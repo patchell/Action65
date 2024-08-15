@@ -1,0 +1,200 @@
+This needs to be BOTTOM UP
+-------------------------------------------------
+Program->ProgModule Program_1
+
+Program_1   ->MODULE ProgModule Program_1
+            -> .
+
+ProgModule	-> SysDecls RoutineList
+
+RoutineList	-> Routine RoutineList_1
+
+
+//-------------------------------
+// Compiler Constants
+//-------------------------------
+CompConst	->	BaseCompConst
+			->CompConst ‘+’ BaseCompConst
+
+BaseCompConst	-> IDENT
+				-> NUMBER
+				-> PtrRef
+				-> ‘*’
+
+--------------------------------------
+
+// SysDecls	-> DEFINE DefList
+//			-> TYPE RecIdentList
+//			-> RECORDTYPE RecordDecl
+//			-> CHAR CharDecl
+//			-> BYTE BtteDecl
+//			-> INT IntDecl
+//			-> CARD CardDecl
+//			-> .
+
+DefList	-> Def DefList_1
+
+DefList_1	-> ',' Def DefList_1
+			-> .
+
+Def		-> IDENT ‘=’ Constant
+
+//------- TYPE ----
+
+RecIdentList	->RecDef  RecIdentList
+
+RecIdentList_1	-> ',' RecDef RecIdentList_1
+				-> .
+
+RecDef		-> '='
+RecIdent	-> RecName RecIdent_1
+RecIdent_1	-> '=' RecName RecIdent_1
+
+
+RecName ‘=’ ‘[‘ FieldInit ‘]’
+
+----- BYTE ----
+
+ByteDecl	-> Modifier ByteDecl_1
+ByteDecl_1	->  Ident ByteDecl_2
+ByteDecl_2	-> ',' Ident ByteDecl_2
+			-> .
+
+
+Ident		-> IDENT
+			-> .
+----------------------------------------
+Ident
+SysDecls	-> SysDecl
+			-> SysDecls SysDecl
+
+FundType	-> CHAR 
+			->BYTE 
+			->CARD 
+			->INT
+
+
+SysDecl	-> DefineDecl 
+		-> TypeDecl 
+		-> FundDecl
+		-> PointerDecl
+		-> ArrayDecl
+		-> RecordDecl
+
+//--------------------------------
+//TYPE Declaration (for Record)
+//--------------------------------
+
+TypeDecl	-> TYPE RecIdentList
+
+RecIdentList	->RecIdent  RecIdentList
+				->RecIdent
+
+RecIdentList_1	->
+RecIdent 
+-> RecName ‘=’ ‘[‘ FieldInit ‘]’
+
+RecName	-> IDENT
+
+FieldInit	-> FundVarDecl
+
+
+Variable Declarations
+
+VarDecl	-> VarDecl BaseVarDecl
+		-> VarDecl ‘,’ BaseVarDecl
+		-> BaseVarDecl
+
+BaseVarDecl	-> FundDecl
+			-> PointerDecl
+			-> RecordDecl
+			-> ArrayDecl
+
+Variable Declarations for Fundamental Data types
+
+FundDecl	-> FundType FundIdentList
+
+FundType -> CARD
+		-> INT
+		-> BYTE
+		-> CHAR
+
+FundIdentList	-> FundIdent
+				-> FundIdentList ‘,’ FundIdent
+
+FundIdent	-> IDENT ‘=’ InitOpts
+			-> IDENT
+
+InitOpts	-> Address
+			-> ‘[‘ Value ‘]’
+
+Address	-> CompConst
+
+Value	-> NUMBER
+
+
+Variable declartions for Pointers
+
+PointerDec -> PtrType POINTER PtrIdentList
+
+PtrType	-> FundType
+		->RecName
+
+PtrIdentList-> PtrIdent
+			-> PtrIdentList ‘,’ PtrIdent
+
+PtrIdent -> IDENT
+		-> IDENT ‘=’ Value
+
+
+Variable Declarations for Arrays
+
+ArrayDecl	-> FundType ARRAY ArrList
+
+ArrIdentList	-> ArrIdent
+				-> ArrIdentList ‘,’ ArrIden
+
+ArrIdent-> IDENT
+		-> IDENT ‘(‘ NUMBER ‘)’
+		-> IDENT ‘=’ ArrInitOps
+		-> IDENT ‘(‘ Dim ‘)’ ‘=’ ArrInitOps
+
+ArrInitOpts	-> Address
+			-> ‘[‘ ValueList ‘]’
+			-> StrConst
+
+ValueList	-> Value ValueList
+
+Value	-> CompConst
+
+Variable Declarations for Records
+
+RecordDecl	-> IDENT RecIdentLst
+
+RecIdentLst	-> RecIdent
+			-> RecIdentLst ‘,’ RecIdent
+
+RecIdent	-> IDENT
+			-> IDENT ‘=’ Address
+
+Address	-> CompConst
+
+//----------------------------------
+//Variable References
+//Memory References
+//----------------------------------
+MemRef	-> MemContents
+		-> ‘@’ IDENT
+
+MemContents	-> FundRef
+			-> ArrRef
+			-> PtrRef
+			-> RecRef
+
+Fundref	->IDENT
+
+ArrRef	-> IDENT ‘(‘ ArithExpr ‘)’
+
+PtrRef	-> IDENT ‘^’
+
+RecRef	-> IDENT ‘.’ IDENT

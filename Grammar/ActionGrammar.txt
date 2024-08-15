@@ -1,0 +1,375 @@
+Action Grammar Original Recipe
+This is a Bottom Up grammar
+----------------------------------------
+
+//----------
+// Constants
+//----------
+NumConst	-> DecNum
+			->	HexNum
+			-> Char
+
+DecNum		-> Digit
+			-> DecNum Digit
+
+HexNum		-> ‘$’ HexDigit
+			-> HexNum HexDigit
+
+
+HexDigit	->	Digit
+			-> ‘A’ 
+			-> ‘B’ 
+			-> ‘C’ 
+			-> ‘D’ 
+			-> ‘E’ 
+			-> ‘F’
+
+Digit	->	‘0’
+		->’1’
+		->’2’
+		->’3’
+		->’4’
+		->’5’
+		->’6’
+		->’7’
+		->’8’
+		->’9’
+
+Char	-> ‘’’ <any printable character>
+
+Sting Constants
+
+StrConst -> ‘”’ String
+
+String		->	StrChar
+			->String StrChar
+
+StrChar -> <all characters except “>
+
+//-------------------------------
+// Compiler Constants
+//-------------------------------
+CompConst	->	BaseCompConst
+			->CompConst ‘+’ BaseCompConst
+
+BaseCompConst	-> Ident
+				-> NumConst
+				-> PtrRef
+				-> ‘*’
+Operators
+
+SpecialOp	-> AND		//logical AND
+			-> OR		//logi8cal OR
+			-> ‘&’		//Bitwise AND
+			->	‘%’		//Bitwise OR
+
+RelOps	-> XOR
+		->’!’
+		-> ‘=’
+		-> ‘#’
+		-> ‘>’
+		-> ‘<’
+		-> ‘<>’
+		-> ‘>=’
+		-> ‘<=’
+
+AddOp	-> ‘+’
+		-> ‘-‘
+
+MultOp		-> ‘*’
+			-> ‘/’
+			-> MOD
+			-> LSH
+			-> RSH
+
+
+Unary	-> ‘@’ 
+		-> ‘-‘
+
+Fundamental Data Types
+
+FundType	-> CHAR 
+			->BYTE 
+			->CARD 
+			->INT
+
+ACTION! Program Structure
+
+Program 	-> Program MODULE ProgModule
+			-> MODULE ProgModule
+			-> ProgModule
+
+ProgModule	-> SysDecls RoutineList
+
+//--------------------------------
+//Declarations
+//--------------------------------
+SysDecls	-> SysDecl
+			-> SysDecls SysDecl
+
+SysDecl	-> DefineDecl 
+		-> TypeDecl 
+		-> FundDecl
+		-> PointerDecl
+		-> ArrayDecl
+		-> RecordDecl
+
+//------------------
+// Define Directive
+//------------------
+
+DefineDecl	->DEFINE DefList
+
+DefList	-> Def
+		-> DefList ‘,’ Def
+
+Def		-> Identfier ‘=’ Constant
+
+TYPE Declaration (for Record)
+
+TypeDecl	-> TYPE RecIdentList
+
+RecIdentList	->RecIdentList RecIdent
+				->RecIdent
+
+RecIdent 
+-> RecName ‘=’ ‘[‘ FieldInit ‘]’
+
+RecName	-> Ident
+
+FieldInit	-> FundVarDecl
+
+
+Variable Declarations
+
+VarDecl	-> VarDecl BaseVarDecl
+		-> VarDecl ‘,’ BaseVarDecl
+		-> BaseVarDecl
+
+BaseVarDecl	-> FundDecl
+			-> PointerDecl
+			-> RecordDecl
+			-> ArrayDecl
+
+Variable Declarations for Fundamental Data types
+
+FundDecl	-> FundType FundIdentList
+
+FundType -> CARD
+		-> INT
+		-> BYTE
+		-> CHAR
+
+FundIdentList	-> FundIdent
+				-> FundIdentList ‘,’ FundIdent
+
+FundIdent	-> Ident ‘=’ InitOpts
+			-> Ident
+
+InitOpts	-> Address
+			-> ‘[‘ Value ‘]’
+
+Address	-> CompConst
+
+Value	-> NumConst
+
+
+Variable declartions for Pointers
+
+PointerDec -> PtrType POINTER PtrIdentList
+
+PtrType	-> FundType
+		->RecName
+
+PtrIdentList-> PtrIdent
+			-> PtrIdentList ‘,’ PtrIdent
+
+PtrIdent -> Ident
+		-> Ident ‘=’ Value
+
+
+Variable Declarations for Arrays
+
+ArrayDecl	-> FundType ARRAY ArrList
+
+ArrIdentList	-> ArrIdent
+				-> ArrIdentList ‘,’ ArrIden
+
+ArrIdent-> Ident
+		-> Ident ‘(‘ Dim ‘)’
+		-> Ident ‘=’ ArrInitOps
+		-> Ident ‘(‘ Dim ‘)’ ‘=’ ArrInitOps
+
+Dim	-> NumConst
+
+ArrInitOpts	-> Address
+			-> ‘[‘ ValueList ‘]’
+			-> StrConst
+
+ValueList	-> Value
+			-> ValueList Value
+
+Value	-> CompConst
+
+Variable Declarations for Records
+
+RecordDecl	-> Ident RecIdentLst
+
+RecIdentLst	-> RecIdent
+			-> RecIdentLst ‘,’ RecIdent
+
+RecIdent	-> Ident
+			-> Ident ‘=’ Address
+
+Address	-> CompConst
+
+Variable References
+
+Memory References
+
+MemRef	-> MemContents
+		-> ‘@’ Ident
+
+MemContents	-> FundRef
+			-> ArrRef
+			-> PtrRef
+			-> RecRef
+
+Fundref	->Ident
+
+ArrRef	-> Ident ‘(‘ ArithExpr ‘)’
+
+PtrRef	-> Ident ‘^’
+
+RecRef	-> Ident ‘.’ Ident
+
+Action Routines
+
+RoutineList	-> Routine
+			-> RoutineList Routine
+
+			A -> A , B
+			  -> B
+
+			A -> B A'
+			A' ->, B A'
+				-> .
+
+Routine	-> ProcRoutine
+		-> FuncRoutine
+
+---- Proceedure Structure ----
+
+ProcRoutine	-> ProcDecl LocVar Statements Return
+
+LocalVar -> SysDecls
+			-> e
+
+Statements	-> StmList
+			-> e
+
+Return	->RETURN
+		-> e
+
+ProcDecl->PROC Ident ProcInit ‘(‘ Params ‘)’
+
+ProcInit -> ‘=’ Address
+		-> e
+
+
+Params		-> VarDecl
+			-> e
+
+Address	-> CompConst
+
+---- Function Struture ----
+
+** Wrong **
+FuncRoutine	->FUNCdecl LocalVar Statements FuncReturn
+
+FUNCdecl	->FundType FUNC Ident ProcInit ‘(‘ Params ‘)’
+
+---- Routine Calls ----
+
+RoutineCall	-> FUNCcall
+			-> PROCcall
+
+FUNCcall	-> Identifier '(' Params ')'
+PROCcall	-> Identifier '(' Params ')'
+
+---- statements ----
+
+StmtList	-> Stmt
+			-> StmtList Stmt
+
+Stmt	-> SimpStmt
+		-> StructStmt
+		-> CodeBlock
+		-> InlineAsm
+
+SimpStmt	-> AssignStmt
+			-> EXITstmt
+			-> RoutineCall
+
+StructStmt	-> IFstmt
+			-> DOloop
+			-> WHILEloop
+			-> FORloop
+
+//-------------------------------
+//---- Assignment Statements ----
+//-------------------------------
+
+ASSIGNstmt	-> MemContents '=' ArithExpr
+			-> MemContents '==+' ArithExpr
+			-> MemContents '==-' ArithExpr
+			-> MemContents '==*' ArithExpr
+			-> MemContents '==/' ArithExpr
+			-> MemContents '==MOD' ArithExpr
+			-> MemContents '==&' ArithExpr
+			-> MemContents '==|' ArithExpr
+			-> MemContents '==%' ArithExpr
+			-> MemContents '==LSH' ArithExpr
+			-> MemContents '==RSH' ArithExpr
+
+EXITstmt	-> EXIT
+
+IFstmt	-> IF ComplexRel THEN Statements ELSEIFextend ELSEstmt FI
+ELSEIFextend	-> ELSEIF ComplexRel THEN Statements
+ELSEstmt	-> ELSE Statements
+
+DOloop	-> DO Statements UNTILLstmt OD
+UNTILLstmt	-> UNTILL ComplexRel
+			-> e
+
+WHILEloop	-> WHILE ComplexRel DoLoop
+
+FORloop	-> FOR Identifier '=' Start TO Finish STEPoption DOloop
+Start	-> ArithExpr
+Finish	-> ArithExpr
+STEPoption	-> STEP ArithExpr
+			-> e
+
+CodeBlock	-> '[' CompConstList ']'
+CompConstList	-> CompConst
+				-> CompConstList CompConst
+
+InlineAsm	-> ASM  AsmList ENDASM
+
+---- Expresions ----
+
+ComplexRel	-> ComplexRel SpecialOp SimpleRelExpr
+			-> SimpleRelExpr
+
+SimpleRelExpr	-> ArithExpr RelOp ArithExpr
+				-> ArithExpr
+
+ArithExpr	-> ArithExpr AddOp MultExpr
+			-> MultExpr
+
+MultExpr	-> MultExpr MultOp Value
+			-> Value
+
+Value	-> NumConst
+		-> MemReference
+		-> '(' ArithExpr ')'

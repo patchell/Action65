@@ -1,0 +1,57 @@
+#ifndef  PCH__H
+#define PCH__H
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <ctype.h>
+#include <string.h>
+#include <windows.h>
+
+enum class IdentType {
+	NEW_SYMBOL,
+	LABEL,
+	PROC,
+	FUNC,
+	FUNC_BYTE,
+	FUNC_CHAR,
+	FUNC_CARD,
+	FUNC_INT,
+	FUNC_POINTER_BYTE,
+	FUNC_POINTER_CHAR,
+	FUNC_POINTER_CARD,
+	FUNC_POINTER_INT,
+	MEM_GLOBAL_BYTE,
+	MEM_GLOBAL_CHAR,
+	MEM_GLOBAL_CARD,
+	MEM_GLOBAL_INT,
+	MEM_GLOBAL_POINTER_BYTE,
+	MEM_GLOBAL_POINTER_CHAR,
+	MEM_GLOBAL_POINTER_CARD,
+	MEM_GLOBAL_POINTER_INT,
+	MEM_PARAM_BYTE,
+	MEM_PARAM_CHAR,
+	MEM_PARAM_CARD,
+	MEM_PARAM_INT,
+	MEM_PARAM_POINTER_BYTE,
+	MEM_PARAM_POINTER_CHAR,
+	MEM_PARAM_POINTER_CARD,
+	MEM_PARAM_POINTER_INT,
+	MEM_LOCAL_BYTE,
+	MEM_LOCAL_CHAR,
+	MEM_LOCAL_CARD,
+	MEM_LOCAL_INT,
+	MEM_LOCAL_POINTER_BYTE,
+	MEM_LOCAL_POINTER_CHAR,
+	MEM_LOCAL_POINTER_CARD,
+	MEM_LOCAL_POINTER_INT
+};
+
+#include "Bin.h"
+#include "Bucket.h"
+#include "Symbol.h"
+#include "SymTab.h"
+#include "Lexer.h"
+#include "Parser.h"
+
+#endif // ! PCH__H
+

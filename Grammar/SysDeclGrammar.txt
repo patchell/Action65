@@ -1,0 +1,316 @@
+
+*********************************************
+*********************************************
+
+Bottom UP VERSION
+
+**********************************************
+Transformation from LR -> LL
+A	-> A B 
+	-> C 
+is equivalent to LL rules:
+A	-> C A’
+A’	-> B A’ 
+	-> .
+**********************************************
+
+//--------------------------------
+// ACTION! Program Structure
+//-------------------------------
+
+Program		-> ProgModule Program_1
+Program_1	-> MODULE ProgModule Program_1
+			-> .
+
+ProgModule	-> SysDecls RoutineList
+
+//----------------------------
+// Action Routines
+//---------------------------
+
+RoutineList	-> Routine RoutineList
+
+Routine	-> ProcRoutine
+		-> FuncRoutine
+
+//-----------------------------------
+//---- Proceedure Structure ----
+//-----------------------------------
+ProcRoutine	-> ProcDecl LocVar Statements ProcReturn
+
+LocalVar	-> SysDecls
+
+Statements	-> StmtList
+
+ProcReturn	->RETURN
+		-> .
+
+ProcDecl->PROC IDENT ProcInit ‘(‘ Params ‘)’
+
+ProcInit	-> ‘=’ Address
+			-> .
+
+
+Params	-> VarDecl
+
+Address	-> CompConst
+
+---- Function Struture ----
+
+FuncRoutine	->FUNCdecl LocalVar Statements FuncReturn
+
+FUNCdecl	->FundType FUNC IDENT ProcInit ‘(‘ Params ‘)’
+
+//-----------------------
+//---- Routine Calls ----
+//-----------------------
+
+RoutineCall	-> FUNCTION '(' Params ')'
+			->  PROCEDURE '(' Params ')'
+			-> .
+
+FUNCcall	-> FUNCTION '(' Params ')'
+			-> .
+
+//--------------------
+//---- statements ----
+//--------------------
+
+Statements	-> BEGIN Statements_1
+Statments_1	-> Statement Statements_2
+			-> END
+			-> 
+Statement	-> Simple Statement_1
+Statement_1	-> '[' CpdeBlock Statement_1
+			-> ASM InlineASM Statement_1
+			-> IF moreIF  Statement_1
+			-> DO moreDO  Statement_1
+			-> WHILE MoreWHILE  Statement_1
+			-> FOR MoreFor  Statement_1
+			-> .
+
+Simple		-> ProcCall Simple_1
+Simple_1	-> ';' ProcCall Simple_1
+			-> .
+
+ProcCall	-> Exit ProcCall'
+ProcCall'	->';' ProcCall'' Exit ProcCall'
+			-> .
+ProcCall''	->PROCNAME '(' Params ')'
+			-> .
+
+Exit	-> ASSIGNstmt Exit'
+Exit'	-> ';' Exit'' ASSIGNstmt Exit'
+		-> .
+Exit''	-> EXIT
+		->
+
+		-> .
+
+ASSIGNstmt	-> MemContents Assignment
+
+Assignment	-> '=' ArithExpr
+			-> '==+' ArithExpr
+			-> '==-' ArithExpr
+			-> '==*' ArithExpr
+			-> '==/' ArithExpr
+			-> '==MOD' ArithExpr
+			-> '==&' ArithExpr
+			-> '==|' ArithExpr
+			-> '==%' ArithExpr
+			-> '==LSH' ArithExpr
+			-> '==RSH' ArithExpr
+			-> .
+
+//--------------------------
+// Structured Statements
+//--------------------------
+
+CodeBlock	-> Value CodeBlock_1
+CodeBlock_1	-> ',' Value CodeBlock_1
+			-> ']'
+
+InlineAsm	->'[' AsemblyCode
+			-> ']'
+
+moreIF		-> '(' ComplexRel ')' THEN MoreIF_1
+MoreIF_1	-> Statements MoreIF_2
+MoreIF_2	-> ELSEIF '(' ComplexRel ')' THEN MoreIF_1
+			-> ELSE Statements
+			-> FI
+ 
+MoreDODO	-> Statements Until OD
+Untill		->UNTIL '(' ComplexRel ')'
+			-> .
+
+MoreWHILE	-> '( ComplexRel ')' DO MoureDDO
+
+MoreFOR		-> IDENT '=' ArithExpr TO ArithExpr MorFOR_1 DO MoreDODO
+MoreFOR_1	-> STEP ArithExpr
+			-> .
+
+
+BEGINblock		-> Statements BEGINblock_1
+BEGINblock_1	-> END 
+				-> .
+
+//--------------------
+//---- Expresions ----
+//--------------------
+
+LogicalOR	-> LogicalAND LogicalOR_1
+LogicalOR_1	-> OR LogicalAND LogicalOR_1
+			-> .
+
+LogicalAND		-> BitwiseOR LogicalAND_1
+LogicalAND_1	-> AND BitwiseOR LogicalAND_1
+				-> .
+
+BitwiseOR	-> BitwiseAND BitwiseOR_1
+BitwiseOR_1	-> '%' BitwiseAND BitwiseOR_1
+			-> .
+
+BitwiseAND		-> SimpleRelExpr BitwiseAND_1
+BitwiseAND_1	-> '&' SimpleRelExpr BitwiseAND_1
+				-> .
+
+SimpleRelExpr	-> RelOperation SimpleRelExpr_1
+SimpleRelExpr_1	-> '!' RelOperation SimpleRelExpr_1
+				-> .
+
+RelOperation	-> RelEquals RelOperation_1
+RelOperation_1	-> ‘>’ RelEquals RelOperation_1
+				-> ‘<’ RelEquals RelOperation_1
+				-> GTEQ RelEquals RelOperation_1
+				-> LTEQ RelEquals RelOperation_1
+				-> .
+
+RelEquals	-> ArithExpr RelEquals_1
+RelEquals_1	-> '=' ArithExpr RelEquals_1
+			-> '#' ArithExpr RelEquals_1
+			-> .
+
+
+ArithExpr	-> ShifExpr ArithExpr_1
+ArithExpr_1	-> '+' ShifExpr ArithExpr_1
+			-> '-' ShifExpr ArithExpr_1
+			-> .
+
+ShifExpr	-> MultExpr ShiftExpr_1
+ShiftExpr_1	-> LSH MultExpr ShiftExpr_1
+			-> RSH MultExpr ShiftExpr_1
+			-> .
+
+MultExpr	-> Unary MultExpr_1
+MultExpr_1	-> '*' Unary MultExpr_1
+			-> '/' Unary MultExpr_1
+			-> MOD Unary MultExpr_1
+			-> .
+
+Unary	-> '-' Unary
+		-> Factor
+
+Factor	-> NUMBER
+		-> '(' ArithExpr ')'
+		-> MemRef
+
+//-------------------------------
+// Compiler Constants
+//-------------------------------
+CompConst	->	BaseCompConst CompConst_1
+CompConst_1	-> ‘+’ BaseCompConst CompConst_1
+			-> .
+
+BaseCompConst	-> IDENT IdentRefType
+				-> NUMBER
+				-> ‘*’
+				-> .
+
+IdentRefType	-> '^'		//Pointer Referece
+				-> .		//regular ref
+
+//------------------------------------------
+// Declarations
+//------------------------------------------
+
+SysDecls	-> DefineDecl SysDecls
+
+DefineDecl		->TypeDecl DefineDecl_1
+DefineDecl_1	-> DEFINE DefList DefineDecl_1
+				-> .
+
+TypeDecl		->RecordDecl TypeDecl_1
+TypeDecl_1		->TYPE TypeList TypeDecl_1
+				-> .
+
+RecordDecl		-> FundDecl RecordDecl_1
+RecordDecl_1	-> RECTYPE RecordList RecordDecl_1
+				-> .
+
+FundDecl		-> CHAR Modifier FundIdentList
+				-> BYTE Modifier FundIdentList
+				-> CARD Modifier FundIdentList
+				-> INT  Modifier FundIdentList
+				-> .
+
+Modifier		-> POINTER
+				-> ARRAY
+				-> .
+//---------------------------
+
+DefList -> Def DefList_1
+
+DefList_1	-> ',' Def DefList_1
+			-> .
+
+Def	-> IDENT ‘=’ Constant
+	-> .
+
+//------------------------------------
+// Type
+//------------------------------------
+
+TypeList	-> IDENT ‘=’ ‘[‘ VarDecl ‘]’ TypeList
+			-> .
+
+//-------------------------------------------------
+// Record Decl , declared for TYPE def
+//-------------------------------------------------
+
+RecordList		-> RecIdent RecordList_1
+RecordList_1	-> ‘,’ RecIdent RecordList_1
+				-> .
+
+RecIdent	-> IDENT RecIdent_1
+RecIdent_1	-> ‘=’ InitOpts RecIdent_1
+			-> .
+-------------------------------------------
+
+VarDecl		-> RecordDecl VarDecl_1
+VarDecl_1	-> ‘,’ RecordDecl VarDecl_1
+			-> .
+
+FundIdentList	-> FundIdent FundIdentList_1
+FundIdentList_1	-> ‘,’ FundIdent FundIdentList_1
+				-> .
+
+FundIdent	-> IDENT FundIdent_1
+FundIdent_1	-> ‘=’ InitOpts FundIdent_1
+			-> .
+
+InitOpts	-> CompConst
+			-> ‘[‘ NumConst ‘]’
+			-> .
+
+//----------------------------------
+//Variable References
+//Memory References
+//----------------------------------
+MemRef	-> IDENT MemContents
+		-> ‘@’ IDENT
+
+MemContents	-> ‘(‘ ArithExpr ‘)’	//array reference
+			-> ‘^’					//pointer reference
+			-> ‘.’ IDENT			//record reference
+			-> .
+

@@ -1,0 +1,288 @@
+This needs to be Top Down
+-------------------------------------------------
+Action65	->Program $
+
+Program_1   -> GLOBALS SysDecls Program
+            -> ROUTINES RoutineList
+			-> .
+
+RoutineList	-> Routine RoutineList_1
+
+Action Routines
+
+RoutineList	-> Routine
+			-> RoutineList Routine
+
+Routine	-> ProcRoutine
+		-> FuncRoutine
+
+---- Proceedure Structure ----
+
+ProcRoutine	-> ProcDecl LocVar Statements Return
+
+LocalVar -> SysDecls
+			-> e
+
+Statements	-> StmList
+			-> e
+
+Return	->RETURN
+		-> e
+
+ProcDecl->PROC Ident ProcInit ‘(‘ Params ‘)’
+
+ProcInit -> ‘=’ Address
+		-> e
+
+
+Params		-> VarDecl
+			-> e
+
+Address	-> CompConst
+
+---- Function Struture ----
+
+** Wrong **
+FuncRoutine	->FUNCdecl LocalVar Statements FuncReturn
+
+FUNCdecl	->FundType FUNC Ident ProcInit ‘(‘ Params ‘)’
+
+---- Routine Calls ----
+
+RoutineCall	-> FUNCcall
+			-> PROCcall
+
+FUNCcall	-> Identifier '(' Params ')'
+PROCcall	-> Identifier '(' Params ')'
+
+---- statements ----
+
+StmtList	-> IDENT MemContentsType ASSIGNstmt StmtList
+			-> IF IfDtmt
+			-> FOR ForStmt
+			-> WHILE WhileLoop
+			-> DO DoLoop
+			-> EXIT
+			-> PROC_CALL ProcCall
+			-> FUNC_CALL FuncCall
+			-> .
+
+---- Assignment Statements ----
+
+ASSIGNstmt	->  '=' ArithExpr
+				->  '==+' ArithExpr
+				->  '==-' ArithExpr
+				->  '==*' ArithExpr
+				->  '==/' ArithExpr
+				->  '==MOD' ArithExpr
+				->  '==&' ArithExpr
+				->  '==!' ArithExpr
+				->  '==XOR' ArithExpr
+				->  '==%' ArithExpr
+				->  '==LSH' ArithExpr
+				->  '==RSH' ArithExpr
+
+--------------------- If Statment -----------------
+IFstmt		-> CondExpr THEN StmtList ELSEIFlist ELSEstmt FI
+ELSEIFlist	-> ElseIf ELSEIFlist_1
+ELSEIFlist_1-> ELSEIF CondExpr THEN StmtList ELSEIFlist_1
+			-> .
+ELSEstmt	-> ELSE StmtList
+			-> .
+
+----------------- Do Loop -------------------------
+DOloop	-> StmtList UNTILLstmt OD
+UNTILLstmt	-> UNTILL CondExpr
+			-> .
+
+WHILEloop	-> CondExpr DO StmtList OD
+
+FORloop		-> Identifier '=' Start TO Finish STEPoption DO StmtList OD
+Start		-> ArithExpr
+Finish		-> ArithExpr
+STEPoption	-> STEP ArithExpr
+			-> .
+
+CodeBlock	-> '[' CompConstList ']'
+CompConstList	-> CompConst
+CompConstList_1	-> ',' CompConst CompConstList_1
+				-> .
+
+InlineAsm	-> ASM  AsmList ENDASM
+
+---- Expresions ----
+
+ArithExpr	-> LogicalAND LogicalOR_1
+LogicalOR_1	-> OR LogicalAND LogicalOR_1
+			-> .
+
+LogicalAND		-> RelOperation LogicalAND_1
+LogicalAND_1	-> AND RelOperation LogicalAND_1
+				-> .
+
+RelOperation	-> RelEquals RelOperation_1
+RelOperation_1	-> ‘>’ RelEquals RelOperation_1
+				-> ‘<’ RelEquals RelOperation_1
+				-> GTEQ RelEquals RelOperation_1
+				-> LTEQ RelEquals RelOperation_1
+				-> .
+
+RelEquals	-> BitwiseOR RelEquals_1
+RelEquals_1	-> '=' BitwiseOR RelEquals_1
+			-> '#' BitwiseOR RelEquals_1
+			-> .
+
+BitwiseOR	-> BitwiseAND BitwiseOR_1
+BitwiseOR_1	-> '%' BitwiseAND BitwiseOR_1
+			-> .
+
+BitwiseAND		-> BitwiseXOR BitwiseAND_1
+BitwiseAND_1	-> '&' BitwiseXOR BitwiseAND_1
+				-> .
+
+BitwiseXOR	-> AddExpr SimpleRelExpr_1
+SimpleRelExpr_1	-> '!' AddExpr SimpleRelExpr_1
+				-> .
+
+AddExpr	-> ShifExpr AddExpr_1
+AddExpr_1	-> '+' ShifExpr AddExpr_1
+			-> '-' ShifExpr AddExpr_1
+			-> .
+
+ShifExpr	-> MultExpr ShiftExpr_1
+ShiftExpr_1	-> LSH MultExpr ShiftExpr_1
+			-> RSH MultExpr ShiftExpr_1
+			-> .
+
+MultExpr	-> Unary MultExpr_1
+MultExpr_1	-> '*' Unary MultExpr_1
+			-> '/' Unary MultExpr_1
+			-> MOD Unary MultExpr_1
+			-> .
+
+Unary	-> '-' Unary
+		-> Factor
+
+Factor	-> NUMBER
+		-> '(' ArithExpr ')'
+		-> MemContents
+
+
+//-------------------------------
+// Compiler Constants
+//-------------------------------
+
+BaseCompConst	-> IDENT
+				-> NUMBER
+				-> PtrRef
+				-> ‘*’
+
+CompConst		-> BaseCompConst CompConst_1
+CompConst_1		-> '+' BaseCompConst CompConst_1
+				-> .
+
+--------------------------------------
+
+SysDecls	-> DEFINE DefList
+			-> TYPE RecIdentList
+			-> RECORDTYPE RecordDecl
+			-> CHAR CharDecl
+			-> BYTE ByteDecl
+			-> INT IntDecl
+			-> CARD CardDecl
+			-> .
+
+--------------- DEFINE ----------------------
+
+DefList	-> Def DefList_1
+
+DefList_1	-> ',' Def DefList_1
+			-> .
+
+Def		-> IDENT ‘=’ Constant
+
+//------- TYPE ----
+
+RecIdentList	-> RecDef  RecIdentList
+
+RecIdentList_1	-> ',' RecDef RecIdentList_1
+				-> .
+
+RecDef		-> '='
+RecIdent	-> RecName RecIdent_1
+RecIdent_1	-> '=' RecName RecIdent_1
+
+
+RecName ‘=’ ‘[‘ FieldInit ‘]’
+
+---------- RECORDTYPE ---------
+
+RecordDecl	-> RecIdentLst
+
+RecIdentLst		-> RecIdent RecIdentLst_1
+RecIdentLst_1	-> ‘,’ RecIdent RecIdentLst_1
+
+RecIdent	-> Ident OptRecInit
+OptRecInit	-> '=' Address
+			-> .
+
+----- BYTE ----
+
+ByteDecl	-> Modifier ByteDecl_1
+ByteDecl_1	->  Ident OptInit ByteDecl_2
+ByteDecl_2	-> ',' ByteDecl_1
+			-> .
+
+----------- CHAR -----------
+
+CharDecl	-> Modifier CharDecl_1
+CharDecl_1	-> Ident OptInit CharDecl_2
+CharDecl_2	-> ',' ByteDecl_1
+			-> .
+
+------------ INT ----------------------
+
+IntDecl		-> Modifier IntDecl_1
+IntDecl_1	-> Ident OptInit IntDecl_2
+IntDecl_2	-> ',' IntDecl_1
+			-> .
+
+------------- CARD -------------
+
+CardDecl	-> Modifier CardDecl_1
+CardDecl_1	-> Ident OptInit CardDecl_2
+CardDecl_2	-> ',' CardDecl_1
+			-> .
+
+----------- Misc Declaration Stuff --------------------
+
+OptInit		-> '=' CompConst
+			-> .
+
+Ident		-> IDENT
+
+Modifier	-> POINTER
+			-> ARRAY ArrayStuff
+			-> .
+
+ArrayStuff	-> '(' CompConst ')' OptArrayInit
+			-> .
+OptArrayInit	-> '=' OptArrayInit_1
+				-> .
+OptArrayInit_1	-> '[' OptArrayInit_2 ']'
+OptArrayInit_2	-> CompConst OptArrayInit_3
+OptArrayInit_3	-> ',' OptArrayInit_2
+				-> .
+
+//----------------------------------
+//Variable References
+//Memory References
+//----------------------------------
+
+MemContents	-> IDENT MemContentsType
+			-> '@' IDENT
+
+MemContentsType		-> ‘(‘ ArithExpr ‘)’	//array ref
+					-> '^'	// Pointer Dereference
+					-> ‘.’ IDENT	//record ref
+					-> .
