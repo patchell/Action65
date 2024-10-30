@@ -1,4 +1,8 @@
 MODULE
 
-INT A
-CARD C
+INT Avar
+CARD Cvar
+
+PROC Procone()
+Avar = Cvar
+RETURN

@@ -1,143 +1,339 @@
 #pragma once
 
+//-------------------------------------
+// Allowed Addressing Modes
+//-------------------------------------
+
+constexpr auto ADR_MODE_ABSOLUTE = 0x0001;
+constexpr auto ADR_MODE_ABSOLUTE_X = 0x0002;
+constexpr auto ADR_MODE_ABSOLUTE_Y = 0x0041;
+constexpr auto ADR_MODE_ZEROPAGE = 0x0008;
+constexpr auto ADR_MODE_ZEROPAGE_X = 0x0010;
+constexpr auto ADR_MODE_ZEROPAGE_Y = 0x0020;
+constexpr auto ADR_MODE_IMMEDIATE = 0x0040;
+constexpr auto ADR_MODE_INDIRECT_Y = 0x0080;
+constexpr auto ADR_MODE_INDIRECT_X = 0x0100;
+constexpr auto ADR_MODE_INDIRECT = 0x0200;
+constexpr auto ADR_MODE_RELATIVE = 0x0400;
+constexpr auto ADR_MODE_ACCUMULATOR = 0x0800;
+constexpr auto ADR_MODE_IMPLIED = 0x1000;
+
 class CParser
 {
-	CLexer m_Lex;
-	FILE* m_pOut;
+public:
+	enum class PHASE {
+		NONE,
+		GENERATE_AST,
+		EXECUTE_AST_PASS1,
+		EXECUTE_AST_PASS2,
+		GENTERATE_OUT_FILES
+	};
+private:
+	struct PHASE_LUT {
+		PHASE m_Phase;
+		const char* m_pName;
+		const char* LookupPhaseName(PHASE phase);
+		PHASE LookupPhaseToken(const char* pName);
+	};
+	static inline PHASE_LUT ParsePhase[4] = {
+		{PHASE::GENERATE_AST,"GENERATE_AST"},
+		{PHASE::EXECUTE_AST_PASS1,"EXECUTE_AST_PASS1"},
+		{PHASE::EXECUTE_AST_PASS2,"EXECUTE_AST_PASS2"},
+		{PHASE::GENTERATE_OUT_FILES,"GENTERATE_OUT_FILES"},
+	};
+	CLexer* m_pLex;
+	FILE* m_pfObjectFile;	//Object File Output
+	FILE* m_pfBINaryFile;	// Binary file for ROM
+	char* m_pInputFile;		// Source File Name
+	char* m_pLogFile;		// Log file Name (debug)
+	char* m_pObjFileOut;	// Object File Name
+	char* m_pBinaryFileOut;	// Binary File Name
+	PHASE m_Phase;			// Phase of the compiler operation
+	CSection* m_pCurrentSection;
+	CLexer::Processor m_Processor;
+	CStack m_ValueStack;
 public:
 	CParser();
 	virtual ~CParser();
-	BOOL Create(FILE* pIn, FILE* pOut);
-	CLexer* GetLexer() { return &m_Lex; }
-	CLexer::Token Run();
+	bool Create();
+	void SetCurrentSection(CSection* pSection) {
+		m_pCurrentSection = m_pCurrentSection;
+	}
+	CSection* GetCurrentSection() {
+		return m_pCurrentSection;
+	}
+	CStack* GetValueStack() { return &m_ValueStack; }
+	CLexer* GetLexer() { return m_pLex; }
+	FILE* LogFile() { return GetLexer()->GetLogFile(); }
+	Token Run();
+	//---------------------------------
+	Token Expect(Token Lookahead, Token Expected);
+	bool Accept(Token Lookahead, Token Expected);
+private:
+	void PrepareInstruction(CInstruction** ppInst, Token Token);
 	//---------------------------------
 	// Parsing Methods
 	//---------------------------------
 	// Program Structure
 	//---------------------------------
-
-	CLexer::Token Action65(CLexer::Token LookaHeadToken);
-	CLexer::Token Modules(CLexer::Token LookaHeadToken);
-	CLexer::Token Modules_1(CLexer::Token LookaHeadToken);
-	CLexer::Token Module(CLexer::Token LookaHeadToken);
-	CLexer::Token Routines(CLexer::Token LookaHeadToken);
-	CLexer::Token Routines_1(CLexer::Token LookaHeadToken);
-	CLexer::Token Routine(CLexer::Token LookaHeadToken);
-	CLexer::Token ProcBody(CLexer::Token LookaHeadToken);
-	CLexer::Token ProcBody_1(CLexer::Token LookaHeadToken);
-	CLexer::Token ProcDecl(CLexer::Token LookaHeadToken);
-	CLexer::Token FuncDecl(CLexer::Token LookaHeadToken);
-	CLexer::Token ProcIdent(CLexer::Token LookaHeadToken);
-	CLexer::Token FuncIdent(CLexer::Token LookaHeadToken);
+	Token Action65(Token LookaHeadToken);
+	Token Modules(Token LookaHeadToken);
+	Token Vector(Token LookaHeadToken);
+	Token VectorAddress(Token LookaHeadToken);
+	Token PROCroutine(Token LookaHeadToken);
+	Token ProcDef(Token LookaHeadToken);
+	Token FuncDef(Token LookaHeadToken);
+	Token OptInit(Token LookaHeadToken);
+	Token ProcBody(Token LookaHeadToken);
+	Token FuncBody(Token LookaHeadToken);
 	//------------------------------------------
 	// Statements
 	//------------------------------------------
-	CLexer::Token Statements(CLexer::Token LookaHeadToken);
-	CLexer::Token Begin(CLexer::Token LookaHeadToken);
-	CLexer::Token ProcCall(CLexer::Token LookaHeadToken);
-	CLexer::Token ProcCall_1(CLexer::Token LookaHeadToken);
-	CLexer::Token ForStmt(CLexer::Token LookaHeadToken);
-	CLexer::Token ForStmt_1(CLexer::Token LookaHeadToken);
-	CLexer::Token IfStmt(CLexer::Token LookaHeadToken);
-	CLexer::Token IfStmt_1(CLexer::Token LookaHeadToken);
-	CLexer::Token WhileStmt(CLexer::Token LookaHeadToken);
-	CLexer::Token WhileStmt_1(CLexer::Token LookaHeadToken);
-	CLexer::Token DoStmt(CLexer::Token LookaHeadToken);
-	CLexer::Token DoStmt_1(CLexer::Token LookaHeadToken);
-	CLexer::Token EXITstmt(CLexer::Token LookaHeadToken);
-	CLexer::Token EXITstmt_1(CLexer::Token LookaHeadToken);
-	CLexer::Token RetStmt(CLexer::Token LookaHeadToken);
-	CLexer::Token RetStmt_1(CLexer::Token LookaHeadToken);
-	CLexer::Token CodeBlock(CLexer::Token LookaHeadToken);
-	CLexer::Token CodeBlock_1(CLexer::Token LookaHeadToken);
-	CLexer::Token UntillStmt(CLexer::Token LookaHeadToken);
-	CLexer::Token UntillStmt_1(CLexer::Token LookaHeadToken);
-	CLexer::Token Assignment(CLexer::Token LookaHeadToken);
-	CLexer::Token ASSIGNstmt(CLexer::Token LookaHeadToken);
-	CLexer::Token PROCstmt(CLexer::Token LookaHeadToken);
-	CLexer::Token If(CLexer::Token LookaHeadToken);
-	CLexer::Token ThenPart(CLexer::Token LookaHeadToken);
-	CLexer::Token ThenPart_1(CLexer::Token LookaHeadToken);
-	CLexer::Token ElseIfPart(CLexer::Token LookaHeadToken);
-	CLexer::Token DOstmt(CLexer::Token LookaHeadToken);
-	CLexer::Token UNTILLstmt(CLexer::Token LookaHeadToken);
-	CLexer::Token WhileLoop(CLexer::Token LookaHeadToken);
-	CLexer::Token FORstmt(CLexer::Token LookaHeadToken);
-	CLexer::Token Start(CLexer::Token LookaHeadToken);
-	CLexer::Token Finish(CLexer::Token LookaHeadToken);
-	CLexer::Token STEPoption(CLexer::Token LookaHeadToken);
-	CLexer::Token CODEblock(CLexer::Token LookaHeadToken);
-	CLexer::Token CODEblock_1(CLexer::Token LookaHeadToken);
-	CLexer::Token RETURNstmt(CLexer::Token LookaHeadToken);
+	Token Statements(Token LookaHeadToken);
+	Token ProcParams(Token LookaHeadToken);
+
+	Token ForStmt(Token LookaHeadToken);
+	Token Iterator(Token LookaHeadToken);
+	Token Start(Token LookaHeadToken);
+	Token Finish(Token LookaHeadToken);
+	Token STEPoption(Token LookaHeadToken);
+
+	Token IfStmt(Token LookaHeadToken);
+	Token If(Token LookaHeadToken);
+	Token ThenPart(Token LookaHeadToken);
+	Token ElseIfPart(Token LookaHeadToken);
+	Token ElsePart(Token LookaHeadToken);
+
+	Token WhileStmt(Token LookaHeadToken);
+
+	Token DoStmt(Token LookaHeadToken);
+	
+	Token EXITstmt(Token LookaHeadToken);
+	
+	Token RetStmt(Token LookaHeadToken);
+	Token OptReturnValue(Token LookaHeadToken);
+
+	Token InlineAssembly(Token LookaHeadToken);
+	Token InlineAssembly_1(Token LookaHeadToken);
+	Token InlineAssBlock(Token LookaHeadToken);
+	Token InlineAssBlock_1(Token LookaHeadToken);
+	Token InlineAssBlock_2(Token LookaHeadToken);
+
+
+	Token CodeBlock(Token LookaHeadToken);
+
+	Token UntillStmt(Token LookaHeadToken);
+
+	Token Assignment(Token LookaHeadToken);
 	//--------------------------------------
 	// Arithmetic Expressions
 	//--------------------------------------
-	CLexer::Token ArithExpr(CLexer::Token LookaHeadToken);
-	CLexer::Token LogicalOR_1(CLexer::Token LookaHeadToken);
-	CLexer::Token LogicalAND(CLexer::Token LookaHeadToken);
-	CLexer::Token LogicalAND_1(CLexer::Token LookaHeadToken);
-	CLexer::Token RelOperation(CLexer::Token LookaHeadToken);
-	CLexer::Token RelOperation_1(CLexer::Token LookaHeadToken);
-	CLexer::Token RelEquals(CLexer::Token LookaHeadToken);
-	CLexer::Token RelEquals_1(CLexer::Token LookaHeadToken);
-	CLexer::Token BitwiseOR(CLexer::Token LookaHeadToken);
-	CLexer::Token BitwiseOR_1(CLexer::Token LookaHeadToken);
-	CLexer::Token BitwiseAND(CLexer::Token LookaHeadToken);
-	CLexer::Token BitwiseAND_1(CLexer::Token LookaHeadToken);
-	CLexer::Token BitwiseXOR(CLexer::Token LookaHeadToken);
-	CLexer::Token BitwiseXOR_1(CLexer::Token LookaHeadToken);
-	CLexer::Token AddExpr(CLexer::Token LookaHeadToken);
-	CLexer::Token AddExpr_1(CLexer::Token LookaHeadToken);
-	CLexer::Token ShifExpr(CLexer::Token LookaHeadToken);
-	CLexer::Token ShiftExpr_1(CLexer::Token LookaHeadToken);
-	CLexer::Token MultExpr(CLexer::Token LookaHeadToken);
-	CLexer::Token MultExpr_1(CLexer::Token LookaHeadToken);
-	CLexer::Token Unary(CLexer::Token LookaHeadToken);
-	CLexer::Token Factor(CLexer::Token LookaHeadToken);
-	CLexer::Token FUNCcall(CLexer::Token LookaHeadToken);
-	CLexer::Token IdentList(CLexer::Token LookaHeadToken);
-	CLexer::Token IdentList_1(CLexer::Token LookaHeadToken);
+	Token ArithExpr(Token LookaHeadToken);
+	Token LogicalAND(Token LookaHeadToken);
+	Token RelOperation(Token LookaHeadToken);
+	Token RelEquals(Token LookaHeadToken);
+	Token BitwiseOR(Token LookaHeadToken);
+	Token BitwiseAND(Token LookaHeadToken);
+	Token BitwiseXOR(Token LookaHeadToken);
+	Token AddExpr(Token LookaHeadToken);
+	Token ShifExpr(Token LookaHeadToken);
+	Token MultExpr(Token LookaHeadToken);
+	Token Unary(Token LookaHeadToken);
+	Token Factor(Token LookaHeadToken);
+	Token MemContentsList(Token LookaHeadToken);
+
 	//-------------------------------------------
 	// Declarations
 	//-------------------------------------------
-	CLexer::Token FundType(CLexer::Token LookaHeadToken);
-	CLexer::Token OptModifier(CLexer::Token LookaHeadToken);
-	CLexer::Token ParamList(CLexer::Token LookaHeadToken);
-	CLexer::Token ParamList_1(CLexer::Token LookaHeadToken);
-	CLexer::Token Param(CLexer::Token LookaHeadToken);
-	CLexer::Token VarDecls(CLexer::Token LookaHeadToken);
-	CLexer::Token SysDecls(CLexer::Token LookaHeadToken);
-	CLexer::Token SysDecls_1(CLexer::Token LookaHeadToken);
-	CLexer::Token SysDecl(CLexer::Token LookaHeadToken);
-	CLexer::Token VarList(CLexer::Token LookaHeadToken);
-	CLexer::Token VarList_1(CLexer::Token LookaHeadToken);
-	CLexer::Token VarName(CLexer::Token LookaHeadToken);
-	CLexer::Token OptInit(CLexer::Token LookaHeadToken);
-	CLexer::Token DefList(CLexer::Token LookaHeadToken);
-	CLexer::Token DefList_1(CLexer::Token LookaHeadToken);
-	CLexer::Token Def(CLexer::Token LookaHeadToken);
+	Token SysDecl(Token LookaHeadToken);
+	Token DefList(Token LookaHeadToken);
+	Token Def(Token LookaHeadToken);
 	//--------------------------------------
-	// TYPE Definition
+	// TYPEdef Definition
 	//--------------------------------------
-	CLexer::Token RecIdent(CLexer::Token LookaHeadToken);
-	CLexer::Token RecField(CLexer::Token LookaHeadToken);
-	CLexer::Token RecFieldList(CLexer::Token LookaHeadToken);
-	CLexer::Token RecFieldList_1(CLexer::Token LookaHeadToken);
-	CLexer::Token Modifier(CLexer::Token LookaHeadToken);
-	CLexer::Token ArrayStuff(CLexer::Token LookaHeadToken);
-	CLexer::Token OptArrayInit(CLexer::Token LookaHeadToken);
+	Token TypeDefDecl(Token LookaHeadToken);
+	Token RecDefIdent(Token LookaHeadToken);
+	Token RecDefVarDecls(Token LookaHeadToken);
+	Token RecDefVarDecl(Token LookaHeadToken);
+	Token RecDefModifier(Token LookaHeadToken);
+	Token RecDefVarList(Token LookaHeadToken);
+	Token RecDefPointer(Token LookaHeadToken);
+	Token RecDefArray(Token LookaHeadToken);
+	Token RecDefIdentList(Token LookaHeadToken);
+	//----------------------------------------------
+	// Declarse a record type (RECORDTYPE) that was
+	// defined by a TYPE declaration.
+	//----------------------------------------------
+	Token RecDecl(Token LookaHeadToken);
+	Token RecDeclModifier(Token LookaHeadToken);
+	Token RecDeclArray(Token LookaHeadToken);
+	Token RecDeclIdentList(Token LookaHeadToken);
+	//----------------------------------------
+	// Fundamental Declarations
+	//----------------------------------------
+	Token FundDecl(Token LookaHeadToken);
+	Token FundModifier(Token LookaHeadToken);
+	Token FundPtrModifier(Token LookaHeadToken);
+	Token FundArrayModifier(Token LookaHeadToken);
+	//----------------------------------
+	// Identifiers
+	//----------------------------------
+	Token IdentList(Token LookaHeadToken);
+	Token Ident(Token LookaHeadToken);
+	Token Options(Token LookaHeadToken);
+	Token OptArrayInit(Token LookaHeadToken);
+	Token OptArrayDimension(Token LookaHeadToken);
+	//-------------------------------------------
+	// Parameter Declarations
+	//-------------------------------------------
+	Token ParamList(Token LookaHeadToken);
+	Token Param(Token LookaHeadToken);
+	Token ParamModifier(Token LookaHeadToken);
+	//-----------------------------------------------
+	// Local Variableas
+	//-----------------------------------------------
+	Token LocalDecls(Token LookaHeadToken);
+	Token LocalModifier(Token LookaHeadToken);
+	Token LocArrayModifier(Token LookaHeadToken);
 	//-------------------------------
 	// Compiler Constants
 	//-------------------------------
-	CLexer::Token CompConst(CLexer::Token LookaHeadToken);
-	CLexer::Token CompConst_1(CLexer::Token LookaHeadToken);
-	CLexer::Token BaseCompConst(CLexer::Token LookaHeadToken);
-	CLexer::Token Ident(CLexer::Token LookaHeadToken);
+	Token CompConstList(Token LookaHeadToken);
+	Token CompConst(Token LookaHeadToken);
+	Token BaseCompConst(Token LookaHeadToken);
 	//----------------------------------
 	//Variable References
 	//Memory References
 	//----------------------------------
-	CLexer::Token MemContents(CLexer::Token LookaHeadToken);
-	CLexer::Token MemContentsType(CLexer::Token LookaHeadToken);
+	Token MemContents(Token LookaHeadToken);
+	Token MemContentsType(Token LookaHeadToken);
+	Token ArrayIndex(Token LookaHeadToken);
+	//****************************************
+	//----------------------------------------
+	//  Inline assembly code
+	//----------------------------------------
+	//	Statements
+	//----------------------------------------
+	//****************************************
+	Token AsmStmt(Token LookaHeadToken);
+	Token Processor_1(Token LookaHeadToken);
+	Token ProcessorType(Token LookaHeadToken);
+	//-----------------------------------------
+	// Code
+	//		These statements are what actually
+	// do something that concerns the machine
+	// code that is executed
+	//-----------------------------------------
+
+	//-----------------------------------------
+	// SECITON
+	//-----------------------------------------
+	Token Section(Token LookaHeadToken);
+	Token Section_1(Token LookaHeadToken);
+	Token Section_2(Token LookaHeadToken);
+	Token SectionDef(Token LookaHeadToken);
+	Token SectionDef_1(Token LookaHeadToken);
+	Token SectionAttributes(Token LookaHeadToken);
+	Token SectionAtribute(Token LookaHeadToken);
+	Token Modes(Token LookaHeadToken);
+	Token TrueFalse(Token LookaHeadToken);
+	//-------------------------------------
+	// Org  Sets the location counter
+	// for the current section
+	//-------------------------------------
+	Token Org(Token LookaHeadToken);
+	//-------------------------------------
+	// Define Memeory
+	//-------------------------------------
+	Token DefineMemory(Token LookaHeadToken);
+	//-------------------------------------
+	// DefineStorage
+	//-------------------------------------
+	Token DefineStorage(Token LookaHeadToken);
+	//-------------------------------------
+	// Proceedure
+	//-------------------------------------
+	Token Proceedure(Token LookaHeadToken);
+	//--------------------------------------
+	// Opcodes
+	//--------------------------------------
+	Token Instruction(Token LookaHeadToken);
+	//---------------------------------------------
+	// Lables
+	//---------------------------------------------
+	Token Labels(Token LookaHeadToken);
+	Token LocalGlobal(Token LookaHeadToken);
+	//-----------------------------------
+	//ALU Addressing Mode
+	//-----------------------------------
+	Token AluAdrModes(Token LookaHeadToken);
+	Token Indirect(Token LookaHeadToken);
+	//---------------------------------------------
+	// STA addressing mode
+	//---------------------------------------------
+	Token StaAddressingModes(Token LookaHeadToken);
+	//-----------------------------------------
+	// ASL LSR ROR and ROL addressing modes
+	//-----------------------------------------
+	Token ShiftAddressingModes(Token LookaHeadToken);
+	//------------------------------------------
+	// Branch Instructions Addressing Mode
+	//------------------------------------------
+	Token RelAddressingMode(Token LookaHeadToken);
+	//------------------------------------------
+	// BIT Instructions Addressing Mode
+	//------------------------------------------
+	Token BitAddressModes(Token LookaHeadToken);
+	//------------------------------------------
+	// INC DEC Instructions Addressing Mode
+	//------------------------------------------
+	Token IncAddressingMOdes(Token LookaHeadToken);
+	//------------------------------------------
+	// JMP Instructions Addressing Mode
+	//------------------------------------------
+	Token JumpAddressingModes(Token LookaHeadToken);
+	//------------------------------------------
+	// JSR Instructions Addressing Mode
+	//------------------------------------------
+	Token CallAddressingMode(Token LookaHeadToken);
+	//------------------------------------------
+	// LDX Instructions Addressing Mode
+	//------------------------------------------
+	Token LdxAddressingMode(Token LookaHeadToken);
+	//------------------------------------------
+	// CPX & CPY Instructions Addressing Mode
+	//------------------------------------------
+	Token CPX_CPY_AddressingMode(Token LookaHeadToken);
+	//------------------------------------------
+	// STX Instructions Addressing Mode
+	//------------------------------------------
+	Token StxAddressingMode(Token LookaHeadToken);
+	//------------------------------------------
+	// LDY Instructions Addressing Mode
+	//------------------------------------------
+	Token LdyAddressingMode(Token LookaHeadToken);
+	//------------------------------------------
+	// STY Instructions Addressing Mode
+	//------------------------------------------
+	Token StyAddressingMode(Token LookaHeadToken);
+	//---------------------------------------------
+	//	Optional Index Registers
+	//---------------------------------------------
+	Token OptIndexReg(Token LookaHeadToken);
+	Token OptIndexReg_1(Token LookaHeadToken);
+	Token OptXReg(Token LookaHeadToken);
+	Token OptYReg(Token LookaHeadToken);
+	//---------------------------------------
+	// Assembler Constants
+	//---------------------------------------
+	Token AsmConstList(Token LookaHeadToken);
+	Token AsmConstList_1(Token LookaHeadToken);
+	Token AsmConstant(Token LookaHeadToken);
+	Token AsmConstAddSub(Token LookaHeadToken);
+	Token BaseAsmConstant(Token LookaHeadToken);
+	Token Immediate(Token LookaHeadToken, CInstruction* pInst);
+	void PageZero(CInstruction* pInst, int Address, CLexer::AdrModeType ModeType);
+	void Absolute(CInstruction* pInst, int Address, CLexer::AdrModeType ModeType);
+	bool CheckZeroPageAddress(int A);
 };
 

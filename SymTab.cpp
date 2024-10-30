@@ -1,4 +1,4 @@
-#include "Global.h"
+#include "pch.h"
 
 //***************************************
 // Implementation of Hash Table Member
@@ -49,14 +49,14 @@ CSymTab::~CSymTab()
 	if (m_ppTab) delete[] m_ppTab;
 }
 
-BOOL CSymTab::Create(int TableDepth)
+bool CSymTab::Create(int TableDepth)
 {
 	m_ppTab = new CBucket * [TableDepth];
 	m_tSize = TableDepth;
 	for (int i = 0; i < m_tSize; ++i)
 		m_ppTab[i] = 0;
 	m_nElements = 0;
-	return TRUE;
+	return true;
 }
 
 //*****************************************************
@@ -201,3 +201,42 @@ void CSymTab::PrintTable(FILE* pOut)
 		}
 	}
 }
+
+
+bool CSymTab::FindAll(CBin::BinType Type, int NumberOfObject, CBin** ppObjects)
+{
+	bool rV = true;
+	int ItemCount = 0;
+	CBucket* pBucket;
+	CBin* pBin;
+	int i;
+
+	for (i = 0; i < m_tSize; ++i)
+	{
+		pBucket = this->GetTable()[i];
+		if (pBucket)
+		{
+			pBin = pBucket->GetHead();
+			while (pBin)
+			{
+				if (pBin->GetType() == Type)
+				{
+					if (ItemCount < NumberOfObject)
+					{
+						ppObjects[ItemCount] = pBin;
+						ItemCount++;
+					}
+					else
+					{
+						++ItemCount;
+					}
+				}
+				pBin = pBin->GetNext();
+			}
+		}
+	}
+	if (ItemCount > NumberOfObject - 1)
+		rV = false;
+	return rV;
+}
+

@@ -1,4 +1,4 @@
-#include "Global.h"
+#include "pch.h"
 
 
 CBucket::~CBucket()
@@ -34,13 +34,13 @@ void CBucket::Add(CBin* pSym)
 CBin* CBucket::Find(const char* pName, int scope)
 {
 	CBin* pBin = 0;
-	BOOL loop = TRUE;
+	bool loop = true;
 
 	pBin = GetHead();
 	while (pBin && loop)
 	{
 		if (pBin->Compare(pName, scope))
-			loop = FALSE;
+			loop = false;
 		else
 			pBin = pBin->GetNext();
 	}

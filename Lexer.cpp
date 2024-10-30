@@ -1,4 +1,4 @@
-#include "Global.h"
+#include "pch.h"
 
 CLexer::CLexer()
 {
@@ -6,46 +6,77 @@ CLexer::CLexer()
 
 	for (i = 0; i < 256; ++i)
 		m_aLexBuff[i] = 0;
-	m_pInputFile = 0;
 	m_UngetBuffer = 0;
 	m_LexBuffIndex = 0;
 	m_Line = 1;
 	m_Col = 0;
 	m_Number = 0;
 	m_pLexSymbol = 0;
+	m_pFileBuffeer = 0;
 }
 
 CLexer::~CLexer()
 {
+	 
 }
 
-BOOL CLexer::Create(FILE* pIn)
+bool CLexer::Create()
 {
-	m_pInputFile = pIn;
+	struct _stat32 FileStats;
+	int l;
+	unsigned BytesRead = 0;
+
+	//---------------------------------
+	// Open Input File
+	//---------------------------------
+	_stat32(Act()->GetSourceFileName(), &FileStats);
+	m_InFileSize = FileStats.st_size;
+	Act()->OpenSource();
+	m_pFileBuffeer = new char[m_InFileSize + 1];
+	if(m_pFileBuffeer && Act()->SrcFile())
+		BytesRead = fread(m_pFileBuffeer, 1, m_InFileSize, Act()->SrcFile());
+	Act()->CloseSource();
+	if (BytesRead)
+		m_InFileSize = BytesRead;
+	//----------------------------
+	// Create Symbol Table
+	//----------------------------
 	m_SymbolTable.Create(101);
-	return TRUE;
+	//----------------------------
+	// Open Log file
+	//----------------------------
+	Act()->OpenLog();
+	fprintf(stderr, "File:%s has %d Bytes\n", Act()->GetSourceFileName(), m_InFileSize);
+	return true;
+}
+
+FILE* CLexer::GetLogFile()
+{
+	return Act()->LogFile();
 }
 
 int CLexer::LexGet()
 {
 	int c = 0;
 
-	if (m_UngetBuffer)
-		c = m_UngetBuffer;
+	if (m_pFileBuffeer && (m_FileIndex < m_InFileSize))
+		c = m_pFileBuffeer[m_FileIndex++];
 	else
-	{
-		if (m_pInputFile)
-			c = fgetc(m_pInputFile);
-		else
-			c = EOF;
-	}
+		c = EOF;
 	m_Col++;
 	return c;
 }
 
-BOOL CLexer::IsValidHexNumber(int c)
+void CLexer::LexUnGet()
 {
-	BOOL IsValid = FALSE;
+	if (m_FileIndex > 0) --m_FileIndex;
+	if(m_Col > 0)
+		m_Col--;
+}
+
+bool CLexer::IsValidHexNumber(int c)
+{
+	bool IsValid = false;
 
 	switch (c)
 	{
@@ -53,38 +84,38 @@ BOOL CLexer::IsValidHexNumber(int c)
 	case '5': case '6': case '7': case '8': case '9':
 	case 'a': case 'b': case 'c': case 'd': case 'e': case 'f':
 	case 'A': case 'B': case 'C': case 'D': case 'E': case 'F':
-		IsValid = TRUE;
+		IsValid = true;
 		break;
 	}
 	return IsValid;
 }
 
-BOOL CLexer::IsValidNumber(int c)
+bool CLexer::IsValidNumber(int c)
 {
-	BOOL IsValid = FALSE;
+	bool IsValid = false;
 
 	switch (c)
 	{
 	case '0': case '1': case '2': case '3': case '4':
 	case '5': case '6': case '7': case '8': case '9':
-		IsValid = TRUE;
+		IsValid = true;
 		break;
 	}
 	return IsValid;
 }
 
-BOOL CLexer::IsValidNameChar(int c)
+bool CLexer::IsValidNameChar(int c)
 {
-	BOOL IsValid = FALSE;
+	bool IsValid = false;
 
 	if (isalnum(c) || c == '_')
-		IsValid = TRUE;
+		IsValid = true;
 	return IsValid;;
 }
 
-BOOL CLexer::IsWhiteSpace(int c)
+bool CLexer::IsWhiteSpace(int c)
 {
-	BOOL IsValid = FALSE;
+	bool IsValid = false;
 
 	switch (c)
 	{
@@ -92,15 +123,15 @@ BOOL CLexer::IsWhiteSpace(int c)
 	case '\r':
 	case '\t':
 	case ' ':
-		IsValid = TRUE;
+		IsValid = true;
 		break;;
 	}
 	return IsValid;
 }
 
-BOOL CLexer::IsValidAssignmentOperator(int c)
+bool CLexer::IsValidAssignmentOperator(int c)
 {
-	BOOL IsValid = FALSE;
+	bool IsValid = false;
 
 	switch (c)
 	{
@@ -115,15 +146,15 @@ BOOL CLexer::IsValidAssignmentOperator(int c)
 	case 'X':
 	case 'L':
 	case 'R':
-		IsValid = TRUE;
+		IsValid = true;
 	}
 	return IsValid;
 }
 
-CLexer::Token CLexer::Lex()
+Token CLexer::Lex()
 {
-	BOOL Loop = TRUE;
-	BOOL auxLoop = TRUE;
+	bool Loop = true;
+	bool auxLoop = true;
 	int c;
 	Token TokenValue = Token(0);
 
@@ -135,11 +166,12 @@ CLexer::Token CLexer::Lex()
 		{
 		case EOF:
 			TokenValue = Token(EOF);
-			Loop = FALSE;
+			Loop = false;
 			break;
 		case '\n':	//white space
 			m_Col = 0;
 			m_Line++;
+			break;
 		case '\r':	//more white space
 		case '\t':
 		case ' ':
@@ -148,35 +180,35 @@ CLexer::Token CLexer::Lex()
 		case '5': case '6': case '7': case '8': case '9':
 			//Decimal Number
 			m_aLexBuff[m_LexBuffIndex++] = c;
-			auxLoop = TRUE;
+			auxLoop = true;
 			while (auxLoop)
 			{
 				c = LexGet();
 				if (IsValidNumber(c))
 					m_aLexBuff[m_LexBuffIndex++] = c;
 				else
-					auxLoop = FALSE;
+					auxLoop = false;
 			}
 			m_aLexBuff[m_LexBuffIndex] = 0;
 			m_Number = atoi(m_aLexBuff);
-			LexUnGet(c);
-			Loop = FALSE;
+			LexUnGet();
+			Loop = false;
 			TokenValue = Token::NUMBER;
 			break;
 		case '$':	//Hexadecimal Number
-			auxLoop = TRUE;
+			auxLoop = true;
 			while (auxLoop)
 			{
 				c = LexGet();
 				if (IsValidHexNumber(c))
 					m_aLexBuff[m_LexBuffIndex++] = c;
 				else
-					auxLoop = FALSE;
+					auxLoop = false;
 			}
 			m_aLexBuff[m_LexBuffIndex] = 0;
 			m_Number = strtol(m_aLexBuff, NULL, 16);
-			LexUnGet(c);
-			Loop = FALSE;
+			LexUnGet();
+			Loop = false;
 			TokenValue = Token::NUMBER;
 			break;
 		case '=':	//assignment operators
@@ -184,8 +216,8 @@ CLexer::Token CLexer::Lex()
 			if (IsWhiteSpace(c) || c != '=')
 			{
 				TokenValue = Token('=');
-				Loop = FALSE;
-				LexUnGet(c);
+				Loop = false;
+				LexUnGet();
 			}
 			else
 			{
@@ -242,7 +274,7 @@ CLexer::Token CLexer::Lex()
 					}
 				}
 			}
-			Loop = FALSE;
+			Loop = false;
 			break;
 		case '[':
 		case ']':
@@ -260,7 +292,7 @@ CLexer::Token CLexer::Lex()
 		case '^':	//Pointer dereference
 		case ',':
 			TokenValue = Token(c);
-			Loop = FALSE;
+			Loop = false;
 			break;
 		case '>':	//Greader Than
 			c = LexGet();
@@ -269,9 +301,9 @@ CLexer::Token CLexer::Lex()
 			else
 			{
 				TokenValue = Token('>');
-				LexUnGet(c);
+				LexUnGet();
 			}
-			Loop = FALSE;
+			Loop = false;
 			break;
 		case '<':	//Less Than
 			c = LexGet();
@@ -282,18 +314,18 @@ CLexer::Token CLexer::Lex()
 			else
 			{
 				TokenValue = Token('<');
-				LexUnGet(c);
+				LexUnGet();
 			}
-			Loop = FALSE;
+			Loop = false;
 			break;
 		case ';':	// Comment
-			auxLoop = TRUE;
+			auxLoop = true;
 			while (auxLoop)
 			{
 				c = LexGet();
 				if (c == '\n')
 				{
-					auxLoop = FALSE;
+					auxLoop = false;
 					m_Line++;
 					m_Col = 0;
 				}
@@ -301,7 +333,7 @@ CLexer::Token CLexer::Lex()
 			break;
 		default:	//Keywords and Identifiers
 			m_aLexBuff[m_LexBuffIndex++] = c;
-			auxLoop = TRUE;
+			auxLoop = true;
 			while (auxLoop)
 			{
 				c = LexGet();
@@ -311,9 +343,9 @@ CLexer::Token CLexer::Lex()
 				}
 				else
 				{
-					auxLoop = FALSE;
+					auxLoop = false;
 					m_aLexBuff[m_LexBuffIndex] = 0;
-					LexUnGet(c);
+					LexUnGet();
 				}
 			}	//END OF collecting characters for word
 			//---------------------------------
@@ -336,8 +368,8 @@ CLexer::Token CLexer::Lex()
 				m_pLexSymbol = (CSymbol*)LookupSymbol(m_aLexBuff);
 				if (m_pLexSymbol)
 				{
-					TokenValue = CLexer::Token::IDENT;
-					Loop = FALSE;
+					TokenValue = Token::IDENT;
+					Loop = false;
 				}
 				else
 				{
@@ -348,7 +380,8 @@ CLexer::Token CLexer::Lex()
 					m_pLexSymbol->Create();
 					TokenValue = Token::IDENT;
 					m_pLexSymbol->SetIdentType(IdentType::NEW_SYMBOL);
-					Loop = FALSE;
+					m_pLexSymbol->SetName(GetLexBuffer());
+					Loop = false;
 				}
 			}
 			break;	// end of default:
@@ -357,99 +390,124 @@ CLexer::Token CLexer::Lex()
 	return TokenValue;
 }
 
-//**********************************************
-// Expect
-//
-// This function is used to check that we get
-// the token that we Expect.
-//
-// parameters:
-//	Lookahead..Current lookahead token
-//	token....this is the token we Expect
-// return value:
-//	reutns the next Lookahead token (>0)
-//	reutnrs 0 or negative if we did not get what we Expected
-//*********************************************
-
-CLexer::Token CLexer::Expect(CLexer::Token LookaHeadToken, CLexer::Token Expected)
-{
-	if (Accept(LookaHeadToken, Expected))
-		LookaHeadToken = Lex();
-	else
-	{
-		fprintf(stderr, "Line %d: Unexpected Token:Got %d Expected %d\n", m_Line, LookaHeadToken, Expected);
-		exit(1);
-	}
-	return LookaHeadToken;
-}
-
-//********************************************
-// Accept
-//
-// This function compares the token you want
-// versus the token that is current.  If they
-// match, then we get another token.
-// If not, then just return.
-//
-// parameter:
-//	Lookahead..The current lookahead token
-//	token.....this is the token we want
-//
-// return value:
-//	returns the new token value (>0)
-//	returns 0 or negative if we don't get the token we want
-//**********************************************
-
-BOOL CLexer::Accept(Token Lookahead, Token Expected)
-{
-	BOOL rv = FALSE;
-
-	if (Expected == Lookahead)
-		rv = TRUE;
-	return rv;
-}
-
 CBin* CLexer::LookupSymbol(const char* pName)
 {
-	CBin* pSym = 0;
-
-	pSym = m_SymbolTable.FindSymbol(pName, SYMBOL_SCOPE_ANY);
-	return pSym;
+	return GetSymTab()->FindSymbol(pName,1);
 }
 
-CLexer::Token CLexer::LookupKeyword(const char* pKeyword)
+Token CLexer::LookupKeyword(const char* pKeyword)
 {
-	int i;
-	Token KeywordToken = Token(0);
-	BOOL Loop = TRUE;
+	Token Toke;
 
-	for (i = 0; Loop && KeyWords[i].m_TokenID != Token::ENDOFTOKENS; ++i)
-	{
-		if (strcmp(pKeyword, KeyWords[i].m_Name) == 0)
-		{
-			Loop = FALSE;
-			KeywordToken = KeyWords[i].m_TokenID;
-		}
-	}
-	return KeywordToken;
+	Toke = KeyWords->LookupToToken(pKeyword);
+	return Toke;
 }
 
 CLexer::KeyWord* CLexer::FindKeyword(Token KeywordToken)
 {
-	KeyWord* pKeyword = 0;
-	BOOL Loop = TRUE;
+	return nullptr;
+}
+
+CLexer::Processor CLexer::LookupProcessor(Token KeywordToken)
+{
+	Processor AppropriateProcessor = Processor::ALL;
 	int i = 0;
+	bool Loop = true;
 
 	while (Loop)
 	{
 		if (KeyWords[i].m_TokenID == KeywordToken)
 		{
-			pKeyword = (KeyWord*)&KeyWords[i];
+			AppropriateProcessor = KeyWords[i].m_Processor;
 			Loop = 0;
+		}
+		else
+		{
+			++i;
+			if (KeyWords[i].m_TokenID == Token::ENDOFTOKENS)
+			{
+				Loop = false;
+			}
+		}
+	}
+	return AppropriateProcessor;
+}
+
+int CLexer::LookupOpcode(Token OpcodeToken)
+{
+	int OpCode = 0;
+	int i;
+	bool Loop = true;
+
+	for (i = 0; KeyWords[i].m_OpCode >= 0 && Loop; ++i)
+	{
+		if (KeyWords[i].m_TokenID == OpcodeToken)
+		{
+			Loop = false;
+			OpCode = KeyWords[i].m_OpCode;
+		}
+	}
+	return OpCode;
+}
+
+int CLexer::GetOpcode(Token OpCodeToken)
+{
+	int OpCode = -1;	//indicates error
+	int i = 0;
+	bool Loop = true;
+
+	while (KeyWords[i].m_TokenID != Token::ENDOFTOKENS && Loop)
+	{
+		if (KeyWords[i].m_TokenID == OpCodeToken)
+		{
+			OpCode = KeyWords[i].m_OpCode;
+			Loop = false;
 		}
 		else
 			++i;
 	}
-	return pKeyword;
+	return OpCode;
 }
 
+const char* CLexer::KeyWord::LookupToName(Token Toke)
+{
+	return nullptr;
+}
+
+Token CLexer::KeyWord::LookupToToken(const char* pName)
+{
+	int i = 0;
+	bool Loop = true;
+
+	while (Loop)
+	{
+		if (strcmp(pName, KeyWords[i].m_Name) == 0)
+			Loop = false;
+		else
+			i++;
+		if (KeyWords[i].m_TokenID == Token::ENDOFTOKENS)
+		{
+			Loop = false;
+		}
+	}
+	return KeyWords[i].m_TokenID;
+}
+
+int CLexer::KeyWord::FindInc(AdrModeType AdrMode)
+{
+	int IncValue = -1;
+
+	IncValue = m_pAddresModeLUT->GetInc(AdrMode);
+	if (IncValue < 0)
+	{
+		sprintf_s(
+			ExceptionThrown.GetErrorString(),
+			ExceptionThrown.GetMaxStringLen(),
+			"Houston, we have a problem Line:%d",
+			Act()->GetParser()->GetLexer()->GetLineNumber()
+		);
+		ExceptionThrown.SetXCeptType(Exception::ExceptionType::INTERNAL_ERROR);
+		throw(ExceptionThrown);
+	}
+	return IncValue;
+}

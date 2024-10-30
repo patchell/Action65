@@ -11,7 +11,7 @@ public:
 	}
 	virtual ~CBucket();
 	void Add(CBin* pSym);
-	BOOL Create() { return TRUE; }
+	bool Create() { return true; }
 	CBin* Find(const char* pName, int scope);
 	void Delete(CBin* pSym);
 	void Unlink(CBin* pSym);

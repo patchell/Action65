@@ -1,0 +1,427 @@
+???????? $ Nullable Set(0)
+Add Rule:AsmStmt
+TERMINALS['Terminals'] { 'IDENT','EOL','VECTOR','GLOBALS','ROUTINES','MODULE','RETURN'
+,'PROC','FUNC','FUNC_CALL','PROC_CALL','IF','FOR','WHILE','DO','OD','EXIT','THEN'
+,'FI','ELSEIF','ELSE','UNTILL','TO','STEP','OR','AND','GTEQ','LTEQ','NUMBER','DEFINE'
+,'TYPE','RECORDTYPE','BOOL','CHAR','BYTE','CARD','INT','POINTER','ARRAY','INTERRUPT'
+,'PUSH','POP','ACC','XREG','YREG','ASM','ADC','AND','ASL','BCC','BCS','BEQ','BMI'
+,'BNE','BPL','BVC','BVS','BIT','BRK','CLC','CLD','CLI','CLV','CMP','CPX','CPY','DEC'
+,'DEX','DEY','EOR','INC','INX','INY','JMP','JSR','LDA','LDX','LDY','LSR','NOP','ORA'
+,'PHA','PLA','PHP','PLP','ROL','ROR','RTI','RTS','SBC','STA','SEC','SED','SEI','STX'
+,'STY','TAX','TAY','TXA','TYA','TXS','TSX','X','Y','A','SR','@','.','^','!','XOR'
+,'&','%','#','>','<','{','}','=','==+','==-','==*','==/','==MOD','==&','==!','==XOR'
+,'==%','==LSH','==RSH','[',']',',',';','+','-','*','/','MOD','LSH','RSH','(',')','FUNC_IDENT'
+,'POINRTER','PROCESSOR','R6502','WD65C02','WD65C816','SECTION','SECTION_NAME','START'
+,'SIZE','MODE','ZEROPAGE','READ_ONLY','READ_WRITE','true','false','ORG','DB','DW'
+,'DL','DAS','STRING','DCS','DS','EPROC',':','AREG','LOCAL_LABLE','GLOBAL_LABLE','CHAR_CONSTANT'
+,'e','$' }
+NONTERMINALS['Non Terminals'] { 'Action65','Modules','Modules_1','Vector','Vector_1'
+,'VectorAddress','PROCroutine','PROCroutine_1','IrqDef','ProcDef','FuncDef','IrqDecl'
+,'ProcDecl','FuncDecl','OptInit','IrqBody','ProcBody','FuncBody','Statements','ProcCall_1'
+,'ProcParams','ForStmt','ForStmt_1','Iterator','Start','Finish','STEPoption','IfStmt'
+,'IfStmt_1','If','ThenPart','ThenPart_1','ElseIfPart','ElseIfPart_1','ElsePart','WhileStmt'
+,'WhileStmt_1','DoStmt','DoStmt_1','EXITstmt','EXITstmt_1','RetStmt','RetStmt_1','OptReturnValue'
+,'InlineAssembly','InlineAssembly_1','InlineAssBlock','InlineAssBlock_1','InlineAssBlock_2'
+,'CodeBlock','CodeBlock_1','ConstList','ConstList_1','UntillStmt','UntillStmt_1','Assignment'
+,'Assignment_1','ArithExpr','LogicalOR_1','LogicalAND','LogicalAND_1','RelOperation'
+,'RelOperation_1','RelEquals','RelEquals_1','BitwiseOR','BitwiseOR_1','BitwiseAND'
+,'BitwiseAND_1','BitwiseXOR','BitwiseXOR_1','AddExpr','AddExpr_1','ShifExpr','ShiftExpr_1'
+,'MultExpr','MultExpr_1','Unary','Factor','MemContentsList','MemContentsList_1','SysDecl'
+,'Define','DefList','DefList_1','Def','TypeDefDecl','TypeDefDecl_1','RecDefIdent'
+,'RecDefField','RecDefVarDecls','RecDefVarDecls_1','RecDefVarDecl','RecDefVarList'
+,'RecDefModifier','RecDefPointer','RecDefArray','RecDefArray_1','RecDefIdentList'
+,'RecDefIdentList_1','RecDecl','RecDecl_1','RecDecModifier','RecDecPointer','RecDecArray'
+,'FundDecl','FundModifier','FundModifier_1','FundPtrModifier','FundPtrModifier_1'
+,'FundArrayModifier','IdentList','IdentList_1','Ident','Options','OptArrayDimension'
+,'OptArrayInit','ParamList','ParamList_1','Param','ParamModifier','LocalDecls','LocalModifier'
+,'LocPtrModifier','LocArrayModifier','LocArrayModifier_1','CompConst','CompConst_1'
+,'BaseCompConst','MemContents','MemContentsType','ArrayIndex','AsmStmt','Processor_1'
+,'ProcessorType','Section','Section_1','Section_2','SectionDef','SectionDef_1','SectionAttributes'
+,'SectionAttributes_1','SectionAtribute','Modes','TrueFalse','Org','Org_1','DefineMemory'
+,'DefineMemory_1','DefineStorage','DefineStorage_1','Proceedure','Proceedure_1','Instruction'
+,'Instruction_1','Labels','Label_1','AluAdrModes','Indirect','Indirect_1','StaAddressingModes'
+,'ShiftAddressingModes','RelAddressingMode','BitAddressModes','IncAddressingMOdes'
+,'JumpAddressingModes','CallAddressingMode','LdxAddressingMode','CPX_CPY_AddressingMode'
+,'StxAddressingMode','LdyAddressingMode','StyAddressingMode','OptIndexReg','OptIndexReg_1'
+,'OptXReg','OptYReg','AsmConstList','AsmConstList_1','AsmConstList_2','AsmConstant'
+,'AsmConstant_1','AsmConstAddSub','AsmConstAddSub_1','BaseAsmConstant' }
+*********** Build Nullable Set **********
+****************Create NOT nullable set ************************
+----- Calc First Sets------
+FIRST['Action65'] { }
+FIRST['Modules'] { }
+FIRST['Modules_1'] { 'e' }
+FIRST['Vector'] { }
+FIRST['Vector_1'] { 'e' }
+FIRST['VectorAddress'] { }
+FIRST['PROCroutine'] { }
+FIRST['PROCroutine_1'] { 'e' }
+FIRST['IrqDef'] { }
+FIRST['ProcDef'] { }
+FIRST['FuncDef'] { }
+FIRST['IrqDecl'] { }
+FIRST['ProcDecl'] { }
+FIRST['FuncDecl'] { }
+FIRST['OptInit'] { 'e' }
+FIRST['IrqBody'] { }
+FIRST['ProcBody'] { }
+FIRST['FuncBody'] { }
+FIRST['Statements'] { }
+FIRST['ProcCall_1'] { 'e' }
+FIRST['ProcParams'] { }
+FIRST['ForStmt'] { }
+FIRST['ForStmt_1'] { 'e' }
+FIRST['Iterator'] { }
+FIRST['Start'] { }
+FIRST['Finish'] { }
+FIRST['STEPoption'] { 'e' }
+FIRST['IfStmt'] { }
+FIRST['IfStmt_1'] { 'e' }
+FIRST['If'] { }
+FIRST['ThenPart'] { }
+FIRST['ThenPart_1'] { }
+FIRST['ElseIfPart'] { 'e' }
+FIRST['ElseIfPart_1'] { 'e' }
+FIRST['ElsePart'] { 'e' }
+FIRST['WhileStmt'] { }
+FIRST['WhileStmt_1'] { 'e' }
+FIRST['DoStmt'] { }
+FIRST['DoStmt_1'] { 'e' }
+FIRST['EXITstmt'] { }
+FIRST['EXITstmt_1'] { 'e' }
+FIRST['RetStmt'] { }
+FIRST['RetStmt_1'] { 'e' }
+FIRST['OptReturnValue'] { 'e' }
+FIRST['InlineAssembly'] { }
+FIRST['InlineAssembly_1'] { 'e' }
+FIRST['InlineAssBlock'] { }
+FIRST['InlineAssBlock_1'] { }
+FIRST['InlineAssBlock_2'] { 'e' }
+FIRST['CodeBlock'] { }
+FIRST['CodeBlock_1'] { 'e' }
+FIRST['ConstList'] { }
+FIRST['ConstList_1'] { 'e' }
+FIRST['UntillStmt'] { }
+FIRST['UntillStmt_1'] { 'e' }
+FIRST['Assignment'] { 'e' }
+FIRST['Assignment_1'] { 'e' }
+FIRST['ArithExpr'] { }
+FIRST['LogicalOR_1'] { 'e' }
+FIRST['LogicalAND'] { }
+FIRST['LogicalAND_1'] { 'e' }
+FIRST['RelOperation'] { }
+FIRST['RelOperation_1'] { 'e' }
+FIRST['RelEquals'] { }
+FIRST['RelEquals_1'] { 'e' }
+FIRST['BitwiseOR'] { }
+FIRST['BitwiseOR_1'] { 'e' }
+FIRST['BitwiseAND'] { }
+FIRST['BitwiseAND_1'] { 'e' }
+FIRST['BitwiseXOR'] { }
+FIRST['BitwiseXOR_1'] { 'e' }
+FIRST['AddExpr'] { }
+FIRST['AddExpr_1'] { 'e' }
+FIRST['ShifExpr'] { }
+FIRST['ShiftExpr_1'] { 'e' }
+FIRST['MultExpr'] { }
+FIRST['MultExpr_1'] { 'e' }
+FIRST['Unary'] { }
+FIRST['Factor'] { 'FUNC_IDENT','e' }
+FIRST['MemContentsList'] { 'e' }
+FIRST['MemContentsList_1'] { 'e' }
+FIRST['SysDecl'] { }
+FIRST['Define'] { 'e' }
+FIRST['DefList'] { }
+FIRST['DefList_1'] { 'e' }
+FIRST['Def'] { }
+FIRST['TypeDefDecl'] { }
+FIRST['TypeDefDecl_1'] { 'e' }
+FIRST['RecDefIdent'] { 'e' }
+FIRST['RecDefField'] { 'e' }
+FIRST['RecDefVarDecls'] { 'e' }
+FIRST['RecDefVarDecls_1'] { 'e' }
+FIRST['RecDefVarDecl'] { 'e' }
+FIRST['RecDefVarList'] { 'e' }
+FIRST['RecDefModifier'] { }
+FIRST['RecDefPointer'] { 'POINRTER','e' }
+FIRST['RecDefArray'] { }
+FIRST['RecDefArray_1'] { 'e' }
+FIRST['RecDefIdentList'] { 'e' }
+FIRST['RecDefIdentList_1'] { 'e' }
+FIRST['RecDecl'] { 'e' }
+FIRST['RecDecl_1'] { 'e' }
+FIRST['RecDecModifier'] { 'e' }
+FIRST['RecDecPointer'] { 'e' }
+FIRST['RecDecArray'] { 'e' }
+FIRST['FundDecl'] { 'e' }
+FIRST['FundModifier'] { }
+FIRST['FundModifier_1'] { }
+FIRST['FundPtrModifier'] { 'e' }
+FIRST['FundPtrModifier_1'] { 'e' }
+FIRST['FundArrayModifier'] { 'e' }
+FIRST['IdentList'] { 'e' }
+FIRST['IdentList_1'] { 'e' }
+FIRST['Ident'] { 'e' }
+FIRST['Options'] { 'e' }
+FIRST['OptArrayDimension'] { }
+FIRST['OptArrayInit'] { 'e' }
+FIRST['ParamList'] { 'e' }
+FIRST['ParamList_1'] { 'e' }
+FIRST['Param'] { 'e' }
+FIRST['ParamModifier'] { 'e' }
+FIRST['LocalDecls'] { 'e' }
+FIRST['LocalModifier'] { }
+FIRST['LocPtrModifier'] { 'e' }
+FIRST['LocArrayModifier'] { }
+FIRST['LocArrayModifier_1'] { 'e' }
+FIRST['CompConst'] { 'e' }
+FIRST['CompConst_1'] { 'e' }
+FIRST['BaseCompConst'] { 'e' }
+FIRST['MemContents'] { 'e' }
+FIRST['MemContentsType'] { 'e' }
+FIRST['ArrayIndex'] { }
+FIRST['AsmStmt'] { }
+FIRST['Processor_1'] { 'PROCESSOR','e' }
+FIRST['ProcessorType'] { 'R6502','WD65C02','WD65C816' }
+FIRST['Section'] { }
+FIRST['Section_1'] { 'SECTION','e' }
+FIRST['Section_2'] { 'SECTION_NAME' }
+FIRST['SectionDef'] { }
+FIRST['SectionDef_1'] { 'e' }
+FIRST['SectionAttributes'] { 'e','START','SIZE','MODE','ZEROPAGE' }
+FIRST['SectionAttributes_1'] { 'e' }
+FIRST['SectionAtribute'] { 'START','SIZE','MODE','ZEROPAGE','e' }
+FIRST['Modes'] { 'READ_ONLY','READ_WRITE' }
+FIRST['TrueFalse'] { 'true','false' }
+FIRST['Org'] { }
+FIRST['Org_1'] { 'ORG','e' }
+FIRST['DefineMemory'] { }
+FIRST['DefineMemory_1'] { 'DB','DW','DL','DAS','DCS','e' }
+FIRST['DefineStorage'] { }
+FIRST['DefineStorage_1'] { 'DS','e' }
+FIRST['Proceedure'] { }
+FIRST['Proceedure_1'] { 'e' }
+FIRST['Instruction'] { 'e' }
+FIRST['Instruction_1'] { 'e' }
+FIRST['Labels'] { 'e' }
+FIRST['Label_1'] { ':','e' }
+FIRST['AluAdrModes'] { 'LOCAL_LABLE','GLOBAL_LABLE','CHAR_CONSTANT' }
+FIRST['Indirect'] { 'LOCAL_LABLE','GLOBAL_LABLE','CHAR_CONSTANT' }
+FIRST['Indirect_1'] { }
+FIRST['StaAddressingModes'] { 'LOCAL_LABLE','GLOBAL_LABLE','CHAR_CONSTANT' }
+FIRST['ShiftAddressingModes'] { 'AREG','LOCAL_LABLE','GLOBAL_LABLE','CHAR_CONSTANT'
+ }
+FIRST['RelAddressingMode'] { 'LOCAL_LABLE','GLOBAL_LABLE','CHAR_CONSTANT' }
+FIRST['BitAddressModes'] { 'LOCAL_LABLE','GLOBAL_LABLE','CHAR_CONSTANT' }
+FIRST['IncAddressingMOdes'] { 'LOCAL_LABLE','GLOBAL_LABLE','CHAR_CONSTANT' }
+FIRST['JumpAddressingModes'] { 'LOCAL_LABLE','GLOBAL_LABLE','CHAR_CONSTANT' }
+FIRST['CallAddressingMode'] { 'LOCAL_LABLE','GLOBAL_LABLE','CHAR_CONSTANT' }
+FIRST['LdxAddressingMode'] { 'LOCAL_LABLE','GLOBAL_LABLE','CHAR_CONSTANT' }
+FIRST['CPX_CPY_AddressingMode'] { 'LOCAL_LABLE','GLOBAL_LABLE','CHAR_CONSTANT' }
+FIRST['StxAddressingMode'] { 'LOCAL_LABLE','GLOBAL_LABLE','CHAR_CONSTANT' }
+FIRST['LdyAddressingMode'] { 'LOCAL_LABLE','GLOBAL_LABLE','CHAR_CONSTANT' }
+FIRST['StyAddressingMode'] { 'LOCAL_LABLE','GLOBAL_LABLE','CHAR_CONSTANT' }
+FIRST['OptIndexReg'] { 'e' }
+FIRST['OptIndexReg_1'] { }
+FIRST['OptXReg'] { 'e' }
+FIRST['OptYReg'] { 'e' }
+FIRST['AsmConstList'] { 'STRING','LOCAL_LABLE','GLOBAL_LABLE','CHAR_CONSTANT' }
+FIRST['AsmConstList_1'] { 'LOCAL_LABLE','GLOBAL_LABLE','CHAR_CONSTANT' }
+FIRST['AsmConstList_2'] { 'e' }
+FIRST['AsmConstant'] { 'LOCAL_LABLE','GLOBAL_LABLE','CHAR_CONSTANT' }
+FIRST['AsmConstant_1'] { 'e' }
+FIRST['AsmConstAddSub'] { 'LOCAL_LABLE','GLOBAL_LABLE','CHAR_CONSTANT' }
+FIRST['AsmConstAddSub_1'] { 'e' }
+FIRST['BaseAsmConstant'] { 'LOCAL_LABLE','GLOBAL_LABLE','CHAR_CONSTANT' }
+----- Calc Follow Sets------
+------------ Follow Sets ---------------
+FOLLOW['Action65'] { '$' }
+FOLLOW['Modules'] { '$' }
+FOLLOW['Modules_1'] { '$' }
+FOLLOW['Vector'] { '$' }
+FOLLOW['Vector_1'] { '$' }
+FOLLOW['VectorAddress'] { }
+FOLLOW['PROCroutine'] { '$' }
+FOLLOW['PROCroutine_1'] { '$' }
+FOLLOW['IrqDef'] { }
+FOLLOW['ProcDef'] { }
+FOLLOW['FuncDef'] { }
+FOLLOW['IrqDecl'] { }
+FOLLOW['ProcDecl'] { }
+FOLLOW['FuncDecl'] { }
+FOLLOW['OptInit'] { }
+FOLLOW['IrqBody'] { }
+FOLLOW['ProcBody'] { }
+FOLLOW['FuncBody'] { }
+FOLLOW['Statements'] { }
+FOLLOW['ProcCall_1'] { }
+FOLLOW['ProcParams'] { }
+FOLLOW['ForStmt'] { }
+FOLLOW['ForStmt_1'] { }
+FOLLOW['Iterator'] { }
+FOLLOW['Start'] { }
+FOLLOW['Finish'] { }
+FOLLOW['STEPoption'] { }
+FOLLOW['IfStmt'] { }
+FOLLOW['IfStmt_1'] { }
+FOLLOW['If'] { }
+FOLLOW['ThenPart'] { }
+FOLLOW['ThenPart_1'] { }
+FOLLOW['ElseIfPart'] { }
+FOLLOW['ElseIfPart_1'] { }
+FOLLOW['ElsePart'] { }
+FOLLOW['WhileStmt'] { }
+FOLLOW['WhileStmt_1'] { }
+FOLLOW['DoStmt'] { }
+FOLLOW['DoStmt_1'] { }
+FOLLOW['EXITstmt'] { }
+FOLLOW['EXITstmt_1'] { }
+FOLLOW['RetStmt'] { }
+FOLLOW['RetStmt_1'] { }
+FOLLOW['OptReturnValue'] { }
+FOLLOW['InlineAssembly'] { }
+FOLLOW['InlineAssembly_1'] { }
+FOLLOW['InlineAssBlock'] { }
+FOLLOW['InlineAssBlock_1'] { }
+FOLLOW['InlineAssBlock_2'] { }
+FOLLOW['CodeBlock'] { }
+FOLLOW['CodeBlock_1'] { }
+FOLLOW['ConstList'] { }
+FOLLOW['ConstList_1'] { }
+FOLLOW['UntillStmt'] { }
+FOLLOW['UntillStmt_1'] { }
+FOLLOW['Assignment'] { }
+FOLLOW['Assignment_1'] { }
+FOLLOW['ArithExpr'] { }
+FOLLOW['LogicalOR_1'] { }
+FOLLOW['LogicalAND'] { }
+FOLLOW['LogicalAND_1'] { }
+FOLLOW['RelOperation'] { }
+FOLLOW['RelOperation_1'] { }
+FOLLOW['RelEquals'] { }
+FOLLOW['RelEquals_1'] { }
+FOLLOW['BitwiseOR'] { }
+FOLLOW['BitwiseOR_1'] { }
+FOLLOW['BitwiseAND'] { }
+FOLLOW['BitwiseAND_1'] { }
+FOLLOW['BitwiseXOR'] { }
+FOLLOW['BitwiseXOR_1'] { }
+FOLLOW['AddExpr'] { }
+FOLLOW['AddExpr_1'] { }
+FOLLOW['ShifExpr'] { }
+FOLLOW['ShiftExpr_1'] { }
+FOLLOW['MultExpr'] { }
+FOLLOW['MultExpr_1'] { }
+FOLLOW['Unary'] { }
+FOLLOW['Factor'] { }
+FOLLOW['MemContentsList'] { }
+FOLLOW['MemContentsList_1'] { }
+FOLLOW['SysDecl'] { '$' }
+FOLLOW['Define'] { '$' }
+FOLLOW['DefList'] { }
+FOLLOW['DefList_1'] { }
+FOLLOW['Def'] { }
+FOLLOW['TypeDefDecl'] { '$' }
+FOLLOW['TypeDefDecl_1'] { '$' }
+FOLLOW['RecDefIdent'] { }
+FOLLOW['RecDefField'] { }
+FOLLOW['RecDefVarDecls'] { }
+FOLLOW['RecDefVarDecls_1'] { }
+FOLLOW['RecDefVarDecl'] { }
+FOLLOW['RecDefVarList'] { }
+FOLLOW['RecDefModifier'] { }
+FOLLOW['RecDefPointer'] { }
+FOLLOW['RecDefArray'] { 'POINRTER' }
+FOLLOW['RecDefArray_1'] { 'POINRTER' }
+FOLLOW['RecDefIdentList'] { 'POINRTER' }
+FOLLOW['RecDefIdentList_1'] { 'POINRTER' }
+FOLLOW['RecDecl'] { '$' }
+FOLLOW['RecDecl_1'] { '$' }
+FOLLOW['RecDecModifier'] { }
+FOLLOW['RecDecPointer'] { }
+FOLLOW['RecDecArray'] { }
+FOLLOW['FundDecl'] { '$' }
+FOLLOW['FundModifier'] { '$' }
+FOLLOW['FundModifier_1'] { '$' }
+FOLLOW['FundPtrModifier'] { }
+FOLLOW['FundPtrModifier_1'] { }
+FOLLOW['FundArrayModifier'] { }
+FOLLOW['IdentList'] { '$' }
+FOLLOW['IdentList_1'] { '$' }
+FOLLOW['Ident'] { 'POINRTER','$' }
+FOLLOW['Options'] { }
+FOLLOW['OptArrayDimension'] { }
+FOLLOW['OptArrayInit'] { }
+FOLLOW['ParamList'] { }
+FOLLOW['ParamList_1'] { }
+FOLLOW['Param'] { }
+FOLLOW['ParamModifier'] { }
+FOLLOW['LocalDecls'] { }
+FOLLOW['LocalModifier'] { }
+FOLLOW['LocPtrModifier'] { }
+FOLLOW['LocArrayModifier'] { }
+FOLLOW['LocArrayModifier_1'] { }
+FOLLOW['CompConst'] { }
+FOLLOW['CompConst_1'] { }
+FOLLOW['BaseCompConst'] { }
+FOLLOW['MemContents'] { }
+FOLLOW['MemContentsType'] { }
+FOLLOW['ArrayIndex'] { }
+FOLLOW['AsmStmt'] { }
+FOLLOW['Processor_1'] { }
+FOLLOW['ProcessorType'] { }
+FOLLOW['Section'] { }
+FOLLOW['Section_1'] { }
+FOLLOW['Section_2'] { }
+FOLLOW['SectionDef'] { }
+FOLLOW['SectionDef_1'] { }
+FOLLOW['SectionAttributes'] { }
+FOLLOW['SectionAttributes_1'] { }
+FOLLOW['SectionAtribute'] { }
+FOLLOW['Modes'] { }
+FOLLOW['TrueFalse'] { }
+FOLLOW['Org'] { 'SECTION' }
+FOLLOW['Org_1'] { 'SECTION' }
+FOLLOW['DefineMemory'] { 'PROCESSOR','ORG','SECTION' }
+FOLLOW['DefineMemory_1'] { 'PROCESSOR','ORG','SECTION' }
+FOLLOW['DefineStorage'] { 'DB','DW','DL','DAS','DCS','PROCESSOR','ORG','SECTION' }
+FOLLOW['DefineStorage_1'] { 'DB','DW','DL','DAS','DCS','PROCESSOR','ORG','SECTION' }
+FOLLOW['Proceedure'] { 'DS','DB','DW','DL','DAS','DCS','PROCESSOR','ORG','SECTION' }
+FOLLOW['Proceedure_1'] { 'DS','DB','DW','DL','DAS','DCS','PROCESSOR','ORG','SECTION'
+ }
+FOLLOW['Instruction'] { 'DS','DB','DW','DL','DAS','DCS','PROCESSOR','ORG','SECTION'
+ }
+FOLLOW['Instruction_1'] { 'DS','DB','DW','DL','DAS','DCS','PROCESSOR','ORG','SECTION'
+ }
+FOLLOW['Labels'] { 'DS','DB','DW','DL','DAS','DCS','PROCESSOR','ORG','SECTION' }
+FOLLOW['Label_1'] { }
+FOLLOW['AluAdrModes'] { }
+FOLLOW['Indirect'] { }
+FOLLOW['Indirect_1'] { }
+FOLLOW['StaAddressingModes'] { }
+FOLLOW['ShiftAddressingModes'] { }
+FOLLOW['RelAddressingMode'] { }
+FOLLOW['BitAddressModes'] { }
+FOLLOW['IncAddressingMOdes'] { }
+FOLLOW['JumpAddressingModes'] { }
+FOLLOW['CallAddressingMode'] { }
+FOLLOW['LdxAddressingMode'] { }
+FOLLOW['CPX_CPY_AddressingMode'] { }
+FOLLOW['StxAddressingMode'] { }
+FOLLOW['LdyAddressingMode'] { }
+FOLLOW['StyAddressingMode'] { }
+FOLLOW['OptIndexReg'] { }
+FOLLOW['OptIndexReg_1'] { }
+FOLLOW['OptXReg'] { }
+FOLLOW['OptYReg'] { }
+FOLLOW['AsmConstList'] { }
+FOLLOW['AsmConstList_1'] { }
+FOLLOW['AsmConstList_2'] { }
+FOLLOW['AsmConstant'] { }
+FOLLOW['AsmConstant_1'] { }
+FOLLOW['AsmConstAddSub'] { }
+FOLLOW['AsmConstAddSub_1'] { }
+FOLLOW['BaseAsmConstant'] { }
+---------------- Create Parse Table --------------
+Table Entries = 245
+------------ Check For Conflicts-------------

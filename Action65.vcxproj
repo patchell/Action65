@@ -129,27 +129,79 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="AccessModeStackItem.cpp" />
     <ClCompile Include="Action65.cpp" />
-    <ClCompile Include="Global.cpp" />
+    <ClCompile Include="ActionApp.cpp" />
+    <ClCompile Include="AddressSizeStackItem.cpp" />
+    <ClCompile Include="AstNode.cpp" />
+    <ClCompile Include="AstTree.cpp" />
+    <ClCompile Include="BinStackItem.cpp" />
+    <ClCompile Include="ConsolApp.cpp" />
+    <ClCompile Include="DataSizeStackItem.cpp" />
     <ClCompile Include="Bin.cpp" />
     <ClCompile Include="Bucket.cpp" />
+    <ClCompile Include="Instruction.cpp" />
     <ClCompile Include="Lexer.cpp" />
+    <ClCompile Include="NumberStackItem.cpp" />
+    <ClCompile Include="ObjFormatCode.cpp" />
+    <ClCompile Include="ObjFormatData.cpp" />
+    <ClCompile Include="ObjFormatFile.cpp" />
+    <ClCompile Include="ObjFormatRelocation.cpp" />
+    <ClCompile Include="ObjFormatSection.cpp" />
+    <ClCompile Include="ObjFormatSectionItem.cpp" />
+    <ClCompile Include="ObjFormatSymbolItem.cpp" />
+    <ClCompile Include="ObjFormatSymbols.cpp" />
     <ClCompile Include="Parser.cpp" />
+    <ClCompile Include="pch.cpp" />
+    <ClCompile Include="RegisterStackItem.cpp" />
+    <ClCompile Include="Section.cpp" />
+    <ClCompile Include="Stack.cpp" />
+    <ClCompile Include="StackItem.cpp" />
+    <ClCompile Include="StackSectionItem.cpp" />
+    <ClCompile Include="StackSymbolItem.cpp" />
     <ClCompile Include="Symbol.cpp" />
     <ClCompile Include="SymTab.cpp" />
+    <ClCompile Include="UnResolvedSymbol.cpp" />
+    <ClCompile Include="WhereSymbolIsUsed.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Global.h" />
+    <ClInclude Include="AccessModeStackItem.h" />
+    <ClInclude Include="ActionApp.h" />
+    <ClInclude Include="AddressSizeStackItem.h" />
+    <ClInclude Include="AstNode.h" />
+    <ClInclude Include="AstTree.h" />
+    <ClInclude Include="BinStackItem.h" />
+    <ClInclude Include="ConsolApp.h" />
+    <ClInclude Include="DataSizeStackItem.h" />
+    <ClInclude Include="Instruction.h" />
+    <ClInclude Include="NumberStackItem.h" />
+    <ClInclude Include="ObjFormatCode.h" />
+    <ClInclude Include="ObjFormatData.h" />
+    <ClInclude Include="ObjFormatFile.h" />
+    <ClInclude Include="ObjFormatRelocation.h" />
+    <ClInclude Include="ObjFormatSection.h" />
+    <ClInclude Include="ObjFormatSectionItem.h" />
+    <ClInclude Include="ObjFormatSymbolItem.h" />
+    <ClInclude Include="ObjFormatSymbols.h" />
+    <ClInclude Include="pch.h" />
     <ClInclude Include="Bin.h" />
     <ClInclude Include="Bucket.h" />
     <ClInclude Include="Lexer.h" />
     <ClInclude Include="Parser.h" />
+    <ClInclude Include="RegisterStackItem.h" />
+    <ClInclude Include="Section.h" />
+    <ClInclude Include="Stack.h" />
+    <ClInclude Include="StackItem.h" />
+    <ClInclude Include="StackSectionItem.h" />
+    <ClInclude Include="StackSymbolItem.h" />
     <ClInclude Include="Symbol.h" />
     <ClInclude Include="SymTab.h" />
+    <ClInclude Include="UnResolvedSymbol.h" />
+    <ClInclude Include="WhereSymbolIsUsed.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ActionTestFiles\Test1.act" />
-    <None Include="Grammar\action65.gram" />
+    <None Include="Grammar\Action.gram" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
