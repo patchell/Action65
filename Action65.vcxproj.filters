@@ -21,6 +21,10 @@
       <UniqueIdentifier>{d894a29e-3ebf-43b9-be58-cbaf53033548}</UniqueIdentifier>
       <Extensions>txt;gram</Extensions>
     </Filter>
+    <Filter Include="Readme">
+      <UniqueIdentifier>{75978b1d-1d29-491d-b1fa-78e0e644189f}</UniqueIdentifier>
+      <Extensions>md</Extensions>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Action65.cpp">
@@ -233,6 +237,9 @@
     </None>
     <None Include="Grammar\Action.gram">
       <Filter>Grammar</Filter>
+    </None>
+    <None Include="README.md">
+      <Filter>Readme</Filter>
     </None>
   </ItemGroup>
 </Project>
