@@ -174,6 +174,8 @@ enum  class Token {
 	AREG,		//accumulator
 	XREG,
 	YREG,
+	SREG,		//stack pointer
+	PREG,		//processor status register
 	LOCAL_LABEL,
 	GLOBAL_LABLE,
 	CHAR_CONSTANT,

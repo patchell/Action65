@@ -237,6 +237,9 @@ private:
 		{Token::BEGIN,"BEGIN"},
 		{Token::DEFINE,"DEFINE"},
 		{Token::SET,"SET"},
+		//---------------------------------
+		// Assembler Tokens
+		//---------------------------------
 		{Token::ADC,"ADC", 3 ,0X61, Processor::R6502, &LUT_Order8,8},
 		{Token::AND,"AND", 3,0X21, Processor::R6502, &LUT_Order8,8},
 		{Token::ASL,"ASL", 3,0X06, Processor::R6502, &LUT_Order5,5},
@@ -356,9 +359,13 @@ private:
 		{Token::AREG,"A", 0,0, Processor::ALL,NULL,0},
 		{Token::XREG,"X", 0,0, Processor::ALL,NULL,0},
 		{Token::YREG,"Y", 0,0, Processor::ALL,NULL,0},
+		{ Token::SREG,"S", 0,0, Processor::ALL,NULL,0 },
+		{ Token::PREG,"P", 0,0, Processor::ALL,NULL,0 },
 		{ Token::AREG,"a", 0,0, Processor::ALL,NULL,0 },
 		{ Token::XREG,"x", 0,0, Processor::ALL,NULL,0 },
 		{ Token::YREG,"y", 0,0, Processor::ALL,NULL,0 },
+		{ Token::SREG,"s", 0,0, Processor::ALL,NULL,0 },
+		{ Token::PREG,"p", 0,0, Processor::ALL,NULL,0 },
 		{Token::ORG,"ORG", 0,0, Processor::ALL,NULL,0},
 		{Token::LOCAL_LABEL,"Local Lable", 0,0,Processor::ALL,NULL,0},
 		{Token::GLOBAL_LABLE,"Global Lable", 0,0,Processor::ALL,NULL,0},
@@ -384,6 +391,47 @@ private:
 		{Token::WD65C02,"WD65C02", 0,0, Processor::ALL ,NULL,0},
 		{Token::WD65C816,"WD65C816", 0,0, Processor::ALL,NULL,0},
 		{Token::EPROC,"EPROC", 0},
+		//----------------------------------
+		// Misc
+		//----------------------------------
+		{ Token('('),"(", 0 },
+		{ Token(')'),")", 0 },
+		{ Token('{'),"{", 0 },
+		{ Token('}'),"}", 0 },
+		{ Token('['),"[", 0 },
+		{ Token(']'),"]", 0 },
+		{ Token('<'),"<", 0 },
+		{ Token('>'),">", 0 },
+		{ Token('!'),"!", 0 },
+		{ Token('@'),"@", 0 },
+		{ Token('#'),"#", 0 },
+		{ Token('$'),"$", 0 },
+		{ Token('%'),"%", 0 },
+		{ Token('^'),"^", 0 },
+		{ Token('&'),"&", 0 },
+		{ Token('*'),"*", 0 },
+		{ Token('-'),"-", 0 },
+		{ Token('='),"=", 0 },
+		{ Token('+'),"+", 0 },
+		{ Token(','),",", 0 },
+		{ Token('.'),".", 0 },
+		{ Token('/'),"/", 0 },
+		{ Token('?'),"?", 0 },
+		{ Token('~'),"~", 0 },
+		{ Token::ASSIGN_ADD,"==+", 0 },
+		{ Token::ASSIGN_SUB,"==-", 0 },
+		{ Token::ASSIGN_MUL,"==*", 0 },
+		{ Token::ASSIGN_MOD,"==MOD", 0 },
+		{ Token::ASSIGN_AND,"==&", 0 },
+		{ Token::ASSIGN_OR,"==%", 0 },
+		{ Token::ASSIGN_XOR,"==XOR", 0 },
+		{ Token::ASSIGN_RSH,"==RSH", 0 },
+		{ Token::ASSIGN_LSH,"==LSH", 0 },
+		{ Token::MOD,"MOD", 0 },
+		{ Token::LSH,"LSH", 0 },
+		{ Token::RSH,"RSH", 0 },
+		{ Token::GTEQ,">=", 0 },
+		{ Token::LTEQ,"<=", 0 },
 		{Token::ENDOFTOKENS,NULL}
 	};
 	CSymTab m_SymbolTable;
@@ -401,7 +449,7 @@ public:
 	CLexer();
 	virtual ~CLexer();
 	bool Create();
-	FILE* GetLogFile();
+	FILE* LogFile();
 	int LexGet();
 	void LexUnGet();
 	bool IsValidHexNumber(int c);
@@ -423,6 +471,7 @@ public:
 	Processor LookupProcessor(Token KeywordToken);
 	int LookupOpcode(Token OpcodeToken);
 	int GetOpcode(Token OpCodeToken);
+	KeyWord* GetKeyWords() { return KeyWords; }
 	//--------------------------------------
 	// Symbol Methods
 	//--------------------------------------

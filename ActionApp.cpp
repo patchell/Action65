@@ -114,6 +114,7 @@ bool CActionApp::Create(int argc, char* argv[])
 bool CActionApp::Run()
 {
 	bool rV = false;
+	OpenLog();
 	m_ActParse.Create();
 	m_ActParse.Run();
 	return rV;
@@ -145,9 +146,13 @@ bool CActionApp::OpenLog()
 
 	if (m_pLogFile)
 	{
-		err = fopen_s(&m_pfSrc, m_pLogFile, "w");
+		err = fopen_s(&m_pfLog, m_pLogFile, "w");
 		if (err == 0)
 			rV = true;
+		else
+		{
+			fprintf(stderr, "Unable to open %s as the log file\n", m_pLogFile);
+		}
 	}
 	return rV;
 }
@@ -159,7 +164,7 @@ bool CActionApp::OpenObj()
 
 	if (m_pObjectFile)
 	{
-		err = fopen_s(&m_pfSrc, m_pObjectFile, "wb");
+		err = fopen_s(&m_pfObj, m_pObjectFile, "wb");
 		if (err == 0)
 			rV = true;
 	}
@@ -173,7 +178,7 @@ bool CActionApp::OpenBin()
 
 	if (m_pBinaryFile)
 	{
-		err = fopen_s(&m_pfSrc, m_pBinaryFile, "wb");
+		err = fopen_s(&m_pfBin, m_pBinaryFile, "wb");
 		if (err == 0)
 			rV = true;
 	}

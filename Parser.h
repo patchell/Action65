@@ -42,12 +42,6 @@ private:
 		{PHASE::GENTERATE_OUT_FILES,"GENTERATE_OUT_FILES"},
 	};
 	CLexer* m_pLex;
-	FILE* m_pfObjectFile;	//Object File Output
-	FILE* m_pfBINaryFile;	// Binary file for ROM
-	char* m_pInputFile;		// Source File Name
-	char* m_pLogFile;		// Log file Name (debug)
-	char* m_pObjFileOut;	// Object File Name
-	char* m_pBinaryFileOut;	// Binary File Name
 	PHASE m_Phase;			// Phase of the compiler operation
 	CSection* m_pCurrentSection;
 	CLexer::Processor m_Processor;
@@ -64,7 +58,7 @@ public:
 	}
 	CStack* GetValueStack() { return &m_ValueStack; }
 	CLexer* GetLexer() { return m_pLex; }
-	FILE* LogFile() { return GetLexer()->GetLogFile(); }
+	FILE* LogFile();
 	Token Run();
 	//---------------------------------
 	Token Expect(Token Lookahead, Token Expected);
@@ -114,11 +108,7 @@ private:
 	Token OptReturnValue(Token LookaHeadToken);
 
 	Token InlineAssembly(Token LookaHeadToken);
-	Token InlineAssembly_1(Token LookaHeadToken);
 	Token InlineAssBlock(Token LookaHeadToken);
-	Token InlineAssBlock_1(Token LookaHeadToken);
-	Token InlineAssBlock_2(Token LookaHeadToken);
-
 
 	Token CodeBlock(Token LookaHeadToken);
 
@@ -160,14 +150,6 @@ private:
 	Token RecDefPointer(Token LookaHeadToken);
 	Token RecDefArray(Token LookaHeadToken);
 	Token RecDefIdentList(Token LookaHeadToken);
-	//----------------------------------------------
-	// Declarse a record type (RECORDTYPE) that was
-	// defined by a TYPE declaration.
-	//----------------------------------------------
-	Token RecDecl(Token LookaHeadToken);
-	Token RecDeclModifier(Token LookaHeadToken);
-	Token RecDeclArray(Token LookaHeadToken);
-	Token RecDeclIdentList(Token LookaHeadToken);
 	//----------------------------------------
 	// Fundamental Declarations
 	//----------------------------------------

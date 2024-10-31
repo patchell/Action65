@@ -276,8 +276,7 @@ InlineAssembly_1	-> 'ASM' InlineAssBlock InlineAssembly_1
 					;
 
 InlineAssBlock		-> '{' InlineAssBlock_1;
-InlineAssBlock_1	-> AsmStmt InlineAssBlock_2;
-InlineAssBlock_2	-> ';' AsmStmt InlineAssBlock_2
+InlineAssBlock_1	-> AsmStmt InlineAssBlock_1
 					-> '}'
 					-> .
 					;
@@ -471,7 +470,7 @@ FundDecl	-> 'BOOL' FundModifier FundDecl
 			-> 'BYTE' FundModifier FundDecl
 			-> 'INT' FundModifier FundDecl
 			-> 'CARD' FundModifier FundDecl
-			-> 'RECORDTYPE FundModifier FundDecl
+			-> 'RECORDTYPE' FundModifier FundDecl
 			-> .
 			;
 

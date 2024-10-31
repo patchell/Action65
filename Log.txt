@@ -1,0 +1,41 @@
+File:actiontestfiles\test1.act has 62 Bytes
+Parser Created
+Action65
+Modules
+Vectors
+ProcRoutines
+Expected Token: MODULE  Lookahead = MODULE
+Vectors
+ProcRoutines
+Expected Token: INT  Lookahead = INT
+Expected Token: Avar  Lookahead = Avar
+Expected Token: CARD  Lookahead = CARD
+Expected Token: Cvar  Lookahead = Cvar
+Expected Token: PROC  Lookahead = PROC
+ProcDef
+Expected Token: Procone  Lookahead = Procone
+OptInit
+Expected Token: (  Lookahead = (
+ParamList
+Param
+Expected Token: )  Lookahead = )
+ProcBody
+Statements
+ForStmt
+IfStmt
+WhileStmt
+DOOStmt
+EXITstmt
+RetStmt
+CodeBlock
+UNTILLStmt
+Assignment
+Expected Token: Avar  Lookahead = Avar
+Expected Token: =  Lookahead = =
+Assignment
+Expected Token: Cvar  Lookahead = Cvar
+Expected Token: RETURN  Lookahead = RETURN
+OptReturnValue
+CodeBlock
+UNTILLStmt
+Assignment

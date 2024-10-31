@@ -13,6 +13,8 @@ CLexer::CLexer()
 	m_Number = 0;
 	m_pLexSymbol = 0;
 	m_pFileBuffeer = 0;
+	m_FileIndex = 0;
+	m_InFileSize = 0;
 }
 
 CLexer::~CLexer()
@@ -23,7 +25,6 @@ CLexer::~CLexer()
 bool CLexer::Create()
 {
 	struct _stat32 FileStats;
-	int l;
 	unsigned BytesRead = 0;
 
 	//---------------------------------
@@ -42,15 +43,12 @@ bool CLexer::Create()
 	// Create Symbol Table
 	//----------------------------
 	m_SymbolTable.Create(101);
-	//----------------------------
-	// Open Log file
-	//----------------------------
-	Act()->OpenLog();
-	fprintf(stderr, "File:%s has %d Bytes\n", Act()->GetSourceFileName(), m_InFileSize);
+	if(LogFile())
+	fprintf(LogFile(), "File:%s has %d Bytes\n", Act()->GetSourceFileName(), m_InFileSize);
 	return true;
 }
 
-FILE* CLexer::GetLogFile()
+FILE* CLexer::LogFile()
 {
 	return Act()->LogFile();
 }
@@ -405,7 +403,7 @@ Token CLexer::LookupKeyword(const char* pKeyword)
 
 CLexer::KeyWord* CLexer::FindKeyword(Token KeywordToken)
 {
-	return nullptr;
+	return 0;
 }
 
 CLexer::Processor CLexer::LookupProcessor(Token KeywordToken)
@@ -471,7 +469,30 @@ int CLexer::GetOpcode(Token OpCodeToken)
 
 const char* CLexer::KeyWord::LookupToName(Token Toke)
 {
-	return nullptr;
+	bool Loop = true;
+	Token T = Token(0);
+	int i = 0;
+	const char* S =0;
+
+	while (Loop)
+	{
+		T = KeyWords[i].m_TokenID;
+		if (Toke == T)
+		{
+			Loop = false;
+			S = KeyWords[i].m_Name;
+		}
+		else if (T == Token::ENDOFTOKENS)
+		{
+			Loop = false;
+			S = 0;
+		}
+		else
+		{
+			++i;
+		}
+	}
+	return S;
 }
 
 Token CLexer::KeyWord::LookupToToken(const char* pName)

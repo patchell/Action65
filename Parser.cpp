@@ -3,12 +3,6 @@
 CParser::CParser()
 {
 	m_Phase = PHASE::NONE;
-	m_pfBINaryFile = 0;
-	m_pfObjectFile = 0;
-	m_pInputFile = 0;
-	m_pLogFile = 0;
-	m_pObjFileOut = 0;
-	m_pBinaryFileOut = 0;
 	m_pLex = 0;
 	m_Processor = CLexer::Processor::R6502;
 	m_pCurrentSection = 0;
@@ -16,14 +10,6 @@ CParser::CParser()
 
 CParser::~CParser()
 {
-	if (m_pInputFile)
-		delete[] m_pInputFile;
-	if (m_pLogFile)
-		delete[] m_pLogFile;
-	if (m_pObjFileOut)
-		delete[] m_pObjFileOut;
-	if (m_pBinaryFileOut)
-		delete[] m_pBinaryFileOut;
 	if (m_pLex)
 		delete m_pLex;
 }
@@ -33,7 +19,14 @@ bool CParser::Create()
 	bool rV = true;
 	m_pLex = new CLexer;
 	m_pLex->Create();
+	if (LogFile())
+		fprintf(LogFile(), "Parser Created\n");
 	return true;
+}
+
+FILE* CParser::LogFile()
+{
+	return Act()->LogFile();
 }
 
 Token CParser::Run()
@@ -63,6 +56,26 @@ Token CParser::Run()
 
 Token CParser::Expect(Token LookaHeadToken, Token Expected)
 {
+	char* pExpectedToken;
+	char* pLookaheadToken;
+
+	if (LogFile())
+	{
+		if (LookaHeadToken == Token::IDENT)
+		{
+			pLookaheadToken = GetLexer()->GetLexSymbol()->GetName();
+			pExpectedToken = pLookaheadToken;
+		}
+		else
+		{
+			pLookaheadToken = (char*)GetLexer()->GetKeyWords()->LookupToName(LookaHeadToken);
+			pExpectedToken = (char*)GetLexer()->GetKeyWords()->LookupToName(Expected);
+		}
+		fprintf(LogFile(), "Expected Token: %s  Lookahead = %s\n",
+			pExpectedToken,
+			pLookaheadToken
+		);
+	}
 	if (Accept(LookaHeadToken, Expected))
 		LookaHeadToken = GetLexer()->Lex();
 	else
@@ -132,6 +145,8 @@ Token CParser::Action65(Token LookaHeadToken)
 	//	Action65->Modules;
 	// 
 	//--------------------------------------------
+	if (LogFile())
+		fprintf(LogFile(), "Action65\n");
 	LookaHeadToken = Modules(LookaHeadToken);
     return LookaHeadToken;
 }
@@ -147,6 +162,8 @@ Token CParser::Modules(Token LookaHeadToken)
 	//--------------------------------------------
 	bool Loop = true;
 
+	if (LogFile())
+		fprintf(LogFile(), "Modules\n");
 	LookaHeadToken = Vector(LookaHeadToken);
 	while (Loop)
 	{
@@ -174,6 +191,8 @@ Token CParser::Vector(Token LookaHeadToken)
 	//--------------------------------------------
 	bool Loop = true;
 
+	if (LogFile())
+		fprintf(LogFile(), "Vectors\n");
 	LookaHeadToken = PROCroutine(LookaHeadToken);
 	while (Loop)
 	{
@@ -219,6 +238,8 @@ Token CParser::PROCroutine(Token LookaHeadToken)
 	//--------------------------------------------
 	bool Loop = true;
 
+	if (LogFile())
+		fprintf(LogFile(), "ProcRoutines\n");
 	LookaHeadToken = SysDecl(LookaHeadToken);
 	while (Loop)
 	{
@@ -245,6 +266,8 @@ Token CParser::ProcDef(Token LookaHeadToken)
 	// ProcDecl	-> 'IDENT' OptInit '(' ParamList ')';
 	//--------------------------------------------
 
+	if (LogFile())
+		fprintf(LogFile(), "ProcDef\n");
 	switch (LookaHeadToken)
 	{
 	case Token::IDENT:
@@ -269,6 +292,8 @@ Token CParser::FuncDef(Token LookaHeadToken)
 	// FuncDecl	-> 'IDENT' OptInit '(' ParamList ')';
 	//--------------------------------------------
 
+	if (LogFile())
+		fprintf(LogFile(), "FuncDef\n");
 	switch (LookaHeadToken)
 	{
 	case Token::IDENT:
@@ -293,6 +318,8 @@ Token CParser::OptInit(Token LookaHeadToken)
 	//				;
 	//--------------------------------------------
 
+	if (LogFile())
+		fprintf(LogFile(), "OptInit\n");
 	switch (LookaHeadToken)
 	{
 	case Token('='):
@@ -310,6 +337,8 @@ Token CParser::ProcBody(Token LookaHeadToken)
 	//--------------------------------------------
 	// ProcBody	-> LocalDecls Statements;
 	//--------------------------------------------
+	if (LogFile())
+		fprintf(LogFile(), "ProcBody\n");
 	LookaHeadToken = LocalDecls(LookaHeadToken);
 	LookaHeadToken = Statements(LookaHeadToken);
 	return LookaHeadToken;
@@ -320,6 +349,8 @@ Token CParser::FuncBody(Token LookaHeadToken)
 	//--------------------------------------------
 	// FuncBody	-> LocalDecls Statements;
 	//--------------------------------------------
+	if (LogFile())
+		fprintf(LogFile(), "FuncBody\n");
 	LookaHeadToken = LocalDecls(LookaHeadToken);
 	LookaHeadToken = Statements(LookaHeadToken);
 	return LookaHeadToken;
@@ -341,6 +372,8 @@ Token CParser::Statements(Token LookaHeadToken)
 	//--------------------------------------------
 	bool Loop = true;
 
+	if (LogFile())
+		fprintf(LogFile(), "Statements\n");
 	LookaHeadToken = ForStmt(LookaHeadToken);
 	while (Loop)
 	{
@@ -371,6 +404,8 @@ Token CParser::ProcParams(Token LookaHeadToken)
 	//				->  ')' ;
 	//--------------------------------------------
 
+	if (LogFile())
+		fprintf(LogFile(), "ProcParams\n");
 	switch (LookaHeadToken)
 	{
 	case Token('('):
@@ -395,6 +430,8 @@ Token CParser::ForStmt(Token LookaHeadToken)
 	//--------------------------------------------
 	bool Loop = true;
 
+	if (LogFile())
+		fprintf(LogFile(), "ForStmt\n");
 	LookaHeadToken = IfStmt(LookaHeadToken);
 	while (Loop)
 	{
@@ -420,6 +457,8 @@ Token CParser::Iterator(Token LookaHeadToken)
 	// Iterator	-> 'IDENT' '=' Start 'TO' Finish STEPoption ;
 	//--------------------------------------------
 
+	if (LogFile())
+		fprintf(LogFile(), "Iterator (For Statement)\n");
 	switch (LookaHeadToken)
 	{
 	case Token::IDENT:
@@ -436,6 +475,8 @@ Token CParser::Start(Token LookaHeadToken)
 	// Start		-> ArithExpr;
 	//--------------------------------------------
 
+	if (LogFile())
+		fprintf(LogFile(), "Start (For Statement)\n");
 	switch (LookaHeadToken)
 	{
 	case Token('='):
@@ -454,6 +495,8 @@ Token CParser::Finish(Token LookaHeadToken)
 	// Finish		-> 'TO' ArithExpr;
 	//--------------------------------------------
 
+	if (LogFile())
+		fprintf(LogFile(), "Finish (For Statement)\n");
 	LookaHeadToken = ArithExpr(LookaHeadToken);
 	switch (LookaHeadToken)
 	{
@@ -475,6 +518,8 @@ Token CParser::STEPoption(Token LookaHeadToken)
 	//				;
 	//--------------------------------------------
 
+	if (LogFile())
+		fprintf(LogFile(), "STEPoption\n");
 	switch (LookaHeadToken)
 	{
 	case Token::STEP:
@@ -501,6 +546,8 @@ Token CParser::IfStmt(Token LookaHeadToken)
 	//--------------------------------------------
 	bool Loop = true;
 
+	if (LogFile())
+		fprintf(LogFile(), "IfStmt\n");
 	LookaHeadToken = WhileStmt(LookaHeadToken);
 	while (Loop)
 	{
@@ -522,6 +569,8 @@ Token CParser::If(Token LookaHeadToken)
 	//--------------------------------------------
 	// If			-> ArithExpr ThenPart;
 	//--------------------------------------------
+	if (LogFile())
+		fprintf(LogFile(), "If\n");
 	LookaHeadToken = ArithExpr(LookaHeadToken);
 	LookaHeadToken = ThenPart(LookaHeadToken);
 	return LookaHeadToken;
@@ -535,6 +584,8 @@ Token CParser::ThenPart(Token LookaHeadToken)
 	// ThenPart_1	-> 'THEN' Statements ElseIfPart;
 	//--------------------------------------------
 
+	if (LogFile())
+		fprintf(LogFile(), "ThenPart\n");
 	LookaHeadToken = ElseIfPart(LookaHeadToken);
 	switch (LookaHeadToken)
 	{
@@ -559,6 +610,8 @@ Token CParser::ElseIfPart(Token LookaHeadToken)
 	//				;
 	//--------------------------------------------
 
+	if (LogFile())
+		fprintf(LogFile(), "ElseIfPart\n");
 	LookaHeadToken = ElsePart(LookaHeadToken);
 	switch (LookaHeadToken)
 	{
@@ -584,6 +637,8 @@ Token CParser::ElsePart(Token LookaHeadToken)
 	//--------------------------------------------
 	bool Loop = true;
 
+	if (LogFile())
+		fprintf(LogFile(), "ElsePart\n");
 	while (Loop)
 	{
 		switch (LookaHeadToken)
@@ -618,6 +673,8 @@ Token CParser::WhileStmt(Token LookaHeadToken)
 	//--------------------------------------------
 	bool Loop = true;
 
+	if (LogFile())
+		fprintf(LogFile(), "WhileStmt\n");
 	LookaHeadToken = DoStmt(LookaHeadToken);
 	while (Loop)
 	{
@@ -651,6 +708,8 @@ Token CParser::DoStmt(Token LookaHeadToken)
 	//--------------------------------------------
 	bool Loop = true;
 
+	if (LogFile())
+		fprintf(LogFile(), "DOOStmt\n");
 	LookaHeadToken = EXITstmt(LookaHeadToken);
 	while (Loop)
 	{
@@ -687,6 +746,8 @@ Token CParser::EXITstmt(Token LookaHeadToken)
 	//--------------------------------------------
 	bool Loop = true;
 
+	if (LogFile())
+		fprintf(LogFile(), "EXITstmt\n");
 	LookaHeadToken = RetStmt(LookaHeadToken);
 	while (Loop)
 	{
@@ -707,14 +768,16 @@ Token CParser::EXITstmt(Token LookaHeadToken)
 Token CParser::RetStmt(Token LookaHeadToken)
 {
 	//--------------------------------------------
-	// RetStmt		-> CodeBlock RetStmt_1;
+	// RetStmt		-> InlineAssembly RetStmt_1;
 	//--------------------------------------------
-	// RetStmt_1	-> 'RETURN' OptReturnValue  CodeBlock RetStmt_1
+	// RetStmt_1	-> 'RETURN' OptReturnValue  InlineAssembly RetStmt_1
 	//				-> .
 	//				;
 	//--------------------------------------------
 	bool Loop = true;
 
+	if (LogFile())
+		fprintf(LogFile(), "RetStmt\n");
 	LookaHeadToken = CodeBlock(LookaHeadToken);
 	while (Loop)
 	{
@@ -743,6 +806,8 @@ Token CParser::OptReturnValue(Token LookaHeadToken)
 	//--------------------------------------------
 	bool Loop = true;
 
+	if (LogFile())
+		fprintf(LogFile(), "OptReturnValue\n");
 	while (Loop)
 	{
 		switch (LookaHeadToken)
@@ -762,28 +827,68 @@ Token CParser::OptReturnValue(Token LookaHeadToken)
 	return LookaHeadToken;
 }
 
+//---------------------------------------------
+// Inline Assembly Code
+//---------------------------------------------
+
 Token CParser::InlineAssembly(Token LookaHeadToken)
 {
-	return Token();
-}
+	//--------------------------------------------
+	//	InlineAssembly		->CodeBlock InlineAssembly_1;
+	//--------------------------------------------
+	//	InlineAssembly_1	-> 'ASM' InlineAssBlock InlineAssembly_1
+	//						-> .
+	//						;
+	//--------------------------------------------
+	bool Loop = true;
 
-Token CParser::InlineAssembly_1(Token LookaHeadToken)
-{
-	return Token();
+	if (LogFile())
+		fprintf(LogFile(), "InlineAssembly\n");
+
+	LookaHeadToken = CodeBlock(LookaHeadToken);
+	while (Loop)
+	{
+		switch (LookaHeadToken)
+		{
+		case Token::ASM:
+			LookaHeadToken = Expect(LookaHeadToken, Token::ASM);
+			LookaHeadToken = InlineAssBlock(LookaHeadToken);
+			break;
+		default:
+			Loop = false;
+			break;
+		}
+	}
+	return LookaHeadToken;
 }
 
 Token CParser::InlineAssBlock(Token LookaHeadToken)
 {
-	return Token();
-}
+	//--------------------------------------------
+	//	InlineAssBlock		-> '{' InlineAssBlock_1;
+	//--------------------------------------------
+	//	InlineAssBlock_1	->AsmStmt InlineAssBlock_1
+	//						-> '}'
+	//						-> .
+	//						;
+	//--------------------------------------------
+	bool Loop = true;
 
-Token CParser::InlineAssBlock_1(Token LookaHeadToken)
-{
-	return Token();
-}
-
-Token CParser::InlineAssBlock_2(Token LookaHeadToken)
-{
+	if (LogFile())
+		fprintf(LogFile(), "InlineAssBlock\n");
+	LookaHeadToken = Expect(LookaHeadToken, Token('{'));
+	while (Loop)
+	{
+		switch (LookaHeadToken)
+		{
+		case Token('}'):
+			LookaHeadToken = Expect(LookaHeadToken, Token('}'));
+			break;
+		default:
+			LookaHeadToken = AsmStmt(LookaHeadToken);
+			break;
+		}
+	}
 	return Token();
 }
 
@@ -803,6 +908,8 @@ Token CParser::CodeBlock(Token LookaHeadToken)
 	//--------------------------------------------
 	bool Loop = true;
 
+	if (LogFile())
+		fprintf(LogFile(), "CodeBlock\n");
 	LookaHeadToken = UntillStmt(LookaHeadToken);
 	while (Loop)
 	{
@@ -839,6 +946,8 @@ Token CParser::UntillStmt(Token LookaHeadToken)
 	//--------------------------------------------
 	bool Loop = true;
 
+	if (LogFile())
+		fprintf(LogFile(), "UNTILLStmt\n");
 	LookaHeadToken = Assignment(LookaHeadToken);
 	while (Loop)
 	{
@@ -880,6 +989,8 @@ Token CParser::Assignment(Token LookaHeadToken)
 	//				-> .
 	//				;
 	//--------------------------------------------
+	if (LogFile())
+		fprintf(LogFile(), "Assignment\n");
 
 	LookaHeadToken = MemContents(LookaHeadToken);
 	switch (LookaHeadToken)
@@ -949,6 +1060,8 @@ Token CParser::ArithExpr(Token LookaHeadToken)
 	//--------------------------------------------
 	bool Loop = true;
 
+	if (LogFile())
+		fprintf(LogFile(), "ArithExpr\n");
 	LookaHeadToken = LogicalAND(LookaHeadToken);
 	while (Loop)
 	{
@@ -978,6 +1091,8 @@ Token CParser::LogicalAND(Token LookaHeadToken)
 	//--------------------------------------------
 	bool Loop = true;
 
+	if (LogFile())
+		fprintf(LogFile(), "LogicalAND\n");
 	LookaHeadToken = RelOperation(LookaHeadToken);
 	while (Loop)
 	{
@@ -1009,6 +1124,8 @@ Token CParser::RelOperation(Token LookaHeadToken)
 	//--------------------------------------------
 	bool Loop = true;
 
+	if (LogFile())
+		fprintf(LogFile(), "RelOperators\n");
 	LookaHeadToken = RelEquals(LookaHeadToken);
 	while (Loop)
 	{
@@ -1050,6 +1167,8 @@ Token CParser::RelEquals(Token LookaHeadToken)
 	//--------------------------------------------
 	bool Loop = true;
 
+	if (LogFile())
+		fprintf(LogFile(), "RelEquals\n");
 	LookaHeadToken = BitwiseOR(LookaHeadToken);
 	while (Loop)
 	{
@@ -1082,6 +1201,8 @@ Token CParser::BitwiseOR(Token LookaHeadToken)
 	//--------------------------------------------
 	bool Loop = true;
 
+	if (LogFile())
+		fprintf(LogFile(), "BitwiseOR\n");
 	LookaHeadToken = BitwiseAND(LookaHeadToken);
 	while (Loop)
 	{
@@ -1110,6 +1231,8 @@ Token CParser::BitwiseAND(Token LookaHeadToken)
 	//--------------------------------------------
 	bool Loop = true;
 
+	if (LogFile())
+		fprintf(LogFile(), "BitwiseAND\n");
 	LookaHeadToken = BitwiseXOR(LookaHeadToken);
 	while (Loop)
 	{
@@ -1139,6 +1262,8 @@ Token CParser::BitwiseXOR(Token LookaHeadToken)
 	//--------------------------------------------
 	bool Loop = true;
 
+	if (LogFile())
+		fprintf(LogFile(), "BitwiseXOR\n");
 	LookaHeadToken = AddExpr(LookaHeadToken);
 	while (1)
 	{
@@ -1173,6 +1298,8 @@ Token CParser::AddExpr(Token LookaHeadToken)
 	//--------------------------------------------
 	bool Loop = true;
 
+	if (LogFile())
+		fprintf(LogFile(), "AddExpr\n");
 	LookaHeadToken = ShifExpr(LookaHeadToken);
 	while (Loop)
 	{
@@ -1206,6 +1333,8 @@ Token CParser::ShifExpr(Token LookaHeadToken)
 	//--------------------------------------------
 	bool Loop = true;
 
+	if (LogFile())
+		fprintf(LogFile(), "ShiftExpr\n");
 	LookaHeadToken = MultExpr(LookaHeadToken);
 	while (Loop)
 	{
@@ -1241,6 +1370,8 @@ Token CParser::MultExpr(Token LookaHeadToken)
 	//--------------------------------------------
 	bool Loop = true;
 
+	if (LogFile())
+		fprintf(LogFile(), "MultExpr\n");
 	LookaHeadToken = Unary(LookaHeadToken);
 	while (1)
 	{
@@ -1278,6 +1409,8 @@ Token CParser::Unary(Token LookaHeadToken)
 	//--------------------------------------------
 	bool Loop = true;
 
+	if (LogFile())
+		fprintf(LogFile(), "Urinary\n");
 	while (Loop)
 	{
 		switch (LookaHeadToken)
@@ -1306,6 +1439,8 @@ Token CParser::Factor(Token LookaHeadToken)
 	//--------------------------------------------
 	bool Loop = true;
 
+	if (LogFile())
+		fprintf(LogFile(), "FACTOR\n");
 	switch (LookaHeadToken)
 	{
 		case Token::FUNC_CALL:
@@ -1335,14 +1470,16 @@ Token CParser::Factor(Token LookaHeadToken)
 Token CParser::MemContentsList(Token LookaHeadToken)
 {
 	//--------------------------------------------
-	// MemCntentsList		-> MemContents MemCntentsList_1;
+	// MemContentsList		-> MemContents MemContentsList_1;
 	//--------------------------------------------
-	// MemCntentsList_1	-> ',' MemContents MemCntentsList_1
+	// MemContentsList_1	-> ',' MemContents MemCnotentsList_1
 	//					-> .
 	//					;
 	//--------------------------------------------
 	bool Loop = true;
 
+	if (LogFile())
+		fprintf(LogFile(), "MemContentsList\n");
 	LookaHeadToken = MemContents(LookaHeadToken);
 	while (Loop)
 	{
@@ -1380,6 +1517,8 @@ Token CParser::ParamList(Token LookaHeadToken)
 	//--------------------------------------------
 	bool Loop = true;
 
+	if (LogFile())
+		fprintf(LogFile(), "ParamList\n");
 	LookaHeadToken = Param(LookaHeadToken);
 	switch (LookaHeadToken)
 	{
@@ -1407,6 +1546,8 @@ Token CParser::Param(Token LookaHeadToken)
 	//				;
 	//--------------------------------------------
 
+	if (LogFile())
+		fprintf(LogFile(), "Param\n");
 	switch (LookaHeadToken)
 	{
 	case Token::RECORDTYPE:

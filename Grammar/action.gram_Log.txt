@@ -21,8 +21,8 @@ NONTERMINALS['Non Terminals'] { 'Action65','Modules','Modules_1','Vector','Vecto
 ,'ProcParams','ForStmt','ForStmt_1','Iterator','Start','Finish','STEPoption','IfStmt'
 ,'IfStmt_1','If','ThenPart','ThenPart_1','ElseIfPart','ElseIfPart_1','ElsePart','WhileStmt'
 ,'WhileStmt_1','DoStmt','DoStmt_1','EXITstmt','EXITstmt_1','RetStmt','RetStmt_1','OptReturnValue'
-,'InlineAssembly','InlineAssembly_1','InlineAssBlock','InlineAssBlock_1','InlineAssBlock_2'
-,'CodeBlock','CodeBlock_1','ConstList','ConstList_1','UntillStmt','UntillStmt_1','Assignment'
+,'InlineAssembly','InlineAssembly_1','InlineAssBlock','InlineAssBlock_1','CodeBlock'
+,'CodeBlock_1','ConstList','ConstList_1','UntillStmt','UntillStmt_1','Assignment'
 ,'Assignment_1','ArithExpr','LogicalOR_1','LogicalAND','LogicalAND_1','RelOperation'
 ,'RelOperation_1','RelEquals','RelEquals_1','BitwiseOR','BitwiseOR_1','BitwiseAND'
 ,'BitwiseAND_1','BitwiseXOR','BitwiseXOR_1','AddExpr','AddExpr_1','ShifExpr','ShiftExpr_1'
@@ -30,21 +30,21 @@ NONTERMINALS['Non Terminals'] { 'Action65','Modules','Modules_1','Vector','Vecto
 ,'Define','DefList','DefList_1','Def','TypeDefDecl','TypeDefDecl_1','RecDefIdent'
 ,'RecDefField','RecDefVarDecls','RecDefVarDecls_1','RecDefVarDecl','RecDefVarList'
 ,'RecDefModifier','RecDefPointer','RecDefArray','RecDefArray_1','RecDefIdentList'
-,'RecDefIdentList_1','RecDecl','RecDecl_1','RecDecModifier','RecDecPointer','RecDecArray'
-,'FundDecl','FundModifier','FundModifier_1','FundPtrModifier','FundPtrModifier_1'
-,'FundArrayModifier','IdentList','IdentList_1','Ident','Options','OptArrayDimension'
-,'OptArrayInit','ParamList','ParamList_1','Param','ParamModifier','LocalDecls','LocalModifier'
-,'LocPtrModifier','LocArrayModifier','LocArrayModifier_1','CompConst','CompConst_1'
-,'BaseCompConst','MemContents','MemContentsType','ArrayIndex','AsmStmt','Processor_1'
-,'ProcessorType','Section','Section_1','Section_2','SectionDef','SectionDef_1','SectionAttributes'
-,'SectionAttributes_1','SectionAtribute','Modes','TrueFalse','Org','Org_1','DefineMemory'
-,'DefineMemory_1','DefineStorage','DefineStorage_1','Proceedure','Proceedure_1','Instruction'
-,'Instruction_1','Labels','Label_1','AluAdrModes','Indirect','Indirect_1','StaAddressingModes'
-,'ShiftAddressingModes','RelAddressingMode','BitAddressModes','IncAddressingMOdes'
-,'JumpAddressingModes','CallAddressingMode','LdxAddressingMode','CPX_CPY_AddressingMode'
-,'StxAddressingMode','LdyAddressingMode','StyAddressingMode','OptIndexReg','OptIndexReg_1'
-,'OptXReg','OptYReg','AsmConstList','AsmConstList_1','AsmConstList_2','AsmConstant'
-,'AsmConstant_1','AsmConstAddSub','AsmConstAddSub_1','BaseAsmConstant' }
+,'RecDefIdentList_1','FundDecl','FundModifier','FundModifier_1','FundPtrModifier'
+,'FundPtrModifier_1','FundArrayModifier','IdentList','IdentList_1','Ident','Options'
+,'OptArrayDimension','OptArrayInit','ParamList','ParamList_1','Param','ParamModifier'
+,'LocalDecls','LocalModifier','LocPtrModifier','LocArrayModifier','LocArrayModifier_1'
+,'CompConst','CompConst_1','BaseCompConst','MemContents','MemContentsType','ArrayIndex'
+,'AsmStmt','Processor_1','ProcessorType','Section','Section_1','Section_2','SectionDef'
+,'SectionDef_1','SectionAttributes','SectionAttributes_1','SectionAtribute','Modes'
+,'TrueFalse','Org','Org_1','DefineMemory','DefineMemory_1','DefineStorage','DefineStorage_1'
+,'Proceedure','Proceedure_1','Instruction','Instruction_1','Labels','Label_1','AluAdrModes'
+,'Indirect','Indirect_1','StaAddressingModes','ShiftAddressingModes','RelAddressingMode'
+,'BitAddressModes','IncAddressingMOdes','JumpAddressingModes','CallAddressingMode'
+,'LdxAddressingMode','CPX_CPY_AddressingMode','StxAddressingMode','LdyAddressingMode'
+,'StyAddressingMode','OptIndexReg','OptIndexReg_1','OptXReg','OptYReg','AsmConstList'
+,'AsmConstList_1','AsmConstList_2','AsmConstant','AsmConstant_1','AsmConstAddSub'
+,'AsmConstAddSub_1','BaseAsmConstant' }
 *********** Build Nullable Set **********
 ****************Create NOT nullable set ************************
 ----- Calc First Sets------
@@ -95,8 +95,7 @@ FIRST['OptReturnValue'] { 'e' }
 FIRST['InlineAssembly'] { }
 FIRST['InlineAssembly_1'] { 'e' }
 FIRST['InlineAssBlock'] { }
-FIRST['InlineAssBlock_1'] { }
-FIRST['InlineAssBlock_2'] { 'e' }
+FIRST['InlineAssBlock_1'] { 'e' }
 FIRST['CodeBlock'] { }
 FIRST['CodeBlock_1'] { 'e' }
 FIRST['ConstList'] { }
@@ -134,7 +133,7 @@ FIRST['Define'] { 'e' }
 FIRST['DefList'] { }
 FIRST['DefList_1'] { 'e' }
 FIRST['Def'] { }
-FIRST['TypeDefDecl'] { }
+FIRST['TypeDefDecl'] { 'e' }
 FIRST['TypeDefDecl_1'] { 'e' }
 FIRST['RecDefIdent'] { 'e' }
 FIRST['RecDefField'] { 'e' }
@@ -148,11 +147,6 @@ FIRST['RecDefArray'] { }
 FIRST['RecDefArray_1'] { 'e' }
 FIRST['RecDefIdentList'] { 'e' }
 FIRST['RecDefIdentList_1'] { 'e' }
-FIRST['RecDecl'] { 'e' }
-FIRST['RecDecl_1'] { 'e' }
-FIRST['RecDecModifier'] { 'e' }
-FIRST['RecDecPointer'] { 'e' }
-FIRST['RecDecArray'] { 'e' }
 FIRST['FundDecl'] { 'e' }
 FIRST['FundModifier'] { }
 FIRST['FundModifier_1'] { }
@@ -283,7 +277,6 @@ FOLLOW['InlineAssembly'] { }
 FOLLOW['InlineAssembly_1'] { }
 FOLLOW['InlineAssBlock'] { }
 FOLLOW['InlineAssBlock_1'] { }
-FOLLOW['InlineAssBlock_2'] { }
 FOLLOW['CodeBlock'] { }
 FOLLOW['CodeBlock_1'] { }
 FOLLOW['ConstList'] { }
@@ -335,11 +328,6 @@ FOLLOW['RecDefArray'] { 'POINRTER' }
 FOLLOW['RecDefArray_1'] { 'POINRTER' }
 FOLLOW['RecDefIdentList'] { 'POINRTER' }
 FOLLOW['RecDefIdentList_1'] { 'POINRTER' }
-FOLLOW['RecDecl'] { '$' }
-FOLLOW['RecDecl_1'] { '$' }
-FOLLOW['RecDecModifier'] { }
-FOLLOW['RecDecPointer'] { }
-FOLLOW['RecDecArray'] { }
 FOLLOW['FundDecl'] { '$' }
 FOLLOW['FundModifier'] { '$' }
 FOLLOW['FundModifier_1'] { '$' }
@@ -423,5 +411,5 @@ FOLLOW['AsmConstAddSub'] { }
 FOLLOW['AsmConstAddSub_1'] { }
 FOLLOW['BaseAsmConstant'] { }
 ---------------- Create Parse Table --------------
-Table Entries = 245
+Table Entries = 240
 ------------ Check For Conflicts-------------
