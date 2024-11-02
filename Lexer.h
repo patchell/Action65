@@ -454,7 +454,7 @@ public:
 	bool Create();
 	FILE* LogFile();
 	int LexGet();
-	void LexUnGet();
+	void LexUnGet(int c);
 	bool IsValidHexNumber(int c);
 	bool IsValidNumber(int c);
 	bool IsValidNameChar(int c);

@@ -55,7 +55,7 @@ FILE* CLexer::LogFile()
 
 int CLexer::LexGet()
 {
-	int c = 0;
+	int c = EOF;
 
 	if (m_pFileBuffeer && (m_FileIndex < m_InFileSize))
 		c = m_pFileBuffeer[m_FileIndex++];
@@ -67,11 +67,14 @@ int CLexer::LexGet()
 	return c;
 }
 
-void CLexer::LexUnGet()
+void CLexer::LexUnGet(int c)
 {
-	if (m_FileIndex > 0) --m_FileIndex;
-	if(m_Col > 0)
-		m_Col--;
+	if ((m_FileIndex > 0) && (c != EOF))
+	{
+		--m_FileIndex;
+		if (m_Col > 0)
+			m_Col--;
+	}
 }
 
 bool CLexer::IsValidHexNumber(int c)
@@ -191,7 +194,7 @@ Token CLexer::Lex()
 			}
 			m_aLexBuff[m_LexBuffIndex] = 0;
 			m_Number = atoi(m_aLexBuff);
-			LexUnGet();
+			LexUnGet(c);
 			Loop = false;
 			TokenValue = Token::NUMBER;
 			break;
@@ -207,7 +210,7 @@ Token CLexer::Lex()
 			}
 			m_aLexBuff[m_LexBuffIndex] = 0;
 			m_Number = strtol(m_aLexBuff, NULL, 16);
-			LexUnGet();
+			LexUnGet(c);
 			Loop = false;
 			TokenValue = Token::NUMBER;
 			break;
@@ -217,7 +220,7 @@ Token CLexer::Lex()
 			{
 				TokenValue = Token('=');
 				Loop = false;
-				LexUnGet();
+				LexUnGet(c);
 			}
 			else
 			{
@@ -301,7 +304,7 @@ Token CLexer::Lex()
 			else
 			{
 				TokenValue = Token('>');
-				LexUnGet();
+				LexUnGet(c);
 			}
 			Loop = false;
 			break;
@@ -314,7 +317,7 @@ Token CLexer::Lex()
 			else
 			{
 				TokenValue = Token('<');
-				LexUnGet();
+				LexUnGet(c);
 			}
 			Loop = false;
 			break;
@@ -345,7 +348,7 @@ Token CLexer::Lex()
 				{
 					auxLoop = false;
 					m_aLexBuff[m_LexBuffIndex] = 0;
-					LexUnGet();
+					LexUnGet(c);
 				}
 			}	//END OF collecting characters for word
 			//---------------------------------

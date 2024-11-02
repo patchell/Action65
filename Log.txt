@@ -1,4 +1,4 @@
-File:actiontestfiles\test1.act has 233 Bytes
+File:actiontestfiles\test1.act has 232 Bytes
 Parser Created
   1::Enter Action65 Lookahead Token: MODULE LexBuffer 'MODULE' 
   2::Enter Modules Lookahead Token: MODULE LexBuffer 'MODULE' 
