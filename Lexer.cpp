@@ -59,8 +59,10 @@ int CLexer::LexGet()
 
 	if (m_pFileBuffeer && (m_FileIndex < m_InFileSize))
 		c = m_pFileBuffeer[m_FileIndex++];
-	else
+	else if (m_FileIndex == m_InFileSize)
+	{
 		c = EOF;
+	}
 	m_Col++;
 	return c;
 }
@@ -163,7 +165,7 @@ Token CLexer::Lex()
 		switch (c)
 		{
 		case EOF:
-			TokenValue = Token(EOF);
+			TokenValue = Token::ENDOFFILE;
 			Loop = false;
 			break;
 		case '\n':	//white space

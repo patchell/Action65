@@ -201,11 +201,14 @@ private:
 		Token LookupToToken(const char* pName);
 	};
 	static inline KeyWord KeyWords[] = {
+		{Token::ENDOFFILE,"End Of File"},
+		{Token::IDENT,"IDENT"},
+		{Token::NUMBER,"NUMBER"},
 		{Token::MOD,"MOD"},
 		{Token::LSH,"LSH"},
 		{Token::RSH,"RSH"},
 		{Token::OR,"OR"},
-		{Token('!'), "XOR"},
+		{Token::XOR, "XOR"},
 		{Token::PROC,"PROC"},	//Proceedure Declaration
 		{Token::FUNC,"FUNC"},	//Function Declaration
 		{Token::BOOL,"BOOL"},

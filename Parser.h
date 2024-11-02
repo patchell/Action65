@@ -46,6 +46,7 @@ private:
 	CSection* m_pCurrentSection;
 	CLexer::Processor m_Processor;
 	CStack m_ValueStack;
+	int m_Recursion;
 public:
 	CParser();
 	virtual ~CParser();
@@ -317,5 +318,7 @@ private:
 	void PageZero(CInstruction* pInst, int Address, CLexer::AdrModeType ModeType);
 	void Absolute(CInstruction* pInst, int Address, CLexer::AdrModeType ModeType);
 	bool CheckZeroPageAddress(int A);
+	//---------------- Utillity ----------------------
+	void PrintLookahead(FILE*pLog, Token token, const char *pS, int RecursionLevel);
 };
 

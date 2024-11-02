@@ -2,7 +2,20 @@ MODULE
 
 INT Avar
 CARD Cvar
+CHAR Stuff
 
 PROC Procone()
-Avar = Cvar
+	Avar = Cvar
+	IF Avar = Cvar THEN
+		Avar = 1
+	ELSE
+		Stuff = Avar + CVar
+	FI
+RETURN
+
+PROC Another(CHAR aCat, bBat)
+	INT Lone, Ltwo
+
+	Ltwo = aCat * bBat
+	Lone = bBat / Ltwo
 RETURN

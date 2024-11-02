@@ -33,17 +33,17 @@ NONTERMINALS['Non Terminals'] { 'Action65','Modules','Modules_1','Vector','Vecto
 ,'RecDefIdentList_1','FundDecl','FundModifier','FundModifier_1','FundPtrModifier'
 ,'FundPtrModifier_1','FundArrayModifier','IdentList','IdentList_1','Ident','Options'
 ,'OptArrayDimension','OptArrayInit','ParamList','ParamList_1','Param','ParamModifier'
-,'LocalDecls','LocalModifier','LocPtrModifier','LocArrayModifier','LocArrayModifier_1'
-,'CompConst','CompConst_1','BaseCompConst','MemContents','MemContentsType','ArrayIndex'
-,'AsmStmt','Processor_1','ProcessorType','Section','Section_1','Section_2','SectionDef'
-,'SectionDef_1','SectionAttributes','SectionAttributes_1','SectionAtribute','Modes'
-,'TrueFalse','Org','Org_1','DefineMemory','DefineMemory_1','DefineStorage','DefineStorage_1'
-,'Proceedure','Proceedure_1','Instruction','Instruction_1','Labels','Label_1','AluAdrModes'
-,'Indirect','Indirect_1','StaAddressingModes','ShiftAddressingModes','RelAddressingMode'
-,'BitAddressModes','IncAddressingMOdes','JumpAddressingModes','CallAddressingMode'
-,'LdxAddressingMode','CPX_CPY_AddressingMode','StxAddressingMode','LdyAddressingMode'
-,'StyAddressingMode','OptIndexReg','OptIndexReg_1','OptXReg','OptYReg','AsmConstList'
-,'AsmConstList_1','AsmConstList_2','AsmConstant','AsmConstant_1','AsmConstAddSub'
+,'ParamModifier_1','LocalDecls','LocalModifier','LocPtrModifier','LocArrayModifier'
+,'LocArrayModifier_1','CompConst','CompConst_1','BaseCompConst','MemContents','MemContentsType'
+,'ArrayIndex','AsmStmt','Processor_1','ProcessorType','Section','Section_1','Section_2'
+,'SectionDef','SectionDef_1','SectionAttributes','SectionAttributes_1','SectionAtribute'
+,'Modes','TrueFalse','Org','Org_1','DefineMemory','DefineMemory_1','DefineStorage'
+,'DefineStorage_1','Proceedure','Proceedure_1','Instruction','Instruction_1','Labels'
+,'Label_1','AluAdrModes','Indirect','Indirect_1','StaAddressingModes','ShiftAddressingModes'
+,'RelAddressingMode','BitAddressModes','IncAddressingMOdes','JumpAddressingModes'
+,'CallAddressingMode','LdxAddressingMode','CPX_CPY_AddressingMode','StxAddressingMode'
+,'LdyAddressingMode','StyAddressingMode','OptIndexReg','OptIndexReg_1','OptXReg','OptYReg'
+,'AsmConstList','AsmConstList_1','AsmConstList_2','AsmConstant','AsmConstant_1','AsmConstAddSub'
 ,'AsmConstAddSub_1','BaseAsmConstant' }
 *********** Build Nullable Set **********
 ****************Create NOT nullable set ************************
@@ -162,7 +162,8 @@ FIRST['OptArrayInit'] { 'e' }
 FIRST['ParamList'] { 'e' }
 FIRST['ParamList_1'] { 'e' }
 FIRST['Param'] { 'e' }
-FIRST['ParamModifier'] { 'e' }
+FIRST['ParamModifier'] { }
+FIRST['ParamModifier_1'] { 'e' }
 FIRST['LocalDecls'] { 'e' }
 FIRST['LocalModifier'] { }
 FIRST['LocPtrModifier'] { 'e' }
@@ -344,6 +345,7 @@ FOLLOW['ParamList'] { }
 FOLLOW['ParamList_1'] { }
 FOLLOW['Param'] { }
 FOLLOW['ParamModifier'] { }
+FOLLOW['ParamModifier_1'] { }
 FOLLOW['LocalDecls'] { }
 FOLLOW['LocalModifier'] { }
 FOLLOW['LocPtrModifier'] { }

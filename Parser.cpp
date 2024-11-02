@@ -6,6 +6,7 @@ CParser::CParser()
 	m_pLex = 0;
 	m_Processor = CLexer::Processor::R6502;
 	m_pCurrentSection = 0;
+	m_Recursion = 0;
 }
 
 CParser::~CParser()
@@ -56,25 +57,47 @@ Token CParser::Run()
 
 Token CParser::Expect(Token LookaHeadToken, Token Expected)
 {
-	char* pExpectedToken;
-	char* pLookaheadToken;
+	char* pExpectedToken = 0;
+	char* pLookaheadToken = 0;
+	int number = 0;
 
 	if (LogFile())
 	{
-		if (LookaHeadToken == Token::IDENT)
+		switch (LookaHeadToken)
 		{
+		case Token::IDENT:
 			pLookaheadToken = GetLexer()->GetLexSymbol()->GetName();
-			pExpectedToken = pLookaheadToken;
-		}
-		else
-		{
+			if (LookaHeadToken == Expected)
+			{
+				pExpectedToken = pLookaheadToken;
+			}
+			else
+				pExpectedToken = (char*)"Unexpected";
+			fprintf(LogFile(), "%d::Expected Token: %s  Lookahead = %s\n",
+				m_Recursion,
+				pExpectedToken,
+				pLookaheadToken
+			);
+			break;
+		case Token::NUMBER:
+			number = GetLexer()->GetNumber();;
+			pExpectedToken = (char*)GetLexer()->GetKeyWords()->LookupToName(Expected);
+			fprintf(LogFile(), "%d::Expected Token: %s  Lookahead = %d\n",
+				m_Recursion,
+				pExpectedToken,
+				number
+			);
+			break;
+		default:
 			pLookaheadToken = (char*)GetLexer()->GetKeyWords()->LookupToName(LookaHeadToken);
 			pExpectedToken = (char*)GetLexer()->GetKeyWords()->LookupToName(Expected);
+			fprintf(LogFile(), "%d::Expected Token: %s  Lookahead = %s\n",
+				m_Recursion,
+				pExpectedToken,
+				pLookaheadToken
+			);
+			break;
 		}
-		fprintf(LogFile(), "Expected Token: %s  Lookahead = %s\n",
-			pExpectedToken,
-			pLookaheadToken
-		);
 	}
 	if (Accept(LookaHeadToken, Expected))
 		LookaHeadToken = GetLexer()->Lex();
@@ -87,7 +110,30 @@ Token CParser::Expect(Token LookaHeadToken, Token Expected)
 			LookaHeadToken, 
 			Expected
 		);
+		if(LogFile())
+			fprintf(
+				LogFile(),
+				"%d::Line %d: Unexpected Token:Got %d Expected %d\n",
+				m_Recursion,
+				GetLexer()->GetLineNumber(),
+				LookaHeadToken,
+				Expected
+			);
 		exit(1);
+	}
+	if (LogFile())
+	{
+		if (LookaHeadToken == Token::IDENT)
+		{
+			pLookaheadToken = GetLexer()->GetLexSymbol()->GetName();
+		}
+		else
+		{
+			pLookaheadToken = (char*)GetLexer()->GetKeyWords()->LookupToName(LookaHeadToken);
+		}
+		fprintf(LogFile(), "Next Lookahead = %s\n",
+			pLookaheadToken
+		);
 	}
 	return LookaHeadToken;
 }
@@ -145,10 +191,11 @@ Token CParser::Action65(Token LookaHeadToken)
 	//	Action65->Modules;
 	// 
 	//--------------------------------------------
-	if (LogFile())
-		fprintf(LogFile(), "Action65\n");
+	PrintLookahead(LogFile(), LookaHeadToken, "Enter Action65", ++m_Recursion);
+
 	LookaHeadToken = Modules(LookaHeadToken);
-    return LookaHeadToken;
+	PrintLookahead(LogFile(), LookaHeadToken, "Exit Action65", --m_Recursion);
+	return LookaHeadToken;
 }
 
 Token CParser::Modules(Token LookaHeadToken)
@@ -162,8 +209,7 @@ Token CParser::Modules(Token LookaHeadToken)
 	//--------------------------------------------
 	bool Loop = true;
 
-	if (LogFile())
-		fprintf(LogFile(), "Modules\n");
+	PrintLookahead(LogFile(), LookaHeadToken, "Enter Modules", ++m_Recursion);
 	LookaHeadToken = Vector(LookaHeadToken);
 	while (Loop)
 	{
@@ -178,6 +224,7 @@ Token CParser::Modules(Token LookaHeadToken)
 			break;
 		}
 	}
+	PrintLookahead(LogFile(), LookaHeadToken, "Exit Module", --m_Recursion);
 	return LookaHeadToken;
 }
 
@@ -191,8 +238,7 @@ Token CParser::Vector(Token LookaHeadToken)
 	//--------------------------------------------
 	bool Loop = true;
 
-	if (LogFile())
-		fprintf(LogFile(), "Vectors\n");
+	PrintLookahead(LogFile(), LookaHeadToken, "Enter Vector", ++m_Recursion);
 	LookaHeadToken = PROCroutine(LookaHeadToken);
 	while (Loop)
 	{
@@ -208,6 +254,7 @@ Token CParser::Vector(Token LookaHeadToken)
 			break;
 		}
 	}
+	PrintLookahead(LogFile(), LookaHeadToken, "Exit Vector", --m_Recursion);
 	return LookaHeadToken;
 }
 
@@ -218,11 +265,13 @@ Token CParser::VectorAddress(Token LookaHeadToken)
 	//--------------------------------------------
 	bool Loop = true;
 
+	PrintLookahead(LogFile(), LookaHeadToken, "Enter VectorAddress", ++m_Recursion);
 	LookaHeadToken = Expect(LookaHeadToken, Token('('));
 	LookaHeadToken = CompConst(LookaHeadToken);
 	LookaHeadToken = Expect(LookaHeadToken, Token(')'));
 	LookaHeadToken = Expect(LookaHeadToken, Token('='));
 	LookaHeadToken = CompConst(LookaHeadToken);
+	PrintLookahead(LogFile(), LookaHeadToken, "Exit VectorAddress", --m_Recursion);
 	return LookaHeadToken;
 }
 
@@ -238,11 +287,11 @@ Token CParser::PROCroutine(Token LookaHeadToken)
 	//--------------------------------------------
 	bool Loop = true;
 
-	if (LogFile())
-		fprintf(LogFile(), "ProcRoutines\n");
+	PrintLookahead(LogFile(), LookaHeadToken, "Enter PROCroutine", ++m_Recursion);
 	LookaHeadToken = SysDecl(LookaHeadToken);
 	while (Loop)
 	{
+		PrintLookahead(LogFile(), LookaHeadToken, "Parse PROCroutine", m_Recursion);
 		switch (LookaHeadToken)
 		{
 		case Token::PROC:
@@ -255,6 +304,7 @@ Token CParser::PROCroutine(Token LookaHeadToken)
 			break;
 		}
 	}
+	PrintLookahead(LogFile(), LookaHeadToken, "Exit PROCroutine", --m_Recursion);
 	return LookaHeadToken;
 }
 
@@ -266,8 +316,7 @@ Token CParser::ProcDef(Token LookaHeadToken)
 	// ProcDecl	-> 'IDENT' OptInit '(' ParamList ')';
 	//--------------------------------------------
 
-	if (LogFile())
-		fprintf(LogFile(), "ProcDef\n");
+	PrintLookahead(LogFile(), LookaHeadToken, "Enter ProcDef", ++m_Recursion);
 	switch (LookaHeadToken)
 	{
 	case Token::IDENT:
@@ -281,6 +330,7 @@ Token CParser::ProcDef(Token LookaHeadToken)
 		break;
 	}
 	LookaHeadToken = ProcBody(LookaHeadToken);
+	PrintLookahead(LogFile(), LookaHeadToken, "Exit ProcDef", --m_Recursion);
 	return LookaHeadToken;
 }
 
@@ -292,8 +342,7 @@ Token CParser::FuncDef(Token LookaHeadToken)
 	// FuncDecl	-> 'IDENT' OptInit '(' ParamList ')';
 	//--------------------------------------------
 
-	if (LogFile())
-		fprintf(LogFile(), "FuncDef\n");
+	PrintLookahead(LogFile(), LookaHeadToken, "Enter FuncDef", ++m_Recursion);
 	switch (LookaHeadToken)
 	{
 	case Token::IDENT:
@@ -307,6 +356,7 @@ Token CParser::FuncDef(Token LookaHeadToken)
 		break;
 	}
 	LookaHeadToken = FuncBody(LookaHeadToken);
+	PrintLookahead(LogFile(), LookaHeadToken, "Exit FuncDef", --m_Recursion);
 	return LookaHeadToken;
 }
 
@@ -318,8 +368,7 @@ Token CParser::OptInit(Token LookaHeadToken)
 	//				;
 	//--------------------------------------------
 
-	if (LogFile())
-		fprintf(LogFile(), "OptInit\n");
+	PrintLookahead(LogFile(), LookaHeadToken, "Enter OptInit", ++m_Recursion);
 	switch (LookaHeadToken)
 	{
 	case Token('='):
@@ -329,6 +378,7 @@ Token CParser::OptInit(Token LookaHeadToken)
 	default:
 		break;
 	}
+	PrintLookahead(LogFile(), LookaHeadToken, "Exit OptInit", --m_Recursion);
 	return LookaHeadToken;
 }
 
@@ -337,10 +387,10 @@ Token CParser::ProcBody(Token LookaHeadToken)
 	//--------------------------------------------
 	// ProcBody	-> LocalDecls Statements;
 	//--------------------------------------------
-	if (LogFile())
-		fprintf(LogFile(), "ProcBody\n");
+	PrintLookahead(LogFile(), LookaHeadToken, "Enter ProcBody", ++m_Recursion);
 	LookaHeadToken = LocalDecls(LookaHeadToken);
 	LookaHeadToken = Statements(LookaHeadToken);
+	PrintLookahead(LogFile(), LookaHeadToken, "Exit ProcBody", --m_Recursion);
 	return LookaHeadToken;
 }
 
@@ -349,10 +399,10 @@ Token CParser::FuncBody(Token LookaHeadToken)
 	//--------------------------------------------
 	// FuncBody	-> LocalDecls Statements;
 	//--------------------------------------------
-	if (LogFile())
-		fprintf(LogFile(), "FuncBody\n");
+	PrintLookahead(LogFile(), LookaHeadToken, "Enter FuncBodt", ++m_Recursion);
 	LookaHeadToken = LocalDecls(LookaHeadToken);
 	LookaHeadToken = Statements(LookaHeadToken);
+	PrintLookahead(LogFile(), LookaHeadToken, "Exit FuncBody", --m_Recursion);
 	return LookaHeadToken;
 }
 
@@ -372,8 +422,7 @@ Token CParser::Statements(Token LookaHeadToken)
 	//--------------------------------------------
 	bool Loop = true;
 
-	if (LogFile())
-		fprintf(LogFile(), "Statements\n");
+	PrintLookahead(LogFile(), LookaHeadToken, "Enter Statements", ++m_Recursion);
 	LookaHeadToken = ForStmt(LookaHeadToken);
 	while (Loop)
 	{
@@ -394,6 +443,7 @@ Token CParser::Statements(Token LookaHeadToken)
 			break;
 		}
 	}
+	PrintLookahead(LogFile(), LookaHeadToken, "Exit Statements", --m_Recursion);
 	return LookaHeadToken;
 }
 
@@ -404,8 +454,7 @@ Token CParser::ProcParams(Token LookaHeadToken)
 	//				->  ')' ;
 	//--------------------------------------------
 
-	if (LogFile())
-		fprintf(LogFile(), "ProcParams\n");
+	PrintLookahead(LogFile(), LookaHeadToken, "Enter ProcParams", ++m_Recursion);
 	switch (LookaHeadToken)
 	{
 	case Token('('):
@@ -416,6 +465,7 @@ Token CParser::ProcParams(Token LookaHeadToken)
 	default:
 		break;
 	}
+	PrintLookahead(LogFile(), LookaHeadToken, "Exit ProcParams", --m_Recursion);
 	return LookaHeadToken;
 }
 
@@ -430,8 +480,7 @@ Token CParser::ForStmt(Token LookaHeadToken)
 	//--------------------------------------------
 	bool Loop = true;
 
-	if (LogFile())
-		fprintf(LogFile(), "ForStmt\n");
+	PrintLookahead(LogFile(), LookaHeadToken, "Enter ForStmt", ++m_Recursion);
 	LookaHeadToken = IfStmt(LookaHeadToken);
 	while (Loop)
 	{
@@ -448,6 +497,7 @@ Token CParser::ForStmt(Token LookaHeadToken)
 			break;
 		}
 	}
+	PrintLookahead(LogFile(), LookaHeadToken, "Exit ForStmt", --m_Recursion);
 	return LookaHeadToken;
 }
 
@@ -457,8 +507,7 @@ Token CParser::Iterator(Token LookaHeadToken)
 	// Iterator	-> 'IDENT' '=' Start 'TO' Finish STEPoption ;
 	//--------------------------------------------
 
-	if (LogFile())
-		fprintf(LogFile(), "Iterator (For Statement)\n");
+	PrintLookahead(LogFile(), LookaHeadToken, "Enter Iterator", ++m_Recursion);
 	switch (LookaHeadToken)
 	{
 	case Token::IDENT:
@@ -466,6 +515,7 @@ Token CParser::Iterator(Token LookaHeadToken)
 	default:
 		break;
 	}
+	PrintLookahead(LogFile(), LookaHeadToken, "Exit Itterator", --m_Recursion);
 	return LookaHeadToken;
 }
 
@@ -475,8 +525,7 @@ Token CParser::Start(Token LookaHeadToken)
 	// Start		-> ArithExpr;
 	//--------------------------------------------
 
-	if (LogFile())
-		fprintf(LogFile(), "Start (For Statement)\n");
+	PrintLookahead(LogFile(), LookaHeadToken, "Enter Start (for statment)", ++m_Recursion);
 	switch (LookaHeadToken)
 	{
 	case Token('='):
@@ -486,6 +535,7 @@ Token CParser::Start(Token LookaHeadToken)
 	default:
 		break;
 	}
+	PrintLookahead(LogFile(), LookaHeadToken, "Exit Start (for Statment", --m_Recursion);
 	return LookaHeadToken;
 }
 
@@ -495,8 +545,7 @@ Token CParser::Finish(Token LookaHeadToken)
 	// Finish		-> 'TO' ArithExpr;
 	//--------------------------------------------
 
-	if (LogFile())
-		fprintf(LogFile(), "Finish (For Statement)\n");
+	PrintLookahead(LogFile(), LookaHeadToken, "Enter Finish", ++m_Recursion);
 	LookaHeadToken = ArithExpr(LookaHeadToken);
 	switch (LookaHeadToken)
 	{
@@ -507,6 +556,7 @@ Token CParser::Finish(Token LookaHeadToken)
 	default:
 		break;
 	}
+	PrintLookahead(LogFile(), LookaHeadToken, "Exit Finish", --m_Recursion);
 	return LookaHeadToken;
 }
 
@@ -518,8 +568,7 @@ Token CParser::STEPoption(Token LookaHeadToken)
 	//				;
 	//--------------------------------------------
 
-	if (LogFile())
-		fprintf(LogFile(), "STEPoption\n");
+	PrintLookahead(LogFile(), LookaHeadToken, "Enter Step", ++m_Recursion);
 	switch (LookaHeadToken)
 	{
 	case Token::STEP:
@@ -529,6 +578,7 @@ Token CParser::STEPoption(Token LookaHeadToken)
 	default:
 		break;
 	}
+	PrintLookahead(LogFile(), LookaHeadToken, "Exit Step", --m_Recursion);
 	return LookaHeadToken;
 }
 
@@ -540,14 +590,13 @@ Token CParser::IfStmt(Token LookaHeadToken)
 	//--------------------------------------------
 	// IfStmt			-> WhileStmt IfStmt_1;
 	//--------------------------------------------
-	// IfStmt_1		-> 'IF' If 'FI' WhileStmt IfStmt_1
+	// IfStmt_1		-> 'IF' If WhileStmt IfStmt_1
 	//				-> .
 	//				;
 	//--------------------------------------------
 	bool Loop = true;
 
-	if (LogFile())
-		fprintf(LogFile(), "IfStmt\n");
+	PrintLookahead(LogFile(), LookaHeadToken, "Enter IfStmt", ++m_Recursion);
 	LookaHeadToken = WhileStmt(LookaHeadToken);
 	while (Loop)
 	{
@@ -555,12 +604,15 @@ Token CParser::IfStmt(Token LookaHeadToken)
 		{
 		case Token::IF:
 			LookaHeadToken = Expect(LookaHeadToken, Token::IF);
+			LookaHeadToken = If(LookaHeadToken);
+			LookaHeadToken = WhileStmt(LookaHeadToken);
 			break;
 		default:
 			Loop = false;
 			break;
 		}
 	}
+	PrintLookahead(LogFile(), LookaHeadToken, "Exit IfStmt", --m_Recursion);
 	return LookaHeadToken;
 }
 
@@ -569,10 +621,10 @@ Token CParser::If(Token LookaHeadToken)
 	//--------------------------------------------
 	// If			-> ArithExpr ThenPart;
 	//--------------------------------------------
-	if (LogFile())
-		fprintf(LogFile(), "If\n");
+	PrintLookahead(LogFile(), LookaHeadToken, "Enter If", ++m_Recursion);
 	LookaHeadToken = ArithExpr(LookaHeadToken);
 	LookaHeadToken = ThenPart(LookaHeadToken);
+	PrintLookahead(LogFile(), LookaHeadToken, "Exit If", --m_Recursion);
 	return LookaHeadToken;
 }
 
@@ -584,8 +636,7 @@ Token CParser::ThenPart(Token LookaHeadToken)
 	// ThenPart_1	-> 'THEN' Statements ElseIfPart;
 	//--------------------------------------------
 
-	if (LogFile())
-		fprintf(LogFile(), "ThenPart\n");
+	PrintLookahead(LogFile(), LookaHeadToken, "Enter Then Part", ++m_Recursion);
 	LookaHeadToken = ElseIfPart(LookaHeadToken);
 	switch (LookaHeadToken)
 	{
@@ -597,6 +648,7 @@ Token CParser::ThenPart(Token LookaHeadToken)
 	default:
 		break;
 	}
+	PrintLookahead(LogFile(), LookaHeadToken, "Exit Then Part", --m_Recursion);
 	return LookaHeadToken;
 }
 
@@ -609,21 +661,26 @@ Token CParser::ElseIfPart(Token LookaHeadToken)
 	//				-> .
 	//				;
 	//--------------------------------------------
+	bool Loop = true;
 
-	if (LogFile())
-		fprintf(LogFile(), "ElseIfPart\n");
+	PrintLookahead(LogFile(), LookaHeadToken, "Enter ElseIfPart", ++m_Recursion);
 	LookaHeadToken = ElsePart(LookaHeadToken);
-	switch (LookaHeadToken)
+	while (Loop)
 	{
-	case Token::ELSEIF:
-		LookaHeadToken = Expect(LookaHeadToken, Token::THEN);
-		LookaHeadToken = ArithExpr(LookaHeadToken);
-		LookaHeadToken = ThenPart(LookaHeadToken);
-		LookaHeadToken = ElsePart(LookaHeadToken);
-		break;
-	default:
-		break;
+		switch (LookaHeadToken)
+		{
+		case Token::ELSEIF:
+			LookaHeadToken = Expect(LookaHeadToken, Token::THEN);
+			LookaHeadToken = ArithExpr(LookaHeadToken);
+			LookaHeadToken = ThenPart(LookaHeadToken);
+			LookaHeadToken = ElsePart(LookaHeadToken);
+			break;
+		default:
+			Loop = false;
+			break;
+		}
 	}
+	PrintLookahead(LogFile(), LookaHeadToken, "Exit ElseIfPart", --m_Recursion);
 	return LookaHeadToken;
 }
 
@@ -637,8 +694,7 @@ Token CParser::ElsePart(Token LookaHeadToken)
 	//--------------------------------------------
 	bool Loop = true;
 
-	if (LogFile())
-		fprintf(LogFile(), "ElsePart\n");
+	PrintLookahead(LogFile(), LookaHeadToken, "Enter ElsePart", ++m_Recursion);
 	while (Loop)
 	{
 		switch (LookaHeadToken)
@@ -649,12 +705,14 @@ Token CParser::ElsePart(Token LookaHeadToken)
 			break;
 		case Token::FI:
 			LookaHeadToken = Expect(LookaHeadToken, Token::FI);
+			Loop = false;
 			break;
 		default:
 			Loop = false;
 			break;
 		}
 	}
+	PrintLookahead(LogFile(), LookaHeadToken, "Exit ElsePart", --m_Recursion);
 	return LookaHeadToken;
 }
 
@@ -673,8 +731,7 @@ Token CParser::WhileStmt(Token LookaHeadToken)
 	//--------------------------------------------
 	bool Loop = true;
 
-	if (LogFile())
-		fprintf(LogFile(), "WhileStmt\n");
+	PrintLookahead(LogFile(), LookaHeadToken, "Enter WhileStmt", ++m_Recursion);
 	LookaHeadToken = DoStmt(LookaHeadToken);
 	while (Loop)
 	{
@@ -689,6 +746,7 @@ Token CParser::WhileStmt(Token LookaHeadToken)
 			break;
 		}
 	}
+	PrintLookahead(LogFile(), LookaHeadToken, "Exit WhileStmt", --m_Recursion);
 	return LookaHeadToken;
 }
 
@@ -708,8 +766,7 @@ Token CParser::DoStmt(Token LookaHeadToken)
 	//--------------------------------------------
 	bool Loop = true;
 
-	if (LogFile())
-		fprintf(LogFile(), "DOOStmt\n");
+	PrintLookahead(LogFile(), LookaHeadToken, "Enter DO Stmt", ++m_Recursion);
 	LookaHeadToken = EXITstmt(LookaHeadToken);
 	while (Loop)
 	{
@@ -718,8 +775,6 @@ Token CParser::DoStmt(Token LookaHeadToken)
 		case Token::DO:
 			LookaHeadToken = Expect(LookaHeadToken, Token::DO);
 			LookaHeadToken = Statements(LookaHeadToken);
-			break;
-		case Token::OD:
 			LookaHeadToken = Expect(LookaHeadToken, Token::OD);
 			LookaHeadToken = EXITstmt(LookaHeadToken);
 			break;
@@ -728,6 +783,7 @@ Token CParser::DoStmt(Token LookaHeadToken)
 			break;
 		}
 	}
+	PrintLookahead(LogFile(), LookaHeadToken, "Exit DoStmt", --m_Recursion);
 	return LookaHeadToken;
 }
 
@@ -746,8 +802,7 @@ Token CParser::EXITstmt(Token LookaHeadToken)
 	//--------------------------------------------
 	bool Loop = true;
 
-	if (LogFile())
-		fprintf(LogFile(), "EXITstmt\n");
+	PrintLookahead(LogFile(), LookaHeadToken, "Enter EXITstmt", ++m_Recursion);
 	LookaHeadToken = RetStmt(LookaHeadToken);
 	while (Loop)
 	{
@@ -762,6 +817,7 @@ Token CParser::EXITstmt(Token LookaHeadToken)
 			break;
 		}
 	}
+	PrintLookahead(LogFile(), LookaHeadToken, "Exit EXITstmt", --m_Recursion);
 	return LookaHeadToken;
 }
 
@@ -776,8 +832,7 @@ Token CParser::RetStmt(Token LookaHeadToken)
 	//--------------------------------------------
 	bool Loop = true;
 
-	if (LogFile())
-		fprintf(LogFile(), "RetStmt\n");
+	PrintLookahead(LogFile(), LookaHeadToken, "Enter RetStmt", ++m_Recursion);
 	LookaHeadToken = CodeBlock(LookaHeadToken);
 	while (Loop)
 	{
@@ -793,6 +848,7 @@ Token CParser::RetStmt(Token LookaHeadToken)
 			break;
 		}
 	}
+	PrintLookahead(LogFile(), LookaHeadToken, "Exit RetStmt", --m_Recursion);
 	return LookaHeadToken;
 }
 
@@ -806,8 +862,7 @@ Token CParser::OptReturnValue(Token LookaHeadToken)
 	//--------------------------------------------
 	bool Loop = true;
 
-	if (LogFile())
-		fprintf(LogFile(), "OptReturnValue\n");
+	PrintLookahead(LogFile(), LookaHeadToken, "Enter OptRetValue", ++m_Recursion);
 	while (Loop)
 	{
 		switch (LookaHeadToken)
@@ -824,6 +879,7 @@ Token CParser::OptReturnValue(Token LookaHeadToken)
 			break;
 		}
 	}
+	PrintLookahead(LogFile(), LookaHeadToken, "Exit OptReturnValue", --m_Recursion);
 	return LookaHeadToken;
 }
 
@@ -842,9 +898,7 @@ Token CParser::InlineAssembly(Token LookaHeadToken)
 	//--------------------------------------------
 	bool Loop = true;
 
-	if (LogFile())
-		fprintf(LogFile(), "InlineAssembly\n");
-
+	PrintLookahead(LogFile(), LookaHeadToken, "Enter InLineAssembly", ++m_Recursion);
 	LookaHeadToken = CodeBlock(LookaHeadToken);
 	while (Loop)
 	{
@@ -859,6 +913,7 @@ Token CParser::InlineAssembly(Token LookaHeadToken)
 			break;
 		}
 	}
+	PrintLookahead(LogFile(), LookaHeadToken, "Exit InLineAssembly", --m_Recursion);
 	return LookaHeadToken;
 }
 
@@ -874,8 +929,7 @@ Token CParser::InlineAssBlock(Token LookaHeadToken)
 	//--------------------------------------------
 	bool Loop = true;
 
-	if (LogFile())
-		fprintf(LogFile(), "InlineAssBlock\n");
+	PrintLookahead(LogFile(), LookaHeadToken, "Enter InLineAsmBlock", ++m_Recursion);
 	LookaHeadToken = Expect(LookaHeadToken, Token('{'));
 	while (Loop)
 	{
@@ -889,6 +943,7 @@ Token CParser::InlineAssBlock(Token LookaHeadToken)
 			break;
 		}
 	}
+	PrintLookahead(LogFile(), LookaHeadToken, "Exit InLineAsmBlock", --m_Recursion);
 	return Token();
 }
 
@@ -908,8 +963,7 @@ Token CParser::CodeBlock(Token LookaHeadToken)
 	//--------------------------------------------
 	bool Loop = true;
 
-	if (LogFile())
-		fprintf(LogFile(), "CodeBlock\n");
+	PrintLookahead(LogFile(), LookaHeadToken, "Enter CodeBlock", ++m_Recursion);
 	LookaHeadToken = UntillStmt(LookaHeadToken);
 	while (Loop)
 	{
@@ -928,6 +982,7 @@ Token CParser::CodeBlock(Token LookaHeadToken)
 			break;
 		}
 	}
+	PrintLookahead(LogFile(), LookaHeadToken, "Exit CodeBlock", --m_Recursion);
 	return LookaHeadToken;
 }
 
@@ -946,8 +1001,7 @@ Token CParser::UntillStmt(Token LookaHeadToken)
 	//--------------------------------------------
 	bool Loop = true;
 
-	if (LogFile())
-		fprintf(LogFile(), "UNTILLStmt\n");
+	PrintLookahead(LogFile(), LookaHeadToken, "Enter UntillStmt", ++m_Recursion);
 	LookaHeadToken = Assignment(LookaHeadToken);
 	while (Loop)
 	{
@@ -963,6 +1017,7 @@ Token CParser::UntillStmt(Token LookaHeadToken)
 			break;
 		}
 	}
+	PrintLookahead(LogFile(), LookaHeadToken, "Exit UntilStmt", --m_Recursion);
 	return LookaHeadToken;
 }
 
@@ -975,73 +1030,89 @@ Token CParser::Assignment(Token LookaHeadToken)
 	//--------------------------------------------
 	// Assignment	-> MemContents Assignment_1;
 	//--------------------------------------------
-	// Assignment_1	->  '=' ArithExpr 
-	//				-> '==+' ArithExpr
-	//				->  '==-' ArithExpr
-	//				->  '==*' ArithExpr
-	//				->  '==/' ArithExpr
-	//				->  '==MOD' ArithExpr
-	//				->  '==&' ArithExpr
-	//				->  '==!' ArithExpr 	//XOR
-	//				->  '==%' ArithExpr 	//OR
-	//				->  '==LSH' ArithExpr
-	//				->  '==RSH' ArithExpr
+	// Assignment_1	->  '=' ArithExpr Assignment_1
+	//				-> '==+' ArithExpr Assignment_1
+	//				->  '==-' ArithExpr Assignment_1
+	//				->  '==*' ArithExpr Assignment_1
+	//				->  '==/' ArithExpr Assignment_1
+	//				->  '==MOD' ArithExpr Assignment_1
+	//				->  '==&' ArithExpr Assignment_1
+	//				->  '==!' ArithExpr Assignment_1 	//XOR
+	//				->  '==%' ArithExpr Assignment_1 	//OR
+	//				->  '==LSH' ArithExpr Assignment_1
+	//				->  '==RSH' ArithExpr Assignment_1
 	//				-> .
 	//				;
 	//--------------------------------------------
-	if (LogFile())
-		fprintf(LogFile(), "Assignment\n");
+	bool Loop = true;
 
+	PrintLookahead(LogFile(), LookaHeadToken, "Enter Assignment", ++m_Recursion);
 	LookaHeadToken = MemContents(LookaHeadToken);
-	switch (LookaHeadToken)
+	while (Loop)
 	{
-	case Token('='):
-		LookaHeadToken = Expect(LookaHeadToken, Token('='));
-		LookaHeadToken = Assignment(LookaHeadToken);
-		break;
-	case Token::ASSIGN_ADD:
-		LookaHeadToken = Expect(LookaHeadToken, Token::ASSIGN_ADD);
-		LookaHeadToken = Assignment(LookaHeadToken);
-		break;
-	case Token::ASSIGN_AND:
-		LookaHeadToken = Expect(LookaHeadToken, Token::ASSIGN_AND);
-		LookaHeadToken = Assignment(LookaHeadToken);
-		break;
-	case Token::ASSIGN_DIV:
-		LookaHeadToken = Expect(LookaHeadToken, Token::ASSIGN_DIV);
-		LookaHeadToken = Assignment(LookaHeadToken);
-		break;
-	case Token::ASSIGN_LSH:
-		LookaHeadToken = Expect(LookaHeadToken, Token::ASSIGN_LSH);
-		LookaHeadToken = Assignment(LookaHeadToken);
-		break;
-	case Token::ASSIGN_MOD:
-		LookaHeadToken = Expect(LookaHeadToken, Token::ASSIGN_MOD);
-		LookaHeadToken = Assignment(LookaHeadToken);
-		break;
-	case Token::ASSIGN_MUL:
-		LookaHeadToken = Expect(LookaHeadToken, Token::ASSIGN_MUL);
-		LookaHeadToken = Assignment(LookaHeadToken);
-		break;
-	case Token::ASSIGN_OR:
-		LookaHeadToken = Expect(LookaHeadToken, Token::ASSIGN_OR);
-		LookaHeadToken = Assignment(LookaHeadToken);
-		break;
-	case Token::ASSIGN_RSH:
-		LookaHeadToken = Expect(LookaHeadToken, Token::ASSIGN_RSH);
-		LookaHeadToken = Assignment(LookaHeadToken);
-		break;
-	case Token::ASSIGN_SUB:
-		LookaHeadToken = Expect(LookaHeadToken, Token::ASSIGN_SUB);
-		LookaHeadToken = Assignment(LookaHeadToken);
-		break;
-	case Token::ASSIGN_XOR:
-		LookaHeadToken = Expect(LookaHeadToken, Token::ASSIGN_XOR);
-		LookaHeadToken = Assignment(LookaHeadToken);
-		break;
-	default:
-		break;
+		switch (LookaHeadToken)
+		{
+		case Token('='):
+			LookaHeadToken = Expect(LookaHeadToken, Token('='));
+			LookaHeadToken = ArithExpr(LookaHeadToken);
+			LookaHeadToken = MemContents(LookaHeadToken);
+			break;
+		case Token::ASSIGN_ADD:
+			LookaHeadToken = Expect(LookaHeadToken, Token::ASSIGN_ADD);
+			LookaHeadToken = ArithExpr(LookaHeadToken);
+			LookaHeadToken = MemContents(LookaHeadToken);
+			break;
+		case Token::ASSIGN_AND:
+			LookaHeadToken = Expect(LookaHeadToken, Token::ASSIGN_AND);
+			LookaHeadToken = ArithExpr(LookaHeadToken);
+			LookaHeadToken = MemContents(LookaHeadToken);
+			break;
+		case Token::ASSIGN_DIV:
+			LookaHeadToken = Expect(LookaHeadToken, Token::ASSIGN_DIV);
+			LookaHeadToken = ArithExpr(LookaHeadToken);
+			LookaHeadToken = MemContents(LookaHeadToken);
+			break;
+		case Token::ASSIGN_LSH:
+			LookaHeadToken = Expect(LookaHeadToken, Token::ASSIGN_LSH);
+			LookaHeadToken = ArithExpr(LookaHeadToken);
+			LookaHeadToken = MemContents(LookaHeadToken);
+			break;
+		case Token::ASSIGN_MOD:
+			LookaHeadToken = Expect(LookaHeadToken, Token::ASSIGN_MOD);
+			LookaHeadToken = ArithExpr(LookaHeadToken);
+			LookaHeadToken = MemContents(LookaHeadToken);
+			break;
+		case Token::ASSIGN_MUL:
+			LookaHeadToken = Expect(LookaHeadToken, Token::ASSIGN_MUL);
+			LookaHeadToken = ArithExpr(LookaHeadToken);
+			LookaHeadToken = MemContents(LookaHeadToken);
+			break;
+		case Token::ASSIGN_OR:
+			LookaHeadToken = Expect(LookaHeadToken, Token::ASSIGN_OR);
+			LookaHeadToken = ArithExpr(LookaHeadToken);
+			LookaHeadToken = MemContents(LookaHeadToken);
+			break;
+		case Token::ASSIGN_RSH:
+			LookaHeadToken = Expect(LookaHeadToken, Token::ASSIGN_RSH);
+			LookaHeadToken = ArithExpr(LookaHeadToken);
+			LookaHeadToken = MemContents(LookaHeadToken);
+			break;
+		case Token::ASSIGN_SUB:
+			LookaHeadToken = Expect(LookaHeadToken, Token::ASSIGN_SUB);
+			LookaHeadToken = ArithExpr(LookaHeadToken);
+			LookaHeadToken = MemContents(LookaHeadToken);
+			break;
+		case Token::ASSIGN_XOR:
+			LookaHeadToken = Expect(LookaHeadToken, Token::ASSIGN_XOR);
+			LookaHeadToken = ArithExpr(LookaHeadToken);
+			LookaHeadToken = MemContents(LookaHeadToken);
+			break;
+		default:
+			Loop = false;
+			break;
+		}
 	}
+	PrintLookahead(LogFile(), LookaHeadToken, "Exit Assignment", --m_Recursion);
 	return LookaHeadToken;
 }
 
@@ -1060,8 +1131,7 @@ Token CParser::ArithExpr(Token LookaHeadToken)
 	//--------------------------------------------
 	bool Loop = true;
 
-	if (LogFile())
-		fprintf(LogFile(), "ArithExpr\n");
+	PrintLookahead(LogFile(), LookaHeadToken, "Enter ArithExpr",++m_Recursion);
 	LookaHeadToken = LogicalAND(LookaHeadToken);
 	while (Loop)
 	{
@@ -1077,6 +1147,7 @@ Token CParser::ArithExpr(Token LookaHeadToken)
 		}
 
 	}
+	PrintLookahead(LogFile(), LookaHeadToken, "Exit LogicalOR", --m_Recursion);
 	return LookaHeadToken;
 }
 
@@ -1091,8 +1162,7 @@ Token CParser::LogicalAND(Token LookaHeadToken)
 	//--------------------------------------------
 	bool Loop = true;
 
-	if (LogFile())
-		fprintf(LogFile(), "LogicalAND\n");
+	PrintLookahead(LogFile(), LookaHeadToken, "Enter LogicalAND",++m_Recursion);
 	LookaHeadToken = RelOperation(LookaHeadToken);
 	while (Loop)
 	{
@@ -1107,6 +1177,7 @@ Token CParser::LogicalAND(Token LookaHeadToken)
 			break;
 		}
 	}
+	PrintLookahead(LogFile(), LookaHeadToken, "Exit LogicalAND", --m_Recursion);
 	return LookaHeadToken;
 }
 
@@ -1124,8 +1195,7 @@ Token CParser::RelOperation(Token LookaHeadToken)
 	//--------------------------------------------
 	bool Loop = true;
 
-	if (LogFile())
-		fprintf(LogFile(), "RelOperators\n");
+	PrintLookahead(LogFile(), LookaHeadToken, "Enter RelOperations",++m_Recursion);
 	LookaHeadToken = RelEquals(LookaHeadToken);
 	while (Loop)
 	{
@@ -1152,6 +1222,7 @@ Token CParser::RelOperation(Token LookaHeadToken)
 			break;
 		}
 	}
+	PrintLookahead(LogFile(), LookaHeadToken, "Exit RelOperations", --m_Recursion);
 	return LookaHeadToken;
 }
 
@@ -1167,8 +1238,7 @@ Token CParser::RelEquals(Token LookaHeadToken)
 	//--------------------------------------------
 	bool Loop = true;
 
-	if (LogFile())
-		fprintf(LogFile(), "RelEquals\n");
+	PrintLookahead(LogFile(), LookaHeadToken, "Enter RelEquals",++m_Recursion);
 	LookaHeadToken = BitwiseOR(LookaHeadToken);
 	while (Loop)
 	{
@@ -1187,6 +1257,7 @@ Token CParser::RelEquals(Token LookaHeadToken)
 			break;
 		}
 	}
+	PrintLookahead(LogFile(), LookaHeadToken, "Exit RelEquals", --m_Recursion);
 	return LookaHeadToken;
 }
 
@@ -1201,14 +1272,13 @@ Token CParser::BitwiseOR(Token LookaHeadToken)
 	//--------------------------------------------
 	bool Loop = true;
 
-	if (LogFile())
-		fprintf(LogFile(), "BitwiseOR\n");
+	PrintLookahead(LogFile(), LookaHeadToken, "Enter BitwiseOR", ++m_Recursion);
 	LookaHeadToken = BitwiseAND(LookaHeadToken);
 	while (Loop)
 	{
 		switch (LookaHeadToken)
 		{
-		case Token('%'):	// not equals
+		case Token('%'):	
 			LookaHeadToken = Expect(LookaHeadToken, Token('%'));
 			LookaHeadToken = BitwiseAND(LookaHeadToken);
 			break;
@@ -1217,6 +1287,7 @@ Token CParser::BitwiseOR(Token LookaHeadToken)
 			break;
 		}
 	}
+	PrintLookahead(LogFile(), LookaHeadToken, "Exit BitwiseOR", --m_Recursion);
 	return LookaHeadToken;
 }
 
@@ -1231,8 +1302,7 @@ Token CParser::BitwiseAND(Token LookaHeadToken)
 	//--------------------------------------------
 	bool Loop = true;
 
-	if (LogFile())
-		fprintf(LogFile(), "BitwiseAND\n");
+	PrintLookahead(LogFile(), LookaHeadToken, "Enter BitwiseAND", ++m_Recursion);
 	LookaHeadToken = BitwiseXOR(LookaHeadToken);
 	while (Loop)
 	{
@@ -1247,6 +1317,7 @@ Token CParser::BitwiseAND(Token LookaHeadToken)
 			break;
 		}
 	}
+	PrintLookahead(LogFile(), LookaHeadToken, "Exit BitwiseAND", --m_Recursion);
 	return LookaHeadToken;
 }
 
@@ -1257,32 +1328,30 @@ Token CParser::BitwiseXOR(Token LookaHeadToken)
 	//--------------------------------------------
 	// BitwiseXOR_1	-> '!' AddExpr BitwiseXOR_1
 	//				-> 'XOR' AddExpr BitwiseXOR_1
+	//				-> 'EOR' AddExpr BitwiseXOR_1
 	//				-> .
 	//				;
 	//--------------------------------------------
 	bool Loop = true;
 
-	if (LogFile())
-		fprintf(LogFile(), "BitwiseXOR\n");
+	PrintLookahead(LogFile(), LookaHeadToken, "Enter BitwiseXOR", ++m_Recursion);
 	LookaHeadToken = AddExpr(LookaHeadToken);
-	while (1)
+	while (Loop)
 	{
 		switch (LookaHeadToken)
 		{
+		case Token('!'):
+		case Token::EOR:
 		case Token::XOR:	
 			LookaHeadToken = Expect(LookaHeadToken, Token::XOR);
 			LookaHeadToken = AddExpr(LookaHeadToken);
 			break;
-		case Token('!'):	
-			LookaHeadToken = Expect(LookaHeadToken, Token('!'));
-			LookaHeadToken = AddExpr(LookaHeadToken);
-			break;
-
 		default:
 			Loop = false;
 			break;
 		}
 	}
+	PrintLookahead(LogFile(), LookaHeadToken, "Exit BitwiseXOR", --m_Recursion);
 	return LookaHeadToken;
 }
 
@@ -1298,19 +1367,18 @@ Token CParser::AddExpr(Token LookaHeadToken)
 	//--------------------------------------------
 	bool Loop = true;
 
-	if (LogFile())
-		fprintf(LogFile(), "AddExpr\n");
+	PrintLookahead(LogFile(), LookaHeadToken, "Enter AddExpr", ++m_Recursion);
 	LookaHeadToken = ShifExpr(LookaHeadToken);
 	while (Loop)
 	{
 		switch (LookaHeadToken)
 		{
 		case Token('+'):	
-			LookaHeadToken = Expect(LookaHeadToken, Token('!'));
+			LookaHeadToken = Expect(LookaHeadToken, Token('+'));
 			LookaHeadToken = ShifExpr(LookaHeadToken);
 			break;
 		case Token('-'):	
-			LookaHeadToken = Expect(LookaHeadToken, Token('!'));
+			LookaHeadToken = Expect(LookaHeadToken, Token('-'));
 			LookaHeadToken = ShifExpr(LookaHeadToken);
 			break;
 		default:
@@ -1318,6 +1386,7 @@ Token CParser::AddExpr(Token LookaHeadToken)
 			break;
 		}
 	}
+	PrintLookahead(LogFile(), LookaHeadToken, "Exit AddExpr", --m_Recursion);
 	return LookaHeadToken;
 }
 
@@ -1333,8 +1402,7 @@ Token CParser::ShifExpr(Token LookaHeadToken)
 	//--------------------------------------------
 	bool Loop = true;
 
-	if (LogFile())
-		fprintf(LogFile(), "ShiftExpr\n");
+	PrintLookahead(LogFile(), LookaHeadToken, "Enter ShiftExpr", ++m_Recursion);
 	LookaHeadToken = MultExpr(LookaHeadToken);
 	while (Loop)
 	{
@@ -1354,6 +1422,7 @@ Token CParser::ShifExpr(Token LookaHeadToken)
 			break;
 		}
 	}
+	PrintLookahead(LogFile(), LookaHeadToken, "Exit ShiftExpr", --m_Recursion);
 	return LookaHeadToken;
 }
 
@@ -1370,22 +1439,27 @@ Token CParser::MultExpr(Token LookaHeadToken)
 	//--------------------------------------------
 	bool Loop = true;
 
-	if (LogFile())
-		fprintf(LogFile(), "MultExpr\n");
+	PrintLookahead(LogFile(), LookaHeadToken, "Enter MultExpr", ++m_Recursion);
 	LookaHeadToken = Unary(LookaHeadToken);
-	while (1)
+	while (Loop)
 	{
 		switch (LookaHeadToken)
 		{
 		case Token('*'):
+			if (LogFile())
+				fprintf(LogFile(), "[*]\n");
 			LookaHeadToken = Expect(LookaHeadToken, Token('*'));
 			LookaHeadToken = Unary(LookaHeadToken);
 			break;
 		case Token('/'):
+			if (LogFile())
+				fprintf(LogFile(), "[/]\n");
 			LookaHeadToken = Expect(LookaHeadToken, Token('/'));
 			LookaHeadToken = Unary(LookaHeadToken);
 			break;
 		case Token::MOD:
+			if (LogFile())
+				fprintf(LogFile(), "[MOD]\n");
 			LookaHeadToken = Expect(LookaHeadToken, Token::MOD);
 			LookaHeadToken = Unary(LookaHeadToken);
 			break;
@@ -1395,6 +1469,7 @@ Token CParser::MultExpr(Token LookaHeadToken)
 			break;
 		}
 	}
+	PrintLookahead(LogFile(), LookaHeadToken, "Exit MultExpr", --m_Recursion);
 	return LookaHeadToken;
 }
 
@@ -1409,8 +1484,7 @@ Token CParser::Unary(Token LookaHeadToken)
 	//--------------------------------------------
 	bool Loop = true;
 
-	if (LogFile())
-		fprintf(LogFile(), "Urinary\n");
+	PrintLookahead(LogFile(), LookaHeadToken, "Enter Urnary", ++m_Recursion);
 	while (Loop)
 	{
 		switch (LookaHeadToken)
@@ -1419,11 +1493,12 @@ Token CParser::Unary(Token LookaHeadToken)
 			LookaHeadToken = Expect(LookaHeadToken, Token('-'));
 			break;
 		default:
-			LookaHeadToken = Factor(LookaHeadToken);
 			Loop = false;
 			break;
 		}
 	}
+	LookaHeadToken = Factor(LookaHeadToken);
+	PrintLookahead(LogFile(), LookaHeadToken, "Exit Unary", --m_Recursion);
 	return LookaHeadToken;
 }
 
@@ -1432,15 +1507,13 @@ Token CParser::Factor(Token LookaHeadToken)
 	//--------------------------------------------
 	// Factor	-> 'FUNC_IDENT' ProcParams
 	//			-> '(' ArithExpr ')'
-	//			-> '*'
 	//			->IDENT MemContentsType
 	//			->BaseCompConst
 	//			;
 	//--------------------------------------------
 	bool Loop = true;
 
-	if (LogFile())
-		fprintf(LogFile(), "FACTOR\n");
+	PrintLookahead(LogFile(), LookaHeadToken, "Enter Factor", ++m_Recursion);
 	switch (LookaHeadToken)
 	{
 		case Token::FUNC_CALL:
@@ -1456,14 +1529,12 @@ Token CParser::Factor(Token LookaHeadToken)
 		LookaHeadToken = ArithExpr(LookaHeadToken);
 		LookaHeadToken = Expect(LookaHeadToken, Token(')'));
 		break;
-	case Token('*'):
-		LookaHeadToken = Expect(LookaHeadToken, Token('-'));
-		break;
 	default:
 		LookaHeadToken = BaseCompConst(LookaHeadToken);
 		Loop = false;
 		break;
 	}
+	PrintLookahead(LogFile(), LookaHeadToken, "Exit Factor", --m_Recursion);
 	return LookaHeadToken;
 }
 
@@ -1478,8 +1549,7 @@ Token CParser::MemContentsList(Token LookaHeadToken)
 	//--------------------------------------------
 	bool Loop = true;
 
-	if (LogFile())
-		fprintf(LogFile(), "MemContentsList\n");
+	PrintLookahead(LogFile(), LookaHeadToken, "Enter MemContents", ++m_Recursion);
 	LookaHeadToken = MemContents(LookaHeadToken);
 	while (Loop)
 	{
@@ -1494,6 +1564,7 @@ Token CParser::MemContentsList(Token LookaHeadToken)
 			break;
 		}
 	}
+	PrintLookahead(LogFile(), LookaHeadToken, "Exit MemContentsList", --m_Recursion);
 	return LookaHeadToken;
 }
 
@@ -1517,41 +1588,45 @@ Token CParser::ParamList(Token LookaHeadToken)
 	//--------------------------------------------
 	bool Loop = true;
 
-	if (LogFile())
-		fprintf(LogFile(), "ParamList\n");
+	PrintLookahead(LogFile(), LookaHeadToken, "Enter ParamList", ++m_Recursion);
 	LookaHeadToken = Param(LookaHeadToken);
-	switch (LookaHeadToken)
+	while (Loop)
 	{
-	case Token(','):
-		LookaHeadToken = Expect(LookaHeadToken, Token(','));
-		LookaHeadToken = Param(LookaHeadToken);
-		break;
-	default:
-		Loop = false;
-		break;
+		switch (LookaHeadToken)
+		{
+		case Token(','):
+			LookaHeadToken = Expect(LookaHeadToken, Token(','));
+			LookaHeadToken = Param(LookaHeadToken);
+			break;
+		default:
+			Loop = false;
+			break;
+		}
 	}
+	PrintLookahead(LogFile(), LookaHeadToken, "Exit ParamList", --m_Recursion);
 	return LookaHeadToken;
 }
 
 Token CParser::Param(Token LookaHeadToken)
 {
 	//--------------------------------------------
-	// Param		-> 'RECORDTYPE' POINTER IDENT
-	//				-> 'CHAR' ParamModifier IDENT
-	//				-> 'BYTE' ParamModifier IDENT
-	//				-> 'INT' ParamModifier IDENT
-	//				-> 'CARD' ParamModifier IDENT
-	//				-> 'bool' IDENT
+	// Param		-> 'RECORDTYPE' POINTER IdentList
+	//				-> 'CHAR' ParamModifier 
+	//				-> 'BYTE' ParamModifier 
+	//				-> 'INT' ParamModifier 
+	//				-> 'CARD' ParamModifier 
+	//				-> 'bool' ParamModifier
 	//				-> .
 	//				;
 	//--------------------------------------------
 
-	if (LogFile())
-		fprintf(LogFile(), "Param\n");
+	PrintLookahead(LogFile(), LookaHeadToken, "Enter Param", ++m_Recursion);
 	switch (LookaHeadToken)
 	{
 	case Token::RECORDTYPE:
 		LookaHeadToken = Expect(LookaHeadToken, Token::RECORDTYPE);
+		LookaHeadToken = Expect(LookaHeadToken, Token::POINTER);
+		LookaHeadToken = IdentList(LookaHeadToken);
 		break;
 	case Token::CHAR:
 		LookaHeadToken = Expect(LookaHeadToken, Token::CHAR);
@@ -1576,25 +1651,31 @@ Token CParser::Param(Token LookaHeadToken)
 	default:
 		break;
 	}
+	PrintLookahead(LogFile(), LookaHeadToken, "Exit Param", --m_Recursion);
 	return LookaHeadToken;
 }
 
 Token CParser::ParamModifier(Token LookaHeadToken)
 {
 	//--------------------------------------------
-	// ParamModifier	-> 'POINTER'
+	//	ParamModifier	->IdentList ParamModifier_1;
+	//	ParamModifier_1	-> 'POINTER' IdentList
 	//					-> .
 	//					;
 	//--------------------------------------------
 
+	PrintLookahead(LogFile(), LookaHeadToken, "Enter ParamModifier", ++m_Recursion);
+	LookaHeadToken = IdentList(LookaHeadToken);
 	switch (LookaHeadToken)
 	{
 	case Token::POINTER:
 		LookaHeadToken = Expect(LookaHeadToken, Token::POINTER);
+		LookaHeadToken = IdentList(LookaHeadToken);
 		break;
 	default:
 		break;
 	}
+	PrintLookahead(LogFile(), LookaHeadToken, "Exit ParamModifier", --m_Recursion);
 	return LookaHeadToken;
 }
 
@@ -1614,6 +1695,7 @@ Token CParser::SysDecl(Token LookaHeadToken)
 	//--------------------------------------------
 	bool Loop = true;
 
+	PrintLookahead(LogFile(), LookaHeadToken, "Enter SysDecl", ++m_Recursion);
 	LookaHeadToken = TypeDefDecl(LookaHeadToken);
 	while (Loop)
 	{
@@ -1629,6 +1711,7 @@ Token CParser::SysDecl(Token LookaHeadToken)
 			break;
 		}
 	}
+	PrintLookahead(LogFile(), LookaHeadToken, "Exit SysDecl", --m_Recursion);
 	return LookaHeadToken;
 }
 
@@ -1643,6 +1726,7 @@ Token CParser::DefList(Token LookaHeadToken)
 	//--------------------------------------------
 	bool Loop = true;
 
+	PrintLookahead(LogFile(), LookaHeadToken, "Enter DefList", ++m_Recursion);
 	LookaHeadToken = Def(LookaHeadToken);
 	while (Loop)
 	{
@@ -1657,6 +1741,7 @@ Token CParser::DefList(Token LookaHeadToken)
 			break;
 		}
 	}
+	PrintLookahead(LogFile(), LookaHeadToken, "Exit DefList", --m_Recursion);
 	return LookaHeadToken;
 }
 
@@ -1666,6 +1751,7 @@ Token CParser::Def(Token LookaHeadToken)
 	// Def		-> IDENT '=' CompConst;
 	//--------------------------------------------
 
+	PrintLookahead(LogFile(), LookaHeadToken, "Enter DEF", ++m_Recursion);
 	switch (LookaHeadToken)
 	{
 	case Token::IDENT:
@@ -1676,6 +1762,7 @@ Token CParser::Def(Token LookaHeadToken)
 	default:
 		break;
 	}
+	PrintLookahead(LogFile(), LookaHeadToken, "Exit Def", --m_Recursion);
 	return LookaHeadToken;
 }
 
@@ -1694,6 +1781,7 @@ Token CParser::TypeDefDecl(Token LookaHeadToken)
 	//--------------------------------------------
 	bool Loop = true;
 
+	PrintLookahead(LogFile(), LookaHeadToken, "Enter TypeDefDecl", ++m_Recursion);
 	LookaHeadToken = FundDecl(LookaHeadToken);
 	while (Loop)
 	{
@@ -1709,6 +1797,7 @@ Token CParser::TypeDefDecl(Token LookaHeadToken)
 			break;
 		}
 	}
+	PrintLookahead(LogFile(), LookaHeadToken, "Exit TypeDefDecl", --m_Recursion);
 	return LookaHeadToken;
 }
 
@@ -1724,6 +1813,7 @@ Token CParser::RecDefIdent(Token LookaHeadToken)
 	//					;
 	//--------------------------------------------
 
+	PrintLookahead(LogFile(), LookaHeadToken, "Enter RecDefIdent", ++m_Recursion);
 	LookaHeadToken = Expect(LookaHeadToken, Token::IDENT);
 	switch (LookaHeadToken)
 	{
@@ -1736,6 +1826,7 @@ Token CParser::RecDefIdent(Token LookaHeadToken)
 	default:
 		break;
 	}
+	PrintLookahead(LogFile(), LookaHeadToken, "Exit RecDefIdent", --m_Recursion);
 	return LookaHeadToken;
 }
 
@@ -1750,6 +1841,7 @@ Token CParser::RecDefVarDecls(Token LookaHeadToken)
 	//--------------------------------------------
 	bool Loop = true;
 		
+	PrintLookahead(LogFile(), LookaHeadToken, "Enter RecDefVarDecls", ++m_Recursion);
 	LookaHeadToken = RecDefVarDecl(LookaHeadToken);
 	while (Loop)
 	{
@@ -1764,6 +1856,7 @@ Token CParser::RecDefVarDecls(Token LookaHeadToken)
 			break;
 		}
 	}
+	PrintLookahead(LogFile(), LookaHeadToken, "Exit RecDefVarDecls", --m_Recursion);
 	return LookaHeadToken;
 }
 
@@ -1779,6 +1872,7 @@ Token CParser::RecDefVarDecl(Token LookaHeadToken)
 	//						;
 	//--------------------------------------------
 
+	PrintLookahead(LogFile(), LookaHeadToken, "Enter RefDefVarDecl", ++m_Recursion);
 	switch (LookaHeadToken)
 	{
 	case Token::RECORDTYPE:
@@ -1807,6 +1901,7 @@ Token CParser::RecDefVarDecl(Token LookaHeadToken)
 		break;
 
 	}
+	PrintLookahead(LogFile(), LookaHeadToken, "Exit RecDefVarDecl", --m_Recursion);
 	return LookaHeadToken;
 }
 
@@ -1815,8 +1910,10 @@ Token CParser::RecDefModifier(Token LookaHeadToken)
 	//--------------------------------------------
 	// RecModifier		-> RecArray RecPointer;
 	//--------------------------------------------
+	PrintLookahead(LogFile(), LookaHeadToken, "Enter RecDefModifier", ++m_Recursion);
 	LookaHeadToken = RecDefArray(LookaHeadToken);
 	LookaHeadToken = RecDefPointer(LookaHeadToken);
+	PrintLookahead(LogFile(), LookaHeadToken, "Exit RecDefModifier", --m_Recursion);
 	return LookaHeadToken;
 }
 
@@ -1828,6 +1925,7 @@ Token CParser::RecDefPointer(Token LookaHeadToken)
 	//					;
 	//--------------------------------------------
 
+	PrintLookahead(LogFile(), LookaHeadToken, "Enter RecDefPointer", ++m_Recursion);
 	switch (LookaHeadToken)
 	{
 	case Token::POINTER:
@@ -1837,6 +1935,7 @@ Token CParser::RecDefPointer(Token LookaHeadToken)
 	default:
 		break;
 	}
+	PrintLookahead(LogFile(), LookaHeadToken, "Exit RecDefPointer", --m_Recursion);
 	return LookaHeadToken;
 }
 
@@ -1850,6 +1949,7 @@ Token CParser::RecDefArray(Token LookaHeadToken)
 	//					;
 	//--------------------------------------------
 
+	PrintLookahead(LogFile(), LookaHeadToken, "Enter RefDefArray", ++m_Recursion);
 	LookaHeadToken = RecDefIdentList(LookaHeadToken);
 	switch (LookaHeadToken)
 	{
@@ -1860,6 +1960,7 @@ Token CParser::RecDefArray(Token LookaHeadToken)
 	default:
 		break;
 	}
+	PrintLookahead(LogFile(), LookaHeadToken, "Exit RecDefArray", --m_Recursion);
 	return LookaHeadToken;
 }
 
@@ -1874,6 +1975,7 @@ Token CParser::RecDefIdentList(Token LookaHeadToken)
 	//--------------------------------------------
 	bool Loop = true;
 
+	PrintLookahead(LogFile(), LookaHeadToken, "Enter RecDefIdentList", ++m_Recursion);
 	LookaHeadToken = Ident(LookaHeadToken);
 	while (Loop)
 	{
@@ -1888,6 +1990,7 @@ Token CParser::RecDefIdentList(Token LookaHeadToken)
 			break;
 		}
 	}
+	PrintLookahead(LogFile(), LookaHeadToken, "Exit RecDefIdentList", --m_Recursion);
 	return LookaHeadToken;
 }
 
@@ -1902,6 +2005,7 @@ Token CParser::RecDefVarList(Token LookaHeadToken)
 	//--------------------------------------------
 	bool Loop = true;
 
+	PrintLookahead(LogFile(), LookaHeadToken, "Enter RecDefVarList", ++m_Recursion);
 	while (Loop)
 	{
 		switch (LookaHeadToken)
@@ -1917,6 +2021,7 @@ Token CParser::RecDefVarList(Token LookaHeadToken)
 			break;
 		}
 	}
+	PrintLookahead(LogFile(), LookaHeadToken, "Exit RecDefVarList", --m_Recursion);
 	return LookaHeadToken;
 }
 
@@ -1940,6 +2045,7 @@ Token CParser::FundDecl(Token LookaHeadToken)
 	//--------------------------------------------
 	bool Loop = true;
 
+	PrintLookahead(LogFile(), LookaHeadToken, "Enter FundDecl", ++m_Recursion);
 	while (Loop)
 	{
 		switch (LookaHeadToken)
@@ -1972,6 +2078,7 @@ Token CParser::FundDecl(Token LookaHeadToken)
 			break;
 		}
 	}
+	PrintLookahead(LogFile(), LookaHeadToken, "Exit FundDecl", --m_Recursion);
 	return LookaHeadToken;
 }
 
@@ -1985,6 +2092,7 @@ Token CParser::FundModifier(Token LookaHeadToken)
 	//					;
 	//--------------------------------------------
 
+	PrintLookahead(LogFile(), LookaHeadToken, "Enter FundModifier", ++m_Recursion);
 	LookaHeadToken = FundPtrModifier(LookaHeadToken);
 	switch (LookaHeadToken)
 	{
@@ -1996,6 +2104,7 @@ Token CParser::FundModifier(Token LookaHeadToken)
 		LookaHeadToken = IdentList(LookaHeadToken);
 		break;
 	}
+	PrintLookahead(LogFile(), LookaHeadToken, "Exit FundModifieer", --m_Recursion);
 	return LookaHeadToken;
 }
 
@@ -2009,6 +2118,7 @@ Token CParser::FundPtrModifier(Token LookaHeadToken)
 	//						;
 	//--------------------------------------------
 
+	PrintLookahead(LogFile(), LookaHeadToken, "Enter FundPtrModifier", ++m_Recursion);
 	LookaHeadToken = FundArrayModifier(LookaHeadToken);
 	switch (LookaHeadToken)
 	{
@@ -2018,6 +2128,7 @@ Token CParser::FundPtrModifier(Token LookaHeadToken)
 	default:
 		break;
 	}
+	PrintLookahead(LogFile(), LookaHeadToken, "Exit FundPtrModifieer", --m_Recursion);
 	return LookaHeadToken;
 }
 
@@ -2030,6 +2141,7 @@ Token CParser::FundArrayModifier(Token LookaHeadToken)
 	//					;
 	//--------------------------------------------
 
+	PrintLookahead(LogFile(), LookaHeadToken, "Enter FundArrayMod", ++m_Recursion);
 	LookaHeadToken = IdentList(LookaHeadToken);
 	switch (LookaHeadToken)
 	{
@@ -2041,6 +2153,7 @@ Token CParser::FundArrayModifier(Token LookaHeadToken)
 		break;
 
 	}
+	PrintLookahead(LogFile(), LookaHeadToken, "Exit FundArrayModifier", --m_Recursion);
 	return LookaHeadToken;
 }
 
@@ -2058,6 +2171,7 @@ Token CParser::IdentList(Token LookaHeadToken)
 	//--------------------------------------------
 	bool Loop = true;
 
+	PrintLookahead(LogFile(), LookaHeadToken, "Enter IdentList", ++m_Recursion);
 	LookaHeadToken = Ident(LookaHeadToken);
 	while (Loop)
 	{
@@ -2072,6 +2186,7 @@ Token CParser::IdentList(Token LookaHeadToken)
 			break;
 		}
 	}
+	PrintLookahead(LogFile(), LookaHeadToken, "Exit IdenrtList", --m_Recursion);
 	return LookaHeadToken;
 }
 
@@ -2083,6 +2198,7 @@ Token CParser::Ident(Token LookaHeadToken)
 	//				;
 	//--------------------------------------------
 
+	PrintLookahead(LogFile(), LookaHeadToken, "Enter Ident", ++m_Recursion);
 	switch (LookaHeadToken)
 	{
 	case Token::IDENT:
@@ -2092,6 +2208,7 @@ Token CParser::Ident(Token LookaHeadToken)
 	default:
 		break;
 	}
+	PrintLookahead(LogFile(), LookaHeadToken, "Exit Ident", --m_Recursion);
 	return LookaHeadToken;
 }
 
@@ -2104,6 +2221,7 @@ Token CParser::Options(Token LookaHeadToken)
 	//				;
 	//--------------------------------------------
 
+	PrintLookahead(LogFile(), LookaHeadToken, "Enter Options", ++m_Recursion);
 	switch (LookaHeadToken)
 	{
 	case Token('='):
@@ -2119,6 +2237,7 @@ Token CParser::Options(Token LookaHeadToken)
 		break;
 
 	}
+	PrintLookahead(LogFile(), LookaHeadToken, "Exit Options", --m_Recursion);
 	return LookaHeadToken;
 }
 
@@ -2128,8 +2247,10 @@ Token CParser::OptArrayDimension(Token LookaHeadToken)
 	//--------------------------------------------
 	//	OptArrayDimension->CompConst ')';
 	//--------------------------------------------
+	PrintLookahead(LogFile(), LookaHeadToken, "Enter OptArrayDimension", ++m_Recursion);
 	LookaHeadToken = CompConst(LookaHeadToken);
 	LookaHeadToken = Expect(LookaHeadToken, Token(')'));
+	PrintLookahead(LogFile(), LookaHeadToken, "Exit OptArrayDimension", --m_Recursion);
 	return Token();
 }
 
@@ -2141,6 +2262,7 @@ Token CParser::OptArrayInit(Token LookaHeadToken)
 	//				;
 	//--------------------------------------------
 
+	PrintLookahead(LogFile(), LookaHeadToken, "Enter OptArrayInit", ++m_Recursion);
 	switch (LookaHeadToken)
 	{
 	case Token('='):
@@ -2150,6 +2272,7 @@ Token CParser::OptArrayInit(Token LookaHeadToken)
 	default:
 		break;
 	}
+	PrintLookahead(LogFile(), LookaHeadToken, "Exit OptArrayInit", --m_Recursion);
 	return LookaHeadToken;
 }
 
@@ -2173,6 +2296,7 @@ Token CParser::LocalDecls(Token LookaHeadToken)
 	//--------------------------------------------
 	bool Loop = true;
 
+	PrintLookahead(LogFile(), LookaHeadToken, "Enter LocalDecls", ++m_Recursion);
 	while (Loop)
 	{
 		switch (LookaHeadToken)
@@ -2192,10 +2316,10 @@ Token CParser::LocalDecls(Token LookaHeadToken)
 		case Token::INT:
 			LookaHeadToken = Expect(LookaHeadToken, Token::INT);
 			LookaHeadToken = LocalModifier(LookaHeadToken);
-			LookaHeadToken = LocalModifier(LookaHeadToken);
 			break;
 		case Token::BOOL:
 			LookaHeadToken = Expect(LookaHeadToken, Token::BOOL);
+			LookaHeadToken = LocalModifier(LookaHeadToken);
 			break;
 		case Token::RECORDTYPE:
 			LookaHeadToken = Expect(LookaHeadToken, Token::RECORDTYPE);
@@ -2206,6 +2330,7 @@ Token CParser::LocalDecls(Token LookaHeadToken)
 			break;
 		}
 	}
+	PrintLookahead(LogFile(), LookaHeadToken, "Exit LocalDecls", --m_Recursion);
 	return LookaHeadToken;
 }
 
@@ -2218,6 +2343,7 @@ Token CParser::LocalModifier(Token LookaHeadToken)
 	//					-> .
 	//					;
 	//--------------------------------------------
+	PrintLookahead(LogFile(), LookaHeadToken, "Enter LocalModifier", ++m_Recursion);
 	LookaHeadToken = LocArrayModifier(LookaHeadToken);
 	switch (LookaHeadToken)
 	{
@@ -2228,6 +2354,7 @@ Token CParser::LocalModifier(Token LookaHeadToken)
 	default:
 		break;
 	}
+	PrintLookahead(LogFile(), LookaHeadToken, "Exit LocalModifier", --m_Recursion);
 	return LookaHeadToken;
 }
 
@@ -2240,6 +2367,7 @@ Token CParser::LocArrayModifier(Token LookaHeadToken)
 	//					;
 	//--------------------------------------------
 
+	PrintLookahead(LogFile(), LookaHeadToken, "Enter LocArrayModifier", ++m_Recursion);
 	LookaHeadToken = IdentList(LookaHeadToken);
 	switch (LookaHeadToken)
 	{
@@ -2250,6 +2378,7 @@ Token CParser::LocArrayModifier(Token LookaHeadToken)
 	default:
 		break;
 	}
+	PrintLookahead(LogFile(), LookaHeadToken, "Exit LocArrayModifier", --m_Recursion);
 	return LookaHeadToken;
 }
 
@@ -2269,6 +2398,7 @@ Token CParser::CompConstList(Token LookaHeadToken)
 	//--------------------------------------------
 	bool Loop = true;
 
+	PrintLookahead(LogFile(), LookaHeadToken, "Enter CompConstList", ++m_Recursion);
 	LookaHeadToken = CompConst(LookaHeadToken);
 	while (Loop)
 	{
@@ -2283,6 +2413,7 @@ Token CParser::CompConstList(Token LookaHeadToken)
 			break;
 		}
 	}
+	PrintLookahead(LogFile(), LookaHeadToken, "Exit CompConstList", --m_Recursion);
 	return LookaHeadToken;
 }
 
@@ -2298,6 +2429,7 @@ Token CParser::CompConst(Token LookaHeadToken)
 	//--------------------------------------------
 	bool Loop = true;
 
+	PrintLookahead(LogFile(), LookaHeadToken, "Enter CompConst", ++m_Recursion);
 	LookaHeadToken = BaseCompConst(LookaHeadToken);
 	while (Loop)
 	{
@@ -2316,6 +2448,7 @@ Token CParser::CompConst(Token LookaHeadToken)
 			break;
 		}
 	}
+	PrintLookahead(LogFile(), LookaHeadToken, "Exit CompConst", --m_Recursion);
 	return LookaHeadToken;
 }
 
@@ -2329,6 +2462,7 @@ Token CParser::BaseCompConst(Token LookaHeadToken)
 	//					;
 	//--------------------------------------------
 
+	PrintLookahead(LogFile(), LookaHeadToken, "Enter BaseCompConst", ++m_Recursion);
 	switch (LookaHeadToken)
 	{
 	case Token::NUMBER:
@@ -2344,6 +2478,7 @@ Token CParser::BaseCompConst(Token LookaHeadToken)
 	default:
 		break;
 	}
+	PrintLookahead(LogFile(), LookaHeadToken, "Exit BaseCompConst", --m_Recursion);
 	return LookaHeadToken;
 }
 
@@ -2361,6 +2496,7 @@ Token CParser::MemContents(Token LookaHeadToken)
 	//						;
 	//--------------------------------------------
 
+	PrintLookahead(LogFile(), LookaHeadToken, "Enter MemContents", ++m_Recursion);
 	switch (LookaHeadToken)
 	{
 	case Token::IDENT:
@@ -2370,6 +2506,7 @@ Token CParser::MemContents(Token LookaHeadToken)
 	default:
 		break;
 	}
+	PrintLookahead(LogFile(), LookaHeadToken, "Exit MemCoontents", --m_Recursion);
 	return LookaHeadToken;
 }
 
@@ -2383,6 +2520,7 @@ Token CParser::MemContentsType(Token LookaHeadToken)
 	//					;
 	//--------------------------------------------
 
+	PrintLookahead(LogFile(), LookaHeadToken, "Enter MemContentsType", ++m_Recursion);
 	switch (LookaHeadToken)
 	{
 	case Token('('):
@@ -2399,6 +2537,7 @@ Token CParser::MemContentsType(Token LookaHeadToken)
 	default:
 		break;
 	}
+	PrintLookahead(LogFile(), LookaHeadToken, "Exit MemcontentsType", --m_Recursion);
 	return LookaHeadToken;
 }
 
@@ -2407,11 +2546,16 @@ Token CParser::ArrayIndex(Token LookaHeadToken)
 	//--------------------------------------------
 	//	ArrayIndex	-> ArithExpr ')';
 	//--------------------------------------------
+	PrintLookahead(LogFile(), LookaHeadToken, "Enter ArrayIndex", ++m_Recursion);
 	LookaHeadToken = ArithExpr(LookaHeadToken);
 	LookaHeadToken = Expect(LookaHeadToken, Token(')'));
+	PrintLookahead(LogFile(), LookaHeadToken, "Exit ArrayIndex", --m_Recursion);
 	return LookaHeadToken;
 }
 
+//-----------------------------------------------------------
+// Inline Assembler Methods
+//-----------------------------------------------------------
 Token CParser::AsmStmt(Token LookaHeadToken)
 {
 	return Token();
@@ -2840,6 +2984,7 @@ Token CParser::Proceedure(Token LookaHeadToken)
 	//--------------------------------------------------
 	bool Loop = true;
 
+	PrintLookahead(LogFile(), LookaHeadToken, "Enter PRO|C", ++m_Recursion);
 	LookaHeadToken = Instruction(LookaHeadToken);
 	while (Loop)
 	{
@@ -2856,6 +3001,7 @@ Token CParser::Proceedure(Token LookaHeadToken)
 			break;
 		}
 	}
+	PrintLookahead(LogFile(), LookaHeadToken, "Enter PRO|C", --m_Recursion);
 	return LookaHeadToken;
 }
 
@@ -4202,6 +4348,48 @@ bool CParser::CheckZeroPageAddress(int A)
 		throw(ExceptionThrown);
 	}
 	return rV;
+}
+
+void CParser::PrintLookahead(FILE* pLog, Token token, const char* pS, int RecursionLevel)
+{
+	char* pLookaheadToken;
+	int TokenValue;
+	char* pLexBuff;
+
+	if (pLog)
+	{
+		pLexBuff = GetLexer()->GetLexBuffer();
+		switch (token)
+		{
+		case Token::IDENT:
+			pLookaheadToken = GetLexer()->GetLexSymbol()->GetName();
+			fprintf(LogFile(), "  %d::%s  Lookahead = %s LexBuffer \'%s\'\n",
+				RecursionLevel,
+				pS,
+				pLookaheadToken,
+				pLexBuff
+			);
+			break;
+		case Token::NUMBER:
+			TokenValue = GetLexer()->GetNumber();;
+			fprintf(LogFile(), "  %d::%s TokenValue: = %d LexBuffer \'%s\'\n",
+				RecursionLevel,
+				pS,
+				TokenValue,
+				pLexBuff
+			);
+			break;
+		default:
+			pLookaheadToken = (char*)GetLexer()->GetKeyWords()->LookupToName(token);
+			fprintf(LogFile(), "  %d::%s Lookahead Token: %s LexBuffer \'%s\' \n",
+				RecursionLevel,
+				pS,
+				pLookaheadToken,
+				pLexBuff
+			);
+			break;
+		}
+	}
 }
 
 const char* CParser::PHASE_LUT::LookupPhaseName(PHASE phase)

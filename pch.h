@@ -53,6 +53,7 @@ enum class IdentType {
 };
 
 enum  class Token {
+	ENDOFFILE = -1,
 	NUMBER = 256,
 	STRING,
 	IDENT,

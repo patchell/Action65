@@ -305,17 +305,17 @@ UntillStmt_1	-> 'UNTILL' ArithExpr Assignment UntillStmt_1
 //---------------------------------------------------
 
 Assignment	-> MemContents Assignment_1;
-Assignment_1->  '=' ArithExpr 
-			-> '==+' ArithExpr  
-			->  '==-' ArithExpr  
-			->  '==*' ArithExpr  
-			->  '==/' ArithExpr 
-			->  '==MOD' ArithExpr 
-			->  '==&' ArithExpr		// AND
-			->  '==!' ArithExpr 	//XOR
-			->  '==%' ArithExpr 	//OR
-			->  '==LSH' ArithExpr 
-			->  '==RSH' ArithExpr 
+Assignment_1->  '=' ArithExpr MemContents Assignment_1
+			-> '==+' ArithExpr  MemContents Assignment_1
+			->  '==-' ArithExpr  MemContents Assignment_1
+			->  '==*' ArithExpr  MemContents Assignment_1
+			->  '==/' ArithExpr MemContents Assignment_1
+			->  '==MOD' ArithExpr MemContents Assignment_1
+			->  '==&' ArithExpr	MemContents Assignment_1	// AND
+			->  '==!' ArithExpr MemContents Assignment_1	//XOR
+			->  '==%' ArithExpr 	MemContents Assignment_1//OR
+			->  '==LSH' ArithExpr MemContents Assignment_1
+			->  '==RSH' ArithExpr MemContents Assignment_1
 			-> .
 			;
 
@@ -388,7 +388,6 @@ Unary	-> '-' Unary
 
 Factor	-> 'FUNC_IDENT' ProcParams
 		-> '(' ArithExpr ')'
-		-> '*'
 		-> IDENT MemContentsType
 		-> BaseCompConst
 		;
@@ -518,16 +517,17 @@ ParamList	-> Param ParamList_1;
 ParamList_1	-> ',' Param ParamList_1
 			-> .
 			;
-Param		-> 'RECORDTYPE' POINTER IDENT
-			-> 'CHAR' ParamModifier IDENT
-			-> 'BYTE' ParamModifier IDENT
-			-> 'INT' ParamModifier IDENT
-			-> 'CARD' ParamModifier IDENT
-			-> 'BOOL' IDENT
+Param		-> 'RECORDTYPE' POINTER IdentList
+			-> 'CHAR' ParamModifier 
+			-> 'BYTE' ParamModifier 
+			-> 'INT' ParamModifier 
+			-> 'CARD' ParamModifier 
+			-> 'BOOL' ParamModifier 
 			-> .
 			;
 
-ParamModifier	-> 'POINTER'
+ParamModifier	-> IdentList ParamModifier_1;
+ParamModifier_1	-> 'POINTER' IdentList
 				-> .
 				;			
 //-----------------------------------------------
