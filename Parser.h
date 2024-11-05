@@ -47,6 +47,7 @@ private:
 	CLexer::Processor m_Processor;
 	CStack m_ValueStack;
 	int m_Recursion;
+	int m_Bump;
 public:
 	CParser();
 	virtual ~CParser();
@@ -117,13 +118,15 @@ private:
 
 	Token Assignment(Token LookaHeadToken);
 	//--------------------------------------
+	// Logical Expressions
+	//--------------------------------------
+	Token RelOperation(Token LookaHeadToken);
+	Token LogicalOR(Token LookaHeadToken);
+	Token LogicalAND(Token LookaHeadToken);
+	//--------------------------------------
 	// Arithmetic Expressions
 	//--------------------------------------
-	Token ArithExpr(Token LookaHeadToken);
-	Token LogicalAND(Token LookaHeadToken);
-	Token RelOperation(Token LookaHeadToken);
-	Token RelEquals(Token LookaHeadToken);
-	Token BitwiseOR(Token LookaHeadToken);
+	Token ArithExpr(Token LookaHeadToken);	//bitwise OR
 	Token BitwiseAND(Token LookaHeadToken);
 	Token BitwiseXOR(Token LookaHeadToken);
 	Token AddExpr(Token LookaHeadToken);
@@ -319,6 +322,12 @@ private:
 	void Absolute(CInstruction* pInst, int Address, CLexer::AdrModeType ModeType);
 	bool CheckZeroPageAddress(int A);
 	//---------------- Utillity ----------------------
-	void PrintLookahead(FILE*pLog, Token token, const char *pS, int RecursionLevel);
+	void PrintLookahead(
+		FILE* pLog,
+		Token token,
+		const char* pS,
+		int RecursionLevel,
+		int Bump = 0
+	);
 };
 

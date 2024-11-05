@@ -16,6 +16,15 @@ RETURN
 PROC Another(CHAR aCat, bBat)
 	INT Lone, Ltwo
 
-	Ltwo = aCat * bBat
-	Lone = bBat / Ltwo
+	WHILE Avar # Ltwo
+	DO
+		Ltwo = aCat * bBat
+		Lone = bBat / Ltwo
+	OD
 RETURN
+
+INT FUNC Fuction()
+	INT value
+
+	value = 8
+RETURN value

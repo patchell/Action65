@@ -220,11 +220,11 @@ IfStmt			-> WhileStmt IfStmt_1;
 IfStmt_1		-> 'IF' If WhileStmt IfStmt_1
 				-> .
 				;
-If			-> ArithExpr ThenPart;
+If			-> RelOperation ThenPart;
 ThenPart	-> ElseIfPart ThenPart_1;
 ThenPart_1	-> 'THEN' Statements ElseIfPart;
 ElseIfPart	-> ElsePart ElseIfPart_1;
-ElseIfPart_1-> 'ELSEIF' ArithExpr ThenPart ElsePart
+ElseIfPart_1-> 'ELSEIF' RelOperation ThenPart ElsePart
 			-> .
 			;
 ElsePart	-> 'ELSE' Statements ElsePart
@@ -236,7 +236,7 @@ ElsePart	-> 'ELSE' Statements ElsePart
 // WHILE Statement
 //-------------------------------------------------
 WhileStmt		-> DoStmt WhileStmt_1;
-WhileStmt_1		-> 'WHILE' ArithExpr  DoStmt WhileStmt_1
+WhileStmt_1		-> 'WHILE' RelOperation  DoStmt WhileStmt_1
 				-> .
 				;
 
@@ -297,7 +297,7 @@ ConstList_1	-> ',' CompConst ConstList_1
 // UNTILE Statement
 //---------------------------------------------------
 UntillStmt		-> Assignment UntillStmt_1;
-UntillStmt_1	-> 'UNTILL' ArithExpr Assignment UntillStmt_1
+UntillStmt_1	-> 'UNTILL' RelOperation Assignment UntillStmt_1
 				-> .
 				;
 //---------------------------------------------------
@@ -323,31 +323,27 @@ Assignment_1->  '=' ArithExpr MemContents Assignment_1
 // Arithmetic Expressions
 //--------------------------------------
 
-ArithExpr	-> LogicalAND LogicalOR_1;
+RelOperation	-> LogicalOR RelOperation_1;
+RelOperation_1	-> '>' LogicalOR RelOperation_1
+				-> '<' LogicalOR RelOperation_1
+				-> 'GTEQ' LogicalOR RelOperation_1
+				-> 'LTEQ' LogicalOR RelOperation_1
+				-> '=' LogicalOR RelOperation_1
+				-> '#' LogicalOR RelOperation_1	//not equal
+				-> .
+				;
+
+LogicalOR	-> LogicalAND LogicalOR_1;
 LogicalOR_1	-> 'OR' LogicalAND LogicalOR_1
 			-> .
 			;
 
-LogicalAND		-> RelOperation LogicalAND_1;
-LogicalAND_1	-> 'AND' RelOperation LogicalAND_1
+LogicalAND		-> ArithExpr LogicalAND_1;
+LogicalAND_1	-> 'AND' ArithExpr LogicalAND_1
 				-> .
 				;
 
-RelOperation	-> RelEquals RelOperation_1;
-RelOperation_1	-> '>' RelEquals RelOperation_1
-				-> '<' RelEquals RelOperation_1
-				-> 'GTEQ' RelEquals RelOperation_1
-				-> 'LTEQ' RelEquals RelOperation_1
-				-> .
-				;
-
-RelEquals	-> BitwiseOR RelEquals_1;
-RelEquals_1	-> '=' BitwiseOR RelEquals_1
-			-> '#' BitwiseOR RelEquals_1	//not equal
-			-> .
-			;
-
-BitwiseOR	-> BitwiseAND BitwiseOR_1;
+ArithExpr	-> BitwiseAND BitwiseOR_1;
 BitwiseOR_1	-> '%' BitwiseAND BitwiseOR_1
 			-> .
 			;

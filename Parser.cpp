@@ -7,6 +7,7 @@ CParser::CParser()
 	m_Processor = CLexer::Processor::R6502;
 	m_pCurrentSection = 0;
 	m_Recursion = 0;
+	m_Bump = 0;
 }
 
 CParser::~CParser()
@@ -422,7 +423,7 @@ Token CParser::Statements(Token LookaHeadToken)
 	//--------------------------------------------
 	bool Loop = true;
 
-	PrintLookahead(LogFile(), LookaHeadToken, "Enter Statements", ++m_Recursion);
+	PrintLookahead(LogFile(), LookaHeadToken, "Enter Statements", ++m_Recursion,1);
 	LookaHeadToken = ForStmt(LookaHeadToken);
 	while (Loop)
 	{
@@ -443,7 +444,7 @@ Token CParser::Statements(Token LookaHeadToken)
 			break;
 		}
 	}
-	PrintLookahead(LogFile(), LookaHeadToken, "Exit Statements", --m_Recursion);
+	PrintLookahead(LogFile(), LookaHeadToken, "Exit Statements", --m_Recursion,-1);
 	return LookaHeadToken;
 }
 
@@ -619,10 +620,10 @@ Token CParser::IfStmt(Token LookaHeadToken)
 Token CParser::If(Token LookaHeadToken)
 {
 	//--------------------------------------------
-	// If			-> ArithExpr ThenPart;
+	// If			-> RelOperation ThenPart;
 	//--------------------------------------------
 	PrintLookahead(LogFile(), LookaHeadToken, "Enter If", ++m_Recursion);
-	LookaHeadToken = ArithExpr(LookaHeadToken);
+	LookaHeadToken = RelOperation(LookaHeadToken);
 	LookaHeadToken = ThenPart(LookaHeadToken);
 	PrintLookahead(LogFile(), LookaHeadToken, "Exit If", --m_Recursion);
 	return LookaHeadToken;
@@ -657,7 +658,7 @@ Token CParser::ElseIfPart(Token LookaHeadToken)
 	//--------------------------------------------
 	// ElseIfPart	-> ElsePart ElseIfPart_1;
 	//--------------------------------------------
-	// ElseIfPart_1-> 'ELSEIF' ArithExpr ThenPart ElsePart
+	// ElseIfPart_1-> 'ELSEIF' RelOperation ThenPart ElsePart
 	//				-> .
 	//				;
 	//--------------------------------------------
@@ -671,7 +672,7 @@ Token CParser::ElseIfPart(Token LookaHeadToken)
 		{
 		case Token::ELSEIF:
 			LookaHeadToken = Expect(LookaHeadToken, Token::THEN);
-			LookaHeadToken = ArithExpr(LookaHeadToken);
+			LookaHeadToken = RelOperation(LookaHeadToken);
 			LookaHeadToken = ThenPart(LookaHeadToken);
 			LookaHeadToken = ElsePart(LookaHeadToken);
 			break;
@@ -725,7 +726,7 @@ Token CParser::WhileStmt(Token LookaHeadToken)
 	//--------------------------------------------
 	// WhileStmt		-> DoStmt WhileStmt_1;
 	//--------------------------------------------
-	// WhileStmt_1		-> 'WHILE' ArithExpr  DoStmt WhileStmt_1
+	// WhileStmt_1		-> 'WHILE' RelOperation  DoStmt WhileStmt_1
 	//					-> .
 	//					;
 	//--------------------------------------------
@@ -739,6 +740,7 @@ Token CParser::WhileStmt(Token LookaHeadToken)
 		{
 		case Token::WHILE:
 			LookaHeadToken = Expect(LookaHeadToken, Token::WHILE);
+			LookaHeadToken = RelOperation(LookaHeadToken);
 			LookaHeadToken = DoStmt(LookaHeadToken);
 			break;
 		default:
@@ -995,7 +997,7 @@ Token CParser::UntillStmt(Token LookaHeadToken)
 	//--------------------------------------------
 	// UntillStmt		-> Assignment UntillStmt_1;
 	//--------------------------------------------
-	// UntillStmt_1	-> 'UNTILL' ArithExpr Assignment UntillStmt_1
+	// UntillStmt_1	-> 'UNTILL' RelOperation Assignment UntillStmt_1
 	//				-> .
 	//				;
 	//--------------------------------------------
@@ -1009,7 +1011,7 @@ Token CParser::UntillStmt(Token LookaHeadToken)
 		{
 		case Token::UNTIL:
 			LookaHeadToken = Expect(LookaHeadToken, Token::UNTIL);
-			LookaHeadToken = ArithExpr(LookaHeadToken);
+			LookaHeadToken = RelOperation(LookaHeadToken);
 			LookaHeadToken = Assignment(LookaHeadToken);
 			break;
 		default:
@@ -1116,14 +1118,69 @@ Token CParser::Assignment(Token LookaHeadToken)
 	return LookaHeadToken;
 }
 
-//--------------------------------------
-// Arithmetic Expressions
-//--------------------------------------
+//----------------------------------------------
+// Relation Operations
+//----------------------------------------------
 
-Token CParser::ArithExpr(Token LookaHeadToken)
+Token CParser::RelOperation(Token LookaHeadToken)
 {
 	//--------------------------------------------
-	// ArithExpr	-> LogicalAND LogicalOR_1;
+	// RelOperation	-> RelEquals RelOperation_1;
+	//--------------------------------------------
+	// RelOperation_1	-> '>' LogicalOR RelOperation_1
+	//					-> '<' LogicalOR RelOperation_1
+	//					-> 'GTEQ' LogicalOR RelOperation_1
+	//					-> 'LTEQ' LogicalOR RelOperation_1
+	//					-> '=' LogicalOR RelEquals_1
+	//					-> '#' LogicalOR RelEquals_1	//not equal
+	//					-> .
+	//					;
+	//--------------------------------------------
+	bool Loop = true;
+
+	PrintLookahead(LogFile(), LookaHeadToken, "Enter RelOperations", ++m_Recursion);
+	LookaHeadToken = LogicalOR(LookaHeadToken);
+	while (Loop)
+	{
+		switch (LookaHeadToken)
+		{
+		case Token::GTEQ:
+			LookaHeadToken = Expect(LookaHeadToken, Token::GTEQ);
+			LookaHeadToken = LogicalOR(LookaHeadToken);
+			break;
+		case Token::LTEQ:
+			LookaHeadToken = Expect(LookaHeadToken, Token::LTEQ);
+			LookaHeadToken = LogicalOR(LookaHeadToken);
+			break;
+		case Token('<'):
+			LookaHeadToken = Expect(LookaHeadToken, Token('<'));
+			LookaHeadToken = LogicalOR(LookaHeadToken);
+			break;
+		case Token('>'):
+			LookaHeadToken = Expect(LookaHeadToken, Token('>'));
+			LookaHeadToken = LogicalOR(LookaHeadToken);
+			break;
+		case Token('='):
+			LookaHeadToken = Expect(LookaHeadToken, Token('='));
+			LookaHeadToken = LogicalOR(LookaHeadToken);
+			break;
+		case Token('#'):	// not equals
+			LookaHeadToken = Expect(LookaHeadToken, Token('#'));
+			LookaHeadToken = LogicalOR(LookaHeadToken);
+			break;
+		default:
+			Loop = false;
+			break;
+		}
+	}
+	PrintLookahead(LogFile(), LookaHeadToken, "Exit RelOperations", --m_Recursion);
+	return LookaHeadToken;
+}
+
+Token CParser::LogicalOR(Token LookaHeadToken)
+{
+	//--------------------------------------------
+	// LogicalOR	-> LogicalAND LogicalOR_1;
 	//--------------------------------------------
 	// LogicalOR_1	-> 'OR' LogicalAND LogicalOR_1
 	//				-> .
@@ -1131,7 +1188,7 @@ Token CParser::ArithExpr(Token LookaHeadToken)
 	//--------------------------------------------
 	bool Loop = true;
 
-	PrintLookahead(LogFile(), LookaHeadToken, "Enter ArithExpr",++m_Recursion);
+	PrintLookahead(LogFile(), LookaHeadToken, "Enter ArithExpr", ++m_Recursion);
 	LookaHeadToken = LogicalAND(LookaHeadToken);
 	while (Loop)
 	{
@@ -1162,15 +1219,15 @@ Token CParser::LogicalAND(Token LookaHeadToken)
 	//--------------------------------------------
 	bool Loop = true;
 
-	PrintLookahead(LogFile(), LookaHeadToken, "Enter LogicalAND",++m_Recursion);
-	LookaHeadToken = RelOperation(LookaHeadToken);
+	PrintLookahead(LogFile(), LookaHeadToken, "Enter LogicalAND", ++m_Recursion);
+	LookaHeadToken = ArithExpr(LookaHeadToken);
 	while (Loop)
 	{
 		switch (LookaHeadToken)
 		{
 		case Token::AND:
 			LookaHeadToken = Expect(LookaHeadToken, Token::AND);
-			LookaHeadToken = RelOperation(LookaHeadToken);
+			LookaHeadToken = ArithExpr(LookaHeadToken);
 			break;
 		default:
 			Loop = false;
@@ -1181,90 +1238,15 @@ Token CParser::LogicalAND(Token LookaHeadToken)
 	return LookaHeadToken;
 }
 
-Token CParser::RelOperation(Token LookaHeadToken)
+//--------------------------------------
+// Arithmetic Expressions
+//--------------------------------------
+
+
+Token CParser::ArithExpr(Token LookaHeadToken)
 {
 	//--------------------------------------------
-	// RelOperation	-> RelEquals RelOperation_1;
-	//--------------------------------------------
-	// RelOperation_1	-> '>' RelEquals RelOperation_1
-	//					-> '<' RelEquals RelOperation_1
-	//					-> 'GTEQ' RelEquals RelOperation_1
-	//					-> 'LTEQ' RelEquals RelOperation_1
-	//					-> .
-	//					;
-	//--------------------------------------------
-	bool Loop = true;
-
-	PrintLookahead(LogFile(), LookaHeadToken, "Enter RelOperations",++m_Recursion);
-	LookaHeadToken = RelEquals(LookaHeadToken);
-	while (Loop)
-	{
-		switch (LookaHeadToken)
-		{
-		case Token::GTEQ:
-			LookaHeadToken = Expect(LookaHeadToken, Token::GTEQ);
-			LookaHeadToken = RelEquals(LookaHeadToken);
-			break;
-		case Token::LTEQ:
-			LookaHeadToken = Expect(LookaHeadToken, Token::LTEQ);
-			LookaHeadToken = RelEquals(LookaHeadToken);
-			break;
-		case Token('<'):
-			LookaHeadToken = Expect(LookaHeadToken, Token('<'));
-			LookaHeadToken = RelEquals(LookaHeadToken);
-			break;
-		case Token('>'):
-			LookaHeadToken = Expect(LookaHeadToken, Token('>'));
-			LookaHeadToken = RelEquals(LookaHeadToken);
-			break;
-		default:
-			Loop = false;
-			break;
-		}
-	}
-	PrintLookahead(LogFile(), LookaHeadToken, "Exit RelOperations", --m_Recursion);
-	return LookaHeadToken;
-}
-
-Token CParser::RelEquals(Token LookaHeadToken)
-{
-	//--------------------------------------------
-	// RelEquals	-> BitwiseOR RelEquals_1;
-	//--------------------------------------------
-	// RelEquals_1	-> '=' BitwiseOR RelEquals_1
-	//				-> '#' BitwiseOR RelEquals_1	//not equal
-	//				-> .
-	//				;
-	//--------------------------------------------
-	bool Loop = true;
-
-	PrintLookahead(LogFile(), LookaHeadToken, "Enter RelEquals",++m_Recursion);
-	LookaHeadToken = BitwiseOR(LookaHeadToken);
-	while (Loop)
-	{
-		switch (LookaHeadToken)
-		{
-		case Token('='):
-			LookaHeadToken = Expect(LookaHeadToken, Token('='));
-			LookaHeadToken = BitwiseOR(LookaHeadToken);
-			break;
-		case Token('#'):	// not equals
-			LookaHeadToken = Expect(LookaHeadToken, Token('#'));
-			LookaHeadToken = BitwiseOR(LookaHeadToken);
-			break;
-		default:
-			Loop = false;
-			break;
-		}
-	}
-	PrintLookahead(LogFile(), LookaHeadToken, "Exit RelEquals", --m_Recursion);
-	return LookaHeadToken;
-}
-
-Token CParser::BitwiseOR(Token LookaHeadToken)
-{
-	//--------------------------------------------
-	// BitwiseOR	-> BitwiseAND BitwiseOR_1;
+	// ArithExpr	-> BitwiseAND BitwiseOR_1;
 	//--------------------------------------------
 	// BitwiseOR_1	-> '%' BitwiseAND BitwiseOR_1
 	//				-> .
@@ -1416,7 +1398,6 @@ Token CParser::ShifExpr(Token LookaHeadToken)
 			LookaHeadToken = Expect(LookaHeadToken, Token::RSH);
 			LookaHeadToken = MultExpr(LookaHeadToken);
 			break;
-
 		default:
 			Loop = false;
 			break;
@@ -1446,20 +1427,14 @@ Token CParser::MultExpr(Token LookaHeadToken)
 		switch (LookaHeadToken)
 		{
 		case Token('*'):
-			if (LogFile())
-				fprintf(LogFile(), "[*]\n");
 			LookaHeadToken = Expect(LookaHeadToken, Token('*'));
 			LookaHeadToken = Unary(LookaHeadToken);
 			break;
 		case Token('/'):
-			if (LogFile())
-				fprintf(LogFile(), "[/]\n");
 			LookaHeadToken = Expect(LookaHeadToken, Token('/'));
 			LookaHeadToken = Unary(LookaHeadToken);
 			break;
 		case Token::MOD:
-			if (LogFile())
-				fprintf(LogFile(), "[MOD]\n");
 			LookaHeadToken = Expect(LookaHeadToken, Token::MOD);
 			LookaHeadToken = Unary(LookaHeadToken);
 			break;
@@ -1506,7 +1481,7 @@ Token CParser::Factor(Token LookaHeadToken)
 {
 	//--------------------------------------------
 	// Factor	-> 'FUNC_IDENT' ProcParams
-	//			-> '(' ArithExpr ')'
+	//			-> '(' RelOperation ')'
 	//			->IDENT MemContentsType
 	//			->BaseCompConst
 	//			;
@@ -1526,7 +1501,7 @@ Token CParser::Factor(Token LookaHeadToken)
 		break;
 	case Token('('):
 		LookaHeadToken = Expect(LookaHeadToken, Token('('));
-		LookaHeadToken = ArithExpr(LookaHeadToken);
+		LookaHeadToken = RelOperation(LookaHeadToken);
 		LookaHeadToken = Expect(LookaHeadToken, Token(')'));
 		break;
 	default:
@@ -4350,7 +4325,13 @@ bool CParser::CheckZeroPageAddress(int A)
 	return rV;
 }
 
-void CParser::PrintLookahead(FILE* pLog, Token token, const char* pS, int RecursionLevel)
+void CParser::PrintLookahead(
+	FILE* pLog,
+	Token token,
+	const char* pS,
+	int RecursionLevel,
+	int bump
+)
 {
 	char* pLookaheadToken;
 	int TokenValue;
@@ -4358,13 +4339,16 @@ void CParser::PrintLookahead(FILE* pLog, Token token, const char* pS, int Recurs
 
 	if (pLog)
 	{
+		if (bump)
+			m_Bump += bump;
 		pLexBuff = GetLexer()->GetLexBuffer();
 		switch (token)
 		{
 		case Token::IDENT:
 			pLookaheadToken = GetLexer()->GetLexSymbol()->GetName();
-			fprintf(LogFile(), "  %d::%s  Lookahead = %s LexBuffer \'%s\'\n",
+			fprintf(LogFile(), "  %5d.%d::%s  Lookahead = %s LexBuffer \'%s\'\n",
 				RecursionLevel,
+				m_Bump,
 				pS,
 				pLookaheadToken,
 				pLexBuff
@@ -4372,8 +4356,9 @@ void CParser::PrintLookahead(FILE* pLog, Token token, const char* pS, int Recurs
 			break;
 		case Token::NUMBER:
 			TokenValue = GetLexer()->GetNumber();;
-			fprintf(LogFile(), "  %d::%s TokenValue: = %d LexBuffer \'%s\'\n",
+			fprintf(LogFile(), "  %5d.%d::%s TokenValue: = %d LexBuffer \'%s\'\n",
 				RecursionLevel,
+				m_Bump,
 				pS,
 				TokenValue,
 				pLexBuff
@@ -4381,8 +4366,9 @@ void CParser::PrintLookahead(FILE* pLog, Token token, const char* pS, int Recurs
 			break;
 		default:
 			pLookaheadToken = (char*)GetLexer()->GetKeyWords()->LookupToName(token);
-			fprintf(LogFile(), "  %d::%s Lookahead Token: %s LexBuffer \'%s\' \n",
+			fprintf(LogFile(), "  %5d.%d::%s Lookahead Token: %s LexBuffer \'%s\' \n",
 				RecursionLevel,
+				m_Bump,
 				pS,
 				pLookaheadToken,
 				pLexBuff
