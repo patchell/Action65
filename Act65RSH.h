@@ -2,7 +2,7 @@
 
 class CAct65RSH : public CAstNode
 {
-	inline static const char* m_pNodeTyypeName = "ADD";
+	inline static const char* m_pNodeTyypeName = "RSH";
 public:
 	CAct65RSH();
 	virtual ~CAct65RSH();

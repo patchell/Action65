@@ -8,6 +8,8 @@ public:
 	virtual ~CAstTree();
 	bool Create();
 	void Print(FILE* pOut);
-	virtual CAstNode* MakeNewNode(int Type, CAstNode* Child, CAstNode* Next) = 0;
+	//--------------------------------
+	void SetRootNode(CAstNode* pRoot) { m_pRoot = pRoot; }
+	CAstNode* GetRootNode() { return m_pRoot; }
 };
 

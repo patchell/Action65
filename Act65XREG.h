@@ -2,6 +2,7 @@
 
 class CAct65XREG : public CAstNode
 {
+	inline static const char* m_pNodeTyypeName = ".X";
 public:
 	CAct65XREG();
 	virtual ~CAct65XREG();

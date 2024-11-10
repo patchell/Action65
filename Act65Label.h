@@ -2,6 +2,7 @@
 
 class CAct65Label : public CAstNode
 {
+	inline static const char* m_pNodeTyypeName = "LABEL";
 public:
 	CAct65Label();
 	virtual ~CAct65Label();

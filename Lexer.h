@@ -3,42 +3,10 @@
 class CLexer
 {
 public:
-	enum class AdrModeType {
-		NA,
-		IMPLIED,
-		INDIRECT_X_ADR,
-		ZERO_PAGE_ADR,
-		IMMEDIATE_ADR,
-		ABSOLUTE_ADR,
-		INDIRECT_Y_ADR,
-		ZERO_PAGE_X_ADR,
-		ABSOLUTE_Y_ADR,
-		ABSOLUTE_X_ADR,
-		ZERO_PAGE_Y_ADR,
-		INDIRECT_ADR,
-		ACCUMULATOR
-	};
-	enum class AddressModesClass {	//ToDo: Delete?
-		IMPLIED,		//0
-		ONE_MODE,		//1
-		TWO_MODES,		//2
-		THREE_MODES,	//3
-		FOUR_MODES,		//4
-		FIVE_MODES,		//5
-		SIX_MODES,		//6
-		SEVEN_MODES,	//7
-		EIGHT_MODES		//8
-	};
-	enum class Processor {
-		ALL,
-		R6502,
-		WD65C02,
-		WD65C816
-	};
 	
 private:
 	struct AdressModeItem {
-		CLexer::AdrModeType Mode;
+		AdrModeType Mode;
 		int inc;
 		AdressModeItem() {
 			Mode = AdrModeType::NA;
@@ -48,7 +16,7 @@ private:
 			Mode = T;
 			inc = I;
 		}
-		int GetInc(AdrModeType AdrModeType) {
+		int GetInc(AdrModeType ModeType) {
 			//---------------------------
 			// GetInc
 			//	Compares the address mode
@@ -61,7 +29,7 @@ private:
 			//---------------------------
 			int rV = -1;
 
-			if (AdrModeType == Mode)
+			if (ModeType == Mode)
 				rV = inc;
 			return rV;
 		}
@@ -358,7 +326,7 @@ private:
 		{Token::TYA,"tya", 1,0x98, Processor::R6502, NULL,0},
 		{Token::TXS,"txs", 1,0x9a, Processor::R6502, NULL,0},
 		{Token::TSX,"tsx", 1,0xba, Processor::R6502, NULL,0},
-		{Token::ENDOFOPCODES,"", 0, 0, CLexer::Processor::ALL,NULL,0},
+		{Token::ENDOFOPCODES,"EOO", 0, 0, Processor::ALL,NULL,0},
 		{Token::AREG,"A", 0,0, Processor::ALL,NULL,0},
 		{Token::XREG,"X", 0,0, Processor::ALL,NULL,0},
 		{Token::YREG,"Y", 0,0, Processor::ALL,NULL,0},

@@ -44,10 +44,12 @@ private:
 	CLexer* m_pLex;
 	PHASE m_Phase;			// Phase of the compiler operation
 	CSection* m_pCurrentSection;
-	CLexer::Processor m_Processor;
-	CStack m_ValueStack;
+	Processor m_Processor;
 	int m_Recursion;
 	int m_Bump;
+	CStack m_ASTnodeStack;
+	CStack m_ValueStack;
+	CActionAstTree m_AstTree;;
 public:
 	CParser();
 	virtual ~CParser();
@@ -58,8 +60,10 @@ public:
 	CSection* GetCurrentSection() {
 		return m_pCurrentSection;
 	}
+	CStack* GetAstNodeStack() { return &m_ASTnodeStack; }
 	CStack* GetValueStack() { return &m_ValueStack; }
 	CLexer* GetLexer() { return m_pLex; }
+	CActionAstTree* GetAstTree() { return &m_AstTree; }
 	FILE* LogFile();
 	Token Run();
 	//---------------------------------
@@ -318,8 +322,8 @@ private:
 	Token AsmConstAddSub(Token LookaHeadToken);
 	Token BaseAsmConstant(Token LookaHeadToken);
 	Token Immediate(Token LookaHeadToken, CInstruction* pInst);
-	void PageZero(CInstruction* pInst, int Address, CLexer::AdrModeType ModeType);
-	void Absolute(CInstruction* pInst, int Address, CLexer::AdrModeType ModeType);
+	void PageZero(CInstruction* pInst, int Address, AdrModeType ModeType);
+	void Absolute(CInstruction* pInst, int Address, AdrModeType ModeType);
 	bool CheckZeroPageAddress(int A);
 	//---------------- Utillity ----------------------
 	void PrintLookahead(

@@ -2,7 +2,7 @@
 
 class CAct65BYTE : public CAstNode
 {
-	inline static const char* m_pNodeTyypeName = "ADD";
+	inline static const char* m_pNodeTyypeName = "BYTE";
 public:
 	CAct65BYTE();
 	virtual ~CAct65BYTE();

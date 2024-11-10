@@ -2,10 +2,15 @@
 
 class CAct65Opcode : public CAstNode
 {
+	inline static const char* m_pNodeTyypeName = "OP";
 	Token m_OpcodeToken;
 	const char* m_pOpCodeName;
 	int m_LineNumber;
 	int m_ColumnNumber;
+	CSymbol* m_pSym;	// Symbol for argument
+	CSymbol* m_pLabel;	// Symbol for instruction location
+	AdrModeType m_AdressMode;
+	CInstruction* m_pInstruction;
 public:
 	CAct65Opcode();
 	virtual ~CAct65Opcode();

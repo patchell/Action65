@@ -27,9 +27,10 @@ CStack::~CStack()
 	}
 }
 
-bool CStack::Create()
+bool CStack::Create(const char* pName)
 {
-	return 0;
+	m_pName = pName;
+	return true;
 }
 
 void CStack::Push(CStackItem* pItem)
@@ -121,4 +122,24 @@ CStackItem* CStack::Look(int Depth, CStackItem::ItemType Type)
 		}
 	}
 	return pRV;
+}
+
+bool CStack::IsTopOfType(CStackItem::ItemType Type)
+{
+	bool rV = false;
+
+	if (GetHead())
+	{
+		if (GetHead()->GetStackItemType() == Type)
+			rV = true;
+	}
+	else
+	{
+		fprintf(stderr,
+			"Stack %s Is Empty Line:%d\n",
+			GetStackName(),
+			Act()->GetParser()->GetLexer()->GetLineNumber()
+		);
+	}
+    return rV;
 }

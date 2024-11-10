@@ -226,6 +226,7 @@
     <ClCompile Include="Acta65UpperPart.cpp" />
     <ClCompile Include="Action65.cpp" />
     <ClCompile Include="ActionApp.cpp" />
+    <ClCompile Include="ActionAstTree.cpp" />
     <ClCompile Include="ActPopDest.cpp" />
     <ClCompile Include="Actt65DB.cpp" />
     <ClCompile Include="Actt65DS.cpp" />
@@ -366,6 +367,7 @@
     <ClInclude Include="Act65YREG.h" />
     <ClInclude Include="Acta65UpperPart.h" />
     <ClInclude Include="ActionApp.h" />
+    <ClInclude Include="ActionAstTree.h" />
     <ClInclude Include="ActPopDest.h" />
     <ClInclude Include="Actt65DB.h" />
     <ClInclude Include="Actt65DS.h" />

@@ -2,7 +2,7 @@
 
 class CAct65Assignment : public CAstNode
 {
-	inline static const char* m_pNodeTyypeName = "ADD";
+	inline static const char* m_pNodeTyypeName = "=";
 public:
 	CAct65Assignment();
 	virtual ~CAct65Assignment();

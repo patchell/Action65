@@ -2,7 +2,7 @@
 
 class CAct65LTEQ : public CAstNode
 {
-	inline static const char* m_pNodeTyypeName = "ADD";
+	inline static const char* m_pNodeTyypeName = "LTEQ";
 public:
 	CAct65LTEQ();
 	virtual ~CAct65LTEQ();

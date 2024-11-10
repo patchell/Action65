@@ -2,7 +2,7 @@
 
 class CAct65DEFINE : public CAstNode
 {
-	inline static const char* m_pNodeTyypeName = "ADD";
+	inline static const char* m_pNodeTyypeName = "DEFINE";
 public:
 	CAct65DEFINE();
 	virtual ~CAct65DEFINE();

@@ -411,7 +411,7 @@ CLexer::KeyWord* CLexer::FindKeyword(Token KeywordToken)
 	return 0;
 }
 
-CLexer::Processor CLexer::LookupProcessor(Token KeywordToken)
+Processor CLexer::LookupProcessor(Token KeywordToken)
 {
 	Processor AppropriateProcessor = Processor::ALL;
 	int i = 0;

@@ -10,6 +10,6 @@ public:
 	virtual ~CStackNodeItem();
 	bool Create(CAstNode* pNode);
 	void SetNode(CAstNode* pNode) { m_pAstNode = pNode; }
-	CAstNode* GetSection() { return m_pAstNode; }
+	CAstNode* GetNode() { return m_pAstNode; }
 };
 

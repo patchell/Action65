@@ -4,7 +4,7 @@ CParser::CParser()
 {
 	m_Phase = PHASE::NONE;
 	m_pLex = 0;
-	m_Processor = CLexer::Processor::R6502;
+	m_Processor = Processor::R6502;
 	m_pCurrentSection = 0;
 	m_Recursion = 0;
 	m_Bump = 0;
@@ -23,6 +23,7 @@ bool CParser::Create()
 	m_pLex->Create();
 	if (LogFile())
 		fprintf(LogFile(), "Parser Created\n");
+	
 	return true;
 }
 
@@ -33,6 +34,8 @@ FILE* CParser::LogFile()
 
 Token CParser::Run()
 {
+	GetAstNodeStack()->Create("AST");
+	GetValueStack()->Create("VALUE");
     Token LookaHeadToken = Token(0);
 	LookaHeadToken = GetLexer()->Lex();
 	LookaHeadToken = Action65(LookaHeadToken);
@@ -1253,6 +1256,8 @@ Token CParser::ArithExpr(Token LookaHeadToken)
 	//				;
 	//--------------------------------------------
 	bool Loop = true;
+	CAstNode* pN1 = 0, * pN2 = 0;
+	CAct65BitWiseOR* pN;
 
 	PrintLookahead(LogFile(), LookaHeadToken, "Enter BitwiseOR", ++m_Recursion);
 	LookaHeadToken = BitwiseAND(LookaHeadToken);
@@ -1263,6 +1268,12 @@ Token CParser::ArithExpr(Token LookaHeadToken)
 		case Token('%'):	
 			LookaHeadToken = Expect(LookaHeadToken, Token('%'));
 			LookaHeadToken = BitwiseAND(LookaHeadToken);
+			if(GetAstNodeStack()->IsTopOfType(CStackItem::NODE))
+				pN2 = ((CStackNodeItem*)GetAstNodeStack()->Pop(CStackItem::NODE))->GetNode();
+			if (GetAstNodeStack()->IsTopOfType(CStackItem::NODE))
+				pN1 = ((CStackNodeItem*)GetAstNodeStack()->Pop(CStackItem::NODE))->GetNode();
+			pN = new CAct65BitWiseOR;
+			pN->CreateNode(pN1, pN2);
 			break;
 		default:
 			Loop = false;
@@ -3342,18 +3353,18 @@ Token CParser::AluAdrModes(Token LookaHeadToken)
 		{
 		case CRegisterStackItem::RegType::NONE:
 			if (Address < 0x100 && pInst->IsResolved())
-				PageZero(pInst, Address, CLexer::AdrModeType::ZERO_PAGE_ADR);
+				PageZero(pInst, Address, AdrModeType::ZERO_PAGE_ADR);
 			else
-				Absolute(pInst, Address, CLexer::AdrModeType::ABSOLUTE_ADR);
+				Absolute(pInst, Address, AdrModeType::ABSOLUTE_ADR);
 			break;
 		case CRegisterStackItem::RegType::X:
 			if (Address < 0x100 && pInst->IsResolved())
-				PageZero(pInst, Address, CLexer::AdrModeType::ZERO_PAGE_X_ADR);
+				PageZero(pInst, Address, AdrModeType::ZERO_PAGE_X_ADR);
 			else
-				Absolute(pInst, Address, CLexer::AdrModeType::ABSOLUTE_X_ADR);
+				Absolute(pInst, Address, AdrModeType::ABSOLUTE_X_ADR);
 			break;
 		case CRegisterStackItem::RegType::Y:
-			Absolute(pInst, Address, CLexer::AdrModeType::ABSOLUTE_Y_ADR);
+			Absolute(pInst, Address, AdrModeType::ABSOLUTE_Y_ADR);
 			break;
 		}
 	}
@@ -3385,7 +3396,7 @@ Token CParser::Indirect(Token LookaHeadToken)
 		CheckZeroPageAddress(Address);
 		OpCodeInc = GetLexer()->
 			FindKeyword(pInst->GetOpCodeToken())->
-			FindInc(CLexer::AdrModeType::INDIRECT_Y_ADR);
+			FindInc(AdrModeType::INDIRECT_Y_ADR);
 		pInst->AddToOpCode(OpCodeInc);
 		LookaHeadToken = Expect(LookaHeadToken, Token(')'));
 		LookaHeadToken = Expect(LookaHeadToken, Token(','));
@@ -3395,7 +3406,7 @@ Token CParser::Indirect(Token LookaHeadToken)
 		CheckZeroPageAddress(Address);
 		OpCodeInc = GetLexer()->
 			FindKeyword(pInst->GetOpCodeToken())->
-			FindInc(CLexer::AdrModeType::INDIRECT_X_ADR);
+			FindInc(AdrModeType::INDIRECT_X_ADR);
 		pInst->AddToOpCode(OpCodeInc);
 		LookaHeadToken = Expect(LookaHeadToken, Token(','));
 		LookaHeadToken = Expect(LookaHeadToken, Token::XREG);
@@ -3438,18 +3449,18 @@ Token CParser::StaAddressingModes(Token LookaHeadToken)
 		{
 		case CRegisterStackItem::RegType::NONE:
 			if (Address < 0x100 && pInst->IsResolved())
-				PageZero(pInst, Address, CLexer::AdrModeType::ZERO_PAGE_ADR);
+				PageZero(pInst, Address, AdrModeType::ZERO_PAGE_ADR);
 			else
-				Absolute(pInst, Address, CLexer::AdrModeType::ABSOLUTE_ADR);
+				Absolute(pInst, Address, AdrModeType::ABSOLUTE_ADR);
 			break;
 		case CRegisterStackItem::RegType::X:
 			if (Address < 0x100 && pInst->IsResolved())
-				PageZero(pInst, Address, CLexer::AdrModeType::ZERO_PAGE_X_ADR);
+				PageZero(pInst, Address, AdrModeType::ZERO_PAGE_X_ADR);
 			else
-				Absolute(pInst, Address, CLexer::AdrModeType::ABSOLUTE_X_ADR);
+				Absolute(pInst, Address, AdrModeType::ABSOLUTE_X_ADR);
 			break;
 		case CRegisterStackItem::RegType::Y:
-			Absolute(pInst, Address, CLexer::AdrModeType::ABSOLUTE_Y_ADR);
+			Absolute(pInst, Address, AdrModeType::ABSOLUTE_Y_ADR);
 			break;
 		}
 	}
@@ -3477,7 +3488,7 @@ Token CParser::ShiftAddressingModes(Token LookaHeadToken)
 		pInst->SetByteCount(1);
 		OpCodeInc = GetLexer()->
 			FindKeyword(pInst->GetOpCodeToken())->
-			FindInc(CLexer::AdrModeType::ACCUMULATOR);
+			FindInc(AdrModeType::ACCUMULATOR);
 		pInst->AddToOpCode(OpCodeInc);
 		break;
 	default:
@@ -3490,15 +3501,15 @@ Token CParser::ShiftAddressingModes(Token LookaHeadToken)
 		{
 		case CRegisterStackItem::RegType::NONE:
 			if (Address < 0x100 && pInst->IsResolved())
-				PageZero(pInst, Address, CLexer::AdrModeType::ZERO_PAGE_ADR);
+				PageZero(pInst, Address, AdrModeType::ZERO_PAGE_ADR);
 			else
-				Absolute(pInst, Address, CLexer::AdrModeType::ABSOLUTE_ADR);
+				Absolute(pInst, Address, AdrModeType::ABSOLUTE_ADR);
 			break;
 		case CRegisterStackItem::RegType::X:
 			if (Address < 0x100 && pInst->IsResolved())
-				PageZero(pInst, Address, CLexer::AdrModeType::ZERO_PAGE_X_ADR);
+				PageZero(pInst, Address, AdrModeType::ZERO_PAGE_X_ADR);
 			else
-				Absolute(pInst, Address, CLexer::AdrModeType::ABSOLUTE_X_ADR);
+				Absolute(pInst, Address, AdrModeType::ABSOLUTE_X_ADR);
 			break;
 		}
 		break;
@@ -3565,14 +3576,14 @@ Token CParser::BitAddressModes(Token LookaHeadToken)
 		//---------------------
 		// Zero Page Absolute
 		//---------------------
-		PageZero(pInst, Address, CLexer::AdrModeType::ZERO_PAGE_ADR);
+		PageZero(pInst, Address, AdrModeType::ZERO_PAGE_ADR);
 	}
 	else
 	{
 		//---------------------
 		// Absolute
 		//---------------------
-		Absolute(pInst, Address, CLexer::AdrModeType::ABSOLUTE_ADR);
+		Absolute(pInst, Address, AdrModeType::ABSOLUTE_ADR);
 	}
 	return LookaHeadToken;
 }
@@ -3597,15 +3608,15 @@ Token CParser::IncAddressingMOdes(Token LookaHeadToken)
 	{
 	case CRegisterStackItem::RegType::X:
 		if (Address < 0x100 && pInst->IsResolved())
-			PageZero(pInst, Address, CLexer::AdrModeType::ZERO_PAGE_X_ADR);
+			PageZero(pInst, Address, AdrModeType::ZERO_PAGE_X_ADR);
 		else
-			Absolute(pInst, Address, CLexer::AdrModeType::ABSOLUTE_X_ADR);
+			Absolute(pInst, Address, AdrModeType::ABSOLUTE_X_ADR);
 		break;
 	case CRegisterStackItem::RegType::NONE:
 		if (Address < 0x100 && pInst->IsResolved())
-			PageZero(pInst, Address, CLexer::AdrModeType::ZERO_PAGE_ADR);
+			PageZero(pInst, Address, AdrModeType::ZERO_PAGE_ADR);
 		else
-			Absolute(pInst, Address, CLexer::AdrModeType::ABSOLUTE_ADR);
+			Absolute(pInst, Address, AdrModeType::ABSOLUTE_ADR);
 		break;
 	}
 	return LookaHeadToken;
@@ -3634,7 +3645,7 @@ Token CParser::JumpAddressingModes(Token LookaHeadToken)
 		LookaHeadToken = Expect(LookaHeadToken, Token(')'));
 		OpCodeInc = GetLexer()->
 			FindKeyword(pInst->GetOpCodeToken())->FindInc(
-				CLexer::AdrModeType::INDIRECT_ADR
+				AdrModeType::INDIRECT_ADR
 			);
 		pInst->AddToOpCode(OpCodeInc);
 		pInst->SetOperandW(Address);
@@ -3644,7 +3655,7 @@ Token CParser::JumpAddressingModes(Token LookaHeadToken)
 		LookaHeadToken = AsmConstant(LookaHeadToken);
 		pNSI = (CNumberStackItem*)GetValueStack()->Pop(CStackItem::ItemType::INTVALUE);
 		Address = pNSI->GetValue();
-		Absolute(pInst, Address, CLexer::AdrModeType::ABSOLUTE_ADR);
+		Absolute(pInst, Address, AdrModeType::ABSOLUTE_ADR);
 		break;
 	}
 	return LookaHeadToken;
@@ -3663,7 +3674,7 @@ Token CParser::CallAddressingMode(Token LookaHeadToken)
 	LookaHeadToken = AsmConstant(LookaHeadToken);
 	pNSI = (CNumberStackItem*)GetValueStack()->Pop(CStackItem::ItemType::INTVALUE);
 	Address = pNSI->GetValue();
-	Absolute(pInst, Address, CLexer::AdrModeType::ABSOLUTE_ADR);
+	Absolute(pInst, Address, AdrModeType::ABSOLUTE_ADR);
 	return LookaHeadToken;
 }
 
@@ -3694,16 +3705,16 @@ Token CParser::LdxAddressingMode(Token LookaHeadToken)
 		{
 		case CRegisterStackItem::RegType::Y:
 			if (Address < 0x100 && pInst->IsResolved())
-				PageZero(pInst, Address, CLexer::AdrModeType::ZERO_PAGE_Y_ADR);
+				PageZero(pInst, Address, AdrModeType::ZERO_PAGE_Y_ADR);
 			else
-				Absolute(pInst, Address, CLexer::AdrModeType::ABSOLUTE_Y_ADR);
+				Absolute(pInst, Address, AdrModeType::ABSOLUTE_Y_ADR);
 			break;
 		case CRegisterStackItem::RegType::NONE:
 			Address = pNSI->GetValue();
 			if (Address < 0x100 && pInst->IsResolved())
-				PageZero(pInst, Address, CLexer::AdrModeType::ZERO_PAGE_ADR);
+				PageZero(pInst, Address, AdrModeType::ZERO_PAGE_ADR);
 			else
-				Absolute(pInst, Address, CLexer::AdrModeType::ABSOLUTE_ADR);
+				Absolute(pInst, Address, AdrModeType::ABSOLUTE_ADR);
 			break;
 		}
 		break;
@@ -3733,9 +3744,9 @@ Token CParser::CPX_CPY_AddressingMode(Token LookaHeadToken)
 		pNSI = (CNumberStackItem*)GetValueStack()->Pop(CStackItem::ItemType::INTVALUE);
 		Address = pNSI->GetValue();
 		if (Address < 0x100 && pInst->IsResolved())
-			PageZero(pInst, Address, CLexer::AdrModeType::ZERO_PAGE_ADR);
+			PageZero(pInst, Address, AdrModeType::ZERO_PAGE_ADR);
 		else
-			Absolute(pInst, Address, CLexer::AdrModeType::ABSOLUTE_ADR);
+			Absolute(pInst, Address, AdrModeType::ABSOLUTE_ADR);
 		break;
 	}
 	return LookaHeadToken;
@@ -3766,13 +3777,13 @@ Token CParser::StxAddressingMode(Token LookaHeadToken)
 				Address & 0x0ffff
 			);
 		}
-		PageZero(pInst, Address, CLexer::AdrModeType::ZERO_PAGE_Y_ADR);
+		PageZero(pInst, Address, AdrModeType::ZERO_PAGE_Y_ADR);
 		break;
 	case CRegisterStackItem::RegType::NONE:
 		if (Address < 0x100 && pInst->IsResolved())
-			PageZero(pInst, Address, CLexer::AdrModeType::ZERO_PAGE_ADR);
+			PageZero(pInst, Address, AdrModeType::ZERO_PAGE_ADR);
 		else
-			Absolute(pInst, Address, CLexer::AdrModeType::ABSOLUTE_ADR);
+			Absolute(pInst, Address, AdrModeType::ABSOLUTE_ADR);
 		break;
 	}
 	return LookaHeadToken;
@@ -3806,15 +3817,15 @@ Token CParser::LdyAddressingMode(Token LookaHeadToken)
 		{
 		case CRegisterStackItem::RegType::X:
 			if (Address < 0x100 && pInst->IsResolved())
-				PageZero(pInst, Address, CLexer::AdrModeType::ZERO_PAGE_X_ADR);
+				PageZero(pInst, Address, AdrModeType::ZERO_PAGE_X_ADR);
 			else
-				Absolute(pInst, Address, CLexer::AdrModeType::ABSOLUTE_X_ADR);
+				Absolute(pInst, Address, AdrModeType::ABSOLUTE_X_ADR);
 			break;
 		case CRegisterStackItem::RegType::NONE:
 			if (Address < 0x100 && pInst->IsResolved())
-				PageZero(pInst, Address, CLexer::AdrModeType::ZERO_PAGE_ADR);
+				PageZero(pInst, Address, AdrModeType::ZERO_PAGE_ADR);
 			else
-				Absolute(pInst, Address, CLexer::AdrModeType::ABSOLUTE_ADR);
+				Absolute(pInst, Address, AdrModeType::ABSOLUTE_ADR);
 			break;
 		}
 		break;
@@ -3847,13 +3858,13 @@ Token CParser::StyAddressingMode(Token LookaHeadToken)
 				Address & 0x0ffff
 			);
 		}
-		PageZero(pInst, Address, CLexer::AdrModeType::ZERO_PAGE_X_ADR);
+		PageZero(pInst, Address, AdrModeType::ZERO_PAGE_X_ADR);
 		break;
 	case CRegisterStackItem::RegType::NONE:
 		if (Address < 0x100 && pInst->IsResolved())
-			PageZero(pInst, Address, CLexer::AdrModeType::ZERO_PAGE_ADR);
+			PageZero(pInst, Address, AdrModeType::ZERO_PAGE_ADR);
 		else
-			Absolute(pInst, Address, CLexer::AdrModeType::ABSOLUTE_ADR);
+			Absolute(pInst, Address, AdrModeType::ABSOLUTE_ADR);
 		break;
 	}
 	return LookaHeadToken;
@@ -4267,7 +4278,7 @@ Token CParser::Immediate(Token LookaHeadToken, CInstruction* pInst)
 	pIntValue = (CNumberStackItem*)GetValueStack()->Pop(CStackItem::ItemType::INTVALUE);
 	OpCodeInc = GetLexer()->
 		FindKeyword(pInst->GetOpCodeToken())->
-		FindInc(CLexer::AdrModeType::IMMEDIATE_ADR);
+		FindInc(AdrModeType::IMMEDIATE_ADR);
 	pInst->AddToOpCode(OpCodeInc);
 	Address = pIntValue->GetValue();
 	pInst->SetLowByte(Address);
@@ -4278,7 +4289,7 @@ Token CParser::Immediate(Token LookaHeadToken, CInstruction* pInst)
 void CParser::PageZero(
 	CInstruction* pInst,
 	int Address,
-	CLexer::AdrModeType ModeType
+	AdrModeType ModeType
 )
 {
 	int OpCodeInc;
@@ -4294,7 +4305,7 @@ void CParser::PageZero(
 void CParser::Absolute(
 	CInstruction* pInst,
 	int Address,
-	CLexer::AdrModeType ModeType
+	AdrModeType ModeType
 )
 {
 	int OpCodeInc;

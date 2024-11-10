@@ -2,6 +2,7 @@
 
 class CAct65INTERRUPT : public CAstNode
 {
+	inline static const char* m_pNodeTyypeName = "IRQ";
 public:
 	CAct65INTERRUPT();
 	virtual ~CAct65INTERRUPT();

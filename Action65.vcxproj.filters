@@ -444,6 +444,9 @@
     <ClCompile Include="Act65CurrentLocation.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ActionAstTree.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -858,6 +861,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Act65CurrentLocation.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ActionAstTree.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
