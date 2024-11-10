@@ -225,7 +225,9 @@ enum  class Token {
 #include "StackSymbolItem.h"
 #include "Stack.h"
 #include "SymTab.h"
-
+//--------------------------------------
+// Object File Format
+//--------------------------------------
 #include "ObjFormatSectionItem.h"
 #include "ObjFormatSymbolItem.h"
 #include "ObjFormatSymbols.h"
@@ -234,16 +236,31 @@ enum  class Token {
 #include "ObjFormatRelocation.h"
 #include "ObjFormatSection.h"
 #include "ObjFormatFile.h"
-
+//--------------------------------------
 #include "Section.h"
 #include "AddressSizeStackItem.h"
 #include "AccessModeStackItem.h"
+//---------------------------------------
+//----------------Value Stack -----------
+//---------------------------------------
 #include "Stack.h"
+#include "StackItem.h"
+#include "StackNodeItem.h"
+#include "StackSectionItem.h"
+#include "StackSymbolItem.h"
+
+//-------------- AST Base Class ----------
 #include "AstNode.h"
-#include "ActionASTnode.h"
+//----------------------------------------
 //------------- AST Node Classes ---------
+//----------------------------------------
+//------------ Program Structure --------------
 #include "Act65Module.h"
-#include "Act65Binary.h"
+#include "Act65VECTOR.h"
+#include "Act65INTERRUPT.h"
+#include "Act65PROC.h"
+//----------- Declaration AST Nodes -----------
+//----- Types ------
 #include "Act65BYTE.h"
 #include "Act65CHAR.h"
 #include "Act65CARD.h"
@@ -251,19 +268,14 @@ enum  class Token {
 #include "Act65INT.h"
 #include "Act65RECTYPE.h"
 #include "Act65POINTER.h"
+//----- Modifiers --------------
 #include "Act65ARRAY.h"
 #include "Act65DEFINE.h"
-#include "Act65Assignment.h"
-#include "Act65AssignADD.h"
-#include "Act65AssignSUB.h"
-#include "Act65AssignMULT.h"
-#include "Act65AssignDIV.h"
-#include "Act65AssignMOD.h"
-#include "Ast65AssingAssignOR.h"
-#include "Ast65AssignAND.h"
-#include "Act65AssignXOR.h"
-#include "Act65AssignLSH.h"
-#include "Act65AssignRSH.h"
+#include "Adc65tTYPEDEF.h"
+
+//-----------------------------------------
+//---- Logical/Arithmetic AST Nodes -------
+//-----------------------------------------
 #include "Act65GreaterTHAN.h"
 #include "Act65LessTHAN.h"
 #include "Act65GTEQ.h"
@@ -271,7 +283,7 @@ enum  class Token {
 #include "Act65EqualTO.h"
 #include "Act65NotEquelTO.h"
 #include "Act65LogicalOR.h"
-#include "Ast65LogicalAND.h"
+#include "Act65LogicalAND.h"
 #include "Act65BitWiseOR.h"
 #include "Act65BitWiseAND.h"
 #include "Act65XOR.h"
@@ -281,13 +293,93 @@ enum  class Token {
 #include "Act65RSH.h"
 #include "Act65ROR.h"
 #include "Act65ROL.h"
+//---------------------------------------------
+//----------------Statement AST Nodes ---------
+//---------------------------------------------
+#include "Act65ProcCall.h"
+#include "Act65FuncCall.h"
+#include "Act65ProcParams.h"
+#include "Act65FOR.h"
+#include "Act65ForStart.h"
+#include "Act65ForFinish.h"
+#include "Act65ForSTEP.h"
+#include "Act65ForItterator.h"
+#include "Act65IF.h"
+#include "Act65THEN.h"
+#include "Act65ELSEIF.h"
+#include "Act65ELSE.h"
+#include "Act65IFF.h"
+#include "Act65BEGIN.h"
+#include "Act65END.h"
+#include "Act65FFI.h"
+#include "Act65FlagNEG.h"
+#include "Act65FlagCARRY.h"
+#include "Act65FlagZERO.h"
+#include "Act65FlagOVERFLOW.h"
+#include "Act65BIT.h"
+#include "Act65WHILE.h"
+#include "Act65DO.h"
+#include "Act65OD.h"
+#include "Act65EXIT.h"
+#include "Act65RETURN.h"
+#include "Act65ASM.h"
+#include "Act65ASMstatement.h"
+#include "Act65CodeBlock.h"
+#include "Act65UNTILL.h"
+#include "Act65PUSH.h"
+#include "Act65PushSource.h"
+#include "Act65POP.h"
+#include "ActPopDest.h"
+//--------- Assignment Node Classes ------
+#include "Act65Assignment.h"
+#include "Act65AssignADD.h"
+#include "Act65AssignSUB.h"
+#include "Act65AssignMULT.h"
+#include "Act65AssignDIV.h"
+#include "Act65AssignMOD.h"
+#include "Act65AssignOR.h"
+#include "Act65AssignAND.h"
+#include "Act65AssignXOR.h"
+#include "Act65AssignLSH.h"
+#include "Act65AssignRSH.h"
+//------------------------------------
+// Assembler AST Nodes
+//------------------------------------
+#include "Act65PROCESSOR.h"
+#include "Act65SECTION.h"
+#include "Act65SecAtrbSTART.h"
+#include "Act65SecAtrbSIZE.h"
+#include "Act65SecAtrbMODE.h"
+#include "Act65SecAtrbZEROPAGE.h"
+#include "Act65SecAtrbREADONLY.h"
+#include "Act65SecAtrbREADWRITE.h"
+#include "Act65TRUE.h"
+#include "Act65SecAtrbFALSE.h"
+#include "Act65ORG.h"
+#include "Actt65DB.h"
+#include "Act65DW.h"
+#include "Act65DL.h"
+#include "Act65DAS.h"
+#include "Act65DCS.h"
+#include "Actt65DS.h"
+#include "Act65ASMPROC.h"
+#include "Act65EPROC.h"
+#include "Act65Opcode.h"
+#include "Act65Label.h"
+#include "Act65Private.h"
+#include "Act65XREG.h"
+#include "Act65YREG.h"
+#include "Act65ACC.h"
+#include "Act65CharCibstabt.h"
+#include "Acty65LowerPart.h"
+#include "Acta65UpperPart.h"
+#include "Act65CurrentLocation.h"
 
 //------------------------------------
 #include "AstTree.h"
 
 #include "Lexer.h"
 #include "Parser.h"
-#include "ConsolApp.h"
 #include "ActionApp.h"
 
 

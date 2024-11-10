@@ -1,1 +1,9 @@
-#include "Ast65LogicalAND.h"
+#include "pch.h"
+
+CAct65LogicalAND::CAct65LogicalAND()
+{
+}
+
+CAct65LogicalAND::~CAct65LogicalAND()
+{
+}

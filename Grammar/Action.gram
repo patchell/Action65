@@ -1,25 +1,28 @@
 TERMINALS
 	"IDENT" = 256,
-	"EOL",		//end of line
+	"NUMBER",
+	"STRING",
 	"VECTOR",
-	"GLOBALS",
-	"ROUTINES",
 	"MODULE",
 	"RETURN",
 	"PROC",
 	"FUNC",
 	"FUNC_CALL",
 	"PROC_CALL",
-	"IF",
 	"FOR",
 	"WHILE",
 	"DO",
 	"OD",
+	"BEGIN",
+	"END",
 	"EXIT",
+	"IF",
 	"THEN",
-	"FI",
 	"ELSEIF",
 	"ELSE",
+	"FI",
+	"IFF",
+	"FFI",
 	"UNTILL",
 	"TO",
 	"STEP",
@@ -27,7 +30,6 @@ TERMINALS
 	"AND",
 	"GTEQ",
 	"LTEQ",
-	"NUMBER",
 	"DEFINE",
 	"TYPE",
 	"RECORDTYPE",
@@ -45,6 +47,28 @@ TERMINALS
 	"XREG",
 	"YREG",
 	"ASM",
+	//Assembler Tokens
+	"SECTION",
+	"START",
+	"SIZE",
+	"MODE",
+	"ZEROPAGE",
+	"READ_ONLY",
+	"READ_WRITE",
+	"true",
+	"false",
+	"ORG",
+	"DB",
+	"DW",
+	"DL",
+	"DAS",	//ACTION! STRING
+	"DCS",	// 'C' STRING
+	"DS",	// DEFINE STORAGE, BLOCK OF MEMORY
+	"ASMPROC",
+	"EPROC",
+	"LOCAL_LABLE",
+	"GLOBAL_LABLE",
+	"GLOBAL_LABLE",
 	"ADC",
 	"AND",
 	"ASL",
@@ -141,7 +165,14 @@ TERMINALS
 	"LSH",
 	"RSH",
 	"(",
-	")"
+	")",
+	".N",
+	".C",
+	".Z",
+	".O",
+	"{",
+	"}"
+
 GRAMMAR
 //--------------------------------
 // Program Structure
@@ -196,8 +227,9 @@ ProcCall_1		-> 'PROC_CALL' ProcParams ForStmt ProcCall_1
 				-> 'FUNC_CALL' ProcParams ForStmt ProcCall_1
 				-> .
 				;
-ProcParams	-> '(' MemContentsList ProcParams
-			-> ')';
+ProcParams	-> '(' MemContentsList ')'
+			-> .
+			;
 
 //------------------------------------------------
 // FOR statement
@@ -216,8 +248,8 @@ STEPoption	-> 'STEP' ArithExpr
 //------------------------------------------------
 // IF statement
 //------------------------------------------------
-IfStmt			-> WhileStmt IfStmt_1;
-IfStmt_1		-> 'IF' If WhileStmt IfStmt_1
+IfStmt			-> Iff IfStmt_1;
+IfStmt_1		-> 'IF' If Iff IfStmt_1
 				-> .
 				;
 If			-> RelOperation ThenPart;
@@ -231,6 +263,44 @@ ElsePart	-> 'ELSE' Statements ElsePart
 			-> 'FI'
 			-> .
 			;
+//-------------------------------------------------
+// IFF Statement
+//-------------------------------------------------
+
+Iff		-> WhileStmt Iff_1;
+Iff_1	-> 'IFF' IffConditional IffThen WhileStmt Iff_1
+		-> .
+		;
+IffThen	-> 'BEGIN' Statements 'END' IffElse;
+IffElse	-> 'ELSE' 'BEGIN' Statements 'END' 'FFI'
+		-> 'FFI'
+		;
+
+IffConditional	-> StatusFlags IffConditional_1;
+IffConditional_1-> 'AREG' RelOper MemContents
+				-> 'XREG' RelOper MemContents
+				-> 'YREG' RelOper MemContents
+				-> .
+				;
+RelOper			-> '<'
+				-> 'GTEQ'
+				-> '='
+				-> .
+				;
+StatusFlags		-> Bits StatusFlags_1;
+StatusFlags_1	-> OptNot StatusFlags_2;
+OptNot			-> '^'
+				-> .
+				;
+StatusFlags_2	-> '.N'		//negative flag
+				-> '.C'		//Carry flag
+				-> '.Z'		//Zero
+				-> '.O'		//Overflow
+				;
+Bits			-> BIT BitValue
+				-> .
+				;
+BitValue		-> '[' MemContents ']';
 
 //-------------------------------------------------
 // WHILE Statement
@@ -244,8 +314,7 @@ WhileStmt_1		-> 'WHILE' RelOperation  DoStmt WhileStmt_1
 // DO Statement
 //------------------------------------------------
 DoStmt			-> EXITstmt DoStmt_1;
-DoStmt_1		-> 'DO' Statements 
-				-> 'OD' EXITstmt DoStmt_1
+DoStmt_1		-> 'DO' Statements 'OD' EXITstmt DoStmt_1
 				-> .
 				;
 
@@ -263,8 +332,7 @@ RetStmt		-> InlineAssembly RetStmt_1;
 RetStmt_1	-> 'RETURN' OptReturnValue  InlineAssembly RetStmt_1
 				-> .
 				;
-OptReturnValue	-> '(' ArithExpr OptReturnValue
-				-> ')'
+OptReturnValue	-> '(' ArithExpr ')'
 				-> .
 				;
 //---------------------------------------------
@@ -284,8 +352,7 @@ InlineAssBlock_1	-> AsmStmt InlineAssBlock_1
 // CODE (Kluge) BLOCK statement
 //-----------------------------------------------
 CodeBlock		-> UntillStmt CodeBlock_1;
-CodeBlock_1		-> '[' ConstList 
-				-> ']' UntillStmt CodeBlock_1
+CodeBlock_1		-> '[' ConstList ']' UntillStmt CodeBlock_1
 				-> .
 				;
 ConstList	-> CompConst ConstList_1;
@@ -296,10 +363,53 @@ ConstList_1	-> ',' CompConst ConstList_1
 //---------------------------------------------------
 // UNTILE Statement
 //---------------------------------------------------
-UntillStmt		-> Assignment UntillStmt_1;
-UntillStmt_1	-> 'UNTILL' RelOperation Assignment UntillStmt_1
+UntillStmt		-> Push UntillStmt_1;
+UntillStmt_1	-> 'UNTILL' RelOperation Push UntillStmt_1
 				-> .
 				;
+//---------------------------------------------------
+// PUSH Statement
+//---------------------------------------------------
+
+Push		-> Pop Push_1;
+Push_1		-> 'PUSH' PushSourceList Pop Push_1
+			-> .
+			;
+PushSourceList	-> PushSource PushSourceList_1;
+PushSourceList_1-> ',' PushSource PushSourceList_1
+				-> .
+				;
+PushSource	-> MemContents PushSource_1;
+PushSource_1-> 'AREG'
+			-> 'A'
+			-> 'XREG'
+			-> 'X'
+			-> 'YREG'
+			-> 'Y'
+			-> 'SR'
+			-> .
+			;
+//---------------------------------------------------
+// POP Statment
+//---------------------------------------------------
+Pop			-> Assignment Pop_1;
+Pop_1		-> 'POP' PopDestList Assignment Pop_1
+			-> .
+			;
+PopDestList		-> PopDest PopDestList_1;
+PopDestList_1	-> ',' PopDest PopDestList_1
+				-> .
+				;
+PopDest		-> MemContents PopDest_1;
+PopDest_1	-> 'AREG'
+			-> 'A'
+			-> 'XREG'
+			-> 'X'
+			-> 'YREG'
+			-> 'Y'
+			-> 'SR'
+			-> .
+			;
 //---------------------------------------------------
 // Assignment Statements
 //---------------------------------------------------
@@ -353,7 +463,7 @@ BitwiseAND_1	-> '&' BitwiseXOR BitwiseAND_1
 				-> .
 				;
 
-BitwiseXOR	-> AddExpr BitwiseXOR_1;
+BitwiseXOR		-> AddExpr BitwiseXOR_1;
 BitwiseXOR_1	-> '!' AddExpr BitwiseXOR_1
 				-> 'XOR' AddExpr BitwiseXOR_1
 				-> .
@@ -384,8 +494,7 @@ Unary	-> '-' Unary
 
 Factor	-> 'FUNC_IDENT' ProcParams
 		-> '(' ArithExpr ')'
-		-> IDENT MemContentsType
-		-> BaseCompConst
+		-> MemContents
 		;
 		 
 
@@ -419,41 +528,10 @@ TypeDefDecl_1	-> 'TYPE' RecDefIdent FundDecl TypeDefDecl_1
 RecDefIdent		-> 'IDENT' RecDefField
 				-> .
 				;
-RecDefField		->  '=' '[' RecDefVarDecls ']'
+RecDefField		->  '=' '[' LocalDecls ']'
 				-> .
 				;
 
-RecDefVarDecls		-> RecDefVarDecl RecDefVarDecls_1;
-RecDefVarDecls_1		-> ',' RecDefVarDecl RecDefVarDecls_1
-				-> .
-				;
-
-RecDefVarDecl	-> 'CHAR' RecDefModifier  
-				-> 'BYTE' RecDefModifier  
-				-> 'INT' RecDefModifier  
-				-> 'CARD' RecDefModifier  
-				-> 'BOOL' RecDefVarList
-				-> .
-				;
-
-RecDefVarList		-> IDENT RecDefVarList
-					-> ',' RecDefVarList
-					-> .
-					;
-RecDefModifier		-> RecDefArray RecDefPointer;
-RecDefPointer		-> 'POINRTER' RecDefArray
-				-> .
-				;
-
-RecDefArray		-> RecDefIdentList RecDefArray_1;
-RecDefArray_1		-> 'ARRAY' RecDefIdentList
-				-> .
-				;
-
-RecDefIdentList	-> Ident RecDefIdentList_1;
-RecDefIdentList_1	-> ',' Ident RecDefIdentList_1
-			-> .
-			;
 
 //--------------------------------------------
 // Fundemental Declarations.  These are the
@@ -500,7 +578,8 @@ Options		-> '=' CompConst
 			-> .
 			;
 
-OptArrayDimension	-> CompConst ')';
+OptArrayDimension	-> ')'
+					-> CompConst ')';
 
 OptArrayInit	-> '=' CodeBlock
 				-> .
@@ -513,7 +592,7 @@ ParamList	-> Param ParamList_1;
 ParamList_1	-> ',' Param ParamList_1
 			-> .
 			;
-Param		-> 'RECORDTYPE' POINTER IdentList
+Param		-> 'RECORDTYPE' 'POINTER' IdentList
 			-> 'CHAR' ParamModifier 
 			-> 'BYTE' ParamModifier 
 			-> 'INT' ParamModifier 
@@ -568,18 +647,21 @@ BaseCompConst	-> 'NUMBER'
 //Variable References
 //Memory References
 //----------------------------------
+MemContents		-> MemContents_1 Constant;
+Constant		-> 'NUMBER'
+				-> '*'
+				-> '@' MemContents		//address of                      
+				-> .
+				;
 
-MemContents			-> 'IDENT' MemContentsType
+MemContents_1		-> 'IDENT' MemContentsType
 					-> .
 					;
-MemContentsType 	-> '(' ArrayIndex		//array ref
+MemContentsType 	-> '(' ArithExpr ')'		//array ref
 					-> '^'					// Pointer Dereference
 					-> '.' MemContents		//record ref
 					-> .
 					;
-
-ArrayIndex			-> ArithExpr ')';		//array index
-
 
 //----------------------------------------
 //  Inline assembly code
@@ -609,19 +691,19 @@ ProcessorType	-> 'R6502'
 // SECITON
 //-----------------------------------------
 Section		-> Org Section_1;
-Section_1	-> 'SECTION' Section_2 Org Section_1
+Section_1	-> 'SECTION' SectionName Org Section_1
 				-> .
 				;
-Section_2	-> 'SECTION_NAME' Section_2
-			-> SectionDef
+SectionName		-> SectionDef SectionName_1;
+SectionName_1	-> 'IDENT' SectionDef
+				-> .
+				;
 			;
-SectionDef		-> 'IDENT' SectionDef_1;
-SectionDef_1	->'[' SectionAttributes
-				-> ']'
+SectionDef		-> '[' SectionAttributesList ']'
 				-> .
 				;
 
-SectionAttributes	-> SectionAtribute SectionAttributes_1;
+SectionAttributesList	-> SectionAtribute SectionAttributes_1;
 SectionAttributes_1	-> ',' SectionAtribute SectionAttributes_1
 					-> .
 					;
@@ -646,7 +728,7 @@ TrueFalse		-> 'true'
 // for the current section
 //-------------------------------------
 Org				-> DefineMemory Org_1;
-Org_1			-> 'ORG' 'NUMBER' DefineMemory Org_1
+Org_1			-> 'ORG' AsmConstant DefineMemory Org_1
 				-> .
 				;
 
@@ -676,7 +758,7 @@ DefineStorage_1	-> 'DS' AsmConstant Proceedure DefineStorage_1
 // Proceedure
 //-------------------------------------
 Proceedure		-> Instruction Proceedure_1;
-Proceedure_1	-> 'PROC' Section 'EPROC' Instruction Proceedure_1
+Proceedure_1	-> 'ASMPROC' Section 'EPROC' Instruction Proceedure_1
 				-> .
 				;
 
@@ -802,10 +884,11 @@ IncAddressingMOdes	-> AsmConstant OptXReg;
 // JMP Instructions Addressing Mode
 //------------------------------------------
 
-JumpAddressingModes	-> AsmConstant
-					-> '(' AsmConstant ')'
+JumpAddressingModes	-> JumpDirect JumpIndirect;
+JumpIndirect		-> '(' AsmConstant ')'
+					-> .
 					;
-
+JumpDirect			-> AsmConstant;
 //------------------------------------------
 // JSR Instructions Addressing Mode
 //------------------------------------------
@@ -816,16 +899,16 @@ CallAddressingMode	-> AsmConstant;
 // LDX Instructions Addressing Mode
 //------------------------------------------
 
-LdxAddressingMode	-> AsmConstant OptYReg
-					-> '#' AsmConstant
+LdxAddressingMode	-> '#' AsmConstant
+					-> AsmConstant OptYReg
 					;
 //------------------------------------------
 // CPX & CPY Instructions Addressing Mode
 //------------------------------------------
 
-CPX_CPY_AddressingMode	-> AsmConstant
-					-> '#' AsmConstant
-					;
+CPX_CPY_AddressingMode	-> '#' AsmConstant
+						-> AsmConstant
+						;
 
 //------------------------------------------
 // STX Instructions Addressing Mode
@@ -837,8 +920,8 @@ StxAddressingMode	-> AsmConstant OptYReg;
 // LDY Instructions Addressing Mode
 //------------------------------------------
 
-LdyAddressingMode	-> AsmConstant OptXReg
-					-> '#' AsmConstant
+LdyAddressingMode	-> '#' AsmConstant
+					-> AsmConstant OptXReg
 					;
 
 //------------------------------------------

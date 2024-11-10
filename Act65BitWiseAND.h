@@ -1,6 +1,6 @@
 #pragma once
 
-class CAct65BitWiseAND : public CActionASTnode
+class CAct65BitWiseAND : public CAstNode
 {
 public:
 	CAct65BitWiseAND();

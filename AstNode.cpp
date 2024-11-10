@@ -9,8 +9,7 @@ CAstNode::CAstNode()
 	m_pPrev = 0;
 	m_pChild = 0;
 	m_pParent = 0;
-	for (int i = 0; i < 64; ++i)
-		m_sNodeName[i] = 0;
+	m_pNodeName = 0;
 }
 
 CAstNode::CAstNode(int NodeType)
@@ -22,21 +21,25 @@ CAstNode::CAstNode(int NodeType)
 	m_pPrev = 0;
 	m_pChild = 0;
 	m_pParent = 0;
-	for (int i = 0; i < 64; ++i)
-		m_sNodeName[i] = 0;
+	m_pNodeName = 0;
 }
 
 CAstNode::~CAstNode()
 {
 }
 
-bool CAstNode::Create(
+bool CAstNode::CreateNode(
 	CAstNode* pChild,
 	CAstNode* pNext,
 	CAstNode* pPrev,
 	CAstNode* pStart,
 	CAstNode* pParent
 )
+{
+    return false;
+}
+
+bool CAstNode::CreateLeaf(CAstNode* pChild, CAstNode* pNext, CAstNode* pPrev, CAstNode* pStart, CAstNode* pParent)
 {
     return false;
 }

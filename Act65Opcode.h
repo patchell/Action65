@@ -1,0 +1,32 @@
+#pragma once
+
+class CAct65Opcode : public CAstNode
+{
+	Token m_OpcodeToken;
+	const char* m_pOpCodeName;
+	int m_LineNumber;
+	int m_ColumnNumber;
+public:
+	CAct65Opcode();
+	virtual ~CAct65Opcode();
+	bool Create();
+	//-----------------------------
+	// Node Processor
+	//-----------------------------
+	virtual CAstNode* Process(
+		CAstNode* pChild,
+		CAstNode* pNext
+	);
+	//-----------------------------
+	// Setter/Getter Methods
+	//-----------------------------
+	Token GetToken() { return m_OpcodeToken; }
+	void SetToken(Token t) { m_OpcodeToken = t; }
+	const char* GetOpcodeName() { return m_pOpCodeName; }
+	void SetOpcodeName(const char* pN) { m_pOpCodeName = pN; }
+	int GetLineNumber() { return m_LineNumber; }
+	void SetLineNumber(int n) { m_LineNumber = n; }
+	int GetColumnNumber() { return m_ColumnNumber; }
+	void SetColumnNumber(int c) { m_ColumnNumber = c; }
+};
+

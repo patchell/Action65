@@ -2,6 +2,7 @@
 
 CAct65AssignLSh::CAct65AssignLSh()
 {
+	SetNodeName(m_pNodeTyypeName);
 }
 
 CAct65AssignLSh::~CAct65AssignLSh()

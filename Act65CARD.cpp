@@ -2,6 +2,7 @@
 
 CAct65CARD::CAct65CARD()
 {
+	SetNodeName(m_pNodeTyypeName);
 }
 
 CAct65CARD::~CAct65CARD()

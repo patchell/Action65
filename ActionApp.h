@@ -1,6 +1,6 @@
 #pragma once
 
-class CActionApp : public CConsolApp
+class CActionApp
 {
 	char* m_pSourceFile;
 	char* m_pLogFile;

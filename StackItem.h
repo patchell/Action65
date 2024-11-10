@@ -13,7 +13,8 @@ public:
 		ADDRESSSIZE,
 		ACCESS_MODE,
 		DATA_SIZE,
-		BIN
+		BIN,
+		NODE
 	};
 	struct ItemTypeLUT {
 		ItemType m_Type;
@@ -39,6 +40,7 @@ private:
 		{ItemType::ACCESS_MODE,"ACCESS MODE"},
 		{ItemType::DATA_SIZE,"DATA SIZE"},
 		{ItemType::BIN,"BIN"},
+		{ItemType::NODE,"NODE"},
 		{ItemType(-1),NULL}
 	};
 	ItemType m_Type;

@@ -1,0 +1,9 @@
+#include "pch.h"
+
+CAct65INTERRUPT::CAct65INTERRUPT()
+{
+}
+
+CAct65INTERRUPT::~CAct65INTERRUPT()
+{
+}

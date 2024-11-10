@@ -1,7 +1,8 @@
 #pragma once
 
-class CAct65NotEquelTO : public CActionASTnode
+class CAct65NotEquelTO : public CAstNode
 {
+	inline static const char* m_pNodeTyypeName = "ADD";
 public:
 	CAct65NotEquelTO();
 	virtual ~CAct65NotEquelTO();

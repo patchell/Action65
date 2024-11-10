@@ -5,23 +5,35 @@ class CAstNode
 	inline static int m_NodeCount = 0;
 	int m_NodeID;
 	int m_NodeType;
-	char m_sNodeName[64];
+	const char* m_pNodeName;
 	CAstNode* m_pStart;
 	CAstNode* m_pNext;
 	CAstNode* m_pPrev;
 	CAstNode* m_pChild;
 	CAstNode* m_pParent;
+	CSymbol* m_pSym;
 public:
 	CAstNode();
 	CAstNode(int NodeType);
 	virtual ~CAstNode();
-	bool Create(
+	bool CreateNode(
 		CAstNode* pChild,
 		CAstNode* pNext,
 		CAstNode* pPrev = 0,
 		CAstNode* pStart = 0,
 		CAstNode* pParent = 0
 	);
+	bool CreateLeaf(
+		CAstNode* pChild,
+		CAstNode* pNext,
+		CAstNode* pPrev = 0,
+		CAstNode* pStart = 0,
+		CAstNode* pParent = 0
+	);
+	virtual CAstNode* Process(
+		CAstNode* pChild,
+		CAstNode* pNext
+	) = 0;
 	virtual void Print(FILE* pOut, int Indent);
 	virtual void NodeProc();
 	virtual void TopDown();
@@ -43,8 +55,8 @@ public:
 	void SetID(int Id) { m_NodeID = Id; }
 	int GetNodeType() { return m_NodeType; }
 	void SetNodeType(int Nt) { m_NodeType = Nt; }
-	char* GetNodeName() { return m_sNodeName; }
+	const char* GetNodeName() { return m_pNodeName; }
 	void SetNodeName(const char* pName) {
-		strcpy_s(m_sNodeName, 64, pName);
+		m_pNodeName = pName;
 	}
 };
