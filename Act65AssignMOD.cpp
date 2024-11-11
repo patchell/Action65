@@ -8,3 +8,8 @@ CAct65AssignMOD::CAct65AssignMOD()
 CAct65AssignMOD::~CAct65AssignMOD()
 {
 }
+
+bool CAct65AssignMOD::Create()
+{
+    return false;
+}

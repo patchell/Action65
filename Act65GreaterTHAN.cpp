@@ -8,3 +8,8 @@ CAct65GreaterTHAN::CAct65GreaterTHAN()
 CAct65GreaterTHAN::~CAct65GreaterTHAN()
 {
 }
+
+bool CAct65GreaterTHAN::Create()
+{
+    return false;
+}

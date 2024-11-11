@@ -304,7 +304,7 @@ enum class Processor {
 //----- Modifiers --------------
 #include "Act65ARRAY.h"
 #include "Act65DEFINE.h"
-#include "Adc65tTYPEDEF.h"
+#include "Act65TYPEDEF.h"
 
 //-----------------------------------------
 //---- Logical/Arithmetic AST Nodes -------
@@ -362,7 +362,7 @@ enum class Processor {
 #include "Act65PUSH.h"
 #include "Act65PushSource.h"
 #include "Act65POP.h"
-#include "ActPopDest.h"
+#include "Act65PopDest.h"
 //--------- Assignment Node Classes ------
 #include "Act65Assignment.h"
 #include "Act65AssignADD.h"
@@ -389,12 +389,12 @@ enum class Processor {
 #include "Act65TRUE.h"
 #include "Act65SecAtrbFALSE.h"
 #include "Act65ORG.h"
-#include "Actt65DB.h"
+#include "Act65DB.h"
 #include "Act65DW.h"
 #include "Act65DL.h"
 #include "Act65DAS.h"
 #include "Act65DCS.h"
-#include "Actt65DS.h"
+#include "Act65DS.h"
 #include "Act65ASMPROC.h"
 #include "Act65EPROC.h"
 #include "Act65Opcode.h"
@@ -404,8 +404,8 @@ enum class Processor {
 #include "Act65YREG.h"
 #include "Act65ACC.h"
 #include "Act65CharCibstabt.h"
-#include "Acty65LowerPart.h"
-#include "Acta65UpperPart.h"
+#include "Act65LowerPart.h"
+#include "Act65UpperPart.h"
 #include "Act65CurrentLocation.h"
 
 //------------------------------------

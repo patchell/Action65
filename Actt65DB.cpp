@@ -1,9 +1,9 @@
 #include "pch.h"
 
-CActt65DB::CActt65DB()
+CAct65DB::CAct65DB()
 {
 }
 
-CActt65DB::~CActt65DB()
+CAct65DB::~CAct65DB()
 {
 }

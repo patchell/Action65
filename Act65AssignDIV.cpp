@@ -8,3 +8,8 @@ CAct65AssignDIV::CAct65AssignDIV()
 CAct65AssignDIV::~CAct65AssignDIV()
 {
 }
+
+bool CAct65AssignDIV::Create()
+{
+    return false;
+}

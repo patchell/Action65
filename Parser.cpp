@@ -34,14 +34,104 @@ FILE* CParser::LogFile()
 
 Token CParser::Run()
 {
-	GetAstNodeStack()->Create("AST");
-	GetValueStack()->Create("VALUE");
-    Token LookaHeadToken = Token(0);
-	LookaHeadToken = GetLexer()->Lex();
-	LookaHeadToken = Action65(LookaHeadToken);
-	GetLexer()->GetSymTab()->PrintTable(LogFile());
-    return LookaHeadToken;
+	Token LookaHeadToken = Token(0);
+	FILE* ErrorDest = 0;
 
+	if (LogFile())
+		ErrorDest = LogFile();
+	else
+		ErrorDest = stderr;
+	try {
+		GetAstNodeStack()->Create("AST");
+		GetValueStack()->Create("VALUE");
+		LookaHeadToken = GetLexer()->Lex();
+		LookaHeadToken = Action65(LookaHeadToken);
+		GetLexer()->GetSymTab()->PrintTable(LogFile());
+	}
+	catch (Exception& BooBoo)
+	{
+		char* s = new char[256];
+		Exception::ExceptionType ExcptType;
+
+		ExcptType = BooBoo.GetXCeptType();
+		switch (ExcptType)
+		{
+		case Exception::ExceptionType::WHOKNOWS:
+			fprintf(ErrorDest,
+				"%s Line=%d  Col=%d\n",
+				BooBoo.GetExceptionTypeString(BooBoo.GetXCeptType()),
+				GetLexer()->GetLineNumber(),
+				GetLexer()->GetColunm()
+			);
+			break;
+		case Exception::ExceptionType::UNEXPECTED_TOKEN:
+			fprintf(ErrorDest,
+				"%s %d:%s  Line:%d Col:%d\n",
+				BooBoo.GetExceptionTypeString(BooBoo.GetXCeptType()),
+				int(BooBoo.GetGotToken()),
+				GetLexer()->GetKeyWords()->LookupToName(BooBoo.GetGotToken()),
+				GetLexer()->GetLineNumber(),
+				GetLexer()->GetColunm()
+			);
+			break;
+		case Exception::ExceptionType::SECTION_ADDRES_RANGE_EXCEEDED:
+			fprintf(ErrorDest,
+				"Section:Address Range Exceeded %d:%s\n%s\n  Line:%d Col:%d\n",
+				int(BooBoo.GetGotToken()),
+				GetLexer()->GetKeyWords()->LookupToName(BooBoo.GetGotToken()),
+				BooBoo.GetErrorString(),
+				GetLexer()->GetLineNumber(),
+				GetLexer()->GetColunm()
+			);
+			break;
+		case Exception::ExceptionType::SECTION_UNDEFINED:
+			fprintf(ErrorDest,
+				"Section Undefined %d:%s  Line:%d Col:%d\n",
+				int(BooBoo.GetGotToken()),
+				GetLexer()->GetKeyWords()->LookupToName(BooBoo.GetGotToken()),
+				GetLexer()->GetLineNumber(),
+				GetLexer()->GetColunm()
+			);
+			break;
+		case Exception::ExceptionType::NOSECTION_DEFINED:
+			fprintf(ErrorDest,
+				"No Section Defined %d:%s  Line:%d Col:%d\n",
+				int(BooBoo.GetGotToken()),
+				GetLexer()->GetKeyWords()->LookupToName(BooBoo.GetGotToken()),
+				GetLexer()->GetLineNumber(),
+				GetLexer()->GetColunm()
+			);
+			break;
+		case Exception::ExceptionType::LEXER_STUMPTED:
+			fprintf(
+				ErrorDest,
+				"%s",
+				BooBoo.GetErrorString()
+			);
+			break;
+		case Exception::ExceptionType::ILLEGAL_ADDRESSING_MODE:
+			fprintf(ErrorDest,
+				"%s",
+				BooBoo.GetErrorString()
+			);
+			break;
+		case Exception::ExceptionType::INTERNAL_ERROR:
+			fprintf(
+				ErrorDest,
+				"Internal Error:%s Line:%d  Col:%d\n",
+				BooBoo.GetErrorString(),
+				GetLexer()->GetLineNumber(),
+				GetLexer()->GetColunm()
+			);
+			break;
+		default:
+			fprintf(ErrorDest, "Unknown Exception\n");
+			break;
+		}
+		Act()->CloseAll();
+		exit(1);
+	}
+	return LookaHeadToken;
 }
 
 
@@ -107,37 +197,16 @@ Token CParser::Expect(Token LookaHeadToken, Token Expected)
 		LookaHeadToken = GetLexer()->Lex();
 	else
 	{
-		fprintf(
-			stderr, 
-			"Line %d: Unexpected Token:Got %d Expected %d\n", 
-			GetLexer()->GetLineNumber(), 
-			LookaHeadToken, 
+		ExceptionThrown.SetXCeptType(Exception::ExceptionType::UNEXPECTED_TOKEN);
+		sprintf_s(
+			ExceptionThrown.GetErrorString(),
+			ExceptionThrown.GetMaxStringLen(),
+			"Line %d: Unexpected Token:Got %d Expected %d\n",
+			GetLexer()->GetLineNumber(),
+			LookaHeadToken,
 			Expected
 		);
-		if(LogFile())
-			fprintf(
-				LogFile(),
-				"%d::Line %d: Unexpected Token:Got %d Expected %d\n",
-				m_Recursion,
-				GetLexer()->GetLineNumber(),
-				LookaHeadToken,
-				Expected
-			);
-		exit(1);
-	}
-	if (LogFile())
-	{
-		if (LookaHeadToken == Token::IDENT)
-		{
-			pLookaheadToken = GetLexer()->GetLexSymbol()->GetName();
-		}
-		else
-		{
-			pLookaheadToken = (char*)GetLexer()->GetKeyWords()->LookupToName(LookaHeadToken);
-		}
-		fprintf(LogFile(), "Next Lookahead = %s\n",
-			pLookaheadToken
-		);
+		throw(ExceptionThrown);
 	}
 	return LookaHeadToken;
 }
@@ -4322,7 +4391,7 @@ bool CParser::CheckZeroPageAddress(int A)
 {
 	bool rV = true;
 
-	if (A > 255)
+	if (A > 255||A<0)
 	{
 		ExceptionThrown.SetXCeptType(Exception::ExceptionType::VALUE_EXCEEDS_RANGE);
 		sprintf_s(

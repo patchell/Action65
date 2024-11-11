@@ -8,3 +8,8 @@ CAct65GTEQ::CAct65GTEQ()
 CAct65GTEQ::~CAct65GTEQ()
 {
 }
+
+bool CAct65GTEQ::Create()
+{
+    return false;
+}

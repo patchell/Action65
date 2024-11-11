@@ -8,3 +8,8 @@ CAct65LessTHAN::CAct65LessTHAN()
 CAct65LessTHAN::~CAct65LessTHAN()
 {
 }
+
+bool CAct65LessTHAN::Create()
+{
+    return false;
+}

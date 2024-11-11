@@ -6,5 +6,6 @@ class CAct65Module : public CAstNode
 public:
 	CAct65Module();
 	virtual ~CAct65Module();
+	bool Create();
 };
 

@@ -8,3 +8,8 @@ CAct65ARRAY::CAct65ARRAY()
 CAct65ARRAY::~CAct65ARRAY()
 {
 }
+
+bool CAct65ARRAY::Create()
+{
+    return false;
+}

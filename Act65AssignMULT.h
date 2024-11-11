@@ -6,4 +6,5 @@ class CAct65AssignMULT :public CAstNode
 public:
 	CAct65AssignMULT();
 	virtual ~CAct65AssignMULT();
+	bool Create();
 };

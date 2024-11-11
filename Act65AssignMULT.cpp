@@ -10,3 +10,8 @@ CAct65AssignMULT::~CAct65AssignMULT()
 {
 }
 
+bool CAct65AssignMULT::Create()
+{
+    return false;
+}
+

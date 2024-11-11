@@ -6,5 +6,6 @@ class CAct65GTEQ : public CAstNode
 public:
 	CAct65GTEQ();
 	virtual ~CAct65GTEQ();
+	bool Create();
 };
 

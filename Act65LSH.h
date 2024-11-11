@@ -6,5 +6,6 @@ class CAct65LSH : public CAstNode
 public:
 	CAct65LSH();
 	virtual ~CAct65LSH();
+	bool Create();
 };
 

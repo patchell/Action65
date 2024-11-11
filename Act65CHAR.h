@@ -6,6 +6,7 @@ class CAct65CHAR : public CAstNode
 public:
 	CAct65CHAR();
 	virtual ~CAct65CHAR();
+	bool Create();
 };
 
 

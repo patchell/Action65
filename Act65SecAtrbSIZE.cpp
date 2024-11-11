@@ -7,3 +7,8 @@ CAct65SecAtrbSIZE::CAct65SecAtrbSIZE()
 CAct65SecAtrbSIZE::~CAct65SecAtrbSIZE()
 {
 }
+
+bool CAct65SecAtrbSIZE::Create()
+{
+    return false;
+}

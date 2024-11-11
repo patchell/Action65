@@ -7,3 +7,8 @@ CAct65UNTILL::CAct65UNTILL()
 CAct65UNTILL::~CAct65UNTILL()
 {
 }
+
+bool CAct65UNTILL::Create()
+{
+    return false;
+}

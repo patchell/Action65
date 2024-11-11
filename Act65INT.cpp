@@ -8,3 +8,8 @@ CAct65INT::CAct65INT()
 CAct65INT::~CAct65INT()
 {
 }
+
+bool CAct65INT::Create()
+{
+    return false;
+}

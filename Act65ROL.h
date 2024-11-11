@@ -6,5 +6,6 @@ class CAct65ROL : public CAstNode
 public:
 	CAct65ROL();
 	virtual ~CAct65ROL();
+	bool Create();
 };
 

@@ -8,3 +8,8 @@ CAct65ADD::CAct65ADD()
 CAct65ADD::~CAct65ADD()
 {
 }
+
+bool CAct65ADD::Create()
+{
+    return false;
+}

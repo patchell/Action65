@@ -8,3 +8,8 @@ CAct65BOOL::CAct65BOOL()
 CAct65BOOL::~CAct65BOOL()
 {
 }
+
+bool CAct65BOOL::Create()
+{
+    return false;
+}

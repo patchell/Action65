@@ -8,3 +8,8 @@ CAct65Assignment::CAct65Assignment()
 CAct65Assignment::~CAct65Assignment()
 {
 }
+
+bool CAct65Assignment::Create()
+{
+    return false;
+}

@@ -6,5 +6,6 @@ class CAct65AssignADD : public CAstNode
 public:
 	CAct65AssignADD();
 	virtual ~CAct65AssignADD();
+	bool Create();
 };
 

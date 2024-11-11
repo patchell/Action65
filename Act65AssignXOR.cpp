@@ -8,3 +8,8 @@ CAct65AssignXOR::CAct65AssignXOR()
 CAct65AssignXOR::~CAct65AssignXOR()
 {
 }
+
+bool CAct65AssignXOR::Create()
+{
+    return false;
+}

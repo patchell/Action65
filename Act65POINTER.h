@@ -6,5 +6,6 @@ class CAct65POINTER : public CAstNode
 public:
 	CAct65POINTER();
 	virtual ~CAct65POINTER();
+	bool Create();
 };
 

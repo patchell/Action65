@@ -6,5 +6,6 @@ class CAct65EqualTO : public CAstNode
 public:
 	CAct65EqualTO();
 	virtual ~CAct65EqualTO();
+	bool Create();
 };
 

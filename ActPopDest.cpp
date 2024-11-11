@@ -1,9 +1,9 @@
 #include "pch.h"
 
-CActPopDest::CActPopDest()
+CAct65PopDest::CAct65PopDest()
 {
 }
 
-CActPopDest::~CActPopDest()
+CAct65PopDest::~CAct65PopDest()
 {
 }

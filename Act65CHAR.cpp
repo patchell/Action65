@@ -8,3 +8,8 @@ CAct65CHAR::CAct65CHAR()
 CAct65CHAR::~CAct65CHAR()
 {
 }
+
+bool CAct65CHAR::Create()
+{
+    return false;
+}

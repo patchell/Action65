@@ -6,5 +6,6 @@ class CAct65ARRAY : public CAstNode
 public:
 	CAct65ARRAY();
 	virtual ~CAct65ARRAY();
+	bool Create();
 };
 

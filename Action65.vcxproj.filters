@@ -354,7 +354,7 @@
     <ClCompile Include="ActPopDest.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Adc65tTYPEDEF.cpp">
+    <ClCompile Include="Act65TYPEDEF.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Act65PROCESSOR.cpp">
@@ -435,10 +435,10 @@
     <ClCompile Include="Act65CharCibstabt.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Acty65LowerPart.cpp">
+    <ClCompile Include="Act65LowerPart.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Acta65UpperPart.cpp">
+    <ClCompile Include="Act65UpperPart.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Act65CurrentLocation.cpp">
@@ -770,10 +770,10 @@
     <ClInclude Include="Act65POP.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ActPopDest.h">
+    <ClInclude Include="Act65PopDest.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Adc65tTYPEDEF.h">
+    <ClInclude Include="Act65TYPEDEF.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Act65PROCESSOR.h">
@@ -809,7 +809,7 @@
     <ClInclude Include="Act65ORG.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Actt65DB.h">
+    <ClInclude Include="Act65DB.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Act65DW.h">
@@ -824,7 +824,7 @@
     <ClInclude Include="Act65DCS.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Actt65DS.h">
+    <ClInclude Include="Act65DS.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Act65ASMPROC.h">
@@ -854,10 +854,10 @@
     <ClInclude Include="Act65CharCibstabt.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Acty65LowerPart.h">
+    <ClInclude Include="Act65LowerPart.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Acta65UpperPart.h">
+    <ClInclude Include="Act65UpperPart.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Act65CurrentLocation.h">

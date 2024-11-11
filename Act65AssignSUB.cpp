@@ -8,3 +8,8 @@ CAct65AssignSUB::CAct65AssignSUB()
 CAct65AssignSUB::~CAct65AssignSUB()
 {
 }
+
+bool CAct65AssignSUB::Create()
+{
+    return false;
+}

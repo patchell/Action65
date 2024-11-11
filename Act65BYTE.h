@@ -6,5 +6,6 @@ class CAct65BYTE : public CAstNode
 public:
 	CAct65BYTE();
 	virtual ~CAct65BYTE();
+	bool Create();
 };
 

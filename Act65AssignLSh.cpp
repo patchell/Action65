@@ -8,3 +8,8 @@ CAct65AssignLSh::CAct65AssignLSh()
 CAct65AssignLSh::~CAct65AssignLSh()
 {
 }
+
+bool CAct65AssignLSh::Create()
+{
+    return false;
+}

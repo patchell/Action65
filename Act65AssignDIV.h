@@ -6,5 +6,6 @@ class CAct65AssignDIV : public CAstNode
 public:
 	CAct65AssignDIV();
 	virtual ~CAct65AssignDIV();
+	bool Create();
 };
 

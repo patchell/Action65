@@ -8,3 +8,8 @@ CAct65EqualTO::CAct65EqualTO()
 CAct65EqualTO::~CAct65EqualTO()
 {
 }
+
+bool CAct65EqualTO::Create()
+{
+    return false;
+}

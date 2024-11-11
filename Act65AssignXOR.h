@@ -6,5 +6,6 @@ class CAct65AssignXOR : public CAstNode
 public:
 	CAct65AssignXOR();
 	virtual ~CAct65AssignXOR();
+	bool Create();
 };
 

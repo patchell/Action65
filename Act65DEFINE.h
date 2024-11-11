@@ -6,5 +6,6 @@ class CAct65DEFINE : public CAstNode
 public:
 	CAct65DEFINE();
 	virtual ~CAct65DEFINE();
+	bool Create();
 };
 

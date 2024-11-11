@@ -6,5 +6,6 @@ class CAct65AssignMOD : public CAstNode
 public:
 	CAct65AssignMOD();
 	virtual ~CAct65AssignMOD();
+	bool Create();
 };
 

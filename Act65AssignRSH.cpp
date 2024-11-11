@@ -8,3 +8,8 @@ CAct65AssignRSH::CAct65AssignRSH()
 CAct65AssignRSH::~CAct65AssignRSH()
 {
 }
+
+bool CAct65AssignRSH::Create()
+{
+    return false;
+}
