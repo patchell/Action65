@@ -6,6 +6,7 @@ class CAct65NotEquelTO : public CAstNode
 public:
 	CAct65NotEquelTO();
 	virtual ~CAct65NotEquelTO();
-	bool Create();
+	bool Create(CAstNode* pChild, CAstNode* pNext);
+	virtual CValue* Process();
 };
 

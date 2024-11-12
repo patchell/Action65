@@ -6,6 +6,7 @@ class CAct65ROR : public CAstNode
 public:
 	CAct65ROR();
 	virtual ~CAct65ROR();
-	bool Create();
+	bool Create(CAstNode* pChild, CAstNode* pNext);
+	virtual CValue* Process();
 };
 

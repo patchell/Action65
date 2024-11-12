@@ -6,6 +6,7 @@ class CAct65ForStart : public CAstNode
 public:
 	CAct65ForStart();
 	virtual ~CAct65ForStart();
-	bool Create();
+	bool Create(CAstNode* pChild, CAstNode* pNext);
+	virtual CValue* Process();
 };
 

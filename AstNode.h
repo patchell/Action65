@@ -18,10 +18,7 @@ public:
 	virtual ~CAstNode();
 	bool CreateNode(
 		CAstNode* pChild,
-		CAstNode* pNext,
-		CAstNode* pPrev = 0,
-		CAstNode* pStart = 0,
-		CAstNode* pParent = 0
+		CAstNode* pNext
 	);
 	bool CreateLeaf(
 		CAstNode* pChild,
@@ -30,10 +27,7 @@ public:
 		CAstNode* pStart = 0,
 		CAstNode* pParent = 0
 	);
-	virtual CAstNode* Process(
-		CAstNode* pChild,
-		CAstNode* pNext
-	) = 0;
+	virtual CValue* Process() = 0;
 	virtual void Print(FILE* pOut, int Indent);
 	virtual void NodeProc();
 	virtual void TopDown();

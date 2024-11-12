@@ -6,6 +6,7 @@ class CAct65POINTER : public CAstNode
 public:
 	CAct65POINTER();
 	virtual ~CAct65POINTER();
-	bool Create();
+	bool Create(CAstNode* pChild, CAstNode* pNext);
+	virtual CValue* Process();
 };
 

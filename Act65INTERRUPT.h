@@ -6,6 +6,7 @@ class CAct65INTERRUPT : public CAstNode
 public:
 	CAct65INTERRUPT();
 	virtual ~CAct65INTERRUPT();
-	bool Create();
+	bool Create(CAstNode* pChild, CAstNode* pNext);
+	virtual CValue* Process();
 };
 

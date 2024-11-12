@@ -6,6 +6,7 @@ class CAct65FlagNEG : public CAstNode
 public:
 	CAct65FlagNEG();
 	virtual ~CAct65FlagNEG();
-	bool Create();
+	bool Create(CAstNode* pChild, CAstNode* pNext);
+	virtual CValue* Process();
 };
 

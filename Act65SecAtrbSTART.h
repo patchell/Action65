@@ -6,6 +6,7 @@ class CAct65SecAtrbSTART : public CAstNode
 public:
 	CAct65SecAtrbSTART();
 	virtual ~CAct65SecAtrbSTART();
-	bool Create();
+	bool Create(CAstNode* pChild, CAstNode* pNext);
+	virtual CValue* Process();
 };
 

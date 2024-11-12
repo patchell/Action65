@@ -6,6 +6,7 @@ class CAct65UNTILL : public CAstNode
 public:
 	CAct65UNTILL();
 	virtual ~CAct65UNTILL();
-	bool Create();
+	bool Create(CAstNode* pChild, CAstNode* pNext);
+	virtual CValue* Process();
 };
 

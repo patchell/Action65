@@ -6,6 +6,7 @@ class CAct65ForFinish : public CAstNode
 public:
 	CAct65ForFinish();
 	virtual ~CAct65ForFinish();
-	bool Create();
+	bool Create(CAstNode* pChild, CAstNode* pNext);
+	virtual CValue* Process();
 };
 

@@ -224,7 +224,6 @@
     <ClCompile Include="Act65XREG.cpp" />
     <ClCompile Include="Act65YREG.cpp" />
     <ClCompile Include="Act65UpperPart.cpp" />
-    <ClCompile Include="Action65.cpp" />
     <ClCompile Include="ActionApp.cpp" />
     <ClCompile Include="ActionAstTree.cpp" />
     <ClCompile Include="ActPopDest.cpp" />
@@ -268,6 +267,7 @@
     <ClCompile Include="Symbol.cpp" />
     <ClCompile Include="SymTab.cpp" />
     <ClCompile Include="UnResolvedSymbol.cpp" />
+    <ClCompile Include="Value.cpp" />
     <ClCompile Include="WhereSymbolIsUsed.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -409,6 +409,7 @@
     <ClInclude Include="Symbol.h" />
     <ClInclude Include="SymTab.h" />
     <ClInclude Include="UnResolvedSymbol.h" />
+    <ClInclude Include="Value.h" />
     <ClInclude Include="WhereSymbolIsUsed.h" />
   </ItemGroup>
   <ItemGroup>

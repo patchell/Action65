@@ -18,12 +18,32 @@ CAct65Opcode::~CAct65Opcode()
 		delete m_pInstruction;
 }
 
-bool CAct65Opcode::Create()
+bool CAct65Opcode::Create(CAstNode* pChild, CAstNode* pNext)
 {
-	return false;
+	SetNodeName(m_pNodeTyypeName);
+	return CAstNode::CreateNode(pChild, pNext);
 }
 
-CAstNode* CAct65Opcode::Process(CAstNode* pChild, CAstNode* pNext)
+CValue* CAct65Opcode::Process()
 {
-	return nullptr;
+	CAstNode* pChild = 0, * pNext = 0;
+	CValue* pValueChild = 0, * pValueNext = 0
+		;
+	pChild = GetChild();
+	if (pChild)
+	{
+		pNext = pChild->GetNext();
+	}
+	if (pChild)
+	{
+		pValueChild = pChild->Process();
+	}
+	if (pNext)
+	{
+		pValueNext = pNext->Process();
+	}
+	//-----------------------
+	// Code Generation
+	//-----------------------
+	return pValueChild;
 }

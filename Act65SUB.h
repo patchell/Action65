@@ -6,6 +6,7 @@ class CAct65SUB : public CAstNode
 public:
 	CAct65SUB();
 	virtual ~CAct65SUB();
-	bool Create();
+	bool Create(CAstNode* pChild, CAstNode* pNext);
+	virtual CValue* Process();
 };
 

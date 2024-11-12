@@ -6,6 +6,7 @@ class CAct65Label : public CAstNode
 public:
 	CAct65Label();
 	virtual ~CAct65Label();
-	bool Create();
+	bool Create(CAstNode* pChild, CAstNode* pNext);
+	virtual CValue* Process();
 };
 

@@ -6,6 +6,7 @@ class CAct65AssignXOR : public CAstNode
 public:
 	CAct65AssignXOR();
 	virtual ~CAct65AssignXOR();
-	bool Create();
+	bool Create(CAstNode* pChild, CAstNode* pNext);
+	virtual CValue* Process();
 };
 

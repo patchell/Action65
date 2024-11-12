@@ -6,10 +6,7 @@ class CAct65BitWiseOR : public CAstNode
 public:
 	CAct65BitWiseOR();
 	virtual ~CAct65BitWiseOR();
-	bool Create();
-	virtual CAstNode* Process(
-		CAstNode* pChild,
-		CAstNode* pNext
-	);
+	bool Create(CAstNode* pChild, CAstNode* pNext);
+	virtual CValue* Process();
 };
 

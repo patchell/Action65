@@ -8,13 +8,32 @@ CAct65BitWiseOR::~CAct65BitWiseOR()
 {
 }
 
-bool CAct65BitWiseOR::Create()
+bool CAct65BitWiseOR::Create(CAstNode* pChild, CAstNode* pNext)
 {
 	SetNodeName(m_pNodeTyypeName);
-	return false;
+	return CAstNode::CreateNode(pChild, pNext);
 }
 
-CAstNode* CAct65BitWiseOR::Process(CAstNode* pChild, CAstNode* pNext)
+CValue* CAct65BitWiseOR::Process()
 {
-    return nullptr;
+	CAstNode* pChild = 0, * pNext = 0;
+	CValue* pValueChild = 0, * pValueNext = 0
+		;
+	pChild = GetChild();
+	if (pChild)
+	{
+		pNext = pChild->GetNext();
+	}
+	if (pChild)
+	{
+		pValueChild = pChild->Process();
+	}
+	if (pNext)
+	{
+		pValueNext = pNext->Process();
+	}
+	//-----------------------
+	// Code Generation
+	//-----------------------
+	return pValueChild;
 }

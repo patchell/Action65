@@ -6,6 +6,7 @@ class CAct65LowerPart : public CAstNode
 public:
 	CAct65LowerPart();
 	virtual ~CAct65LowerPart();
-	bool Create();
+	bool Create(CAstNode* pChild, CAstNode* pNext);
+	virtual CValue* Process();
 };
 

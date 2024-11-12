@@ -8,7 +8,32 @@ CAct65ROL::~CAct65ROL()
 {
 }
 
-bool CAct65ROL::Create()
+bool CAct65ROL::Create(CAstNode* pChild, CAstNode* pNext)
 {
-    return false;
+	SetNodeName(m_pNodeTyypeName);
+	return CAstNode::CreateNode(pChild, pNext);
+}
+
+CValue* CAct65ROL::Process()
+{
+	CAstNode* pChild = 0, * pNext = 0;
+	CValue* pValueChild = 0, * pValueNext = 0
+		;
+	pChild = GetChild();
+	if (pChild)
+	{
+		pNext = pChild->GetNext();
+	}
+	if (pChild)
+	{
+		pValueChild = pChild->Process();
+	}
+	if (pNext)
+	{
+		pValueNext = pNext->Process();
+	}
+	//-----------------------
+	// Code Generation
+	//-----------------------
+	return pValueChild;
 }

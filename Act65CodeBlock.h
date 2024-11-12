@@ -6,6 +6,7 @@ class CAct65CodeBlock : public CAstNode
 public:
 	CAct65CodeBlock();
 	virtual ~CAct65CodeBlock();
-	bool Create();
+	bool Create(CAstNode* pChild, CAstNode* pNext);
+	virtual CValue* Process();
 };
 

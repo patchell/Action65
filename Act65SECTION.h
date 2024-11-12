@@ -6,6 +6,7 @@ class CAct65SECTION : public CAstNode
 public:
 	CAct65SECTION();
 	virtual ~CAct65SECTION();
-	bool Create();
+	bool Create(CAstNode* pChild, CAstNode* pNext);
+	virtual CValue* Process();
 };
 

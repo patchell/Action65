@@ -1119,7 +1119,21 @@ Token CParser::Assignment(Token LookaHeadToken)
 	//				;
 	//--------------------------------------------
 	bool Loop = true;
-
+	CStackNodeItem* pSNI = 0;
+	union NodeTypes {
+		CAstNode* m_pAstNode;
+		CAct65AssignADD* m_pAssAdd;
+		CAct65AssignAND* m_pAssAnd;
+		CAct65AssignDIV* m_pASSDiv;
+		CAct65AssignLSh* m_pAssLSH;
+		CAct65Assignment* m_pAssignment;
+		CAct65AssignMOD* m_pAssMod;
+		CAct65AssignMULT* m_pAssMult;
+		CAct65AssignOR* m_pAssOr;
+		CAct65AssignRSH* m_pAssRSH;
+		CAct65AssignSUB* m_pAssSub;
+		CAct65AssignXOR* m_pAssXor;
+	}Nodes = NodeTypes(0);
 	PrintLookahead(LogFile(), LookaHeadToken, "Enter Assignment", ++m_Recursion);
 	LookaHeadToken = MemContents(LookaHeadToken);
 	while (Loop)
@@ -1129,56 +1143,89 @@ Token CParser::Assignment(Token LookaHeadToken)
 		case Token('='):
 			LookaHeadToken = Expect(LookaHeadToken, Token('='));
 			LookaHeadToken = ArithExpr(LookaHeadToken);
+			Nodes.m_pAssignment = new CAct65Assignment;
+			pSNI = CreateBinaryNode(Nodes.m_pAstNode);
+			GetAstNodeStack()->Push(pSNI);
 			LookaHeadToken = MemContents(LookaHeadToken);
 			break;
 		case Token::ASSIGN_ADD:
 			LookaHeadToken = Expect(LookaHeadToken, Token::ASSIGN_ADD);
 			LookaHeadToken = ArithExpr(LookaHeadToken);
+			Nodes.m_pAssAdd = new CAct65AssignADD;
+			pSNI = CreateBinaryNode(Nodes.m_pAstNode);
+			GetAstNodeStack()->Push(pSNI);
 			LookaHeadToken = MemContents(LookaHeadToken);
 			break;
 		case Token::ASSIGN_AND:
 			LookaHeadToken = Expect(LookaHeadToken, Token::ASSIGN_AND);
 			LookaHeadToken = ArithExpr(LookaHeadToken);
+			Nodes.m_pAssAnd = new CAct65AssignAND;
+			pSNI = CreateBinaryNode(Nodes.m_pAstNode);
+			GetAstNodeStack()->Push(pSNI);
 			LookaHeadToken = MemContents(LookaHeadToken);
 			break;
 		case Token::ASSIGN_DIV:
 			LookaHeadToken = Expect(LookaHeadToken, Token::ASSIGN_DIV);
 			LookaHeadToken = ArithExpr(LookaHeadToken);
+			Nodes.m_pASSDiv = new CAct65AssignDIV;
+			pSNI = CreateBinaryNode(Nodes.m_pAstNode);
+			GetAstNodeStack()->Push(pSNI);
 			LookaHeadToken = MemContents(LookaHeadToken);
 			break;
 		case Token::ASSIGN_LSH:
 			LookaHeadToken = Expect(LookaHeadToken, Token::ASSIGN_LSH);
 			LookaHeadToken = ArithExpr(LookaHeadToken);
+			Nodes.m_pAssLSH = new CAct65AssignLSh;
+			pSNI = CreateBinaryNode(Nodes.m_pAstNode);
+			GetAstNodeStack()->Push(pSNI);
 			LookaHeadToken = MemContents(LookaHeadToken);
 			break;
 		case Token::ASSIGN_MOD:
 			LookaHeadToken = Expect(LookaHeadToken, Token::ASSIGN_MOD);
 			LookaHeadToken = ArithExpr(LookaHeadToken);
+			Nodes.m_pAssMod = new CAct65AssignMOD;
+			pSNI = CreateBinaryNode(Nodes.m_pAstNode);
+			GetAstNodeStack()->Push(pSNI);
 			LookaHeadToken = MemContents(LookaHeadToken);
 			break;
 		case Token::ASSIGN_MUL:
 			LookaHeadToken = Expect(LookaHeadToken, Token::ASSIGN_MUL);
 			LookaHeadToken = ArithExpr(LookaHeadToken);
+			Nodes.m_pAssMult = new CAct65AssignMULT;
+			pSNI = CreateBinaryNode(Nodes.m_pAstNode);
+			GetAstNodeStack()->Push(pSNI);
 			LookaHeadToken = MemContents(LookaHeadToken);
 			break;
 		case Token::ASSIGN_OR:
 			LookaHeadToken = Expect(LookaHeadToken, Token::ASSIGN_OR);
 			LookaHeadToken = ArithExpr(LookaHeadToken);
+			Nodes.m_pAssOr = new CAct65AssignOR;
+			pSNI = CreateBinaryNode(Nodes.m_pAstNode);
+			GetAstNodeStack()->Push(pSNI);
 			LookaHeadToken = MemContents(LookaHeadToken);
 			break;
 		case Token::ASSIGN_RSH:
 			LookaHeadToken = Expect(LookaHeadToken, Token::ASSIGN_RSH);
 			LookaHeadToken = ArithExpr(LookaHeadToken);
+			Nodes.m_pAssRSH = new CAct65AssignRSH;
+			pSNI = CreateBinaryNode(Nodes.m_pAstNode);
+			GetAstNodeStack()->Push(pSNI);
 			LookaHeadToken = MemContents(LookaHeadToken);
 			break;
 		case Token::ASSIGN_SUB:
 			LookaHeadToken = Expect(LookaHeadToken, Token::ASSIGN_SUB);
 			LookaHeadToken = ArithExpr(LookaHeadToken);
+			Nodes.m_pAssSub = new CAct65AssignSUB;
+			pSNI = CreateBinaryNode(Nodes.m_pAstNode);
+			GetAstNodeStack()->Push(pSNI);
 			LookaHeadToken = MemContents(LookaHeadToken);
 			break;
 		case Token::ASSIGN_XOR:
 			LookaHeadToken = Expect(LookaHeadToken, Token::ASSIGN_XOR);
 			LookaHeadToken = ArithExpr(LookaHeadToken);
+			Nodes.m_pAssXor = new CAct65AssignXOR;
+			pSNI = CreateBinaryNode(Nodes.m_pAstNode);
+			GetAstNodeStack()->Push(pSNI);
 			LookaHeadToken = MemContents(LookaHeadToken);
 			break;
 		default:
@@ -1209,6 +1256,9 @@ Token CParser::RelOperation(Token LookaHeadToken)
 	//					;
 	//--------------------------------------------
 	bool Loop = true;
+	CAstNode* pN1 = 0, * pN2 = 0;
+	CAct65BitWiseOR* pN;
+	CStackNodeItem* pSNI = 0;
 
 	PrintLookahead(LogFile(), LookaHeadToken, "Enter RelOperations", ++m_Recursion);
 	LookaHeadToken = LogicalOR(LookaHeadToken);
@@ -1219,18 +1269,54 @@ Token CParser::RelOperation(Token LookaHeadToken)
 		case Token::GTEQ:
 			LookaHeadToken = Expect(LookaHeadToken, Token::GTEQ);
 			LookaHeadToken = LogicalOR(LookaHeadToken);
+			if (GetAstNodeStack()->IsTopOfType(CStackItem::NODE))
+				pN2 = ((CStackNodeItem*)GetAstNodeStack()->Pop(CStackItem::NODE))->GetNode();
+			if (GetAstNodeStack()->IsTopOfType(CStackItem::NODE))
+				pN1 = ((CStackNodeItem*)GetAstNodeStack()->Pop(CStackItem::NODE))->GetNode();
+			pN = new CAct65BitWiseOR;
+			pN->CreateNode(pN1, pN2);
+			pSNI = new CStackNodeItem;
+			pSNI->Create(pN);
+			GetAstNodeStack()->Push(pSNI);
 			break;
 		case Token::LTEQ:
 			LookaHeadToken = Expect(LookaHeadToken, Token::LTEQ);
 			LookaHeadToken = LogicalOR(LookaHeadToken);
+			if (GetAstNodeStack()->IsTopOfType(CStackItem::NODE))
+				pN2 = ((CStackNodeItem*)GetAstNodeStack()->Pop(CStackItem::NODE))->GetNode();
+			if (GetAstNodeStack()->IsTopOfType(CStackItem::NODE))
+				pN1 = ((CStackNodeItem*)GetAstNodeStack()->Pop(CStackItem::NODE))->GetNode();
+			pN = new CAct65BitWiseOR;
+			pN->CreateNode(pN1, pN2);
+			pSNI = new CStackNodeItem;
+			pSNI->Create(pN);
+			GetAstNodeStack()->Push(pSNI);
 			break;
 		case Token('<'):
 			LookaHeadToken = Expect(LookaHeadToken, Token('<'));
 			LookaHeadToken = LogicalOR(LookaHeadToken);
+			if (GetAstNodeStack()->IsTopOfType(CStackItem::NODE))
+				pN2 = ((CStackNodeItem*)GetAstNodeStack()->Pop(CStackItem::NODE))->GetNode();
+			if (GetAstNodeStack()->IsTopOfType(CStackItem::NODE))
+				pN1 = ((CStackNodeItem*)GetAstNodeStack()->Pop(CStackItem::NODE))->GetNode();
+			pN = new CAct65BitWiseOR;
+			pN->CreateNode(pN1, pN2);
+			pSNI = new CStackNodeItem;
+			pSNI->Create(pN);
+			GetAstNodeStack()->Push(pSNI);
 			break;
 		case Token('>'):
 			LookaHeadToken = Expect(LookaHeadToken, Token('>'));
 			LookaHeadToken = LogicalOR(LookaHeadToken);
+			if (GetAstNodeStack()->IsTopOfType(CStackItem::NODE))
+				pN2 = ((CStackNodeItem*)GetAstNodeStack()->Pop(CStackItem::NODE))->GetNode();
+			if (GetAstNodeStack()->IsTopOfType(CStackItem::NODE))
+				pN1 = ((CStackNodeItem*)GetAstNodeStack()->Pop(CStackItem::NODE))->GetNode();
+			pN = new CAct65BitWiseOR;
+			pN->CreateNode(pN1, pN2);
+			pSNI = new CStackNodeItem;
+			pSNI->Create(pN);
+			GetAstNodeStack()->Push(pSNI);
 			break;
 		case Token('='):
 			LookaHeadToken = Expect(LookaHeadToken, Token('='));
@@ -1239,6 +1325,15 @@ Token CParser::RelOperation(Token LookaHeadToken)
 		case Token('#'):	// not equals
 			LookaHeadToken = Expect(LookaHeadToken, Token('#'));
 			LookaHeadToken = LogicalOR(LookaHeadToken);
+			if (GetAstNodeStack()->IsTopOfType(CStackItem::NODE))
+				pN2 = ((CStackNodeItem*)GetAstNodeStack()->Pop(CStackItem::NODE))->GetNode();
+			if (GetAstNodeStack()->IsTopOfType(CStackItem::NODE))
+				pN1 = ((CStackNodeItem*)GetAstNodeStack()->Pop(CStackItem::NODE))->GetNode();
+			pN = new CAct65BitWiseOR;
+			pN->CreateNode(pN1, pN2);
+			pSNI = new CStackNodeItem;
+			pSNI->Create(pN);
+			GetAstNodeStack()->Push(pSNI);
 			break;
 		default:
 			Loop = false;
@@ -1259,6 +1354,9 @@ Token CParser::LogicalOR(Token LookaHeadToken)
 	//				;
 	//--------------------------------------------
 	bool Loop = true;
+	CAstNode* pN1 = 0, * pN2 = 0;
+	CAct65BitWiseOR* pN;
+	CStackNodeItem* pSNI = 0;
 
 	PrintLookahead(LogFile(), LookaHeadToken, "Enter ArithExpr", ++m_Recursion);
 	LookaHeadToken = LogicalAND(LookaHeadToken);
@@ -1269,6 +1367,15 @@ Token CParser::LogicalOR(Token LookaHeadToken)
 		case Token::OR:
 			LookaHeadToken = Expect(LookaHeadToken, Token::OR);
 			LookaHeadToken = LogicalAND(LookaHeadToken);
+			if (GetAstNodeStack()->IsTopOfType(CStackItem::NODE))
+				pN2 = ((CStackNodeItem*)GetAstNodeStack()->Pop(CStackItem::NODE))->GetNode();
+			if (GetAstNodeStack()->IsTopOfType(CStackItem::NODE))
+				pN1 = ((CStackNodeItem*)GetAstNodeStack()->Pop(CStackItem::NODE))->GetNode();
+			pN = new CAct65BitWiseOR;
+			pN->CreateNode(pN1, pN2);
+			pSNI = new CStackNodeItem;
+			pSNI->Create(pN);
+			GetAstNodeStack()->Push(pSNI);
 			break;
 		default:
 			Loop = false;
@@ -1290,6 +1397,9 @@ Token CParser::LogicalAND(Token LookaHeadToken)
 	//				;
 	//--------------------------------------------
 	bool Loop = true;
+	CAstNode* pN1 = 0, * pN2 = 0;
+	CAct65BitWiseOR* pN;
+	CStackNodeItem* pSNI = 0;
 
 	PrintLookahead(LogFile(), LookaHeadToken, "Enter LogicalAND", ++m_Recursion);
 	LookaHeadToken = ArithExpr(LookaHeadToken);
@@ -1300,6 +1410,15 @@ Token CParser::LogicalAND(Token LookaHeadToken)
 		case Token::AND:
 			LookaHeadToken = Expect(LookaHeadToken, Token::AND);
 			LookaHeadToken = ArithExpr(LookaHeadToken);
+			if (GetAstNodeStack()->IsTopOfType(CStackItem::NODE))
+				pN2 = ((CStackNodeItem*)GetAstNodeStack()->Pop(CStackItem::NODE))->GetNode();
+			if (GetAstNodeStack()->IsTopOfType(CStackItem::NODE))
+				pN1 = ((CStackNodeItem*)GetAstNodeStack()->Pop(CStackItem::NODE))->GetNode();
+			pN = new CAct65BitWiseOR;
+			pN->CreateNode(pN1, pN2);
+			pSNI = new CStackNodeItem;
+			pSNI->Create(pN);
+			GetAstNodeStack()->Push(pSNI);
 			break;
 		default:
 			Loop = false;
@@ -1327,6 +1446,7 @@ Token CParser::ArithExpr(Token LookaHeadToken)
 	bool Loop = true;
 	CAstNode* pN1 = 0, * pN2 = 0;
 	CAct65BitWiseOR* pN;
+	CStackNodeItem* pSNI = 0;
 
 	PrintLookahead(LogFile(), LookaHeadToken, "Enter BitwiseOR", ++m_Recursion);
 	LookaHeadToken = BitwiseAND(LookaHeadToken);
@@ -1343,6 +1463,9 @@ Token CParser::ArithExpr(Token LookaHeadToken)
 				pN1 = ((CStackNodeItem*)GetAstNodeStack()->Pop(CStackItem::NODE))->GetNode();
 			pN = new CAct65BitWiseOR;
 			pN->CreateNode(pN1, pN2);
+			pSNI = new CStackNodeItem;
+			pSNI->Create(pN);
+			GetAstNodeStack()->Push(pSNI);
 			break;
 		default:
 			Loop = false;
@@ -1363,6 +1486,9 @@ Token CParser::BitwiseAND(Token LookaHeadToken)
 	//				;
 	//--------------------------------------------
 	bool Loop = true;
+	CAstNode* pN1 = 0, * pN2 = 0;
+	CAct65BitWiseOR* pN;
+	CStackNodeItem* pSNI = 0;
 
 	PrintLookahead(LogFile(), LookaHeadToken, "Enter BitwiseAND", ++m_Recursion);
 	LookaHeadToken = BitwiseXOR(LookaHeadToken);
@@ -1373,6 +1499,15 @@ Token CParser::BitwiseAND(Token LookaHeadToken)
 		case Token('&'):	// not equals
 			LookaHeadToken = Expect(LookaHeadToken, Token('&'));
 			LookaHeadToken = BitwiseXOR(LookaHeadToken);
+			if (GetAstNodeStack()->IsTopOfType(CStackItem::NODE))
+				pN2 = ((CStackNodeItem*)GetAstNodeStack()->Pop(CStackItem::NODE))->GetNode();
+			if (GetAstNodeStack()->IsTopOfType(CStackItem::NODE))
+				pN1 = ((CStackNodeItem*)GetAstNodeStack()->Pop(CStackItem::NODE))->GetNode();
+			pN = new CAct65BitWiseOR;
+			pN->CreateNode(pN1, pN2);
+			pSNI = new CStackNodeItem;
+			pSNI->Create(pN);
+			GetAstNodeStack()->Push(pSNI);
 			break;
 		default:
 			Loop = false;
@@ -1395,6 +1530,9 @@ Token CParser::BitwiseXOR(Token LookaHeadToken)
 	//				;
 	//--------------------------------------------
 	bool Loop = true;
+	CAstNode* pN1 = 0, * pN2 = 0;
+	CAct65BitWiseOR* pN;
+	CStackNodeItem* pSNI = 0;
 
 	PrintLookahead(LogFile(), LookaHeadToken, "Enter BitwiseXOR", ++m_Recursion);
 	LookaHeadToken = AddExpr(LookaHeadToken);
@@ -1407,6 +1545,15 @@ Token CParser::BitwiseXOR(Token LookaHeadToken)
 		case Token::XOR:	
 			LookaHeadToken = Expect(LookaHeadToken, Token::XOR);
 			LookaHeadToken = AddExpr(LookaHeadToken);
+			if (GetAstNodeStack()->IsTopOfType(CStackItem::NODE))
+				pN2 = ((CStackNodeItem*)GetAstNodeStack()->Pop(CStackItem::NODE))->GetNode();
+			if (GetAstNodeStack()->IsTopOfType(CStackItem::NODE))
+				pN1 = ((CStackNodeItem*)GetAstNodeStack()->Pop(CStackItem::NODE))->GetNode();
+			pN = new CAct65BitWiseOR;
+			pN->CreateNode(pN1, pN2);
+			pSNI = new CStackNodeItem;
+			pSNI->Create(pN);
+			GetAstNodeStack()->Push(pSNI);
 			break;
 		default:
 			Loop = false;
@@ -1428,6 +1575,9 @@ Token CParser::AddExpr(Token LookaHeadToken)
 	//				;
 	//--------------------------------------------
 	bool Loop = true;
+	CAstNode* pN1 = 0, * pN2 = 0;
+	CAct65BitWiseOR* pN;
+	CStackNodeItem* pSNI = 0;
 
 	PrintLookahead(LogFile(), LookaHeadToken, "Enter AddExpr", ++m_Recursion);
 	LookaHeadToken = ShifExpr(LookaHeadToken);
@@ -1438,10 +1588,28 @@ Token CParser::AddExpr(Token LookaHeadToken)
 		case Token('+'):	
 			LookaHeadToken = Expect(LookaHeadToken, Token('+'));
 			LookaHeadToken = ShifExpr(LookaHeadToken);
+			if (GetAstNodeStack()->IsTopOfType(CStackItem::NODE))
+				pN2 = ((CStackNodeItem*)GetAstNodeStack()->Pop(CStackItem::NODE))->GetNode();
+			if (GetAstNodeStack()->IsTopOfType(CStackItem::NODE))
+				pN1 = ((CStackNodeItem*)GetAstNodeStack()->Pop(CStackItem::NODE))->GetNode();
+			pN = new CAct65BitWiseOR;
+			pN->CreateNode(pN1, pN2);
+			pSNI = new CStackNodeItem;
+			pSNI->Create(pN);
+			GetAstNodeStack()->Push(pSNI);
 			break;
 		case Token('-'):	
 			LookaHeadToken = Expect(LookaHeadToken, Token('-'));
 			LookaHeadToken = ShifExpr(LookaHeadToken);
+			if (GetAstNodeStack()->IsTopOfType(CStackItem::NODE))
+				pN2 = ((CStackNodeItem*)GetAstNodeStack()->Pop(CStackItem::NODE))->GetNode();
+			if (GetAstNodeStack()->IsTopOfType(CStackItem::NODE))
+				pN1 = ((CStackNodeItem*)GetAstNodeStack()->Pop(CStackItem::NODE))->GetNode();
+			pN = new CAct65BitWiseOR;
+			pN->CreateNode(pN1, pN2);
+			pSNI = new CStackNodeItem;
+			pSNI->Create(pN);
+			GetAstNodeStack()->Push(pSNI);
 			break;
 		default:
 			Loop = false;
@@ -1463,6 +1631,9 @@ Token CParser::ShifExpr(Token LookaHeadToken)
 	//				;
 	//--------------------------------------------
 	bool Loop = true;
+	CAstNode* pN1 = 0, * pN2 = 0;
+	CAct65BitWiseOR* pN;
+	CStackNodeItem* pSNI = 0;
 
 	PrintLookahead(LogFile(), LookaHeadToken, "Enter ShiftExpr", ++m_Recursion);
 	LookaHeadToken = MultExpr(LookaHeadToken);
@@ -1473,10 +1644,28 @@ Token CParser::ShifExpr(Token LookaHeadToken)
 		case Token::LSH:
 			LookaHeadToken = Expect(LookaHeadToken, Token::LSH);
 			LookaHeadToken = MultExpr(LookaHeadToken);
+			if (GetAstNodeStack()->IsTopOfType(CStackItem::NODE))
+				pN2 = ((CStackNodeItem*)GetAstNodeStack()->Pop(CStackItem::NODE))->GetNode();
+			if (GetAstNodeStack()->IsTopOfType(CStackItem::NODE))
+				pN1 = ((CStackNodeItem*)GetAstNodeStack()->Pop(CStackItem::NODE))->GetNode();
+			pN = new CAct65BitWiseOR;
+			pN->CreateNode(pN1, pN2);
+			pSNI = new CStackNodeItem;
+			pSNI->Create(pN);
+			GetAstNodeStack()->Push(pSNI);
 			break;
 		case Token::RSH:
 			LookaHeadToken = Expect(LookaHeadToken, Token::RSH);
 			LookaHeadToken = MultExpr(LookaHeadToken);
+			if (GetAstNodeStack()->IsTopOfType(CStackItem::NODE))
+				pN2 = ((CStackNodeItem*)GetAstNodeStack()->Pop(CStackItem::NODE))->GetNode();
+			if (GetAstNodeStack()->IsTopOfType(CStackItem::NODE))
+				pN1 = ((CStackNodeItem*)GetAstNodeStack()->Pop(CStackItem::NODE))->GetNode();
+			pN = new CAct65BitWiseOR;
+			pN->CreateNode(pN1, pN2);
+			pSNI = new CStackNodeItem;
+			pSNI->Create(pN);
+			GetAstNodeStack()->Push(pSNI);
 			break;
 		default:
 			Loop = false;
@@ -1499,6 +1688,9 @@ Token CParser::MultExpr(Token LookaHeadToken)
 	//				;
 	//--------------------------------------------
 	bool Loop = true;
+	CAstNode* pN1 = 0, * pN2 = 0;
+	CAct65BitWiseOR* pN;
+	CStackNodeItem* pSNI = 0;
 
 	PrintLookahead(LogFile(), LookaHeadToken, "Enter MultExpr", ++m_Recursion);
 	LookaHeadToken = Unary(LookaHeadToken);
@@ -1509,14 +1701,41 @@ Token CParser::MultExpr(Token LookaHeadToken)
 		case Token('*'):
 			LookaHeadToken = Expect(LookaHeadToken, Token('*'));
 			LookaHeadToken = Unary(LookaHeadToken);
+			if (GetAstNodeStack()->IsTopOfType(CStackItem::NODE))
+				pN2 = ((CStackNodeItem*)GetAstNodeStack()->Pop(CStackItem::NODE))->GetNode();
+			if (GetAstNodeStack()->IsTopOfType(CStackItem::NODE))
+				pN1 = ((CStackNodeItem*)GetAstNodeStack()->Pop(CStackItem::NODE))->GetNode();
+			pN = new CAct65BitWiseOR;
+			pN->CreateNode(pN1, pN2);
+			pSNI = new CStackNodeItem;
+			pSNI->Create(pN);
+			GetAstNodeStack()->Push(pSNI);
 			break;
 		case Token('/'):
 			LookaHeadToken = Expect(LookaHeadToken, Token('/'));
 			LookaHeadToken = Unary(LookaHeadToken);
+			if (GetAstNodeStack()->IsTopOfType(CStackItem::NODE))
+				pN2 = ((CStackNodeItem*)GetAstNodeStack()->Pop(CStackItem::NODE))->GetNode();
+			if (GetAstNodeStack()->IsTopOfType(CStackItem::NODE))
+				pN1 = ((CStackNodeItem*)GetAstNodeStack()->Pop(CStackItem::NODE))->GetNode();
+			pN = new CAct65BitWiseOR;
+			pN->CreateNode(pN1, pN2);
+			pSNI = new CStackNodeItem;
+			pSNI->Create(pN);
+			GetAstNodeStack()->Push(pSNI);
 			break;
 		case Token::MOD:
 			LookaHeadToken = Expect(LookaHeadToken, Token::MOD);
 			LookaHeadToken = Unary(LookaHeadToken);
+			if (GetAstNodeStack()->IsTopOfType(CStackItem::NODE))
+				pN2 = ((CStackNodeItem*)GetAstNodeStack()->Pop(CStackItem::NODE))->GetNode();
+			if (GetAstNodeStack()->IsTopOfType(CStackItem::NODE))
+				pN1 = ((CStackNodeItem*)GetAstNodeStack()->Pop(CStackItem::NODE))->GetNode();
+			pN = new CAct65BitWiseOR;
+			pN->CreateNode(pN1, pN2);
+			pSNI = new CStackNodeItem;
+			pSNI->Create(pN);
+			GetAstNodeStack()->Push(pSNI);
 			break;
 
 		default:
@@ -4403,6 +4622,21 @@ bool CParser::CheckZeroPageAddress(int A)
 		throw(ExceptionThrown);
 	}
 	return rV;
+}
+
+CStackNodeItem* CParser::CreateBinaryNode(CAstNode* pNew)
+{
+	CAstNode* pN1 = 0, * pN2 = 0;
+	CStackNodeItem* pSNI = 0;
+
+	if (GetAstNodeStack()->IsTopOfType(CStackItem::NODE))
+		pN2 = ((CStackNodeItem*)GetAstNodeStack()->Pop(CStackItem::NODE))->GetNode();
+	if (GetAstNodeStack()->IsTopOfType(CStackItem::NODE))
+		pN1 = ((CStackNodeItem*)GetAstNodeStack()->Pop(CStackItem::NODE))->GetNode();
+	pNew->CreateNode(pN1, pN2);
+	pSNI = new CStackNodeItem;
+	pSNI->Create(pNew);
+	return pSNI;
 }
 
 void CParser::PrintLookahead(

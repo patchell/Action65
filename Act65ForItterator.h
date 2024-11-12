@@ -6,6 +6,7 @@ class CAct65ForItterator : public CAstNode
 public:
 	CAct65ForItterator();
 	virtual ~CAct65ForItterator();
-	bool Create();
+	bool Create(CAstNode* pChild, CAstNode* pNext);
+	virtual CValue* Process();
 };
 

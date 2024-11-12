@@ -8,8 +8,32 @@ CAct65BYTE::~CAct65BYTE()
 {
 }
 
-bool CAct65BYTE::Create()
+bool CAct65BYTE::Create(CAstNode* pChild, CAstNode* pNext)
 {
 	SetNodeName(m_pNodeTyypeName);
-    return false;
+	return CAstNode::CreateNode(pChild, pNext);
+}
+
+CValue* CAct65BYTE::Process()
+{
+	CAstNode* pChild = 0, * pNext = 0;
+	CValue* pValueChild = 0, * pValueNext = 0
+		;
+	pChild = GetChild();
+	if (pChild)
+	{
+		pNext = pChild->GetNext();
+	}
+	if (pChild)
+	{
+		pValueChild = pChild->Process();
+	}
+	if (pNext)
+	{
+		pValueNext = pNext->Process();
+	}
+	//-----------------------
+	// Code Generation
+	//-----------------------
+	return pValueChild;
 }

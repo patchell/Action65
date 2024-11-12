@@ -6,6 +6,7 @@ class CAct65CARD : public CAstNode
 public:
 	CAct65CARD();
 	virtual ~CAct65CARD();
-	bool Create();
+	bool Create(CAstNode* pChild, CAstNode* pNext);
+	virtual CValue* Process();
 };
 

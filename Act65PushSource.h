@@ -6,6 +6,7 @@ class CAct65PushSource : public CAstNode
 public:
 	CAct65PushSource();
 	virtual ~CAct65PushSource();
-	bool Create();
+	bool Create(CAstNode* pChild, CAstNode* pNext);
+	virtual CValue* Process();
 };
 

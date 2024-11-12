@@ -6,6 +6,7 @@ class CAct65VECTOR : public CAstNode
 public:
 	CAct65VECTOR();
 	virtual ~CAct65VECTOR();
-	bool Create();
+	bool Create(CAstNode* pChild, CAstNode* pNext);
+	virtual CValue* Process();
 };
 

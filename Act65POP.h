@@ -6,6 +6,7 @@ class CAct65POP : public CAstNode
 public:
 	CAct65POP();
 	virtual ~CAct65POP();
-	bool Create();
+	bool Create(CAstNode* pChild, CAstNode* pNext);
+	virtual CValue* Process();
 };
 

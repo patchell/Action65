@@ -3,15 +3,39 @@
 
 CAct65AssignMULT::CAct65AssignMULT()
 {
-	SetNodeName(m_pNodeTyypeName);
 }
 
 CAct65AssignMULT::~CAct65AssignMULT()
 {
 }
 
-bool CAct65AssignMULT::Create()
+bool CAct65AssignMULT::Create(CAstNode* pChild, CAstNode* pNext)
 {
-    return false;
+	SetNodeName(m_pNodeTyypeName);
+	return CAstNode::CreateNode(pChild, pNext);
+}
+
+CValue* CAct65AssignMULT::Process()
+{
+	CAstNode* pChild = 0, * pNext = 0;
+	CValue* pValueChild = 0, * pValueNext = 0
+		;
+	pChild = GetChild();
+	if (pChild)
+	{
+		pNext = pChild->GetNext();
+	}
+	if (pChild)
+	{
+		pValueChild = pChild->Process();
+	}
+	if (pNext)
+	{
+		pValueNext = pNext->Process();
+	}
+	//-----------------------
+	// Code Generation
+	//-----------------------
+	return pValueChild;
 }
 

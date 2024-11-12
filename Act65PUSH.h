@@ -6,6 +6,7 @@ class CAct65PUSH : public CAstNode
 public:
 	CAct65PUSH();
 	virtual ~CAct65PUSH();
-	bool Create();
+	bool Create(CAstNode* pChild, CAstNode* pNext);
+	virtual CValue* Process();
 };
 

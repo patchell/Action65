@@ -6,6 +6,7 @@ class CAct65SecAtrbREADWRITE : public CAstNode
 public:
 	CAct65SecAtrbREADWRITE();
 	virtual ~CAct65SecAtrbREADWRITE();
-	bool Create();
+	bool Create(CAstNode* pChild, CAstNode* pNext);
+	virtual CValue* Process();
 };
 

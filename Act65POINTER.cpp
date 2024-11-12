@@ -8,7 +8,32 @@ CAct65POINTER::~CAct65POINTER()
 {
 }
 
-bool CAct65POINTER::Create()
+bool CAct65POINTER::Create(CAstNode* pChild, CAstNode* pNext)
 {
-    return false;
+	SetNodeName(m_pNodeTyypeName);
+	return CAstNode::CreateNode(pChild, pNext);
+}
+
+CValue* CAct65POINTER::Process()
+{
+	CAstNode* pChild = 0, * pNext = 0;
+	CValue* pValueChild = 0, * pValueNext = 0
+		;
+	pChild = GetChild();
+	if (pChild)
+	{
+		pNext = pChild->GetNext();
+	}
+	if (pChild)
+	{
+		pValueChild = pChild->Process();
+	}
+	if (pNext)
+	{
+		pValueNext = pNext->Process();
+	}
+	//-----------------------
+	// Code Generation
+	//-----------------------
+	return pValueChild;
 }

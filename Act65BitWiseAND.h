@@ -6,6 +6,7 @@ class CAct65BitWiseAND : public CAstNode
 public:
 	CAct65BitWiseAND();
 	virtual ~CAct65BitWiseAND();
-	bool Create();
+	bool Create(CAstNode* pChild, CAstNode* pNext);
+	virtual CValue* Process();
 };
 

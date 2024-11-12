@@ -6,6 +6,7 @@ class CAct65RSH : public CAstNode
 public:
 	CAct65RSH();
 	virtual ~CAct65RSH();
-	bool Create();
+	bool Create(CAstNode* pChild, CAstNode* pNext);
+	virtual CValue* Process();
 };
 

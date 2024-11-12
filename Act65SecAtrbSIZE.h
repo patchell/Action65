@@ -6,6 +6,7 @@ class CAct65SecAtrbSIZE : public CAstNode
 public:
 	CAct65SecAtrbSIZE();
 	virtual ~CAct65SecAtrbSIZE();
-	bool Create();
+	bool Create(CAstNode* pChild, CAstNode* pNext);
+	virtual CValue* Process();
 };
 

@@ -6,6 +6,7 @@ class CAct65IFF : public CAstNode
 public:
 	CAct65IFF();
 	virtual ~CAct65IFF();
-	bool Create();
+	bool Create(CAstNode* pChild, CAstNode* pNext);
+	virtual CValue* Process();
 };
 

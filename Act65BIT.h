@@ -6,6 +6,7 @@ class CAct65BIT : public CAstNode
 public:
 	CAct65BIT();
 	virtual ~CAct65BIT();
-	bool Create();
+	bool Create(CAstNode* pChild, CAstNode* pNext);
+	virtual CValue* Process();
 };
 

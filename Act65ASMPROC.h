@@ -6,6 +6,7 @@ class CAct65ASMPROC : public CAstNode
 public:
 	CAct65ASMPROC();
 	virtual ~CAct65ASMPROC();
-	bool Create();
+	bool Create(CAstNode* pChild, CAstNode* pNext);
+	virtual CValue* Process();
 };
 

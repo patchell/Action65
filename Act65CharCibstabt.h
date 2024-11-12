@@ -6,6 +6,7 @@ class CAct65CharConstant : public CAstNode
 public:
 	CAct65CharConstant();
 	virtual ~CAct65CharConstant();
-	bool Create();
+	bool Create(CAstNode* pChild, CAstNode* pNext);
+	virtual CValue* Process();
 };
 

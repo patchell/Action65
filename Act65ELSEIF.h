@@ -6,6 +6,7 @@ class CAct65ELSEIF : public CAstNode
 public:
 	CAct65ELSEIF();
 	virtual ~CAct65ELSEIF();
-	bool Create();
+	bool Create(CAstNode* pChild, CAstNode* pNext);
+	virtual CValue* Process();
 };
 

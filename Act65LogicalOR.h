@@ -6,6 +6,7 @@ class CAct65LogicalOR : public CAstNode
 public:
 	CAct65LogicalOR();
 	virtual ~CAct65LogicalOR();
-	bool Create();
+	bool Create(CAstNode* pChild, CAstNode* pNext);
+	virtual CValue* Process();
 };
 

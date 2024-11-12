@@ -253,6 +253,7 @@ enum class Processor {
 #include "UnResolvedSymbol.h"
 #include "Bucket.h"
 #include "Symbol.h"
+#include "Value.h"
 
 #include "BinStackItem.h"
 #include "StackSymbolItem.h"

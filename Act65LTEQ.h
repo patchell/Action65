@@ -6,6 +6,7 @@ class CAct65LTEQ : public CAstNode
 public:
 	CAct65LTEQ();
 	virtual ~CAct65LTEQ();
-	bool Create();
+	bool Create(CAstNode* pChild, CAstNode* pNext);
+	virtual CValue* Process();
 };
 

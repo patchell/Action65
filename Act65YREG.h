@@ -6,6 +6,8 @@ class CAct65YREG : public CAstNode
 public:
 	CAct65YREG();
 	virtual ~CAct65YREG();
-	bool Create();
+	bool Create(CAstNode* pChild, CAstNode* pNext);
+	virtual CValue* Process();
 };
 
+	

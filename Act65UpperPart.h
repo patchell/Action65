@@ -6,6 +6,7 @@ class CAct65UpperPart : public CAstNode
 public:
 	CAct65UpperPart();
 	virtual ~CAct65UpperPart();
-	bool Create();
+	bool Create(CAstNode* pChild, CAstNode* pNext);
+	virtual CValue* Process();
 };
 

@@ -6,6 +6,7 @@ class CAct65PROCESSOR : public CAstNode
 public:
 	CAct65PROCESSOR();
 	virtual ~CAct65PROCESSOR();
-	bool Create();
+	bool Create(CAstNode* pChild, CAstNode* pNext);
+	virtual CValue* Process();
 };
 

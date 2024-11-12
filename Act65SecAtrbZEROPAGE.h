@@ -6,6 +6,7 @@ class CAct65SecAtrbZEROPAGE : public CAstNode
 public:
 	CAct65SecAtrbZEROPAGE();
 	virtual ~CAct65SecAtrbZEROPAGE();
-	bool Create();
+	bool Create(CAstNode* pChild, CAstNode* pNext);
+	virtual CValue* Process();
 };
 

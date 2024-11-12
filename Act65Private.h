@@ -6,6 +6,7 @@ class CAct65Private : public CAstNode
 public:
 	CAct65Private();
 	virtual ~CAct65Private();
-	bool Create();
+	bool Create(CAstNode* pChild, CAstNode* pNext);
+	virtual CValue* Process();
 };
 

@@ -6,6 +6,7 @@ class CAct65AssignOR : public CAstNode
 public:
 	CAct65AssignOR();
 	virtual ~CAct65AssignOR();
-	bool Create();
+	bool Create(CAstNode* pChild, CAstNode* pNext);
+	virtual CValue* Process();
 };
 

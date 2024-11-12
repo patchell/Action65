@@ -6,6 +6,7 @@ class CAct65LessTHAN : public CAstNode
 public:
 	CAct65LessTHAN();
 	virtual ~CAct65LessTHAN();
-	bool Create();
+	bool Create(CAstNode* pChild, CAstNode* pNext);
+	virtual CValue* Process();
 };
 

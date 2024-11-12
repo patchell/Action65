@@ -6,6 +6,7 @@ class CAct65CurrentLocation : public CAstNode
 public:
 	CAct65CurrentLocation();
 	virtual ~CAct65CurrentLocation();
-	bool Create();
+	bool Create(CAstNode* pChild, CAstNode* pNext);
+	virtual CValue* Process();
 };
 

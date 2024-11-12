@@ -8,7 +8,12 @@ CAct65DS::~CAct65DS()
 {
 }
 
-bool CAct65DS::Create()
+bool CAct65DS::Create(CAstNode* pChild, CAstNode* pNext)
 {
     return false;
+}
+
+CValue* CAct65DS::Process()
+{
+    return nullptr;
 }

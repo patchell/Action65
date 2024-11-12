@@ -6,6 +6,7 @@ class CAct65RETURN : public CAstNode
 public:
 	CAct65RETURN();
 	virtual ~CAct65RETURN();
-	bool Create();
+	bool Create(CAstNode* pChild, CAstNode* pNext);
+	virtual CValue* Process();
 };
 

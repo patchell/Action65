@@ -326,6 +326,7 @@ private:
 	void Absolute(CInstruction* pInst, int Address, AdrModeType ModeType);
 	bool CheckZeroPageAddress(int A);
 	//---------------- Utillity ----------------------
+	CStackNodeItem* CreateBinaryNode(CAstNode* pNew);
 	void PrintLookahead(
 		FILE* pLog,
 		Token token,

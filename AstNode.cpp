@@ -30,13 +30,15 @@ CAstNode::~CAstNode()
 
 bool CAstNode::CreateNode(
 	CAstNode* pChild,
-	CAstNode* pNext,
-	CAstNode* pPrev,
-	CAstNode* pStart,
-	CAstNode* pParent
+	CAstNode* pNext
 )
 {
-    return false;
+	SetChild(pChild);
+	SetNext(pNext);
+	GetChild()->SetParent(this);
+	GetNext()->SetPrev(this);
+	SetStart(Act()->GetParser()->GetAstTree()->GetRootNode());
+    return true;
 }
 
 bool CAstNode::CreateLeaf(CAstNode* pChild, CAstNode* pNext, CAstNode* pPrev, CAstNode* pStart, CAstNode* pParent)

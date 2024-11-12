@@ -6,6 +6,6 @@ class CAct65THEN : public CAstNode
 public:
 	CAct65THEN();
 	virtual ~CAct65THEN();
-	bool Create();
+	bool Create(CAstNode* pChild, CAstNode* pNext);
+	virtual CValue* Process();
 };
-

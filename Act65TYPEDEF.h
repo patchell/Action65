@@ -6,6 +6,7 @@ class CAct65tTYPEDEF : public CAstNode
 public:
 	CAct65tTYPEDEF();
 	virtual ~CAct65tTYPEDEF();
-	bool Create();
+	bool Create(CAstNode* pChild, CAstNode* pNext);
+	virtual CValue* Process();
 };
 

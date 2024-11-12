@@ -6,6 +6,7 @@ class CAct65RECTYPE : public CAstNode
 public:
 	CAct65RECTYPE();
 	virtual ~CAct65RECTYPE();
-	bool Create();
+	bool Create(CAstNode* pChild, CAstNode* pNext);
+	virtual CValue* Process();
 };
 
