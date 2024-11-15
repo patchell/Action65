@@ -2,6 +2,7 @@
 
 class CStack
 {
+	static inline char m_sExceptionString[MAX_STRING_LEN];
 	const char* m_pName;
 	CStackItem* m_pHead;
 	int m_ItemCount;
@@ -15,6 +16,14 @@ public:
 	virtual CStackItem* GetHead() { return m_pHead; }
 	virtual void SetHead(CStackItem* pSI) { m_pHead = pSI; }
 	virtual bool IsTopOfType(CStackItem::ItemType Type);
+	virtual void Print(
+		FILE* pLog, 
+		const char* pName, 
+		int Indent = 0,
+		CStackItem* pRV = 0
+	);
+	void StackException(const char* pDesc, Exception::ExceptionSubType SubType);
 	virtual const char* GetStackName() { return m_pName; }
+	int GetItemCount() { return m_ItemCount; }
 };
 

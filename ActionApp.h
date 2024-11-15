@@ -61,6 +61,8 @@ public:
 		unsigned StartAddress, 
 		unsigned Size
 	);
+	//-----------------------------------------
+	char* CreateIndentString(char* s, int n, int Indent, int c = ' ');
 };
 
 extern CActionApp* Act();

@@ -11,7 +11,7 @@ class CAstNode
 	CAstNode* m_pPrev;
 	CAstNode* m_pChild;
 	CAstNode* m_pParent;
-	CSymbol* m_pSym;
+	CBin* m_pSym;
 public:
 	CAstNode();
 	CAstNode(int NodeType);
@@ -20,19 +20,9 @@ public:
 		CAstNode* pChild,
 		CAstNode* pNext
 	);
-	bool CreateLeaf(
-		CAstNode* pChild,
-		CAstNode* pNext,
-		CAstNode* pPrev = 0,
-		CAstNode* pStart = 0,
-		CAstNode* pParent = 0
-	);
+	virtual CAstNode* Duplicate();
 	virtual CValue* Process() = 0;
-	virtual void Print(FILE* pOut, int Indent);
-	virtual void NodeProc();
-	virtual void TopDown();
-	virtual void BottomUp();
-	virtual void Sideways();
+	virtual void Print(FILE* pOut, int Indent, char* s);
 	// Getter/Setter Methods
 	CAstNode* GetStart() { return m_pStart; }
 	CAstNode* GetNext() { return m_pNext; }
@@ -53,4 +43,6 @@ public:
 	void SetNodeName(const char* pName) {
 		m_pNodeName = pName;
 	}
+	void SetSymbol(CBin* pSym) { m_pSym = pSym; }
+	CBin* GetSymbol() { return m_pSym; }
 };

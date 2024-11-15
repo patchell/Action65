@@ -527,13 +527,13 @@ int CLexer::KeyWord::FindInc(AdrModeType AdrMode)
 	if (IncValue < 0)
 	{
 		sprintf_s(
-			ExceptionThrown.GetErrorString(),
-			ExceptionThrown.GetMaxStringLen(),
+			ThrownException.GetErrorString(),
+			ThrownException.GetMaxStringLen(),
 			"Houston, we have a problem Line:%d",
 			Act()->GetParser()->GetLexer()->GetLineNumber()
 		);
-		ExceptionThrown.SetXCeptType(Exception::ExceptionType::INTERNAL_ERROR);
-		throw(ExceptionThrown);
+		ThrownException.SetXCeptType(Exception::ExceptionType::INTERNAL_ERROR);
+		throw(ThrownException);
 	}
 	return IncValue;
 }

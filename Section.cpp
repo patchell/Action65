@@ -39,19 +39,19 @@ void CSection::SetStartAddress(unsigned Start)
 	}
 	else
 	{
-		ExceptionThrown.SetXCeptType(Exception::ExceptionType::SECTION_ADDRES_RANGE_EXCEEDED);
-		ExceptionThrown.SetSymbol(this);
-		ExceptionThrown.SetGotToken(Token::NUMBER);
+		ThrownException.SetXCeptType(Exception::ExceptionType::SECTION_ADDRES_RANGE_EXCEEDED);
+		ThrownException.SetSymbol(this);
+		ThrownException.SetGotToken(Token::NUMBER);
 		sprintf_s(
-			ExceptionThrown.GetErrorString(),
-			ExceptionThrown.GetMaxStringLen(),
+			ThrownException.GetErrorString(),
+			ThrownException.GetMaxStringLen(),
 			"Section:%s  Start Address:$%04x  Size:$%04x Over By:$%04x\n",
 			GetName(),
 			Start,
 			m_Size,
 			Start + m_Size - 0x10000
 		);
-		throw(ExceptionThrown);
+		throw(ThrownException);
 	}
 }
 
@@ -71,19 +71,19 @@ void CSection::SetSectionSize(unsigned Size)
 	}
 	else
 	{
-		ExceptionThrown.SetXCeptType(Exception::ExceptionType::SECTION_ADDRES_RANGE_EXCEEDED);
-		ExceptionThrown.SetSymbol(this);
-		ExceptionThrown.SetGotToken(Token::NUMBER);
+		ThrownException.SetXCeptType(Exception::ExceptionType::SECTION_ADDRES_RANGE_EXCEEDED);
+		ThrownException.SetSymbol(this);
+		ThrownException.SetGotToken(Token::NUMBER);
 		sprintf_s(
-			ExceptionThrown.GetErrorString(),
-			ExceptionThrown.GetMaxStringLen(),
+			ThrownException.GetErrorString(),
+			ThrownException.GetMaxStringLen(),
 			"Section:%s  Start Address:$%04x  Size:$%04x Over By:$%04x\n",
 			GetName(),
 			m_StartAddress,
 			Size,
 			m_StartAddress + Size - 0x10000
 		);
-		throw(ExceptionThrown);
+		throw(ThrownException);
 	}
 }
 
@@ -97,19 +97,19 @@ void CSection::SetLocationCounter(unsigned short NewAddress)
 	}
 	else
 	{
-		ExceptionThrown.SetXCeptType(Exception::ExceptionType::SECTION_ADDRES_RANGE_EXCEEDED);
-		ExceptionThrown.SetSymbol(this);
-		ExceptionThrown.SetGotToken(Token::NUMBER);
+		ThrownException.SetXCeptType(Exception::ExceptionType::SECTION_ADDRES_RANGE_EXCEEDED);
+		ThrownException.SetSymbol(this);
+		ThrownException.SetGotToken(Token::NUMBER);
 		sprintf_s(
-			ExceptionThrown.GetErrorString(),
-			ExceptionThrown.GetMaxStringLen(),
+			ThrownException.GetErrorString(),
+			ThrownException.GetMaxStringLen(),
 			"Section:%s  Start Address:$%04x  Size:$%04x Over By:$%04x\n",
 			GetName(),
 			0,
 			m_Size,
 			NewAddress
 		);
-		throw(ExceptionThrown);
+		throw(ThrownException);
 	}
 }
 

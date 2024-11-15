@@ -178,6 +178,7 @@
     <ClCompile Include="Act65ForSTEP.cpp" />
     <ClCompile Include="Act65GreaterTHAN.cpp" />
     <ClCompile Include="Act65GTEQ.cpp" />
+    <ClCompile Include="Act65IDENT.cpp" />
     <ClCompile Include="Act65IF.cpp" />
     <ClCompile Include="Act65IFF.cpp" />
     <ClCompile Include="Act65INT.cpp" />
@@ -197,6 +198,7 @@
     <ClCompile Include="Act65PROC.cpp" />
     <ClCompile Include="Act65ProcCall.cpp" />
     <ClCompile Include="Act65PROCESSOR.cpp" />
+    <ClCompile Include="Act65PROCname.cpp" />
     <ClCompile Include="Act65ProcParams.cpp" />
     <ClCompile Include="Act65PUSH.cpp" />
     <ClCompile Include="Act65PushSource.cpp" />
@@ -246,6 +248,7 @@
     <ClCompile Include="Bucket.cpp" />
     <ClCompile Include="Instruction.cpp" />
     <ClCompile Include="Lexer.cpp" />
+    <ClCompile Include="LHead.cpp" />
     <ClCompile Include="NumberStackItem.cpp" />
     <ClCompile Include="ObjFormatCode.cpp" />
     <ClCompile Include="ObjFormatData.cpp" />
@@ -261,7 +264,6 @@
     <ClCompile Include="Section.cpp" />
     <ClCompile Include="Stack.cpp" />
     <ClCompile Include="StackItem.cpp" />
-    <ClCompile Include="StackNodeItem.cpp" />
     <ClCompile Include="StackSectionItem.cpp" />
     <ClCompile Include="StackSymbolItem.cpp" />
     <ClCompile Include="Symbol.cpp" />
@@ -320,6 +322,7 @@
     <ClInclude Include="Act65ForSTEP.h" />
     <ClInclude Include="Act65GreaterTHAN.h" />
     <ClInclude Include="Act65GTEQ.h" />
+    <ClInclude Include="Act65IDENT.h" />
     <ClInclude Include="Act65IF.h" />
     <ClInclude Include="Act65IFF.h" />
     <ClInclude Include="Act65INT.h" />
@@ -339,6 +342,7 @@
     <ClInclude Include="Act65PROC.h" />
     <ClInclude Include="Act65ProcCall.h" />
     <ClInclude Include="Act65PROCESSOR.h" />
+    <ClInclude Include="Act65PROCname.h" />
     <ClInclude Include="Act65ProcParams.h" />
     <ClInclude Include="Act65PUSH.h" />
     <ClInclude Include="Act65PushSource.h" />
@@ -385,6 +389,7 @@
     <ClInclude Include="Act65Module.h" />
     <ClInclude Include="DataSizeStackItem.h" />
     <ClInclude Include="Instruction.h" />
+    <ClInclude Include="LHead.h" />
     <ClInclude Include="NumberStackItem.h" />
     <ClInclude Include="ObjFormatCode.h" />
     <ClInclude Include="ObjFormatData.h" />
@@ -403,7 +408,6 @@
     <ClInclude Include="Section.h" />
     <ClInclude Include="Stack.h" />
     <ClInclude Include="StackItem.h" />
-    <ClInclude Include="StackNodeItem.h" />
     <ClInclude Include="StackSectionItem.h" />
     <ClInclude Include="StackSymbolItem.h" />
     <ClInclude Include="Symbol.h" />

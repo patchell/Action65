@@ -29,7 +29,7 @@ NONTERMINALS['Non Terminals'] { 'Action65','Modules','Modules_1','Vector','Vecto
 ,'PopDestList_1','PopDest','PopDest_1','Assignment','Assignment_1','RelOperation'
 ,'RelOperation_1','LogicalOR','LogicalOR_1','LogicalAND','LogicalAND_1','ArithExpr'
 ,'BitwiseOR_1','BitwiseAND','BitwiseAND_1','BitwiseXOR','BitwiseXOR_1','AddExpr','AddExpr_1'
-,'ShifExpr','ShiftExpr_1','MultExpr','MultExpr_1','Unary','Factor','MemContentsList'
+,'ShifExpr','ShiftExpr_1','MultExpr','MultExpr_1','Unary','Factor','Factor_1','MemContentsList'
 ,'MemContentsList_1','SysDecl','Define','DefList','DefList_1','Def','TypeDefDecl'
 ,'TypeDefDecl_1','RecDefIdent','RecDefField','FundDecl','FundModifier','FundModifier_1'
 ,'FundPtrModifier','FundPtrModifier_1','FundArrayModifier','IdentList','IdentList_1'
@@ -78,7 +78,7 @@ FIRST['Finish'] { }
 FIRST['STEPoption'] { 'e' }
 FIRST['IfStmt'] { }
 FIRST['IfStmt_1'] { 'e' }
-FIRST['If'] { 'FUNC_IDENT' }
+FIRST['If'] { }
 FIRST['ThenPart'] { }
 FIRST['ThenPart_1'] { }
 FIRST['ElseIfPart'] { 'e' }
@@ -130,26 +130,27 @@ FIRST['PopDest'] { }
 FIRST['PopDest_1'] { 'AREG','e' }
 FIRST['Assignment'] { }
 FIRST['Assignment_1'] { 'e' }
-FIRST['RelOperation'] { 'FUNC_IDENT' }
+FIRST['RelOperation'] { }
 FIRST['RelOperation_1'] { 'e' }
-FIRST['LogicalOR'] { 'FUNC_IDENT' }
+FIRST['LogicalOR'] { }
 FIRST['LogicalOR_1'] { 'e' }
-FIRST['LogicalAND'] { 'FUNC_IDENT' }
+FIRST['LogicalAND'] { }
 FIRST['LogicalAND_1'] { 'e' }
-FIRST['ArithExpr'] { 'FUNC_IDENT' }
+FIRST['ArithExpr'] { }
 FIRST['BitwiseOR_1'] { 'e' }
-FIRST['BitwiseAND'] { 'FUNC_IDENT' }
+FIRST['BitwiseAND'] { }
 FIRST['BitwiseAND_1'] { 'e' }
-FIRST['BitwiseXOR'] { 'FUNC_IDENT' }
+FIRST['BitwiseXOR'] { }
 FIRST['BitwiseXOR_1'] { 'e' }
-FIRST['AddExpr'] { 'FUNC_IDENT' }
+FIRST['AddExpr'] { }
 FIRST['AddExpr_1'] { 'e' }
-FIRST['ShifExpr'] { 'FUNC_IDENT' }
+FIRST['ShifExpr'] { }
 FIRST['ShiftExpr_1'] { 'e' }
-FIRST['MultExpr'] { 'FUNC_IDENT' }
+FIRST['MultExpr'] { }
 FIRST['MultExpr_1'] { 'e' }
-FIRST['Unary'] { 'FUNC_IDENT' }
-FIRST['Factor'] { 'FUNC_IDENT' }
+FIRST['Unary'] { }
+FIRST['Factor'] { }
+FIRST['Factor_1'] { 'FUNC_IDENT','e' }
 FIRST['MemContentsList'] { }
 FIRST['MemContentsList_1'] { 'e' }
 FIRST['SysDecl'] { }
@@ -347,6 +348,7 @@ FOLLOW['MultExpr'] { }
 FOLLOW['MultExpr_1'] { }
 FOLLOW['Unary'] { }
 FOLLOW['Factor'] { }
+FOLLOW['Factor_1'] { }
 FOLLOW['MemContentsList'] { }
 FOLLOW['MemContentsList_1'] { }
 FOLLOW['SysDecl'] { '$' }
@@ -383,9 +385,9 @@ FOLLOW['LocArrayModifier_1'] { }
 FOLLOW['CompConst'] { }
 FOLLOW['CompConst_1'] { }
 FOLLOW['BaseCompConst'] { }
-FOLLOW['MemContents'] { 'AREG' }
-FOLLOW['Constant'] { 'AREG' }
-FOLLOW['MemContents_1'] { 'AREG' }
+FOLLOW['MemContents'] { 'AREG','FUNC_IDENT' }
+FOLLOW['Constant'] { 'AREG','FUNC_IDENT' }
+FOLLOW['MemContents_1'] { 'AREG','FUNC_IDENT' }
 FOLLOW['MemContentsType'] { }
 FOLLOW['AsmStmt'] { }
 FOLLOW['Processor_1'] { }
@@ -442,5 +444,5 @@ FOLLOW['AsmConstAddSub'] { }
 FOLLOW['AsmConstAddSub_1'] { }
 FOLLOW['BaseAsmConstant'] { }
 ---------------- Create Parse Table --------------
-Table Entries = 156
+Table Entries = 149
 ------------ Check For Conflicts-------------

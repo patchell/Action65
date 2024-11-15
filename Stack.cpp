@@ -4,6 +4,7 @@ CStack::CStack()
 {
 	m_pHead = 0;
 	m_ItemCount = 0;
+	m_pName = 0;
 }
 
 CStack::~CStack()
@@ -17,11 +18,6 @@ CStack::~CStack()
 	while (m_pHead)
 	{
 		pSI = m_pHead->GetNext();
-//		fprintf(
-//			stderr,
-//			"Delete Stack Item %s\n", 
-//			m_pHead->GetStackItemName()
-//		);
 		delete m_pHead;
 		m_pHead = pSI;
 	}
@@ -40,49 +36,57 @@ void CStack::Push(CStackItem* pItem)
 		++m_ItemCount;
 		pItem->SetNext(GetHead());
 		SetHead(pItem);
-//		fprintf(Act()->LogFile(),
-//			"Pushed a %s  Items:%d\n",
-//			CStackItem::LookupItemName(pItem->GetStackItemType()),
-//			m_ItemCount
-//		);
 		if (m_ItemCount > 100)
 			printf("Is Stack Overflowing? %d\n", m_ItemCount);
+		Print(Act()->LogFile(), "PUSH", 4, pItem);
 	}
-//	else
-//		printf("Attempt to push Nothing on Stack\n");
 }
 
 CStackItem* CStack::Pop(CStackItem::ItemType Type)
 {
 	CStackItem* pRV = 0;
 
-	--m_ItemCount;
-	if (GetHead())
+	if (m_ItemCount)
 	{
-		pRV = GetHead();
-		SetHead(GetHead()->GetNext());
+		--m_ItemCount;
+		if (GetHead())
+		{
+			if (IsTopOfType(Type))
+			{
+				pRV = GetHead();
+				SetHead(GetHead()->GetNext());
+				Print(Act()->LogFile(), "POP", 4, pRV);
+			}
+			else
+			{
+				sprintf_s(
+					m_sExceptionString,
+					MAX_STRING_LEN,
+					"Got Stack Item Type:%s\nWanted Stack Item Type:%s\n",
+					GetHead()->LookupItemName(GetHead()->GetStackItemType()),
+					GetHead()->LookupItemName(Type)
+				);
+				StackException(
+					m_sExceptionString,
+					Exception::ExceptionSubType::STACK_ITEM_MISMATCH
+				);
+			}
+		}
+		else
+		{
+			StackException(
+				"Stack Emptyh:Count wrong", 
+				Exception::ExceptionSubType::STACK_UNEXPECTED_NULL
+			);
+		}
 	}
-//	fprintf(Act()->LogFile(),
-//		"Popped a %s, Wanted a %s  Items:%d Line:%d\n",
-//		pRV->GetStackItemName(),
-//		CStackItem::LookupItemName(Type),
-//		m_ItemCount,
-//		Act()->GetParser()->GetLexer()->GetLine()
-//	);
-	
-	if (!pRV->Verify(Type))
+	else
 	{
-		ExceptionThrown.SetXCeptType(Exception::INTERNAL_ERROR);
-		sprintf_s(
-			ExceptionThrown.GetErrorString(),
-			ExceptionThrown.GetMaxStringLen(),
-			"Value Stack:Pop::Got %s Expected %s--Line %d Col %d",
-			CStackItem::LookupItemName(pRV->GetStackItemType()),
-			CStackItem::LookupItemName(Type),
-			Act()->GetParser()->GetLexer()->GetLineNumber(),
-			Act()->GetParser()->GetLexer()->GetColunm()
+		StackException(
+			"Cannot Pop an Empty Stack",
+			Exception::ExceptionSubType::STACK_EMPTY
 		);
-		throw(ExceptionThrown);
+
 	}
 	return pRV;
 }
@@ -108,17 +112,18 @@ CStackItem* CStack::Look(int Depth, CStackItem::ItemType Type)
 		}
 		if (!pRV->Verify(Type))
 		{
-			ExceptionThrown.SetXCeptType(Exception::INTERNAL_ERROR);
+			ThrownException.SetXCeptType(Exception::ExceptionType::INTERNAL_ERROR);
 			sprintf_s(
-				ExceptionThrown.GetErrorString(),
-				ExceptionThrown.GetMaxStringLen(),
-				"Value Stack:Look:Got %s Expected %s--Line %d Col %d",
+				ThrownException.GetErrorString(),
+				ThrownException.GetMaxStringLen(),
+				"Look:%s Stack:Look:Got %s Expected %s--Line %d Col %d",
+				GetStackName(),
 				CStackItem::LookupItemName(pRV->GetStackItemType()),
 				CStackItem::LookupItemName(Type),
 				Act()->GetParser()->GetLexer()->GetLineNumber(),
 				Act()->GetParser()->GetLexer()->GetColunm()
 			);
-			throw(ExceptionThrown);
+			throw(ThrownException);
 		}
 	}
 	return pRV;
@@ -142,4 +147,53 @@ bool CStack::IsTopOfType(CStackItem::ItemType Type)
 		);
 	}
     return rV;
+}
+
+void CStack::Print(
+	FILE* pLog,  
+	const char* pOperation,
+	int Indent,
+	CStackItem* pRV
+)
+{
+	char* IndentString = new char[256];
+	const char* pItemTypeName;
+
+	Act()->CreateIndentString(IndentString, 256, Indent);
+	if (pLog)
+	{
+		if (pRV)
+		{
+			pItemTypeName =pRV->LookupItemName(pRV->GetStackItemType());
+		}
+		else
+			pItemTypeName = "";
+		fprintf(pLog, "\n%s------------------\n", IndentString);
+		fprintf(pLog, 
+			"%sStack:%s:%s:TYPE:%s Line:%d\n", 
+			IndentString,
+			GetStackName(), 
+			pOperation,
+			pItemTypeName,
+			Act()->GetParser()->GetLexer()->GetLineNumber()
+		);
+		fprintf(pLog, "%sItemCount:%d\n", IndentString,GetItemCount());
+		fprintf(pLog, "%s------------------\n\n", IndentString);
+	}
+	delete[]IndentString;
+}
+
+void CStack::StackException(const char* pDesc, Exception::ExceptionSubType SubType)
+{
+	ThrownException.SetXCeptType(Exception::ExceptionType::STACK);
+	sprintf_s(
+		ThrownException.GetErrorString(),
+		ThrownException.GetMaxStringLen(),
+		"Stack:%s::%s\n--Line: %d Col: %d",
+		GetStackName(),
+		pDesc,
+		Act()->GetParser()->GetLexer()->GetLineNumber(),
+		Act()->GetParser()->GetLexer()->GetColunm()
+	);
+	throw(ThrownException);
 }

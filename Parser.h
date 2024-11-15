@@ -47,8 +47,6 @@ private:
 	Processor m_Processor;
 	int m_Recursion;
 	int m_Bump;
-	CStack m_ASTnodeStack;
-	CStack m_ValueStack;
 	CActionAstTree m_AstTree;;
 public:
 	CParser();
@@ -60,144 +58,144 @@ public:
 	CSection* GetCurrentSection() {
 		return m_pCurrentSection;
 	}
-	CStack* GetAstNodeStack() { return &m_ASTnodeStack; }
-	CStack* GetValueStack() { return &m_ValueStack; }
 	CLexer* GetLexer() { return m_pLex; }
 	CActionAstTree* GetAstTree() { return &m_AstTree; }
 	FILE* LogFile();
-	Token Run();
+	CLHead Run();
 	//---------------------------------
-	Token Expect(Token Lookahead, Token Expected);
-	bool Accept(Token Lookahead, Token Expected);
+	Token Expect(Token LookaheadToken, Token Expected);
+	bool Accept(Token LookaheadToken, Token Expected);
 private:
-	void PrepareInstruction(CInstruction** ppInst, Token Token);
+	void PrepareInstruction(CInstruction** ppInst, Token Op);
 	//---------------------------------
 	// Parsing Methods
 	//---------------------------------
 	// Program Structure
 	//---------------------------------
-	Token Action65(Token LookaHeadToken);
-	Token Modules(Token LookaHeadToken);
-	Token Vector(Token LookaHeadToken);
-	Token VectorAddress(Token LookaHeadToken);
-	Token PROCroutine(Token LookaHeadToken);
-	Token ProcDef(Token LookaHeadToken);
-	Token FuncDef(Token LookaHeadToken);
-	Token OptInit(Token LookaHeadToken);
-	Token ProcBody(Token LookaHeadToken);
-	Token FuncBody(Token LookaHeadToken);
+	CLHead Action65(CLHead LookaHeadToken);
+	CLHead Modules(CLHead LookaHeadToken);
+	CLHead Vector(CLHead LookaHeadToken);
+	CLHead VectorAddress(CLHead LookaHeadToken);
+	CLHead PROCroutine(CLHead LookaHeadToken);
+	CLHead ProcDef(CLHead LookaHeadToken);
+	CLHead FuncDef(CLHead LookaHeadToken);
+	CLHead OptInit(CLHead LookaHeadToken);
+	CLHead ProcBody(CLHead LookaHeadToken);
+	CLHead FuncBody(CLHead LookaHeadToken);
 	//------------------------------------------
 	// Statements
 	//------------------------------------------
-	Token Statements(Token LookaHeadToken);
-	Token ProcParams(Token LookaHeadToken);
+	CLHead Statements(CLHead LookaHeadToken);
+	CLHead ProcParams(CLHead LookaHeadToken);
 
-	Token ForStmt(Token LookaHeadToken);
-	Token Iterator(Token LookaHeadToken);
-	Token Start(Token LookaHeadToken);
-	Token Finish(Token LookaHeadToken);
-	Token STEPoption(Token LookaHeadToken);
+	CLHead ForStmt(CLHead LookaHeadToken);
+	CLHead Iterator(CLHead LookaHeadToken);
+	CLHead Start(CLHead LookaHeadToken);
+	CLHead Finish(CLHead LookaHeadToken);
+	CLHead STEPoption(CLHead LookaHeadToken);
 
-	Token IfStmt(Token LookaHeadToken);
-	Token If(Token LookaHeadToken);
-	Token ThenPart(Token LookaHeadToken);
-	Token ElseIfPart(Token LookaHeadToken);
-	Token ElsePart(Token LookaHeadToken);
+	CLHead IfStmt(CLHead LookaHeadToken);
+	CLHead If(CLHead LookaHeadToken);
+	CLHead ThenPart(CLHead LookaHeadToken);
+	CLHead ElseIfPart(CLHead LookaHeadToken);
+	CLHead ElsePart(CLHead LookaHeadToken);
 
-	Token WhileStmt(Token LookaHeadToken);
+	CLHead WhileStmt(CLHead LookaHeadToken);
 
-	Token DoStmt(Token LookaHeadToken);
+	CLHead DoStmt(CLHead LookaHeadToken);
 	
-	Token EXITstmt(Token LookaHeadToken);
+	CLHead EXITstmt(CLHead LookaHeadToken);
 	
-	Token RetStmt(Token LookaHeadToken);
-	Token OptReturnValue(Token LookaHeadToken);
+	CLHead RetStmt(CLHead LookaHeadToken);
+	CLHead OptReturnValue(CLHead LookaHeadToken);
 
-	Token InlineAssembly(Token LookaHeadToken);
-	Token InlineAssBlock(Token LookaHeadToken);
+	CLHead InlineAssembly(CLHead LookaHeadToken);
+	CLHead InlineAssBlock(CLHead LookaHeadToken);
 
-	Token CodeBlock(Token LookaHeadToken);
+	CLHead CodeBlock(CLHead LookaHeadToken);
 
-	Token UntillStmt(Token LookaHeadToken);
+	CLHead UntillStmt(CLHead LookaHeadToken);
 
-	Token Assignment(Token LookaHeadToken);
+	CLHead Assignment(CLHead LookaHeadToken);
 	//--------------------------------------
 	// Logical Expressions
 	//--------------------------------------
-	Token RelOperation(Token LookaHeadToken);
-	Token LogicalOR(Token LookaHeadToken);
-	Token LogicalAND(Token LookaHeadToken);
+	CLHead RelOperation(CLHead LookaHeadToken);
+	CLHead LogicalOR(CLHead LookaHeadToken);
+	CLHead LogicalAND(CLHead LookaHeadToken);
 	//--------------------------------------
 	// Arithmetic Expressions
 	//--------------------------------------
-	Token ArithExpr(Token LookaHeadToken);	//bitwise OR
-	Token BitwiseAND(Token LookaHeadToken);
-	Token BitwiseXOR(Token LookaHeadToken);
-	Token AddExpr(Token LookaHeadToken);
-	Token ShifExpr(Token LookaHeadToken);
-	Token MultExpr(Token LookaHeadToken);
-	Token Unary(Token LookaHeadToken);
-	Token Factor(Token LookaHeadToken);
-	Token MemContentsList(Token LookaHeadToken);
+	CLHead ArithExpr(CLHead LookaHeadToken);	//bitwise OR
+	CLHead BitwiseAND(CLHead LookaHeadToken);
+	CLHead BitwiseXOR(CLHead LookaHeadToken);
+	CLHead AddExpr(CLHead LookaHeadToken);
+	CLHead ShifExpr(CLHead LookaHeadToken);
+	CLHead MultExpr(CLHead LookaHeadToken);
+	CLHead Unary(CLHead LookaHeadToken);
+	CLHead Factor(CLHead LookaHeadToken);
+	CLHead MemContentsList(CLHead LookaHeadToken);
 
 	//-------------------------------------------
 	// Declarations
 	//-------------------------------------------
-	Token SysDecl(Token LookaHeadToken);
-	Token DefList(Token LookaHeadToken);
-	Token Def(Token LookaHeadToken);
+	CLHead SysDecl(CLHead LookaHeadToken);
+	CLHead DefList(CLHead LookaHeadToken);
+	CLHead Def(CLHead LookaHeadToken);
 	//--------------------------------------
 	// TYPEdef Definition
 	//--------------------------------------
-	Token TypeDefDecl(Token LookaHeadToken);
-	Token RecDefIdent(Token LookaHeadToken);
-	Token RecDefVarDecls(Token LookaHeadToken);
-	Token RecDefVarDecl(Token LookaHeadToken);
-	Token RecDefModifier(Token LookaHeadToken);
-	Token RecDefVarList(Token LookaHeadToken);
-	Token RecDefPointer(Token LookaHeadToken);
-	Token RecDefArray(Token LookaHeadToken);
-	Token RecDefIdentList(Token LookaHeadToken);
+	CLHead TypeDefDecl(CLHead LookaHeadToken);
+	CLHead RecDefIdent(CLHead LookaHeadToken);
+	CLHead RecDefVarDecls(CLHead LookaHeadToken);
+	CLHead RecDefVarDecl(CLHead LookaHeadToken);
+	CLHead RecDefModifier(CLHead LookaHeadToken);
+	CLHead RecDefVarList(CLHead LookaHeadToken);
+	CLHead RecDefPointer(CLHead LookaHeadToken);
+	CLHead RecDefArray(CLHead LookaHeadToken);
+	CLHead RecDefIdentList(CLHead LookaHeadToken);
 	//----------------------------------------
 	// Fundamental Declarations
 	//----------------------------------------
-	Token FundDecl(Token LookaHeadToken);
-	Token FundModifier(Token LookaHeadToken);
-	Token FundPtrModifier(Token LookaHeadToken);
-	Token FundArrayModifier(Token LookaHeadToken);
+	CLHead FundDecl(CLHead LookaHeadToken);
+	CLHead FundModifier(CLHead LookaHeadToken);
+	CLHead FundPtrModifier(CLHead LookaHeadToken);
+	CLHead FundArrayModifier(CLHead LookaHeadToken);
 	//----------------------------------
 	// Identifiers
 	//----------------------------------
-	Token IdentList(Token LookaHeadToken);
-	Token Ident(Token LookaHeadToken);
-	Token Options(Token LookaHeadToken);
-	Token OptArrayInit(Token LookaHeadToken);
-	Token OptArrayDimension(Token LookaHeadToken);
+	CLHead IdentList(CLHead LookaHeadToken);
+	CLHead Ident(CLHead LookaHeadToken);
+	CLHead Options(CLHead LookaHeadToken);
+	CLHead OptArrayInit(CLHead LookaHeadToken);
+	CLHead OptArrayDimension(CLHead LookaHeadToken);
 	//-------------------------------------------
 	// Parameter Declarations
 	//-------------------------------------------
-	Token ParamList(Token LookaHeadToken);
-	Token Param(Token LookaHeadToken);
-	Token ParamModifier(Token LookaHeadToken);
+	CLHead ParamList(CLHead LookaHeadToken);
+	CLHead Param(CLHead LookaHeadToken);
+	CLHead ParamModifier(CLHead LookaHeadToken);
 	//-----------------------------------------------
 	// Local Variableas
 	//-----------------------------------------------
-	Token LocalDecls(Token LookaHeadToken);
-	Token LocalModifier(Token LookaHeadToken);
-	Token LocArrayModifier(Token LookaHeadToken);
+	CLHead LocalDecls(CLHead LookaHeadToken);
+	CLHead LocalModifier(CLHead LookaHeadToken);
+	CLHead LocArrayModifier(CLHead LookaHeadToken);
 	//-------------------------------
 	// Compiler Constants
 	//-------------------------------
-	Token CompConstList(Token LookaHeadToken);
-	Token CompConst(Token LookaHeadToken);
-	Token BaseCompConst(Token LookaHeadToken);
+	CLHead CompConstList(CLHead LookaHeadToken);
+	CLHead CompConst(CLHead LookaHeadToken);
+	CLHead BaseCompConst(CLHead LookaHeadToken);
 	//----------------------------------
 	//Variable References
 	//Memory References
 	//----------------------------------
-	Token MemContents(Token LookaHeadToken);
-	Token MemContentsType(Token LookaHeadToken);
-	Token ArrayIndex(Token LookaHeadToken);
+	CLHead MemContents(CLHead LookaHeadToken);
+	CLHead MemContents_1(CLHead LookaHeadToken);
+	CLHead Constant(CLHead LookaHeadToken);
+	CLHead MemContentsType(CLHead LookaHeadToken);
+	CLHead ArrayIndex(CLHead LookaHeadToken);
 	//****************************************
 	//----------------------------------------
 	//  Inline assembly code
@@ -205,9 +203,9 @@ private:
 	//	Statements
 	//----------------------------------------
 	//****************************************
-	Token AsmStmt(Token LookaHeadToken);
-	Token Processor_1(Token LookaHeadToken);
-	Token ProcessorType(Token LookaHeadToken);
+	CLHead AsmStmt(CLHead LookaHeadToken);
+	CLHead Processor_1(CLHead LookaHeadToken);
+	CLHead ProcessorType(CLHead LookaHeadToken);
 	//-----------------------------------------
 	// Code
 	//		These statements are what actually
@@ -218,118 +216,117 @@ private:
 	//-----------------------------------------
 	// SECITON
 	//-----------------------------------------
-	Token Section(Token LookaHeadToken);
-	Token Section_1(Token LookaHeadToken);
-	Token Section_2(Token LookaHeadToken);
-	Token SectionDef(Token LookaHeadToken);
-	Token SectionDef_1(Token LookaHeadToken);
-	Token SectionAttributes(Token LookaHeadToken);
-	Token SectionAtribute(Token LookaHeadToken);
-	Token Modes(Token LookaHeadToken);
-	Token TrueFalse(Token LookaHeadToken);
+	CLHead Section(CLHead LookaHeadToken);
+	CLHead Section_1(CLHead LookaHeadToken);
+	CLHead Section_2(CLHead LookaHeadToken);
+	CLHead SectionDef(CLHead LookaHeadToken);
+	CLHead SectionDef_1(CLHead LookaHeadToken);
+	CLHead SectionAttributes(CLHead LookaHeadToken);
+	CLHead SectionAtribute(CLHead LookaHeadToken);
+	CLHead Modes(CLHead LookaHeadToken);
+	CLHead TrueFalse(CLHead LookaHeadToken);
 	//-------------------------------------
 	// Org  Sets the location counter
 	// for the current section
 	//-------------------------------------
-	Token Org(Token LookaHeadToken);
+	CLHead Org(CLHead LookaHeadToken);
 	//-------------------------------------
 	// Define Memeory
 	//-------------------------------------
-	Token DefineMemory(Token LookaHeadToken);
+	CLHead DefineMemory(CLHead LookaHeadToken);
 	//-------------------------------------
 	// DefineStorage
 	//-------------------------------------
-	Token DefineStorage(Token LookaHeadToken);
+	CLHead DefineStorage(CLHead LookaHeadToken);
 	//-------------------------------------
 	// Proceedure
 	//-------------------------------------
-	Token Proceedure(Token LookaHeadToken);
+	CLHead Proceedure(CLHead LookaHeadToken);
 	//--------------------------------------
 	// Opcodes
 	//--------------------------------------
-	Token Instruction(Token LookaHeadToken);
+	CLHead Instruction(CLHead LookaHeadToken);
 	//---------------------------------------------
 	// Lables
 	//---------------------------------------------
-	Token Labels(Token LookaHeadToken);
-	Token LocalGlobal(Token LookaHeadToken);
+	CLHead Labels(CLHead LookaHeadToken);
+	CLHead LocalGlobal(CLHead LookaHeadToken);
 	//-----------------------------------
 	//ALU Addressing Mode
 	//-----------------------------------
-	Token AluAdrModes(Token LookaHeadToken);
-	Token Indirect(Token LookaHeadToken);
+	CLHead AluAdrModes(CLHead LookaHeadToken);
+	CLHead Indirect(CLHead LookaHeadToken);
 	//---------------------------------------------
 	// STA addressing mode
 	//---------------------------------------------
-	Token StaAddressingModes(Token LookaHeadToken);
+	CLHead StaAddressingModes(CLHead LookaHeadToken);
 	//-----------------------------------------
 	// ASL LSR ROR and ROL addressing modes
 	//-----------------------------------------
-	Token ShiftAddressingModes(Token LookaHeadToken);
+	CLHead ShiftAddressingModes(CLHead LookaHeadToken);
 	//------------------------------------------
 	// Branch Instructions Addressing Mode
 	//------------------------------------------
-	Token RelAddressingMode(Token LookaHeadToken);
+	CLHead RelAddressingMode(CLHead LookaHeadToken);
 	//------------------------------------------
 	// BIT Instructions Addressing Mode
 	//------------------------------------------
-	Token BitAddressModes(Token LookaHeadToken);
+	CLHead BitAddressModes(CLHead LookaHeadToken);
 	//------------------------------------------
 	// INC DEC Instructions Addressing Mode
 	//------------------------------------------
-	Token IncAddressingMOdes(Token LookaHeadToken);
+	CLHead IncAddressingMOdes(CLHead LookaHeadToken);
 	//------------------------------------------
 	// JMP Instructions Addressing Mode
 	//------------------------------------------
-	Token JumpAddressingModes(Token LookaHeadToken);
+	CLHead JumpAddressingModes(CLHead LookaHeadToken);
 	//------------------------------------------
 	// JSR Instructions Addressing Mode
 	//------------------------------------------
-	Token CallAddressingMode(Token LookaHeadToken);
+	CLHead CallAddressingMode(CLHead LookaHeadToken);
 	//------------------------------------------
 	// LDX Instructions Addressing Mode
 	//------------------------------------------
-	Token LdxAddressingMode(Token LookaHeadToken);
+	CLHead LdxAddressingMode(CLHead LookaHeadToken);
 	//------------------------------------------
 	// CPX & CPY Instructions Addressing Mode
 	//------------------------------------------
-	Token CPX_CPY_AddressingMode(Token LookaHeadToken);
+	CLHead CPX_CPY_AddressingMode(CLHead LookaHeadToken);
 	//------------------------------------------
 	// STX Instructions Addressing Mode
 	//------------------------------------------
-	Token StxAddressingMode(Token LookaHeadToken);
+	CLHead StxAddressingMode(CLHead LookaHeadToken);
 	//------------------------------------------
 	// LDY Instructions Addressing Mode
 	//------------------------------------------
-	Token LdyAddressingMode(Token LookaHeadToken);
+	CLHead LdyAddressingMode(CLHead LookaHeadToken);
 	//------------------------------------------
 	// STY Instructions Addressing Mode
 	//------------------------------------------
-	Token StyAddressingMode(Token LookaHeadToken);
+	CLHead StyAddressingMode(CLHead LookaHeadToken);
 	//---------------------------------------------
 	//	Optional Index Registers
 	//---------------------------------------------
-	Token OptIndexReg(Token LookaHeadToken);
-	Token OptIndexReg_1(Token LookaHeadToken);
-	Token OptXReg(Token LookaHeadToken);
-	Token OptYReg(Token LookaHeadToken);
+	CLHead OptIndexReg(CLHead LookaHeadToken);
+	CLHead OptIndexReg_1(CLHead LookaHeadToken);
+	CLHead OptXReg(CLHead LookaHeadToken);
+	CLHead OptYReg(CLHead LookaHeadToken);
 	//---------------------------------------
 	// Assembler Constants
 	//---------------------------------------
-	Token AsmConstList(Token LookaHeadToken);
-	Token AsmConstList_1(Token LookaHeadToken);
-	Token AsmConstant(Token LookaHeadToken);
-	Token AsmConstAddSub(Token LookaHeadToken);
-	Token BaseAsmConstant(Token LookaHeadToken);
-	Token Immediate(Token LookaHeadToken, CInstruction* pInst);
+	CLHead AsmConstList(CLHead LookaHeadToken);
+	CLHead AsmConstList_1(CLHead LookaHeadToken);
+	CLHead AsmConstant(CLHead LookaHeadToken);
+	CLHead AsmConstAddSub(CLHead LookaHeadToken);
+	CLHead BaseAsmConstant(CLHead LookaHeadToken);
+	CLHead Immediate(CLHead LookaHeadToken, CInstruction* pInst);
 	void PageZero(CInstruction* pInst, int Address, AdrModeType ModeType);
 	void Absolute(CInstruction* pInst, int Address, AdrModeType ModeType);
 	bool CheckZeroPageAddress(int A);
 	//---------------- Utillity ----------------------
-	CStackNodeItem* CreateBinaryNode(CAstNode* pNew);
 	void PrintLookahead(
 		FILE* pLog,
-		Token token,
+		CLHead token,
 		const char* pS,
 		int RecursionLevel,
 		int Bump = 0

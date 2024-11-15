@@ -27,24 +27,25 @@ bool CStackItem::Verify(CStackItem::ItemType Type)
 	return rV;
 }
 
-const char* CStackItem::LookupItemName(ItemType Type)
+const char* CStackItem::LookupItemName(CStackItem::ItemType Type)
 {
+	return CStackItem::ItemTypeLUT::FindItemName( Type);
+}
+
+
+const char* CStackItem::ItemTypeLUT::FindItemName(CStackItem::ItemType Type)
+{
+	const char* pName = 0;
 	int i;
-	const char* s = NULL;
 	bool Loop = true;
 
-	for (i = 0; TypeString[i].m_pName && Loop; ++i)
+	for (i = 0;Loop && TypeString[i].m_pName; ++i)
 	{
 		if (Type == TypeString[i].m_Type)
 		{
+			pName = TypeString[i].m_pName;
 			Loop = false;
-			s = TypeString[i].m_pName;
 		}
 	}
-    return s;
-}
-
-const char* CStackItem::GetStackItemName()
-{
-	return LookupItemName(GetStackItemType());
+    return pName;
 }

@@ -3,7 +3,7 @@
 class CStackItem
 {
 public:
-	enum ItemType {
+	enum class ItemType {
 		NONE,
 		SYMBOL,
 		SECTION,
@@ -27,6 +27,7 @@ public:
 			m_Type = T;
 			m_pName = s;
 		}
+		static const char* FindItemName(CStackItem::ItemType Type);
 	};
 private:
 	inline static ItemTypeLUT TypeString[] = {
@@ -53,7 +54,6 @@ public:
 	CStackItem* GetNext() { return m_pNext; }
 	ItemType GetStackItemType() { return m_Type; }
 	bool Verify(CStackItem::ItemType Type);
-	static const char* LookupItemName(ItemType Type);
-	const char* GetStackItemName();
+	static const char* LookupItemName(CStackItem::ItemType Type);
 };
 

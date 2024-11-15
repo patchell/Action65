@@ -10,47 +10,7 @@
 
 constexpr auto MAX_SYMBOL_NAME_LEN = 256;
 constexpr auto MAX_NAME_LEN = 64;
-
-
-
-enum class IdentType {
-	NEW_SYMBOL,
-	LABEL,
-	PROC,
-	FUNC,
-	FUNC_BYTE,
-	FUNC_CHAR,
-	FUNC_CARD,
-	FUNC_INT,
-	FUNC_POINTER_BYTE,
-	FUNC_POINTER_CHAR,
-	FUNC_POINTER_CARD,
-	FUNC_POINTER_INT,
-	MEM_GLOBAL_BYTE,
-	MEM_GLOBAL_CHAR,
-	MEM_GLOBAL_CARD,
-	MEM_GLOBAL_INT,
-	MEM_GLOBAL_POINTER_BYTE,
-	MEM_GLOBAL_POINTER_CHAR,
-	MEM_GLOBAL_POINTER_CARD,
-	MEM_GLOBAL_POINTER_INT,
-	MEM_PARAM_BYTE,
-	MEM_PARAM_CHAR,
-	MEM_PARAM_CARD,
-	MEM_PARAM_INT,
-	MEM_PARAM_POINTER_BYTE,
-	MEM_PARAM_POINTER_CHAR,
-	MEM_PARAM_POINTER_CARD,
-	MEM_PARAM_POINTER_INT,
-	MEM_LOCAL_BYTE,
-	MEM_LOCAL_CHAR,
-	MEM_LOCAL_CARD,
-	MEM_LOCAL_INT,
-	MEM_LOCAL_POINTER_BYTE,
-	MEM_LOCAL_POINTER_CHAR,
-	MEM_LOCAL_POINTER_CARD,
-	MEM_LOCAL_POINTER_INT
-};
+constexpr auto MAX_STRING_LEN = 512;
 
 enum  class Token {
 	ENDOFFILE = -1,
@@ -207,6 +167,47 @@ enum  class Token {
 	ENDOFTOKENS = 0
 };
 
+
+
+enum class IdentType {
+	NEW_SYMBOL,
+	LABEL,
+	PROC,
+	FUNC,
+	FUNC_BYTE,
+	FUNC_CHAR,
+	FUNC_CARD,
+	FUNC_INT,
+	FUNC_POINTER_BYTE,
+	FUNC_POINTER_CHAR,
+	FUNC_POINTER_CARD,
+	FUNC_POINTER_INT,
+	MEM_GLOBAL_BYTE,
+	MEM_GLOBAL_CHAR,
+	MEM_GLOBAL_CARD,
+	MEM_GLOBAL_INT,
+	MEM_GLOBAL_POINTER_BYTE,
+	MEM_GLOBAL_POINTER_CHAR,
+	MEM_GLOBAL_POINTER_CARD,
+	MEM_GLOBAL_POINTER_INT,
+	MEM_PARAM_BYTE,
+	MEM_PARAM_CHAR,
+	MEM_PARAM_CARD,
+	MEM_PARAM_INT,
+	MEM_PARAM_POINTER_BYTE,
+	MEM_PARAM_POINTER_CHAR,
+	MEM_PARAM_POINTER_CARD,
+	MEM_PARAM_POINTER_INT,
+	MEM_LOCAL_BYTE,
+	MEM_LOCAL_CHAR,
+	MEM_LOCAL_CARD,
+	MEM_LOCAL_INT,
+	MEM_LOCAL_POINTER_BYTE,
+	MEM_LOCAL_POINTER_CHAR,
+	MEM_LOCAL_POINTER_CARD,
+	MEM_LOCAL_POINTER_INT
+};
+
 enum class AdrModeType {
 	NA,
 	IMPLIED,
@@ -255,6 +256,126 @@ enum class Processor {
 #include "Symbol.h"
 #include "Value.h"
 
+constexpr auto MAX_EXCEPTION_STRING_LEN = 512;
+
+
+class Exception {
+public:
+	enum class ExceptionType {
+		WHOKNOWS,
+		UNEXPECTED_TOKEN,
+		SECTION_ADDRES_RANGE_EXCEEDED,
+		SECTION_UNDEFINED,
+		NOSECTION_DEFINED,
+		LEXER_STUMPTED,
+		ILLEGAL_ADDRESSING_MODE,
+		TOKEN_OUT_OF_PLACE,
+		VALUE_EXCEEDS_RANGE,
+		STACK,
+		INTERNAL_ERROR
+	};
+	enum class ExceptionSubType {
+		WHOKNOWS,
+		//--------------------
+		// Stack Exceptions Subtypes
+		//--------------------
+		STACK_UNEXPECTED_NULL,
+		STACK_EMPTY,
+		STACK_ITEM_MISMATCH
+	};
+private:
+	ExceptionType m_Type;
+	ExceptionSubType m_SubType;		
+	const char* m_Name;
+	Token badToken;
+	CBin* m_pSymbol;
+	char ErrorString[MAX_EXCEPTION_STRING_LEN];
+	inline static int MaxStringLen = MAX_EXCEPTION_STRING_LEN;
+	//------------------------------------------------
+	struct ExceptionSubTypeStrings {
+		ExceptionSubType m_Type;
+		const char* m_Name;
+		ExceptionSubTypeStrings() {
+			m_Type = ExceptionSubType::WHOKNOWS;
+			m_Name = 0;
+		}
+		ExceptionSubTypeStrings(ExceptionSubType Type, const char* pName) {
+			m_Type = Type;
+			m_Name = pName;
+		}
+		const char* FindSubTypeString(ExceptionSubType Type);
+	};
+	//------------------------------------------------
+	struct ExcepTypeToString {
+		ExceptionType m_Type;
+		const char* m_Name;
+		ExcepTypeToString() {
+			m_Type = ExceptionType::WHOKNOWS;
+			m_Name = 0;
+		}
+		ExcepTypeToString(ExceptionType Type, const char* pName) {
+			m_Type = Type;
+			m_Name = pName;
+		}
+		const char* FindString(ExceptionType Type);
+	};
+	//-------------------------------------------------------
+	inline static ExcepTypeToString ExceptionTypesLUT[] = {
+		{ExceptionType:: WHOKNOWS, "WHO KNOWS, Whatever" },
+		{ ExceptionType::UNEXPECTED_TOKEN, "UNEXPECTED TOKEN" },
+		{ ExceptionType::SECTION_ADDRES_RANGE_EXCEEDED, "SECTION ADDRES RANGE EXCEEDED" },
+		{ ExceptionType::SECTION_UNDEFINED, "SECTION UNDEFINED" },
+		{ ExceptionType::NOSECTION_DEFINED, "NO SECTION DEFINED" },
+		{ExceptionType::LEXER_STUMPTED, "LEXER is STUMPTED!" },
+		{ ExceptionType::ILLEGAL_ADDRESSING_MODE, "ILLEGAL ADDRESSING MODE" },
+		{ ExceptionType::TOKEN_OUT_OF_PLACE, "TOKEN OUT OF PLACE" },
+		{ ExceptionType::VALUE_EXCEEDS_RANGE, "VALUE EXCEEDS RANGE" },
+		{ ExceptionType::INTERNAL_ERROR, "This is too much, INTERNAL ERROR!" },
+		{ ExceptionType(-1), NULL}
+	};
+	//--------------------------------------------------
+	inline static ExceptionSubTypeStrings XcepSubTypesLUT[] =
+	{
+		{ExceptionSubType::WHOKNOWS,"Who Knows, Not me!"},
+		{ExceptionSubType::STACK_UNEXPECTED_NULL,"Top of Stack is NULL"},
+		{ExceptionSubType::STACK_EMPTY,"Stack is Empty"},
+		{ExceptionSubType::STACK_ITEM_MISMATCH,"Mismatch"},
+		{ExceptionSubType(-1),0}
+	};
+public:
+	Exception() {
+		int i;
+
+		m_Name = 0;
+		m_Type = ExceptionType::WHOKNOWS;
+		m_SubType = ExceptionSubType::WHOKNOWS;
+		badToken = Token(0);
+		m_pSymbol = 0;
+		for (i = 0; i < MAX_EXCEPTION_STRING_LEN; ++i)
+			ErrorString[i] = 0;
+	}
+	const char* GetExceptionTypeString(ExceptionType xType);
+	ExceptionType GetXCeptType() { return m_Type; }
+	void SetXCeptType(ExceptionType Type) { m_Type = Type; }
+	Token GetGotToken() { return badToken; }
+	void SetGotToken(Token t) { badToken = t; }
+	char* GetErrorString() { return ErrorString; }
+	int GetMaxStringLen() {
+		return MaxStringLen;
+	}
+	void SetSymbol(CBin* pSym) { m_pSymbol = pSym; }
+	CBin* GetSymbol() { return m_pSymbol; }
+	const char* FindXceptnSubType(ExceptionSubType Type) {
+		return XcepSubTypesLUT->FindSubTypeString(Type);
+	}
+	const char* FindXceptnType(ExceptionType Type) {
+		return ExceptionTypesLUT->FindString(Type);
+	}
+};
+
+
+
+
 #include "BinStackItem.h"
 #include "StackSymbolItem.h"
 #include "Stack.h"
@@ -272,16 +393,15 @@ enum class Processor {
 #include "ObjFormatFile.h"
 //--------------------------------------
 #include "Section.h"
-#include "AddressSizeStackItem.h"
-#include "AccessModeStackItem.h"
 //---------------------------------------
 //----------------Value Stack -----------
 //---------------------------------------
 #include "Stack.h"
 #include "StackItem.h"
-#include "StackNodeItem.h"
 #include "StackSectionItem.h"
 #include "StackSymbolItem.h"
+#include "AddressSizeStackItem.h"
+#include "AccessModeStackItem.h"
 
 //-------------- AST Base Class ----------
 #include "AstNode.h"
@@ -408,87 +528,21 @@ enum class Processor {
 #include "Act65LowerPart.h"
 #include "Act65UpperPart.h"
 #include "Act65CurrentLocation.h"
-
+//------------------------------------
+#include "Act65PROCname.h"
+#include "Act65IDENT.h"
 //------------------------------------
 #include "AstTree.h"
 #include "ActionAstTree.h"
+
+#include "LHead.h"
 
 #include "Lexer.h"
 #include "Parser.h"
 #include "ActionApp.h"
 
 
-constexpr auto MAX_EXCEPTION_STRING_LEN = 512;
-
-class Exception {
-public:
-	enum ExceptionType {
-		WHOKNOWS,
-		UNEXPECTED_TOKEN,
-		SECTION_ADDRES_RANGE_EXCEEDED,
-		SECTION_UNDEFINED,
-		NOSECTION_DEFINED,
-		LEXER_STUMPTED,
-		ILLEGAL_ADDRESSING_MODE,
-		TOKEN_OUT_OF_PLACE,
-		VALUE_EXCEEDS_RANGE,
-		INTERNAL_ERROR
-	};
-private:
-	ExceptionType m_Type;
-	Token badToken;
-	CBin* m_pSymbol;
-	char ErrorString[MAX_EXCEPTION_STRING_LEN];
-	inline static int MaxStringLen = MAX_EXCEPTION_STRING_LEN;
-	struct ExcepTypeToString {
-		ExceptionType m_Type;
-		const char* m_Name;
-		ExcepTypeToString() {
-			m_Type = ExceptionType::WHOKNOWS;
-			m_Name = 0;
-		}
-		ExcepTypeToString(ExceptionType Type, const char* pName) {
-			m_Type = Type;
-			m_Name = pName;
-		}
-	};
-	inline static ExcepTypeToString ExceptionTypesLUT[] = {
-		{ WHOKNOWS, "WHO KNOWS, Whatever" },
-		{ UNEXPECTED_TOKEN, "UNEXPECTED TOKEN" },
-		{ SECTION_ADDRES_RANGE_EXCEEDED, "SECTION ADDRES RANGE EXCEEDED" },
-		{ SECTION_UNDEFINED, "SECTION UNDEFINED" },
-		{ NOSECTION_DEFINED, "NO SECTION DEFINED" },
-		{ LEXER_STUMPTED, "LEXER is STUMPTED!" },
-		{ ILLEGAL_ADDRESSING_MODE, "ILLEGAL ADDRESSING MODE" },
-		{ TOKEN_OUT_OF_PLACE, "TOKEN OUT OF PLACE" },
-		{ VALUE_EXCEEDS_RANGE, "VALUE EXCEEDS RANGE" },
-		{ INTERNAL_ERROR, "This is too much, INTERNAL ERROR!" },
-		{ ExceptionType(-1), NULL}
-	};
-public:
-	Exception() {
-		int i;
-
-		m_Type = ExceptionType(0);
-		badToken = Token(0);
-		m_pSymbol = 0;
-		for (i = 0; i < MAX_EXCEPTION_STRING_LEN; ++i)
-			ErrorString[i] = 0;
-	}
-	const char* GetExceptionTypeString(ExceptionType xType);
-	ExceptionType GetXCeptType() { return m_Type; }
-	void SetXCeptType(ExceptionType Type) { m_Type = Type; }
-	Token GetGotToken() { return badToken; }
-	void SetGotToken(Token t) { badToken = t; }
-	char* GetErrorString() { return ErrorString; }
-	int GetMaxStringLen() {
-		return MaxStringLen;
-	}
-	void SetSymbol(CBin* pSym) { m_pSymbol = pSym; }
-	CBin* GetSymbol() { return m_pSymbol; }
-};
-
-extern Exception ExceptionThrown;
+extern Exception ThrownException;
 
 
 #endif // ! PCH__H

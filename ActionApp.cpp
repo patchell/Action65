@@ -133,6 +133,7 @@ bool CActionApp::OpenSource()
 		else
 		{
 			fprintf(stderr, "Could not open %s\n", m_pSourceFile);
+			CloseAll();
 			exit(1);
 		}
 	}
@@ -287,4 +288,14 @@ void CActionApp::Dump(
 		}
 	}
 	delete[] s;
+}
+
+char* CActionApp::CreateIndentString(char* s, int n, int Indent, int c)
+{
+	int i;
+
+	for (i = 0; (i < Indent) && (i < (n - 1)); ++i)
+		s[i] = c;
+	s[i] = 0;
+	return s;
 }

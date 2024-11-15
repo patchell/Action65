@@ -492,10 +492,11 @@ Unary	-> '-' Unary
 		-> Factor
 		;
 
-Factor	-> 'FUNC_IDENT' ProcParams
-		-> '(' ArithExpr ')'
-		-> MemContents
-		;
+Factor		-> MemContents Factor_1;
+Factor_1	-> 'FUNC_IDENT' ProcParams
+			-> '(' ArithExpr ')'
+			-> .
+			;
 		 
 
 MemContentsList		-> MemContents MemContentsList_1;
@@ -649,15 +650,16 @@ BaseCompConst	-> 'NUMBER'
 //----------------------------------
 MemContents		-> MemContents_1 Constant;
 Constant		-> 'NUMBER'
-				-> '*'
+				-> '*'					//current location
 				-> '@' MemContents		//address of                      
 				-> .
 				;
+MemContents_1	-> 'IDENT' MemContentsType
+				-> .
+				;
 
-MemContents_1		-> 'IDENT' MemContentsType
-					-> .
-					;
-MemContentsType 	-> '(' ArithExpr ')'		//array ref
+
+MemContentsType 	-> '(' ArithExpr ')'	//array ref
 					-> '^'					// Pointer Dereference
 					-> '.' MemContents		//record ref
 					-> .

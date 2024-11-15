@@ -10,6 +10,7 @@ CAstNode::CAstNode()
 	m_pChild = 0;
 	m_pParent = 0;
 	m_pNodeName = 0;
+	m_pSym = 0;
 }
 
 CAstNode::CAstNode(int NodeType)
@@ -22,6 +23,7 @@ CAstNode::CAstNode(int NodeType)
 	m_pChild = 0;
 	m_pParent = 0;
 	m_pNodeName = 0;
+	m_pSym = 0;
 }
 
 CAstNode::~CAstNode()
@@ -35,39 +37,36 @@ bool CAstNode::CreateNode(
 {
 	SetChild(pChild);
 	SetNext(pNext);
-	GetChild()->SetParent(this);
-	GetNext()->SetPrev(this);
+	if(pChild)GetChild()->SetParent(this);
+	if(pNext)GetNext()->SetPrev(this);
 	SetStart(Act()->GetParser()->GetAstTree()->GetRootNode());
     return true;
 }
 
-bool CAstNode::CreateLeaf(CAstNode* pChild, CAstNode* pNext, CAstNode* pPrev, CAstNode* pStart, CAstNode* pParent)
+void CAstNode::Print(FILE* pOut, int Indent, char* s)
 {
-    return false;
-}
+	int ChildID, NextID;
+//	char* pIndentString;
 
-void CAstNode::Print(FILE* pOut, int Indent)
-{
-}
-
-void CAstNode::NodeProc()
-{
-	TopDown();
-	if (m_pChild)
-		m_pChild->NodeProc();
-	Sideways();
-	if (m_pNext)m_pNext->NodeProc();
-	BottomUp();
-}
-
-void CAstNode::TopDown()
-{
-}
-
-void CAstNode::BottomUp()
-{
-}
-
-void CAstNode::Sideways()
-{
+//	pIndentString = new char[256];
+//	Act()->IndentString(pIndentString, Indent, ' ');
+	if (GetChild())
+		ChildID = GetChild()->GetID();
+	else
+		ChildID = -1;
+	if (GetNext())
+		NextID = GetNext()->GetID();
+	else
+		NextID = -1;
+	fprintf(
+		pOut,
+		";\t %4d %4d %4d %s%s %s\n",
+		GetID(),
+		ChildID,
+		NextID,
+		s,
+		this->GetNodeName(),
+		GetSymbol()?GetSymbol()->GetName():"..."
+	);
+//	delete[] pIndentString;
 }

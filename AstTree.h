@@ -8,6 +8,11 @@ public:
 	virtual ~CAstTree();
 	bool Create();
 	void Print(FILE* pOut);
+	void TraverseTree(
+		FILE* pOut, 
+		CAstNode* pNode, 
+		char* s
+	);
 	//--------------------------------
 	void SetRootNode(CAstNode* pRoot) { m_pRoot = pRoot; }
 	CAstNode* GetRootNode() { return m_pRoot; }

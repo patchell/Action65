@@ -234,9 +234,6 @@
     <ClCompile Include="Act65ROL.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="StackNodeItem.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Act65ADD.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -445,6 +442,15 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Value.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="LHead.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Act65PROCname.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Act65IDENT.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -656,9 +662,6 @@
     <ClInclude Include="Act65ROL.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="StackNodeItem.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Act65ADD.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -867,6 +870,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Value.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="LHead.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Act65PROCname.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Act65IDENT.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
