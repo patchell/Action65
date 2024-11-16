@@ -14,6 +14,11 @@ class CSymbol: public CBin
 	CSection* m_pSection;
 	IdentType m_IdentType;
 	bool m_UnResolved;
+	//---------------------------
+	// Type Chain
+	//---------------------------
+	CObjType* m_pTcHead;
+	CObjType* m_pTcTail;
 public:
 	CSymbol() {
 		m_Address = 0;
@@ -52,6 +57,17 @@ public:
 	// Backfill unresolved references
 	//-------------------------------------------------
 	void BackFillUnresolved();
+	//-----------------------------------
+	// Type chain methods
+	//-----------------------------------
+	void AddAtHead(CObjType* pObjType);
+	void AddAtTail(CObjType* pObjType);
+	void Delete(CObjType* pObjType);
+	void Unlink(CObjType* pObjType);
+	void SetTcHead(CObjType* pOT) { m_pTcHead = pOT; }
+	CObjType* GetTcHead() { return m_pTcHead; }
+	void SetTcTail(CObjType* pOT) { m_pTcTail = pOT; }
+	CObjType* GetTcTail() { return m_pTcTail; }
 
 };
 

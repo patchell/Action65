@@ -20,7 +20,6 @@ public:
 		CAstNode* pChild,
 		CAstNode* pNext
 	);
-	virtual CAstNode* Duplicate();
 	virtual CValue* Process() = 0;
 	virtual void Print(FILE* pOut, int Indent, char* s);
 	// Getter/Setter Methods

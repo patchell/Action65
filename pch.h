@@ -249,6 +249,8 @@ enum class Processor {
 #include "StackSectionItem.h"
 #include "NumberStackItem.h"
 
+#include "ObjType.h"
+
 #include "Bin.h"
 #include "WhereSymbolIsUsed.h"
 #include "UnResolvedSymbol.h"

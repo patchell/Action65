@@ -12,3 +12,8 @@ bool CAct65PROCname::Create()
 {
 	return false;
 }
+
+CValue* CAct65PROCname::Process()
+{
+	return nullptr;
+}

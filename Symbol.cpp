@@ -75,6 +75,63 @@ void CSymbol::BackFillUnresolved()
 	SetResolved();
 }
 
+void CSymbol::AddAtHead(CObjType* pObjType)
+{
+	if (GetHead())
+	{
+		GetTcHead()->SetPrev(pObjType);
+		pObjType->SetNext(GetTcTail());
+		SetTcHead(pObjType);
+	}
+	else
+	{
+		SetTcTail(pObjType);
+		SetTcHead(pObjType);
+	}
+}
+
+void CSymbol::AddAtTail(CObjType* pObjType)
+{
+	if (GetHead())
+	{
+		GetTcTail()->SetNext(pObjType);
+		pObjType->SetPrev(GetTcTail());
+		SetTcTail(pObjType);
+	}
+	else
+	{
+		SetTcTail(pObjType);
+		SetTcHead(pObjType);
+	}
+}
+
+void CSymbol::Delete(CObjType* pObjType)
+{
+	Unlink(pObjType);
+	delete pObjType;
+}
+
+void CSymbol::Unlink(CObjType* pObjType)
+{
+	if (GetTcHead() == pObjType)
+	{
+		SetTcHead(pObjType->GetNext());
+		if (GetTcHead())
+			GetTcHead()->SetPrev(0);
+	}
+	else if (GetTcTail() == pObjType)
+	{
+		SetTcTail(pObjType->GetPrev());
+		if (GetTcTail())
+			GetTcTail()->SetNext(0);
+	}
+	else
+	{
+		pObjType->GetNext()->SetPrev(pObjType->GetPrev());
+		pObjType->GetPrev()->SetNext(pObjType->GetNext());
+	}
+}
+
 void CSymbol::Print(FILE* pOut, const char* s)
 {
 	fprintf(pOut, "%s:Address=%08lx  Value=%04x  Scope=%d\n",

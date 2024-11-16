@@ -258,6 +258,7 @@
     <ClCompile Include="ObjFormatSectionItem.cpp" />
     <ClCompile Include="ObjFormatSymbolItem.cpp" />
     <ClCompile Include="ObjFormatSymbols.cpp" />
+    <ClCompile Include="ObjType.cpp" />
     <ClCompile Include="Parser.cpp" />
     <ClCompile Include="pch.cpp" />
     <ClCompile Include="RegisterStackItem.cpp" />
@@ -399,6 +400,7 @@
     <ClInclude Include="ObjFormatSectionItem.h" />
     <ClInclude Include="ObjFormatSymbolItem.h" />
     <ClInclude Include="ObjFormatSymbols.h" />
+    <ClInclude Include="ObjType.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Bin.h" />
     <ClInclude Include="Bucket.h" />

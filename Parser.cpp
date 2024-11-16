@@ -427,7 +427,10 @@ CLHead CParser::ProcDef(CLHead LookaHead)
 	{
 	case Token::IDENT:
 		LookaHead.m_Token = Expect(LookaHead.GetToken(), Token::IDENT);
-		pIdent = new CAct65PROCN
+		pIdent = new CAct65PROCname;
+		pIdent->SetSymbol(GetLexer()->GetLexSymbol());
+		pIdent->GetSymbol()->SetToken(Token::PROC_CALL);
+		pIdent->GetSymbol()->
 		LookaHead = OptInit(LookaHead);
 		LookaHead.m_Token = Expect(LookaHead.GetToken(), Token('('));
 		LookaHead = ParamList(LookaHead);
