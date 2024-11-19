@@ -166,10 +166,10 @@ TERMINALS
 	"RSH",
 	"(",
 	")",
-	"NEG",		//cpu 'N'eg status register flage
-	"CARRY",		// cpu 'C'arry status register flag
-	"ZERO",		// cpu 'Z'ero status register flag
-	"OVERFLOW"		// cpu 'O'verflow status register flag
+	".N",		//cpu 'N'eg status register flage
+	".C",		// cpu 'C'arry status register flag
+	".Z",		// cpu 'Z'ero status register flag
+	".O"		// cpu 'O'verflow status register flag
 
 GRAMMAR
 //--------------------------------
@@ -211,68 +211,46 @@ ProcParams	-> '(' ValueList ')'
 // FOR statement
 //------------------------------------------------
 ForStmt			-> IfStmt ForStmt_1;
-ForStmt_1		-> 'FOR' STEPoption ForStmt_1
+ForStmt_1		-> 'FOR' Iterator DoStmt IfStmt ForStmt_1
 				-> .
 				;
-STEPoption		-> Finish STEPoption_1;
-STEPoption_1	-> 'STEP' ArithExpr
-				-> .
-				;
-Finish			-> Itterrator Finish_1;
-Finish_1		-> 'TO' ArithExpr
-				-> .
-				;
-Itterrator		-> MemContentsType Itterrator_1;
-Itterrator_1		-> '=' Value
-				-> .
-				;
+Iterator	-> 'IDENT' Start  Finish STEPoption ;
+Start		-> '=' ArithExpr;
+Finish		-> 'TO' ArithExpr;
+STEPoption	-> 'STEP' ArithExpr
+			-> .
+			;
 
 //------------------------------------------------
 // IF statement
 //------------------------------------------------
 IfStmt			-> Iff IfStmt_1;
-IfStmt_1		-> 'IF' EndIF Iff IfStmt_1
+IfStmt_1		-> 'IF' If Iff IfStmt_1
 				-> .
 				;
-
-EndIF		-> ElsePart EndIF_1;
-EndIF_1		-> 'FI';
-
-ElsePart	-> ElseIfPart ElsePart_1;
-ElsePart_1	-> 'ELSE' Statements
+If			-> RelOperation ThenPart;
+ThenPart	-> ElseIfPart ThenPart_1;
+ThenPart_1	-> 'THEN' Statements ElseIfPart;
+ElseIfPart	-> ElsePart ElseIfPart_1;
+ElseIfPart_1-> 'ELSEIF' RelOperation ThenPart ElsePart
 			-> .
 			;
-
-ElseIfPart		-> ThenPart ElseIfPart_1;
-ElseIfPart_1	-> 'ELSEIF' ThenPart ElseIfPart_1
-				-> .
-				;
-
-ThenPart	-> RelOperation ThenPart_1;
-ThenPart_1	-> 'THEN' Statements
+ElsePart	-> 'ELSE' Statements ElsePart
+			-> 'FI'
 			-> .
 			;
-
 //-------------------------------------------------
 // IFF Statement
 //-------------------------------------------------
 
 Iff		-> WhileStmt Iff_1;
-Iff_1	-> 'IFF' IFFend WhileStmt Iff_1
+Iff_1	-> 'IFF' IffConditional IffThen WhileStmt Iff_1
 		-> .
 		;
-
-IFFend		-> IFFelse IFFend_1;
-IFFend_1	-> 'FFI';
-
-IFFelse		-> IFFthenpart IFFelse_1;
-IFFelse_1	-> 'ELSE' Statements
-			-> .
-			;
-IFFthenpart		-> IffConditional IFFthenpart_1;
-IFFthenpart_1	-> 'THEN' Statements
-				-> .
-				;
+IffThen	-> 'BEGIN' Statements 'END' IffElse;
+IffElse	-> 'ELSE' 'BEGIN' Statements 'END' 'FFI'
+		-> 'FFI'
+		;
 
 IffConditional	-> StatusFlags IffConditional_1;
 IffConditional_1-> 'AREG' RelOper Value
@@ -290,15 +268,15 @@ StatusFlags_1	-> OptNot StatusFlags_2;
 OptNot			-> '^'
 				-> .
 				;
-StatusFlags_2	-> 'NEG'		//negative flag
-				-> 'CARRY'		//Carry flag
-				-> 'ZERO'		//Zero
-				-> 'OVERFLOW'		//Overflow
+StatusFlags_2	-> '.N'		//negative flag
+				-> '.C'		//Carry flag
+				-> '.Z'		//Zero
+				-> '.O'		//Overflow
 				;
 Bits			-> BIT BitValue
 				-> .
 				;
-BitValue		-> '[' ArithExpr ']';
+BitValue		-> '[' Value ']';
 
 //-------------------------------------------------
 // WHILE Statement
@@ -312,11 +290,7 @@ WhileStmt_1		-> 'WHILE' RelOperation  DoStmt WhileStmt_1
 // DO Statement
 //------------------------------------------------
 DoStmt			-> EXITstmt DoStmt_1;
-DoStmt_1		-> 'DO' DoEnd EXITstmt DoStmt_1
-				-> .
-				;
-DoEnd			-> Statements DoEnd_1;
-DoEnd_1			-> 'OD'
+DoStmt_1		-> 'DO' Statements 'OD' EXITstmt DoStmt_1
 				-> .
 				;
 
@@ -341,7 +315,7 @@ OptReturnValue	-> '(' ArithExpr ')'
 // Inline Assembly Code
 //---------------------------------------------
 InlineAssembly		-> CodeBlock InlineAssembly_1;
-InlineAssembly_1	-> 'ASM' InlineAssBlock CodeBlock InlineAssembly_1
+InlineAssembly_1	-> 'ASM' InlineAssBlock InlineAssembly_1
 					-> .
 					;
 
@@ -354,11 +328,7 @@ InlineAssBlock_1	-> AsmStmt InlineAssBlock_1
 // CODE (Kluge) BLOCK statement
 //-----------------------------------------------
 CodeBlock		-> UntillStmt CodeBlock_1;
-CodeBlock_1		-> '[' CodeBlockEnd UntillStmt CodeBlock_1
-				-> .
-				;
-CodeBlockEnd	-> ConstList CodeBlockEnd_1;
-CodeBlockEnd_1	-> ']'
+CodeBlock_1		-> '[' ConstList ']' UntillStmt CodeBlock_1
 				-> .
 				;
 ConstList	-> CompConst ConstList_1;
@@ -385,10 +355,13 @@ PushSourceList	-> PushSource PushSourceList_1;
 PushSourceList_1-> ',' PushSource PushSourceList_1
 				-> .
 				;
-PushSource	-> ArithExpr PushSource_1;
+PushSource	-> Value PushSource_1;
 PushSource_1-> 'AREG'
+			-> 'A'
 			-> 'XREG'
+			-> 'X'
 			-> 'YREG'
+			-> 'Y'
 			-> 'SR'
 			-> .
 			;
@@ -405,8 +378,11 @@ PopDestList_1	-> ',' PopDest PopDestList_1
 				;
 PopDest		-> MemContentsType PopDest_1;
 PopDest_1	-> 'AREG'
+			-> 'A'
 			-> 'XREG'
+			-> 'X'
 			-> 'YREG'
+			-> 'Y'
 			-> 'SR'
 			-> .
 			;
@@ -583,40 +559,23 @@ FuncBody	-> LocalDecls Statements;
 
 //----------------------------------
 // Identifiers
-//BYTE a,b;
-//BYTE x=$a0
-//BYTE y=[15]
-//BYTE ARRAY a=$2000
-//BYTE ARRAY b =["This is a string"]
-//BYTE ARRAY c = [1 2 3 4 55 6]
-//BYTE ARRAY d(156) =$2100
 //----------------------------------
 IdentList	-> Ident IdentList_1;
 IdentList_1	-> ',' Ident IdentList_1
 			-> .
 			;
-
-Ident		-> IdentInit Ident_1;
-Ident_1		-> 'IDENT' IdentInit
-			-> .
-			;
-IdentInit	-> ArrayDim IdentInit_1;
-IdentInit_1	-> '=' Address
+Ident		-> 'IDENT' Options
 			-> .
 			;
 
-Address		-> CompConst Address_1;
-Address_1	-> '[' Data ']'
+Options		-> '=' CompConst Options	//assign address
+			-> '(' CompConst ')' OptArrayInit
 			-> .
 			;
-Data		-> ConstList Data_1;
-Data_1		-> 'STRING'
-			-> .
-			;
-ArrayDim	-> ArrayDim_1;
-ArrayDim_1	-> '(' CompConst ')'
-			-> .
-			;
+
+OptArrayInit	-> '=' CodeBlock
+				-> .
+				;
 
 //-------------------------------------------
 // Parameter Declarations

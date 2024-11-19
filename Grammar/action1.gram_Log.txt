@@ -13,16 +13,18 @@ TERMINALS['Terminals'] { 'IDENT','NUMBER','STRING','VECTOR','MODULE','RETURN','P
 ,'SED','SEI','STX','STY','TAX','TAY','TXA','TYA','TXS','TSX','X','Y','A','SR','@'
 ,'.','^','!','XOR','&','%','#','>','<','{','}','=','==+','==-','==*','==/','==MOD'
 ,'==&','==!','==XOR','==%','==LSH','==RSH','[',']',',',';','+','-','*','/','MOD','LSH'
-,'RSH','(',')','.N','.C','.Z','.O','AREG','FUNC_IDENT','PROCESSOR','R6502','WD65C02'
-,'WD65C816',':','CHAR_CONSTANT','e','$' }
+,'RSH','(',')','NEG','CARRY','ZERO','OVERFLOW','AREG','FUNC_IDENT','PROCESSOR','R6502'
+,'WD65C02','WD65C816',':','CHAR_CONSTANT','e','$' }
 NONTERMINALS['Non Terminals'] { 'Action65','Modules','Modules_1','Vector','Vector_1'
 ,'VectorAddress','VectorData','Statements','ProcCall_1','ProcParams','ForStmt','ForStmt_1'
-,'Iterator','Start','Finish','STEPoption','IfStmt','IfStmt_1','If','ThenPart','ThenPart_1'
-,'ElseIfPart','ElseIfPart_1','ElsePart','Iff','Iff_1','IffThen','IffElse','IffConditional'
-,'IffConditional_1','RelOper','StatusFlags','StatusFlags_1','OptNot','StatusFlags_2'
-,'Bits','BitValue','WhileStmt','WhileStmt_1','DoStmt','DoStmt_1','EXITstmt','EXITstmt_1'
-,'RetStmt','RetStmt_1','OptReturnValue','InlineAssembly','InlineAssembly_1','InlineAssBlock'
-,'InlineAssBlock_1','CodeBlock','CodeBlock_1','ConstList','ConstList_1','UntillStmt'
+,'STEPoption','STEPoption_1','Finish','Finish_1','Itterrator','Itterrator_1','IfStmt'
+,'IfStmt_1','EndIF','EndIF_1','ElsePart','ElsePart_1','ElseIfPart','ElseIfPart_1'
+,'ThenPart','ThenPart_1','Iff','Iff_1','IFFend','IFFend_1','IFFelse','IFFelse_1','IFFthenpart'
+,'IFFthenpart_1','IffConditional','IffConditional_1','RelOper','StatusFlags','StatusFlags_1'
+,'OptNot','StatusFlags_2','Bits','BitValue','WhileStmt','WhileStmt_1','DoStmt','DoStmt_1'
+,'DoEnd','DoEnd_1','EXITstmt','EXITstmt_1','RetStmt','RetStmt_1','OptReturnValue'
+,'InlineAssembly','InlineAssembly_1','InlineAssBlock','InlineAssBlock_1','CodeBlock'
+,'CodeBlock_1','CodeBlockEnd','CodeBlockEnd_1','ConstList','ConstList_1','UntillStmt'
 ,'UntillStmt_1','Push','Push_1','PushSourceList','PushSourceList_1','PushSource','PushSource_1'
 ,'Pop','Pop_1','PopDestList','PopDestList_1','PopDest','PopDest_1','Assignment','Assignment_1'
 ,'RelOperation','RelOperation_1','LogicalOR','LogicalOR_1','LogicalAND','LogicalAND_1'
@@ -32,15 +34,16 @@ NONTERMINALS['Non Terminals'] { 'Action65','Modules','Modules_1','Vector','Vecto
 ,'TypeDefDecl','TypeDefDecl_1','RecDefIdent','RecDefField','FundDecl','FundDecl_1'
 ,'FundPointerDecl','FundPointerDecl_1','FundArrayDecl','FundArrayDecl_1','FunctionDecl'
 ,'FunctionDecl_1','IrqDef','ProcDef','FuncDef','IrqDecl','ProcDecl','FuncDecl','OptInit'
-,'IrqBody','ProcBody','FuncBody','IdentList','IdentList_1','Ident','Options','OptArrayInit'
-,'ParamList','Param_1','PramPointer','ParamPointer_1','ParamArray','ParamArray_1'
-,'LocalDecls','LocalDecls_1','LocalPointerDecl','LocalPointerDecl_1','LocalArrayDecl'
-,'LocalArrayDecl_1','CompConst','CompConst_1','BaseCompConst','Value','Value_1','MemContentsType'
-,'MemContentsType_1','MemContents','AsmStmt','Processor_1','ProcessorType','Section'
-,'Section_1','SectionName','SectionName_1','SectionDef','SectionAttributesList','SectionAttributes_1'
-,'SectionAtribute','Modes','TrueFalse','Org','Org_1','DefineMemory','DefineMemory_1'
-,'DefineStorage','DefineStorage_1','Proceedure','Proceedure_1','Instruction','Instruction_1'
-,'Labels','Label_1','AluAdrModes','Indirect','Indirect_1','StaAddressingModes','ShiftAddressingModes'
+,'IrqBody','ProcBody','FuncBody','IdentList','IdentList_1','Ident','Ident_1','IdentInit'
+,'IdentInit_1','Address','Address_1','Data','Data_1','ArrayDim','ArrayDim_1','ParamList'
+,'Param_1','PramPointer','ParamPointer_1','ParamArray','ParamArray_1','LocalDecls'
+,'LocalDecls_1','LocalPointerDecl','LocalPointerDecl_1','LocalArrayDecl','LocalArrayDecl_1'
+,'CompConst','CompConst_1','BaseCompConst','Value','Value_1','MemContentsType','MemContentsType_1'
+,'MemContents','AsmStmt','Processor_1','ProcessorType','Section','Section_1','SectionName'
+,'SectionName_1','SectionDef','SectionAttributesList','SectionAttributes_1','SectionAtribute'
+,'Modes','TrueFalse','Org','Org_1','DefineMemory','DefineMemory_1','DefineStorage'
+,'DefineStorage_1','Proceedure','Proceedure_1','Instruction','Instruction_1','Labels'
+,'Label_1','AluAdrModes','Indirect','Indirect_1','StaAddressingModes','ShiftAddressingModes'
 ,'RelAddressingMode','BitAddressModes','IncAddressingMOdes','JumpAddressingModes'
 ,'JumpIndirect','JumpDirect','CallAddressingMode','LdxAddressingMode','CPX_CPY_AddressingMode'
 ,'StxAddressingMode','LdyAddressingMode','StyAddressingMode','OptIndexReg','OptIndexReg_1'
@@ -61,22 +64,30 @@ FIRST['ProcCall_1'] { 'e' }
 FIRST['ProcParams'] { 'e' }
 FIRST['ForStmt'] { }
 FIRST['ForStmt_1'] { 'e' }
-FIRST['Iterator'] { }
-FIRST['Start'] { }
+FIRST['STEPoption'] { }
+FIRST['STEPoption_1'] { 'e' }
 FIRST['Finish'] { }
-FIRST['STEPoption'] { 'e' }
+FIRST['Finish_1'] { 'e' }
+FIRST['Itterrator'] { }
+FIRST['Itterrator_1'] { 'e' }
 FIRST['IfStmt'] { }
 FIRST['IfStmt_1'] { 'e' }
-FIRST['If'] { }
-FIRST['ThenPart'] { }
-FIRST['ThenPart_1'] { }
-FIRST['ElseIfPart'] { 'e' }
+FIRST['EndIF'] { }
+FIRST['EndIF_1'] { }
+FIRST['ElsePart'] { }
+FIRST['ElsePart_1'] { 'e' }
+FIRST['ElseIfPart'] { }
 FIRST['ElseIfPart_1'] { 'e' }
-FIRST['ElsePart'] { 'e' }
+FIRST['ThenPart'] { }
+FIRST['ThenPart_1'] { 'e' }
 FIRST['Iff'] { }
 FIRST['Iff_1'] { 'e' }
-FIRST['IffThen'] { }
-FIRST['IffElse'] { }
+FIRST['IFFend'] { }
+FIRST['IFFend_1'] { }
+FIRST['IFFelse'] { }
+FIRST['IFFelse_1'] { 'e' }
+FIRST['IFFthenpart'] { }
+FIRST['IFFthenpart_1'] { 'e' }
 FIRST['IffConditional'] { }
 FIRST['IffConditional_1'] { 'AREG','e' }
 FIRST['RelOper'] { 'e' }
@@ -90,6 +101,8 @@ FIRST['WhileStmt'] { }
 FIRST['WhileStmt_1'] { 'e' }
 FIRST['DoStmt'] { }
 FIRST['DoStmt_1'] { 'e' }
+FIRST['DoEnd'] { }
+FIRST['DoEnd_1'] { 'e' }
 FIRST['EXITstmt'] { }
 FIRST['EXITstmt_1'] { 'e' }
 FIRST['RetStmt'] { }
@@ -101,6 +114,8 @@ FIRST['InlineAssBlock'] { }
 FIRST['InlineAssBlock_1'] { 'e' }
 FIRST['CodeBlock'] { }
 FIRST['CodeBlock_1'] { 'e' }
+FIRST['CodeBlockEnd'] { }
+FIRST['CodeBlockEnd_1'] { 'e' }
 FIRST['ConstList'] { }
 FIRST['ConstList_1'] { 'e' }
 FIRST['UntillStmt'] { }
@@ -169,11 +184,18 @@ FIRST['OptInit'] { 'e' }
 FIRST['IrqBody'] { }
 FIRST['ProcBody'] { }
 FIRST['FuncBody'] { }
-FIRST['IdentList'] { 'e' }
+FIRST['IdentList'] { }
 FIRST['IdentList_1'] { 'e' }
-FIRST['Ident'] { 'e' }
-FIRST['Options'] { 'e' }
-FIRST['OptArrayInit'] { 'e' }
+FIRST['Ident'] { }
+FIRST['Ident_1'] { 'e' }
+FIRST['IdentInit'] { }
+FIRST['IdentInit_1'] { 'e' }
+FIRST['Address'] { }
+FIRST['Address_1'] { 'e' }
+FIRST['Data'] { }
+FIRST['Data_1'] { 'e' }
+FIRST['ArrayDim'] { 'e' }
+FIRST['ArrayDim_1'] { 'e' }
 FIRST['ParamList'] { }
 FIRST['Param_1'] { 'e' }
 FIRST['PramPointer'] { }
@@ -262,22 +284,30 @@ FOLLOW['ProcCall_1'] { }
 FOLLOW['ProcParams'] { }
 FOLLOW['ForStmt'] { }
 FOLLOW['ForStmt_1'] { }
-FOLLOW['Iterator'] { }
-FOLLOW['Start'] { }
-FOLLOW['Finish'] { }
 FOLLOW['STEPoption'] { }
+FOLLOW['STEPoption_1'] { }
+FOLLOW['Finish'] { }
+FOLLOW['Finish_1'] { }
+FOLLOW['Itterrator'] { }
+FOLLOW['Itterrator_1'] { }
 FOLLOW['IfStmt'] { }
 FOLLOW['IfStmt_1'] { }
-FOLLOW['If'] { }
-FOLLOW['ThenPart'] { }
-FOLLOW['ThenPart_1'] { }
+FOLLOW['EndIF'] { }
+FOLLOW['EndIF_1'] { }
+FOLLOW['ElsePart'] { }
+FOLLOW['ElsePart_1'] { }
 FOLLOW['ElseIfPart'] { }
 FOLLOW['ElseIfPart_1'] { }
-FOLLOW['ElsePart'] { }
+FOLLOW['ThenPart'] { }
+FOLLOW['ThenPart_1'] { }
 FOLLOW['Iff'] { }
 FOLLOW['Iff_1'] { }
-FOLLOW['IffThen'] { }
-FOLLOW['IffElse'] { }
+FOLLOW['IFFend'] { }
+FOLLOW['IFFend_1'] { }
+FOLLOW['IFFelse'] { }
+FOLLOW['IFFelse_1'] { }
+FOLLOW['IFFthenpart'] { }
+FOLLOW['IFFthenpart_1'] { }
 FOLLOW['IffConditional'] { }
 FOLLOW['IffConditional_1'] { }
 FOLLOW['RelOper'] { }
@@ -291,6 +321,8 @@ FOLLOW['WhileStmt'] { }
 FOLLOW['WhileStmt_1'] { }
 FOLLOW['DoStmt'] { }
 FOLLOW['DoStmt_1'] { }
+FOLLOW['DoEnd'] { }
+FOLLOW['DoEnd_1'] { }
 FOLLOW['EXITstmt'] { }
 FOLLOW['EXITstmt_1'] { }
 FOLLOW['RetStmt'] { }
@@ -302,6 +334,8 @@ FOLLOW['InlineAssBlock'] { }
 FOLLOW['InlineAssBlock_1'] { }
 FOLLOW['CodeBlock'] { }
 FOLLOW['CodeBlock_1'] { }
+FOLLOW['CodeBlockEnd'] { }
+FOLLOW['CodeBlockEnd_1'] { }
 FOLLOW['ConstList'] { }
 FOLLOW['ConstList_1'] { }
 FOLLOW['UntillStmt'] { }
@@ -326,21 +360,21 @@ FOLLOW['LogicalOR'] { }
 FOLLOW['LogicalOR_1'] { }
 FOLLOW['LogicalAND'] { }
 FOLLOW['LogicalAND_1'] { }
-FOLLOW['ArithExpr'] { }
-FOLLOW['BitwiseOR_1'] { }
-FOLLOW['BitwiseAND'] { }
-FOLLOW['BitwiseAND_1'] { }
-FOLLOW['BitwiseXOR'] { }
-FOLLOW['BitwiseXOR_1'] { }
-FOLLOW['AddExpr'] { }
-FOLLOW['AddExpr_1'] { }
-FOLLOW['ShifExpr'] { }
-FOLLOW['ShiftExpr_1'] { }
-FOLLOW['MultExpr'] { }
-FOLLOW['MultExpr_1'] { }
-FOLLOW['Unary'] { }
-FOLLOW['Factor'] { }
-FOLLOW['Factor_1'] { }
+FOLLOW['ArithExpr'] { 'AREG' }
+FOLLOW['BitwiseOR_1'] { 'AREG' }
+FOLLOW['BitwiseAND'] { 'AREG' }
+FOLLOW['BitwiseAND_1'] { 'AREG' }
+FOLLOW['BitwiseXOR'] { 'AREG' }
+FOLLOW['BitwiseXOR_1'] { 'AREG' }
+FOLLOW['AddExpr'] { 'AREG' }
+FOLLOW['AddExpr_1'] { 'AREG' }
+FOLLOW['ShifExpr'] { 'AREG' }
+FOLLOW['ShiftExpr_1'] { 'AREG' }
+FOLLOW['MultExpr'] { 'AREG' }
+FOLLOW['MultExpr_1'] { 'AREG' }
+FOLLOW['Unary'] { 'AREG' }
+FOLLOW['Factor'] { 'AREG' }
+FOLLOW['Factor_1'] { 'AREG' }
 FOLLOW['ValueList'] { }
 FOLLOW['ValueList_1'] { }
 FOLLOW['SysDecl'] { '$' }
@@ -373,8 +407,15 @@ FOLLOW['FuncBody'] { }
 FOLLOW['IdentList'] { '$' }
 FOLLOW['IdentList_1'] { '$' }
 FOLLOW['Ident'] { '$' }
-FOLLOW['Options'] { }
-FOLLOW['OptArrayInit'] { }
+FOLLOW['Ident_1'] { '$' }
+FOLLOW['IdentInit'] { '$' }
+FOLLOW['IdentInit_1'] { '$' }
+FOLLOW['Address'] { }
+FOLLOW['Address_1'] { }
+FOLLOW['Data'] { }
+FOLLOW['Data_1'] { }
+FOLLOW['ArrayDim'] { '$' }
+FOLLOW['ArrayDim_1'] { '$' }
 FOLLOW['ParamList'] { }
 FOLLOW['Param_1'] { }
 FOLLOW['PramPointer'] { }
@@ -390,8 +431,8 @@ FOLLOW['LocalArrayDecl_1'] { }
 FOLLOW['CompConst'] { }
 FOLLOW['CompConst_1'] { }
 FOLLOW['BaseCompConst'] { }
-FOLLOW['Value'] { 'AREG','FUNC_IDENT' }
-FOLLOW['Value_1'] { 'AREG','FUNC_IDENT' }
+FOLLOW['Value'] { 'FUNC_IDENT','AREG' }
+FOLLOW['Value_1'] { 'FUNC_IDENT','AREG' }
 FOLLOW['MemContentsType'] { 'AREG','FUNC_IDENT' }
 FOLLOW['MemContentsType_1'] { 'AREG','FUNC_IDENT' }
 FOLLOW['MemContents'] { 'AREG','FUNC_IDENT' }
@@ -450,5 +491,5 @@ FOLLOW['AsmConstAddSub'] { }
 FOLLOW['AsmConstAddSub_1'] { }
 FOLLOW['BaseAsmConstant'] { }
 ---------------- Create Parse Table --------------
-Table Entries = 149
+Table Entries = 166
 ------------ Check For Conflicts-------------

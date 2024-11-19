@@ -47,11 +47,13 @@ private:
 	Processor m_Processor;
 	int m_Recursion;
 	int m_Bump;
-	CActionAstTree m_AstTree;;
+	CActionAstTree m_AstTree;
+	CStack m_ValueStack;
 public:
 	CParser();
 	virtual ~CParser();
 	bool Create();
+	CStack* GetValueStack() { return &m_ValueStack; }
 	void SetCurrentSection(CSection* pSection) {
 		m_pCurrentSection = m_pCurrentSection;
 	}
