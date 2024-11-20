@@ -7,8 +7,9 @@ TERMINALS
 	"RETURN",
 	"PROC",
 	"FUNC",
-	"FUNC_CALL",
-	"PROC_CALL",
+	"INTERRUPT",
+	"INTERRUPT_IDENT",
+	"PROC_IDENT",
 	"FOR",
 	"WHILE",
 	"DO",
@@ -40,9 +41,9 @@ TERMINALS
 	"INT",
 	"POINTER",
 	"ARRAY",
-	"INTERRUPT",
 	"PUSH",
 	"POP",
+	"BREAK",
 	"ACC",
 	"XREG",
 	"YREG",
@@ -196,11 +197,11 @@ VectorData		-> '=' CompConst;
 
 
 //---------------------------------------
-// Proceedure Call
+// Proceedure/Function Call
 //---------------------------------------
 Statements		->ForStmt ProcCall_1;
-ProcCall_1		-> 'PROC_CALL' ProcParams ForStmt ProcCall_1
-				-> 'FUNC_CALL' ProcParams ForStmt ProcCall_1
+ProcCall_1		-> 'PROC_IDENT' ProcParams ForStmt ProcCall_1
+				-> 'FUNC_IDENT' ProcParams ForStmt ProcCall_1
 				-> .
 				;
 ProcParams	-> '(' ValueList ')'
@@ -223,7 +224,7 @@ Finish_1		-> 'TO' ArithExpr
 				-> .
 				;
 Itterrator		-> MemContentsType Itterrator_1;
-Itterrator_1		-> '=' Value
+Itterrator_1	-> '=' Value
 				-> .
 				;
 
@@ -345,9 +346,11 @@ InlineAssembly_1	-> 'ASM' InlineAssBlock CodeBlock InlineAssembly_1
 					-> .
 					;
 
-InlineAssBlock		-> '{' InlineAssBlock_1;
-InlineAssBlock_1	-> AsmStmt InlineAssBlock_1
-					-> '}'
+InlineAssBlock		-> EndAsmBlock InlineAssBlock_1;
+InlineAssBlock_1	-> '{' AsmStmt EndAsmBlock InlineAssBlock_1
+					-> .
+					;
+EndAsmBlock			-> '}'
 					-> .
 					;
 //-----------------------------------------------
@@ -361,10 +364,6 @@ CodeBlockEnd	-> ConstList CodeBlockEnd_1;
 CodeBlockEnd_1	-> ']'
 				-> .
 				;
-ConstList	-> CompConst ConstList_1;
-ConstList_1	-> ',' CompConst ConstList_1
-			-> .
-			;
 
 //---------------------------------------------------
 // UNTILE Statement
@@ -395,8 +394,8 @@ PushSource_1-> 'AREG'
 //---------------------------------------------------
 // POP Statment
 //---------------------------------------------------
-Pop			-> Assignment Pop_1;
-Pop_1		-> 'POP' PopDestList Assignment Pop_1
+Pop			-> Break Pop_1;
+Pop_1		-> 'POP' PopDestList Break Pop_1
 			-> .
 			;
 PopDestList		-> PopDest PopDestList_1;
@@ -410,28 +409,42 @@ PopDest_1	-> 'AREG'
 			-> 'SR'
 			-> .
 			;
+//--------------------------------------------------
+// BREAK Statement (Assembler BRK) Software Interrupt
+//--------------------------------------------------
+Break	-> Rti Break_1;
+Break_1	-> 'BREAK' Rti Break_1
+		-> .
+		;
+//--------------------------------------------------
+// RTI  Return from interrupt statement
+//--------------------------------------------------
+Rti		-> Assignment Rti_1;
+Rti_1	-> 'RTI' Assignment Rti_1
+		-> .
+		;
 //---------------------------------------------------
 // Assignment Statements
 //---------------------------------------------------
 
 Assignment	-> MemContentsType Assignment_1;
-Assignment_1->  '=' ArithExpr Value Assignment_1
-			-> '==+' ArithExpr  Value Assignment_1
-			->  '==-' ArithExpr  Value Assignment_1
-			->  '==*' ArithExpr  Value Assignment_1
-			->  '==/' ArithExpr Value Assignment_1
-			->  '==MOD' ArithExpr Value Assignment_1
-			->  '==&' ArithExpr	Value Assignment_1	// AND
-			->  '==!' ArithExpr Value Assignment_1	//XOR
-			->  '==%' ArithExpr 	Value Assignment_1//OR
-			->  '==LSH' ArithExpr Value Assignment_1
-			->  '==RSH' ArithExpr Value Assignment_1
+Assignment_1->  '=' ArithExpr Assignment_1
+			-> '==+' ArithExpr  Assignment_1
+			->  '==-' ArithExpr  Assignment_1
+			->  '==*' ArithExpr  Assignment_1
+			->  '==/' ArithExpr Assignment_1
+			->  '==MOD' ArithExpr Assignment_1
+			->  '==&' ArithExpr	Assignment_1	// AND
+			->  '==!' ArithExpr Assignment_1	//XOR
+			->  '==%' ArithExpr Assignment_1	//OR
+			->  '==LSH' ArithExpr Assignment_1
+			->  '==RSH' ArithExpr Assignment_1
 			-> .
 			;
 
-//--------------------------------------
-// Arithmetic Expressions
-//--------------------------------------
+//----------------------------------------------
+// Relation Operations
+//----------------------------------------------
 
 RelOperation	-> LogicalOR RelOperation_1;
 RelOperation_1	-> '>' LogicalOR RelOperation_1
@@ -452,6 +465,10 @@ LogicalAND		-> ArithExpr LogicalAND_1;
 LogicalAND_1	-> 'AND' ArithExpr LogicalAND_1
 				-> .
 				;
+
+//--------------------------------------
+// Arithmetic Expressions
+//--------------------------------------
 
 ArithExpr	-> BitwiseAND BitwiseOR_1;
 BitwiseOR_1	-> '%' BitwiseAND BitwiseOR_1
@@ -493,16 +510,10 @@ Unary	-> '-' Unary
 		;
 
 Factor		-> Value Factor_1;
-Factor_1	-> 'FUNC_IDENT' ProcParams
-			-> '(' ArithExpr ')'
+Factor_1	-> '(' ArithExpr ')'
 			-> .
 			;
 		 
-
-ValueList	-> Value ValueList_1;
-ValueList_1	-> ',' Value ValueList_1
-				-> .
-				;
 //-------------------------------------------
 // Declarations
 //-------------------------------------------
@@ -523,13 +534,16 @@ Def		-> IDENT '=' CompConst;
 // object.
 //----------------------------------------------
 TypeDefDecl		-> FundDecl TypeDefDecl_1;
-TypeDefDecl_1	-> 'TYPE' RecDefIdent FundDecl TypeDefDecl_1
+TypeDefDecl_1	-> 'TYPE' EndTypeDef FundDecl TypeDefDecl_1
 				-> .
 				;
-RecDefIdent		-> 'IDENT' RecDefField
+EndTypeDef		-> RecDefField EndTypeDef_1;
+EndTypeDef_1	-> ']'
 				-> .
 				;
-RecDefField		->  '=' '[' LocalDecls ']'
+RecDefField		-> Ident RecDefField_1;
+RecDefField_1	-> '=' '[' LocalDecls
+				-> '[' LocalDecls
 				-> .
 				;
 
@@ -669,6 +683,10 @@ LocalArrayDecl_1	-> 'ARRAY' IdentList
 //-------------------------------
 // Compiler Constants
 //-------------------------------
+ConstList	-> CompConst ConstList_1;
+ConstList_1	-> ',' CompConst ConstList_1
+			-> .
+			;
 CompConst		-> BaseCompConst CompConst_1;
 CompConst_1		-> '+' BaseCompConst CompConst_1
 				-> '-' BaseCompConst CompConst_1
@@ -677,6 +695,9 @@ CompConst_1		-> '+' BaseCompConst CompConst_1
 BaseCompConst	-> 'NUMBER'
 				-> '*'
 				-> '@' MemContentsType
+				-> 'INTERUPT_IDENT'
+				-> 'FUNC_IDENT'
+				-> 'PROC_IDENT'
 				-> .
 				;
 
@@ -685,13 +706,24 @@ BaseCompConst	-> 'NUMBER'
 //Memory References
 //----------------------------------
 
-Value			-> MemContentsType Value_1;
-Value_1			-> 'NUMBER'
-				-> '*'		// current memroy location
-				-> '@' MemContentsType
+ValueList	-> Value ValueList_1;
+ValueList_1	-> ',' Value ValueList_1
 				-> .
 				;
 
+Value			-> MemContentsType Value_1;
+Value_1			-> 'NUMBER'
+				-> '*'		// current memroy location
+				-> '@' AddressOf
+				-> .
+				;
+
+AddressOf		-> MemContentsType AddressOf_1;
+AddressOf_1		->'PROC_IDENT'
+				-> 'FUNC_IDENT'
+				-> 'INTERRUPT_IDENT'
+				-> .
+				; 
 MemContentsType		-> MemContents MemContentsType_1;
 MemContentsType_1 	-> '(' ArithExpr ')'	//array ref
 					-> '^'					// Pointer Dereference
