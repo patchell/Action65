@@ -456,6 +456,15 @@
     <ClCompile Include="ObjType.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ActRTI.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ActBREAK.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ActStatusFlags.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -885,6 +894,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ObjType.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ActRTI.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ActBREAK.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ActStatusFlags.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

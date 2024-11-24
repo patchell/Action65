@@ -44,6 +44,7 @@ TERMINALS
 	"PUSH",
 	"POP",
 	"BREAK",
+	"BITS",
 	"ACC",
 	"XREG",
 	"YREG",
@@ -296,7 +297,7 @@ StatusFlags_2	-> 'NEG'		//negative flag
 				-> 'ZERO'		//Zero
 				-> 'OVERFLOW'		//Overflow
 				;
-Bits			-> BIT BitValue
+Bits			-> 'BITS' BitValue
 				-> .
 				;
 BitValue		-> '[' ArithExpr ']';
@@ -347,10 +348,11 @@ InlineAssembly_1	-> 'ASM' InlineAssBlock CodeBlock InlineAssembly_1
 					;
 
 InlineAssBlock		-> EndAsmBlock InlineAssBlock_1;
-InlineAssBlock_1	-> '{' AsmStmt EndAsmBlock InlineAssBlock_1
+InlineAssBlock_1	-> '{' EndAsmBlock InlineAssBlock_1
 					-> .
 					;
-EndAsmBlock			-> '}'
+EndAsmBlock			-> AsmStmt EndAsmBlock_1;
+EndAsmBlock_1		-> '}'
 					-> .
 					;
 //-----------------------------------------------
@@ -568,7 +570,7 @@ FundPointerDecl_1	-> 'POINTER' FundArrayDecl
 					;
 
 FundArrayDecl	-> FunctionDecl FundArrayDecl_1;
-FundArrayDecl_1	-> 'ARRAY' FunctionDecl FundArrayDecl_1
+FundArrayDecl_1	-> 'ARRAY' FunctionDecl 
 				-> .
 				;
 
@@ -772,15 +774,15 @@ SectionName		-> SectionDef SectionName_1;
 SectionName_1	-> 'IDENT' SectionDef
 				-> .
 				;
-			;
+			
 SectionDef		-> '[' SectionAttributesList ']'
 				-> .
 				;
 
-SectionAttributesList	-> SectionAtribute SectionAttributes_1;
-SectionAttributes_1	-> ',' SectionAtribute SectionAttributes_1
-					-> .
-					;
+SectionAttributesList	-> SectionAtribute SectionAttributesList_1;
+SectionAttributesList_1	-> ',' SectionAtribute SectionAttributesList_1
+						-> .
+						;
 
 SectionAtribute	-> 'START' '=' AsmConstant
 				-> 'SIZE' '=' AsmConstant

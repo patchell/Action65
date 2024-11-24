@@ -15,6 +15,7 @@ CLexer::CLexer()
 	m_pFileBuffeer = 0;
 	m_FileIndex = 0;
 	m_InFileSize = 0;
+	m_bAsmMode = false;
 }
 
 CLexer::~CLexer()
@@ -64,6 +65,21 @@ int CLexer::LexGet()
 		c = EOF;
 	}
 	m_Col++;
+	return c;
+}
+
+int CLexer::LexLook(int index)
+{
+	int c = EOF;
+	int i;
+
+	i = index + m_FileIndex;
+	if (m_pFileBuffeer && (i < m_InFileSize))
+		c = m_pFileBuffeer[i];
+	else if (m_FileIndex == m_InFileSize)
+	{
+		c = EOF;
+	}
 	return c;
 }
 
@@ -158,7 +174,7 @@ Token CLexer::Lex()
 {
 	bool Loop = true;
 	bool auxLoop = true;
-	int c;
+	int c = 0,c1 = 0, c2 = 0;
 	Token TokenValue = Token(0);
 
 	m_LexBuffIndex = 0;
@@ -283,14 +299,15 @@ Token CLexer::Lex()
 		case ']':
 		case '(':
 		case ')':
+		case'{':
+		case '}':
 		case '+':	//add
 		case '-':	//sub
 		case '*':	//mul
-		case '/':	//div
 		case '!':	//XOR
 		case '&':	//Bitwise AND
 		case '%':	//Bitwise OR
-		case '#':	//Not Equal
+		case '#':	//Not Equal/Immediate Data
 		case '@':	//Address of
 		case '^':	//Pointer dereference
 		case ',':
@@ -320,6 +337,86 @@ Token CLexer::Lex()
 				LexUnGet(c);
 			}
 			Loop = false;
+			break;
+		case '.':
+			c1 = LexLook(1);
+			c2 = LexLook(2);
+			if (!IsValidNameChar(c2))
+			{
+				switch (c1)
+				{
+				case 'A':	//accumulator
+					TokenValue = Token::AREG;
+					m_LexBuffIndex++;
+					break;
+				case 'P':	//proecssor status
+					TokenValue = Token::PSREG;
+					m_LexBuffIndex++;
+					break;
+				case 'S':	// stack pointer
+					TokenValue = Token::SPREG;
+					m_LexBuffIndex++;
+					break;
+				case 'X':	// X index register
+					TokenValue = Token::XREG;
+					m_LexBuffIndex++;
+					break;
+				case 'Y':	// Y index register
+					TokenValue = Token::YREG;
+					m_LexBuffIndex++;
+					break;
+				case 'C':	// carry flag
+					TokenValue = Token::CARRY;
+					m_LexBuffIndex++;
+					break;
+				case 'D':
+					TokenValue = Token::DECIMAL_MODE;
+					m_LexBuffIndex++;
+					break;
+				case 'I':	// interrupt flag
+					TokenValue = Token::IRQENABLE;
+					m_LexBuffIndex++;
+					break;
+				case 'N':	// negative flag
+					TokenValue = Token::NEG;
+					m_LexBuffIndex++;
+					break;
+				case 'O':
+					TokenValue = Token::OVERFLOW;
+					m_LexBuffIndex++;
+					break;
+				default:
+					TokenValue = Token('.');
+					break;
+				}
+				Loop = false;
+			}
+			else
+			{
+				TokenValue = Token('.');
+			}
+			Loop = false;
+			break;
+		case '/':
+			if (LexLook(1) == '/')	//comment?
+			{
+				auxLoop = true;
+				while (auxLoop)
+				{
+					c = LexGet();
+					if (c == '\n')
+					{
+						auxLoop = false;
+						m_Line++;
+						m_Col = 0;
+					}
+				}
+			}
+			else
+			{
+				TokenValue = Token(c);
+				Loop = false;
+			}
 			break;
 		case ';':	// Comment
 			auxLoop = true;

@@ -243,11 +243,9 @@ private:
 	// SECITON
 	//-----------------------------------------
 	CLHead Section(CLHead LookaHead);
-	CLHead Section_1(CLHead LookaHead);
-	CLHead Section_2(CLHead LookaHead);
+	CLHead SectionName(CLHead LookaHead);
 	CLHead SectionDef(CLHead LookaHead);
-	CLHead SectionDef_1(CLHead LookaHead);
-	CLHead SectionAttributes(CLHead LookaHead);
+	CLHead SectionAttributesList(CLHead LookaHead);
 	CLHead SectionAtribute(CLHead LookaHead);
 	CLHead Modes(CLHead LookaHead);
 	CLHead TrueFalse(CLHead LookaHead);

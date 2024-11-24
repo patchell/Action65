@@ -13,20 +13,22 @@ constexpr auto MAX_NAME_LEN = 64;
 constexpr auto MAX_STRING_LEN = 512;
 
 enum  class Token {
-	ENDOFFILE = -1,
-	NUMBER = 256,
-	STRING,
-	IDENT,
-	ASSIGN_ADD,
-	ASSIGN_SUB,
-	ASSIGN_MUL,
-	ASSIGN_DIV,
-	ASSIGN_MOD,
-	ASSIGN_AND,
+	ENDOFFILE = -1,	// 1
+	IDENT = 256,	//2
+	STRING,			//3
+	NUMBER,			//4
+	//------ Assignment
+	ASSIGN_ADD,		//5
+	ASSIGN_SUB,		//6
+	ASSIGN_MUL,		//7
+	ASSIGN_DIV,		//8
+	ASSIGN_MOD,		//9
+	ASSIGN_AND,		//10
 	ASSIGN_OR,
 	ASSIGN_XOR,
 	ASSIGN_RSH,
 	ASSIGN_LSH,
+	//------- Operators
 	MOD,
 	LSH,
 	RSH,
@@ -34,9 +36,13 @@ enum  class Token {
 	LTEQ,
 	OR,		//logical OR
 	XOR,	//bitwise Exclusive OR
-	//----------------
+	//-------- Functions --------
 	PROC,
 	FUNC,
+	INTERRUPT,
+	INTERRUPT_IDENT,
+	FUNC_IDENT,
+	PROC_IDENT,
 	//------ Data Types -----------------
 	BOOL,
 	BYTE,
@@ -47,34 +53,58 @@ enum  class Token {
 	TYPE,
 	RECORDTYPE,
 	ARRAY,
-	//------------------
+	//--------Statements----------
 	MODULE,
 	VECTOR,
-	FUNC_CALL,
-	PROC_CALL,
-	DO,
-	OD,
+	FOR,
+	TO,
+	STEP,
 	IF,
+	IFF,
 	THEN,
 	ELSEIF,
 	ELSE,
 	FI,
+	FFI,
 	WHILE,
+	DO,
+	OD,
 	UNTIL,
-	FOR,
-	TO,
-	STEP,
 	EXIT,
 	RETURN,
 	ASM,
-	ENDASM,
-	END,
+	PUSH,
+	POP,
+	BREAK,
+	BITS,
 	BEGIN,
+	END,
 	// Compiler Directives
 	DEFINE,
 	SET,
 	INCLUDE,
 	//---------- Assembler Tokens ------------
+	//--------- Section --------
+	SECTION,
+	SECTION_NAME,
+	START,
+	SIZE,
+	NAME,
+	MODE,
+	READ_WRTE,
+	READ_ONLY,
+	ZEROPAGE,
+	True,
+	False,
+	//----- Assembler declarators
+	ORG,
+	DB,
+	DW,
+	DL,
+	DAS,	//define action! string
+	DCS,	//define C String
+	DS,		//define storage
+	//------- Opcodes
 	ADC,
 	AND,	//Logical Action AND or ASM Opcode
 	ASL,
@@ -132,38 +162,32 @@ enum  class Token {
 	TXS,
 	TSX,
 	ENDOFOPCODES,
+	//----- Registers
 	AREG,		//accumulator
 	XREG,
 	YREG,
-	SREG,		//stack pointer
-	PREG,		//processor status register
+	SPREG,		//stack pointer
+	PSREG,		//processor status register
+	//---------- Lables 
 	LOCAL_LABEL,
 	GLOBAL_LABLE,
-	CHAR_CONSTANT,
-	ORG,
-	DB,
-	DW,
-	DL,
-	DAS,	//define action! string
-	DCS,	//define C String
-	DS,		//define storage
-	SECTION,
-	SECTION_NAME,
-	START,
-	SIZE,
-	NAME,
-	MODE,
-	READ_WRTE,
-	READ_ONLY,
-	ZEROPAGE,
-	True,
-	False,
-	R6502,
+	//-------- Status Register bits
+	NEG,
+	ZERO,
+	CARRY,
+	OVERFLOW,
+	IRQENABLE,
+	DECIMAL_MODE,
+	//------- Processor Selector
 	PROCESSOR,
+	R6502,
 	WD65C02,
 	WD65C816,
+	//------- Misc
+	CHAR_CONSTANT,
 	EPROC,		// proceedure end
 	EOL,
+	//------------------------
 	ENDOFTOKENS = 0
 };
 
@@ -486,6 +510,8 @@ public:
 #include "Act65PushSource.h"
 #include "Act65POP.h"
 #include "Act65PopDest.h"
+#include "ActRTI.h"
+#include "ActBREAK.h"
 //--------- Assignment Node Classes ------
 #include "Act65Assignment.h"
 #include "Act65AssignADD.h"
@@ -530,6 +556,7 @@ public:
 #include "Act65LowerPart.h"
 #include "Act65UpperPart.h"
 #include "Act65CurrentLocation.h"
+#include "ActStatusFlags.h"
 //------------------------------------
 #include "Act65PROCname.h"
 #include "Act65IDENT.h"

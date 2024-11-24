@@ -226,9 +226,12 @@
     <ClCompile Include="Act65XREG.cpp" />
     <ClCompile Include="Act65YREG.cpp" />
     <ClCompile Include="Act65UpperPart.cpp" />
+    <ClCompile Include="ActBREAK.cpp" />
     <ClCompile Include="ActionApp.cpp" />
     <ClCompile Include="ActionAstTree.cpp" />
     <ClCompile Include="ActPopDest.cpp" />
+    <ClCompile Include="ActRTI.cpp" />
+    <ClCompile Include="ActStatusFlags.cpp" />
     <ClCompile Include="Actt65DB.cpp" />
     <ClCompile Include="Actt65DS.cpp" />
     <ClCompile Include="Act65LowerPart.cpp" />
@@ -371,6 +374,7 @@
     <ClInclude Include="Act65XREG.h" />
     <ClInclude Include="Act65YREG.h" />
     <ClInclude Include="Act65UpperPart.h" />
+    <ClInclude Include="ActBREAK.h" />
     <ClInclude Include="ActionApp.h" />
     <ClInclude Include="ActionAstTree.h" />
     <ClInclude Include="Act65PopDest.h" />
@@ -378,6 +382,8 @@
     <ClInclude Include="Act65DS.h" />
     <ClInclude Include="Act65LowerPart.h" />
     <ClInclude Include="Act65TYPEDEF.h" />
+    <ClInclude Include="ActRTI.h" />
+    <ClInclude Include="ActStatusFlags.h" />
     <ClInclude Include="AddressSizeStackItem.h" />
     <ClInclude Include="Act65AssignAND.h" />
     <ClInclude Include="Act65AssignOR.h" />

@@ -27,6 +27,8 @@ public:
 		m_pSection = 0;
 		m_IdentType = IdentType::NEW_SYMBOL;
 		m_UnResolved = true;
+		m_pTcHead = 0;
+		m_pTcTail = 0;
 	}
 	virtual ~CSymbol() {}
 	bool Create() { return true; }

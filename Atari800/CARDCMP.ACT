@@ -1,0 +1,1 @@
+SET 14=$7000›SET $491=$7000››PROC TEST()› CARD A,B›› A = $55CC› B = $CC55›› IF(A > B) THEN›       A = 0›       B = 0› FI›RETURN›››

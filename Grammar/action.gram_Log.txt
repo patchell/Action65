@@ -1,12 +1,13 @@
 ???????? $ Nullable Set(0)
 Add Rule:AsmStmt
+Lines Scaned 1058
 TERMINALS['Terminals'] { 'IDENT','NUMBER','STRING','VECTOR','MODULE','RETURN','PROC'
 ,'FUNC','INTERRUPT','INTERRUPT_IDENT','PROC_IDENT','FOR','WHILE','DO','OD','BEGIN'
 ,'END','EXIT','IF','THEN','ELSEIF','ELSE','FI','IFF','FFI','UNTILL','TO','STEP','OR'
 ,'AND','GTEQ','LTEQ','DEFINE','TYPE','RECORDTYPE','BOOL','CHAR','BYTE','CARD','INT'
-,'POINTER','ARRAY','PUSH','POP','BREAK','ACC','XREG','YREG','ASM','SECTION','START'
-,'SIZE','MODE','ZEROPAGE','READ_ONLY','READ_WRITE','true','false','ORG','DB','DW'
-,'DL','DAS','DCS','DS','ASMPROC','EPROC','LOCAL_LABLE','GLOBAL_LABLE','GLOBAL_LABLE'
+,'POINTER','ARRAY','PUSH','POP','BREAK','BITS','ACC','XREG','YREG','ASM','SECTION'
+,'START','SIZE','MODE','ZEROPAGE','READ_ONLY','READ_WRITE','true','false','ORG','DB'
+,'DW','DL','DAS','DCS','DS','ASMPROC','EPROC','LOCAL_LABLE','GLOBAL_LABLE','GLOBAL_LABLE'
 ,'ADC','ASL','BCC','BCS','BEQ','BMI','BNE','BPL','BVC','BVS','BIT','BRK','CLC','CLD'
 ,'CLI','CLV','CMP','CPX','CPY','DEC','DEX','DEY','EOR','INC','INX','INY','JMP','JSR'
 ,'LDA','LDX','LDY','LSR','NOP','ORA','PHA','PLA','PHP','PLP','ROL','ROR','RTI','RTS'
@@ -25,32 +26,33 @@ NONTERMINALS['Non Terminals'] { 'Action65','Modules','Modules_1','Vector','Vecto
 ,'OptNot','StatusFlags_2','Bits','BitValue','WhileStmt','WhileStmt_1','DoStmt','DoStmt_1'
 ,'DoEnd','DoEnd_1','EXITstmt','EXITstmt_1','RetStmt','RetStmt_1','OptReturnValue'
 ,'InlineAssembly','InlineAssembly_1','InlineAssBlock','InlineAssBlock_1','EndAsmBlock'
-,'CodeBlock','CodeBlock_1','CodeBlockEnd','CodeBlockEnd_1','UntillStmt','UntillStmt_1'
-,'Push','Push_1','PushSourceList','PushSourceList_1','PushSource','PushSource_1','Pop'
-,'Pop_1','PopDestList','PopDestList_1','PopDest','PopDest_1','Break','Break_1','Rti'
-,'Rti_1','Assignment','Assignment_1','RelOperation','RelOperation_1','LogicalOR','LogicalOR_1'
-,'LogicalAND','LogicalAND_1','ArithExpr','BitwiseOR_1','BitwiseAND','BitwiseAND_1'
-,'BitwiseXOR','BitwiseXOR_1','AddExpr','AddExpr_1','ShifExpr','ShiftExpr_1','MultExpr'
-,'MultExpr_1','Unary','Factor','Factor_1','SysDecl','Define','DefList','DefList_1'
-,'Def','TypeDefDecl','TypeDefDecl_1','EndTypeDef','EndTypeDef_1','RecDefField','RecDefField_1'
-,'FundDecl','FundDecl_1','FundPointerDecl','FundPointerDecl_1','FundArrayDecl','FundArrayDecl_1'
-,'FunctionDecl','FunctionDecl_1','IrqDef','ProcDef','FuncDef','IrqDecl','ProcDecl'
-,'FuncDecl','OptInit','IrqBody','ProcBody','FuncBody','IdentList','IdentList_1','Ident'
-,'Ident_1','IdentInit','IdentInit_1','Address','Address_1','Data','Data_1','ArrayDim'
-,'ArrayDim_1','ParamList','Param_1','PramPointer','ParamPointer_1','ParamArray','ParamArray_1'
-,'LocalDecls','LocalDecls_1','LocalPointerDecl','LocalPointerDecl_1','LocalArrayDecl'
-,'LocalArrayDecl_1','ConstList','ConstList_1','CompConst','CompConst_1','BaseCompConst'
-,'ValueList','ValueList_1','Value','Value_1','AddressOf','AddressOf_1','MemContentsType'
-,'MemContentsType_1','MemContents','AsmStmt','Processor_1','ProcessorType','Section'
-,'Section_1','SectionName','SectionName_1','SectionDef','SectionAttributesList','SectionAttributes_1'
-,'SectionAtribute','Modes','TrueFalse','Org','Org_1','DefineMemory','DefineMemory_1'
-,'DefineStorage','DefineStorage_1','Proceedure','Proceedure_1','Instruction','Instruction_1'
-,'Labels','Label_1','AluAdrModes','Indirect','Indirect_1','StaAddressingModes','ShiftAddressingModes'
-,'RelAddressingMode','BitAddressModes','IncAddressingMOdes','JumpAddressingModes'
-,'JumpIndirect','JumpDirect','CallAddressingMode','LdxAddressingMode','CPX_CPY_AddressingMode'
-,'StxAddressingMode','LdyAddressingMode','StyAddressingMode','OptIndexReg','OptIndexReg_1'
-,'OptXReg','OptYReg','AsmConstList','AsmConstList_1','AsmConstList_2','AsmConstant'
-,'AsmConstant_1','AsmConstAddSub','AsmConstAddSub_1','BaseAsmConstant' }
+,'EndAsmBlock_1','CodeBlock','CodeBlock_1','CodeBlockEnd','CodeBlockEnd_1','UntillStmt'
+,'UntillStmt_1','Push','Push_1','PushSourceList','PushSourceList_1','PushSource','PushSource_1'
+,'Pop','Pop_1','PopDestList','PopDestList_1','PopDest','PopDest_1','Break','Break_1'
+,'Rti','Rti_1','Assignment','Assignment_1','RelOperation','RelOperation_1','LogicalOR'
+,'LogicalOR_1','LogicalAND','LogicalAND_1','ArithExpr','BitwiseOR_1','BitwiseAND'
+,'BitwiseAND_1','BitwiseXOR','BitwiseXOR_1','AddExpr','AddExpr_1','ShifExpr','ShiftExpr_1'
+,'MultExpr','MultExpr_1','Unary','Factor','Factor_1','SysDecl','Define','DefList'
+,'DefList_1','Def','TypeDefDecl','TypeDefDecl_1','EndTypeDef','EndTypeDef_1','RecDefField'
+,'RecDefField_1','FundDecl','FundDecl_1','FundPointerDecl','FundPointerDecl_1','FundArrayDecl'
+,'FundArrayDecl_1','FunctionDecl','FunctionDecl_1','IrqDef','ProcDef','FuncDef','IrqDecl'
+,'ProcDecl','FuncDecl','OptInit','IrqBody','ProcBody','FuncBody','IdentList','IdentList_1'
+,'Ident','Ident_1','IdentInit','IdentInit_1','Address','Address_1','Data','Data_1'
+,'ArrayDim','ArrayDim_1','ParamList','Param_1','PramPointer','ParamPointer_1','ParamArray'
+,'ParamArray_1','LocalDecls','LocalDecls_1','LocalPointerDecl','LocalPointerDecl_1'
+,'LocalArrayDecl','LocalArrayDecl_1','ConstList','ConstList_1','CompConst','CompConst_1'
+,'BaseCompConst','ValueList','ValueList_1','Value','Value_1','AddressOf','AddressOf_1'
+,'MemContentsType','MemContentsType_1','MemContents','AsmStmt','Processor_1','ProcessorType'
+,'Section','Section_1','SectionName','SectionName_1','SectionDef','SectionAttributesList'
+,'SectionAttributesList_1','SectionAtribute','Modes','TrueFalse','Org','Org_1','DefineMemory'
+,'DefineMemory_1','DefineStorage','DefineStorage_1','Proceedure','Proceedure_1','Instruction'
+,'Instruction_1','Labels','Label_1','AluAdrModes','Indirect','Indirect_1','StaAddressingModes'
+,'ShiftAddressingModes','RelAddressingMode','BitAddressModes','IncAddressingMOdes'
+,'JumpAddressingModes','JumpIndirect','JumpDirect','CallAddressingMode','LdxAddressingMode'
+,'CPX_CPY_AddressingMode','StxAddressingMode','LdyAddressingMode','StyAddressingMode'
+,'OptIndexReg','OptIndexReg_1','OptXReg','OptYReg','AsmConstList','AsmConstList_1'
+,'AsmConstList_2','AsmConstant','AsmConstant_1','AsmConstAddSub','AsmConstAddSub_1'
+,'BaseAsmConstant' }
 *********** Build Nullable Set **********
 ****************Create NOT nullable set ************************
 ----- Calc First Sets------
@@ -112,9 +114,10 @@ FIRST['RetStmt_1'] { 'e' }
 FIRST['OptReturnValue'] { 'e' }
 FIRST['InlineAssembly'] { }
 FIRST['InlineAssembly_1'] { 'e' }
-FIRST['InlineAssBlock'] { 'e' }
+FIRST['InlineAssBlock'] { }
 FIRST['InlineAssBlock_1'] { 'e' }
-FIRST['EndAsmBlock'] { 'e' }
+FIRST['EndAsmBlock'] { }
+FIRST['EndAsmBlock_1'] { 'e' }
 FIRST['CodeBlock'] { }
 FIRST['CodeBlock_1'] { 'e' }
 FIRST['CodeBlockEnd'] { 'INTERUPT_IDENT','FUNC_IDENT' }
@@ -236,7 +239,7 @@ FIRST['SectionName'] { 'e' }
 FIRST['SectionName_1'] { 'e' }
 FIRST['SectionDef'] { 'e' }
 FIRST['SectionAttributesList'] { 'e' }
-FIRST['SectionAttributes_1'] { 'e' }
+FIRST['SectionAttributesList_1'] { 'e' }
 FIRST['SectionAtribute'] { 'e' }
 FIRST['Modes'] { }
 FIRST['TrueFalse'] { }
@@ -344,6 +347,7 @@ FOLLOW['InlineAssembly_1'] { 'FUNC_IDENT' }
 FOLLOW['InlineAssBlock'] { }
 FOLLOW['InlineAssBlock_1'] { }
 FOLLOW['EndAsmBlock'] { }
+FOLLOW['EndAsmBlock_1'] { }
 FOLLOW['CodeBlock'] { 'FUNC_IDENT' }
 FOLLOW['CodeBlock_1'] { 'FUNC_IDENT' }
 FOLLOW['CodeBlockEnd'] { }
@@ -465,7 +469,7 @@ FOLLOW['SectionName'] { }
 FOLLOW['SectionName_1'] { }
 FOLLOW['SectionDef'] { }
 FOLLOW['SectionAttributesList'] { }
-FOLLOW['SectionAttributes_1'] { }
+FOLLOW['SectionAttributesList_1'] { }
 FOLLOW['SectionAtribute'] { }
 FOLLOW['Modes'] { }
 FOLLOW['TrueFalse'] { }
@@ -511,5 +515,5 @@ FOLLOW['AsmConstAddSub'] { }
 FOLLOW['AsmConstAddSub_1'] { }
 FOLLOW['BaseAsmConstant'] { }
 ---------------- Create Parse Table --------------
-Table Entries = 209
+Table Entries = 208
 ------------ Check For Conflicts-------------
