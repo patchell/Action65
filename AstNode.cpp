@@ -10,7 +10,9 @@ CAstNode::CAstNode()
 	m_pChild = 0;
 	m_pParent = 0;
 	m_pNodeName = 0;
-	m_pSym = 0;
+	m_pValue = 0;
+	m_pHead = 0;
+	m_pTail = 0;
 }
 
 CAstNode::CAstNode(int NodeType)
@@ -23,7 +25,9 @@ CAstNode::CAstNode(int NodeType)
 	m_pChild = 0;
 	m_pParent = 0;
 	m_pNodeName = 0;
-	m_pSym = 0;
+	m_pValue = 0;
+	m_pHead = 0;
+	m_pTail = 0;
 }
 
 CAstNode::~CAstNode()
@@ -37,7 +41,11 @@ bool CAstNode::CreateNode(
 {
 	SetChild(pChild);
 	SetNext(pNext);
-	if(pChild)GetChild()->SetParent(this);
+	SetChild(pChild);
+	if (pChild)
+	{
+		pChild->AddToTail(pNext);
+	}
 	if(pNext)GetNext()->SetPrev(this);
 	SetStart(Act()->GetParser()->GetAstTree()->GetRootNode());
     return true;
@@ -69,4 +77,35 @@ void CAstNode::Print(FILE* pOut, int Indent, char* s)
 		GetSymbol()?GetSymbol()->GetName():"..."
 	);
 //	delete[] pIndentString;
+}
+
+void CAstNode::AddToHead(CAstNode* pN)
+{
+	if (GetHead())
+	{
+		GetHead()->SetPrev(pN);
+		pN->SetNext(GetHead());
+		SetHead(pN);
+	}
+	else
+	{
+		SetTail(pN);
+		SetHead(pN);
+	}
+}
+
+
+void CAstNode::AddToTail(CAstNode* pNode)
+{
+	if (GetHead())
+	{
+		GetTail()->SetNext(pNode);
+		pNode->SetPrev(GetTail());
+		SetTail(pNode);
+	}
+	else
+	{
+		SetTail(pNode);
+		SetHead(pNode);
+	}
 }

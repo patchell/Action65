@@ -8,7 +8,16 @@ CAct65IDENT::~CAct65IDENT()
 {
 }
 
-bool CAct65IDENT::Create()
+bool CAct65IDENT::Create(CBin* pSym)
 {
-	return false;
+	bool rV = true;
+	CValue* pV = new CValue;
+	pV->Create(pSym);
+	CAstNode::CreateNode();
+	return rV;
+}
+
+CValue* CAct65IDENT::Process()
+{
+    return nullptr;
 }

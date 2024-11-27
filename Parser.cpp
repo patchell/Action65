@@ -45,7 +45,8 @@ CLHead CParser::Run()
 		LookaHead.m_Token = GetLexer()->Lex();
 		LookaHead = Action65(LookaHead);
 		GetLexer()->GetSymTab()->PrintTable(LogFile());
-		GetAstTree()->Print(LogFile());
+//		GetAstTree()->Print(LogFile());
+		fprintf(LogFile(), "Lines Compiled:%d\n", GetLexer()->GetLineNumber());
 	}
 	catch (Exception& BooBoo)
 	{
@@ -274,7 +275,6 @@ CLHead CParser::Action65(CLHead LookaHead)
 	// 
 	//--------------------------------------------
 	PrintLookahead(LogFile(), LookaHead, "Enter Action65", ++m_Recursion);
-
 	LookaHead = Modules(LookaHead);
 	PrintLookahead(LogFile(), LookaHead, "Exit Action65", --m_Recursion);
 	return LookaHead;
@@ -306,6 +306,9 @@ CLHead CParser::Modules(CLHead LookaHead)
 			pN->CreateNode(LHChild.GetNode(), LHNext.GetNode());
 			LHChild.m_pNode = pN;
 			LHChild.SetToken(LHNext.GetToken());
+			break;
+		case Token::EOL:
+			Loop = false;
 			break;
 		default:
 			Loop = false;
@@ -364,10 +367,14 @@ CLHead CParser::VectorAddress(CLHead LookaHead)
 
 	PrintLookahead(LogFile(), LookaHead, "Enter VectorAddress", ++m_Recursion);
 	LookaHead.m_Token = Expect(LookaHead.GetToken(), Token('('));
-	LHChild = CompConst(LookaHead);
+	LHChild = CompConst(LookaHead);	// Vector Address
 	LHNext.m_Token = Expect(LHChild.GetToken(), Token(')'));
 	LHNext.m_Token = Expect(LHNext.GetToken(), Token('='));
-	LHChild.GetNode()->SetNext(LHChild.GetNode());
+	LHNext = CompConst(LHNext);	// Vector Data
+	pN = new CAct65VECTOR;
+	pN->CreateNode(LHChild.GetNode(), LHNext.GetNode());
+	LHChild.m_pNode = pN;
+	LHChild.m_Token = LHNext.GetToken();
 	PrintLookahead(LogFile(), LookaHead, "Exit VectorAddress", --m_Recursion);
 	return LHChild;
 }
@@ -387,23 +394,33 @@ CLHead CParser::Statements(CLHead LookaHead)
 	//					;
 	//--------------------------------------------
 	bool Loop = true;
-	CAstNode* pIdent = 0;
+	CAstNode* pN = 0;
 	CLHead LHChild, LHNext;
 
 	PrintLookahead(LogFile(), LookaHead, "Enter Statements", ++m_Recursion,1);
-	LookaHead = ForStmt(LookaHead);
+	LHChild = ForStmt(LookaHead);
 	while (Loop)
 	{
 		switch (LookaHead.GetToken())
 		{
 		case Token::PROC_IDENT:
-			LookaHead.m_Token = Expect(LookaHead.GetToken(), Token::PROC_IDENT);
-			LookaHead = ProcParams(LookaHead);
-			LookaHead = ForStmt(LookaHead);
+			LHNext.m_Token = Expect(LHChild.GetToken(), Token::PROC_IDENT);
+			LHNext = ProcParams(LHNext);
+			pN = new CAct65ProcCall;
+			pN->CreateNode(LHChild.GetNode(), LHNext.GetNode());
+			LHChild.m_pNode = pN;
+			LHChild.SetToken(LHNext.GetToken());
+			//--------------------------------------------
+			LHChild = ForStmt(LHChild);
 			break;
 		case Token::FUNC_IDENT:
-			LookaHead.m_Token = Expect(LookaHead.GetToken(), Token::FUNC_IDENT);
-			LookaHead = ProcParams(LookaHead);
+			LHNext.m_Token = Expect(LHChild.GetToken(), Token::FUNC_IDENT);
+			LHNext = ProcParams(LookaHead);
+			pN = new CAct65FuncCall;
+			pN->CreateNode(LHChild.GetNode(), LHNext.GetNode());
+			LHChild.m_pNode = pN;
+			LHChild.SetToken(LHNext.GetToken());
+			//-----------------------------------------
 			LookaHead = ForStmt(LookaHead);
 			break;
 		default:
@@ -412,7 +429,7 @@ CLHead CParser::Statements(CLHead LookaHead)
 		}
 	}
 	PrintLookahead(LogFile(), LookaHead, "Exit Statements", --m_Recursion,-1);
-	return LookaHead;
+	return LHChild;
 }
 
 CLHead CParser::ProcParams(CLHead LookaHead)
@@ -422,7 +439,7 @@ CLHead CParser::ProcParams(CLHead LookaHead)
 	//				-> .
 	//				;
 	//--------------------------------------------
-	CAstNode* pIdent = 0;
+	CAstNode* pN = 0;
 	CLHead LHChild, LHNext;
 
 	PrintLookahead(LogFile(), LookaHead, "Enter ProcParams", ++m_Recursion);
@@ -430,8 +447,12 @@ CLHead CParser::ProcParams(CLHead LookaHead)
 	{
 	case Token('('):
 		LookaHead.m_Token = Expect(LookaHead.GetToken(), Token('('));
-		LookaHead = MemContents(LookaHead);
-		LookaHead.m_Token = Expect(LookaHead.GetToken(), Token(')'));
+		LHNext = MemContents(LookaHead);
+		pN = new CAct65FuncCall;
+		pN->CreateNode(LHChild.GetNode(), LHNext.GetNode());
+		LHChild.m_pNode = pN;
+		LHChild.SetToken(LHNext.GetToken());
+		LHChild.m_Token = Expect(LHNext.GetToken(), Token(')'));
 		break;
 	default:
 		break;
@@ -593,7 +614,7 @@ CLHead CParser::EndIf(CLHead LookaHead)
 	CAstNode* pAstNode = 0;
 	CLHead LHChild, LHNext;
 
-	PrintLookahead(LogFile(), LookaHead, "Enter CompConst", ++m_Recursion);
+	PrintLookahead(LogFile(), LookaHead, "Enter EndIf", ++m_Recursion);
 	LookaHead = ElsePart(LookaHead);
 	while (Loop)
 	{
@@ -608,7 +629,7 @@ CLHead CParser::EndIf(CLHead LookaHead)
 			break;
 		}
 	}
-	PrintLookahead(LogFile(), LookaHead, "Exit CompConst", --m_Recursion);
+	PrintLookahead(LogFile(), LookaHead, "Exit EndIf", --m_Recursion);
 	return LHChild;
 }
 
@@ -721,7 +742,7 @@ CLHead CParser::IffStmt(CLHead LookaHead)
 	CAstNode* pAstNode = 0;
 	CLHead LHChild, LHNext;
 
-	PrintLookahead(LogFile(), LookaHead, "Enter CompConst", ++m_Recursion);
+	PrintLookahead(LogFile(), LookaHead, "Enter IFFStmt", ++m_Recursion);
 	LookaHead = WhileStmt(LookaHead);
 	while (Loop)
 	{
@@ -737,7 +758,7 @@ CLHead CParser::IffStmt(CLHead LookaHead)
 			break;
 		}
 	}
-	PrintLookahead(LogFile(), LookaHead, "Exit CompConst", --m_Recursion);
+	PrintLookahead(LogFile(), LookaHead, "Exit IFFStmt", --m_Recursion);
 	return LHChild;
 }
 
@@ -751,7 +772,7 @@ CLHead CParser::IFFend(CLHead LookaHead)
 	CAstNode* pAstNode = 0;
 	CLHead LHChild, LHNext;
 
-	PrintLookahead(LogFile(), LookaHead, "Enter CompConst", ++m_Recursion);
+	PrintLookahead(LogFile(), LookaHead, "Enter IFFend", ++m_Recursion);
 	LookaHead = IFFelse(LookaHead);
 	switch (LookaHead.GetToken())
 	{
@@ -763,7 +784,7 @@ CLHead CParser::IFFend(CLHead LookaHead)
 		Loop = false;
 		break;
 	}
-	PrintLookahead(LogFile(), LookaHead, "Exit CompConst", --m_Recursion);
+	PrintLookahead(LogFile(), LookaHead, "Exit IFFend", --m_Recursion);
 	return LHChild;
 
 }
@@ -780,7 +801,7 @@ CLHead CParser::IFFelse(CLHead LookaHead)
 	CAstNode* pAstNode = 0;
 	CLHead LHChild, LHNext;
 
-	PrintLookahead(LogFile(), LookaHead, "Enter CompConst", ++m_Recursion);
+	PrintLookahead(LogFile(), LookaHead, "Enter IFFelse", ++m_Recursion);
 	LookaHead = IFFthenpart(LookaHead);
 	while (Loop)
 	{
@@ -795,7 +816,7 @@ CLHead CParser::IFFelse(CLHead LookaHead)
 			break;
 		}
 	}
-	PrintLookahead(LogFile(), LookaHead, "Exit CompConst", --m_Recursion);
+	PrintLookahead(LogFile(), LookaHead, "Exit IFFelse", --m_Recursion);
 	return LHChild;
 
 }
@@ -812,7 +833,7 @@ CLHead CParser::IFFthenpart(CLHead LookaHead)
 	CAstNode* pAstNode = 0;
 	CLHead LHChild, LHNext;
 
-	PrintLookahead(LogFile(), LookaHead, "Enter CompConst", ++m_Recursion);
+	PrintLookahead(LogFile(), LookaHead, "Enter IFFthenpart", ++m_Recursion);
 	LookaHead = IffConditional(LookaHead);
 	while (Loop)
 	{
@@ -828,7 +849,7 @@ CLHead CParser::IFFthenpart(CLHead LookaHead)
 			break;
 		}
 	}
-	PrintLookahead(LogFile(), LookaHead, "Exit CompConst", --m_Recursion);
+	PrintLookahead(LogFile(), LookaHead, "Exit IFFthenpart", --m_Recursion);
 	return LHChild;
 
 }
@@ -847,7 +868,7 @@ CLHead CParser::IffConditional(CLHead LookaHead)
 	CAstNode* pAstNode = 0;
 	CLHead LHChild, LHNext;
 
-	PrintLookahead(LogFile(), LookaHead, "Enter CompConst", ++m_Recursion);
+	PrintLookahead(LogFile(), LookaHead, "Enter IffConditional", ++m_Recursion);
 	LookaHead = StatusFlags(LookaHead);
 	while (Loop)
 	{
@@ -873,7 +894,7 @@ CLHead CParser::IffConditional(CLHead LookaHead)
 			break;
 		}
 	}
-	PrintLookahead(LogFile(), LookaHead, "Exit CompConst", --m_Recursion);
+	PrintLookahead(LogFile(), LookaHead, "Exit IffConditional", --m_Recursion);
 	return LHChild;
 
 }
@@ -890,7 +911,7 @@ CLHead CParser::RelOper(CLHead LookaHead)
 	CAstNode* pAstNode = 0;
 	CLHead LHChild, LHNext;
 
-	PrintLookahead(LogFile(), LookaHead, "Enter CompConst", ++m_Recursion);
+	PrintLookahead(LogFile(), LookaHead, "Enter RelOper", ++m_Recursion);
 	switch (LookaHead.GetToken())
 	{
 	case Token('<'):
@@ -905,7 +926,7 @@ CLHead CParser::RelOper(CLHead LookaHead)
 	default:
 		break;
 	}
-	PrintLookahead(LogFile(), LookaHead, "Exit CompConst", --m_Recursion);
+	PrintLookahead(LogFile(), LookaHead, "Exit RelOper", --m_Recursion);
 	return LHChild;
 
 }
@@ -919,11 +940,11 @@ CLHead CParser::StatusFlags(CLHead LookaHead)
 	CAstNode* pAstNode = 0;
 	CLHead LHChild, LHNext;
 
-	PrintLookahead(LogFile(), LookaHead, "Enter CompConst", ++m_Recursion);
+	PrintLookahead(LogFile(), LookaHead, "Enter StatusFlags", ++m_Recursion);
 	LookaHead = Bits(LookaHead);
 	LookaHead = OptNot(LookaHead);
 	LookaHead = StatusFlags_2(LookaHead);
-	PrintLookahead(LogFile(), LookaHead, "Exit CompConst", --m_Recursion);
+	PrintLookahead(LogFile(), LookaHead, "Exit StatusFlags", --m_Recursion);
 	return LHChild;
 
 }
@@ -938,7 +959,7 @@ CLHead CParser::OptNot(CLHead LookaHead)
 	CAstNode* pAstNode = 0;
 	CLHead LHChild, LHNext;
 
-	PrintLookahead(LogFile(), LookaHead, "Enter CompConst", ++m_Recursion);
+	PrintLookahead(LogFile(), LookaHead, "Enter OptNot", ++m_Recursion);
 	switch (LookaHead.GetToken())
 	{
 	case Token('^'):
@@ -947,7 +968,7 @@ CLHead CParser::OptNot(CLHead LookaHead)
 	default:
 		break;
 	}
-	PrintLookahead(LogFile(), LookaHead, "Exit CompConst", --m_Recursion);
+	PrintLookahead(LogFile(), LookaHead, "Exit OptNot", --m_Recursion);
 	return LHChild;
 
 }
@@ -965,7 +986,7 @@ CLHead CParser::StatusFlags_2(CLHead LookaHead)
 	CAstNode* pAstNode = 0;
 	CLHead LHChild, LHNext;
 
-	PrintLookahead(LogFile(), LookaHead, "Enter CompConst", ++m_Recursion);
+	PrintLookahead(LogFile(), LookaHead, "Enter StatusFlags_2", ++m_Recursion);
 	switch (LookaHead.GetToken())
 	{
 	case Token::NEG:
@@ -983,7 +1004,7 @@ CLHead CParser::StatusFlags_2(CLHead LookaHead)
 	default:
 		break;
 	}
-	PrintLookahead(LogFile(), LookaHead, "Exit CompConst", --m_Recursion);
+	PrintLookahead(LogFile(), LookaHead, "Exit StatusFlags_2", --m_Recursion);
 	return LHChild;
 
 }
@@ -999,7 +1020,7 @@ CLHead CParser::Bits(CLHead LookaHead)
 	CAstNode* pAstNode = 0;
 	CLHead LHChild, LHNext;
 
-	PrintLookahead(LogFile(), LookaHead, "Enter CompConst", ++m_Recursion);
+	PrintLookahead(LogFile(), LookaHead, "Enter Bits", ++m_Recursion);
 	switch (LookaHead.GetToken())
 	{
 		case Token::BITS:
@@ -1010,7 +1031,7 @@ CLHead CParser::Bits(CLHead LookaHead)
 		Loop = false;
 		break;
 	}
-	PrintLookahead(LogFile(), LookaHead, "Exit CompConst", --m_Recursion);
+	PrintLookahead(LogFile(), LookaHead, "Exit Bits", --m_Recursion);
 	return LHChild;
 
 }
@@ -1024,11 +1045,11 @@ CLHead CParser::BitValue(CLHead LookaHead)
 	CAstNode* pAstNode = 0;
 	CLHead LHChild, LHNext;
 
-	PrintLookahead(LogFile(), LookaHead, "Enter CompConst", ++m_Recursion);
+	PrintLookahead(LogFile(), LookaHead, "Enter BitValue", ++m_Recursion);
 	LookaHead.m_Token = Expect(LookaHead.GetToken(), Token('['));
 	LookaHead = ArithExpr(LookaHead);
 	LookaHead.m_Token = Expect(LookaHead.GetToken(), Token(']'));
-	PrintLookahead(LogFile(), LookaHead, "Exit CompConst", --m_Recursion);
+	PrintLookahead(LogFile(), LookaHead, "Exit BitValue", --m_Recursion);
 	return LHChild;
 
 }
@@ -1117,7 +1138,7 @@ CLHead CParser::DoEND(CLHead LookaHead)
 	CAstNode* pAstNode = 0;
 	CLHead LHChild, LHNext;
 
-	PrintLookahead(LogFile(), LookaHead, "Enter CompConst", ++m_Recursion);
+	PrintLookahead(LogFile(), LookaHead, "Enter DoEND", ++m_Recursion);
 	LookaHead = Statements(LookaHead);
 	switch (LookaHead.GetToken())
 	{
@@ -1127,7 +1148,7 @@ CLHead CParser::DoEND(CLHead LookaHead)
 	default:
 		break;
 	}
-	PrintLookahead(LogFile(), LookaHead, "Exit CompConst", --m_Recursion);
+	PrintLookahead(LogFile(), LookaHead, "Exit DoEND", --m_Recursion);
 	return LHChild;
 
 }
@@ -1300,7 +1321,7 @@ CLHead CParser::EndAsmBlock(CLHead LookaHead)
 	CAstNode* pAstNode = 0;
 	CLHead LHChild, LHNext;
 
-	PrintLookahead(LogFile(), LookaHead, "Enter CompConst", ++m_Recursion);
+	PrintLookahead(LogFile(), LookaHead, "Enter EndAsmBlock", ++m_Recursion);
 	LookaHead = AsmStmt(LookaHead);
 	switch (LookaHead.GetToken())
 	{
@@ -1311,7 +1332,7 @@ CLHead CParser::EndAsmBlock(CLHead LookaHead)
 	default:
 		break;
 	}
-	PrintLookahead(LogFile(), LookaHead, "Exit CompConst", --m_Recursion);
+	PrintLookahead(LogFile(), LookaHead, "Exit EndAsmBlock", --m_Recursion);
 	return LHChild;
 
 }
@@ -1363,7 +1384,7 @@ CLHead CParser::CodeBlockEnd(CLHead LookaHead)
 	CAstNode* pAstNode = 0;
 	CLHead LHChild, LHNext;
 
-	PrintLookahead(LogFile(), LookaHead, "Enter CompConst", ++m_Recursion);
+	PrintLookahead(LogFile(), LookaHead, "Enter CodeBlockEnd", ++m_Recursion);
 	LookaHead = ConstList(LookaHead);
 	switch (LookaHead.GetToken())
 	{
@@ -1373,7 +1394,7 @@ CLHead CParser::CodeBlockEnd(CLHead LookaHead)
 	default:
 		break;
 	}
-	PrintLookahead(LogFile(), LookaHead, "Exit CompConst", --m_Recursion);
+	PrintLookahead(LogFile(), LookaHead, "Exit CodeBlockEnd", --m_Recursion);
 	return LHChild;
 
 }
@@ -1429,7 +1450,7 @@ CLHead CParser::Push(CLHead LookaHead)
 	CAstNode* pAstNode = 0;
 	CLHead LHChild, LHNext;
 
-	PrintLookahead(LogFile(), LookaHead, "Enter CompConst", ++m_Recursion);
+	PrintLookahead(LogFile(), LookaHead, "Enter Push", ++m_Recursion);
 	LookaHead = Pop(LookaHead);
 	while (Loop)
 	{
@@ -1445,7 +1466,7 @@ CLHead CParser::Push(CLHead LookaHead)
 			break;
 		}
 	}
-	PrintLookahead(LogFile(), LookaHead, "Exit CompConst", --m_Recursion);
+	PrintLookahead(LogFile(), LookaHead, "Exit Push", --m_Recursion);
 	return LHChild;
 
 }
@@ -1462,7 +1483,7 @@ CLHead CParser::PushSourceList(CLHead LookaHead)
 		CAstNode* pAstNode = 0;
 		CLHead LHChild, LHNext;
 
-		PrintLookahead(LogFile(), LookaHead, "Enter CompConst", ++m_Recursion);
+		PrintLookahead(LogFile(), LookaHead, "Enter PushSourceList", ++m_Recursion);
 		LookaHead = PushSource(LookaHead);
 		while (Loop)
 		{
@@ -1477,7 +1498,7 @@ CLHead CParser::PushSourceList(CLHead LookaHead)
 				break;
 			}
 		}
-		PrintLookahead(LogFile(), LookaHead, "Exit CompConst", --m_Recursion);
+		PrintLookahead(LogFile(), LookaHead, "Exit PushSourceList", --m_Recursion);
 		return LHChild;
 
 }
@@ -1497,7 +1518,7 @@ CLHead CParser::PushSource(CLHead LookaHead)
 	CAstNode* pAstNode = 0;
 	CLHead LHChild, LHNext;
 
-	PrintLookahead(LogFile(), LookaHead, "Enter CompConst", ++m_Recursion);
+	PrintLookahead(LogFile(), LookaHead, "Enter PushSource", ++m_Recursion);
 	LookaHead = ArithExpr(LookaHead);
 	switch (LookaHead.GetToken())
 	{
@@ -1517,7 +1538,7 @@ CLHead CParser::PushSource(CLHead LookaHead)
 		Loop = false;
 		break;
 	}
-	PrintLookahead(LogFile(), LookaHead, "Exit CompConst", --m_Recursion);
+	PrintLookahead(LogFile(), LookaHead, "Exit PushSource", --m_Recursion);
 	return LHChild;
 
 }
@@ -1538,7 +1559,7 @@ CLHead CParser::Pop(CLHead LookaHead)
 	CAstNode* pAstNode = 0;
 	CLHead LHChild, LHNext;
 
-	PrintLookahead(LogFile(), LookaHead, "Enter CompConst", ++m_Recursion);
+	PrintLookahead(LogFile(), LookaHead, "Enter Pop", ++m_Recursion);
 	LookaHead = Break(LookaHead);
 	while (Loop)
 	{
@@ -1554,7 +1575,7 @@ CLHead CParser::Pop(CLHead LookaHead)
 			break;
 		}
 	}
-	PrintLookahead(LogFile(), LookaHead, "Exit CompConst", --m_Recursion);
+	PrintLookahead(LogFile(), LookaHead, "Exit Pop", --m_Recursion);
 	return LHChild;
 
 }
@@ -1571,7 +1592,7 @@ CLHead CParser::PopDestList(CLHead LookaHead)
 	CAstNode* pAstNode = 0;
 	CLHead LHChild, LHNext;
 
-	PrintLookahead(LogFile(), LookaHead, "Enter CompConst", ++m_Recursion);
+	PrintLookahead(LogFile(), LookaHead, "Enter PopDestList", ++m_Recursion);
 	LookaHead = PopDest(LookaHead);
 	while (Loop)
 	{
@@ -1586,7 +1607,7 @@ CLHead CParser::PopDestList(CLHead LookaHead)
 			break;
 		}
 	}
-	PrintLookahead(LogFile(), LookaHead, "Exit CompConst", --m_Recursion);
+	PrintLookahead(LogFile(), LookaHead, "Exit PopDestList", --m_Recursion);
 	return LHChild;
 
 }
@@ -1605,7 +1626,7 @@ CLHead CParser::PopDest(CLHead LookaHead)
 	CAstNode* pAstNode = 0;
 	CLHead LHChild, LHNext;
 
-	PrintLookahead(LogFile(), LookaHead, "Enter CompConst", ++m_Recursion);
+	PrintLookahead(LogFile(), LookaHead, "Enter PopDest", ++m_Recursion);
 	LookaHead = MemContentsType(LookaHead);
 	switch (LookaHead.GetToken())
 	{
@@ -1624,7 +1645,7 @@ CLHead CParser::PopDest(CLHead LookaHead)
 	default:
 		break;
 	}
-	PrintLookahead(LogFile(), LookaHead, "Exit CompConst", --m_Recursion);
+	PrintLookahead(LogFile(), LookaHead, "Exit PopDest", --m_Recursion);
 	return LHChild;
 
 }
@@ -1645,7 +1666,7 @@ CLHead CParser::Break(CLHead LookaHead)
 	CAstNode* pAstNode = 0;
 	CLHead LHChild, LHNext;
 
-	PrintLookahead(LogFile(), LookaHead, "Enter CompConst", ++m_Recursion);
+	PrintLookahead(LogFile(), LookaHead, "Enter Break", ++m_Recursion);
 	LookaHead = Rti(LookaHead);
 	while (Loop)
 	{
@@ -1660,7 +1681,7 @@ CLHead CParser::Break(CLHead LookaHead)
 			break;
 		}
 	}
-	PrintLookahead(LogFile(), LookaHead, "Exit CompConst", --m_Recursion);
+	PrintLookahead(LogFile(), LookaHead, "Exit Break", --m_Recursion);
 	return LHChild;
 
 }
@@ -1681,7 +1702,7 @@ CLHead CParser::Rti(CLHead LookaHead)
 	CAstNode* pAstNode = 0;
 	CLHead LHChild, LHNext;
 
-	PrintLookahead(LogFile(), LookaHead, "Enter CompConst", ++m_Recursion);
+	PrintLookahead(LogFile(), LookaHead, "Enter Rti", ++m_Recursion);
 	LookaHead = Assignment(LookaHead);
 	while (Loop)
 	{
@@ -1696,7 +1717,7 @@ CLHead CParser::Rti(CLHead LookaHead)
 			break;
 		}
 	}
-	PrintLookahead(LogFile(), LookaHead, "Exit CompConst", --m_Recursion);
+	PrintLookahead(LogFile(), LookaHead, "Exit Rti", --m_Recursion);
 	return LHChild;
 
 }
@@ -1964,7 +1985,7 @@ CLHead CParser::LogicalOR(CLHead LookaHead)
 	CAstNode* pN = 0;
 	CLHead LHChild, LHNext;
 
-	PrintLookahead(LogFile(), LookaHead, "Enter ArithExpr", ++m_Recursion);
+	PrintLookahead(LogFile(), LookaHead, "Enter LogicalOR", ++m_Recursion);
 	LHChild = LogicalAND(LookaHead);
 	while (Loop)
 	{
@@ -2039,7 +2060,7 @@ CLHead CParser::ArithExpr(CLHead LookaHead)
 	CAstNode* pN = 0;
 	CLHead LHChild, LHNext;
 
-	PrintLookahead(LogFile(), LookaHead, "Enter BitwiseOR", ++m_Recursion);
+	PrintLookahead(LogFile(), LookaHead, "Enter ArithExpr/BitwiseOR", ++m_Recursion);
 	LHChild = BitwiseAND(LookaHead);
 	while (Loop)
 	{
@@ -2058,7 +2079,7 @@ CLHead CParser::ArithExpr(CLHead LookaHead)
 			break;
 		}
 	}
-	PrintLookahead(LogFile(), LookaHead, "Exit BitwiseOR", --m_Recursion);
+	PrintLookahead(LogFile(), LookaHead, "Exit ArithExpr/BitwiseOR", --m_Recursion);
 	return LHChild;
 }
 
@@ -2421,7 +2442,7 @@ CLHead CParser::Def(CLHead LookaHead)
 	default:
 		break;
 	}
-	PrintLookahead(LogFile(), LookaHead, "Exit Def", --m_Recursion);
+	PrintLookahead(LogFile(), LookaHead, "Exit DEF", --m_Recursion);
 	return LHChild;
 }
 
@@ -2472,7 +2493,7 @@ CLHead CParser::EndTypeDef(CLHead LookaHead)
 	CAstNode* pAstNode = 0;
 	CLHead LHChild, LHNext;
 
-	PrintLookahead(LogFile(), LookaHead, "Enter CompConst", ++m_Recursion);
+	PrintLookahead(LogFile(), LookaHead, "Enter EndTypeDef", ++m_Recursion);
 	LookaHead = RecDefField(LookaHead);
 	switch (LookaHead.GetToken())
 	{
@@ -2482,7 +2503,7 @@ CLHead CParser::EndTypeDef(CLHead LookaHead)
 	default:
 		break;
 	}
-	PrintLookahead(LogFile(), LookaHead, "Exit CompConst", --m_Recursion);
+	PrintLookahead(LogFile(), LookaHead, "Exit EndTypeDef", --m_Recursion);
 	return LHChild;
 
 }
@@ -2499,7 +2520,7 @@ CLHead CParser::RecDefField(CLHead LookaHead)
 	CAstNode* pAstNode = 0;
 	CLHead LHChild, LHNext;
 
-	PrintLookahead(LogFile(), LookaHead, "Enter CompConst", ++m_Recursion);
+	PrintLookahead(LogFile(), LookaHead, "Enter RecDefField", ++m_Recursion);
 	LookaHead = Ident(LookaHead);
 		switch (LookaHead.GetToken())
 		{
@@ -2515,7 +2536,7 @@ CLHead CParser::RecDefField(CLHead LookaHead)
 	default:
 		break;
 	}
-	PrintLookahead(LogFile(), LookaHead, "Exit CompConst", --m_Recursion);
+	PrintLookahead(LogFile(), LookaHead, "Exit RecDefField", --m_Recursion);
 	return LHChild;
 
 }
@@ -2592,7 +2613,7 @@ CLHead CParser::FundPointerDecl(CLHead LookaHead)
 	CAstNode* pAstNode = 0;
 	CLHead LHChild, LHNext;
 
-	PrintLookahead(LogFile(), LookaHead, "Enter CompConst", ++m_Recursion);
+	PrintLookahead(LogFile(), LookaHead, "Enter FundPointerDecl", ++m_Recursion);
 	LookaHead = FundArrayDecl(LookaHead);
 	switch (LookaHead.GetToken())
 	{
@@ -2603,7 +2624,7 @@ CLHead CParser::FundPointerDecl(CLHead LookaHead)
 	default:
 		break;
 	}
-	PrintLookahead(LogFile(), LookaHead, "Exit CompConst", --m_Recursion);
+	PrintLookahead(LogFile(), LookaHead, "Exit FundPointerDecl", --m_Recursion);
 	return LHChild;
 
 }
@@ -2619,7 +2640,7 @@ CLHead CParser::FundArrayDecl(CLHead LookaHead)
 	CAstNode* pAstNode = 0;
 	CLHead LHChild, LHNext;
 
-	PrintLookahead(LogFile(), LookaHead, "Enter CompConst", ++m_Recursion);
+	PrintLookahead(LogFile(), LookaHead, "Enter FundArrayDecl", ++m_Recursion);
 	LookaHead = FunctionDecl(LookaHead);
 	switch (LookaHead.GetToken())
 	{
@@ -2630,7 +2651,7 @@ CLHead CParser::FundArrayDecl(CLHead LookaHead)
 	default:
 		break;
 	}
-	PrintLookahead(LogFile(), LookaHead, "Exit CompConst", --m_Recursion);
+	PrintLookahead(LogFile(), LookaHead, "Exit FundArrayDecl", --m_Recursion);
 	return LHChild;
 }
 
@@ -2647,7 +2668,7 @@ CLHead CParser::FunctionDecl(CLHead LookaHead)
 	CAstNode* pAstNode = 0;
 	CLHead LHChild, LHNext;
 
-	PrintLookahead(LogFile(), LookaHead, "Enter CompConst", ++m_Recursion);
+	PrintLookahead(LogFile(), LookaHead, "Enter FunctionDecl", ++m_Recursion);
 	LookaHead = IdentList(LookaHead);
 	switch (LookaHead.GetToken())
 	{
@@ -2666,7 +2687,7 @@ CLHead CParser::FunctionDecl(CLHead LookaHead)
 	default:
 		break;
 	}
-	PrintLookahead(LogFile(), LookaHead, "Exit CompConst", --m_Recursion);
+	PrintLookahead(LogFile(), LookaHead, "Exit FunctionDecl", --m_Recursion);
 	return LHChild;
 
 }
@@ -2679,10 +2700,10 @@ CLHead CParser::IrqDef(CLHead LookaHead)
 	CAstNode* pAstNode = 0;
 	CLHead LHChild, LHNext;
 
-	PrintLookahead(LogFile(), LookaHead, "Enter CompConst", ++m_Recursion);
+	PrintLookahead(LogFile(), LookaHead, "Enter IrqDef", ++m_Recursion);
 	LookaHead = IrqDecl(LookaHead);
 	LookaHead = IrqBody(LookaHead);
-	PrintLookahead(LogFile(), LookaHead, "Exit CompConst", --m_Recursion);
+	PrintLookahead(LogFile(), LookaHead, "Exit IrqDef", --m_Recursion);
 	return LHChild;
 }
 
@@ -2728,11 +2749,12 @@ CLHead CParser::IrqDecl(CLHead LookaHead)
 	CAstNode* pAstNode = 0;
 	CLHead LHChild, LHNext;
 
+	PrintLookahead(LogFile(), LookaHead, "Enter IrqDecl", ++m_Recursion);
 	LookaHead.m_Token = Expect(LookaHead.GetToken(), Token::IDENT);
 	LookaHead = OptInit(LookaHead);
 	LookaHead.m_Token = Expect(LookaHead.GetToken(), Token('('));
 	LookaHead.m_Token = Expect(LookaHead.GetToken(), Token(')'));
-	PrintLookahead(LogFile(), LookaHead, "Exit CompConst", --m_Recursion);
+	PrintLookahead(LogFile(), LookaHead, "Exit IrqDecl", --m_Recursion);
 	return LHChild;
 
 }
@@ -2745,7 +2767,7 @@ CLHead CParser::ProcDecl(CLHead LookaHead)
 	CAstNode* pAstNode = 0;
 	CLHead LHChild, LHNext;
 
-	PrintLookahead(LogFile(), LookaHead, "Enter CompConst", ++m_Recursion);
+	PrintLookahead(LogFile(), LookaHead, "Enter ProcDecl", ++m_Recursion);
 	switch (LookaHead.GetToken())
 	{
 	case Token::IDENT:
@@ -2758,7 +2780,7 @@ CLHead CParser::ProcDecl(CLHead LookaHead)
 	default:
 		break;
 	}
-	PrintLookahead(LogFile(), LookaHead, "Exit CompConst", --m_Recursion);
+	PrintLookahead(LogFile(), LookaHead, "Exit ProcDecl", --m_Recursion);
 	return LHChild;
 
 }
@@ -2771,13 +2793,13 @@ CLHead CParser::FuncDecl(CLHead LookaHead)
 	CAstNode* pAstNode = 0;
 	CLHead LHChild, LHNext;
 
-	PrintLookahead(LogFile(), LookaHead, "Enter CompConst", ++m_Recursion);
+	PrintLookahead(LogFile(), LookaHead, "Enter FuncDecl", ++m_Recursion);
 	LookaHead.m_Token = Expect(LookaHead.GetToken(), Token::IDENT);
 	LookaHead = OptInit(LookaHead);
 	LookaHead.m_Token = Expect(LookaHead.GetToken(), Token('('));
 	LookaHead = ParamList(LookaHead);
 	LookaHead.m_Token = Expect(LookaHead.GetToken(), Token(')'));
-	PrintLookahead(LogFile(), LookaHead, "Exit CompConst", --m_Recursion);
+	PrintLookahead(LogFile(), LookaHead, "Exit FuncDecl", --m_Recursion);
 	return LHChild;
 
 }
@@ -2816,10 +2838,10 @@ CLHead CParser::IrqBody(CLHead LookaHead)
 	CAstNode* pAstNode = 0;
 	CLHead LHChild, LHNext;
 
-	PrintLookahead(LogFile(), LookaHead, "Enter CompConst", ++m_Recursion);
+	PrintLookahead(LogFile(), LookaHead, "Enter IrqBody", ++m_Recursion);
 	LookaHead = LocalDecls(LookaHead);
 	LookaHead = Statements(LookaHead);
-	PrintLookahead(LogFile(), LookaHead, "Exit CompConst", --m_Recursion);
+	PrintLookahead(LogFile(), LookaHead, "Exit IrqBody", --m_Recursion);
 	return LHChild;
 
 }
@@ -2918,7 +2940,7 @@ CLHead CParser::IdentInit(CLHead LookaHead)
 	CAstNode* pAstNode = 0;
 	CLHead LHChild, LHNext;
 
-	PrintLookahead(LogFile(), LookaHead, "Enter CompConst", ++m_Recursion);
+	PrintLookahead(LogFile(), LookaHead, "Enter IdentInit", ++m_Recursion);
 	LookaHead = ArrayDim(LookaHead);
 	switch (LookaHead.GetToken())
 	{
@@ -2929,7 +2951,7 @@ CLHead CParser::IdentInit(CLHead LookaHead)
 	default:
 		break;
 	}
-	PrintLookahead(LogFile(), LookaHead, "Exit CompConst", --m_Recursion);
+	PrintLookahead(LogFile(), LookaHead, "Exit IdentInit", --m_Recursion);
 	return LHChild;
 }
 
@@ -2944,7 +2966,7 @@ CLHead CParser::Address(CLHead LookaHead)
 	CAstNode* pAstNode = 0;
 	CLHead LHChild, LHNext;
 
-	PrintLookahead(LogFile(), LookaHead, "Enter CompConst", ++m_Recursion);
+	PrintLookahead(LogFile(), LookaHead, "Enter Address", ++m_Recursion);
 	LookaHead = CompConst(LookaHead);
 	switch (LookaHead.GetToken())
 	{
@@ -2955,7 +2977,7 @@ CLHead CParser::Address(CLHead LookaHead)
 	default:
 		break;
 	}
-	PrintLookahead(LogFile(), LookaHead, "Exit CompConst", --m_Recursion);
+	PrintLookahead(LogFile(), LookaHead, "Exit Address", --m_Recursion);
 	return LHChild;
 
 }
@@ -2971,7 +2993,7 @@ CLHead CParser::Data(CLHead LookaHead)
 	CAstNode* pAstNode = 0;
 	CLHead LHChild, LHNext;
 
-	PrintLookahead(LogFile(), LookaHead, "Enter CompConst", ++m_Recursion);
+	PrintLookahead(LogFile(), LookaHead, "Enter Data", ++m_Recursion);
 	LookaHead = ConstList(LookaHead);
 	switch (LookaHead.GetToken())
 	{
@@ -2981,7 +3003,7 @@ CLHead CParser::Data(CLHead LookaHead)
 	default:
 		break;
 	}
-	PrintLookahead(LogFile(), LookaHead, "Exit CompConst", --m_Recursion);
+	PrintLookahead(LogFile(), LookaHead, "Exit Data", --m_Recursion);
 	return LHChild;
 
 }
@@ -2998,11 +3020,18 @@ CLHead CParser::ArrayDim(CLHead LookaHead)
 	CAstNode* pAstNode = 0;
 	CLHead LHChild, LHNext;
 
-	PrintLookahead(LogFile(), LookaHead, "Enter CompConst", ++m_Recursion);
-	LookaHead.m_Token = Expect(LookaHead.GetToken(), Token('('));
-	LookaHead = CompConst(LookaHead);
-	LookaHead.m_Token = Expect(LookaHead.GetToken(), Token(')'));
-	PrintLookahead(LogFile(), LookaHead, "Exit CompConst", --m_Recursion);
+	PrintLookahead(LogFile(), LookaHead, "Enter ArrayDim", ++m_Recursion);
+	switch (LookaHead.GetToken())
+	{
+	case Token('('):
+		LookaHead.m_Token = Expect(LookaHead.GetToken(), Token('('));
+		LookaHead = CompConst(LookaHead);
+		LookaHead.m_Token = Expect(LookaHead.GetToken(), Token(')'));
+		break;
+	default:
+		break;
+	}
+	PrintLookahead(LogFile(), LookaHead, "Exit ArrayDim", --m_Recursion);
 	return LHChild;
 
 }
@@ -3083,7 +3112,7 @@ CLHead CParser::PramPointer(CLHead LookaHead)
 	CAstNode* pAstNode = 0;
 	CLHead LHChild, LHNext;
 
-	PrintLookahead(LogFile(), LookaHead, "Enter CompConst", ++m_Recursion);
+	PrintLookahead(LogFile(), LookaHead, "Enter PramPointer", ++m_Recursion);
 	LookaHead = ParamArray(LookaHead);
 	switch (LookaHead.GetToken())
 	{
@@ -3094,7 +3123,7 @@ CLHead CParser::PramPointer(CLHead LookaHead)
 	default:
 		break;
 	}
-	PrintLookahead(LogFile(), LookaHead, "Exit CompConst", --m_Recursion);
+	PrintLookahead(LogFile(), LookaHead, "Exit PramPointer", --m_Recursion);
 	return LHChild;
 
 }
@@ -3110,7 +3139,7 @@ CLHead CParser::ParamArray(CLHead LookaHead)
 	CAstNode* pAstNode = 0;
 	CLHead LHChild, LHNext;
 
-	PrintLookahead(LogFile(), LookaHead, "Enter CompConst", ++m_Recursion);
+	PrintLookahead(LogFile(), LookaHead, "Enter ParamArray", ++m_Recursion);
 	LookaHead = IdentList(LookaHead);
 	switch (LookaHead.GetToken())
 	{
@@ -3121,7 +3150,7 @@ CLHead CParser::ParamArray(CLHead LookaHead)
 	default:
 		break;
 	}
-	PrintLookahead(LogFile(), LookaHead, "Exit CompConst", --m_Recursion);
+	PrintLookahead(LogFile(), LookaHead, "Exit ParamArray", --m_Recursion);
 	return LHChild;
 }
 
@@ -3199,7 +3228,7 @@ CLHead CParser::LocalPointerDecl(CLHead LookaHead)
 	CAstNode* pAstNode = 0;
 	CLHead LHChild, LHNext;
 
-	PrintLookahead(LogFile(), LookaHead, "Enter CompConst", ++m_Recursion);
+	PrintLookahead(LogFile(), LookaHead, "Enter LocalPointerDecl", ++m_Recursion);
 	LookaHead = LocalArrayDecl(LookaHead);
 	switch (LookaHead.GetToken())
 	{
@@ -3210,7 +3239,7 @@ CLHead CParser::LocalPointerDecl(CLHead LookaHead)
 	default:
 		break;
 	}
-	PrintLookahead(LogFile(), LookaHead, "Exit CompConst", --m_Recursion);
+	PrintLookahead(LogFile(), LookaHead, "Exit LocalPointerDecl", --m_Recursion);
 	return LHChild;
 
 }
@@ -3226,7 +3255,7 @@ CLHead CParser::LocalArrayDecl(CLHead LookaHead)
 	CAstNode* pAstNode = 0;
 	CLHead LHChild, LHNext;
 
-	PrintLookahead(LogFile(), LookaHead, "Enter CompConst", ++m_Recursion);
+	PrintLookahead(LogFile(), LookaHead, "Enter LocalArrayDecl", ++m_Recursion);
 	LookaHead = IdentList(LookaHead);
 	switch (LookaHead.GetToken())
 	{
@@ -3237,7 +3266,7 @@ CLHead CParser::LocalArrayDecl(CLHead LookaHead)
 	default:
 		break;
 	}
-	PrintLookahead(LogFile(), LookaHead, "Exit CompConst", --m_Recursion);
+	PrintLookahead(LogFile(), LookaHead, "Exit LocalArrayDecl", --m_Recursion);
 	return LHChild;
 }
 
@@ -3258,7 +3287,7 @@ CLHead CParser::ConstList(CLHead LookaHead)
 	CAstNode* pAstNode = 0;
 	CLHead LHChild, LHNext;
 
-	PrintLookahead(LogFile(), LookaHead, "Enter CompConstList", ++m_Recursion);
+	PrintLookahead(LogFile(), LookaHead, "Enter ConstList", ++m_Recursion);
 	LookaHead = CompConst(LookaHead);
 	while (Loop)
 	{
@@ -3273,7 +3302,7 @@ CLHead CParser::ConstList(CLHead LookaHead)
 			break;
 		}
 	}
-	PrintLookahead(LogFile(), LookaHead, "Exit CompConstList", --m_Recursion);
+	PrintLookahead(LogFile(), LookaHead, "Exit ConstList", --m_Recursion);
 	return LHChild;
 }
 
@@ -3375,7 +3404,7 @@ CLHead CParser::ValueList(CLHead LookaHead)
 	CAstNode* pAstNode = 0;
 	CLHead LHChild, LHNext;
 
-	PrintLookahead(LogFile(), LookaHead, "Enter CompConst", ++m_Recursion);
+	PrintLookahead(LogFile(), LookaHead, "Enter ValueList", ++m_Recursion);
 	LookaHead = Value(LookaHead);
 	while (Loop)
 	{
@@ -3390,7 +3419,7 @@ CLHead CParser::ValueList(CLHead LookaHead)
 			break;
 		}
 	}
-	PrintLookahead(LogFile(), LookaHead, "Exit CompConst", --m_Recursion);
+	PrintLookahead(LogFile(), LookaHead, "Exit ValueList", --m_Recursion);
 	return LHChild;
 
 }
@@ -3409,7 +3438,7 @@ CLHead CParser::Value(CLHead LookaHead)
 	CAstNode* pAstNode = 0;
 	CLHead LHChild, LHNext;
 
-	PrintLookahead(LogFile(), LookaHead, "Enter CompConst", ++m_Recursion);
+	PrintLookahead(LogFile(), LookaHead, "Enter Value", ++m_Recursion);
 	LookaHead = MemContentsType(LookaHead);
 	while (Loop)
 	{
@@ -3430,7 +3459,7 @@ CLHead CParser::Value(CLHead LookaHead)
 			break;
 		}
 	}
-	PrintLookahead(LogFile(), LookaHead, "Exit CompConst", --m_Recursion);
+	PrintLookahead(LogFile(), LookaHead, "Exit Value", --m_Recursion);
 	return LHChild;
 
 }
@@ -3449,7 +3478,7 @@ CLHead CParser::AddressOf(CLHead LookaHead)
 	CAstNode* pAstNode = 0;
 	CLHead LHChild, LHNext;
 
-	PrintLookahead(LogFile(), LookaHead, "Enter CompConst", ++m_Recursion);
+	PrintLookahead(LogFile(), LookaHead, "Enter AddressOf", ++m_Recursion);
 	LookaHead = MemContentsType(LookaHead);
 	switch (LookaHead.GetToken())
 	{
@@ -3466,7 +3495,7 @@ CLHead CParser::AddressOf(CLHead LookaHead)
 		Loop = false;
 		break;
 	}
-	PrintLookahead(LogFile(), LookaHead, "Exit CompConst", --m_Recursion);
+	PrintLookahead(LogFile(), LookaHead, "Exit AddressOf", --m_Recursion);
 	return LHChild;
 
 }
@@ -3522,13 +3551,14 @@ CLHead CParser::MemContents(CLHead LookaHead)
 	//					-> .
 	//					;
 	//--------------------------------------------
-	CAstNode* pAstNode = 0;
-	CLHead LHChild, LHNext;
+	CAstNode* pN = 0;
 
 	PrintLookahead(LogFile(), LookaHead, "Enter MemContents", ++m_Recursion);
+	pN = new CAct65IDENT;
 	LookaHead.m_Token = Expect(LookaHead.GetToken(), Token::IDENT);
+	LookaHead.SetNode(pN);
 	PrintLookahead(LogFile(), LookaHead, "Exit MemCoontents", --m_Recursion);
-	return LHChild;
+	return LookaHead;
 }
 
 
@@ -3540,8 +3570,10 @@ CLHead CParser::AsmStmt(CLHead LookaHead)
 	CAstNode* pAstNode = 0;
 	CLHead LHChild, LHNext;
 
+	PrintLookahead(LogFile(), LookaHead, "Enter AsmStmt", ++m_Recursion);
 	LookaHead = Section(LookaHead);
 	LookaHead = Processor_1(LookaHead);
+	PrintLookahead(LogFile(), LookaHead, "Enter AsmStmt", ++m_Recursion);
 	return LookaHead;
 }
 
@@ -3556,6 +3588,7 @@ CLHead CParser::Processor_1(CLHead LookaHead)
 	CAstNode* pAstNode = 0;
 	CLHead LHChild, LHNext;
 
+	PrintLookahead(LogFile(), LookaHead, "Enter Processor_1", ++m_Recursion);
 	while (Loop)
 	{
 		switch (LookaHead.GetToken())
@@ -3569,6 +3602,7 @@ CLHead CParser::Processor_1(CLHead LookaHead)
 			break;
 		}
 	}
+	PrintLookahead(LogFile(), LookaHead, "Enter Processor_1", ++m_Recursion);
 	return LookaHead;
 }
 
@@ -3583,6 +3617,7 @@ CLHead CParser::ProcessorType(CLHead LookaHead)
 	CAstNode* pAstNode = 0;
 	CLHead LHChild, LHNext;
 
+	PrintLookahead(LogFile(), LookaHead, "Enter ProcessorType", ++m_Recursion);
 	switch (LookaHead.GetToken())
 	{
 	case Token::R6502:
@@ -3597,6 +3632,7 @@ CLHead CParser::ProcessorType(CLHead LookaHead)
 	default:
 		break;
 	}
+	PrintLookahead(LogFile(), LookaHead, "Enter ProcessorType", ++m_Recursion);
 	return LookaHead;
 }
 
@@ -3616,6 +3652,7 @@ CLHead CParser::Section(CLHead LookaHead)
 	CAstNode* pAstNode = 0;
 	CLHead LHChild, LHNext;
 
+	PrintLookahead(LogFile(), LookaHead, "Enter Section", ++m_Recursion);
 	LookaHead = Org(LookaHead);
 	while (Loop)
 	{
@@ -3636,6 +3673,7 @@ CLHead CParser::Section(CLHead LookaHead)
 			break;
 		}
 	}
+	PrintLookahead(LogFile(), LookaHead, "Exit Section", ++m_Recursion);
 	return LookaHead;
 }
 
@@ -3648,6 +3686,8 @@ CLHead CParser::SectionName(CLHead LookaHead)
 	//					;
 	//--------------------------------------------------
 
+	PrintLookahead(LogFile(), LookaHead, "Enter SectionName", ++m_Recursion);
+	PrintLookahead(LogFile(), LookaHead, "Exit SectionName", ++m_Recursion);
 	return CLHead();
 }
 
@@ -3658,6 +3698,8 @@ CLHead CParser::SectionDef(CLHead LookaHead)
 	//				-> .
 	//				;
 	//--------------------------------------------------
+	PrintLookahead(LogFile(), LookaHead, "Enter SectionDef", ++m_Recursion);
+	PrintLookahead(LogFile(), LookaHead, "Exit SectionDef", ++m_Recursion);
 	return CLHead();
 }
 
@@ -3669,6 +3711,8 @@ CLHead CParser::SectionAttributesList(CLHead LookaHead)
 	//							-> .
 	//							;
 	//--------------------------------------------------
+	PrintLookahead(LogFile(), LookaHead, "Enter SectionAttributesList", ++m_Recursion);
+	PrintLookahead(LogFile(), LookaHead, "Exit SectionAttributesList", ++m_Recursion);
 	return CLHead();
 }
 
@@ -3687,6 +3731,7 @@ CLHead CParser::SectionAtribute(CLHead LookaHead)
 	CAstNode* pAstNode = 0;
 	CLHead LHChild, LHNext;
 
+	PrintLookahead(LogFile(), LookaHead, "Enter SectionAtribute", ++m_Recursion);
 	switch (LookaHead.GetToken())
 	{
 	case Token::START:
@@ -3732,6 +3777,7 @@ CLHead CParser::SectionAtribute(CLHead LookaHead)
 	default:
 		break;
 	}
+	PrintLookahead(LogFile(), LookaHead, "Exit SectionAtribute", ++m_Recursion);
 	return LookaHead;
 }
 
@@ -3746,6 +3792,7 @@ CLHead CParser::Modes(CLHead LookaHead)
 	CAstNode* pAstNode = 0;
 	CLHead LHChild, LHNext;
 
+	PrintLookahead(LogFile(), LookaHead, "Enter Modes", ++m_Recursion);
 	pAMSI = new CAccessModeStackItem;
 	pAMSI->Create();
 
@@ -3764,6 +3811,7 @@ CLHead CParser::Modes(CLHead LookaHead)
 	default:
 		break;
 	}
+	PrintLookahead(LogFile(), LookaHead, "Exit Modes", ++m_Recursion);
 	return LookaHead;
 }
 
@@ -3773,6 +3821,7 @@ CLHead CParser::TrueFalse(CLHead LookaHead)
 	CAstNode* pAstNode = 0;
 	CLHead LHChild, LHNext;
 
+	PrintLookahead(LogFile(), LookaHead, "Enter TrueFalse", ++m_Recursion);
 	pNumber = new CNumberStackItem;
 	pNumber->Create();
 	switch (LookaHead.GetToken())
@@ -3788,6 +3837,7 @@ CLHead CParser::TrueFalse(CLHead LookaHead)
 		GetValueStack()->Push(pNumber);
 		break;
 	}
+	PrintLookahead(LogFile(), LookaHead, "Exit TrueFalse", ++m_Recursion);
 	return LookaHead;
 }
 
@@ -3804,6 +3854,7 @@ CLHead CParser::Org(CLHead LookaHead)
 	CAstNode* pAstNode = 0;
 	CLHead LHChild, LHNext;
 
+	PrintLookahead(LogFile(), LookaHead, "Enter Org", ++m_Recursion);
 	LookaHead = DefineMemory(LookaHead);
 	while (Loop)
 	{
@@ -3821,6 +3872,7 @@ CLHead CParser::Org(CLHead LookaHead)
 			break;
 		}
 	}
+	PrintLookahead(LogFile(), LookaHead, "Exit Org", ++m_Recursion);
 	return LookaHead;
 }
 
@@ -3842,6 +3894,7 @@ CLHead CParser::DefineMemory(CLHead LookaHead)
 	CDataSizeStackItem* pDSI;
 	int i, l, c;
 
+	PrintLookahead(LogFile(), LookaHead, "Enter DefineMemory", ++m_Recursion);
 	LookaHead = DefineStorage(LookaHead);
 	while (Loop)
 	{
@@ -3901,6 +3954,7 @@ CLHead CParser::DefineMemory(CLHead LookaHead)
 			break;
 		}
 	}
+	PrintLookahead(LogFile(), LookaHead, "Exit DefineMemory", ++m_Recursion);
 	return LookaHead;
 }
 
@@ -3918,6 +3972,7 @@ CLHead CParser::DefineStorage(CLHead LookaHead)
 	CNumberStackItem* pNSI;
 	int BlockSize;
 
+	PrintLookahead(LogFile(), LookaHead, "Exit DefineStorage", ++m_Recursion);
 	LookaHead = Proceedure(LookaHead);
 	while (Loop)
 	{
@@ -3936,6 +3991,7 @@ CLHead CParser::DefineStorage(CLHead LookaHead)
 			break;
 		}
 	}
+	PrintLookahead(LogFile(), LookaHead, "Exit DefineStorage", ++m_Recursion);
 	return LookaHead;
 }
 
@@ -3968,7 +4024,7 @@ CLHead CParser::Proceedure(CLHead LookaHead)
 			break;
 		}
 	}
-	PrintLookahead(LogFile(), LookaHead, "Enter PRO|C", --m_Recursion);
+	PrintLookahead(LogFile(), LookaHead, "Exit PROC", --m_Recursion);
 	return LookaHead;
 }
 
@@ -4040,6 +4096,7 @@ CLHead CParser::Instruction(CLHead LookaHead)
 	CAstNode* pAstNode = 0;
 	CLHead LHChild, LHNext;
 
+	PrintLookahead(LogFile(), LookaHead, "Enter Instruction", ++m_Recursion);
 	LookaHead = Labels(LookaHead);
 	while (Loop)
 	{
@@ -4215,6 +4272,7 @@ CLHead CParser::Instruction(CLHead LookaHead)
 			break;
 		}
 	}
+	PrintLookahead(LogFile(), LookaHead, "Exit Instruction", ++m_Recursion);
 	return LookaHead;
 }
 
@@ -4232,6 +4290,7 @@ CLHead CParser::Labels(CLHead LookaHead)
 
 	int Address = 0;
 
+	PrintLookahead(LogFile(), LookaHead, "Enter Labels", ++m_Recursion);
 	switch (LookaHead.GetToken())
 	{
 	case Token::IDENT:
@@ -4265,6 +4324,7 @@ CLHead CParser::Labels(CLHead LookaHead)
 	default:
 		break;
 	}
+	PrintLookahead(LogFile(), LookaHead, "Exit Labels", ++m_Recursion);
 	return LookaHead;
 }
 
@@ -4279,6 +4339,7 @@ CLHead CParser::LocalGlobal(CLHead LookaHead)
 	CAstNode* pAstNode = 0;
 	CLHead LHChild, LHNext;
 
+	PrintLookahead(LogFile(), LookaHead, "Enter LocalGlobal", ++m_Recursion);
 	if (GetValueStack()->GetHead())
 	{
 		pSSI = (CStackSymbolItem*)GetValueStack()->Look(0, CStackItem::ItemType::SYMBOL);
@@ -4299,6 +4360,7 @@ CLHead CParser::LocalGlobal(CLHead LookaHead)
 		pSSI->GetSymbol()->SetToken(Token::GLOBAL_LABLE);
 		break;
 	}
+	PrintLookahead(LogFile(), LookaHead, "Exit LocalGlobal", ++m_Recursion);
 	return LookaHead;
 }
 
@@ -4317,6 +4379,7 @@ CLHead CParser::AluAdrModes(CLHead LookaHead)
 	CAstNode* pAstNode = 0;
 	CLHead LHChild, LHNext;
 
+	PrintLookahead(LogFile(), LookaHead, "Enter AluAdrModes", ++m_Recursion);
 	pInst = (CInstruction*)GetValueStack()->Look(0, CStackItem::ItemType::INSTRUCTION);
 	switch (LookaHead.GetToken())
 	{
@@ -4357,6 +4420,7 @@ CLHead CParser::AluAdrModes(CLHead LookaHead)
 			break;
 		}
 	}
+	PrintLookahead(LogFile(), LookaHead, "Exit AluAdrModes", ++m_Recursion);
 	return LookaHead;
 }
 
@@ -4376,6 +4440,7 @@ CLHead CParser::Indirect(CLHead LookaHead)
 	CAstNode* pAstNode = 0;
 	CLHead LHChild, LHNext;
 
+	PrintLookahead(LogFile(), LookaHead, "Enter Indirect", ++m_Recursion);
 	LookaHead = AsmConstant(LookaHead);
 	pNSI = (CNumberStackItem*)GetValueStack()->Pop(CStackItem::ItemType::INTVALUE);
 	Address = pNSI->GetValue();
@@ -4406,6 +4471,7 @@ CLHead CParser::Indirect(CLHead LookaHead)
 	default:
 		break;
 	}
+	PrintLookahead(LogFile(), LookaHead, "Exit Indirect", ++m_Recursion);
 	return LookaHead;
 }
 
@@ -4424,6 +4490,7 @@ CLHead CParser::StaAddressingModes(CLHead LookaHead)
 	CAstNode* pAstNode = 0;
 	CLHead LHChild, LHNext;
 
+	PrintLookahead(LogFile(), LookaHead, "Enter StaAddressingModes", ++m_Recursion);
 	pInst = (CInstruction*)GetValueStack()->Look(0, CStackItem::ItemType::INSTRUCTION);
 	switch (LookaHead.GetToken())
 	{
@@ -4457,6 +4524,7 @@ CLHead CParser::StaAddressingModes(CLHead LookaHead)
 			break;
 		}
 	}
+	PrintLookahead(LogFile(), LookaHead, "Exit StaAddressingModes", ++m_Recursion);
 	return LookaHead;
 }
 
@@ -4475,6 +4543,7 @@ CLHead CParser::ShiftAddressingModes(CLHead LookaHead)
 	CAstNode* pAstNode = 0;
 	CLHead LHChild, LHNext;
 
+	PrintLookahead(LogFile(), LookaHead, "Enter ShiftAddressingModes", ++m_Recursion);
 	pInst = (CInstruction*)GetValueStack()->Look(0, CStackItem::ItemType::INSTRUCTION);
 	switch (LookaHead.GetToken())
 	{
@@ -4509,6 +4578,7 @@ CLHead CParser::ShiftAddressingModes(CLHead LookaHead)
 		}
 		break;
 	}
+	PrintLookahead(LogFile(), LookaHead, "Exit ShiftAddressingModes", ++m_Recursion);
 	return LookaHead;
 }
 
@@ -4524,6 +4594,7 @@ CLHead CParser::RelAddressingMode(CLHead LookaHead)
 	CAstNode* pAstNode = 0;
 	CLHead LHChild, LHNext;
 
+	PrintLookahead(LogFile(), LookaHead, "Enter RelAddressingMode", ++m_Recursion);
 	pInst = (CInstruction*)GetValueStack()->Look(0, CStackItem::ItemType::INSTRUCTION);
 	LookaHead = AsmConstant(LookaHead);
 	pNSI = (CNumberStackItem*)GetValueStack()->Pop(CStackItem::ItemType::INTVALUE);
@@ -4549,6 +4620,7 @@ CLHead CParser::RelAddressingMode(CLHead LookaHead)
 	{
 		pInst->SetLowByte(Address);
 	}
+	PrintLookahead(LogFile(), LookaHead, "Exit RelAddressingMode", ++m_Recursion);
 	return LookaHead;
 }
 
@@ -4563,6 +4635,7 @@ CLHead CParser::BitAddressModes(CLHead LookaHead)
 	CAstNode* pAstNode = 0;
 	CLHead LHChild, LHNext;
 
+	PrintLookahead(LogFile(), LookaHead, "Enter BitAddressModes", ++m_Recursion);
 	pInst = (CInstruction*)GetValueStack()->Look(0, CStackItem::ItemType::INSTRUCTION);
 	LookaHead = AsmConstant(LookaHead);
 	pNSI = (CNumberStackItem*)GetValueStack()->Pop(CStackItem::ItemType::INTVALUE);
@@ -4584,6 +4657,7 @@ CLHead CParser::BitAddressModes(CLHead LookaHead)
 		//---------------------
 		Absolute(pInst, Address, AdrModeType::ABSOLUTE_ADR);
 	}
+	PrintLookahead(LogFile(), LookaHead, "Exit BitAddressModes", ++m_Recursion);
 	return LookaHead;
 }
 
@@ -4599,6 +4673,7 @@ CLHead CParser::IncAddressingMOdes(CLHead LookaHead)
 	CAstNode* pAstNode = 0;
 	CLHead LHChild, LHNext;
 
+	PrintLookahead(LogFile(), LookaHead, "Enter IncAddressingMOdes", ++m_Recursion);
 	pInst = (CInstruction*)GetValueStack()->Look(0, CStackItem::ItemType::INSTRUCTION);
 	LookaHead = AsmConstant(LookaHead);
 	pNSI = (CNumberStackItem*)GetValueStack()->Pop(CStackItem::ItemType::INTVALUE);
@@ -4620,6 +4695,7 @@ CLHead CParser::IncAddressingMOdes(CLHead LookaHead)
 			Absolute(pInst, Address, AdrModeType::ABSOLUTE_ADR);
 		break;
 	}
+	PrintLookahead(LogFile(), LookaHead, "Exit IncAddressingMOdes", ++m_Recursion);
 	return LookaHead;
 }
 
@@ -4637,6 +4713,7 @@ CLHead CParser::JumpAddressingModes(CLHead LookaHead)
 	CAstNode* pAstNode = 0;
 	CLHead LHChild, LHNext;
 
+	PrintLookahead(LogFile(), LookaHead, "Enter JumpAddressingModes", ++m_Recursion);
 	pInst = (CInstruction*)GetValueStack()->Look(0, CStackItem::ItemType::INSTRUCTION);
 	switch (LookaHead.GetToken())
 	{
@@ -4661,6 +4738,7 @@ CLHead CParser::JumpAddressingModes(CLHead LookaHead)
 		Absolute(pInst, Address, AdrModeType::ABSOLUTE_ADR);
 		break;
 	}
+	PrintLookahead(LogFile(), LookaHead, "Exit JumpAddressingModes", ++m_Recursion);
 	return LookaHead;
 }
 
@@ -4675,11 +4753,13 @@ CLHead CParser::CallAddressingMode(CLHead LookaHead)
 	CAstNode* pAstNode = 0;
 	CLHead LHChild, LHNext;
 
+	PrintLookahead(LogFile(), LookaHead, "Enter CallAddressingMode", ++m_Recursion);
 	pInst = (CInstruction*)GetValueStack()->Look(0, CStackItem::ItemType::INSTRUCTION);
 	LookaHead = AsmConstant(LookaHead);
 	pNSI = (CNumberStackItem*)GetValueStack()->Pop(CStackItem::ItemType::INTVALUE);
 	Address = pNSI->GetValue();
 	Absolute(pInst, Address, AdrModeType::ABSOLUTE_ADR);
+	PrintLookahead(LogFile(), LookaHead, "Exit CallAddressingMode", ++m_Recursion);
 	return LookaHead;
 }
 
@@ -4697,6 +4777,7 @@ CLHead CParser::LdxAddressingMode(CLHead LookaHead)
 	CAstNode* pAstNode = 0;
 	CLHead LHChild, LHNext;
 
+	PrintLookahead(LogFile(), LookaHead, "Enter LdxAddressingMode", ++m_Recursion);
 	pInst = (CInstruction*)GetValueStack()->Look(0, CStackItem::ItemType::INSTRUCTION);
 	switch (LookaHead.GetToken())
 	{
@@ -4727,6 +4808,7 @@ CLHead CParser::LdxAddressingMode(CLHead LookaHead)
 		}
 		break;
 	}
+	PrintLookahead(LogFile(), LookaHead, "Exit LdxAddressingMode", ++m_Recursion);
 	return LookaHead;
 }
 
@@ -4743,6 +4825,7 @@ CLHead CParser::CPX_CPY_AddressingMode(CLHead LookaHead)
 	CAstNode* pAstNode = 0;
 	CLHead LHChild, LHNext;
 
+	PrintLookahead(LogFile(), LookaHead, "Enter CPX_CPY_AddressingMode", ++m_Recursion);
 	pInst = (CInstruction*)GetValueStack()->Look(0, CStackItem::ItemType::INSTRUCTION);
 	switch (LookaHead.GetToken())
 	{
@@ -4759,6 +4842,7 @@ CLHead CParser::CPX_CPY_AddressingMode(CLHead LookaHead)
 			Absolute(pInst, Address, AdrModeType::ABSOLUTE_ADR);
 		break;
 	}
+	PrintLookahead(LogFile(), LookaHead, "Exit CPX_CPY_AddressingMode", ++m_Recursion);
 	return LookaHead;
 }
 
@@ -4774,6 +4858,7 @@ CLHead CParser::StxAddressingMode(CLHead LookaHead)
 	CAstNode* pAstNode = 0;
 	CLHead LHChild, LHNext;
 
+	PrintLookahead(LogFile(), LookaHead, "Enter StxAddressingMode", ++m_Recursion);
 	pInst = (CInstruction*)GetValueStack()->Look(0, CStackItem::ItemType::INSTRUCTION);
 	LookaHead = AsmConstant(LookaHead);
 	pNSI = (CNumberStackItem*)GetValueStack()->Pop(CStackItem::ItemType::INTVALUE);
@@ -4798,6 +4883,7 @@ CLHead CParser::StxAddressingMode(CLHead LookaHead)
 			Absolute(pInst, Address, AdrModeType::ABSOLUTE_ADR);
 		break;
 	}
+	PrintLookahead(LogFile(), LookaHead, "Exit StxAddressingMode", ++m_Recursion);
 	return LookaHead;
 }
 
@@ -4815,6 +4901,7 @@ CLHead CParser::LdyAddressingMode(CLHead LookaHead)
 	CAstNode* pAstNode = 0;
 	CLHead LHChild, LHNext;
 
+	PrintLookahead(LogFile(), LookaHead, "Enter LdyAddressingMode", ++m_Recursion);
 	pInst = (CInstruction*)GetValueStack()->Look(0, CStackItem::ItemType::INSTRUCTION);
 	switch (LookaHead.GetToken())
 	{
@@ -4844,6 +4931,7 @@ CLHead CParser::LdyAddressingMode(CLHead LookaHead)
 		}
 		break;
 	}
+	PrintLookahead(LogFile(), LookaHead, "Exit LdyAddressingMode", ++m_Recursion);
 	return LookaHead;
 }
 
@@ -4859,6 +4947,7 @@ CLHead CParser::StyAddressingMode(CLHead LookaHead)
 	CAstNode* pAstNode = 0;
 	CLHead LHChild, LHNext;
 
+	PrintLookahead(LogFile(), LookaHead, "Enter StyAddressingMode", ++m_Recursion);
 	pInst = (CInstruction*)GetValueStack()->Look(0, CStackItem::ItemType::INSTRUCTION);
 	LookaHead = AsmConstant(LookaHead);
 	pNSI = (CNumberStackItem*)GetValueStack()->Pop(CStackItem::ItemType::INTVALUE);
@@ -4883,6 +4972,7 @@ CLHead CParser::StyAddressingMode(CLHead LookaHead)
 			Absolute(pInst, Address, AdrModeType::ABSOLUTE_ADR);
 		break;
 	}
+	PrintLookahead(LogFile(), LookaHead, "Exit StyAddressingMode", ++m_Recursion);
 	return LookaHead;
 }
 
@@ -4897,6 +4987,7 @@ CLHead CParser::OptIndexReg(CLHead LookaHead)
 	CAstNode* pAstNode = 0;
 	CLHead LHChild, LHNext;
 
+	PrintLookahead(LogFile(), LookaHead, "Enter OptIndexReg", ++m_Recursion);
 	switch (LookaHead.GetToken())
 	{
 	case Token(','):
@@ -4910,6 +5001,7 @@ CLHead CParser::OptIndexReg(CLHead LookaHead)
 		GetValueStack()->Push(pRSI);
 		break;
 	}
+	PrintLookahead(LogFile(), LookaHead, "Exit OptIndexReg", ++m_Recursion);
 	return LookaHead;
 }
 
@@ -4924,6 +5016,7 @@ CLHead CParser::OptIndexReg_1(CLHead LookaHead)
 	CAstNode* pAstNode = 0;
 	CLHead LHChild, LHNext;
 
+	PrintLookahead(LogFile(), LookaHead, "Enter OptIndexReg_1", ++m_Recursion);
 	pRSI = new CRegisterStackItem;
 	pRSI->Create();
 	switch (LookaHead.GetToken())
@@ -4941,6 +5034,7 @@ CLHead CParser::OptIndexReg_1(CLHead LookaHead)
 	default:
 		break;
 	}
+	PrintLookahead(LogFile(), LookaHead, "Exit OptIndexReg_1", ++m_Recursion);
 	return LookaHead;
 }
 
@@ -4955,6 +5049,7 @@ CLHead CParser::OptXReg(CLHead LookaHead)
 	CAstNode* pAstNode = 0;
 	CLHead LHChild, LHNext;
 
+	PrintLookahead(LogFile(), LookaHead, "Enter OptXReg", ++m_Recursion);
 	pRSI = new CRegisterStackItem;
 	pRSI->Create();
 	GetValueStack()->Push(pRSI);
@@ -4969,6 +5064,7 @@ CLHead CParser::OptXReg(CLHead LookaHead)
 		pRSI->SetRegType(CRegisterStackItem::RegType::NONE);
 		break;
 	}
+	PrintLookahead(LogFile(), LookaHead, "Exit OptXReg", ++m_Recursion);
 	return LookaHead;
 }
 
@@ -4983,6 +5079,7 @@ CLHead CParser::OptYReg(CLHead LookaHead)
 	CAstNode* pAstNode = 0;
 	CLHead LHChild, LHNext;
 
+	PrintLookahead(LogFile(), LookaHead, "Enter OptYReg", ++m_Recursion);
 	pRSI = new CRegisterStackItem;
 	pRSI->Create();
 	GetValueStack()->Push(pRSI);
@@ -4997,6 +5094,7 @@ CLHead CParser::OptYReg(CLHead LookaHead)
 		pRSI->SetRegType(CRegisterStackItem::RegType::NONE);
 		break;
 	}
+	PrintLookahead(LogFile(), LookaHead, "Exit OptYReg", ++m_Recursion);
 	return LookaHead;
 }
 
@@ -5014,6 +5112,7 @@ CLHead CParser::AsmConstList(CLHead LookaHead)
 
 	CDataSizeStackItem* pDSSI;
 
+	PrintLookahead(LogFile(), LookaHead, "Enter AsmConstList", ++m_Recursion);
 	switch (LookaHead.GetToken())
 	{
 	case Token::STRING:
@@ -5031,6 +5130,7 @@ CLHead CParser::AsmConstList(CLHead LookaHead)
 		LookaHead = AsmConstList_1(LookaHead);
 		break;
 	}
+	PrintLookahead(LogFile(), LookaHead, "Exit AsmConstList", ++m_Recursion);
 	return LookaHead;
 }
 
@@ -5049,6 +5149,7 @@ CLHead CParser::AsmConstList_1(CLHead LookaHead)
 	CAstNode* pAstNode = 0;
 	CLHead LHChild, LHNext;
 
+	PrintLookahead(LogFile(), LookaHead, "Enter AsmConstList_1", ++m_Recursion);
 	pDSSI = (CDataSizeStackItem*)GetValueStack()->Pop(CStackItem::ItemType::DATA_SIZE);
 	ObjectSize = pDSSI->GetSize();
 	LookaHead = AsmConstant(LookaHead);
@@ -5069,6 +5170,7 @@ CLHead CParser::AsmConstList_1(CLHead LookaHead)
 			break;
 		}
 	}
+	PrintLookahead(LogFile(), LookaHead, "Exit AsmConstList_1", ++m_Recursion);
 	return LookaHead;
 }
 
@@ -5086,6 +5188,7 @@ CLHead CParser::AsmConstant(CLHead LookaHead)
 	CAstNode* pAstNode = 0;
 	CLHead LHChild, LHNext;
 
+	PrintLookahead(LogFile(), LookaHead, "Enter AsmConstant", ++m_Recursion);
 	LookaHead = AsmConstAddSub(LookaHead);
 	while (Loop)
 	{
@@ -5115,6 +5218,7 @@ CLHead CParser::AsmConstant(CLHead LookaHead)
 			break;
 		}
 	}
+	PrintLookahead(LogFile(), LookaHead, "Exit AsmConstant", ++m_Recursion);
 	return LookaHead;
 }
 
@@ -5134,6 +5238,7 @@ CLHead CParser::AsmConstAddSub(CLHead LookaHead)
 	CAstNode* pAstNode = 0;
 	CLHead LHChild, LHNext;
 
+	PrintLookahead(LogFile(), LookaHead, "Enter AsmConstAddSub", ++m_Recursion);
 	LookaHead = BaseAsmConstant(LookaHead);
 	pNSI_1 = (CNumberStackItem*)GetValueStack()->Look(0, CStackItem::ItemType::INTVALUE);
 	// AsmConstAddSub_1
@@ -5162,6 +5267,7 @@ CLHead CParser::AsmConstAddSub(CLHead LookaHead)
 			break;
 		}
 	}
+	PrintLookahead(LogFile(), LookaHead, "Exit AsmConstAddSub", ++m_Recursion);
 	return LookaHead;
 }
 
@@ -5183,6 +5289,7 @@ CLHead CParser::BaseAsmConstant(CLHead LookaHead)
 	CAstNode* pAstNode = 0;
 	CLHead LHChild, LHNext;
 
+	PrintLookahead(LogFile(), LookaHead, "Enter BaseAsmConstant", ++m_Recursion);
 	switch (LookaHead.GetToken())
 	{
 	case Token::LOCAL_LABEL:
@@ -5298,6 +5405,7 @@ CLHead CParser::BaseAsmConstant(CLHead LookaHead)
 	default:
 		break;
 	}
+	PrintLookahead(LogFile(), LookaHead, "Exit BaseAsmConstant", ++m_Recursion);
 	return LookaHead;
 }
 
@@ -5309,6 +5417,7 @@ CLHead CParser::Immediate(CLHead LookaHead, CInstruction* pInst)
 	CAstNode* pAstNode = 0;
 	CLHead LHChild, LHNext;
 
+	PrintLookahead(LogFile(), LookaHead, "Enter Immediate", ++m_Recursion);
 	LookaHead.m_Token = Expect(LookaHead.GetToken(), Token('#'));
 	LookaHead = AsmConstant(LookaHead);
 	pIntValue = (CNumberStackItem*)GetValueStack()->Pop(CStackItem::ItemType::INTVALUE);
@@ -5319,6 +5428,7 @@ CLHead CParser::Immediate(CLHead LookaHead, CInstruction* pInst)
 	Address = pIntValue->GetValue();
 	pInst->SetLowByte(Address);
 	pInst->SetByteCount(2);
+	PrintLookahead(LogFile(), LookaHead, "Exit Immediate", ++m_Recursion);
 	return LookaHead;
 }
 
@@ -5419,16 +5529,32 @@ void CParser::PrintLookahead(
 			break;
 		default:
 			pLookaheadToken = (char*)GetLexer()->GetKeyWords()->LookupToName(token.m_Token);
-			fprintf(LogFile(), "  %5d.%d::%s Lookahead CLHead: %s LexBuffer \'%s\' \n",
-				RecursionLevel,
-				m_Bump,
-				pS,
-				pLookaheadToken,
-				pLexBuff
-			);
+			if (token.GetNode() == 0)
+			{
+				fprintf(LogFile(), "  %5d.%d::%s Lookahead CLHead: %s LexBuffer \'%s\' \n",
+					RecursionLevel,
+					m_Bump,
+					pS,
+					pLookaheadToken,
+					pLexBuff
+				);
+			}
+			else
+			{
+				fprintf(LogFile(), "  %5d.%d::%s TOKEN:%s LexBuffer:\'%s\' AST node:%s\n",
+					RecursionLevel,
+					m_Bump,
+					pS,
+					pLookaheadToken,
+					pLexBuff,
+					token.m_pNode->GetNodeName() ? token.m_pNode->GetNodeName() : "Name is NULL"
+				);
+			}
 			break;
 		}
 	}
+	if (token.GetNode())
+		token.GetNode()->Print(LogFile(), 0,(char*) "");
 }
 
 const char* CParser::PHASE_LUT::LookupPhaseName(PHASE phase)
