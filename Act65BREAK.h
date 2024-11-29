@@ -6,5 +6,6 @@ public:
 	CActBREAK();
 	virtual ~CActBREAK();
 	bool Create();
+	virtual CValue* Process();
 };
 

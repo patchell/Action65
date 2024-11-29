@@ -249,12 +249,6 @@
     <ClCompile Include="Act65FOR.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Act65ForStart.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Act65ForFinish.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Act65ForSTEP.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -345,7 +339,7 @@
     <ClCompile Include="Act65POP.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ActPopDest.cpp">
+    <ClCompile Include="Act65PopDest.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Act65TYPEDEF.cpp">
@@ -456,13 +450,22 @@
     <ClCompile Include="ObjType.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ActRTI.cpp">
+    <ClCompile Include="Act65RTI.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ActBREAK.cpp">
+    <ClCompile Include="Act65BREAK.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ActStatusFlags.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Act65ForTO.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Act65FI.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Act65OptNOT.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -689,12 +692,6 @@
     <ClInclude Include="Act65FOR.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Act65ForStart.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Act65ForFinish.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Act65ForSTEP.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -896,13 +893,22 @@
     <ClInclude Include="ObjType.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ActRTI.h">
+    <ClInclude Include="Act65RTI.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ActBREAK.h">
+    <ClInclude Include="Act65BREAK.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ActStatusFlags.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Act65ForTO.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Act65FI.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Act65OptNOT.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

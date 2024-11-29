@@ -1,6 +1,6 @@
 ???????? $ Nullable Set(0)
 Add Rule:AsmStmt
-Lines Scaned 1058
+Lines Scaned 1067
 TERMINALS['Terminals'] { 'IDENT','NUMBER','STRING','VECTOR','MODULE','RETURN','PROC'
 ,'FUNC','INTERRUPT','INTERRUPT_IDENT','PROC_IDENT','FOR','WHILE','DO','OD','BEGIN'
 ,'END','EXIT','IF','THEN','ELSEIF','ELSE','FI','IFF','FFI','UNTILL','TO','STEP','OR'
@@ -19,11 +19,11 @@ TERMINALS['Terminals'] { 'IDENT','NUMBER','STRING','VECTOR','MODULE','RETURN','P
 ,'$' }
 NONTERMINALS['Non Terminals'] { 'Action65','Modules','Modules_1','Vector','Vector_1'
 ,'VectorAddress','VectorData','Statements','ProcCall_1','ProcParams','ForStmt','ForStmt_1'
-,'STEPoption','STEPoption_1','Finish','Finish_1','Itterrator','Itterrator_1','IfStmt'
+,'STEPoption','STEPoption_1','ForTO','ForTO_1','Itterrator','Itterrator_1','IfStmt'
 ,'IfStmt_1','EndIF','EndIF_1','ElsePart','ElsePart_1','ElseIfPart','ElseIfPart_1'
 ,'ThenPart','ThenPart_1','Iff','Iff_1','IFFend','IFFend_1','IFFelse','IFFelse_1','IFFthenpart'
-,'IFFthenpart_1','IffConditional','IffConditional_1','RelOper','StatusFlags','StatusFlags_1'
-,'OptNot','StatusFlags_2','Bits','BitValue','WhileStmt','WhileStmt_1','DoStmt','DoStmt_1'
+,'IFFthenpart_1','IffConditional','IffConditional_1','RelOper','Bits','Bits_1','BitValue'
+,'StatusFlags','StatusFlags_1','OptNot','WhileStmt','WhileStmt_1','DoStmt','DoStmt_1'
 ,'DoEnd','DoEnd_1','EXITstmt','EXITstmt_1','RetStmt','RetStmt_1','OptReturnValue'
 ,'InlineAssembly','InlineAssembly_1','InlineAssBlock','InlineAssBlock_1','EndAsmBlock'
 ,'EndAsmBlock_1','CodeBlock','CodeBlock_1','CodeBlockEnd','CodeBlockEnd_1','UntillStmt'
@@ -70,8 +70,8 @@ FIRST['ForStmt'] { }
 FIRST['ForStmt_1'] { 'e' }
 FIRST['STEPoption'] { }
 FIRST['STEPoption_1'] { 'e' }
-FIRST['Finish'] { }
-FIRST['Finish_1'] { 'e' }
+FIRST['ForTO'] { }
+FIRST['ForTO_1'] { 'e' }
 FIRST['Itterrator'] { }
 FIRST['Itterrator_1'] { 'e' }
 FIRST['IfStmt'] { }
@@ -95,12 +95,12 @@ FIRST['IFFthenpart_1'] { 'e' }
 FIRST['IffConditional'] { }
 FIRST['IffConditional_1'] { 'AREG','e' }
 FIRST['RelOper'] { 'e' }
+FIRST['Bits'] { }
+FIRST['Bits_1'] { 'e' }
+FIRST['BitValue'] { }
 FIRST['StatusFlags'] { }
 FIRST['StatusFlags_1'] { }
 FIRST['OptNot'] { 'e' }
-FIRST['StatusFlags_2'] { }
-FIRST['Bits'] { 'e' }
-FIRST['BitValue'] { }
 FIRST['WhileStmt'] { }
 FIRST['WhileStmt_1'] { 'e' }
 FIRST['DoStmt'] { }
@@ -298,12 +298,12 @@ FOLLOW['ProcCall_1'] { }
 FOLLOW['ProcParams'] { }
 FOLLOW['ForStmt'] { 'FUNC_IDENT' }
 FOLLOW['ForStmt_1'] { 'FUNC_IDENT' }
-FOLLOW['STEPoption'] { 'FUNC_IDENT' }
-FOLLOW['STEPoption_1'] { 'FUNC_IDENT' }
-FOLLOW['Finish'] { 'FUNC_IDENT' }
-FOLLOW['Finish_1'] { 'FUNC_IDENT' }
-FOLLOW['Itterrator'] { 'FUNC_IDENT' }
-FOLLOW['Itterrator_1'] { 'FUNC_IDENT' }
+FOLLOW['STEPoption'] { }
+FOLLOW['STEPoption_1'] { }
+FOLLOW['ForTO'] { }
+FOLLOW['ForTO_1'] { }
+FOLLOW['Itterrator'] { }
+FOLLOW['Itterrator_1'] { }
 FOLLOW['IfStmt'] { 'FUNC_IDENT' }
 FOLLOW['IfStmt_1'] { 'FUNC_IDENT' }
 FOLLOW['EndIF'] { }
@@ -325,12 +325,12 @@ FOLLOW['IFFthenpart_1'] { }
 FOLLOW['IffConditional'] { }
 FOLLOW['IffConditional_1'] { }
 FOLLOW['RelOper'] { }
+FOLLOW['Bits'] { 'AREG' }
+FOLLOW['Bits_1'] { 'AREG' }
+FOLLOW['BitValue'] { }
 FOLLOW['StatusFlags'] { 'AREG' }
 FOLLOW['StatusFlags_1'] { 'AREG' }
 FOLLOW['OptNot'] { }
-FOLLOW['StatusFlags_2'] { 'AREG' }
-FOLLOW['Bits'] { }
-FOLLOW['BitValue'] { }
 FOLLOW['WhileStmt'] { 'FUNC_IDENT' }
 FOLLOW['WhileStmt_1'] { 'FUNC_IDENT' }
 FOLLOW['DoStmt'] { 'FUNC_IDENT' }
@@ -515,5 +515,5 @@ FOLLOW['AsmConstAddSub'] { }
 FOLLOW['AsmConstAddSub_1'] { }
 FOLLOW['BaseAsmConstant'] { }
 ---------------- Create Parse Table --------------
-Table Entries = 208
+Table Entries = 206
 ------------ Check For Conflicts-------------

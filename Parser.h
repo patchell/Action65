@@ -86,7 +86,7 @@ private:
 	//----FOR
 	CLHead ForStmt(CLHead LookaHead);
 	CLHead STEPoption(CLHead LookaHead);
-	CLHead Finish(CLHead LookaHead);
+	CLHead ForTO(CLHead LookaHead);
 	CLHead Iterator(CLHead LookaHead);
 	//--- IF
 	CLHead IfStmt(CLHead LookaHead);
@@ -103,9 +103,8 @@ private:
 	CLHead RelOper(CLHead LookaHead);;
 	CLHead StatusFlags(CLHead LookaHead);;
 	CLHead OptNot(CLHead LookaHead);;
-	CLHead StatusFlags_2(CLHead LookaHead);;
-	CLHead Bits(CLHead LookaHead);;
 	CLHead BitValue(CLHead LookaHead);;
+	CLHead Bits(CLHead LookaHead);;
 	//----WHILE
 	CLHead WhileStmt(CLHead LookaHead);
 	//----DO

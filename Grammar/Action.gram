@@ -1,3 +1,8 @@
+//----------------------------------
+// ACTION! compiler for the 6502
+// Version 0.0.1 Nov 27, 2024
+//----------------------------------
+
 TERMINALS
 	"IDENT" = 256,
 	"NUMBER",
@@ -213,19 +218,19 @@ ProcParams	-> '(' ValueList ')'
 // FOR statement
 //------------------------------------------------
 ForStmt			-> IfStmt ForStmt_1;
-ForStmt_1		-> 'FOR' STEPoption ForStmt_1
+ForStmt_1		-> 'FOR' STEPoption DoStmt ForStmt_1
 				-> .
 				;
-STEPoption		-> Finish STEPoption_1;
+STEPoption		-> ForTO STEPoption_1;
 STEPoption_1	-> 'STEP' ArithExpr
 				-> .
 				;
-Finish			-> Itterrator Finish_1;
-Finish_1		-> 'TO' ArithExpr
+ForTO			-> Itterrator ForTO_1;
+ForTO_1		-> 'TO' ArithExpr
 				-> .
 				;
 Itterrator		-> MemContentsType Itterrator_1;
-Itterrator_1	-> '=' Value
+Itterrator_1	-> '=' ArithExpr
 				-> .
 				;
 
@@ -276,31 +281,35 @@ IFFthenpart_1	-> 'THEN' Statements
 				-> .
 				;
 
-IffConditional	-> StatusFlags IffConditional_1;
-IffConditional_1-> 'AREG' RelOper Value
-				-> 'XREG' RelOper Value
-				-> 'YREG' RelOper Value
+IffConditional	-> Bits IffConditional_1;
+IffConditional_1-> 'AREG' RelOper 
+				-> 'XREG' RelOper 
+				-> 'YREG' RelOper 
 				-> .
 				;
-RelOper			-> '<'
-				-> 'GTEQ'
-				-> '='
+RelOper			-> '<' Value
+				-> 'GTEQ' Value
+				-> '=' Value
 				-> .
 				;
-StatusFlags		-> Bits StatusFlags_1;
-StatusFlags_1	-> OptNot StatusFlags_2;
-OptNot			-> '^'
+
+Bits			->StatusFlags Bits_1;
+Bits_1			-> 'BITS' BitValue
 				-> .
 				;
-StatusFlags_2	-> 'NEG'		//negative flag
+BitValue		-> '[' ArithExpr ']';
+
+StatusFlags		-> OptNot StatusFlags_1;
+StatusFlags_1	-> 'NEG'		//negative flag
 				-> 'CARRY'		//Carry flag
 				-> 'ZERO'		//Zero
 				-> 'OVERFLOW'		//Overflow
 				;
-Bits			-> 'BITS' BitValue
+
+OptNot			-> '^'
 				-> .
 				;
-BitValue		-> '[' ArithExpr ']';
+
 
 //-------------------------------------------------
 // WHILE Statement

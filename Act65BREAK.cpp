@@ -12,3 +12,8 @@ bool CActBREAK::Create()
 {
 	return false;
 }
+
+CValue* CActBREAK::Process()
+{
+    return nullptr;
+}
