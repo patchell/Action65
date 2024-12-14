@@ -76,15 +76,16 @@ private:
 	//---------------------------------
 	CLHead Action65(CLHead LookaHead);
 	CLHead Modules(CLHead LookaHead);
-	CLHead Vector(CLHead LookaHead);
-	CLHead VectorAddress(CLHead LookaHead);
 	//------------------------------------------
 	// Statements
 	//------------------------------------------
-	CLHead Statements(CLHead LookaHead);
+	CLHead Statements(CLHead LookaHead);	//ProcCal
 	CLHead ProcParams(CLHead LookaHead);
+	CLHead ProcParamsEnd(CLHead LookaHead);
 	//----FOR
 	CLHead ForStmt(CLHead LookaHead);
+	CLHead ForDOend(CLHead LookaHead);
+	CLHead ForDO(CLHead LookaHead);
 	CLHead STEPoption(CLHead LookaHead);
 	CLHead ForTO(CLHead LookaHead);
 	CLHead Iterator(CLHead LookaHead);
@@ -101,12 +102,14 @@ private:
 	CLHead IFFthenpart(CLHead LookaHead);;
 	CLHead IffConditional(CLHead LookaHead);;
 	CLHead RelOper(CLHead LookaHead);;
+	CLHead Bits(CLHead LookaHead);;
+	CLHead BitValue(CLHead LookaHead);;
 	CLHead StatusFlags(CLHead LookaHead);;
 	CLHead OptNot(CLHead LookaHead);;
-	CLHead BitValue(CLHead LookaHead);;
-	CLHead Bits(CLHead LookaHead);;
 	//----WHILE
 	CLHead WhileStmt(CLHead LookaHead);
+	CLHead WhileDOend(CLHead LookaHead);
+	CLHead WhileDO(CLHead LookaHead);
 	//----DO
 	CLHead DoStmt(CLHead LookaHead);
 	CLHead DoEND(CLHead LookaHead);
@@ -117,8 +120,8 @@ private:
 	CLHead OptReturnValue(CLHead LookaHead);
 	//----ASM
 	CLHead InlineAssembly(CLHead LookaHead);
-	CLHead InlineAssBlock(CLHead LookaHead);
 	CLHead EndAsmBlock(CLHead LookaHead);
+	CLHead InlineAssBlock(CLHead LookaHead);
 	//----CODE BLOCK
 	CLHead CodeBlock(CLHead LookaHead);
 	CLHead CodeBlockEnd(CLHead LookaHead);
@@ -154,12 +157,31 @@ private:
 	CLHead ShifExpr(CLHead LookaHead);
 	CLHead MultExpr(CLHead LookaHead);
 	CLHead Unary(CLHead LookaHead);
+	//----------------------------------
+	//Variable References
+	//Memory References
+	//----------------------------------
+	CLHead ValueList(CLHead LookaHead);
+	CLHead Value(CLHead LookaHead);
+	CLHead AddressOf(CLHead LookaHead);
+	CLHead MemContentsType(CLHead LookaHead);
+	CLHead MemContents(CLHead LookaHead);
+	CLHead ArrayIndex(CLHead LookaHead);
 	CLHead Factor(CLHead LookaHead);
 
 	//-------------------------------------------
 	// Declarations
 	//-------------------------------------------
-	CLHead SysDecl(CLHead LookaHead);
+	// VECTOR
+	//-------------------------------------------
+	CLHead SysDecl(CLHead LookaHead);	//Vectpr
+	CLHead VectorEnd(CLHead LookaHead);
+	CLHead AddressEnd(CLHead LookaHead);
+	CLHead VectorAddress(CLHead LookaHead);
+	//------------------------------------------
+	// DEFINE
+	//------------------------------------------
+	CLHead Define(CLHead LookaHead);
 	CLHead DefList(CLHead LookaHead);
 	CLHead Def(CLHead LookaHead);
 	//--------------------------------------
@@ -168,6 +190,7 @@ private:
 	CLHead TypeDefDecl(CLHead LookaHead);
 	CLHead EndTypeDef(CLHead LookaHead);
 	CLHead RecDefField(CLHead LookaHead);
+	CLHead Fields(CLHead LookaHead);
 	//----------------------------------------
 	// Fundamental Declarations
 	//----------------------------------------
@@ -175,25 +198,27 @@ private:
 	CLHead FundPointerDecl(CLHead LookaHead);
 	CLHead FundArrayDecl(CLHead LookaHead);
 	CLHead FunctionDecl(CLHead LookaHead);
-	CLHead IrqDef(CLHead LookaHead);
-	CLHead ProcDef(CLHead LookaHead);
-	CLHead FuncDef(CLHead LookaHead);
+	//------------------
 	CLHead IrqDecl(CLHead LookaHead);
-	CLHead ProcDecl(CLHead LookaHead);
-	CLHead FuncDecl(CLHead LookaHead);
+	CLHead IrqDeclParams(CLHead LookaHead);
 	CLHead IrqBody(CLHead LookaHead);
+	//------------------
+	CLHead ProcDecl(CLHead LookaHead);
+	CLHead ProcDeclParams(CLHead LookaHead);
 	CLHead ProcBody(CLHead LookaHead);
+	//------------------
+	CLHead FuncDecl(CLHead LookaHead);
+	CLHead FuncDeclParams(CLHead LookaHead);
 	CLHead FuncBody(CLHead LookaHead);
+	//------------------
 	CLHead OptInit(CLHead LookaHead);
 	//----------------------------------
 	// Identifiers
 	//----------------------------------
 	CLHead IdentList(CLHead LookaHead);
 	CLHead Ident(CLHead LookaHead);
-	CLHead IdentInit(CLHead LookaHead);
-	CLHead Address(CLHead LookaHead);
-	CLHead Data(CLHead LookaHead);
-	CLHead ArrayDim(CLHead LookaHead);
+	CLHead IdentInitType(CLHead LookaHead);
+	CLHead InitData(CLHead LookaHead);
 	//-------------------------------------------
 	// Parameter Declarations
 	//-------------------------------------------
@@ -212,15 +237,6 @@ private:
 	CLHead ConstList(CLHead LookaHead);
 	CLHead CompConst(CLHead LookaHead);
 	CLHead BaseCompConst(CLHead LookaHead);
-	//----------------------------------
-	//Variable References
-	//Memory References
-	//----------------------------------
-	CLHead ValueList(CLHead LookaHead);
-	CLHead Value(CLHead LookaHead);
-	CLHead AddressOf(CLHead LookaHead);
-	CLHead MemContentsType(CLHead LookaHead);
-	CLHead MemContents(CLHead LookaHead);
 	//****************************************
 	//----------------------------------------
 	//  Inline assembly code

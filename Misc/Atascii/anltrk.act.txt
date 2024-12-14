@@ -1,0 +1,292 @@
+;
+;**********************************
+;
+; SECTOR ANALYSIS PROGRAM
+;
+;**********************************
+;
+BYTE ARRAY t_buff(3072)
+
+
+PROC Siov=$E459()[]
+
+BYTE FUNC hi=*(CARD a)
+;
+;returns the high order byte of a
+;
+[$86$A0]    ;stx $A0 high order byte
+[$60]       ;retrun
+
+BYTE FUNC lo=*(CARD a)
+;
+;returns lo byte of a
+;
+[$85$A0]    ;sta $A0 low order byte
+[$60]       ;return
+;
+PROC pbyt(BYTE a)
+;
+;print hex of byte a
+;
+BYTE temp
+
+temp=a & $F0
+temp=temp RSH 4 ;get low nibble
+IF temp <$0A THEN
+  temp=temp+'0
+ELSE 
+  temp=temp+7+'0
+FI
+Put(temp) ;print upper nibble
+temp=a & $0F
+IF temp <$0A THEN
+  temp=temp+'0
+ELSE 
+  temp=temp+7+'0
+FI
+Put(temp)
+RETURN
+
+PROC pdat(BYTE a)
+
+pbyt(a)
+Put(' ) ;print space
+ 
+RETURN
+
+PROC padr(CARD a)
+;
+;print hex value of a
+;
+BYTE b
+
+b=hi(a)
+pbyt(b)
+b=lo(a)
+pbyt(b)
+Put(' ) ;print space
+RETURN
+
+PROC pasc(BYTE ARRAY a)
+;
+;print out ascii of hex data
+;
+BYTE index,dat
+
+index=0
+DO
+  dat=a(index) & $7F
+  IF dat<$20 OR dat > $7A THEN
+    dat='.
+  FI
+  Put(dat)
+  index==+1
+  UNTIL index=8
+OD
+RETURN
+
+BYTE FUNC sio(BYTE dev,drv,cmd CARD buf,cnt,sec)
+
+BYTE ARRAY dcb=$300 
+CARD ARRAY dcbc=$300
+BYTE stat=$303
+
+dcb(0)=dev
+dcb(1)=drv
+dcb(2)=cmd
+IF cmd=$52 OR cmd=$53 OR cmd='a THEN
+ stat=$40
+ELSEIF cmd=$57 THEN
+ stat=$80
+ELSE
+ stat=0
+FI
+dcbc(2)=buf
+dcbc(4)=cnt
+dcbc(5)=sec
+Siov()
+RETURN(stat)
+
+
+PROC dump_sec(BYTE d CARD track,sec BYTE ARRAY buff)
+
+CARD sector,len
+BYTE res,a,i,j
+BYTE ARRAY stat=$02EA
+BYTE ARRAY asc(8)
+
+sector = (track * 18)+ sec   
+len=128
+res=sio($31,d,'R,buff,len,sector)
+IF res<>1 THEN
+ len=4
+ sio($31,d,'S,stat,len,sector)
+ a=stat(1);fdc status
+ a = a ! $FF
+ IF (a & $80)>0 THEN
+  PrintE("Γςγ Εςςος")
+ ELSEIF (a & $10)>0 THEN
+  PrintE("Òεγοςδ Ξοτ Ζουξδ Εςςος")
+ ELSEIF (a & $20)>0 THEN
+  PrintE("Δεμετεδ Δατα Ναςλ")
+ FI
+FI
+Print("Track:")
+PrintCE(track)
+Print("Sector:")
+PrintCE(sec)
+i=0
+DO
+ j=0
+ DO
+  a = buff(i)
+  pdat(a)
+  asc(j)=a
+  j==+1
+  i==+1
+  UNTIL j=8
+ OD
+ pasc(asc)
+ PutE()
+ UNTIL i=128
+OD
+RETURN
+
+PROC del_entry(BYTE i BYTE ARRAY buff)
+
+BYTE j
+
+;removes unwanted entry
+;
+j=i+8
+DO
+ buff(i)=buff(j)
+ i==+1
+ j==+1
+ UNTIL j=0
+OD
+RETURN
+
+BYTE FUNC ck_buff(BYTE trk BYTE ARRAY buff)
+
+BYTE i,a,j,count
+
+count=0;sector count
+i=0
+DO
+ a=buff(i)
+ IF a <> trk THEN
+  del_entry(i,buff)
+ FI
+ i==+1     
+ j=0
+ DO
+  a = a % buff(i)
+  i==+1
+  j==+1
+  UNTIL j=7
+ OD
+ IF a = 0 THEN
+  EXIT
+ FI
+ count==+1
+ UNTIL i > 200
+OD
+RETURN(count)
+
+PROC dis_stat(BYTE n BYTE ARRAY buff)
+
+BYTE i,a,j,sectors
+
+a = buff(255)  ;check status
+IF a = 2 THEN
+ PrintE("Ξοτθιξη οξ τθισ τςαγλ")
+ RETURN
+FI
+IF a = 1 THEN
+ PrintE("Τθισ ισ ξοτ α ςεαμ τςαγλ")
+ RETURN
+FI
+PrintE("ΤÒΑΛ ΣΙΔΕ ΣΓΤÒ ΜΞΤΘ ΣΤΑΤΥΣ ΤΙΝΕ")
+i=0
+DO 
+ j=0
+ DO
+ IF j=4 THEN
+  j==+2
+  i==+2
+ FI
+ a=buff(i)
+ IF a < 100 THEN
+  Put(' )
+ FI
+ IF a < 10 THEN
+  Put(' )
+ FI
+ PrintB(a)
+ Print("  ")
+ i==+1
+ j==+1
+ UNTIL j=8
+ OD
+PutE()
+sectors=n * 8
+UNTIL i=sectors
+OD
+RETURN
+
+PROC main()
+
+BYTE ARRAY buff(256)
+BYTE drive,res,n,a
+CARD sec,len,track
+
+Print("Input drive number:")
+drive=InputB()
+res=sio($31,drive,'b,buff,len,sec)
+DO
+ Print("Input track number:")
+ track=InputC()
+ len=256
+ res=sio($31,drive,'a,buff,len,track)
+ IF res<>1 THEN
+  Print("Error code is:")
+  PrintBE(res)
+  Print("Sector number:")
+  PrintCE(sec)
+ FI
+ Print("Status of operation=")
+ PrintBE(buff(255))
+ n=ck_buff(track,buff)
+ Print("Ξυνβες οζ σεγτοςσ½")
+ PrintBE(n)
+ dis_stat(n,buff)
+ DO
+  Print("Dump any sectors?(y or n)")
+  a=GetD(7)
+  PutE()
+  IF a='y OR a='Y THEN
+   Print("Input Sector number (1-18)")
+   sec=InputC()
+   IF sec>18 THEN
+    PrintE("Ωου δυννω¬ ωου γαξ§τ δο τθατ‘")
+   ELSE
+    dump_sec(drive,track,sec,buff)
+   FI
+  ELSEIF a='n OR a='N THEN
+   EXIT
+  ELSE
+   PrintE("Wrong answer στυπιδ!")
+  FI
+ OD
+ PrintE("Press Ε to EXIT")
+ PrintE("Any other to continue")
+ a=GetD(7)
+ IF a='e OR a='E THEN
+  EXIT
+ FI
+OD
+res=sio($31,drive,'b,buff,len,sec)
+RETURN
+
+nnnnnnnnnnnnnnnnnn

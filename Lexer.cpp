@@ -314,6 +314,23 @@ Token CLexer::Lex()
 			TokenValue = Token(c);
 			Loop = false;
 			break;
+		case '"':	// STRING
+			auxLoop = true;
+			while (auxLoop)
+			{
+				c = LexGet();
+				if (c == '"')
+					auxLoop = false;
+				else
+				{
+					m_aLexBuff[m_LexBuffIndex++] = c;
+					m_aLexBuff[m_LexBuffIndex++] = c;
+				}
+			}
+			m_aLexBuff[m_LexBuffIndex++] = 0;
+			Loop = false;
+			TokenValue = Token::STRING;
+			break;
 		case '>':	//Greader Than
 			c = LexGet();
 			if (c == '=')

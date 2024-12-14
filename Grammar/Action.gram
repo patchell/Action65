@@ -1,6 +1,15 @@
 //----------------------------------
 // ACTION! compiler for the 6502
 // Version 0.0.1 Nov 27, 2024
+// Version 0.0.2 Dec 3, 2024
+//	Had a bit of a mishap with the 
+// ll(1) grammar checker, ok, it turned
+// out to be majorly broken.  It did
+// work at one time, but I made it 
+// better by not making it work.
+// I was wondering why I had become
+// such a genius at writing ll(1)
+// grammars.
 //----------------------------------
 
 TERMINALS
@@ -15,6 +24,7 @@ TERMINALS
 	"INTERRUPT",
 	"INTERRUPT_IDENT",
 	"PROC_IDENT",
+	"FUNC_IDENT",
 	"FOR",
 	"WHILE",
 	"DO",
@@ -176,7 +186,8 @@ TERMINALS
 	"NEG",		//cpu 'N'eg status register flage
 	"CARRY",		// cpu 'C'arry status register flag
 	"ZERO",		// cpu 'Z'ero status register flag
-	"OVERFLOW"		// cpu 'O'verflow status register flag
+	"OVERFLOW",		// cpu 'O'verflow status register flag
+	"CUR_LOC"
 
 GRAMMAR
 //--------------------------------
@@ -184,23 +195,17 @@ GRAMMAR
 //--------------------------------
 Action65	-> Modules;
 
-Modules		-> Vector Modules_1;
-Modules_1	-> 'MODULE' Vector Modules_1
+Modules		-> SysDecl Modules_1;
+Modules_1	-> 'MODULE' SysDecl Modules_1
 			-> .
 			;
 
-Vector			-> SysDecl Vector_1;
-Vector_1		-> 'VECTOR' VectorAddress SysDecl Vector_1
-				-> .
-				;
-VectorAddress	-> '(' CompConst ')' VectorData;
-VectorData		-> '=' CompConst;
 
-
+//------------------------------------------
+// Grammar for code
 //------------------------------------------
 // Statements
 //------------------------------------------
-
 
 //---------------------------------------
 // Proceedure/Function Call
@@ -210,28 +215,39 @@ ProcCall_1		-> 'PROC_IDENT' ProcParams ForStmt ProcCall_1
 				-> 'FUNC_IDENT' ProcParams ForStmt ProcCall_1
 				-> .
 				;
-ProcParams	-> '(' ValueList ')'
-			-> .
-			;
+
+ProcParams		->  ProcParamsEnd ProcParams_1;
+ProcParams_1	->	'(' ProcParamsEnd
+				-> .
+				;
+
+ProcParamsEnd	-> ValueList ProcParamsEnd_1;
+ProcParamsEnd_1	-> ')'
+				;
 
 //------------------------------------------------
 // FOR statement
 //------------------------------------------------
 ForStmt			-> IfStmt ForStmt_1;
-ForStmt_1		-> 'FOR' STEPoption DoStmt ForStmt_1
+ForStmt_1		-> 'FOR' ForDOend IfStmt ForStmt_1
 				-> .
 				;
+
+ForDOend		-> ForDO ForDOend_1;
+ForDOend_1		-> 'OD';
+
+ForDO			-> STEPoption ForDO_1;
+ForDO_1			-> 'DO' Statements;
+
 STEPoption		-> ForTO STEPoption_1;
 STEPoption_1	-> 'STEP' ArithExpr
 				-> .
 				;
 ForTO			-> Itterrator ForTO_1;
-ForTO_1		-> 'TO' ArithExpr
-				-> .
+ForTO_1			-> 'TO' ArithExpr
 				;
 Itterrator		-> MemContentsType Itterrator_1;
 Itterrator_1	-> '=' ArithExpr
-				-> .
 				;
 
 //------------------------------------------------
@@ -315,9 +331,17 @@ OptNot			-> '^'
 // WHILE Statement
 //-------------------------------------------------
 WhileStmt		-> DoStmt WhileStmt_1;
-WhileStmt_1		-> 'WHILE' RelOperation  DoStmt WhileStmt_1
+WhileStmt_1		-> 'WHILE'  WhileODend DoStmt WhileStmt_1
 				-> .
 				;
+
+WhileODend		-> WhileDO WhileODend_1;
+WhileODend_1	-> 'OD';
+
+WhileDO		-> RelOperation WhileDO_1;
+WhileDO_1	-> 'DO' Statements;
+
+
 
 //------------------------------------------------
 // DO Statement
@@ -327,9 +351,7 @@ DoStmt_1		-> 'DO' DoEnd EXITstmt DoStmt_1
 				-> .
 				;
 DoEnd			-> Statements DoEnd_1;
-DoEnd_1			-> 'OD'
-				-> .
-				;
+DoEnd_1			-> 'OD';
 
 //---------------------------------------------------
 // EXIT Statement
@@ -352,17 +374,15 @@ OptReturnValue	-> '(' ArithExpr ')'
 // Inline Assembly Code
 //---------------------------------------------
 InlineAssembly		-> CodeBlock InlineAssembly_1;
-InlineAssembly_1	-> 'ASM' InlineAssBlock CodeBlock InlineAssembly_1
+InlineAssembly_1	-> 'ASM' EndAsmBlock CodeBlock InlineAssembly_1
 					-> .
 					;
 
-InlineAssBlock		-> EndAsmBlock InlineAssBlock_1;
-InlineAssBlock_1	-> '{' EndAsmBlock InlineAssBlock_1
-					-> .
-					;
-EndAsmBlock			-> AsmStmt EndAsmBlock_1;
+EndAsmBlock			-> InlineAssBlock EndAsmBlock_1;
 EndAsmBlock_1		-> '}'
-					-> .
+					;
+
+InlineAssBlock		-> '{' AsmStmt
 					;
 //-----------------------------------------------
 // CODE (Kluge) BLOCK statement
@@ -373,7 +393,6 @@ CodeBlock_1		-> '[' CodeBlockEnd UntillStmt CodeBlock_1
 				;
 CodeBlockEnd	-> ConstList CodeBlockEnd_1;
 CodeBlockEnd_1	-> ']'
-				-> .
 				;
 
 //---------------------------------------------------
@@ -517,21 +536,78 @@ MultExpr_1	-> '*' Unary MultExpr_1
 			;
 
 Unary	-> '-' Unary
-		-> Factor
+		-> Value
 		;
 
-Factor		-> Value Factor_1;
-Factor_1	-> '(' ArithExpr ')'
-			-> .
-			;
+//----------------------------------
+//Variable References
+//Memory References from run time
+//----------------------------------
+
+ValueList	-> Value ValueList_1;
+ValueList_1	-> ',' Value ValueList_1
+				-> .
+				;
+
+Value			-> MemContentsType Value_1;
+Value_1			-> 'NUMBER'
+				-> 'CUR_LOC'		// current memroy location
+				-> '@' AddressOf
+				-> .
+				;
+
+AddressOf		-> MemContentsType AddressOf_1;
+AddressOf_1		-> 'PROC_IDENT'
+				-> 'FUNC_IDENT'
+				-> 'INTERRUPT_IDENT'
+				-> .
+				; 
+MemContentsType		-> MemContents MemContentsType_1;
+MemContentsType_1 	 -> '^'					// Pointer Dereference
+					-> '.' MemContents MemContentsType_1		//record ref
+					-> .
+					;
+
+
+MemContents			-> Factor MemContents_1;
+MemContents_1		-> 'IDENT' ArrayIndex
+					-> .
+					;
+
+ArrayIndex			-> '(' ArithExpr ')'
+					-> .
+					;
+
+Factor				-> '(' ArithExpr ')'
+					-> .
+					;
+
+
 		 
 //-------------------------------------------
-// Declarations
+// Declarations Grammars
+//-------------------------------------------
+// Vector Address, interrupt, indirect jmp, etc.
+//------------------------------------------
+SysDecl			-> Define Vector_1;
+Vector_1		-> 'VECTOR' VectorEnd Define Vector_1
+				-> .
+				;
+
+VectorEnd		-> AddressEnd VectorEnd_1;
+VectorEnd_1		-> '=' CompConst;
+
+AddressEnd		-> VectorAddress AddressEnd_1;
+AddressEnd_1	-> ')'
+				;
+VectorAddress	-> '('  CompConst;
+
+
 //-------------------------------------------
 // DEFINE declaration  Sort of a MACRO defination
 //-------------------------------------------
-SysDecl		-> TypeDefDecl Define;
-Define	-> 'DEFINE' DefList TypeDefDecl Define
+Define		-> TypeDefDecl Define_1;
+Define_1	-> 'DEFINE' DefList TypeDefDecl Define
 			-> .
 			;
 DefList	-> Def DefList_1;
@@ -552,12 +628,10 @@ EndTypeDef		-> RecDefField EndTypeDef_1;
 EndTypeDef_1	-> ']'
 				-> .
 				;
-RecDefField		-> Ident RecDefField_1;
-RecDefField_1	-> '=' '[' LocalDecls
-				-> '[' LocalDecls
-				-> .
-				;
+RecDefField		-> 'IDENT' RecDefField_1;
+RecDefField_1	-> '=' Fields;
 
+Fields			-> '[' LocalDecls;
 
 //--------------------------------------------
 // Fundemental Declarations.  These are the
@@ -583,31 +657,36 @@ FundArrayDecl_1	-> 'ARRAY' FunctionDecl
 				-> .
 				;
 
-FunctionDecl	-> IdentList FunctionDecl_1;;
-FunctionDecl_1	-> 'FUNC' FuncDef
-				-> 'PROC' ProcDef
-				-> 'INTERRUPT' IrqDef
+//------------------------------------------------
+// Proceedure, Functions, Interrupt Routines
+//------------------------------------------------
+FunctionDecl	-> IdentList FunctionDecl_1;
+FunctionDecl_1	-> 'FUNC' FuncDecl
+				-> 'PROC' ProcDecl
+				-> 'INTERRUPT' IrqDecl
 				-> .
 				;
 
-IrqDef		-> IrqDecl IrqBody;
-ProcDef		-> ProcDecl ProcBody;
-FuncDef		-> FuncDecl FuncBody;
+IrqDecl			-> 'IDENT' OptInit IrqDeclParams;
+IrqDeclParams	-> '(' ')' IrqBody;
+IrqBody			-> LocalDecls Statements;
 
-IrqDecl		-> 'IDENT' OptInit '(' ')';
-ProcDecl	-> 'IDENT' OptInit '(' ParamList ')';
-FuncDecl	-> 'IDENT' OptInit '(' ParamList ')';
+ProcDecl		-> 'IDENT' OptInit ProcDeclParams;
+ProcDeclParams	-> '(' ParamList ')' ProcBody;
+ProcBody		-> LocalDecls Statements;
+
+FuncDecl		-> 'IDENT' OptInit FuncDeclParams;
+FuncDeclParams	-> '(' ParamList ')' FuncBody;
+FuncBody		-> LocalDecls Statements;
+
 
 OptInit		-> '=' CompConst
 			-> .
 			;
 
-IrqBody		-> LocalDecls Statements;
-ProcBody	-> LocalDecls Statements;
-FuncBody	-> LocalDecls Statements;
 
 //----------------------------------
-// Identifiers
+// Identifiers declarations
 //BYTE a,b;
 //BYTE x=$a0
 //BYTE y=[15]
@@ -621,27 +700,20 @@ IdentList_1	-> ',' Ident IdentList_1
 			-> .
 			;
 
-Ident		-> IdentInit Ident_1;
-Ident_1		-> 'IDENT' IdentInit
+Ident		-> IdentInitType Ident_1;
+Ident_1		-> 'IDENT' IdentInitType
 			-> .
 			;
-IdentInit	-> ArrayDim IdentInit_1;
-IdentInit_1	-> '=' Address
-			-> .
-			;
+IdentInitType	-> '(' CompConst ')'
+				-> '=' InitData
+				.
+				;
 
-Address		-> CompConst Address_1;
-Address_1	-> '[' Data ']'
-			-> .
-			;
-Data		-> ConstList Data_1;
-Data_1		-> 'STRING'
-			-> .
-			;
-ArrayDim	-> ArrayDim_1;
-ArrayDim_1	-> '(' CompConst ')'
-			-> .
-			;
+InitData		-> CompConst InitData_1;
+InitData_1		-> 'STRING'
+				-> '[' ConstList ']'
+				-> .
+				;
 
 //-------------------------------------------
 // Parameter Declarations
@@ -654,7 +726,6 @@ Param_1		-> 'RECORDTYPE' PramPointer Param_1
 			-> 'INT' PramPointer Param_1 
 			-> 'CARD' PramPointer Param_1 
 			-> 'BOOL' PramPointer Param_1 
-			-> ',' Param_1
 			-> .
 			;
 
@@ -692,7 +763,7 @@ LocalArrayDecl_1	-> 'ARRAY' IdentList
 					;
 
 //-------------------------------
-// Compiler Constants
+// Compiler Constants, from Compile time
 //-------------------------------
 ConstList	-> CompConst ConstList_1;
 ConstList_1	-> ',' CompConst ConstList_1
@@ -704,54 +775,18 @@ CompConst_1		-> '+' BaseCompConst CompConst_1
 				-> .
 				;
 BaseCompConst	-> 'NUMBER'
-				-> '*'
-				-> '@' MemContentsType
-				-> 'INTERUPT_IDENT'
+				-> 'CUR_LOC'
+				-> '@' IDENT
+				-> 'INTERRUPT_IDENT'
 				-> 'FUNC_IDENT'
 				-> 'PROC_IDENT'
 				-> .
 				;
 
-//----------------------------------
-//Variable References
-//Memory References
-//----------------------------------
-
-ValueList	-> Value ValueList_1;
-ValueList_1	-> ',' Value ValueList_1
-				-> .
-				;
-
-Value			-> MemContentsType Value_1;
-Value_1			-> 'NUMBER'
-				-> '*'		// current memroy location
-				-> '@' AddressOf
-				-> .
-				;
-
-AddressOf		-> MemContentsType AddressOf_1;
-AddressOf_1		->'PROC_IDENT'
-				-> 'FUNC_IDENT'
-				-> 'INTERRUPT_IDENT'
-				-> .
-				; 
-MemContentsType		-> MemContents MemContentsType_1;
-MemContentsType_1 	-> '(' ArithExpr ')'	//array ref
-					-> '^'					// Pointer Dereference
-					-> '.' MemContents MemContentsType_1		//record ref
-					-> .
-					;
-
-MemContents		-> 'IDENT'
-				-> .
-				;
-
-
 
 //----------------------------------------
 //  Inline assembly code
 //----------------------------------------
-
 //----------------------------------------
 //	Statements
 //----------------------------------------
