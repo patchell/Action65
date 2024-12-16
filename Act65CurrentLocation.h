@@ -1,5 +1,5 @@
 #pragma once
-#include "AstNode.h"
+
 class CAct65CurrentLocation : public CAstNode
 {
 	inline static const char* m_pNodeTyypeName = "*";

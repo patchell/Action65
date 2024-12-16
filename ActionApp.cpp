@@ -11,8 +11,8 @@ CActionApp* Act()
 int main(int argc, char* argv[])
 {
 	fprintf(stderr, "The Action! Compiler for the 6502 Ver 0.0.1\nNov 27, 2024\n");
-	ActApp.Create(argc, argv);
-	ActApp.Run();
+	if(ActApp.Create(argc, argv))
+		ActApp.Run();
 	fprintf(stderr, "Done\n");
 }
 
@@ -59,6 +59,7 @@ bool CActionApp::Create(int argc, char* argv[])
 
 	int i;
 	int l=0;
+	bool bOpps = false;
 
 	if (argc == 1)
 	{
@@ -116,8 +117,9 @@ bool CActionApp::Create(int argc, char* argv[])
 				}
 			}
 		}
+		bOpps = true;
 	}
-	return true;
+	return bOpps;
 }
 
 bool CActionApp::Run()

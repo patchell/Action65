@@ -568,6 +568,10 @@ public:
 #include "Act65AddrOfINTERRUPT.h"
 #include "Acrt65ProcADDR.h"
 #include "Act65IdentList.h"
+#include "Act65ConstLIST.h"
+#include "Act65STRING.h"
+#include "Act65InitDATA.h"
+#include "Act65Identifier.h"
 #include "AstTree.h"
 #include "ActionAstTree.h"
 
