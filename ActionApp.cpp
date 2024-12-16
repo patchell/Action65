@@ -26,6 +26,7 @@ CActionApp::CActionApp()
 	m_pLogFile = 0;
 	m_pObjectFile = 0;
 	m_pBinaryFile = 0;
+	m_pAsmSrcOut = 0;
 	m_pfSrc = 0;
 	m_pfLog = 0;
 	m_pfBin = 0;
@@ -38,6 +39,7 @@ CActionApp::~CActionApp()
 	if (m_pLogFile)delete[]m_pLogFile;
 	if (m_pObjectFile)delete[]m_pObjectFile;
 	if (m_pBinaryFile)delete[]m_pBinaryFile;
+	if (m_pAsmSrcOut) delete[] m_pAsmSrcOut;
 	CloseAll();
 }
 
@@ -66,6 +68,7 @@ bool CActionApp::Create(int argc, char* argv[])
 		fprintf(stderr, "-L <Log File Name>\n");
 		fprintf(stderr, "-B <Binary File Name>\n");
 		fprintf(stderr, "-O <Object File Name>\n");
+		fprintf(stderr, "-s <Assembly Source File Output\n");
 	}
 	else
 	{
@@ -78,7 +81,7 @@ bool CActionApp::Create(int argc, char* argv[])
 				// the input source
 				// file
 				//---------------------
-				l = strlen(argv[i]) + 1;
+				l = (int)strlen(argv[i]) + 1;
 				m_pSourceFile = new char[l];
 				strcpy_s(m_pSourceFile, l, argv[i]);
 			}
@@ -88,21 +91,27 @@ bool CActionApp::Create(int argc, char* argv[])
 				{
 				case 'L':
 					++i;
-					l = strlen(argv[i]) + 1;
+					l = (int)strlen(argv[i]) + 1;
 					m_pLogFile = new char[l];
 					strcpy_s(m_pLogFile, l, argv[i]);
 					break;
 				case 'O':
 					++i;
-					l = strlen(argv[i]) + 1;
+					l = (int)strlen(argv[i]) + 1;
 					m_pObjectFile = new char[l];
 					strcpy_s(m_pObjectFile, l, argv[i]);
 					break;
 				case 'B':
 					++i;
-					l = strlen(argv[i]) + 1;
+					l = (int)strlen(argv[i]) + 1;
 					m_pBinaryFile = new char[l];
 					strcpy_s(m_pBinaryFile, l, argv[i]);
+					break;
+				case 's':
+					++i;
+					l = (int)strlen(argv[i]) + 1;
+					m_pAsmSrcOut = new char[l];
+					strcpy_s(m_pAsmSrcOut, l, argv[i]);
 					break;
 				}
 			}

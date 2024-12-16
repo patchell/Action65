@@ -130,8 +130,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="AccessModeStackItem.cpp" />
+    <ClCompile Include="Acrt65ProcADDR.cpp" />
     <ClCompile Include="Act65ACC.cpp" />
     <ClCompile Include="Act65ADD.cpp" />
+    <ClCompile Include="Act65AddressOF.cpp" />
+    <ClCompile Include="Act65AddrOfINTERRUPT.cpp" />
+    <ClCompile Include="Act65AdrOfCONST.cpp" />
     <ClCompile Include="Act65ARRAY.cpp" />
     <ClCompile Include="Act65ASM.cpp" />
     <ClCompile Include="Act65ASMPROC.cpp" />
@@ -153,6 +157,7 @@
     <ClCompile Include="Act65CHAR.cpp" />
     <ClCompile Include="Act65CharCibstabt.cpp" />
     <ClCompile Include="Act65CodeBlock.cpp" />
+    <ClCompile Include="Act65CONSTANT.cpp" />
     <ClCompile Include="Act65CurrentLocation.cpp" />
     <ClCompile Include="Act65DAS.cpp" />
     <ClCompile Include="Act65DCS.cpp" />
@@ -175,9 +180,11 @@
     <ClCompile Include="Act65FOR.cpp" />
     <ClCompile Include="Act65ForItterator.cpp" />
     <ClCompile Include="Act65ForSTEP.cpp" />
+    <ClCompile Include="Act65FuncADDR.cpp" />
     <ClCompile Include="Act65GreaterTHAN.cpp" />
     <ClCompile Include="Act65GTEQ.cpp" />
     <ClCompile Include="Act65IDENT.cpp" />
+    <ClCompile Include="Act65IdentList.cpp" />
     <ClCompile Include="Act65IF.cpp" />
     <ClCompile Include="Act65IFF.cpp" />
     <ClCompile Include="Act65INT.cpp" />
@@ -279,8 +286,12 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AccessModeStackItem.h" />
+    <ClInclude Include="Acrt65ProcADDR.h" />
     <ClInclude Include="Act65ACC.h" />
     <ClInclude Include="Act65ADD.h" />
+    <ClInclude Include="Act65AddressOF.h" />
+    <ClInclude Include="Act65AddrOfINTERRUPT.h" />
+    <ClInclude Include="Act65AdrOfCONST.h" />
     <ClInclude Include="Act65ARRAY.h" />
     <ClInclude Include="Act65ASM.h" />
     <ClInclude Include="Act65ASMPROC.h" />
@@ -302,6 +313,7 @@
     <ClInclude Include="Act65CHAR.h" />
     <ClInclude Include="Act65CharCibstabt.h" />
     <ClInclude Include="Act65CodeBlock.h" />
+    <ClInclude Include="Act65CONSTANT.h" />
     <ClInclude Include="Act65CurrentLocation.h" />
     <ClInclude Include="Act65DAS.h" />
     <ClInclude Include="Act65DCS.h" />
@@ -324,9 +336,11 @@
     <ClInclude Include="Act65FOR.h" />
     <ClInclude Include="Act65ForItterator.h" />
     <ClInclude Include="Act65ForSTEP.h" />
+    <ClInclude Include="Act65FuncADDR.h" />
     <ClInclude Include="Act65GreaterTHAN.h" />
     <ClInclude Include="Act65GTEQ.h" />
     <ClInclude Include="Act65IDENT.h" />
+    <ClInclude Include="Act65IdentList.h" />
     <ClInclude Include="Act65IF.h" />
     <ClInclude Include="Act65IFF.h" />
     <ClInclude Include="Act65INT.h" />

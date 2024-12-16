@@ -6,6 +6,7 @@ class CActionApp
 	char* m_pLogFile;
 	char* m_pObjectFile;
 	char* m_pBinaryFile;
+	char* m_pAsmSrcOut;
 	FILE* m_pfSrc;
 	FILE* m_pfLog;
 	FILE* m_pfBin;

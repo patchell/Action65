@@ -64,5 +64,11 @@ public:
 
 		if (m_pValue)
 			pSym = m_pValue->GetSymbol();
-		return pSym; }
+		return pSym; 
+	}
+	void SetValue(CValue* pV) { m_pValue = pV; }
+	CValue* GetVvalue() {
+		return m_pValue
+			;
+	}
 };

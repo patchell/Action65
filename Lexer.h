@@ -442,7 +442,7 @@ private:
 	int m_LexBuffIndex;
 	int m_Line;
 	int m_Col;
-	int m_Number;
+	int m_LexValue;
 	CSymbol* m_pLexSymbol;
 	char* m_pFileBuffeer;
 	int m_InFileSize;
@@ -483,7 +483,7 @@ public:
 	// Symbol Methods
 	//--------------------------------------
 	CSymbol* GetLexSymbol() { return m_pLexSymbol; }
-	int GetNumber() { return m_Number; }
+	int GetLexValue() { return m_LexValue; }
 	char* GetLexBuffer() { return m_aLexBuff; }
 	int GetLineNumber() { return m_Line; }
 	int GetColunm() { return m_Col; }

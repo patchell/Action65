@@ -10,7 +10,7 @@ CLexer::CLexer()
 	m_LexBuffIndex = 0;
 	m_Line = 1;
 	m_Col = 0;
-	m_Number = 0;
+	m_LexValue = 0;
 	m_pLexSymbol = 0;
 	m_pFileBuffeer = 0;
 	m_FileIndex = 0;
@@ -36,7 +36,7 @@ bool CLexer::Create()
 	Act()->OpenSource();
 	m_pFileBuffeer = new char[m_InFileSize + 1];
 	if(m_pFileBuffeer && Act()->SrcFile())
-		BytesRead = fread(m_pFileBuffeer, 1, m_InFileSize, Act()->SrcFile());
+		BytesRead = (int)fread(m_pFileBuffeer, 1, m_InFileSize, Act()->SrcFile());
 	Act()->CloseSource();
 	if (BytesRead)
 		m_InFileSize = BytesRead;
@@ -209,7 +209,7 @@ Token CLexer::Lex()
 					auxLoop = false;
 			}
 			m_aLexBuff[m_LexBuffIndex] = 0;
-			m_Number = atoi(m_aLexBuff);
+			m_LexValue = atoi(m_aLexBuff);
 			LexUnGet(c);
 			Loop = false;
 			TokenValue = Token::NUMBER;
@@ -225,7 +225,7 @@ Token CLexer::Lex()
 					auxLoop = false;
 			}
 			m_aLexBuff[m_LexBuffIndex] = 0;
-			m_Number = strtol(m_aLexBuff, NULL, 16);
+			m_LexValue = strtol(m_aLexBuff, NULL, 16);
 			LexUnGet(c);
 			Loop = false;
 			TokenValue = Token::NUMBER;

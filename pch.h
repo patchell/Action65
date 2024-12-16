@@ -561,7 +561,13 @@ public:
 //------------------------------------
 #include "Act65PROCname.h"
 #include "Act65IDENT.h"
-//------------------------------------
+#include "Act65CONSTANT.h"
+#include "Act65AddressOF.h"
+#include "Act65AdrOfCONST.h"
+#include "Act65FuncADDR.h"
+#include "Act65AddrOfINTERRUPT.h"
+#include "Acrt65ProcADDR.h"
+#include "Act65IdentList.h"
 #include "AstTree.h"
 #include "ActionAstTree.h"
 
