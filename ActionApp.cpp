@@ -55,6 +55,7 @@ bool CActionApp::Create(int argc, char* argv[])
 	// -L <log file name>
 	// -O <object file output
 	// -B <binary file output for burning rom>
+	// -s <asm file output>
 	//--------------------------------
 
 	int i;

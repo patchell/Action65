@@ -185,6 +185,7 @@
     <ClCompile Include="Act65FOR.cpp" />
     <ClCompile Include="Act65ForItterator.cpp" />
     <ClCompile Include="Act65ForSTEP.cpp" />
+    <ClCompile Include="Act65FUNC.cpp" />
     <ClCompile Include="Act65FuncADDR.cpp" />
     <ClCompile Include="Act65GreaterTHAN.cpp" />
     <ClCompile Include="Act65GTEQ.cpp" />
@@ -234,6 +235,8 @@
     <ClCompile Include="Act65SUB.cpp" />
     <ClCompile Include="Act65THEN.cpp" />
     <ClCompile Include="Act65TRUE.cpp" />
+    <ClCompile Include="Act65TYPE.cpp" />
+    <ClCompile Include="Act65TypeFIELDS.cpp" />
     <ClCompile Include="Act65UNTILL.cpp" />
     <ClCompile Include="Act65VECTOR.cpp" />
     <ClCompile Include="Act65WHILE.cpp" />
@@ -345,6 +348,7 @@
     <ClInclude Include="Act65FOR.h" />
     <ClInclude Include="Act65ForItterator.h" />
     <ClInclude Include="Act65ForSTEP.h" />
+    <ClInclude Include="Act65FUNC.h" />
     <ClInclude Include="Act65FuncADDR.h" />
     <ClInclude Include="Act65GreaterTHAN.h" />
     <ClInclude Include="Act65GTEQ.h" />
@@ -394,6 +398,8 @@
     <ClInclude Include="Act65SUB.h" />
     <ClInclude Include="Act65THEN.h" />
     <ClInclude Include="Act65TRUE.h" />
+    <ClInclude Include="Act65TYPE.h" />
+    <ClInclude Include="Act65TypeFIELDS.h" />
     <ClInclude Include="Act65UNTILL.h" />
     <ClInclude Include="Act65VECTOR.h" />
     <ClInclude Include="Act65WHILE.h" />

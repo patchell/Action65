@@ -10,18 +10,6 @@
 // I was wondering why I had become
 // such a genius at writing ll(1)
 // grammars.
-// VERSION:0.0.3 December 16, 2024
-//		The original ACTION did not
-// have comma seperators between
-// values, unlike the previous
-// versions of this grammar.
-// Changed the production for a
-// constant list so commas are not
-// needed.  Surprised myself.  I did
-// not think this was doable in an
-// ll(1) grammar.
-// This grammar is a far cry from
-// the older grammars.
 //----------------------------------
 
 TERMINALS
@@ -400,11 +388,8 @@ InlineAssBlock		-> '{' AsmStmt
 // CODE (Kluge) BLOCK statement
 //-----------------------------------------------
 CodeBlock		-> UntillStmt CodeBlock_1;
-CodeBlock_1		-> '[' CodeBlockEnd UntillStmt CodeBlock_1
+CodeBlock_1		-> '[' ConstList UntillStmt CodeBlock_1
 				-> .
-				;
-CodeBlockEnd	-> ConstList CodeBlockEnd_1;
-CodeBlockEnd_1	-> ']'
 				;
 
 //---------------------------------------------------
@@ -723,7 +708,7 @@ IdentInitType	-> '(' CompConst ')'
 
 InitData		-> CompConst InitData_1;
 InitData_1		-> 'STRING'
-				-> '[' ConstList ']'
+				-> '[' ConstList 
 				-> .
 				;
 
@@ -778,7 +763,8 @@ LocalArrayDecl_1	-> 'ARRAY' IdentList
 // Compiler Constants, from Compile time
 //-------------------------------
 ConstList	-> CompConst ConstList_1;
-ConstList_1	-> ',' CompConst ConstList_1
+ConstList_1	-> CompConst ConstList_1
+			-> ']'
 			-> .
 			;
 CompConst		-> BaseCompConst CompConst_1;

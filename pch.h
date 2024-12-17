@@ -572,6 +572,9 @@ public:
 #include "Act65STRING.h"
 #include "Act65InitDATA.h"
 #include "Act65Identifier.h"
+#include "Act65FUNC.h"
+#include "Act65TypeFIELDS.h"
+#include "Act65TYPE.h"
 #include "AstTree.h"
 #include "ActionAstTree.h"
 
