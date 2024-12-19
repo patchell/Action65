@@ -11,7 +11,7 @@ CAct65ForItterator::~CAct65ForItterator()
 bool CAct65ForItterator::Create(CAstNode* pChild, CAstNode* pNext)
 {
 	SetNodeName(m_pNodeTyypeName);
-	return CAstNode::CreateNode(pChild, pNext);
+	return CAstNode::Create(pChild, pNext);
 }
 
 CValue* CAct65ForItterator::Process()
@@ -36,4 +36,9 @@ CValue* CAct65ForItterator::Process()
 	// Code Generation
 	//-----------------------
 	return pValueChild;
+}
+
+void CAct65ForItterator::Print(FILE* pOut, int Indent, char* s)
+{
+	CAstNode::Print(pOut, Indent, s);
 }

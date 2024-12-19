@@ -14,11 +14,12 @@ class CAct65Opcode : public CAstNode
 public:
 	CAct65Opcode();
 	virtual ~CAct65Opcode();
-	bool Create(CAstNode* pChild, CAstNode* pNext);
+	bool Create(CAstNode* pChild = 0, CAstNode* pNext = 0);
 	//-----------------------------
 	// Node Processor
 	//-----------------------------
 	virtual CValue* Process();
+	virtual void Print(FILE* pOut, int Indent, char* s);
 	//-----------------------------
 	// Setter/Getter Methods
 	//-----------------------------

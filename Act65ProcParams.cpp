@@ -11,7 +11,7 @@ CAct65ProcParams::~CAct65ProcParams()
 bool CAct65ProcParams::Create(CAstNode* pChild, CAstNode* pNext)
 {
 	SetNodeName(m_pNodeTyypeName);
-	return CAstNode::CreateNode(pChild, pNext);
+	return CAstNode::Create(pChild, pNext);
 }
 
 CValue* CAct65ProcParams::Process()
@@ -36,4 +36,9 @@ CValue* CAct65ProcParams::Process()
 	// Code Generation
 	//-----------------------
 	return pValueChild;
+}
+
+void CAct65ProcParams::Print(FILE* pOut, int Indent, char* s)
+{
+	CAstNode::Print(pOut, Indent, s);
 }

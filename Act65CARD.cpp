@@ -12,7 +12,7 @@ CAct65CARD::~CAct65CARD()
 bool CAct65CARD::Create(CAstNode* pChild, CAstNode* pNext)
 {
 	SetNodeName(m_pNodeTyypeName);
-	return CAstNode::CreateNode(pChild, pNext);
+	return CAstNode::Create(pChild, pNext);
 }
 
 CValue* CAct65CARD::Process()
@@ -37,4 +37,9 @@ CValue* CAct65CARD::Process()
 	// Code Generation
 	//-----------------------
 	return pValueChild;
+}
+
+void CAct65CARD::Print(FILE* pOut, int Indent, char* s)
+{
+	CAstNode::Print(pOut, Indent, s);
 }

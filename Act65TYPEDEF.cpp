@@ -10,7 +10,8 @@ CAct65tTYPEDEF::~CAct65tTYPEDEF()
 
 bool CAct65tTYPEDEF::Create(CAstNode* pChild, CAstNode* pNext)
 {
-    return false;
+	SetNodeName(m_pNodeTyypeName);
+	return CAstNode::Create(pChild, pNext);
 }
 
 CValue* CAct65tTYPEDEF::Process()
@@ -35,4 +36,9 @@ CValue* CAct65tTYPEDEF::Process()
 	// Code Generation
 	//-----------------------
 	return pValueChild;
+}
+
+void CAct65tTYPEDEF::Print(FILE* pOut, int Indent, char* s)
+{
+	CAstNode::Print(pOut, Indent, s);
 }

@@ -11,7 +11,7 @@ CAct65ForSTEP::~CAct65ForSTEP()
 bool CAct65ForSTEP::Create(CAstNode* pChild, CAstNode* pNext)
 {
 	SetNodeName(m_pNodeTyypeName);
-	return CAstNode::CreateNode(pChild, pNext);
+	return CAstNode::Create(pChild, pNext);
 }
 
 CValue* CAct65ForSTEP::Process()
@@ -36,4 +36,9 @@ CValue* CAct65ForSTEP::Process()
 	// Code Generation
 	//-----------------------
 	return pValueChild;
+}
+
+void CAct65ForSTEP::Print(FILE* pOut, int Indent, char* s)
+{
+	CAstNode::Print(pOut, Indent, s);
 }

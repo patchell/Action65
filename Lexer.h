@@ -172,7 +172,8 @@ private:
 		{Token::ENDOFFILE,"End Of File"},		//1
 		{Token::IDENT,"IDENT"},					//2
 		{Token::NUMBER,"NUMBER"},				//3
-		{Token::MOD,"MOD"},		
+		{Token::MOD,"MOD"},
+		{Token::DEFINED_IDENT, "DEFINED IDENT"},
 		//--------- Assignment -------------
 		{ Token::ASSIGN_ADD,"==+", 0 },
 		{ Token::ASSIGN_SUB,"==-", 0 },

@@ -2,7 +2,6 @@
 
 CAct65LessTHAN::CAct65LessTHAN()
 {
-	SetNodeName(m_pNodeTyypeName);
 }
 
 CAct65LessTHAN::~CAct65LessTHAN()
@@ -12,7 +11,7 @@ CAct65LessTHAN::~CAct65LessTHAN()
 bool CAct65LessTHAN::Create(CAstNode* pChild, CAstNode* pNext)
 {
 	SetNodeName(m_pNodeTyypeName);
-	return CAstNode::CreateNode(pChild, pNext);
+	return CAstNode::Create(pChild, pNext);
 }
 
 CValue* CAct65LessTHAN::Process()
@@ -37,4 +36,9 @@ CValue* CAct65LessTHAN::Process()
 	// Code Generation
 	//-----------------------
 	return pValueChild;
+}
+
+void CAct65LessTHAN::Print(FILE* pOut, int Indent, char* s)
+{
+	CAstNode::Print(pOut, Indent, s);
 }

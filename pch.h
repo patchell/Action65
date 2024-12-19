@@ -17,6 +17,7 @@ enum  class Token {
 	IDENT = 256,	//2
 	STRING,			//3
 	NUMBER,			//4
+	DEFINED_IDENT,
 	//------ Assignment
 	ASSIGN_ADD,		//5
 	ASSIGN_SUB,		//6
@@ -557,7 +558,6 @@ public:
 #include "Act65LowerPart.h"
 #include "Act65UpperPart.h"
 #include "Act65CurrentLocation.h"
-#include "ActStatusFlags.h"
 //------------------------------------
 #include "Act65PROCname.h"
 #include "Act65IDENT.h"
@@ -574,7 +574,10 @@ public:
 #include "Act65Identifier.h"
 #include "Act65FUNC.h"
 #include "Act65TypeFIELDS.h"
+#include "Act65DefineOBJECT.h"
 #include "Act65TYPE.h"
+#include "Act65DefLIST.h"
+#include "Act65StatusFLAGS.h"
 #include "AstTree.h"
 #include "ActionAstTree.h"
 

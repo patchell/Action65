@@ -11,7 +11,7 @@ CAct65LogicalOR::~CAct65LogicalOR()
 bool CAct65LogicalOR::Create(CAstNode* pChild, CAstNode* pNext)
 {
 	SetNodeName(m_pNodeTyypeName);
-	return CAstNode::CreateNode(pChild, pNext);
+	return CAstNode::Create(pChild, pNext);
 }
 
 CValue* CAct65LogicalOR::Process()
@@ -36,4 +36,9 @@ CValue* CAct65LogicalOR::Process()
 	// Code Generation
 	//-----------------------
 	return pValueChild;
+}
+
+void CAct65LogicalOR::Print(FILE* pOut, int Indent, char* s)
+{
+	CAstNode::Print(pOut, Indent, s);
 }

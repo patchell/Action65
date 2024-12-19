@@ -8,12 +8,18 @@ CAct65ConstLIST::~CAct65ConstLIST()
 {
 }
 
-bool CAct65ConstLIST::Create()
+bool CAct65ConstLIST::Create(CAstNode* pChild, CAstNode* pNext)
 {
-	return false;
+	SetNodeName(m_pNodeTyypeName);
+	return CAstNode::Create(pChild, pNext);
 }
 
 CValue* CAct65ConstLIST::Process()
 {
 	return nullptr;
+}
+
+void CAct65ConstLIST::Print(FILE* pOut, int Indent, char* s)
+{
+	CAstNode::Print(pOut, Indent, s);
 }

@@ -12,7 +12,7 @@ CAct65INT::~CAct65INT()
 bool CAct65INT::Create(CAstNode* pChild, CAstNode* pNext)
 {
 	SetNodeName(m_pNodeTyypeName);
-	return CAstNode::CreateNode(pChild, pNext);
+	return CAstNode::Create(pChild, pNext);
 }
 
 CValue* CAct65INT::Process()
@@ -37,4 +37,9 @@ CValue* CAct65INT::Process()
 	// Code Generation
 	//-----------------------
 	return pValueChild;
+}
+
+void CAct65INT::Print(FILE* pOut, int Indent, char* s)
+{
+	CAstNode::Print(pOut, Indent, s);
 }

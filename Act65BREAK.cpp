@@ -8,12 +8,18 @@ CActBREAK::~CActBREAK()
 {
 }
 
-bool CActBREAK::Create()
+bool CActBREAK::Create(CAstNode* pChild, CAstNode* pNext)
 {
-	return false;
+	SetNodeName(m_pNodeTyypeName);
+	return CAstNode::Create(pChild, pNext);
 }
 
 CValue* CActBREAK::Process()
 {
     return nullptr;
+}
+
+void CActBREAK::Print(FILE* pOut, int Indent, char* s)
+{
+	CAstNode::Print(pOut, Indent, s);
 }

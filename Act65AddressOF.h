@@ -6,7 +6,8 @@ class CAct65AddressOF : public CAstNode
 public:
 	CAct65AddressOF();
 	virtual ~CAct65AddressOF();
-	bool Create();
+	bool Create(CAstNode* pChild = 0, CAstNode* pNext = 0);
 	CValue* Process();
+	virtual void Print(FILE* pOut, int Indent, char* s);
 };
 

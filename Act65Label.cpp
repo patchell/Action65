@@ -11,7 +11,7 @@ CAct65Label::~CAct65Label()
 bool CAct65Label::Create(CAstNode* pChild, CAstNode* pNext)
 {
 	SetNodeName(m_pNodeTyypeName);
-	return CAstNode::CreateNode(pChild, pNext);
+	return CAstNode::Create(pChild, pNext);
 }
 
 CValue* CAct65Label::Process()
@@ -36,4 +36,9 @@ CValue* CAct65Label::Process()
 	// Code Generation
 	//-----------------------
 	return pValueChild;
+}
+
+void CAct65Label::Print(FILE* pOut, int Indent, char* s)
+{
+	CAstNode::Print(pOut, Indent, s);
 }

@@ -71,7 +71,6 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <OutDir>D:\Dos</OutDir>
     <TargetName>action</TargetName>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -167,6 +166,8 @@
     <ClCompile Include="Act65DAS.cpp" />
     <ClCompile Include="Act65DCS.cpp" />
     <ClCompile Include="Act65DEFINE.cpp" />
+    <ClCompile Include="Act65DefineOBJECT.cpp" />
+    <ClCompile Include="Act65DefLIST.cpp" />
     <ClCompile Include="Act65DL.cpp" />
     <ClCompile Include="Act65DO.cpp" />
     <ClCompile Include="Act65DW.cpp" />
@@ -231,6 +232,7 @@
     <ClCompile Include="Act65SecAtrbSTART.cpp" />
     <ClCompile Include="Act65SecAtrbZEROPAGE.cpp" />
     <ClCompile Include="Act65SECTION.cpp" />
+    <ClCompile Include="Act65StatusFLAGS.cpp" />
     <ClCompile Include="Act65STRING.cpp" />
     <ClCompile Include="Act65SUB.cpp" />
     <ClCompile Include="Act65THEN.cpp" />
@@ -250,7 +252,6 @@
     <ClCompile Include="ActionAstTree.cpp" />
     <ClCompile Include="Act65PopDest.cpp" />
     <ClCompile Include="Act65RTI.cpp" />
-    <ClCompile Include="ActStatusFlags.cpp" />
     <ClCompile Include="Actt65DB.cpp" />
     <ClCompile Include="Actt65DS.cpp" />
     <ClCompile Include="Act65LowerPart.cpp" />
@@ -330,6 +331,8 @@
     <ClInclude Include="Act65DAS.h" />
     <ClInclude Include="Act65DCS.h" />
     <ClInclude Include="Act65DEFINE.h" />
+    <ClInclude Include="Act65DefineOBJECT.h" />
+    <ClInclude Include="Act65DefLIST.h" />
     <ClInclude Include="Act65DL.h" />
     <ClInclude Include="Act65DO.h" />
     <ClInclude Include="Act65DW.h" />
@@ -394,6 +397,7 @@
     <ClInclude Include="Act65SecAtrbSTART.h" />
     <ClInclude Include="Act65SecAtrbZEROPAGE.h" />
     <ClInclude Include="Act65SECTION.h" />
+    <ClInclude Include="Act65StatusFLAGS.h" />
     <ClInclude Include="Act65STRING.h" />
     <ClInclude Include="Act65SUB.h" />
     <ClInclude Include="Act65THEN.h" />
@@ -417,7 +421,6 @@
     <ClInclude Include="Act65LowerPart.h" />
     <ClInclude Include="Act65TYPEDEF.h" />
     <ClInclude Include="Act65RTI.h" />
-    <ClInclude Include="ActStatusFlags.h" />
     <ClInclude Include="AddressSizeStackItem.h" />
     <ClInclude Include="Act65AssignAND.h" />
     <ClInclude Include="Act65AssignOR.h" />

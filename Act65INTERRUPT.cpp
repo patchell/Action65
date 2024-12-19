@@ -11,7 +11,7 @@ CAct65INTERRUPT::~CAct65INTERRUPT()
 bool CAct65INTERRUPT::Create(CAstNode* pChild, CAstNode* pNext)
 {
 	SetNodeName(m_pNodeTyypeName);
-	return CAstNode::CreateNode(pChild, pNext);
+	return CAstNode::Create(pChild, pNext);
 }
 
 CValue* CAct65INTERRUPT::Process()
@@ -36,4 +36,9 @@ CValue* CAct65INTERRUPT::Process()
 	// Code Generation
 	//-----------------------
 	return pValueChild;
+}
+
+void CAct65INTERRUPT::Print(FILE* pOut, int Indent, char* s)
+{
+	CAstNode::Print(pOut, Indent, s);
 }

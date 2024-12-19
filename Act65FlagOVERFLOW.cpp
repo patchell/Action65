@@ -11,7 +11,7 @@ CAct65FlagOVERFLOW::~CAct65FlagOVERFLOW()
 bool CAct65FlagOVERFLOW::Create(CAstNode* pChild, CAstNode* pNext)
 {
 	SetNodeName(m_pNodeTyypeName);
-	return CAstNode::CreateNode(pChild, pNext);
+	return CAstNode::Create(pChild, pNext);
 }
 
 CValue* CAct65FlagOVERFLOW::Process()
@@ -36,4 +36,9 @@ CValue* CAct65FlagOVERFLOW::Process()
 	// Code Generation
 	//-----------------------
 	return pValueChild;
+}
+
+void CAct65FlagOVERFLOW::Print(FILE* pOut, int Indent, char* s)
+{
+	CAstNode::Print(pOut, Indent, s);
 }

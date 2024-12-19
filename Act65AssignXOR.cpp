@@ -11,7 +11,7 @@ CAct65AssignXOR::~CAct65AssignXOR()
 bool CAct65AssignXOR::Create(CAstNode* pChild, CAstNode* pNext)
 {
 	SetNodeName(m_pNodeTyypeName);
-	return CAstNode::CreateNode(pChild, pNext);
+	return CAstNode::Create(pChild, pNext);
 }
 
 CValue* CAct65AssignXOR::Process()
@@ -36,4 +36,9 @@ CValue* CAct65AssignXOR::Process()
 	// Code Generation
 	//-----------------------
 	return pValueChild;
+}
+
+void CAct65AssignXOR::Print(FILE* pOut, int Indent, char* s)
+{
+	CAstNode::Print(pOut, Indent, s);
 }

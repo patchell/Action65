@@ -2,7 +2,6 @@
 
 CAct65GreaterTHAN::CAct65GreaterTHAN()
 {
-	SetNodeName(m_pNodeTyypeName);
 }
 
 CAct65GreaterTHAN::~CAct65GreaterTHAN()
@@ -12,7 +11,7 @@ CAct65GreaterTHAN::~CAct65GreaterTHAN()
 bool CAct65GreaterTHAN::Create(CAstNode* pChild, CAstNode* pNext)
 {
 	SetNodeName(m_pNodeTyypeName);
-	return CAstNode::CreateNode(pChild, pNext);
+	return CAstNode::Create(pChild, pNext);
 }
 
 CValue* CAct65GreaterTHAN::Process()
@@ -37,4 +36,9 @@ CValue* CAct65GreaterTHAN::Process()
 	// Code Generation
 	//-----------------------
 	return pValueChild;
+}
+
+void CAct65GreaterTHAN::Print(FILE* pOut, int Indent, char* s)
+{
+	CAstNode::Print(pOut, Indent, s);
 }

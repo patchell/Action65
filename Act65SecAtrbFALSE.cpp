@@ -11,7 +11,7 @@ CAct65SecAtrbFALSE::~CAct65SecAtrbFALSE()
 bool CAct65SecAtrbFALSE::Create(CAstNode* pChild, CAstNode* pNext)
 {
 	SetNodeName(m_pNodeTyypeName);
-	return CAstNode::CreateNode(pChild, pNext);
+	return CAstNode::Create(pChild, pNext);
 }
 
 CValue* CAct65SecAtrbFALSE::Process()
@@ -36,4 +36,9 @@ CValue* CAct65SecAtrbFALSE::Process()
 	// Code Generation
 	//-----------------------
 	return pValueChild;
+}
+
+void CAct65SecAtrbFALSE::Print(FILE* pOut, int Indent, char* s)
+{
+	CAstNode::Print(pOut, Indent, s);
 }

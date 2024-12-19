@@ -11,7 +11,7 @@ CAct65ARRAY::~CAct65ARRAY()
 bool CAct65ARRAY::Create(CAstNode* pChild, CAstNode* pNext)
 {
 	SetNodeName(m_pNodeTyypeName);
-	return CAstNode::CreateNode(pChild, pNext);
+	return CAstNode::Create(pChild, pNext);
 }
 
 CValue* CAct65ARRAY::Process()
@@ -36,4 +36,9 @@ CValue* CAct65ARRAY::Process()
 	// Code Generation
 	//-----------------------
 	return pValueChild;
+}
+
+void CAct65ARRAY::Print(FILE* pOut, int Indent, char* s)
+{
+	CAstNode::Print(pOut, Indent, s);
 }

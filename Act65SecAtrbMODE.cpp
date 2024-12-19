@@ -11,7 +11,7 @@ CAct65SecAtrbMODE::~CAct65SecAtrbMODE()
 bool CAct65SecAtrbMODE::Create(CAstNode* pChild, CAstNode* pNext)
 {
 	SetNodeName(m_pNodeTyypeName);
-	return CAstNode::CreateNode(pChild, pNext);
+	return CAstNode::Create(pChild, pNext);
 }
 
 CValue* CAct65SecAtrbMODE::Process()
@@ -36,4 +36,9 @@ CValue* CAct65SecAtrbMODE::Process()
 	// Code Generation
 	//-----------------------
 	return pValueChild;
+}
+
+void CAct65SecAtrbMODE::Print(FILE* pOut, int Indent, char* s)
+{
+	CAstNode::Print(pOut, Indent, s);
 }

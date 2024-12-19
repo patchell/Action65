@@ -11,7 +11,7 @@ CAct65BitWiseOR::~CAct65BitWiseOR()
 bool CAct65BitWiseOR::Create(CAstNode* pChild, CAstNode* pNext)
 {
 	SetNodeName(m_pNodeTyypeName);
-	return CAstNode::CreateNode(pChild, pNext);
+	return CAstNode::Create(pChild, pNext);
 }
 
 CValue* CAct65BitWiseOR::Process()
@@ -36,4 +36,9 @@ CValue* CAct65BitWiseOR::Process()
 	// Code Generation
 	//-----------------------
 	return pValueChild;
+}
+
+void CAct65BitWiseOR::Print(FILE* pOut, int Indent, char* s)
+{
+	CAstNode::Print(pOut, Indent, s);
 }

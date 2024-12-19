@@ -11,7 +11,7 @@ CAct65FlagZERO::~CAct65FlagZERO()
 bool CAct65FlagZERO::Create(CAstNode* pChild, CAstNode* pNext)
 {
 	SetNodeName(m_pNodeTyypeName);
-	return CAstNode::CreateNode(pChild, pNext);
+	return CAstNode::Create(pChild, pNext);
 }
 
 CValue* CAct65FlagZERO::Process()
@@ -36,4 +36,9 @@ CValue* CAct65FlagZERO::Process()
 	// Code Generation
 	//-----------------------
 	return pValueChild;
+}
+
+void CAct65FlagZERO::Print(FILE* pOut, int Indent, char* s)
+{
+	CAstNode::Print(pOut, Indent, s);
 }

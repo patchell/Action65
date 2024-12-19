@@ -18,7 +18,7 @@ public:
 	CAstNode();
 	CAstNode(int NodeType);
 	virtual ~CAstNode();
-	bool CreateNode(
+	virtual bool Create(
 		CAstNode* pChild = 0,
 		CAstNode* pNext = 0
 	);

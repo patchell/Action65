@@ -11,7 +11,7 @@ CAct65SECTION::~CAct65SECTION()
 bool CAct65SECTION::Create(CAstNode* pChild, CAstNode* pNext)
 {
 	SetNodeName(m_pNodeTyypeName);
-	return CAstNode::CreateNode(pChild, pNext);
+	return CAstNode::Create(pChild, pNext);
 }
 
 CValue* CAct65SECTION::Process()
@@ -36,4 +36,9 @@ CValue* CAct65SECTION::Process()
 	// Code Generation
 	//-----------------------
 	return pValueChild;
+}
+
+void CAct65SECTION::Print(FILE* pOut, int Indent, char* s)
+{
+	CAstNode::Print(pOut, Indent, s);
 }

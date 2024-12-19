@@ -12,7 +12,7 @@ CAct65SecAtrbZEROPAGE::~CAct65SecAtrbZEROPAGE()
 bool CAct65SecAtrbZEROPAGE::Create(CAstNode* pChild, CAstNode* pNext)
 {
 	SetNodeName(m_pNodeTyypeName);
-	return CAstNode::CreateNode(pChild, pNext);
+	return CAstNode::Create(pChild, pNext);
 }
 
 CValue* CAct65SecAtrbZEROPAGE::Process()
@@ -37,4 +37,9 @@ CValue* CAct65SecAtrbZEROPAGE::Process()
 	// Code Generation
 	//-----------------------
 	return pValueChild;
+}
+
+void CAct65SecAtrbZEROPAGE::Print(FILE* pOut, int Indent, char* s)
+{
+	CAstNode::Print(pOut, Indent, s);
 }

@@ -11,7 +11,7 @@ CAct65POINTER::~CAct65POINTER()
 bool CAct65POINTER::Create(CAstNode* pChild, CAstNode* pNext)
 {
 	SetNodeName(m_pNodeTyypeName);
-	return CAstNode::CreateNode(pChild, pNext);
+	return CAstNode::Create(pChild, pNext);
 }
 
 CValue* CAct65POINTER::Process()
@@ -36,4 +36,9 @@ CValue* CAct65POINTER::Process()
 	// Code Generation
 	//-----------------------
 	return pValueChild;
+}
+
+void CAct65POINTER::Print(FILE* pOut, int Indent, char* s)
+{
+	CAstNode::Print(pOut, Indent, s);
 }

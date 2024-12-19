@@ -11,7 +11,7 @@ CAct65AssignAND::~CAct65AssignAND()
 bool CAct65AssignAND::Create(CAstNode* pChild, CAstNode* pNext)
 {
 	SetNodeName(m_pNodeTyypeName);
-	return CAstNode::CreateNode(pChild, pNext);
+	return CAstNode::Create(pChild, pNext);
 }
 
 CValue* CAct65AssignAND::Process()
@@ -36,4 +36,9 @@ CValue* CAct65AssignAND::Process()
 	// Code Generation
 	//-----------------------
 	return pValueChild;
+}
+
+void CAct65AssignAND::Print(FILE* pOut, int Indent, char* s)
+{
+	CAstNode::Print(pOut, Indent, s);
 }

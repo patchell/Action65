@@ -11,7 +11,7 @@ CAct65FlagCARRY::~CAct65FlagCARRY()
 bool CAct65FlagCARRY::Create(CAstNode* pChild, CAstNode* pNext)
 {
 	SetNodeName(m_pNodeTyypeName);
-	return CAstNode::CreateNode(pChild, pNext);
+	return CAstNode::Create(pChild, pNext);
 }
 
 CValue* CAct65FlagCARRY::Process()
@@ -36,4 +36,9 @@ CValue* CAct65FlagCARRY::Process()
 	// Code Generation
 	//-----------------------
 	return pValueChild;
+}
+
+void CAct65FlagCARRY::Print(FILE* pOut, int Indent, char* s)
+{
+	CAstNode::Print(pOut, Indent, s);
 }

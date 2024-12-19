@@ -34,14 +34,13 @@ CAstNode::~CAstNode()
 {
 }
 
-bool CAstNode::CreateNode(
+bool CAstNode::Create(
 	CAstNode* pChild,
 	CAstNode* pNext
 )
 {
 	SetChild(pChild);
 	SetNext(pNext);
-	SetChild(pChild);
 	if (pChild)
 	{
 		pChild->AddToTail(pNext);
@@ -53,30 +52,42 @@ bool CAstNode::CreateNode(
 
 void CAstNode::Print(FILE* pOut, int Indent, char* s)
 {
-	int ChildID, NextID;
-//	char* pIndentString;
 
-//	pIndentString = new char[256];
-//	Act()->IndentString(pIndentString, Indent, ' ');
+	char* pIndentStr = new char[256];
+	int i = 0, l = 0;
+	int Id, Child, Next;
+
+	Id = GetID();
 	if (GetChild())
-		ChildID = GetChild()->GetID();
+		Child = GetChild()->GetID();
 	else
-		ChildID = -1;
+		Child = -1;
 	if (GetNext())
-		NextID = GetNext()->GetID();
+		Next = GetNext()->GetID();
 	else
-		NextID = -1;
-	fprintf(
-		pOut,
-		";\t %4d %4d %4d %s%s %s\n",
-		GetID(),
-		ChildID,
-		NextID,
-		s,
-		this->GetNodeName(),
-		GetSymbol()?GetSymbol()->GetName():"..."
+		Next = -1;
+	l += sprintf_s(pIndentStr, 256, "%6d %6d %6d ", Id, Child, Next);
+	for (i = 0; i < Indent; ++i)
+	{
+		l += sprintf_s(&pIndentStr[l], 256 - l, "| ");
+	}
+	l += sprintf_s(&pIndentStr[l], 256 - l, "+-");
+	fprintf(pOut, "%s%s\n",
+		pIndentStr,
+		GetNodeName()
 	);
-//	delete[] pIndentString;
+	delete[] pIndentStr;
+
+	//CAstNode* pN;
+
+	//if (GetChild())
+	//	GetChild()->Print(pOut, Indent, s);
+	//pN = GetHead();
+	//while (pN)
+	//{
+	//	pN->Print(pOut, Indent, s);
+	//	pN = pN->GetNext();
+	//}
 }
 
 void CAstNode::AddToHead(CAstNode* pN)

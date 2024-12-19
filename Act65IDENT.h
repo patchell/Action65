@@ -7,5 +7,6 @@ public:
 	virtual ~CAct65IDENT();
 	bool Create(CBin* pSym);
 	virtual CValue* Process();
+	virtual void Print(FILE* pOut, int Indent, char* s);
 };
 

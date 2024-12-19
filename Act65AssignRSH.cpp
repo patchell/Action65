@@ -11,7 +11,7 @@ CAct65AssignRSH::~CAct65AssignRSH()
 bool CAct65AssignRSH::Create(CAstNode* pChild, CAstNode* pNext)
 {
 	SetNodeName(m_pNodeTyypeName);
-	return CAstNode::CreateNode(pChild, pNext);
+	return CAstNode::Create(pChild, pNext);
 }
 
 CValue* CAct65AssignRSH::Process()
@@ -36,4 +36,9 @@ CValue* CAct65AssignRSH::Process()
 	// Code Generation
 	//-----------------------
 	return pValueChild;
+}
+
+void CAct65AssignRSH::Print(FILE* pOut, int Indent, char* s)
+{
+	CAstNode::Print(pOut, Indent, s);
 }

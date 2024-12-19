@@ -6,7 +6,8 @@ class CAct65STRING : public CAstNode
 public:
 	CAct65STRING();
 	virtual ~CAct65STRING();
-	bool Create();
+	bool Create(CAstNode* pChild = 0, CAstNode* pNext = 0);
 	virtual CValue* Process();
+	virtual void Print(FILE* pOut, int Indent, char* s);
 };
 

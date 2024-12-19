@@ -11,7 +11,7 @@ CAct65FlagNEG::~CAct65FlagNEG()
 bool CAct65FlagNEG::Create(CAstNode* pChild, CAstNode* pNext)
 {
 	SetNodeName(m_pNodeTyypeName);
-	return CAstNode::CreateNode(pChild, pNext);
+	return CAstNode::Create(pChild, pNext);
 }
 
 CValue* CAct65FlagNEG::Process()
@@ -36,4 +36,9 @@ CValue* CAct65FlagNEG::Process()
 	// Code Generation
 	//-----------------------
 	return pValueChild;
+}
+
+void CAct65FlagNEG::Print(FILE* pOut, int Indent, char* s)
+{
+	CAstNode::Print(pOut, Indent, s);
 }

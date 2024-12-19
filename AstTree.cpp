@@ -41,6 +41,7 @@ void CAstTree::TraverseTree(FILE* pOut, CAstNode* pNode, char* s)
 
 	if (++Recursions > 100)
 	{
+		fprintf(stderr, "Too Many Recursions\n");
 		fprintf(pOut, "Too Many Recursions\n");
 		Act()->CloseAll();
 		exit(2);

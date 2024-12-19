@@ -11,7 +11,7 @@ CAct65NotEquelTO::~CAct65NotEquelTO()
 bool CAct65NotEquelTO::Create(CAstNode* pChild, CAstNode* pNext)
 {
 	SetNodeName(m_pNodeTyypeName);
-	return CAstNode::CreateNode(pChild, pNext);
+	return CAstNode::Create(pChild, pNext);
 }
 
 CValue* CAct65NotEquelTO::Process()
@@ -36,4 +36,9 @@ CValue* CAct65NotEquelTO::Process()
 	// Code Generation
 	//-----------------------
 	return pValueChild;
+}
+
+void CAct65NotEquelTO::Print(FILE* pOut, int Indent, char* s)
+{
+	CAstNode::Print(pOut, Indent, s);
 }

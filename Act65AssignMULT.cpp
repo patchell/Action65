@@ -12,7 +12,7 @@ CAct65AssignMULT::~CAct65AssignMULT()
 bool CAct65AssignMULT::Create(CAstNode* pChild, CAstNode* pNext)
 {
 	SetNodeName(m_pNodeTyypeName);
-	return CAstNode::CreateNode(pChild, pNext);
+	return CAstNode::Create(pChild, pNext);
 }
 
 CValue* CAct65AssignMULT::Process()
@@ -37,5 +37,10 @@ CValue* CAct65AssignMULT::Process()
 	// Code Generation
 	//-----------------------
 	return pValueChild;
+}
+
+void CAct65AssignMULT::Print(FILE* pOut, int Indent, char* s)
+{
+	CAstNode::Print(pOut, Indent, s);
 }
 

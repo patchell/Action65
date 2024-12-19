@@ -11,7 +11,7 @@ CAct65DO::~CAct65DO()
 bool CAct65DO::Create(CAstNode* pChild, CAstNode* pNext)
 {
 	SetNodeName(m_pNodeTyypeName);
-	return CAstNode::CreateNode(pChild, pNext);
+	return CAstNode::Create(pChild, pNext);
 }
 
 CValue* CAct65DO::Process()
@@ -36,4 +36,9 @@ CValue* CAct65DO::Process()
 	// Code Generation
 	//-----------------------
 	return pValueChild;
+}
+
+void CAct65DO::Print(FILE* pOut, int Indent, char* s)
+{
+	CAstNode::Print(pOut, Indent, s);
 }

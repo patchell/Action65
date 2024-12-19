@@ -10,7 +10,7 @@ CActionApp* Act()
 
 int main(int argc, char* argv[])
 {
-	fprintf(stderr, "The Action! Compiler for the 6502 Ver 0.0.1\nNov 27, 2024\n");
+	fprintf(stderr, "The Action! Compiler for the 6502 Ver 0.0.1\nDec 17, 2024\n");
 	if(ActApp.Create(argc, argv))
 		ActApp.Run();
 	fprintf(stderr, "Done\n");

@@ -11,7 +11,7 @@ CAct65ELSEIF::~CAct65ELSEIF()
 bool CAct65ELSEIF::Create(CAstNode* pChild, CAstNode* pNext)
 {
 	SetNodeName(m_pNodeTyypeName);
-	return CAstNode::CreateNode(pChild, pNext);
+	return CAstNode::Create(pChild, pNext);
 }
 
 CValue* CAct65ELSEIF::Process()
@@ -36,4 +36,9 @@ CValue* CAct65ELSEIF::Process()
 	// Code Generation
 	//-----------------------
 	return pValueChild;
+}
+
+void CAct65ELSEIF::Print(FILE* pOut, int Indent, char* s)
+{
+	CAstNode::Print(pOut, Indent, s);
 }

@@ -1,0 +1,30 @@
+MODULE
+
+INT Avar
+CARD Cvar
+CHAR Stuff
+
+PROC Procone()
+	Avar = Cvar
+	IF Avar = Cvar THEN
+		Avar = 1
+	ELSE
+		Stuff = Avar + CVar
+	FI
+RETURN
+
+PROC Another(CHAR aCat, bBat)
+	INT Lone, Ltwo
+
+	WHILE Avar # Ltwo
+	DO
+		Ltwo = aCat * bBat
+		Lone = bBat / Ltwo
+	OD
+RETURN
+
+INT FUNC Fuction()
+	INT value
+
+	value = 8
+RETURN value

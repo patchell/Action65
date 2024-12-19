@@ -8,12 +8,18 @@ CAct65ProcADDR::~CAct65ProcADDR()
 {
 }
 
-bool CAct65ProcADDR::Create()
+bool CAct65ProcADDR::Create(CAstNode* pChild, CAstNode* pNext)
 {
-	return false;
+	SetNodeName(m_pNodeTyypeName);
+	return CAstNode::Create(pChild, pNext);
 }
 
 CValue* CAct65ProcADDR::Process()
 {
 	return nullptr;
+}
+
+void CAct65ProcADDR::Print(FILE* pOut, int Indent, char* s)
+{
+	CAstNode::Print(pOut, Indent, s);
 }

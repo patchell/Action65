@@ -59,6 +59,7 @@ TERMINALS
 	"GTEQ",
 	"LTEQ",
 	"DEFINE",
+	"DEFINED_IDENT",
 	"TYPE",
 	"RECORDTYPE",
 	"BOOL",
@@ -343,12 +344,12 @@ OptNot			-> '^'
 // WHILE Statement
 //-------------------------------------------------
 WhileStmt		-> DoStmt WhileStmt_1;
-WhileStmt_1		-> 'WHILE'  WhileODend DoStmt WhileStmt_1
+WhileStmt_1		-> 'WHILE'  WhileDOend DoStmt WhileStmt_1
 				-> .
 				;
 
-WhileODend		-> WhileDO WhileODend_1;
-WhileODend_1	-> 'OD';
+WhileDOend		-> WhileDO WhileDOend_1;
+WhileDOend_1	-> 'OD';
 
 WhileDO		-> RelOperation WhileDO_1;
 WhileDO_1	-> 'DO' Statements;
@@ -789,6 +790,7 @@ CompConst_1		-> '+' BaseCompConst CompConst_1
 BaseCompConst	-> 'NUMBER'
 				-> 'CUR_LOC'
 				-> '@' IDENT
+				-> DEFINED_IDENT
 				-> 'INTERRUPT_IDENT'
 				-> 'FUNC_IDENT'
 				-> 'PROC_IDENT'

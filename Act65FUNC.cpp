@@ -8,9 +8,10 @@ CAct65FUNC::~CAct65FUNC()
 {
 }
 
-bool CAct65FUNC::Create()
+bool CAct65FUNC::Create(CAstNode* pChild, CAstNode* pNext)
 {
-	return false;
+	SetNodeName(m_pNodeTyypeName);
+	return CAstNode::Create(pChild, pNext);
 }
 
 CValue* CAct65FUNC::Process()
@@ -20,4 +21,5 @@ CValue* CAct65FUNC::Process()
 
 void CAct65FUNC::Print(FILE* pOut, int Indent, char* s)
 {
+	CAstNode::Print(pOut, Indent, s);
 }

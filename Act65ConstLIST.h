@@ -6,7 +6,8 @@ class CAct65ConstLIST : public CAstNode
 public:
 	CAct65ConstLIST();
 	virtual ~CAct65ConstLIST();
-	bool Create();
+	bool Create(CAstNode* pChild = 0, CAstNode* pNext = 0);
 	virtual CValue* Process();
+	virtual void Print(FILE* pOut, int Indent, char* s);
 };
 

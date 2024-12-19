@@ -6,7 +6,8 @@ class CAct65ProcParams : public CAstNode
 public:
 	CAct65ProcParams();
 	virtual ~CAct65ProcParams();
-	bool Create(CAstNode* pChild, CAstNode* pNext);
+	bool Create(CAstNode* pChild = 0, CAstNode* pNext = 0);
 	virtual CValue* Process();
+	virtual void Print(FILE* pOut, int Indent, char* s);
 };
 

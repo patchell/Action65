@@ -11,7 +11,7 @@ CAct65Private::~CAct65Private()
 bool CAct65Private::Create(CAstNode* pChild, CAstNode* pNext)
 {
 	SetNodeName(m_pNodeTyypeName);
-	return CAstNode::CreateNode(pChild, pNext);
+	return CAstNode::Create(pChild, pNext);
 }
 
 CValue* CAct65Private::Process()
@@ -36,4 +36,9 @@ CValue* CAct65Private::Process()
 	// Code Generation
 	//-----------------------
 	return pValueChild;
+}
+
+void CAct65Private::Print(FILE* pOut, int Indent, char* s)
+{
+	CAstNode::Print(pOut, Indent, s);
 }

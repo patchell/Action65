@@ -11,7 +11,7 @@ CAct65ASMPROC::~CAct65ASMPROC()
 bool CAct65ASMPROC::Create(CAstNode* pChild, CAstNode* pNext)
 {
 	SetNodeName(m_pNodeTyypeName);
-	return CAstNode::CreateNode(pChild, pNext);
+	return CAstNode::Create(pChild, pNext);
 }
 
 CValue* CAct65ASMPROC::Process()
@@ -36,4 +36,9 @@ CValue* CAct65ASMPROC::Process()
 	// Code Generation
 	//-----------------------
 	return pValueChild;
+}
+
+void CAct65ASMPROC::Print(FILE* pOut, int Indent, char* s)
+{
+	CAstNode::Print(pOut, Indent, s);
 }

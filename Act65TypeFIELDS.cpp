@@ -8,9 +8,10 @@ CAct65TypeFIELDS::~CAct65TypeFIELDS()
 {
 }
 
-bool CAct65TypeFIELDS::Create()
+bool CAct65TypeFIELDS::Create(CAstNode* pChild, CAstNode* pNext)
 {
-	return false;
+	SetNodeName(m_pNodeTyypeName);
+	return CAstNode::Create(pChild, pNext);
 }
 
 CValue* CAct65TypeFIELDS::Process()
@@ -20,4 +21,5 @@ CValue* CAct65TypeFIELDS::Process()
 
 void CAct65TypeFIELDS::Print(FILE* pOut, int Indent, char* s)
 {
+	CAstNode::Print(pOut, Indent, s);
 }

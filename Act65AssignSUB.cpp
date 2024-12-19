@@ -11,7 +11,7 @@ CAct65AssignSUB::~CAct65AssignSUB()
 bool CAct65AssignSUB::Create(CAstNode* pChild, CAstNode* pNext)
 {
 	SetNodeName(m_pNodeTyypeName);
-	return CAstNode::CreateNode(pChild, pNext);
+	return CAstNode::Create(pChild, pNext);
 }
 
 CValue* CAct65AssignSUB::Process()
@@ -36,4 +36,9 @@ CValue* CAct65AssignSUB::Process()
 	// Code Generation
 	//-----------------------
 	return pValueChild;
+}
+
+void CAct65AssignSUB::Print(FILE* pOut, int Indent, char* s)
+{
+	CAstNode::Print(pOut, Indent, s);
 }

@@ -8,12 +8,18 @@ CAct65PROCname::~CAct65PROCname()
 {
 }
 
-bool CAct65PROCname::Create()
+bool CAct65PROCname::Create(CAstNode* pChild, CAstNode* pNext)
 {
-	return false;
+	SetNodeName(m_pNodeTyypeName);
+	return CAstNode::Create(pChild, pNext);
 }
 
 CValue* CAct65PROCname::Process()
 {
 	return nullptr;
+}
+
+void CAct65PROCname::Print(FILE* pOut, int Indent, char* s)
+{
+	CAstNode::Print(pOut, Indent, s);
 }
