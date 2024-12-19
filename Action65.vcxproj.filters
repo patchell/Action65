@@ -516,6 +516,18 @@
     <ClCompile Include="Act65StatusFLAGS.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Act65ArrayINDEX.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Act65PointerDeREF.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CAct65TypeDotField.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Act65VALUE.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -1005,6 +1017,18 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Act65StatusFLAGS.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Act65ArrayINDEX.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Act65PointerDeREF.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CAct65TypeDotField.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Act65VALUE.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

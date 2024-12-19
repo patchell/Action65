@@ -578,6 +578,10 @@ public:
 #include "Act65TYPE.h"
 #include "Act65DefLIST.h"
 #include "Act65StatusFLAGS.h"
+#include "Act65ArrayINDEX.h"
+#include "Act65PointerDeREF.h"
+#include "CAct65TypeDotField.h"
+#include "Act65VALUE.h"
 #include "AstTree.h"
 #include "ActionAstTree.h"
 

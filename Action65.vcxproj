@@ -140,6 +140,7 @@
     <ClCompile Include="Act65AddrOfINTERRUPT.cpp" />
     <ClCompile Include="Act65AdrOfCONST.cpp" />
     <ClCompile Include="Act65ARRAY.cpp" />
+    <ClCompile Include="Act65ArrayINDEX.cpp" />
     <ClCompile Include="Act65ASM.cpp" />
     <ClCompile Include="Act65ASMPROC.cpp" />
     <ClCompile Include="Act65ASMstatement.cpp" />
@@ -209,6 +210,7 @@
     <ClCompile Include="Act65OptNOT.cpp" />
     <ClCompile Include="Act65ORG.cpp" />
     <ClCompile Include="Act65POINTER.cpp" />
+    <ClCompile Include="Act65PointerDeREF.cpp" />
     <ClCompile Include="Act65POP.cpp" />
     <ClCompile Include="Act65Private.cpp" />
     <ClCompile Include="Act65PROC.cpp" />
@@ -240,6 +242,7 @@
     <ClCompile Include="Act65TYPE.cpp" />
     <ClCompile Include="Act65TypeFIELDS.cpp" />
     <ClCompile Include="Act65UNTILL.cpp" />
+    <ClCompile Include="Act65VALUE.cpp" />
     <ClCompile Include="Act65VECTOR.cpp" />
     <ClCompile Include="Act65WHILE.cpp" />
     <ClCompile Include="Act65XOR.cpp" />
@@ -266,6 +269,7 @@
     <ClCompile Include="BinStackItem.cpp" />
     <ClCompile Include="Act65BOOL.cpp" />
     <ClCompile Include="Act65Module.cpp" />
+    <ClCompile Include="CAct65TypeDotField.cpp" />
     <ClCompile Include="DataSizeStackItem.cpp" />
     <ClCompile Include="Bin.cpp" />
     <ClCompile Include="Bucket.cpp" />
@@ -305,6 +309,7 @@
     <ClInclude Include="Act65AddrOfINTERRUPT.h" />
     <ClInclude Include="Act65AdrOfCONST.h" />
     <ClInclude Include="Act65ARRAY.h" />
+    <ClInclude Include="Act65ArrayINDEX.h" />
     <ClInclude Include="Act65ASM.h" />
     <ClInclude Include="Act65ASMPROC.h" />
     <ClInclude Include="Act65ASMstatement.h" />
@@ -374,6 +379,7 @@
     <ClInclude Include="Act65OptNOT.h" />
     <ClInclude Include="Act65ORG.h" />
     <ClInclude Include="Act65POINTER.h" />
+    <ClInclude Include="Act65PointerDeREF.h" />
     <ClInclude Include="Act65POP.h" />
     <ClInclude Include="Act65Private.h" />
     <ClInclude Include="Act65PROC.h" />
@@ -405,6 +411,7 @@
     <ClInclude Include="Act65TYPE.h" />
     <ClInclude Include="Act65TypeFIELDS.h" />
     <ClInclude Include="Act65UNTILL.h" />
+    <ClInclude Include="Act65VALUE.h" />
     <ClInclude Include="Act65VECTOR.h" />
     <ClInclude Include="Act65WHILE.h" />
     <ClInclude Include="Act65XOR.h" />
@@ -431,6 +438,7 @@
     <ClInclude Include="BinStackItem.h" />
     <ClInclude Include="Act65BOOL.h" />
     <ClInclude Include="Act65Module.h" />
+    <ClInclude Include="CAct65TypeDotField.h" />
     <ClInclude Include="DataSizeStackItem.h" />
     <ClInclude Include="Instruction.h" />
     <ClInclude Include="LHead.h" />

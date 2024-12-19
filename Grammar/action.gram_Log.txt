@@ -2085,16 +2085,16 @@ FOLLOW['Assignment'] { 'RTI','BREAK','POP','PUSH','UNTILL','[','ASM','RETURN','E
 ,'DO','WHILE','IFF','IF','FOR','PROC_IDENT','FUNC_IDENT','OD' }
 FOLLOW['Assignment_1'] { 'RTI','BREAK','POP','PUSH','UNTILL','[','ASM','RETURN','EXIT'
 ,'DO','WHILE','IFF','IF','FOR','PROC_IDENT','FUNC_IDENT','OD' }
-FOLLOW['RelOperation'] { 'THEN','ELSEIF','ELSE','FI','DO' }
-FOLLOW['RelOperation_1'] { 'THEN','ELSEIF','ELSE','FI','DO' }
+FOLLOW['RelOperation'] { 'THEN','ELSEIF','ELSE','FI','DO',')' }
+FOLLOW['RelOperation_1'] { 'THEN','ELSEIF','ELSE','FI','DO',')' }
 FOLLOW['LogicalOR'] { '>','<','GTEQ','LTEQ','=','#','THEN','ELSEIF','ELSE','FI','DO'
- }
+,')' }
 FOLLOW['LogicalOR_1'] { '>','<','GTEQ','LTEQ','=','#','THEN','ELSEIF','ELSE','FI','DO'
- }
+,')' }
 FOLLOW['LogicalAND'] { 'OR','>','<','GTEQ','LTEQ','=','#','THEN','ELSEIF','ELSE','FI'
-,'DO' }
+,'DO',')' }
 FOLLOW['LogicalAND_1'] { 'OR','>','<','GTEQ','LTEQ','=','#','THEN','ELSEIF','ELSE','FI'
-,'DO' }
+,'DO',')' }
 FOLLOW['ArithExpr'] { ']',')','AREG','XREG','YREG','SR',',','=','==+','==-','==*','==/'
 ,'==MOD','==&','==!','==%','==LSH','==RSH','AND','OR','>','<','GTEQ','LTEQ','#','THEN'
 ,'ELSEIF','ELSE','FI','DO','RTI','BREAK','POP','PUSH','UNTILL','[','ASM','RETURN'
@@ -2345,5 +2345,5 @@ FOLLOW['AsmConstAddSub'] { '>','<',',',')','(' }
 FOLLOW['AsmConstAddSub_1'] { '>','<',',',')','(' }
 FOLLOW['BaseAsmConstant'] { '+','-','>','<',',',')','(' }
 ---------------- Create Parse Table --------------
-Table Entries = 1795
+Table Entries = 1798
 ------------ Check For Conflicts-------------
