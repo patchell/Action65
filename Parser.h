@@ -245,7 +245,6 @@ private:
 	//----------------------------------------
 	//****************************************
 	CLHead AsmStmt(CLHead LookaHead);
-	CLHead Processor_1(CLHead LookaHead);
 	CLHead ProcessorType(CLHead LookaHead);
 	//-----------------------------------------
 	// Code

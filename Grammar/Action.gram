@@ -805,8 +805,8 @@ BaseCompConst	-> 'NUMBER'
 //	Statements
 //----------------------------------------
 
-AsmStmt			-> DefineMemory Processor_1;
-Processor_1		-> 'PROCESSOR' ProcessorType DefineMemory Processor_1
+AsmStmt			-> Section Processor_1;
+Processor_1		-> 'PROCESSOR' ProcessorType Section Processor_1
 				-> .
 				;
 ProcessorType	-> 'R6502'

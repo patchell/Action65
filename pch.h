@@ -182,8 +182,8 @@ enum  class Token {
 	//------- Processor Selector
 	PROCESSOR,
 	R6502,
-	WD65C02,
-	WD65C816,
+	W65C02,
+	W65C816,
 	//------- Misc
 	CHAR_CONSTANT,
 	EPROC,		// proceedure end
@@ -192,45 +192,14 @@ enum  class Token {
 	ENDOFTOKENS = 0
 };
 
-
-
 enum class IdentType {
 	NEW_SYMBOL,
 	LABEL,
 	PROC,
 	FUNC,
-	FUNC_BYTE,
-	FUNC_CHAR,
-	FUNC_CARD,
-	FUNC_INT,
-	FUNC_POINTER_BYTE,
-	FUNC_POINTER_CHAR,
-	FUNC_POINTER_CARD,
-	FUNC_POINTER_INT,
-	MEM_GLOBAL_BYTE,
-	MEM_GLOBAL_CHAR,
-	MEM_GLOBAL_CARD,
-	MEM_GLOBAL_INT,
-	MEM_GLOBAL_POINTER_BYTE,
-	MEM_GLOBAL_POINTER_CHAR,
-	MEM_GLOBAL_POINTER_CARD,
-	MEM_GLOBAL_POINTER_INT,
-	MEM_PARAM_BYTE,
-	MEM_PARAM_CHAR,
-	MEM_PARAM_CARD,
-	MEM_PARAM_INT,
-	MEM_PARAM_POINTER_BYTE,
-	MEM_PARAM_POINTER_CHAR,
-	MEM_PARAM_POINTER_CARD,
-	MEM_PARAM_POINTER_INT,
-	MEM_LOCAL_BYTE,
-	MEM_LOCAL_CHAR,
-	MEM_LOCAL_CARD,
-	MEM_LOCAL_INT,
-	MEM_LOCAL_POINTER_BYTE,
-	MEM_LOCAL_POINTER_CHAR,
-	MEM_LOCAL_POINTER_CARD,
-	MEM_LOCAL_POINTER_INT
+	GLOBAL,
+	LOCAL,
+	SECTION
 };
 
 enum class AdrModeType {
@@ -248,6 +217,7 @@ enum class AdrModeType {
 	INDIRECT_ADR,
 	ACCUMULATOR
 };
+
 enum class AddressModesClass {	//ToDo: Delete?
 	IMPLIED,		//0
 	ONE_MODE,		//1
@@ -284,7 +254,6 @@ enum class Processor {
 #include "Value.h"
 
 constexpr auto MAX_EXCEPTION_STRING_LEN = 512;
-
 
 class Exception {
 public:
@@ -530,6 +499,9 @@ public:
 // Assembler AST Nodes
 //------------------------------------
 #include "Act65PROCESSOR.h"
+#include "Act65W65C02.h"
+#include "Act65W65C816.h"
+#include "Act65R6502.h"
 #include "Act65SECTION.h"
 #include "Act65SecAtrbSTART.h"
 #include "Act65SecAtrbSIZE.h"

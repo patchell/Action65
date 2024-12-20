@@ -141,3 +141,8 @@ void CSymbol::Print(FILE* pOut, const char* s)
 		GetScope()
 	);
 }
+
+const char* CSymbol::CIdentType::LookupIdentType(IdentType IT)
+{
+    return IdentTypeLUT[int(IT)].m_pName;
+}

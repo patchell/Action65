@@ -404,8 +404,8 @@ private:
 		//-------- Processor Selection -------
 		{ Token::PROCESSOR,"PROCESSOR", 0,0,Processor::ALL,NULL,0 },
 		{ Token::R6502,"R6502", 0,0, Processor::ALL,NULL,0 },
-		{ Token::WD65C02,"WD65C02", 0,0, Processor::ALL ,NULL,0 },
-		{ Token::WD65C816,"WD65C816", 0,0, Processor::ALL,NULL,0 },
+		{ Token::W65C02,"WD65C02", 0,0, Processor::ALL ,NULL,0 },
+		{ Token::W65C816,"WD65C816", 0,0, Processor::ALL,NULL,0 },
 		//----------------------------------
 		// Misc
 		//----------------------------------

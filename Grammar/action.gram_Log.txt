@@ -2285,8 +2285,8 @@ FOLLOW['BaseCompConst'] { '+','-',')','STRING','[','IDENT',',','FUNC','PROC','IN
 FOLLOW['AsmStmt'] { }
 FOLLOW['Processor_1'] { }
 FOLLOW['ProcessorType'] { }
-FOLLOW['Section'] { }
-FOLLOW['Section_1'] { }
+FOLLOW['Section'] { 'PROCESSOR' }
+FOLLOW['Section_1'] { 'PROCESSOR' }
 FOLLOW['SectionName'] { }
 FOLLOW['SectionName_1'] { }
 FOLLOW['SectionDef'] { 'IDENT' }
@@ -2295,24 +2295,24 @@ FOLLOW['SectionAttributesList_1'] { ']' }
 FOLLOW['SectionAtribute'] { ',',']' }
 FOLLOW['Modes'] { }
 FOLLOW['TrueFalse'] { }
-FOLLOW['Org'] { 'SECTION' }
-FOLLOW['Org_1'] { 'SECTION' }
-FOLLOW['DefineMemory'] { 'PROCESSOR','ORG','SECTION' }
-FOLLOW['DefineMemory_1'] { 'PROCESSOR','ORG','SECTION' }
-FOLLOW['DefineStorage'] { 'DB','DW','DL','DAS','DCS','PROCESSOR','ORG','SECTION' }
-FOLLOW['DefineStorage_1'] { 'DB','DW','DL','DAS','DCS','PROCESSOR','ORG','SECTION' }
-FOLLOW['Proceedure'] { 'DS','DB','DW','DL','DAS','DCS','PROCESSOR','ORG','SECTION' }
-FOLLOW['Proceedure_1'] { 'DS','DB','DW','DL','DAS','DCS','PROCESSOR','ORG','SECTION'
+FOLLOW['Org'] { 'SECTION','PROCESSOR' }
+FOLLOW['Org_1'] { 'SECTION','PROCESSOR' }
+FOLLOW['DefineMemory'] { 'ORG','SECTION','PROCESSOR' }
+FOLLOW['DefineMemory_1'] { 'ORG','SECTION','PROCESSOR' }
+FOLLOW['DefineStorage'] { 'DB','DW','DL','DAS','DCS','ORG','SECTION','PROCESSOR' }
+FOLLOW['DefineStorage_1'] { 'DB','DW','DL','DAS','DCS','ORG','SECTION','PROCESSOR' }
+FOLLOW['Proceedure'] { 'DS','DB','DW','DL','DAS','DCS','ORG','SECTION','PROCESSOR' }
+FOLLOW['Proceedure_1'] { 'DS','DB','DW','DL','DAS','DCS','ORG','SECTION','PROCESSOR'
  }
-FOLLOW['Instruction'] { 'ASMPROC','DS','DB','DW','DL','DAS','DCS','PROCESSOR','ORG'
-,'SECTION' }
-FOLLOW['Instruction_1'] { 'ASMPROC','DS','DB','DW','DL','DAS','DCS','PROCESSOR','ORG'
-,'SECTION' }
+FOLLOW['Instruction'] { 'ASMPROC','DS','DB','DW','DL','DAS','DCS','ORG','SECTION','PROCESSOR'
+ }
+FOLLOW['Instruction_1'] { 'ASMPROC','DS','DB','DW','DL','DAS','DCS','ORG','SECTION'
+,'PROCESSOR' }
 FOLLOW['Labels'] { 'ADC','AND','EOR','ORA','CMP','SBC','LDA','STA','ASL','ROL','LSR'
 ,'ROR','BCC','BCS','BEQ','BMI','BNE','BPL','BVC','BVS','BIT','BRK','CLC','CLD','CLI'
 ,'CLV','DEX','DEY','INX','INY','NOP','PHA','PLA','PHP','PLP','RTI','RTS','SEC','SED'
 ,'SEI','TAX','TAY','TXA','TYA','TXS','TSX','INC','DEC','JMP','JSR','CPX','CPY','LDX'
-,'LDY','STX','STY','ASMPROC','DS','DB','DW','DL','DAS','DCS','PROCESSOR','ORG','SECTION'
+,'LDY','STX','STY','ASMPROC','DS','DB','DW','DL','DAS','DCS','ORG','SECTION','PROCESSOR'
  }
 FOLLOW['Label_1'] { }
 FOLLOW['AluAdrModes'] { }
@@ -2345,5 +2345,5 @@ FOLLOW['AsmConstAddSub'] { '>','<',',',')','(' }
 FOLLOW['AsmConstAddSub_1'] { '>','<',',',')','(' }
 FOLLOW['BaseAsmConstant'] { '+','-','>','<',',',')','(' }
 ---------------- Create Parse Table --------------
-Table Entries = 1798
+Table Entries = 1800
 ------------ Check For Conflicts-------------

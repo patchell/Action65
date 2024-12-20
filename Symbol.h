@@ -14,6 +14,29 @@ class CSymbol: public CBin
 	CSection* m_pSection;
 	IdentType m_IdentType;
 	bool m_UnResolved;
+	class CIdentType {
+		IdentType m_Type;
+		const char* m_pName;
+	public:
+		CIdentType() {
+			m_Type = IdentType(0);
+			m_pName = 0;
+		}
+		CIdentType(IdentType IT, const char* pN) {
+			m_Type = IT;
+			m_pName = pN;
+		}
+		const char* LookupIdentType(IdentType IT);
+	};
+	inline static CSymbol::CIdentType IdentTypeLUT[] = {
+		{IdentType::NEW_SYMBOL , "NEW SYMBOL"},
+		{IdentType::LABEL , "LABEL"},
+		{IdentType::PROC , "PROC"},
+		{IdentType::FUNC , "FUNC"},
+		{IdentType::GLOBAL , "GLOBAL"},
+		{IdentType::LOCAL , "LOCAL"},
+		{IdentType::SECTION , "SECTION"}
+	};
 	//---------------------------
 	// Type Chain
 	//---------------------------
