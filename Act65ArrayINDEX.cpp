@@ -21,4 +21,5 @@ CValue* CAct65ArrayINDEX::Process()
 
 void CAct65ArrayINDEX::Print(FILE* pOut, int Indent, char* s)
 {
+	CAstNode::Print(pOut, Indent, s);
 }

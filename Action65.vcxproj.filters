@@ -522,10 +522,22 @@
     <ClCompile Include="Act65PointerDeREF.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="CAct65TypeDotField.cpp">
+    <ClCompile Include="Act65TypeDotField.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Act65VALUE.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Act65UnaryNEG.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Act65MUL.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Act565MOD.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Act65DIV.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -1025,10 +1037,22 @@
     <ClInclude Include="Act65PointerDeREF.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="CAct65TypeDotField.h">
+    <ClInclude Include="Act65TypeDotField.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Act65VALUE.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Act65UnaryNEG.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Act65MUL.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Act565MOD.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Act65DIV.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
