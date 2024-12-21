@@ -51,24 +51,6 @@
     <ClCompile Include="AstTree.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="AccessModeStackItem.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="AddressSizeStackItem.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="BinStackItem.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="DataSizeStackItem.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Instruction.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="NumberStackItem.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="ObjFormatCode.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -93,22 +75,7 @@
     <ClCompile Include="ObjFormatSymbols.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="RegisterStackItem.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Section.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Stack.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="StackItem.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="StackSectionItem.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="StackSymbolItem.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="UnResolvedSymbol.cpp">
@@ -578,22 +545,7 @@
     <ClInclude Include="AstTree.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="AccessModeStackItem.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="AddressSizeStackItem.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="BinStackItem.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="DataSizeStackItem.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Instruction.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="NumberStackItem.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ObjFormatCode.h">
@@ -620,22 +572,7 @@
     <ClInclude Include="ObjFormatSymbols.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="RegisterStackItem.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Section.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Stack.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="StackItem.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="StackSectionItem.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="StackSymbolItem.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="UnResolvedSymbol.h">

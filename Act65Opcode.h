@@ -10,7 +10,7 @@ class CAct65Opcode : public CAstNode
 	CSymbol* m_pSym;	// Symbol for argument
 	CSymbol* m_pLabel;	// Symbol for instruction location
 	AdrModeType m_AdressMode;
-	CInstruction* m_pInstruction;
+//	CInstruction* m_pInstruction;
 public:
 	CAct65Opcode();
 	virtual ~CAct65Opcode();

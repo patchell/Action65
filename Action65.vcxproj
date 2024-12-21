@@ -132,7 +132,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="AccessModeStackItem.cpp" />
     <ClCompile Include="Acrt65ProcADDR.cpp" />
     <ClCompile Include="Act565MOD.cpp" />
     <ClCompile Include="Act65ACC.cpp" />
@@ -265,25 +264,20 @@
     <ClCompile Include="Actt65DS.cpp" />
     <ClCompile Include="Act65LowerPart.cpp" />
     <ClCompile Include="Act65TYPEDEF.cpp" />
-    <ClCompile Include="AddressSizeStackItem.cpp" />
     <ClCompile Include="Act65AssignAND.cpp" />
     <ClCompile Include="Act65AssignOR.cpp" />
     <ClCompile Include="Act65FuncCall.cpp" />
     <ClCompile Include="Act65LogicalAND.cpp" />
     <ClCompile Include="AstNode.cpp" />
     <ClCompile Include="AstTree.cpp" />
-    <ClCompile Include="BinStackItem.cpp" />
     <ClCompile Include="Act65BOOL.cpp" />
     <ClCompile Include="Act65Module.cpp" />
     <ClCompile Include="Act65TypeDotField.cpp" />
     <ClCompile Include="Act65UnaryNEG.cpp" />
-    <ClCompile Include="DataSizeStackItem.cpp" />
     <ClCompile Include="Bin.cpp" />
     <ClCompile Include="Bucket.cpp" />
-    <ClCompile Include="Instruction.cpp" />
     <ClCompile Include="Lexer.cpp" />
     <ClCompile Include="LHead.cpp" />
-    <ClCompile Include="NumberStackItem.cpp" />
     <ClCompile Include="ObjFormatCode.cpp" />
     <ClCompile Include="ObjFormatData.cpp" />
     <ClCompile Include="ObjFormatFile.cpp" />
@@ -295,12 +289,7 @@
     <ClCompile Include="ObjType.cpp" />
     <ClCompile Include="Parser.cpp" />
     <ClCompile Include="pch.cpp" />
-    <ClCompile Include="RegisterStackItem.cpp" />
     <ClCompile Include="Section.cpp" />
-    <ClCompile Include="Stack.cpp" />
-    <ClCompile Include="StackItem.cpp" />
-    <ClCompile Include="StackSectionItem.cpp" />
-    <ClCompile Include="StackSymbolItem.cpp" />
     <ClCompile Include="Symbol.cpp" />
     <ClCompile Include="SymTab.cpp" />
     <ClCompile Include="UnResolvedSymbol.cpp" />
@@ -308,7 +297,6 @@
     <ClCompile Include="WhereSymbolIsUsed.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="AccessModeStackItem.h" />
     <ClInclude Include="Acrt65ProcADDR.h" />
     <ClInclude Include="Act565MOD.h" />
     <ClInclude Include="Act65ACC.h" />
@@ -448,15 +436,11 @@
     <ClInclude Include="Act65LogicalAND.h" />
     <ClInclude Include="AstNode.h" />
     <ClInclude Include="AstTree.h" />
-    <ClInclude Include="BinStackItem.h" />
     <ClInclude Include="Act65BOOL.h" />
     <ClInclude Include="Act65Module.h" />
     <ClInclude Include="Act65TypeDotField.h" />
     <ClInclude Include="Act65UnaryNEG.h" />
-    <ClInclude Include="DataSizeStackItem.h" />
-    <ClInclude Include="Instruction.h" />
     <ClInclude Include="LHead.h" />
-    <ClInclude Include="NumberStackItem.h" />
     <ClInclude Include="ObjFormatCode.h" />
     <ClInclude Include="ObjFormatData.h" />
     <ClInclude Include="ObjFormatFile.h" />
@@ -471,12 +455,7 @@
     <ClInclude Include="Bucket.h" />
     <ClInclude Include="Lexer.h" />
     <ClInclude Include="Parser.h" />
-    <ClInclude Include="RegisterStackItem.h" />
     <ClInclude Include="Section.h" />
-    <ClInclude Include="Stack.h" />
-    <ClInclude Include="StackItem.h" />
-    <ClInclude Include="StackSectionItem.h" />
-    <ClInclude Include="StackSymbolItem.h" />
     <ClInclude Include="Symbol.h" />
     <ClInclude Include="SymTab.h" />
     <ClInclude Include="UnResolvedSymbol.h" />

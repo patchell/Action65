@@ -48,12 +48,10 @@ private:
 	int m_Recursion;
 	int m_Bump;
 	CActionAstTree m_AstTree;
-	CStack m_ValueStack;
 public:
 	CParser();
 	virtual ~CParser();
 	bool Create();
-	CStack* GetValueStack() { return &m_ValueStack; }
 	void SetCurrentSection(CSection* pSection) {
 		m_pCurrentSection = m_pCurrentSection;
 	}
@@ -68,7 +66,7 @@ public:
 	Token Expect(Token LookaheadToken, Token Expected);
 	bool Accept(Token LookaheadToken, Token Expected);
 private:
-	void PrepareInstruction(CInstruction** ppInst, Token Op);
+	void PrepareInstruction( Token Op);
 	//---------------------------------
 	// Parsing Methods
 	//---------------------------------
@@ -357,9 +355,9 @@ private:
 	CLHead AsmConstant(CLHead LookaHead);
 	CLHead AsmConstAddSub(CLHead LookaHead);
 	CLHead BaseAsmConstant(CLHead LookaHead);
-	CLHead Immediate(CLHead LookaHead, CInstruction* pInst);
-	void PageZero(CInstruction* pInst, int Address, AdrModeType ModeType);
-	void Absolute(CInstruction* pInst, int Address, AdrModeType ModeType);
+	CLHead Immediate(CLHead LookaHead);
+	void PageZero(int Address, AdrModeType ModeType);
+	void Absolute(int Address, AdrModeType ModeType);
 	bool CheckZeroPageAddress(int A);
 	//---------------- Utillity ----------------------
 	void PrintLookahead(

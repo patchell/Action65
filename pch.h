@@ -237,18 +237,9 @@ enum class Processor {
 };
 
 
-#include "StackItem.h"
-#include "DataSizeStackItem.h"
-#include "RegisterStackItem.h"
-#include "Instruction.h"
-#include "StackSectionItem.h"
-#include "NumberStackItem.h"
-
 #include "ObjType.h"
 
 #include "Bin.h"
-#include "WhereSymbolIsUsed.h"
-#include "UnResolvedSymbol.h"
 #include "Bucket.h"
 #include "Symbol.h"
 #include "Value.h"
@@ -369,12 +360,6 @@ public:
 	}
 };
 
-
-
-
-#include "BinStackItem.h"
-#include "StackSymbolItem.h"
-#include "Stack.h"
 #include "SymTab.h"
 //--------------------------------------
 // Object File Format
@@ -389,15 +374,11 @@ public:
 #include "ObjFormatFile.h"
 //--------------------------------------
 #include "Section.h"
+#include "WhereSymbolIsUsed.h"
+#include "UnResolvedSymbol.h"
 //---------------------------------------
 //----------------Value Stack -----------
 //---------------------------------------
-#include "Stack.h"
-#include "StackItem.h"
-#include "StackSectionItem.h"
-#include "StackSymbolItem.h"
-#include "AddressSizeStackItem.h"
-#include "AccessModeStackItem.h"
 
 //-------------- AST Base Class ----------
 #include "AstNode.h"
