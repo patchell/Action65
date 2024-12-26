@@ -358,7 +358,7 @@ CLHead CParser::Statements(CLHead LookaHead)
 			LHChild.m_pNode = pN;
 			LHChild.SetToken(LHNext.GetToken());
 			//-----------------------------------------
-			LookaHead = ForStmt(LookaHead);
+			LookaHead = ForStmt(LHChild);
 			break;
 		default:
 			Loop = false;
