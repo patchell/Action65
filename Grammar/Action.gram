@@ -22,6 +22,13 @@
 // ll(1) grammar.
 // This grammar is a far cry from
 // the older grammars.
+// VERSION 0.0.4
+// Added some new TOKENS and KEYWORDS
+// DECLARE......To declare PROCS/FUNCS/INTERRUPT functions
+// VAR_LOCAL....Token
+// VAR_GLOBAL...Token
+// VAR_PARAM....Token
+//
 //----------------------------------
 
 TERMINALS
@@ -34,6 +41,7 @@ TERMINALS
 	"PROC",
 	"FUNC",
 	"INTERRUPT",
+	"DECLARE",
 	"INTERRUPT_IDENT",
 	"PROC_IDENT",
 	"FUNC_IDENT",
@@ -69,6 +77,9 @@ TERMINALS
 	"INT",
 	"POINTER",
 	"ARRAY",
+	"VAR_LOCAL",
+	"VAR_GLOBAL",
+	"VAR_PARAM",
 	"PUSH",
 	"POP",
 	"BREAK",
@@ -259,7 +270,7 @@ STEPoption_1	-> 'STEP' ArithExpr
 ForTO			-> Itterrator ForTO_1;
 ForTO_1			-> 'TO' ArithExpr
 				;
-Itterrator		-> MemContentsType Itterrator_1;
+Itterrator		-> Value Itterrator_1;
 Itterrator_1	-> '=' ArithExpr
 				;
 
@@ -583,7 +594,9 @@ MemContentsType_1 	 -> '^'					// Pointer Dereference
 
 
 MemContents			-> Factor MemContents_1;
-MemContents_1		-> 'IDENT' ArrayIndex
+MemContents_1		-> 'VAR_GLOBAL' ArrayIndex
+					-> 'VAR_LOCAL' ArrayIndex
+					-> 'VAR_PARAM' ArrayIndex
 					-> .
 					;
 
@@ -633,8 +646,8 @@ Def		-> IDENT '=' CompConst;
 // TYPE Defination  Creates User define data
 // object.
 //----------------------------------------------
-TypeDefDecl		-> FundDecl TypeDefDecl_1;
-TypeDefDecl_1	-> 'TYPE' EndTypeDef FundDecl TypeDefDecl_1
+TypeDefDecl		-> Declare TypeDefDecl_1;
+TypeDefDecl_1	-> 'TYPE' EndTypeDef Declare TypeDefDecl_1
 				-> .
 				;
 EndTypeDef		-> RecDefField EndTypeDef_1;
@@ -645,6 +658,73 @@ RecDefField		-> 'IDENT' RecDefField_1;
 RecDefField_1	-> '=' Fields;
 
 Fields			-> '[' LocalDecls;
+
+//--------------------------------------------
+// FUNC, PROC, INTERRUPT prototype declarations
+//--------------------------------------------
+
+Declare		-> FundDecl Declare_1;
+Declare_1	-> 'DECLARE' DeclareEnd FundDecl Declare_1
+			-> .
+			;
+
+DeclareEnd		-> DeclareParams DeclareEnd_1;
+DeclareEnd_1	-> ')'
+				;
+
+DeclareParams	-> DeclarFuncName DeclareParams_1;
+DeclareParams_1	-> '(' DeclParamList
+				;
+
+DeclParamList	-> DeclPramPointer DeclParamList_1;
+DeclParamList_1	-> 'RECORDTYPE' DeclPramPointer DeclParamList_1
+				-> 'CHAR' DeclPramPointer DeclParamList_1 
+				-> 'BYTE' DeclPramPointer DeclParamList_1 
+				-> 'INT' DeclPramPointer DeclParamList_1 
+				-> 'CARD' DeclPramPointer DeclParamList_1 
+				-> 'BOOL' DeclPramPointer DeclParamList_1 
+				-> .
+				;
+
+DeclPramPointer		-> DeclParamArray DeclPramPointer_1;
+DeclPramPointer_1	-> 'POINTER'  DeclParamArray
+					-> .
+					;
+
+DeclParamArray		-> IdentList DeclParamArray_1;
+DeclParamArray_1	-> 'ARRAY' IdentList
+					-> .
+					;
+
+
+DeclarFuncName	-> DeclareType DeclarFuncName_1;
+DeclarFuncName_1-> 'IDENT' DeclareType
+				;
+
+DeclareType		-> DeclarePointer DeclareType_1;
+DeclareType_1	-> 'BYTE' DeclarePointer
+				-> 'CHAR' DeclarePointer
+				-> 'INT' DeclarePointer
+				-> 'CARD' DeclarePointer
+				-> 'BOOL' DeclarePointer
+				-> 'RECORDTYPE' DeclarePointer
+				-> .
+				;
+
+DeclarePointer		-> DeclareArray DeclarePointer_1;
+DeclarePointer_1	-> 'POINTER' DeclareArray
+					-> .
+					;
+
+DeclareArray	-> DeclarFuncType DeclareArray_1;
+DeclareArray_1	-> 'ARRAY' DeclarFuncType
+				-> .
+				;
+
+DeclarFuncType	-> 'FUNC' 
+				-> 'PROC' 
+				-> 'INTERRUPT' 
+				;
 
 //--------------------------------------------
 // Fundemental Declarations.  These are the
@@ -669,6 +749,7 @@ FundArrayDecl	-> FunctionDecl FundArrayDecl_1;
 FundArrayDecl_1	-> 'ARRAY' FunctionDecl 
 				-> .
 				;
+
 
 //------------------------------------------------
 // Proceedure, Functions, Interrupt Routines
@@ -898,6 +979,7 @@ Proceedure_1	-> 'ASMPROC' Section 'EPROC' Instruction Proceedure_1
 
 //--------------------------------------
 // Opcodes
+//	<Label>	<OP> <addressing mode>
 //--------------------------------------
 Instruction		-> Labels Instruction_1;	
 Instruction_1	-> 'ADC'  AluAdrModes	Labels Instruction_1 //ALU Opcodes		
@@ -1106,9 +1188,9 @@ AsmConstAddSub_1	-> '+' BaseAsmConstant AsmConstAddSub_1
 					-> .
 					;
 
-BaseAsmConstant	-> 'LOCAL_LABLE'
-				-> 'GLOBAL_LABLE'
-				-> 'IDENT'
+BaseAsmConstant	-> 'LOCAL_LABLE'	//from a CSymbol
+				-> 'GLOBAL_LABLE'	//from a CSymbol
+				-> 'IDENT'			//from a CSymbol
 				-> 'NUMBER'
 				-> 'CHAR_CONSTANT'
 				-> '*'				//current location counter

@@ -16,3 +16,9 @@ bool CValue::Create(CBin* pSym)
 	SetSymbol(pSym);
     return rV;
 }
+
+bool CValue::AsmInstruction::Create()
+{
+	bool rV = true;
+    return rV;
+}

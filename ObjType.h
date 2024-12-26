@@ -10,11 +10,13 @@ public:
 		INT,
 		CARD,
 		BOOL,
+		TYPE,
 		TYPEDEF,
 		ARRAY,
 		POINTER,
 		PROC,
-		FUNC
+		FUNC,
+		INTERRUPT
 	};
 private:
 	struct Types {
@@ -37,11 +39,13 @@ private:
 		{Spec::INT,"INT"},
 		{Spec::CARD,"CARD"},
 		{Spec::BOOL,"BOOL"},
+		{Spec::TYPE,"TYPE"},
 		{Spec::TYPEDEF,"TYPEDEF"},
 		{Spec::ARRAY,"ARRAY"},
 		{Spec::POINTER,"POINTER"},
 		{Spec::PROC,"PROC"},
 		{Spec::FUNC,"FUNC"},
+		{Spec::INTERRUPT,"INTERRUPT"},
 		{Spec(-1),0}
 	};
 	Spec m_SpecType;

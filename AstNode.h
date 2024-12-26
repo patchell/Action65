@@ -22,6 +22,13 @@ public:
 		CAstNode* pChild = 0,
 		CAstNode* pNext = 0
 	);
+	virtual void SetChildNext(
+		CAstNode* pChild = 0,
+		CAstNode* pNext = 0
+	) {
+		m_pChild = pChild;
+		m_pNext = pNext;
+	}
 	virtual CValue* Process() = 0;
 	virtual void Print(FILE* pOut, int Indent, char* s);
 	void AddToHead(CAstNode* pN);

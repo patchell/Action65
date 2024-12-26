@@ -501,7 +501,7 @@
     <ClCompile Include="Act65MUL.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Act565MOD.cpp">
+    <ClCompile Include="Act65MOD.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Act65DIV.cpp">
@@ -995,7 +995,7 @@
     <ClInclude Include="Act65MUL.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Act565MOD.h">
+    <ClInclude Include="Act65MOD.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Act65DIV.h">

@@ -44,6 +44,7 @@ enum  class Token {
 	INTERRUPT_IDENT,
 	FUNC_IDENT,
 	PROC_IDENT,
+	DECLARE,
 	//------ Data Types -----------------
 	BOOL,
 	BYTE,
@@ -54,6 +55,9 @@ enum  class Token {
 	TYPE,
 	RECORDTYPE,
 	ARRAY,
+	VAR_GLOBAL,
+	VAR_LOCAL,
+	VAR_PARAM,
 	//--------Statements----------
 	MODULE,
 	VECTOR,
@@ -107,7 +111,7 @@ enum  class Token {
 	DS,		//define storage
 	//------- Opcodes
 	ADC,
-	AND,	//Logical Action AND or ASM Opcode
+	AND,	//Logical Action or ASM AND  Opcode
 	ASL,
 	BCC,
 	BCS,
@@ -234,6 +238,76 @@ enum class Processor {
 	R6502,
 	WD65C02,
 	WD65C816
+};
+
+struct AdressModeItem {
+	AdrModeType Mode;
+	int inc;
+	AdressModeItem() {
+		Mode = AdrModeType::NA;
+		inc = 0;
+	}
+	AdressModeItem(AdrModeType T, int I) {
+		Mode = T;
+		inc = I;
+	}
+	int GetInc(AdrModeType ModeType) const {
+		//---------------------------
+		// GetInc
+		//	Compares the address mode
+		// type of this object to the
+		// one that is desired.  If
+		// they are equal, we get
+		// back the increment value,
+		// If they are not equal, we
+		// get back -1
+		//---------------------------
+		int rV = -1;
+
+		if (ModeType == Mode)
+			rV = inc;
+		return rV;
+	}
+};
+
+struct AdressModeLUT {
+	AdressModeItem* ModeInc;
+	int m_nElements;
+	AdressModeLUT() {
+		ModeInc = 0;
+		m_nElements = 0;
+	}
+	//--------------------
+	AdressModeLUT(int n, AdressModeItem* MI) {
+		ModeInc = MI;
+		m_nElements = n;
+	}
+	//-------------------
+	int GetInc(AdrModeType Type) {
+		int i, rV = -1;
+		bool Loop = true;
+
+		for (i = 0; Loop && i < m_nElements; ++i)
+		{
+			rV = ModeInc[i].GetInc(Type);
+			if (rV >= 0)
+				Loop = false;
+		}
+		return rV;
+	}
+};
+
+struct KeyWord {
+	Token m_TokenID;	//token value
+	const char* m_Name;	//token name
+	int m_MaxBytes;			//Maximum number of bytes for instruction
+	int m_OpCode;			//base opcode
+	Processor m_Processor;	//for which processor
+	AdressModeLUT* m_pAddresModeLUT;
+	int NumOfAdrModes;
+	//------ Methods ------
+	int FindInc(AdrModeType AdrMode);
+	static Token LookupToToken(const char* pName);
 };
 
 
@@ -537,7 +611,7 @@ public:
 #include "Act65VALUE.h"
 #include "Act65UnaryNEG.h"
 #include "Act65MUL.h"
-#include "Act565MOD.h"
+#include "Act65MOD.h"
 #include "Act65DIV.h"
 #include "AstTree.h"
 #include "ActionAstTree.h"

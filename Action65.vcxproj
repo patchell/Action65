@@ -133,7 +133,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Acrt65ProcADDR.cpp" />
-    <ClCompile Include="Act565MOD.cpp" />
+    <ClCompile Include="Act65MOD.cpp" />
     <ClCompile Include="Act65ACC.cpp" />
     <ClCompile Include="Act65ADD.cpp" />
     <ClCompile Include="Act65AddressOF.cpp" />
@@ -298,7 +298,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Acrt65ProcADDR.h" />
-    <ClInclude Include="Act565MOD.h" />
+    <ClInclude Include="Act65MOD.h" />
     <ClInclude Include="Act65ACC.h" />
     <ClInclude Include="Act65ADD.h" />
     <ClInclude Include="Act65AddressOF.h" />

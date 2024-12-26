@@ -53,3 +53,45 @@ const char* Exception::ExceptionSubTypeStrings::FindSubTypeString(ExceptionSubTy
 	}
 	return pString;
 }
+
+//---------------------------------------
+
+int KeyWord::FindInc(AdrModeType AdrMode)
+{
+	int IncValue = -1;
+
+	IncValue = m_pAddresModeLUT->GetInc(AdrMode);
+	if (IncValue < 0)
+	{
+		sprintf_s(
+			ThrownException.GetErrorString(),
+			ThrownException.GetMaxStringLen(),
+			"Houston, we have a problem Line:%d",
+			Act()->GetParser()->GetLexer()->GetLineNumber()
+		);
+		ThrownException.SetXCeptType(Exception::ExceptionType::INTERNAL_ERROR);
+		throw(ThrownException);
+	}
+	return IncValue;
+}
+
+
+Token KeyWord::LookupToToken(const char* pName)
+{
+	int i = 0;
+	bool Loop = true;
+	KeyWord* pKW = Act()->GetParser()->GetLexer()->GetKeyWords();
+
+	while (Loop)
+	{
+		if (strcmp(pName, pKW[i].m_Name) == 0)
+			Loop = false;
+		else
+			i++;
+		if (pKW[i].m_TokenID == Token::ENDOFTOKENS)
+		{
+			Loop = false;
+		}
+	}
+	return pKW[i].m_TokenID;
+}

@@ -1,159 +1,111 @@
-File:test1.act has 318 Bytes
+File:test4.act has 29 Bytes
 Parser Created
       1.0::Enter Action65 Lookahead CLHead: MODULE LexBuffer 'MODULE' Line:1 Col:6
       2.0::Enter Modules Lookahead CLHead: MODULE LexBuffer 'MODULE' Line:1 Col:6
       3.0::Enter Vector Lookahead CLHead: MODULE LexBuffer 'MODULE' Line:1 Col:6
       4.0::Enter SysDecl Lookahead CLHead: MODULE LexBuffer 'MODULE' Line:1 Col:6
       5.0::Enter TypeDefDecl Lookahead CLHead: MODULE LexBuffer 'MODULE' Line:1 Col:6
-      6.0::Enter FundDecl Lookahead CLHead: MODULE LexBuffer 'MODULE' Line:1 Col:6
-      7.0::Enter FundPointerDecl Lookahead CLHead: MODULE LexBuffer 'MODULE' Line:1 Col:6
-      8.0::Enter FundArrayDecl Lookahead CLHead: MODULE LexBuffer 'MODULE' Line:1 Col:6
-      9.0::Enter FunctionDecl Lookahead CLHead: MODULE LexBuffer 'MODULE' Line:1 Col:6
-     10.0::Enter IdentList Lookahead CLHead: MODULE LexBuffer 'MODULE' Line:1 Col:6
-     11.0::Enter Ident Lookahead CLHead: MODULE LexBuffer 'MODULE' Line:1 Col:6
-     10.0::Exit Ident Lookahead CLHead: MODULE LexBuffer 'MODULE' Line:1 Col:6
-      9.0::Exit IdenrtList Lookahead CLHead: MODULE LexBuffer 'MODULE' Line:1 Col:6
-      8.0::Exit FunctionDecl Lookahead CLHead: MODULE LexBuffer 'MODULE' Line:1 Col:6
-      7.0::Exit FundArrayDecl Lookahead CLHead: MODULE LexBuffer 'MODULE' Line:1 Col:6
-      6.0::Exit FundPointerDecl Lookahead CLHead: MODULE LexBuffer 'MODULE' Line:1 Col:6
-      5.0::Exit FundDecl Lookahead CLHead: MODULE LexBuffer 'MODULE' Line:1 Col:6
+      6.0::Enter Declare Lookahead CLHead: MODULE LexBuffer 'MODULE' Line:1 Col:6
+      7.0::Enter FundDecl Lookahead CLHead: MODULE LexBuffer 'MODULE' Line:1 Col:6
+      8.0::Enter FundPointerDecl Lookahead CLHead: MODULE LexBuffer 'MODULE' Line:1 Col:6
+      9.0::Enter FundArrayDecl Lookahead CLHead: MODULE LexBuffer 'MODULE' Line:1 Col:6
+     10.0::Enter FunctionDecl Lookahead CLHead: MODULE LexBuffer 'MODULE' Line:1 Col:6
+     11.0::Enter IdentList Lookahead CLHead: MODULE LexBuffer 'MODULE' Line:1 Col:6
+     12.0::Enter Ident Lookahead CLHead: MODULE LexBuffer 'MODULE' Line:1 Col:6
+     11.0::Exit Ident Lookahead CLHead: MODULE LexBuffer 'MODULE' Line:1 Col:6
+     10.0::Exit IdenrtList Lookahead CLHead: MODULE LexBuffer 'MODULE' Line:1 Col:6
+      9.0::Exit FunctionDecl Lookahead CLHead: MODULE LexBuffer 'MODULE' Line:1 Col:6
+      8.0::Exit FundArrayDecl Lookahead CLHead: MODULE LexBuffer 'MODULE' Line:1 Col:6
+      7.0::Exit FundPointerDecl Lookahead CLHead: MODULE LexBuffer 'MODULE' Line:1 Col:6
+      6.0::Exit FundDecl Lookahead CLHead: MODULE LexBuffer 'MODULE' Line:1 Col:6
+      5.0::Exit Declare Lookahead CLHead: MODULE LexBuffer 'MODULE' Line:1 Col:6
       4.0::Exit TypeDefDecl Lookahead CLHead: MODULE LexBuffer 'MODULE' Line:1 Col:6
       3.0::Exit SysDecl Lookahead CLHead: MODULE LexBuffer 'MODULE' Line:1 Col:6
       2.0::Exit Vector Lookahead CLHead: MODULE LexBuffer 'MODULE' Line:1 Col:6
 2::Expected CLHead: MODULE  LookaHeadToken = MODULE Line:1
-      3.0::Enter Vector Lookahead CLHead: INT LexBuffer 'INT' Line:3 Col:3
-      4.0::Enter SysDecl Lookahead CLHead: INT LexBuffer 'INT' Line:3 Col:3
-      5.0::Enter TypeDefDecl Lookahead CLHead: INT LexBuffer 'INT' Line:3 Col:3
-      6.0::Enter FundDecl Lookahead CLHead: INT LexBuffer 'INT' Line:3 Col:3
-      7.0::Enter FundPointerDecl Lookahead CLHead: INT LexBuffer 'INT' Line:3 Col:3
-      8.0::Enter FundArrayDecl Lookahead CLHead: INT LexBuffer 'INT' Line:3 Col:3
-      9.0::Enter FunctionDecl Lookahead CLHead: INT LexBuffer 'INT' Line:3 Col:3
-     10.0::Enter IdentList Lookahead CLHead: INT LexBuffer 'INT' Line:3 Col:3
-     11.0::Enter Ident Lookahead CLHead: INT LexBuffer 'INT' Line:3 Col:3
-     10.0::Exit Ident Lookahead CLHead: INT LexBuffer 'INT' Line:3 Col:3
-      9.0::Exit IdenrtList Lookahead CLHead: INT LexBuffer 'INT' Line:3 Col:3
-      8.0::Exit FunctionDecl Lookahead CLHead: INT LexBuffer 'INT' Line:3 Col:3
-      7.0::Exit FundArrayDecl Lookahead CLHead: INT LexBuffer 'INT' Line:3 Col:3
-      6.0::Exit FundPointerDecl Lookahead CLHead: INT LexBuffer 'INT' Line:3 Col:3
-6::Expected CLHead: INT  LookaHeadToken = INT Line:3
-      7.0::Enter FundPointerDecl  Lookahead = Avar LexBuffer 'Avar' Line:3 Col:8
-      8.0::Enter FundArrayDecl  Lookahead = Avar LexBuffer 'Avar' Line:3 Col:8
-      9.0::Enter FunctionDecl  Lookahead = Avar LexBuffer 'Avar' Line:3 Col:8
-     10.0::Enter IdentList  Lookahead = Avar LexBuffer 'Avar' Line:3 Col:8
-     11.0::Enter Ident  Lookahead = Avar LexBuffer 'Avar' Line:3 Col:8
-11::Expected CLHead: Avar  Lookahead = Avar Line:3
-     10.0::Exit Ident  Lookahead = Avar LexBuffer 'CARD' Line:4 Col:4
-      9.0::Exit IdenrtList  Lookahead = Avar LexBuffer 'CARD' Line:4 Col:4
-      8.0::Exit FunctionDecl  Lookahead = Avar LexBuffer 'CARD' Line:4 Col:4
-      7.0::Exit FundArrayDecl  Lookahead = Avar LexBuffer 'CARD' Line:4 Col:4
-      6.0::Exit FundPointerDecl  Lookahead = Avar LexBuffer 'CARD' Line:4 Col:4
-6::Expected CLHead: CARD  LookaHeadToken = CARD Line:4
-      7.0::Enter FundPointerDecl  Lookahead = Cvar LexBuffer 'Cvar' Line:4 Col:9
-     2      1     -1 +-CONSTANT
-      8.0::Enter FundArrayDecl  Lookahead = Cvar LexBuffer 'Cvar' Line:4 Col:9
-     2      1     -1 +-CONSTANT
-      9.0::Enter FunctionDecl  Lookahead = Cvar LexBuffer 'Cvar' Line:4 Col:9
-     2      1     -1 +-CONSTANT
-     10.0::Enter IdentList  Lookahead = Cvar LexBuffer 'Cvar' Line:4 Col:9
-     2      1     -1 +-CONSTANT
-     11.0::Enter Ident  Lookahead = Cvar LexBuffer 'Cvar' Line:4 Col:9
-     2      1     -1 +-CONSTANT
-11::Expected CLHead: Cvar  Lookahead = Cvar Line:4
-     10.0::Exit Ident  Lookahead = Cvar LexBuffer 'CHAR' Line:5 Col:4
-     2      1     -1 +-CONSTANT
-      9.0::Exit IdenrtList  Lookahead = Cvar LexBuffer 'CHAR' Line:5 Col:4
-     2      1     -1 +-CONSTANT
-      8.0::Exit FunctionDecl  Lookahead = Cvar LexBuffer 'CHAR' Line:5 Col:4
-     2      1     -1 +-CONSTANT
-      7.0::Exit FundArrayDecl  Lookahead = Cvar LexBuffer 'CHAR' Line:5 Col:4
-     2      1     -1 +-CONSTANT
-      6.0::Exit FundPointerDecl  Lookahead = Cvar LexBuffer 'CHAR' Line:5 Col:4
-     2      1     -1 +-CONSTANT
-6::Expected CLHead: CHAR  LookaHeadToken = CHAR Line:5
-      7.0::Enter FundPointerDecl  Lookahead = Stuff LexBuffer 'Stuff' Line:5 Col:10
-     5      4     -1 +-CONSTANT
-      8.0::Enter FundArrayDecl  Lookahead = Stuff LexBuffer 'Stuff' Line:5 Col:10
-     5      4     -1 +-CONSTANT
-      9.0::Enter FunctionDecl  Lookahead = Stuff LexBuffer 'Stuff' Line:5 Col:10
-     5      4     -1 +-CONSTANT
-     10.0::Enter IdentList  Lookahead = Stuff LexBuffer 'Stuff' Line:5 Col:10
-     5      4     -1 +-CONSTANT
-     11.0::Enter Ident  Lookahead = Stuff LexBuffer 'Stuff' Line:5 Col:10
-     5      4     -1 +-CONSTANT
-11::Expected CLHead: Stuff  Lookahead = Stuff Line:5
-     10.0::Exit Ident  Lookahead = Stuff LexBuffer 'PROC' Line:7 Col:4
-     5      4     -1 +-CONSTANT
-      9.0::Exit IdenrtList  Lookahead = Stuff LexBuffer 'PROC' Line:7 Col:4
-     5      4     -1 +-CONSTANT
-9::Expected CLHead: PROC  LookaHeadToken = PROC Line:7
-     10.0::Enter ProcDecl  Lookahead = Procone LexBuffer 'Procone' Line:7 Col:12
-10::Expected CLHead: Procone  Lookahead = Procone Line:7
-     11.0::Enter OptInit Lookahead CLHead: ( LexBuffer 'Procone' Line:7 Col:13
-     10.0::Exit OptInit Lookahead CLHead: ( LexBuffer 'Procone' Line:7 Col:13
-10::Expected CLHead: (  LookaHeadToken = ( Line:7
-     11.0::Enter ParamList Lookahead CLHead: ) LexBuffer 'Procone' Line:7 Col:14
-     12.0::Enter PramPointer Lookahead CLHead: ) LexBuffer 'Procone' Line:7 Col:14
-     13.0::Enter ParamArray Lookahead CLHead: ) LexBuffer 'Procone' Line:7 Col:14
-     14.0::Enter IdentList Lookahead CLHead: ) LexBuffer 'Procone' Line:7 Col:14
-     15.0::Enter Ident Lookahead CLHead: ) LexBuffer 'Procone' Line:7 Col:14
-     14.0::Exit Ident Lookahead CLHead: ) LexBuffer 'Procone' Line:7 Col:14
-     13.0::Exit IdenrtList Lookahead CLHead: ) LexBuffer 'Procone' Line:7 Col:14
-     12.0::Exit ParamArray Lookahead CLHead: ) LexBuffer 'Procone' Line:7 Col:14
-     11.0::Exit PramPointer Lookahead CLHead: ) LexBuffer 'Procone' Line:7 Col:14
-     10.0::Exit ParamList Lookahead CLHead: ) LexBuffer 'Procone' Line:7 Col:14
-10::Expected CLHead: )  LookaHeadToken = ) Line:7
-     11.0::Enter ProcBody  Lookahead = Avar LexBuffer 'Avar' Line:8 Col:5
-     12.0::Enter LocalDecls  Lookahead = Avar LexBuffer 'Avar' Line:8 Col:5
-     13.0::Enter LocalPointerDecl  Lookahead = Avar LexBuffer 'Avar' Line:8 Col:5
-     14.0::Enter LocalArrayDecl  Lookahead = Avar LexBuffer 'Avar' Line:8 Col:5
-     15.0::Enter IdentList  Lookahead = Avar LexBuffer 'Avar' Line:8 Col:5
-     16.0::Enter Ident  Lookahead = Avar LexBuffer 'Avar' Line:8 Col:5
-16::Expected CLHead: Avar  Lookahead = Avar Line:8
-16::Expected CLHead: =  LookaHeadToken = = Line:8
-     17.0::Enter CompConst  Lookahead = Cvar LexBuffer 'Cvar' Line:8 Col:12
-     18.0::Enter BaseCompConst  Lookahead = Cvar LexBuffer 'Cvar' Line:8 Col:12
-     17.0::Exit BaseCompConst  Lookahead = Cvar LexBuffer 'Cvar' Line:8 Col:12
-     16.0::Exit CompConst  Lookahead = Cvar LexBuffer 'Cvar' Line:8 Col:12
-     15.0::Exit Ident  Lookahead = Cvar LexBuffer 'Cvar' Line:8 Col:12
-     14.0::Exit IdenrtList  Lookahead = Cvar LexBuffer 'Cvar' Line:8 Col:12
-     13.0::Exit LocalArrayDecl TOKEN:(null) LexBuffer:'Cvar' AST node:CONSTANT Line:8 Col:12
-    11      9     10 +-CONSTANT
-     12.0::Exit LocalPointerDecl TOKEN:(null) LexBuffer:'Cvar' AST node:CONSTANT Line:8 Col:12
-    11      9     10 +-CONSTANT
-     11.0::Exit LocalDecls  Lookahead = Cvar LexBuffer 'Cvar' Line:8 Col:12
-     12.1::Enter Statements TOKEN:(null) LexBuffer:'Cvar' AST node:CONSTANT Line:8 Col:12
-    11      9     10 +-CONSTANT
-     13.1::Enter ForStmt TOKEN:(null) LexBuffer:'Cvar' AST node:CONSTANT Line:8 Col:12
-    11      9     10 +-CONSTANT
-     14.1::Enter IfStmt TOKEN:(null) LexBuffer:'Cvar' AST node:CONSTANT Line:8 Col:12
-    11      9     10 +-CONSTANT
-     15.1::Enter IFFStmt TOKEN:(null) LexBuffer:'Cvar' AST node:CONSTANT Line:8 Col:12
-    11      9     10 +-CONSTANT
-     16.1::Enter WhileStmt TOKEN:(null) LexBuffer:'Cvar' AST node:CONSTANT Line:8 Col:12
-    11      9     10 +-CONSTANT
-     17.1::Enter DO Stmt TOKEN:(null) LexBuffer:'Cvar' AST node:CONSTANT Line:8 Col:12
-    11      9     10 +-CONSTANT
-     18.1::Enter EXITstmt TOKEN:(null) LexBuffer:'Cvar' AST node:CONSTANT Line:8 Col:12
-    11      9     10 +-CONSTANT
-     19.1::Enter RetStmt TOKEN:(null) LexBuffer:'Cvar' AST node:CONSTANT Line:8 Col:12
-    11      9     10 +-CONSTANT
-     20.1::Enter InLineAssembly TOKEN:(null) LexBuffer:'Cvar' AST node:CONSTANT Line:8 Col:12
-    11      9     10 +-CONSTANT
-     21.1::Enter CodeBlock TOKEN:(null) LexBuffer:'Cvar' AST node:CONSTANT Line:8 Col:12
-    11      9     10 +-CONSTANT
-     22.1::Enter UntillStmt TOKEN:(null) LexBuffer:'Cvar' AST node:CONSTANT Line:8 Col:12
-    11      9     10 +-CONSTANT
-     23.1::Enter Push TOKEN:(null) LexBuffer:'Cvar' AST node:CONSTANT Line:8 Col:12
-    11      9     10 +-CONSTANT
-     24.1::Enter Pop TOKEN:(null) LexBuffer:'Cvar' AST node:CONSTANT Line:8 Col:12
-    11      9     10 +-CONSTANT
-     25.1::Enter Break TOKEN:(null) LexBuffer:'Cvar' AST node:CONSTANT Line:8 Col:12
-    11      9     10 +-CONSTANT
-     26.1::Enter Rti TOKEN:(null) LexBuffer:'Cvar' AST node:CONSTANT Line:8 Col:12
-    11      9     10 +-CONSTANT
-     27.1::Enter Assignment TOKEN:(null) LexBuffer:'Cvar' AST node:CONSTANT Line:8 Col:12
-    11      9     10 +-CONSTANT
-     28.1::Enter MemContents TOKEN:(null) LexBuffer:'Cvar' AST node:CONSTANT Line:8 Col:12
-    11      9     10 +-CONSTANT
-28::Expected CLHead: IDENT  LookaHeadToken = (null) Line:8
-UNEXPECTED TOKEN 0:(null)  Line:8 Col:12
+      3.0::Enter Vector Lookahead CLHead: DECLARE LexBuffer 'DECLARE' Line:3 Col:7
+      4.0::Enter SysDecl Lookahead CLHead: DECLARE LexBuffer 'DECLARE' Line:3 Col:7
+      5.0::Enter TypeDefDecl Lookahead CLHead: DECLARE LexBuffer 'DECLARE' Line:3 Col:7
+      6.0::Enter Declare Lookahead CLHead: DECLARE LexBuffer 'DECLARE' Line:3 Col:7
+      7.0::Enter FundDecl Lookahead CLHead: DECLARE LexBuffer 'DECLARE' Line:3 Col:7
+      8.0::Enter FundPointerDecl Lookahead CLHead: DECLARE LexBuffer 'DECLARE' Line:3 Col:7
+      9.0::Enter FundArrayDecl Lookahead CLHead: DECLARE LexBuffer 'DECLARE' Line:3 Col:7
+     10.0::Enter FunctionDecl Lookahead CLHead: DECLARE LexBuffer 'DECLARE' Line:3 Col:7
+     11.0::Enter IdentList Lookahead CLHead: DECLARE LexBuffer 'DECLARE' Line:3 Col:7
+     12.0::Enter Ident Lookahead CLHead: DECLARE LexBuffer 'DECLARE' Line:3 Col:7
+     11.0::Exit Ident Lookahead CLHead: DECLARE LexBuffer 'DECLARE' Line:3 Col:7
+     10.0::Exit IdenrtList Lookahead CLHead: DECLARE LexBuffer 'DECLARE' Line:3 Col:7
+      9.0::Exit FunctionDecl Lookahead CLHead: DECLARE LexBuffer 'DECLARE' Line:3 Col:7
+      8.0::Exit FundArrayDecl Lookahead CLHead: DECLARE LexBuffer 'DECLARE' Line:3 Col:7
+      7.0::Exit FundPointerDecl Lookahead CLHead: DECLARE LexBuffer 'DECLARE' Line:3 Col:7
+      6.0::Exit FundDecl Lookahead CLHead: DECLARE LexBuffer 'DECLARE' Line:3 Col:7
+6::Expected CLHead: DECLARE  LookaHeadToken = DECLARE Line:3
+      7.0::Enter DeclareEnd Lookahead CLHead: PROC LexBuffer 'PROC' Line:3 Col:12
+      8.0::Enter DeclareParams Lookahead CLHead: PROC LexBuffer 'PROC' Line:3 Col:12
+      9.0::Enter DeclarFuncName Lookahead CLHead: PROC LexBuffer 'PROC' Line:3 Col:12
+     10.0::Enter DeclareType Lookahead CLHead: PROC LexBuffer 'PROC' Line:3 Col:12
+     11.0::Enter DeclarePointer Lookahead CLHead: PROC LexBuffer 'PROC' Line:3 Col:12
+     12.0::Enter Func DeclareArray Lookahead CLHead: PROC LexBuffer 'PROC' Line:3 Col:12
+     13.0::Enter DeclarFuncType Lookahead CLHead: PROC LexBuffer 'PROC' Line:3 Col:12
+13::Expected CLHead: PROC  LookaHeadToken = PROC Line:3
+     14.0::Enter DeclarePointer  Lookahead = Aproc LexBuffer 'Aproc' Line:3 Col:18
+     15.0::Enter Func DeclareArray  Lookahead = Aproc LexBuffer 'Aproc' Line:3 Col:18
+     16.0::Enter DeclarFuncType  Lookahead = Aproc LexBuffer 'Aproc' Line:3 Col:18
+     15.0::Exit DeclarFuncType  Lookahead = Aproc LexBuffer 'Aproc' Line:3 Col:18
+     14.0::Exit Func DeclareArray  Lookahead = Aproc LexBuffer 'Aproc' Line:3 Col:18
+     13.0::Exit DeclarePointer  Lookahead = Aproc LexBuffer 'Aproc' Line:3 Col:18
+     12.0::Exit DeclarFuncType Lookahead CLHead: PROC LexBuffer 'Aproc' Line:3 Col:18
+     11.0::Exit Func DeclareArray Lookahead CLHead: PROC LexBuffer 'Aproc' Line:3 Col:18
+     10.0::Exit DeclarePointer Lookahead CLHead: PROC LexBuffer 'Aproc' Line:3 Col:18
+      9.0::Exit DeclareType Lookahead CLHead: PROC LexBuffer 'Aproc' Line:3 Col:18
+9::Expected CLHead: Aproc  Lookahead = Aproc Line:3
+     10.0::Enter DeclarePointer Lookahead CLHead: ( LexBuffer 'Aproc' Line:3 Col:19
+     11.0::Enter Func DeclareArray Lookahead CLHead: ( LexBuffer 'Aproc' Line:3 Col:19
+     12.0::Enter DeclarFuncType Lookahead CLHead: ( LexBuffer 'Aproc' Line:3 Col:19
+     11.0::Exit DeclarFuncType Lookahead CLHead: ( LexBuffer 'Aproc' Line:3 Col:19
+     10.0::Exit Func DeclareArray Lookahead CLHead: ( LexBuffer 'Aproc' Line:3 Col:19
+      9.0::Exit DeclarePointer Lookahead CLHead: ( LexBuffer 'Aproc' Line:3 Col:19
+     10.0::Enter DeclareType Lookahead CLHead: ( LexBuffer 'Aproc' Line:3 Col:19
+     11.0::Enter DeclarePointer Lookahead CLHead: ( LexBuffer 'Aproc' Line:3 Col:19
+     12.0::Enter Func DeclareArray Lookahead CLHead: ( LexBuffer 'Aproc' Line:3 Col:19
+     13.0::Enter DeclarFuncType Lookahead CLHead: ( LexBuffer 'Aproc' Line:3 Col:19
+     12.0::Exit DeclarFuncType Lookahead CLHead: ( LexBuffer 'Aproc' Line:3 Col:19
+     11.0::Exit Func DeclareArray Lookahead CLHead: ( LexBuffer 'Aproc' Line:3 Col:19
+     10.0::Exit DeclarePointer Lookahead CLHead: ( LexBuffer 'Aproc' Line:3 Col:19
+      9.0::Exit DeclareType Lookahead CLHead: ( LexBuffer 'Aproc' Line:3 Col:19
+      8.0::Exit DeclarFuncName Lookahead CLHead: PROC LexBuffer 'Aproc' Line:3 Col:19
+8::Expected CLHead: (  LookaHeadToken = ( Line:3
+      9.0::Enter DeclParamList Lookahead CLHead: ) LexBuffer 'Aproc' Line:3 Col:20
+     10.0::Enter DeclPramPointer Lookahead CLHead: ) LexBuffer 'Aproc' Line:3 Col:20
+     11.0::Enter DeclParamArray Lookahead CLHead: ) LexBuffer 'Aproc' Line:3 Col:20
+     12.0::Enter IdentList Lookahead CLHead: ) LexBuffer 'Aproc' Line:3 Col:20
+     13.0::Enter Ident Lookahead CLHead: ) LexBuffer 'Aproc' Line:3 Col:20
+     12.0::Exit Ident Lookahead CLHead: ) LexBuffer 'Aproc' Line:3 Col:20
+     11.0::Exit IdenrtList Lookahead CLHead: ) LexBuffer 'Aproc' Line:3 Col:20
+     10.0::Exit DeclParamArray Lookahead CLHead: ) LexBuffer 'Aproc' Line:3 Col:20
+      9.0::Exit DeclPramPointer Lookahead CLHead: ) LexBuffer 'Aproc' Line:3 Col:20
+      8.0::Exit DeclParamList Lookahead CLHead: ) LexBuffer 'Aproc' Line:3 Col:20
+      7.0::Exit DeclareParams Lookahead CLHead: PROC LexBuffer 'Aproc' Line:3 Col:20
+7::Expected CLHead: )  LookaHeadToken = ) Line:3
+      6.0::Exit DeclareEnd Lookahead CLHead: End Of File LexBuffer 'Aproc' Line:4 Col:1
+      7.0::Enter FundDecl Lookahead CLHead: End Of File LexBuffer 'Aproc' Line:4 Col:1
+      8.0::Enter FundPointerDecl Lookahead CLHead: End Of File LexBuffer 'Aproc' Line:4 Col:1
+      9.0::Enter FundArrayDecl Lookahead CLHead: End Of File LexBuffer 'Aproc' Line:4 Col:1
+     10.0::Enter FunctionDecl Lookahead CLHead: End Of File LexBuffer 'Aproc' Line:4 Col:1
+     11.0::Enter IdentList Lookahead CLHead: End Of File LexBuffer 'Aproc' Line:4 Col:1
+     12.0::Enter Ident Lookahead CLHead: End Of File LexBuffer 'Aproc' Line:4 Col:1
+     11.0::Exit Ident Lookahead CLHead: End Of File LexBuffer 'Aproc' Line:4 Col:1
+     10.0::Exit IdenrtList Lookahead CLHead: End Of File LexBuffer 'Aproc' Line:4 Col:1
+      9.0::Exit FunctionDecl Lookahead CLHead: End Of File LexBuffer 'Aproc' Line:4 Col:1
+      8.0::Exit FundArrayDecl Lookahead CLHead: End Of File LexBuffer 'Aproc' Line:4 Col:1
+      7.0::Exit FundPointerDecl Lookahead CLHead: End Of File LexBuffer 'Aproc' Line:4 Col:1
+      6.0::Exit FundDecl Lookahead CLHead: End Of File LexBuffer 'Aproc' Line:4 Col:1
+      5.0::Exit Declare Lookahead CLHead: DECLARE LexBuffer 'Aproc' Line:4 Col:1
+      4.0::Exit TypeDefDecl Lookahead CLHead: DECLARE LexBuffer 'Aproc' Line:4 Col:1
+      3.0::Exit SysDecl Lookahead CLHead: DECLARE LexBuffer 'Aproc' Line:4 Col:1
+      2.0::Exit Vector Lookahead CLHead: End Of File LexBuffer 'Aproc' Line:4 Col:1
+      1.0::Exit Module TOKEN:End Of File LexBuffer:'Aproc' AST node:MODULE Line:4 Col:1
+     1     -1     -1 +-MODULE
+      0.0::Exit Action65 TOKEN:End Of File LexBuffer:'Aproc' AST node:MODULE Line:4 Col:1
+     1     -1     -1 +-MODULE
+Lines Compiled:4

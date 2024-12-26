@@ -4,6 +4,7 @@ CLHead::CLHead()
 {
 	m_Token = Token(0);
 	m_pNode = 0;
+	m_pSymbol = 0;
 }
 
 CLHead::~CLHead()
@@ -19,4 +20,5 @@ void CLHead::operator=(const CLHead& pLH)
 {
 	m_Token = pLH.m_Token;
 	m_pNode = pLH.m_pNode;
+	m_pSymbol = pLH.m_pSymbol;
 }

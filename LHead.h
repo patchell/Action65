@@ -5,6 +5,7 @@ class CLHead
 public:
 	Token m_Token;
 	CAstNode* m_pNode;
+	CSymbol* m_pSymbol;
 public:
 	CLHead();
 	CLHead(Token T, CAstNode* pN) {
@@ -19,6 +20,8 @@ public:
 	CAstNode* GetNode() {
 		return m_pNode;
 	}
+	CSymbol* GetSymbol() { return m_pSymbol; }
+	void SetSymbol(CSymbol* pS) { m_pSymbol = pS; }
 	void operator=(const CLHead & pLH);
 };
 

@@ -66,7 +66,7 @@ public:
 	Token Expect(Token LookaheadToken, Token Expected);
 	bool Accept(Token LookaheadToken, Token Expected);
 private:
-	void PrepareInstruction( Token Op);
+	void PrepareInstruction(Token OpToken, CValue* pVal);
 	//---------------------------------
 	// Parsing Methods
 	//---------------------------------
@@ -190,6 +190,20 @@ private:
 	CLHead RecDefField(CLHead LookaHead);
 	CLHead Fields(CLHead LookaHead);
 	//----------------------------------------
+	// Function/Procedure/Interrupt
+	// Declarations/Function Prototypes
+	CLHead Declare(CLHead LookaHead);
+	CLHead DeclareEnd(CLHead LookaHead);
+	CLHead DeclareParams(CLHead LookaHead);
+	CLHead DeclParamList(CLHead LookaHead);
+	CLHead DeclPramPointer(CLHead LookaHead);
+	CLHead DeclParamArray(CLHead LookaHead);
+	CLHead DeclarFuncName(CLHead LookaHead);
+	CLHead DeclareType(CLHead LookaHead);
+	CLHead DeclarePointer(CLHead LookaHead);
+	CLHead DeclareArray(CLHead LookaHead);
+	CLHead DeclarFuncType(CLHead LookaHead);
+	// ---------------------------------------
 	// Fundamental Declarations
 	//----------------------------------------
 	CLHead FundDecl(CLHead LookaHead);

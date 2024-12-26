@@ -2,62 +2,8 @@
 
 class CLexer
 {
-public:
-	
+
 private:
-	struct AdressModeItem {
-		AdrModeType Mode;
-		int inc;
-		AdressModeItem() {
-			Mode = AdrModeType::NA;
-			inc = 0;
-		}
-		AdressModeItem(AdrModeType T, int I) {
-			Mode = T;
-			inc = I;
-		}
-		int GetInc(AdrModeType ModeType) {
-			//---------------------------
-			// GetInc
-			//	Compares the address mode
-			// type of this object to the
-			// one that is desired.  If
-			// they are equal, we get
-			// back the increment value,
-			// If they are not equal, we
-			// get back -1
-			//---------------------------
-			int rV = -1;
-
-			if (ModeType == Mode)
-				rV = inc;
-			return rV;
-		}
-	};
-	struct AdressModeLUT {
-		CLexer::AdressModeItem* ModeInc;
-		int m_nElements;
-		AdressModeLUT() {
-			ModeInc = 0;
-			m_nElements = 0;
-		}
-		AdressModeLUT(int n, AdressModeItem* MI) {
-			ModeInc = MI;
-			m_nElements = n;
-		}
-		int GetInc(AdrModeType Type) {
-			int i, rV = -1;
-			bool Loop = true;
-
-			for (i = 0; Loop && i < m_nElements; ++i)
-			{
-				rV = ModeInc[i].GetInc(Type);
-				if (rV >= 0)
-					Loop = false;
-			}
-			return rV;
-		}
-	};
 	//alu access modes
 	static inline AdressModeItem Order8[8] = {
 		{AdrModeType::INDIRECT_X_ADR, 0},
@@ -156,18 +102,6 @@ private:
 		{AdrModeType::ABSOLUTE_ADR,0 }
 	};
 	static inline AdressModeLUT LUT_Order1 = { 3, Order1 };
-	struct KeyWord {
-		Token m_TokenID;	//token value
-		const char* m_Name;	//token name
-		int m_MaxBytes;			//Maximum number of bytes for instruction
-		int m_OpCode;			//base opcode
-		Processor m_Processor;	//for which processor
-		AdressModeLUT* m_pAddresModeLUT;
-		int NumOfAdrModes;
-		const char* LookupToName(Token Toke);
-		int FindInc(AdrModeType AdrMode);
-		Token LookupToToken(const char* pName);
-	};
 	static inline KeyWord KeyWords[] = {
 		{Token::ENDOFFILE,"End Of File"},		//1
 		{Token::IDENT,"IDENT"},					//2
@@ -200,6 +134,7 @@ private:
 		{Token::PROC_IDENT,"PROC Idnet"},	//  Proceedure Declaration
 		{Token::FUNC_IDENT,"FUNC Ident"},	//  Function Declaration
 		{Token::INTERRUPT_IDENT,"INTERRUPT Indent"},
+		{Token::DECLARE,"DECLARE"},
 		//------ Data Types -----------------
 		{Token::BOOL,"BOOL"},
 		{Token::BYTE,"BYTE"},
@@ -210,7 +145,10 @@ private:
 		{Token::RECORDTYPE,"Record Type (TYPE)"},
 		{Token::POINTER,"POINTER"},
 		{Token::ARRAY,"ARRAY"},
-		//--------- Statements --------------
+		{Token::VAR_GLOBAL,"VAR_GLOBAL"},
+		{Token::VAR_LOCAL,"VAR_LOCAL"},
+		{Token::VAR_PARAM,"VAR_PARAM"},
+	//--------- Statements --------------
 		{Token::MODULE,"MODULE"},
 		{Token::VECTOR,"VECTOR"},
 		{Token::FOR,"FOR"},
@@ -479,6 +417,9 @@ public:
 	Processor LookupProcessor(Token KeywordToken);
 	int LookupOpcode(Token OpcodeToken);
 	int GetOpcode(Token OpCodeToken);
+	const char* LookupToName(Token Toke);
+	Token LookupToToken(const char* pName);
+	int FindInc(AdrModeType AdrMode);
 	KeyWord* GetKeyWords() { return KeyWords; }
 	//--------------------------------------
 	// Symbol Methods

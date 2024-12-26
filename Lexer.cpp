@@ -480,12 +480,12 @@ Token CLexer::Lex()
 			else
 			{
 				//-------------------------------------
-				// Is it a Identifier?
+				// Is it an Identifier?
 				//-------------------------------------
 				m_pLexSymbol = (CSymbol*)LookupSymbol(m_aLexBuff);
 				if (m_pLexSymbol)
 				{
-					TokenValue = Token::IDENT;
+					TokenValue = m_pLexSymbol->GetToken();
 					Loop = false;
 				}
 				else
@@ -520,9 +520,29 @@ Token CLexer::LookupKeyword(const char* pKeyword)
 	return Toke;
 }
 
-CLexer::KeyWord* CLexer::FindKeyword(Token KeywordToken)
+KeyWord* CLexer::FindKeyword(Token KeywordToken)
 {
-	return 0;
+	int i = 0;
+	bool Loop = true;
+	KeyWord* pKW = 0;
+
+	while (Loop)
+	{
+		if (KeyWords[i].m_TokenID == KeywordToken)
+		{
+			pKW = &KeyWords[i];
+			Loop = 0;
+		}
+		else
+		{
+			++i;
+			if (KeyWords[i].m_TokenID == Token::ENDOFTOKENS)
+			{
+				Loop = false;
+			}
+		}
+	}
+	return pKW;
 }
 
 Processor CLexer::LookupProcessor(Token KeywordToken)
@@ -586,7 +606,7 @@ int CLexer::GetOpcode(Token OpCodeToken)
 	return OpCode;
 }
 
-const char* CLexer::KeyWord::LookupToName(Token Toke)
+const char* CLexer::LookupToName(Token Toke)
 {
 	bool Loop = true;
 	Token T = Token(0);
@@ -612,42 +632,4 @@ const char* CLexer::KeyWord::LookupToName(Token Toke)
 		}
 	}
 	return S;
-}
-
-Token CLexer::KeyWord::LookupToToken(const char* pName)
-{
-	int i = 0;
-	bool Loop = true;
-
-	while (Loop)
-	{
-		if (strcmp(pName, KeyWords[i].m_Name) == 0)
-			Loop = false;
-		else
-			i++;
-		if (KeyWords[i].m_TokenID == Token::ENDOFTOKENS)
-		{
-			Loop = false;
-		}
-	}
-	return KeyWords[i].m_TokenID;
-}
-
-int CLexer::KeyWord::FindInc(AdrModeType AdrMode)
-{
-	int IncValue = -1;
-
-	IncValue = m_pAddresModeLUT->GetInc(AdrMode);
-	if (IncValue < 0)
-	{
-		sprintf_s(
-			ThrownException.GetErrorString(),
-			ThrownException.GetMaxStringLen(),
-			"Houston, we have a problem Line:%d",
-			Act()->GetParser()->GetLexer()->GetLineNumber()
-		);
-		ThrownException.SetXCeptType(Exception::ExceptionType::INTERNAL_ERROR);
-		throw(ThrownException);
-	}
-	return IncValue;
 }
