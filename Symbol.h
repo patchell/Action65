@@ -40,8 +40,7 @@ class CSymbol: public CBin
 	//---------------------------
 	// Type Chain
 	//---------------------------
-	CObjType* m_pTcHead;
-	CObjType* m_pTcTail;
+	CTypeChain* m_pTypeChain;
 public:
 	CSymbol() {
 		m_Address = 0;
@@ -50,13 +49,13 @@ public:
 		m_pSection = 0;
 		m_IdentType = IdentType::NEW_SYMBOL;
 		m_UnResolved = true;
-		m_pTcHead = 0;
-		m_pTcTail = 0;
+		m_pTypeChain = 0;
 	}
 	virtual ~CSymbol() {}
 	bool Create() { return true; }
 	virtual bool Compare(const char* name, int scope);
 	virtual void Print(FILE* pOut, const char* s);
+	virtual int Print(char* pSO,int l, const char* s);
 	//-----------------------------
 	// Accessor Methods
 	//-----------------------------
@@ -85,14 +84,7 @@ public:
 	//-----------------------------------
 	// Type chain methods
 	//-----------------------------------
-	void AddAtHead(CObjType* pObjType);
-	void AddAtTail(CObjType* pObjType);
-	void Delete(CObjType* pObjType);
-	void Unlink(CObjType* pObjType);
-	void SetTcHead(CObjType* pOT) { m_pTcHead = pOT; }
-	CObjType* GetTcHead() { return m_pTcHead; }
-	void SetTcTail(CObjType* pOT) { m_pTcTail = pOT; }
-	CObjType* GetTcTail() { return m_pTcTail; }
-
+	CTypeChain* GetTypeChain() { return m_pTypeChain; }
+	void SetTypeChain(CTypeChain* pTC) { m_pTypeChain = pTC; }
 };
 

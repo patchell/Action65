@@ -176,6 +176,7 @@ Token CLexer::Lex()
 	bool auxLoop = true;
 	int c = 0,c1 = 0, c2 = 0;
 	Token TokenValue = Token(0);
+	static Token PreviousSymbolType = Token::NONE;
 
 	m_LexBuffIndex = 0;
 	while (Loop)
@@ -356,61 +357,73 @@ Token CLexer::Lex()
 			Loop = false;
 			break;
 		case '.':
-			c1 = LexLook(1);
-			c2 = LexLook(2);
-			if (!IsValidNameChar(c2))
+			if (PreviousSymbolType == Token::RECORDTYPE)
 			{
-				switch (c1)
-				{
-				case 'A':	//accumulator
-					TokenValue = Token::AREG;
-					m_LexBuffIndex++;
-					break;
-				case 'P':	//proecssor status
-					TokenValue = Token::PSREG;
-					m_LexBuffIndex++;
-					break;
-				case 'S':	// stack pointer
-					TokenValue = Token::SPREG;
-					m_LexBuffIndex++;
-					break;
-				case 'X':	// X index register
-					TokenValue = Token::XREG;
-					m_LexBuffIndex++;
-					break;
-				case 'Y':	// Y index register
-					TokenValue = Token::YREG;
-					m_LexBuffIndex++;
-					break;
-				case 'C':	// carry flag
-					TokenValue = Token::CARRY;
-					m_LexBuffIndex++;
-					break;
-				case 'D':
-					TokenValue = Token::DECIMAL_MODE;
-					m_LexBuffIndex++;
-					break;
-				case 'I':	// interrupt flag
-					TokenValue = Token::IRQENABLE;
-					m_LexBuffIndex++;
-					break;
-				case 'N':	// negative flag
-					TokenValue = Token::NEG;
-					m_LexBuffIndex++;
-					break;
-				case 'O':
-					TokenValue = Token::OVERFLOW;
-					m_LexBuffIndex++;
-					break;
-				default:
-					TokenValue = Token('.');
-					break;
-				}
+				TokenValue = Token('.');
 				Loop = false;
 			}
 			else
 			{
-				TokenValue = Token('.');
+				c1 = LexLook(1);
+				c2 = LexLook(2);
+				if (!IsValidNameChar(c2))
+				{
+					switch (c1)
+					{
+					case 'A':	//accumulator
+						TokenValue = Token::AREG;
+						m_LexBuffIndex++;
+						break;
+					case 'P':	//proecssor status
+						TokenValue = Token::PSREG;
+						m_LexBuffIndex++;
+						break;
+					case 'S':	// stack pointer
+						TokenValue = Token::SPREG;
+						m_LexBuffIndex++;
+						break;
+					case 'X':	// X index register
+						TokenValue = Token::XREG;
+						m_LexBuffIndex++;
+						break;
+					case 'Y':	// Y index register
+						TokenValue = Token::YREG;
+						m_LexBuffIndex++;
+						break;
+					case 'C':	// carry flag
+						TokenValue = Token::CARRY;
+						m_LexBuffIndex++;
+						break;
+					case 'D':
+						TokenValue = Token::DECIMAL_MODE;
+						m_LexBuffIndex++;
+						break;
+					case 'I':	// interrupt flag
+						TokenValue = Token::IRQENABLE;
+						m_LexBuffIndex++;
+						break;
+					case 'N':	// negative flag
+						TokenValue = Token::NEG;
+						m_LexBuffIndex++;
+						break;
+					case 'O':
+						TokenValue = Token::OVERFLOW;
+						m_LexBuffIndex++;
+						break;
+					case 'Z':
+						TokenValue = Token::ZERO;
+						m_LexBuffIndex++;
+						break;
+					default:
+						TokenValue = Token('.');
+						break;
+					}
+					Loop = false;
+				}
+				else
+				{
+					TokenValue = Token('.');
+				}
 			}
 			Loop = false;
 			break;
@@ -486,6 +499,7 @@ Token CLexer::Lex()
 				if (m_pLexSymbol)
 				{
 					TokenValue = m_pLexSymbol->GetToken();
+					PreviousSymbolType = TokenValue;
 					Loop = false;
 				}
 				else

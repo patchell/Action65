@@ -1768,17 +1768,18 @@ NONTERMINALS['Non Terminals'] { 'Action65','Modules','Modules_1','Statements','P
 ,'VectorAddress','Define','Define_1','DefList','DefList_1','Def','TypeDefDecl','TypeDefDecl_1'
 ,'EndTypeDef','EndTypeDef_1','RecDefField','RecDefField_1','Fields','Declare','Declare_1'
 ,'DeclareEnd','DeclareEnd_1','DeclareParams','DeclareParams_1','DeclParamList','DeclParamList_1'
-,'DeclPramPointer','DeclPramPointer_1','DeclParamArray','DeclParamArray_1','DeclarFuncName'
-,'DeclarFuncName_1','DeclareType','DeclareType_1','DeclarePointer','DeclarePointer_1'
-,'DeclareArray','DeclareArray_1','DeclarFuncType','FundDecl','FundDecl_1','FundPointerDecl'
-,'FundPointerDecl_1','FundArrayDecl','FundArrayDecl_1','FunctionDecl','FunctionDecl_1'
-,'IrqDecl','IrqDeclParams','IrqBody','ProcDecl','ProcDeclParams','ProcBody','FuncDecl'
-,'FuncDeclParams','FuncBody','OptInit','IdentList','IdentList_1','Ident','Ident_1'
-,'IdentInitType','InitData','InitData_1','ParamList','Param_1','PramPointer','ParamPointer_1'
-,'ParamArray','ParamArray_1','LocalDecls','LocalDecls_1','LocalPointerDecl','LocalPointerDecl_1'
-,'LocalArrayDecl','LocalArrayDecl_1','ConstList','ConstList_1','CompConst','CompConst_1'
-,'BaseCompConst','AsmStmt','Processor_1','ProcessorType','Section','Section_1','SectionName'
-,'SectionName_1','SectionDef','SectionAttributesList','SectionAttributesList_1','SectionAtribute'
+,'DeclPramPointer','DeclPramPointer_1','DeclParamArray','DeclParamArray_1','DeclareParamIdentList'
+,'DeclareParamIdentList_1','DeclareParamIdent','DeclarFuncName','DeclarFuncName_1'
+,'DeclareType','DeclareType_1','DeclarePointer','DeclarePointer_1','DeclareArray'
+,'DeclareArray_1','DeclarFuncType','FundDecl','FundDecl_1','FundPointerDecl','FundPointerDecl_1'
+,'FundArrayDecl','FundArrayDecl_1','FunctionDecl','FunctionDecl_1','IrqDecl','IrqDeclParams'
+,'IrqBody','ProcDecl','ProcDeclParams','ProcBody','FuncDecl','FuncDeclParams','FuncBody'
+,'OptInit','IdentList','IdentList_1','Ident','Ident_1','IdentInitType','InitData'
+,'InitData_1','ParamList','Param_1','PramPointer','ParamPointer_1','ParamArray','ParamArray_1'
+,'LocalDecls','LocalDecls_1','LocalPointerDecl','LocalPointerDecl_1','LocalArrayDecl'
+,'LocalArrayDecl_1','ConstList','ConstList_1','CompConst','CompConst_1','BaseCompConst'
+,'AsmStmt','Processor_1','ProcessorType','Section','Section_1','SectionName','SectionName_1'
+,'SectionDef','SectionAttributesList','SectionAttributesList_1','SectionAtribute'
 ,'Modes','TrueFalse','Org','Org_1','DefineMemory','DefineMemory_1','DefineStorage'
 ,'DefineStorage_1','Proceedure','Proceedure_1','Instruction','Instruction_1','Labels'
 ,'Label_1','AluAdrModes','Indirect','Indirect_1','StaAddressingModes','ShiftAddressingModes'
@@ -1940,12 +1941,15 @@ FIRST['DeclareEnd'] { 'FUNC','PROC','INTERRUPT' }
 FIRST['DeclareEnd_1'] { ')' }
 FIRST['DeclareParams'] { 'FUNC','PROC','INTERRUPT' }
 FIRST['DeclareParams_1'] { '(' }
-FIRST['DeclParamList'] { '(','=' }
+FIRST['DeclParamList'] { 'IDENT' }
 FIRST['DeclParamList_1'] { 'RECORDTYPE','CHAR','BYTE','INT','CARD','BOOL','e' }
-FIRST['DeclPramPointer'] { '(','=' }
+FIRST['DeclPramPointer'] { 'IDENT' }
 FIRST['DeclPramPointer_1'] { 'POINTER','e' }
-FIRST['DeclParamArray'] { '(','=' }
+FIRST['DeclParamArray'] { 'IDENT' }
 FIRST['DeclParamArray_1'] { 'ARRAY','e' }
+FIRST['DeclareParamIdentList'] { 'IDENT' }
+FIRST['DeclareParamIdentList_1'] { ',','e' }
+FIRST['DeclareParamIdent'] { 'IDENT' }
 FIRST['DeclarFuncName'] { 'FUNC','PROC','INTERRUPT' }
 FIRST['DeclarFuncName_1'] { 'IDENT' }
 FIRST['DeclareType'] { 'FUNC','PROC','INTERRUPT' }
@@ -2337,6 +2341,12 @@ FOLLOW['DeclParamArray'] { 'POINTER','RECORDTYPE','CHAR','BYTE','INT','CARD','BO
  }
 FOLLOW['DeclParamArray_1'] { 'POINTER','RECORDTYPE','CHAR','BYTE','INT','CARD','BOOL'
  }
+FOLLOW['DeclareParamIdentList'] { 'ARRAY','POINTER','RECORDTYPE','CHAR','BYTE','INT'
+,'CARD','BOOL' }
+FOLLOW['DeclareParamIdentList_1'] { 'ARRAY','POINTER','RECORDTYPE','CHAR','BYTE','INT'
+,'CARD','BOOL' }
+FOLLOW['DeclareParamIdent'] { ',','ARRAY','POINTER','RECORDTYPE','CHAR','BYTE','INT'
+,'CARD','BOOL' }
 FOLLOW['DeclarFuncName'] { '(' }
 FOLLOW['DeclarFuncName_1'] { '(' }
 FOLLOW['DeclareType'] { 'IDENT' }
@@ -2374,26 +2384,26 @@ FOLLOW['FuncDecl'] { }
 FOLLOW['FuncDeclParams'] { }
 FOLLOW['FuncBody'] { }
 FOLLOW['OptInit'] { '(' }
-FOLLOW['IdentList'] { 'ARRAY','POINTER','RECORDTYPE','CHAR','BYTE','INT','CARD','BOOL'
-,'FUNC','PROC','INTERRUPT','DECLARE','TYPE','DEFINE','VECTOR','MODULE','$','(','='
+FOLLOW['IdentList'] { 'FUNC','PROC','INTERRUPT','ARRAY','POINTER','BOOL','CHAR','BYTE'
+,'INT','CARD','RECORDTYPE','DECLARE','TYPE','DEFINE','VECTOR','MODULE','$','(','='
  }
-FOLLOW['IdentList_1'] { 'ARRAY','POINTER','RECORDTYPE','CHAR','BYTE','INT','CARD','BOOL'
-,'FUNC','PROC','INTERRUPT','DECLARE','TYPE','DEFINE','VECTOR','MODULE','$','(','='
+FOLLOW['IdentList_1'] { 'FUNC','PROC','INTERRUPT','ARRAY','POINTER','BOOL','CHAR','BYTE'
+,'INT','CARD','RECORDTYPE','DECLARE','TYPE','DEFINE','VECTOR','MODULE','$','(','='
  }
-FOLLOW['Ident'] { ',','ARRAY','POINTER','RECORDTYPE','CHAR','BYTE','INT','CARD','BOOL'
-,'FUNC','PROC','INTERRUPT','DECLARE','TYPE','DEFINE','VECTOR','MODULE','$','(','='
+FOLLOW['Ident'] { ',','FUNC','PROC','INTERRUPT','ARRAY','POINTER','BOOL','CHAR','BYTE'
+,'INT','CARD','RECORDTYPE','DECLARE','TYPE','DEFINE','VECTOR','MODULE','$','(','='
  }
-FOLLOW['Ident_1'] { ',','ARRAY','POINTER','RECORDTYPE','CHAR','BYTE','INT','CARD','BOOL'
-,'FUNC','PROC','INTERRUPT','DECLARE','TYPE','DEFINE','VECTOR','MODULE','$','(','='
+FOLLOW['Ident_1'] { ',','FUNC','PROC','INTERRUPT','ARRAY','POINTER','BOOL','CHAR','BYTE'
+,'INT','CARD','RECORDTYPE','DECLARE','TYPE','DEFINE','VECTOR','MODULE','$','(','='
  }
-FOLLOW['IdentInitType'] { 'IDENT',',','ARRAY','POINTER','RECORDTYPE','CHAR','BYTE','INT'
-,'CARD','BOOL','FUNC','PROC','INTERRUPT','DECLARE','TYPE','DEFINE','VECTOR','MODULE'
+FOLLOW['IdentInitType'] { 'IDENT',',','FUNC','PROC','INTERRUPT','ARRAY','POINTER','BOOL'
+,'CHAR','BYTE','INT','CARD','RECORDTYPE','DECLARE','TYPE','DEFINE','VECTOR','MODULE'
 ,'$','(','=' }
-FOLLOW['InitData'] { 'IDENT',',','ARRAY','POINTER','RECORDTYPE','CHAR','BYTE','INT'
-,'CARD','BOOL','FUNC','PROC','INTERRUPT','DECLARE','TYPE','DEFINE','VECTOR','MODULE'
+FOLLOW['InitData'] { 'IDENT',',','FUNC','PROC','INTERRUPT','ARRAY','POINTER','BOOL'
+,'CHAR','BYTE','INT','CARD','RECORDTYPE','DECLARE','TYPE','DEFINE','VECTOR','MODULE'
 ,'$','(','=' }
-FOLLOW['InitData_1'] { 'IDENT',',','ARRAY','POINTER','RECORDTYPE','CHAR','BYTE','INT'
-,'CARD','BOOL','FUNC','PROC','INTERRUPT','DECLARE','TYPE','DEFINE','VECTOR','MODULE'
+FOLLOW['InitData_1'] { 'IDENT',',','FUNC','PROC','INTERRUPT','ARRAY','POINTER','BOOL'
+,'CHAR','BYTE','INT','CARD','RECORDTYPE','DECLARE','TYPE','DEFINE','VECTOR','MODULE'
 ,'$','(','=' }
 FOLLOW['ParamList'] { }
 FOLLOW['Param_1'] { }
@@ -2411,15 +2421,15 @@ FOLLOW['LocalArrayDecl_1'] { 'POINTER','CHAR','BYTE','INT','CARD','BOOL','RECORD
 ,'(' }
 FOLLOW['ConstList'] { ']' }
 FOLLOW['ConstList_1'] { ']' }
-FOLLOW['CompConst'] { ')','STRING','[','IDENT',',','ARRAY','POINTER','RECORDTYPE','CHAR'
-,'BYTE','INT','CARD','BOOL','FUNC','PROC','INTERRUPT','DECLARE','TYPE','DEFINE','VECTOR'
-,'MODULE','$','(','=',']' }
-FOLLOW['CompConst_1'] { ')','STRING','[','IDENT',',','ARRAY','POINTER','RECORDTYPE'
-,'CHAR','BYTE','INT','CARD','BOOL','FUNC','PROC','INTERRUPT','DECLARE','TYPE','DEFINE'
+FOLLOW['CompConst'] { ')','STRING','[','IDENT',',','FUNC','PROC','INTERRUPT','ARRAY'
+,'POINTER','BOOL','CHAR','BYTE','INT','CARD','RECORDTYPE','DECLARE','TYPE','DEFINE'
 ,'VECTOR','MODULE','$','(','=',']' }
-FOLLOW['BaseCompConst'] { '+','-',')','STRING','[','IDENT',',','ARRAY','POINTER','RECORDTYPE'
-,'CHAR','BYTE','INT','CARD','BOOL','FUNC','PROC','INTERRUPT','DECLARE','TYPE','DEFINE'
+FOLLOW['CompConst_1'] { ')','STRING','[','IDENT',',','FUNC','PROC','INTERRUPT','ARRAY'
+,'POINTER','BOOL','CHAR','BYTE','INT','CARD','RECORDTYPE','DECLARE','TYPE','DEFINE'
 ,'VECTOR','MODULE','$','(','=',']' }
+FOLLOW['BaseCompConst'] { '+','-',')','STRING','[','IDENT',',','FUNC','PROC','INTERRUPT'
+,'ARRAY','POINTER','BOOL','CHAR','BYTE','INT','CARD','RECORDTYPE','DECLARE','TYPE'
+,'DEFINE','VECTOR','MODULE','$','(','=',']' }
 FOLLOW['AsmStmt'] { }
 FOLLOW['Processor_1'] { }
 FOLLOW['ProcessorType'] { }
@@ -2483,5 +2493,5 @@ FOLLOW['AsmConstAddSub'] { '>','<',',',')','(' }
 FOLLOW['AsmConstAddSub_1'] { '>','<',',',')','(' }
 FOLLOW['BaseAsmConstant'] { '+','-','>','<',',',')','(' }
 ---------------- Create Parse Table --------------
-Table Entries = 1925
+Table Entries = 1934
 ------------ Check For Conflicts-------------

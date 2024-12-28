@@ -18,7 +18,6 @@ private:
 	char* m_pName;
 	BinType m_Type;
 	Token m_Token;
-	char m_strName[MAX_SYMBOL_NAME_LEN];
 public:
 	CBin() {
 		m_pHead = 0;
@@ -26,22 +25,18 @@ public:
 		m_Token = Token(0);
 		m_pNext = 0;
 		m_pPrev = 0;
-		m_pName = new char[MAX_NAME_LEN];
+		m_pName = 0;
 		m_Type = BinType(0);
 		m_Token = Token(0);
-		for (int i = 0; i < MAX_SYMBOL_NAME_LEN; ++i)
-			m_strName[i] = 0;
 	}
 	CBin(BinType type) {
-		m_pName = new char[MAX_NAME_LEN];
+		m_pName = 0;
 		m_pNext = 0;
 		m_pPrev = 0;
 		m_pHead = 0;
 		m_pTail = 0;
 		m_Token = Token::ENDOFTOKENS;
 		m_Type = type;
-		for (int i = 0; i < MAX_SYMBOL_NAME_LEN; ++i)
-			m_strName[i] = 0;
 	}
 	virtual ~CBin() {
 		if (m_pName)

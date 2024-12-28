@@ -321,24 +321,6 @@ private:
 		//------- Lables -------------
 		{ Token::LOCAL_LABEL,"Local Lable", 0,0,Processor::ALL,NULL,0 },
 		{ Token::GLOBAL_LABLE,"Global Lable", 0,0,Processor::ALL,NULL,0 },
-		//-------- Registers -------------
-		{ Token::AREG,"A", 0,0, Processor::ALL,NULL,0 },
-		{ Token::XREG,"X", 0,0, Processor::ALL,NULL,0 },
-		{ Token::YREG,"Y", 0,0, Processor::ALL,NULL,0 },
-		{ Token::SPREG,"S", 0,0, Processor::ALL,NULL,0 },
-		{ Token::PSREG,"P", 0,0, Processor::ALL,NULL,0 },
-		{ Token::AREG,"a", 0,0, Processor::ALL,NULL,0 },
-		{ Token::XREG,"x", 0,0, Processor::ALL,NULL,0 },
-		{ Token::YREG,"y", 0,0, Processor::ALL,NULL,0 },
-		{ Token::SPREG,"s", 0,0, Processor::ALL,NULL,0 },
-		{ Token::PSREG,"p", 0,0, Processor::ALL,NULL,0 },
-		//--------- Status Register Bits -------------
-		{ Token::NEG,"N" },
-		{ Token::ZERO,"Z" },
-		{Token::CARRY,"C"},
-		{Token::OVERFLOW,"O"},
-		{Token::DECIMAL_MODE,"D"},
-		{Token::IRQENABLE,"I"},
 		//-------- Processor Selection -------
 		{ Token::PROCESSOR,"PROCESSOR", 0,0,Processor::ALL,NULL,0 },
 		{ Token::R6502,"R6502", 0,0, Processor::ALL,NULL,0 },

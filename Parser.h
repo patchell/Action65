@@ -61,7 +61,7 @@ public:
 	CLexer* GetLexer() { return m_pLex; }
 	CActionAstTree* GetAstTree() { return &m_AstTree; }
 	FILE* LogFile();
-	CLHead Run();
+	CLkHead Run();
 	//---------------------------------
 	Token Expect(Token LookaheadToken, Token Expected);
 	bool Accept(Token LookaheadToken, Token Expected);
@@ -72,183 +72,186 @@ private:
 	//---------------------------------
 	// Program Structure
 	//---------------------------------
-	CLHead Action65(CLHead LookaHead);
-	CLHead Modules(CLHead LookaHead);
+	CLkHead Action65(CLkHead LookaHead);
+	CLkHead Modules(CLkHead LookaHead);
 	//------------------------------------------
 	// Statements
 	//------------------------------------------
-	CLHead Statements(CLHead LookaHead);	//ProcCal
-	CLHead ProcParams(CLHead LookaHead);
-	CLHead ProcParamsEnd(CLHead LookaHead);
+	CLkHead Statements(CLkHead LookaHead);	//ProcCal
+	CLkHead ProcParams(CLkHead LookaHead);
+	CLkHead ProcParamsEnd(CLkHead LookaHead);
 	//----FOR
-	CLHead ForStmt(CLHead LookaHead);
-	CLHead ForDOend(CLHead LookaHead);
-	CLHead ForDO(CLHead LookaHead);
-	CLHead STEPoption(CLHead LookaHead);
-	CLHead ForTO(CLHead LookaHead);
-	CLHead Iterator(CLHead LookaHead);
+	CLkHead ForStmt(CLkHead LookaHead);
+	CLkHead ForDOend(CLkHead LookaHead);
+	CLkHead ForDO(CLkHead LookaHead);
+	CLkHead STEPoption(CLkHead LookaHead);
+	CLkHead ForTO(CLkHead LookaHead);
+	CLkHead Iterator(CLkHead LookaHead);
 	//--- IF
-	CLHead IfStmt(CLHead LookaHead);
-	CLHead EndIf(CLHead LookaHead);
-	CLHead ElsePart(CLHead LookaHead);
-	CLHead ElseIfPart(CLHead LookaHead);
-	CLHead ThenPart(CLHead LookaHead);
+	CLkHead IfStmt(CLkHead LookaHead);
+	CLkHead EndIf(CLkHead LookaHead);
+	CLkHead ElsePart(CLkHead LookaHead);
+	CLkHead ElseIfPart(CLkHead LookaHead);
+	CLkHead ThenPart(CLkHead LookaHead);
 	//----IFF
-	CLHead IffStmt(CLHead LookaHead);
-	CLHead IFFend(CLHead LookaHead);;
-	CLHead IFFelse(CLHead LookaHead);;
-	CLHead IFFthenpart(CLHead LookaHead);;
-	CLHead IffConditional(CLHead LookaHead);;
-	CLHead RelOper(CLHead LookaHead);;
-	CLHead Bits(CLHead LookaHead);;
-	CLHead BitValue(CLHead LookaHead);;
-	CLHead StatusFlags(CLHead LookaHead);;
-	CLHead OptNot(CLHead LookaHead);;
+	CLkHead IffStmt(CLkHead LookaHead);
+	CLkHead IFFend(CLkHead LookaHead);;
+	CLkHead IFFelse(CLkHead LookaHead);;
+	CLkHead IFFthenpart(CLkHead LookaHead);;
+	CLkHead IffConditional(CLkHead LookaHead);;
+	CLkHead RelOper(CLkHead LookaHead);;
+	CLkHead Bits(CLkHead LookaHead);;
+	CLkHead BitValue(CLkHead LookaHead);;
+	CLkHead StatusFlags(CLkHead LookaHead);;
+	CLkHead OptNot(CLkHead LookaHead);;
 	//----WHILE
-	CLHead WhileStmt(CLHead LookaHead);
-	CLHead WhileDOend(CLHead LookaHead);
-	CLHead WhileDO(CLHead LookaHead);
+	CLkHead WhileStmt(CLkHead LookaHead);
+	CLkHead WhileDOend(CLkHead LookaHead);
+	CLkHead WhileDO(CLkHead LookaHead);
 	//----DO
-	CLHead DoStmt(CLHead LookaHead);
-	CLHead DoEND(CLHead LookaHead);
+	CLkHead DoStmt(CLkHead LookaHead);
+	CLkHead DoEND(CLkHead LookaHead);
 	//----EXIT
-	CLHead EXITstmt(CLHead LookaHead);
+	CLkHead EXITstmt(CLkHead LookaHead);
 	//----RETURN
-	CLHead RetStmt(CLHead LookaHead);
-	CLHead OptReturnValue(CLHead LookaHead);
+	CLkHead RetStmt(CLkHead LookaHead);
+	CLkHead OptReturnValue(CLkHead LookaHead);
 	//----ASM
-	CLHead InlineAssembly(CLHead LookaHead);
-	CLHead EndAsmBlock(CLHead LookaHead);
-	CLHead InlineAssBlock(CLHead LookaHead);
+	CLkHead InlineAssembly(CLkHead LookaHead);
+	CLkHead EndAsmBlock(CLkHead LookaHead);
+	CLkHead InlineAssBlock(CLkHead LookaHead);
 	//----CODE BLOCK
-	CLHead CodeBlock(CLHead LookaHead);
-	CLHead CodeBlockEnd(CLHead LookaHead);
+	CLkHead CodeBlock(CLkHead LookaHead);
+	CLkHead CodeBlockEnd(CLkHead LookaHead);
 	//---- UNTIL
-	CLHead UntillStmt(CLHead LookaHead);
+	CLkHead UntillStmt(CLkHead LookaHead);
 	//---- PUSH
-	CLHead Push(CLHead LookaHead);
-	CLHead PushSourceList(CLHead LookaHead);
-	CLHead PushSource(CLHead LookaHead);
+	CLkHead Push(CLkHead LookaHead);
+	CLkHead PushSourceList(CLkHead LookaHead);
+	CLkHead PushSource(CLkHead LookaHead);
 	//---- POP
-	CLHead Pop(CLHead LookaHead);
-	CLHead PopDestList(CLHead LookaHead);
-	CLHead PopDest(CLHead LookaHead);
+	CLkHead Pop(CLkHead LookaHead);
+	CLkHead PopDestList(CLkHead LookaHead);
+	CLkHead PopDest(CLkHead LookaHead);
 	//---- BREAK
-	CLHead Break(CLHead LookaHead);
+	CLkHead Break(CLkHead LookaHead);
 	//---- RTI
-	CLHead Rti(CLHead LookaHead);
+	CLkHead Rti(CLkHead LookaHead);
 	//---- Assogmemt
-	CLHead Assignment(CLHead LookaHead);
+	CLkHead Assignment(CLkHead LookaHead);
 	//--------------------------------------
 	// Logical Expressions
 	//--------------------------------------
-	CLHead RelOperation(CLHead LookaHead);
-	CLHead LogicalOR(CLHead LookaHead);
-	CLHead LogicalAND(CLHead LookaHead);
+	CLkHead RelOperation(CLkHead LookaHead);
+	CLkHead LogicalOR(CLkHead LookaHead);
+	CLkHead LogicalAND(CLkHead LookaHead);
 	//--------------------------------------
 	// Arithmetic Expressions
 	//--------------------------------------
-	CLHead ArithExpr(CLHead LookaHead);	//bitwise OR
-	CLHead BitwiseAND(CLHead LookaHead);
-	CLHead BitwiseXOR(CLHead LookaHead);
-	CLHead AddExpr(CLHead LookaHead);
-	CLHead ShifExpr(CLHead LookaHead);
-	CLHead MultExpr(CLHead LookaHead);
-	CLHead Unary(CLHead LookaHead);
+	CLkHead ArithExpr(CLkHead LookaHead);	//bitwise OR
+	CLkHead BitwiseAND(CLkHead LookaHead);
+	CLkHead BitwiseXOR(CLkHead LookaHead);
+	CLkHead AddExpr(CLkHead LookaHead);
+	CLkHead ShifExpr(CLkHead LookaHead);
+	CLkHead MultExpr(CLkHead LookaHead);
+	CLkHead Unary(CLkHead LookaHead);
 	//----------------------------------
 	//Variable References
 	//Memory References
 	//----------------------------------
-	CLHead ValueList(CLHead LookaHead);
-	CLHead Value(CLHead LookaHead);
-	CLHead AddressOf(CLHead LookaHead);
-	CLHead MemContentsType(CLHead LookaHead);
-	CLHead MemContents(CLHead LookaHead);
-	CLHead ArrayIndex(CLHead LookaHead);
-	CLHead Factor(CLHead LookaHead);
+	CLkHead ValueList(CLkHead LookaHead);
+	CLkHead Value(CLkHead LookaHead);
+	CLkHead AddressOf(CLkHead LookaHead);
+	CLkHead MemContentsType(CLkHead LookaHead);
+	CLkHead MemContents(CLkHead LookaHead);
+	CLkHead ArrayIndex(CLkHead LookaHead);
+	CLkHead Factor(CLkHead LookaHead);
 
 	//-------------------------------------------
 	// Declarations
 	//-------------------------------------------
 	// VECTOR
 	//-------------------------------------------
-	CLHead SysDecl(CLHead LookaHead);	//Vectpr
-	CLHead VectorEnd(CLHead LookaHead);
-	CLHead AddressEnd(CLHead LookaHead);
-	CLHead VectorAddress(CLHead LookaHead);
+	CLkHead SysDecl(CLkHead LookaHead);	//Vectpr
+	CLkHead VectorEnd(CLkHead LookaHead);
+	CLkHead AddressEnd(CLkHead LookaHead);
+	CLkHead VectorAddress(CLkHead LookaHead);
 	//------------------------------------------
 	// DEFINE
 	//------------------------------------------
-	CLHead Define(CLHead LookaHead);
-	CLHead DefList(CLHead LookaHead);
-	CLHead Def(CLHead LookaHead);
+	CLkHead Define(CLkHead LookaHead);
+	CLkHead DefList(CLkHead LookaHead);
+	CLkHead Def(CLkHead LookaHead);
 	//--------------------------------------
 	// TYPEdef Definition
 	//--------------------------------------
-	CLHead TypeDefDecl(CLHead LookaHead);
-	CLHead EndTypeDef(CLHead LookaHead);
-	CLHead RecDefField(CLHead LookaHead);
-	CLHead Fields(CLHead LookaHead);
+	CLkHead TypeDefDecl(CLkHead LookaHead);
+	CLkHead EndTypeDef(CLkHead LookaHead);
+	CLkHead RecDefField(CLkHead LookaHead);
+	CLkHead Fields(CLkHead LookaHead);
 	//----------------------------------------
 	// Function/Procedure/Interrupt
 	// Declarations/Function Prototypes
-	CLHead Declare(CLHead LookaHead);
-	CLHead DeclareEnd(CLHead LookaHead);
-	CLHead DeclareParams(CLHead LookaHead);
-	CLHead DeclParamList(CLHead LookaHead);
-	CLHead DeclPramPointer(CLHead LookaHead);
-	CLHead DeclParamArray(CLHead LookaHead);
-	CLHead DeclarFuncName(CLHead LookaHead);
-	CLHead DeclareType(CLHead LookaHead);
-	CLHead DeclarePointer(CLHead LookaHead);
-	CLHead DeclareArray(CLHead LookaHead);
-	CLHead DeclarFuncType(CLHead LookaHead);
+	CLkHead Declare(CLkHead LookaHead);
+	CLkHead DeclareEnd(CLkHead LookaHead);
+	CLkHead DeclareParams(CLkHead LookaHead);
+	CLkHead DeclParamList(CLkHead LookaHead);
+	CLkHead DeclPramPointer(CLkHead LookaHead);
+	CLkHead DeclParamArray(CLkHead LookaHead);
+	CLkHead DeclareParamIdentList(CLkHead LookaHead);
+	CLkHead DeclareParamIdent(CLkHead LookaHead);
+	//-------------------
+	CLkHead DeclarFuncName(CLkHead LookaHead);
+	CLkHead DeclareType(CLkHead LookaHead);
+	CLkHead DeclarePointer(CLkHead LookaHead);
+	CLkHead DeclareArray(CLkHead LookaHead);
+	CLkHead DeclarFuncType(CLkHead LookaHead);
 	// ---------------------------------------
 	// Fundamental Declarations
 	//----------------------------------------
-	CLHead FundDecl(CLHead LookaHead);
-	CLHead FundPointerDecl(CLHead LookaHead);
-	CLHead FundArrayDecl(CLHead LookaHead);
-	CLHead FunctionDecl(CLHead LookaHead);
+	CLkHead FundDecl(CLkHead LookaHead);
+	CLkHead FundPointerDecl(CLkHead LookaHead);
+	CLkHead FundArrayDecl(CLkHead LookaHead);
+	CLkHead FunctionDecl(CLkHead LookaHead);
 	//------------------
-	CLHead IrqDecl(CLHead LookaHead);
-	CLHead IrqDeclParams(CLHead LookaHead);
-	CLHead IrqBody(CLHead LookaHead);
+	CLkHead IrqDecl(CLkHead LookaHead);
+	CLkHead IrqDeclParams(CLkHead LookaHead);
+	CLkHead IrqBody(CLkHead LookaHead);
 	//------------------
-	CLHead ProcDecl(CLHead LookaHead);
-	CLHead ProcDeclParams(CLHead LookaHead);
-	CLHead ProcBody(CLHead LookaHead);
+	CLkHead ProcDecl(CLkHead LookaHead);
+	CLkHead ProcDeclParams(CLkHead LookaHead);
+	CLkHead ProcBody(CLkHead LookaHead);
 	//------------------
-	CLHead FuncDecl(CLHead LookaHead);
-	CLHead FuncDeclParams(CLHead LookaHead);
-	CLHead FuncBody(CLHead LookaHead);
+	CLkHead FuncDecl(CLkHead LookaHead);
+	CLkHead FuncDeclParams(CLkHead LookaHead);
+	CLkHead FuncBody(CLkHead LookaHead);
 	//------------------
-	CLHead OptInit(CLHead LookaHead);
+	CLkHead OptInit(CLkHead LookaHead);
 	//----------------------------------
 	// Identifiers
 	//----------------------------------
-	CLHead IdentList(CLHead LookaHead);
-	CLHead Ident(CLHead LookaHead);
-	CLHead IdentInitType(CLHead LookaHead);
-	CLHead InitData(CLHead LookaHead);
+	CLkHead IdentList(CLkHead LookaHead);
+	CLkHead Ident(CLkHead LookaHead);
+	CLkHead IdentInitType(CLkHead LookaHead);
+	CLkHead InitData(CLkHead LookaHead);
 	//-------------------------------------------
 	// Parameter Declarations
 	//-------------------------------------------
-	CLHead ParamList(CLHead LookaHead);
-	CLHead PramPointer(CLHead LookaHead);
-	CLHead ParamArray(CLHead LookaHead);
+	CLkHead ParamList(CLkHead LookaHead);
+	CLkHead PramPointer(CLkHead LookaHead);
+	CLkHead ParamArray(CLkHead LookaHead);
 	//-----------------------------------------------
 	// Local Variableas
 	//-----------------------------------------------
-	CLHead LocalDecls(CLHead LookaHead);
-	CLHead LocalPointerDecl(CLHead LookaHead);
-	CLHead LocalArrayDecl(CLHead LookaHead);
+	CLkHead LocalDecls(CLkHead LookaHead);
+	CLkHead LocalPointerDecl(CLkHead LookaHead);
+	CLkHead LocalArrayDecl(CLkHead LookaHead);
 	//-------------------------------
 	// Compiler Constants
 	//-------------------------------
-	CLHead ConstList(CLHead LookaHead);
-	CLHead CompConst(CLHead LookaHead);
-	CLHead BaseCompConst(CLHead LookaHead);
+	CLkHead ConstList(CLkHead LookaHead);
+	CLkHead CompConst(CLkHead LookaHead);
+	CLkHead BaseCompConst(CLkHead LookaHead);
 	//****************************************
 	//----------------------------------------
 	//  Inline assembly code
@@ -256,8 +259,8 @@ private:
 	//	Statements
 	//----------------------------------------
 	//****************************************
-	CLHead AsmStmt(CLHead LookaHead);
-	CLHead ProcessorType(CLHead LookaHead);
+	CLkHead AsmStmt(CLkHead LookaHead);
+	CLkHead ProcessorType(CLkHead LookaHead);
 	//-----------------------------------------
 	// Code
 	//		These statements are what actually
@@ -268,115 +271,115 @@ private:
 	//-----------------------------------------
 	// SECITON
 	//-----------------------------------------
-	CLHead Section(CLHead LookaHead);
-	CLHead SectionName(CLHead LookaHead);
-	CLHead SectionDef(CLHead LookaHead);
-	CLHead SectionAttributesList(CLHead LookaHead);
-	CLHead SectionAtribute(CLHead LookaHead);
-	CLHead Modes(CLHead LookaHead);
-	CLHead TrueFalse(CLHead LookaHead);
+	CLkHead Section(CLkHead LookaHead);
+	CLkHead SectionName(CLkHead LookaHead);
+	CLkHead SectionDef(CLkHead LookaHead);
+	CLkHead SectionAttributesList(CLkHead LookaHead);
+	CLkHead SectionAtribute(CLkHead LookaHead);
+	CLkHead Modes(CLkHead LookaHead);
+	CLkHead TrueFalse(CLkHead LookaHead);
 	//-------------------------------------
 	// Org  Sets the location counter
 	// for the current section
 	//-------------------------------------
-	CLHead Org(CLHead LookaHead);
+	CLkHead Org(CLkHead LookaHead);
 	//-------------------------------------
 	// Define Memeory
 	//-------------------------------------
-	CLHead DefineMemory(CLHead LookaHead);
+	CLkHead DefineMemory(CLkHead LookaHead);
 	//-------------------------------------
 	// DefineStorage
 	//-------------------------------------
-	CLHead DefineStorage(CLHead LookaHead);
+	CLkHead DefineStorage(CLkHead LookaHead);
 	//-------------------------------------
 	// Proceedure
 	//-------------------------------------
-	CLHead Proceedure(CLHead LookaHead);
+	CLkHead Proceedure(CLkHead LookaHead);
 	//--------------------------------------
 	// Opcodes
 	//--------------------------------------
-	CLHead Instruction(CLHead LookaHead);
+	CLkHead Instruction(CLkHead LookaHead);
 	//---------------------------------------------
 	// Lables
 	//---------------------------------------------
-	CLHead Labels(CLHead LookaHead);
-	CLHead LocalGlobal(CLHead LookaHead);
+	CLkHead Labels(CLkHead LookaHead);
+	CLkHead LocalGlobal(CLkHead LookaHead);
 	//-----------------------------------
 	//ALU Addressing Mode
 	//-----------------------------------
-	CLHead AluAdrModes(CLHead LookaHead);
-	CLHead Indirect(CLHead LookaHead);
+	CLkHead AluAdrModes(CLkHead LookaHead);
+	CLkHead Indirect(CLkHead LookaHead);
 	//---------------------------------------------
 	// STA addressing mode
 	//---------------------------------------------
-	CLHead StaAddressingModes(CLHead LookaHead);
+	CLkHead StaAddressingModes(CLkHead LookaHead);
 	//-----------------------------------------
 	// ASL LSR ROR and ROL addressing modes
 	//-----------------------------------------
-	CLHead ShiftAddressingModes(CLHead LookaHead);
+	CLkHead ShiftAddressingModes(CLkHead LookaHead);
 	//------------------------------------------
 	// Branch Instructions Addressing Mode
 	//------------------------------------------
-	CLHead RelAddressingMode(CLHead LookaHead);
+	CLkHead RelAddressingMode(CLkHead LookaHead);
 	//------------------------------------------
 	// BIT Instructions Addressing Mode
 	//------------------------------------------
-	CLHead BitAddressModes(CLHead LookaHead);
+	CLkHead BitAddressModes(CLkHead LookaHead);
 	//------------------------------------------
 	// INC DEC Instructions Addressing Mode
 	//------------------------------------------
-	CLHead IncAddressingMOdes(CLHead LookaHead);
+	CLkHead IncAddressingMOdes(CLkHead LookaHead);
 	//------------------------------------------
 	// JMP Instructions Addressing Mode
 	//------------------------------------------
-	CLHead JumpAddressingModes(CLHead LookaHead);
+	CLkHead JumpAddressingModes(CLkHead LookaHead);
 	//------------------------------------------
 	// JSR Instructions Addressing Mode
 	//------------------------------------------
-	CLHead CallAddressingMode(CLHead LookaHead);
+	CLkHead CallAddressingMode(CLkHead LookaHead);
 	//------------------------------------------
 	// LDX Instructions Addressing Mode
 	//------------------------------------------
-	CLHead LdxAddressingMode(CLHead LookaHead);
+	CLkHead LdxAddressingMode(CLkHead LookaHead);
 	//------------------------------------------
 	// CPX & CPY Instructions Addressing Mode
 	//------------------------------------------
-	CLHead CPX_CPY_AddressingMode(CLHead LookaHead);
+	CLkHead CPX_CPY_AddressingMode(CLkHead LookaHead);
 	//------------------------------------------
 	// STX Instructions Addressing Mode
 	//------------------------------------------
-	CLHead StxAddressingMode(CLHead LookaHead);
+	CLkHead StxAddressingMode(CLkHead LookaHead);
 	//------------------------------------------
 	// LDY Instructions Addressing Mode
 	//------------------------------------------
-	CLHead LdyAddressingMode(CLHead LookaHead);
+	CLkHead LdyAddressingMode(CLkHead LookaHead);
 	//------------------------------------------
 	// STY Instructions Addressing Mode
 	//------------------------------------------
-	CLHead StyAddressingMode(CLHead LookaHead);
+	CLkHead StyAddressingMode(CLkHead LookaHead);
 	//---------------------------------------------
 	//	Optional Index Registers
 	//---------------------------------------------
-	CLHead OptIndexReg(CLHead LookaHead);
-	CLHead OptIndexReg_1(CLHead LookaHead);
-	CLHead OptXReg(CLHead LookaHead);
-	CLHead OptYReg(CLHead LookaHead);
+	CLkHead OptIndexReg(CLkHead LookaHead);
+	CLkHead OptIndexReg_1(CLkHead LookaHead);
+	CLkHead OptXReg(CLkHead LookaHead);
+	CLkHead OptYReg(CLkHead LookaHead);
 	//---------------------------------------
 	// Assembler Constants
 	//---------------------------------------
-	CLHead AsmConstList(CLHead LookaHead);
-	CLHead AsmConstList_1(CLHead LookaHead);
-	CLHead AsmConstant(CLHead LookaHead);
-	CLHead AsmConstAddSub(CLHead LookaHead);
-	CLHead BaseAsmConstant(CLHead LookaHead);
-	CLHead Immediate(CLHead LookaHead);
+	CLkHead AsmConstList(CLkHead LookaHead);
+	CLkHead AsmConstList_1(CLkHead LookaHead);
+	CLkHead AsmConstant(CLkHead LookaHead);
+	CLkHead AsmConstAddSub(CLkHead LookaHead);
+	CLkHead BaseAsmConstant(CLkHead LookaHead);
+	CLkHead Immediate(CLkHead LookaHead);
 	void PageZero(int Address, AdrModeType ModeType);
 	void Absolute(int Address, AdrModeType ModeType);
 	bool CheckZeroPageAddress(int A);
 	//---------------- Utillity ----------------------
 	void PrintLookahead(
 		FILE* pLog,
-		CLHead token,
+		CLkHead token,
 		const char* pS,
 		int RecursionLevel,
 		int Bump = 0

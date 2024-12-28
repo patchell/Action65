@@ -1,3 +1,4 @@
 MODULE
 
 DECLARE PROC Aproc()
+DECLARE PROC Bproc(INT a,b,c)

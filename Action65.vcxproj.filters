@@ -405,7 +405,7 @@
     <ClCompile Include="Value.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="LHead.cpp">
+    <ClCompile Include="LkHead.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Act65PROCname.cpp">
@@ -514,6 +514,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Act65W65C816.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="TypeChain.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ParameterChain.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -899,7 +905,7 @@
     <ClInclude Include="Value.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="LHead.h">
+    <ClInclude Include="LkHead.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Act65PROCname.h">
@@ -1008,6 +1014,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Act65W65C816.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TypeChain.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ParameterChain.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

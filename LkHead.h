@@ -1,18 +1,21 @@
 #pragma once
 
-class CLHead
+class CLkHead
 {
 public:
 	Token m_Token;
 	CAstNode* m_pNode;
 	CSymbol* m_pSymbol;
+	CTypeChain* m_pTypeChain;
 public:
-	CLHead();
-	CLHead(Token T, CAstNode* pN) {
+	CLkHead();
+	CLkHead(Token T, CAstNode* pN) {
 		m_Token = T;
 		m_pNode = pN;
+		m_pSymbol = 0;
+		m_pTypeChain = 0;
 	}
-	virtual ~CLHead();
+	virtual ~CLkHead();
 	bool Create();
 	void SetToken(Token T) { m_Token = T; }
 	Token GetToken() { return m_Token; }
@@ -22,6 +25,8 @@ public:
 	}
 	CSymbol* GetSymbol() { return m_pSymbol; }
 	void SetSymbol(CSymbol* pS) { m_pSymbol = pS; }
-	void operator=(const CLHead & pLH);
+	CTypeChain* GetTypeChain() { return m_pTypeChain; }
+	void SetTypeChain(CTypeChain* pTC) { m_pTypeChain = pTC; }
+	void operator=(const CLkHead & pLH);
 };
 

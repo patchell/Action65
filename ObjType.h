@@ -1,6 +1,6 @@
 #pragma once
 
-class CObjType
+class CObjTypeChain
 {
 public:
 	enum class Spec {
@@ -49,18 +49,21 @@ private:
 		{Spec(-1),0}
 	};
 	Spec m_SpecType;
-	CObjType* m_pNext;
-	CObjType* m_pPrev;
+	CObjTypeChain* m_pNext;
+	CObjTypeChain* m_pPrev;
 public:
-	CObjType();
-	virtual ~CObjType();
+	CObjTypeChain();
+	virtual ~CObjTypeChain();
 	bool Create();
+	int Print(char* pSO, int l);
 	const char* FindName(Spec T) {
 		return Types::FindName(T);
 	}
-	CObjType* GetNext() { return m_pNext; }
-	void SetNext(CObjType* pN) { m_pNext = pN; }
-	CObjType* GetPrev() { return m_pPrev; }
-	void SetPrev(CObjType* pP) { m_pPrev = pP; }
+	CObjTypeChain* GetNext() { return m_pNext; }
+	void SetNext(CObjTypeChain* pN) { m_pNext = pN; }
+	CObjTypeChain* GetPrev() { return m_pPrev; }
+	void SetPrev(CObjTypeChain* pP) { m_pPrev = pP; }
+	Spec GetSpec() { return m_SpecType; }
+	void SetSpec(Spec s) { m_SpecType = s; }
 };
 

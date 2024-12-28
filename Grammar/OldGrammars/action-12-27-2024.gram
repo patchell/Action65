@@ -691,19 +691,11 @@ DeclPramPointer_1	-> 'POINTER'  DeclParamArray
 					-> .
 					;
 
-DeclParamArray		-> DeclareParamIdentList DeclParamArray_1;
-DeclParamArray_1	-> 'ARRAY' DeclareParamIdentList
+DeclParamArray		-> IdentList DeclParamArray_1;
+DeclParamArray_1	-> 'ARRAY' IdentList
 					-> .
 					;
 
-DeclareParamIdentList	-> DeclareParamIdent DeclareParamIdentList_1;
-DeclareParamIdentList_1	-> ',' DeclareParamIdent DeclareParamIdentList_1
-						-> .
-						;
-
-DeclareParamIdent		-> 'IDENT';
-
-//------------------
 
 DeclarFuncName	-> DeclareType DeclarFuncName_1;
 DeclarFuncName_1-> 'IDENT' 

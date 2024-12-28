@@ -14,6 +14,7 @@ constexpr auto MAX_STRING_LEN = 512;
 
 enum  class Token {
 	ENDOFFILE = -1,	// 1
+	NONE,
 	IDENT = 256,	//2
 	STRING,			//3
 	NUMBER,			//4
@@ -315,6 +316,8 @@ struct KeyWord {
 
 #include "Bin.h"
 #include "Bucket.h"
+#include "TypeChain.h"
+#include "ParameterChain.h"
 #include "Symbol.h"
 #include "Value.h"
 
@@ -616,7 +619,7 @@ public:
 #include "AstTree.h"
 #include "ActionAstTree.h"
 
-#include "LHead.h"
+#include "LkHead.h"
 
 #include "Lexer.h"
 #include "Parser.h"

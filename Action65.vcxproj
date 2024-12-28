@@ -277,7 +277,7 @@
     <ClCompile Include="Bin.cpp" />
     <ClCompile Include="Bucket.cpp" />
     <ClCompile Include="Lexer.cpp" />
-    <ClCompile Include="LHead.cpp" />
+    <ClCompile Include="LkHead.cpp" />
     <ClCompile Include="ObjFormatCode.cpp" />
     <ClCompile Include="ObjFormatData.cpp" />
     <ClCompile Include="ObjFormatFile.cpp" />
@@ -287,11 +287,13 @@
     <ClCompile Include="ObjFormatSymbolItem.cpp" />
     <ClCompile Include="ObjFormatSymbols.cpp" />
     <ClCompile Include="ObjType.cpp" />
+    <ClCompile Include="ParameterChain.cpp" />
     <ClCompile Include="Parser.cpp" />
     <ClCompile Include="pch.cpp" />
     <ClCompile Include="Section.cpp" />
     <ClCompile Include="Symbol.cpp" />
     <ClCompile Include="SymTab.cpp" />
+    <ClCompile Include="TypeChain.cpp" />
     <ClCompile Include="UnResolvedSymbol.cpp" />
     <ClCompile Include="Value.cpp" />
     <ClCompile Include="WhereSymbolIsUsed.cpp" />
@@ -440,7 +442,7 @@
     <ClInclude Include="Act65Module.h" />
     <ClInclude Include="Act65TypeDotField.h" />
     <ClInclude Include="Act65UnaryNEG.h" />
-    <ClInclude Include="LHead.h" />
+    <ClInclude Include="LkHead.h" />
     <ClInclude Include="ObjFormatCode.h" />
     <ClInclude Include="ObjFormatData.h" />
     <ClInclude Include="ObjFormatFile.h" />
@@ -450,6 +452,7 @@
     <ClInclude Include="ObjFormatSymbolItem.h" />
     <ClInclude Include="ObjFormatSymbols.h" />
     <ClInclude Include="ObjType.h" />
+    <ClInclude Include="ParameterChain.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Bin.h" />
     <ClInclude Include="Bucket.h" />
@@ -458,6 +461,7 @@
     <ClInclude Include="Section.h" />
     <ClInclude Include="Symbol.h" />
     <ClInclude Include="SymTab.h" />
+    <ClInclude Include="TypeChain.h" />
     <ClInclude Include="UnResolvedSymbol.h" />
     <ClInclude Include="Value.h" />
     <ClInclude Include="WhereSymbolIsUsed.h" />
