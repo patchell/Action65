@@ -14,6 +14,6 @@ public:
 	void SetTail(CBin* pT) { m_pTail = pT; }
 	void AddToTail(CBin* pB);
 	void AddToHead(CBin* pB);
-	void Print(char* pS, int l);
+	int Print(char* pS, int l);
 };
 

@@ -43,6 +43,16 @@ void CParameterChain::AddToHead(CBin* pB)
 	}
 }
 
-void CParameterChain::Print(char* pS, int l)
+int CParameterChain::Print(char* pS, int l)
 {
+	CSymbol* pSym;
+	int ls = 0;
+
+	pSym = (CSymbol*)GetHead();
+	while (pSym)
+	{
+		ls += pSym->Print(pS, l - ls, "::");
+		pSym = (CSymbol*)pSym->GetNext();
+	}
+	return ls;
 }

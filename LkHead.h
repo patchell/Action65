@@ -20,7 +20,7 @@ public:
 	void SetToken(Token T) { m_Token = T; }
 	Token GetToken() { return m_Token; }
 	void SetNode(CAstNode* pN) { m_pNode = pN; }
-	CAstNode* GetNode() {
+	CAstNode* GetNode() const {
 		return m_pNode;
 	}
 	CSymbol* GetSymbol() { return m_pSymbol; }

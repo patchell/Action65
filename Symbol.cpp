@@ -90,8 +90,16 @@ int CSymbol::Print(char* pSO, int l, const char* s)
 	int ls = 0;
 	int size;
 
+	if (s)
+	{
+		size = l - ls;
+		ls += sprintf_s(pSO, size, "%s", s);
+	}
 	if (GetName())
-		ls += sprintf_s(pSO, l, "%s: ", GetName());
+	{
+		size = l - ls;
+		ls += sprintf_s(pSO, size, "%s: ", GetName());
+	}
 	if (GetTypeChain())
 	{
 		ls += GetTypeChain()->Print(&pSO[ls], l - ls);

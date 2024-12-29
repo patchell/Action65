@@ -41,6 +41,7 @@ class CSymbol: public CBin
 	// Type Chain
 	//---------------------------
 	CTypeChain* m_pTypeChain;
+	CParameterChain* m_pParamChain;
 public:
 	CSymbol() {
 		m_Address = 0;
@@ -50,6 +51,7 @@ public:
 		m_IdentType = IdentType::NEW_SYMBOL;
 		m_UnResolved = true;
 		m_pTypeChain = 0;
+		m_pParamChain = 0;
 	}
 	virtual ~CSymbol() {}
 	bool Create() { return true; }
@@ -59,6 +61,14 @@ public:
 	//-----------------------------
 	// Accessor Methods
 	//-----------------------------
+	CParameterChain* GetParamChain() {
+		return m_pParamChain
+			;
+	}
+	void CreateParamChain() {
+		m_pParamChain = new CParameterChain;
+		m_pParamChain->Create();
+	}
 	unsigned GetAddress() { return m_Address; }
 	void SetAddress(unsigned A) { m_Address = A; }
 	int GetValue() { return m_Value; }
