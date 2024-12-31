@@ -63,7 +63,7 @@ public:
 	FILE* LogFile();
 	CLkHead Run();
 	//---------------------------------
-	Token Expect(Token LookaheadToken, Token Expected);
+	CLkHead Expect(CLkHead LookaheadToken, Token Expected);
 	bool Accept(Token LookaheadToken, Token Expected);
 private:
 	void PrepareInstruction(Token OpToken, CValue* pVal);

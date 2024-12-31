@@ -522,6 +522,9 @@
     <ClCompile Include="ParameterChain.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Act65ParamList.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -1020,6 +1023,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ParameterChain.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Act65ParamList.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

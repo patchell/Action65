@@ -77,10 +77,10 @@ void CSymbol::BackFillUnresolved()
 
 void CSymbol::Print(FILE* pOut, const char* s)
 {
-	char* pSO = new char[512];
+	char* pSO = new char[2048];
 
-	memset(pSO, 0, 256);
-	Print(pSO, 512, NULL);
+	memset(pSO, 0, 2048);
+	Print(pSO, 2048, NULL);
 	fprintf(pOut, "%s\n", pSO);
 	delete[] pSO;
 }
@@ -89,16 +89,17 @@ int CSymbol::Print(char* pSO, int l, const char* s)
 {
 	int ls = 0;
 	int size;
+	char* pp = pSO;
 
 	if (s)
 	{
 		size = l - ls;
-		ls += sprintf_s(pSO, size, "%s", s);
+		ls += sprintf_s(&pSO[ls], size, "%s", s);
 	}
 	if (GetName())
 	{
 		size = l - ls;
-		ls += sprintf_s(pSO, size, "%s: ", GetName());
+		ls += sprintf_s(&pSO[ls], size, "%s: ", GetName());
 	}
 	if (GetTypeChain())
 	{
@@ -109,6 +110,12 @@ int CSymbol::Print(char* pSO, int l, const char* s)
 		GetAddress(),
 		GetValue()
 	);
+	if (GetParamChain())
+	{
+		size = l - ls;
+		ls += sprintf_s(&pSO[ls], size, "\tParameters\n");
+		GetParamChain()->Print(&pSO[ls], l - ls);
+	}
 	return ls;
 }
 

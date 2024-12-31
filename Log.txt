@@ -1,28 +1,7 @@
-File:test4.act has 127 Bytes
+File:test4.act has 355 Bytes
 Parser Created
-      1.0:c:Enter Action65 Lookahead CLHead: MODULE LexBuffer 'MODULE'  Line:1 Col:6
-      2.0:c:Enter Modules Lookahead CLHead: MODULE LexBuffer 'MODULE'  Line:1 Col:6
-      3.0:c:Enter Vector Lookahead CLHead: MODULE LexBuffer 'MODULE'  Line:1 Col:6
-      4.0:c:Enter SysDecl Lookahead CLHead: MODULE LexBuffer 'MODULE'  Line:1 Col:6
-      5.0:c:Enter TypeDefDecl Lookahead CLHead: MODULE LexBuffer 'MODULE'  Line:1 Col:6
-      6.0:c:Enter Declare Lookahead CLHead: MODULE LexBuffer 'MODULE'  Line:1 Col:6
-      7.0:c:Enter FundDecl Lookahead CLHead: MODULE LexBuffer 'MODULE'  Line:1 Col:6
-      8.0:c:Enter FundPointerDecl Lookahead CLHead: MODULE LexBuffer 'MODULE'  Line:1 Col:6
-      9.0:c:Enter FundArrayDecl Lookahead CLHead: MODULE LexBuffer 'MODULE'  Line:1 Col:6
-     10.0:c:Enter FunctionDecl Lookahead CLHead: MODULE LexBuffer 'MODULE'  Line:1 Col:6
-     11.0:c:Enter IdentList Lookahead CLHead: MODULE LexBuffer 'MODULE'  Line:1 Col:6
-     12.0:c:Enter Ident Lookahead CLHead: MODULE LexBuffer 'MODULE'  Line:1 Col:6
-     11.0:c:Exit Ident Lookahead CLHead: MODULE LexBuffer 'MODULE'  Line:1 Col:6
-     10.0:c:Exit IdenrtList Lookahead CLHead: MODULE LexBuffer 'MODULE'  Line:1 Col:6
-      9.0:c:Exit FunctionDecl Lookahead CLHead: MODULE LexBuffer 'MODULE'  Line:1 Col:6
-      8.0:c:Exit FundArrayDecl Lookahead CLHead: MODULE LexBuffer 'MODULE'  Line:1 Col:6
-      7.0:c:Exit FundPointerDecl Lookahead CLHead: MODULE LexBuffer 'MODULE'  Line:1 Col:6
-      6.0:c:Exit FundDecl Lookahead CLHead: MODULE LexBuffer 'MODULE'  Line:1 Col:6
-      5.0:c:Exit Declare Lookahead CLHead: MODULE LexBuffer 'MODULE'  Line:1 Col:6
-      4.0:c:Exit TypeDefDecl Lookahead CLHead: MODULE LexBuffer 'MODULE'  Line:1 Col:6
-      3.0:c:Exit SysDecl Lookahead CLHead: MODULE LexBuffer 'MODULE'  Line:1 Col:6
-      2.0:c:Exit Vector Lookahead CLHead: MODULE LexBuffer 'MODULE'  Line:1 Col:6
-2::Expected CLHead: MODULE  LookaHeadToken = MODULE Line:1
+      1.0:c:Enter Action65 Lookahead CLHead: DECLARE LexBuffer 'DECLARE'  Line:3 Col:7
+      2.0:c:Enter Modules Lookahead CLHead: DECLARE LexBuffer 'DECLARE'  Line:3 Col:7
       3.0:c:Enter Vector Lookahead CLHead: DECLARE LexBuffer 'DECLARE'  Line:3 Col:7
       4.0:c:Enter SysDecl Lookahead CLHead: DECLARE LexBuffer 'DECLARE'  Line:3 Col:7
       5.0:c:Enter TypeDefDecl Lookahead CLHead: DECLARE LexBuffer 'DECLARE'  Line:3 Col:7
@@ -51,73 +30,93 @@ Parser Created
      11.0:c:Exit Func DeclareArray Lookahead CLHead: INT LexBuffer 'INT'  Line:3 Col:11
      10.0:c:Exit DeclarePointer Lookahead CLHead: INT LexBuffer 'INT'  Line:3 Col:11
 10::Expected CLHead: INT  LookaHeadToken = INT Line:3
-     11.0:c:Enter DeclarePointer Lookahead CLHead: FUNC LexBuffer 'FUNC'  Line:3 Col:16
-     12.0:c:Enter Func DeclareArray Lookahead CLHead: FUNC LexBuffer 'FUNC'  Line:3 Col:16
-     13.0:c:Enter DeclarFuncType Lookahead CLHead: FUNC LexBuffer 'FUNC'  Line:3 Col:16
+     11.0:c:Enter DeclarePointer Lookahead CLHead: ARRAY LexBuffer 'ARRAY'  Line:3 Col:17
+     12.0:c:Enter Func DeclareArray Lookahead CLHead: ARRAY LexBuffer 'ARRAY'  Line:3 Col:17
+     13.0:c:Enter DeclarFuncType Lookahead CLHead: ARRAY LexBuffer 'ARRAY'  Line:3 Col:17
+     12.0:c:Exit DeclarFuncType Lookahead CLHead: ARRAY LexBuffer 'ARRAY'  Line:3 Col:17
+12::Expected CLHead: ARRAY  LookaHeadToken = ARRAY Line:3
+     11.0:c:Exit Func DeclareArray Lookahead CLHead: POINTER LexBuffer 'POINTER'  Line:3 Col:25
+11::Expected CLHead: POINTER  LookaHeadToken = POINTER Line:3
+     12.0:c:Enter Func DeclareArray Lookahead CLHead: FUNC LexBuffer 'FUNC'  Line:3 Col:30
+     13.0:c:Enter DeclarFuncType Lookahead CLHead: FUNC LexBuffer 'FUNC'  Line:3 Col:30
 13::Expected CLHead: FUNC  LookaHeadToken = FUNC Line:3
-     12.0:a:Exit DeclarFuncType  Lookahead = Ffunc LexBuffer 'Ffunc' Line:3 Col:22
-     11.0:a:Exit Func DeclareArray  Lookahead = Ffunc LexBuffer 'Ffunc' Line:3 Col:22
-     10.0:a:Exit DeclarePointer  Lookahead = Ffunc LexBuffer 'Ffunc' Line:3 Col:22
-      9.0:a:Exit DeclareType  Lookahead = Ffunc LexBuffer 'Ffunc' Line:3 Col:22
+     12.0:a:Exit DeclarFuncType  Lookahead = Ffunc LexBuffer 'Ffunc' Line:3 Col:36
+     11.0:a:Exit Func DeclareArray  Lookahead = Ffunc LexBuffer 'Ffunc' Line:3 Col:36
+     10.0:a:Exit DeclarePointer  Lookahead = Ffunc LexBuffer 'Ffunc' Line:3 Col:36
+      9.0:a:Exit DeclareType  Lookahead = Ffunc LexBuffer 'Ffunc' Line:3 Col:36
 9::Expected CLHead: Ffunc  Lookahead = Ffunc Line:3
-      8.0:c:Exit DeclarFuncName Lookahead CLHead: ( LexBuffer 'Ffunc' Ffunc: FUNC::Address=00000000  Value=0000
- Line:3 Col:23
+      8.0:c:Exit DeclarFuncName Lookahead CLHead: ( LexBuffer 'Ffunc' Ffunc: INT:ARRAY:POINTER:FUNC::Address=00000000  Value=0000
+ Line:3 Col:37
 8::Expected CLHead: (  LookaHeadToken = ( Line:3
-      9.0:c:Enter DeclParamList Lookahead CLHead: CARD LexBuffer 'CARD' Ffunc: FUNC::Address=00000000  Value=0000
- Line:3 Col:27
-     10.0:c:Enter DeclPramPointer Lookahead CLHead: CARD LexBuffer 'CARD' Ffunc: FUNC::Address=00000000  Value=0000
- Line:3 Col:27
-     11.0:c:Enter DeclParamArray Lookahead CLHead: CARD LexBuffer 'CARD' Ffunc: FUNC::Address=00000000  Value=0000
- Line:3 Col:27
-     12.0:c:Enter DeclareParamIdentList Lookahead CLHead: CARD LexBuffer 'CARD' Ffunc: FUNC::Address=00000000  Value=0000
- Line:3 Col:27
-     13.0:c:Enter DeclareParamIdent Lookahead CLHead: CARD LexBuffer 'CARD' Ffunc: FUNC::Address=00000000  Value=0000
- Line:3 Col:27
-     12.0:c:Exit DeclareParamIdent Lookahead CLHead: CARD LexBuffer 'CARD' Ffunc: FUNC::Address=00000000  Value=0000
- Line:3 Col:27
-     11.0:c:Exit DeclareParamIdentList Lookahead CLHead: CARD LexBuffer 'CARD' Ffunc: FUNC::Address=00000000  Value=0000
- Line:3 Col:27
-     10.0:c:Exit DeclParamArray Lookahead CLHead: CARD LexBuffer 'CARD' Ffunc: FUNC::Address=00000000  Value=0000
- Line:3 Col:27
-      9.0:c:Exit DeclPramPointer Lookahead CLHead: CARD LexBuffer 'CARD' Ffunc: FUNC::Address=00000000  Value=0000
- Line:3 Col:27
+      9.0:c:Enter DeclParamList Lookahead CLHead: CARD LexBuffer 'CARD' Ffunc: INT:ARRAY:POINTER:FUNC::Address=00000000  Value=0000
+ Line:3 Col:41
+     10.0:c:Enter DeclPramPointer Lookahead CLHead: CARD LexBuffer 'CARD' Ffunc: INT:ARRAY:POINTER:FUNC::Address=00000000  Value=0000
+ Line:3 Col:41
+     11.0:c:Enter DeclParamArray Lookahead CLHead: CARD LexBuffer 'CARD' Ffunc: INT:ARRAY:POINTER:FUNC::Address=00000000  Value=0000
+ Line:3 Col:41
+     12.0:c:Enter DeclareParamIdentList Lookahead CLHead: CARD LexBuffer 'CARD' Ffunc: INT:ARRAY:POINTER:FUNC::Address=00000000  Value=0000
+ Line:3 Col:41
+     13.0:c:Enter DeclareParamIdent Lookahead CLHead: CARD LexBuffer 'CARD' Ffunc: INT:ARRAY:POINTER:FUNC::Address=00000000  Value=0000
+ Line:3 Col:41
+     12.0:c:Exit DeclareParamIdent Lookahead CLHead: CARD LexBuffer 'CARD' Ffunc: INT:ARRAY:POINTER:FUNC::Address=00000000  Value=0000
+ Line:3 Col:41
+     11.0:c:Exit DeclareParamIdentList Lookahead CLHead: CARD LexBuffer 'CARD' Ffunc: INT:ARRAY:POINTER:FUNC::Address=00000000  Value=0000
+ Line:3 Col:41
+     10.0:c:Exit DeclParamArray Lookahead CLHead: CARD LexBuffer 'CARD' Ffunc: INT:ARRAY:POINTER:FUNC::Address=00000000  Value=0000
+ Line:3 Col:41
+      9.0:c:Exit DeclPramPointer Lookahead CLHead: CARD LexBuffer 'CARD' Ffunc: INT:ARRAY:POINTER:FUNC::Address=00000000  Value=0000
+ Line:3 Col:41
 9::Expected CLHead: CARD  LookaHeadToken = CARD Line:3
-     10.0:c:Enter DeclPramPointer Lookahead CLHead: POINTER LexBuffer 'POINTER' Ffunc: FUNC::Address=00000000  Value=0000
- Line:3 Col:35
-     11.0:c:Enter DeclParamArray Lookahead CLHead: POINTER LexBuffer 'POINTER' Ffunc: FUNC::Address=00000000  Value=0000
- Line:3 Col:35
-     12.0:c:Enter DeclareParamIdentList Lookahead CLHead: POINTER LexBuffer 'POINTER' Ffunc: FUNC::Address=00000000  Value=0000
- Line:3 Col:35
-     13.0:c:Enter DeclareParamIdent Lookahead CLHead: POINTER LexBuffer 'POINTER' Ffunc: FUNC::Address=00000000  Value=0000
- Line:3 Col:35
-     12.0:c:Exit DeclareParamIdent Lookahead CLHead: POINTER LexBuffer 'POINTER' Ffunc: FUNC::Address=00000000  Value=0000
- Line:3 Col:35
-     11.0:c:Exit DeclareParamIdentList Lookahead CLHead: POINTER LexBuffer 'POINTER' Ffunc: FUNC::Address=00000000  Value=0000
- Line:3 Col:35
-     10.0:c:Exit DeclParamArray Lookahead CLHead: POINTER LexBuffer 'POINTER' Ffunc: FUNC::Address=00000000  Value=0000
- Line:3 Col:35
+     10.0:c:Enter DeclPramPointer Lookahead CLHead: POINTER LexBuffer 'POINTER' Ffunc: INT:ARRAY:POINTER:FUNC::Address=00000000  Value=0000
+ Line:3 Col:49
+     11.0:c:Enter DeclParamArray Lookahead CLHead: POINTER LexBuffer 'POINTER' Ffunc: INT:ARRAY:POINTER:FUNC::Address=00000000  Value=0000
+ Line:3 Col:49
+     12.0:c:Enter DeclareParamIdentList Lookahead CLHead: POINTER LexBuffer 'POINTER' Ffunc: INT:ARRAY:POINTER:FUNC::Address=00000000  Value=0000
+ Line:3 Col:49
+     13.0:c:Enter DeclareParamIdent Lookahead CLHead: POINTER LexBuffer 'POINTER' Ffunc: INT:ARRAY:POINTER:FUNC::Address=00000000  Value=0000
+ Line:3 Col:49
+     12.0:c:Exit DeclareParamIdent Lookahead CLHead: POINTER LexBuffer 'POINTER' Ffunc: INT:ARRAY:POINTER:FUNC::Address=00000000  Value=0000
+ Line:3 Col:49
+     11.0:c:Exit DeclareParamIdentList Lookahead CLHead: POINTER LexBuffer 'POINTER' Ffunc: INT:ARRAY:POINTER:FUNC::Address=00000000  Value=0000
+ Line:3 Col:49
+     10.0:c:Exit DeclParamArray Lookahead CLHead: POINTER LexBuffer 'POINTER' Ffunc: INT:ARRAY:POINTER:FUNC::Address=00000000  Value=0000
+ Line:3 Col:49
 10::Expected CLHead: POINTER  LookaHeadToken = POINTER Line:3
-     11.0:a:Enter DeclParamArray  Lookahead = pN LexBuffer 'pN' Ffunc: FUNC::Address=00000000  Value=0000
-Line:3 Col:38
-     12.0:a:Enter DeclareParamIdentList  Lookahead = pN LexBuffer 'pN' Ffunc: FUNC::Address=00000000  Value=0000
-Line:3 Col:38
-     13.0:a:Enter DeclareParamIdent  Lookahead = pN LexBuffer 'pN' Ffunc: FUNC::Address=00000000  Value=0000
-Line:3 Col:38
-13::Expected CLHead: pN  Lookahead = pN Line:3
-     12.0:c:Exit DeclareParamIdent Lookahead CLHead: ) LexBuffer 'pN' Ffunc: FUNC::Address=00000000  Value=0000
- Line:3 Col:39
-     11.0:c:Exit DeclareParamIdentList Lookahead CLHead: ) LexBuffer 'pN' Ffunc: FUNC::Address=00000000  Value=0000
- Line:3 Col:39
-     10.0:c:Exit DeclParamArray Lookahead CLHead: ) LexBuffer 'pN' Ffunc: FUNC::Address=00000000  Value=0000
- Line:3 Col:39
-      9.0:c:Exit DeclPramPointer Lookahead CLHead: ) LexBuffer 'pN' Ffunc: FUNC::Address=00000000  Value=0000
- Line:3 Col:39
-      8.0:c:Exit DeclParamList Lookahead CLHead: ) LexBuffer 'pN' Ffunc: FUNC::Address=00000000  Value=0000
- Line:3 Col:39
-      7.0:c:Exit DeclareParams Lookahead CLHead: ) LexBuffer 'pN' Ffunc: FUNC::Address=00000000  Value=0000
- Line:3 Col:39
+     11.0:a:Enter DeclParamArray  Lookahead = pL LexBuffer 'pL' Ffunc: INT:ARRAY:POINTER:FUNC::Address=00000000  Value=0000
+Line:3 Col:52
+     12.0:a:Enter DeclareParamIdentList  Lookahead = pL LexBuffer 'pL' Ffunc: INT:ARRAY:POINTER:FUNC::Address=00000000  Value=0000
+Line:3 Col:52
+     13.0:a:Enter DeclareParamIdent  Lookahead = pL LexBuffer 'pL' Ffunc: INT:ARRAY:POINTER:FUNC::Address=00000000  Value=0000
+Line:3 Col:52
+13::Expected CLHead: pL  Lookahead = pL Line:3
+     12.0:c:Exit DeclareParamIdent Lookahead CLHead: ) LexBuffer 'pL' Ffunc: INT:ARRAY:POINTER:FUNC::Address=00000000  Value=0000
+	Parameters
+	pL: CARD:POINTER::Address=00000000  Value=0000
+ Line:3 Col:53
+     11.0:c:Exit DeclareParamIdentList Lookahead CLHead: ) LexBuffer 'pL' Ffunc: INT:ARRAY:POINTER:FUNC::Address=00000000  Value=0000
+	Parameters
+	pL: CARD:POINTER::Address=00000000  Value=0000
+ Line:3 Col:53
+     10.0:c:Exit DeclParamArray Lookahead CLHead: ) LexBuffer 'pL' Ffunc: INT:ARRAY:POINTER:FUNC::Address=00000000  Value=0000
+	Parameters
+	pL: CARD:POINTER::Address=00000000  Value=0000
+ Line:3 Col:53
+      9.0:c:Exit DeclPramPointer Lookahead CLHead: ) LexBuffer 'pL' Ffunc: INT:ARRAY:POINTER:FUNC::Address=00000000  Value=0000
+	Parameters
+	pL: CARD:POINTER::Address=00000000  Value=0000
+ Line:3 Col:53
+      8.0:c:Exit DeclParamList Lookahead CLHead: ) LexBuffer 'pL' Ffunc: INT:ARRAY:POINTER:FUNC::Address=00000000  Value=0000
+	Parameters
+	pL: CARD:POINTER::Address=00000000  Value=0000
+ Line:3 Col:53
+      7.0:c:Exit DeclareParams Lookahead CLHead: ) LexBuffer 'pL' Ffunc: INT:ARRAY:POINTER:FUNC::Address=00000000  Value=0000
+	Parameters
+	pL: CARD:POINTER::Address=00000000  Value=0000
+ Line:3 Col:53
 7::Expected CLHead: )  LookaHeadToken = ) Line:3
-      6.0:c:Exit DeclareEnd Lookahead CLHead: DECLARE LexBuffer 'DECLARE' Ffunc: FUNC::Address=00000000  Value=0000
+      6.0:c:Exit DeclareEnd Lookahead CLHead: DECLARE LexBuffer 'DECLARE' Ffunc: INT:ARRAY:POINTER:FUNC::Address=00000000  Value=0000
+	Parameters
+	pL: CARD:POINTER::Address=00000000  Value=0000
  Line:4 Col:7
       7.0:c:Enter FundDecl Lookahead CLHead: DECLARE LexBuffer 'DECLARE'  Line:4 Col:7
       8.0:c:Enter FundPointerDecl Lookahead CLHead: DECLARE LexBuffer 'DECLARE'  Line:4 Col:7
@@ -132,57 +131,103 @@ Line:3 Col:38
       7.0:c:Exit FundPointerDecl Lookahead CLHead: DECLARE LexBuffer 'DECLARE'  Line:4 Col:7
       6.0:c:Exit FundDecl Lookahead CLHead: DECLARE LexBuffer 'DECLARE'  Line:4 Col:7
 6::Expected CLHead: DECLARE  LookaHeadToken = DECLARE Line:4
-      7.0:c:Enter DeclareEnd Lookahead CLHead: PROC LexBuffer 'PROC' Ffunc: FUNC::Address=00000000  Value=0000
- Line:4 Col:12
-      8.0:c:Enter DeclareParams Lookahead CLHead: PROC LexBuffer 'PROC' Ffunc: FUNC::Address=00000000  Value=0000
- Line:4 Col:12
-      9.0:c:Enter DeclarFuncName Lookahead CLHead: PROC LexBuffer 'PROC' Ffunc: FUNC::Address=00000000  Value=0000
- Line:4 Col:12
-     10.0:c:Enter DeclareType Lookahead CLHead: PROC LexBuffer 'PROC' Ffunc: FUNC::Address=00000000  Value=0000
- Line:4 Col:12
-     11.0:c:Enter DeclarePointer Lookahead CLHead: PROC LexBuffer 'PROC' Ffunc: FUNC::Address=00000000  Value=0000
- Line:4 Col:12
-     12.0:c:Enter Func DeclareArray Lookahead CLHead: PROC LexBuffer 'PROC' Ffunc: FUNC::Address=00000000  Value=0000
- Line:4 Col:12
-     13.0:c:Enter DeclarFuncType Lookahead CLHead: PROC LexBuffer 'PROC' Ffunc: FUNC::Address=00000000  Value=0000
- Line:4 Col:12
-13::Expected CLHead: PROC  LookaHeadToken = PROC Line:4
-     12.0:a:Exit DeclarFuncType  Lookahead = Aproc LexBuffer 'Aproc' Ffunc: FUNC::Address=00000000  Value=0000
-Line:4 Col:18
-     11.0:a:Exit Func DeclareArray  Lookahead = Aproc LexBuffer 'Aproc' Ffunc: FUNC::Address=00000000  Value=0000
-Line:4 Col:18
-     10.0:a:Exit DeclarePointer  Lookahead = Aproc LexBuffer 'Aproc' Ffunc: FUNC::Address=00000000  Value=0000
-Line:4 Col:18
-      9.0:a:Exit DeclareType  Lookahead = Aproc LexBuffer 'Aproc' Ffunc: FUNC::Address=00000000  Value=0000
-Line:4 Col:18
-9::Expected CLHead: Aproc  Lookahead = Aproc Line:4
-      8.0:c:Exit DeclarFuncName Lookahead CLHead: ( LexBuffer 'Aproc' Aproc: PROC::Address=00000000  Value=0000
- Line:4 Col:19
+      7.0:c:Enter DeclareEnd Lookahead CLHead: CHAR LexBuffer 'CHAR'  Line:4 Col:12
+      8.0:c:Enter DeclareParams Lookahead CLHead: CHAR LexBuffer 'CHAR'  Line:4 Col:12
+      9.0:c:Enter DeclarFuncName Lookahead CLHead: CHAR LexBuffer 'CHAR'  Line:4 Col:12
+     10.0:c:Enter DeclareType Lookahead CLHead: CHAR LexBuffer 'CHAR'  Line:4 Col:12
+     11.0:c:Enter DeclarePointer Lookahead CLHead: CHAR LexBuffer 'CHAR'  Line:4 Col:12
+     12.0:c:Enter Func DeclareArray Lookahead CLHead: CHAR LexBuffer 'CHAR'  Line:4 Col:12
+     13.0:c:Enter DeclarFuncType Lookahead CLHead: CHAR LexBuffer 'CHAR'  Line:4 Col:12
+     12.0:c:Exit DeclarFuncType Lookahead CLHead: CHAR LexBuffer 'CHAR'  Line:4 Col:12
+     11.0:c:Exit Func DeclareArray Lookahead CLHead: CHAR LexBuffer 'CHAR'  Line:4 Col:12
+     10.0:c:Exit DeclarePointer Lookahead CLHead: CHAR LexBuffer 'CHAR'  Line:4 Col:12
+10::Expected CLHead: CHAR  LookaHeadToken = CHAR Line:4
+     11.0:c:Enter DeclarePointer Lookahead CLHead: POINTER LexBuffer 'POINTER'  Line:4 Col:20
+     12.0:c:Enter Func DeclareArray Lookahead CLHead: POINTER LexBuffer 'POINTER'  Line:4 Col:20
+     13.0:c:Enter DeclarFuncType Lookahead CLHead: POINTER LexBuffer 'POINTER'  Line:4 Col:20
+     12.0:c:Exit DeclarFuncType Lookahead CLHead: POINTER LexBuffer 'POINTER'  Line:4 Col:20
+     11.0:c:Exit Func DeclareArray Lookahead CLHead: POINTER LexBuffer 'POINTER'  Line:4 Col:20
+11::Expected CLHead: POINTER  LookaHeadToken = POINTER Line:4
+     12.0:c:Enter Func DeclareArray Lookahead CLHead: FUNC LexBuffer 'FUNC'  Line:4 Col:25
+     13.0:c:Enter DeclarFuncType Lookahead CLHead: FUNC LexBuffer 'FUNC'  Line:4 Col:25
+13::Expected CLHead: FUNC  LookaHeadToken = FUNC Line:4
+     12.0:a:Exit DeclarFuncType  Lookahead = Gfunc LexBuffer 'Gfunc' Line:4 Col:31
+     11.0:a:Exit Func DeclareArray  Lookahead = Gfunc LexBuffer 'Gfunc' Line:4 Col:31
+     10.0:a:Exit DeclarePointer  Lookahead = Gfunc LexBuffer 'Gfunc' Line:4 Col:31
+      9.0:a:Exit DeclareType  Lookahead = Gfunc LexBuffer 'Gfunc' Line:4 Col:31
+9::Expected CLHead: Gfunc  Lookahead = Gfunc Line:4
+      8.0:c:Exit DeclarFuncName Lookahead CLHead: ( LexBuffer 'Gfunc' Gfunc: CHAR:POINTER:FUNC::Address=00000000  Value=0000
+ Line:4 Col:32
 8::Expected CLHead: (  LookaHeadToken = ( Line:4
-      9.0:c:Enter DeclParamList Lookahead CLHead: ) LexBuffer 'Aproc' Aproc: PROC::Address=00000000  Value=0000
- Line:4 Col:20
-     10.0:c:Enter DeclPramPointer Lookahead CLHead: ) LexBuffer 'Aproc' Aproc: PROC::Address=00000000  Value=0000
- Line:4 Col:20
-     11.0:c:Enter DeclParamArray Lookahead CLHead: ) LexBuffer 'Aproc' Aproc: PROC::Address=00000000  Value=0000
- Line:4 Col:20
-     12.0:c:Enter DeclareParamIdentList Lookahead CLHead: ) LexBuffer 'Aproc' Aproc: PROC::Address=00000000  Value=0000
- Line:4 Col:20
-     13.0:c:Enter DeclareParamIdent Lookahead CLHead: ) LexBuffer 'Aproc' Aproc: PROC::Address=00000000  Value=0000
- Line:4 Col:20
-     12.0:c:Exit DeclareParamIdent Lookahead CLHead: ) LexBuffer 'Aproc' Aproc: PROC::Address=00000000  Value=0000
- Line:4 Col:20
-     11.0:c:Exit DeclareParamIdentList Lookahead CLHead: ) LexBuffer 'Aproc' Aproc: PROC::Address=00000000  Value=0000
- Line:4 Col:20
-     10.0:c:Exit DeclParamArray Lookahead CLHead: ) LexBuffer 'Aproc' Aproc: PROC::Address=00000000  Value=0000
- Line:4 Col:20
-      9.0:c:Exit DeclPramPointer Lookahead CLHead: ) LexBuffer 'Aproc' Aproc: PROC::Address=00000000  Value=0000
- Line:4 Col:20
-      8.0:c:Exit DeclParamList Lookahead CLHead: ) LexBuffer 'Aproc' Aproc: PROC::Address=00000000  Value=0000
- Line:4 Col:20
-      7.0:c:Exit DeclareParams Lookahead CLHead: ) LexBuffer 'Aproc' Aproc: PROC::Address=00000000  Value=0000
- Line:4 Col:20
+      9.0:c:Enter DeclParamList Lookahead CLHead: CARD LexBuffer 'CARD' Gfunc: CHAR:POINTER:FUNC::Address=00000000  Value=0000
+ Line:4 Col:36
+     10.0:c:Enter DeclPramPointer Lookahead CLHead: CARD LexBuffer 'CARD' Gfunc: CHAR:POINTER:FUNC::Address=00000000  Value=0000
+ Line:4 Col:36
+     11.0:c:Enter DeclParamArray Lookahead CLHead: CARD LexBuffer 'CARD' Gfunc: CHAR:POINTER:FUNC::Address=00000000  Value=0000
+ Line:4 Col:36
+     12.0:c:Enter DeclareParamIdentList Lookahead CLHead: CARD LexBuffer 'CARD' Gfunc: CHAR:POINTER:FUNC::Address=00000000  Value=0000
+ Line:4 Col:36
+     13.0:c:Enter DeclareParamIdent Lookahead CLHead: CARD LexBuffer 'CARD' Gfunc: CHAR:POINTER:FUNC::Address=00000000  Value=0000
+ Line:4 Col:36
+     12.0:c:Exit DeclareParamIdent Lookahead CLHead: CARD LexBuffer 'CARD' Gfunc: CHAR:POINTER:FUNC::Address=00000000  Value=0000
+ Line:4 Col:36
+     11.0:c:Exit DeclareParamIdentList Lookahead CLHead: CARD LexBuffer 'CARD' Gfunc: CHAR:POINTER:FUNC::Address=00000000  Value=0000
+ Line:4 Col:36
+     10.0:c:Exit DeclParamArray Lookahead CLHead: CARD LexBuffer 'CARD' Gfunc: CHAR:POINTER:FUNC::Address=00000000  Value=0000
+ Line:4 Col:36
+      9.0:c:Exit DeclPramPointer Lookahead CLHead: CARD LexBuffer 'CARD' Gfunc: CHAR:POINTER:FUNC::Address=00000000  Value=0000
+ Line:4 Col:36
+9::Expected CLHead: CARD  LookaHeadToken = CARD Line:4
+     10.0:c:Enter DeclPramPointer Lookahead CLHead: POINTER LexBuffer 'POINTER' Gfunc: CHAR:POINTER:FUNC::Address=00000000  Value=0000
+ Line:4 Col:44
+     11.0:c:Enter DeclParamArray Lookahead CLHead: POINTER LexBuffer 'POINTER' Gfunc: CHAR:POINTER:FUNC::Address=00000000  Value=0000
+ Line:4 Col:44
+     12.0:c:Enter DeclareParamIdentList Lookahead CLHead: POINTER LexBuffer 'POINTER' Gfunc: CHAR:POINTER:FUNC::Address=00000000  Value=0000
+ Line:4 Col:44
+     13.0:c:Enter DeclareParamIdent Lookahead CLHead: POINTER LexBuffer 'POINTER' Gfunc: CHAR:POINTER:FUNC::Address=00000000  Value=0000
+ Line:4 Col:44
+     12.0:c:Exit DeclareParamIdent Lookahead CLHead: POINTER LexBuffer 'POINTER' Gfunc: CHAR:POINTER:FUNC::Address=00000000  Value=0000
+ Line:4 Col:44
+     11.0:c:Exit DeclareParamIdentList Lookahead CLHead: POINTER LexBuffer 'POINTER' Gfunc: CHAR:POINTER:FUNC::Address=00000000  Value=0000
+ Line:4 Col:44
+     10.0:c:Exit DeclParamArray Lookahead CLHead: POINTER LexBuffer 'POINTER' Gfunc: CHAR:POINTER:FUNC::Address=00000000  Value=0000
+ Line:4 Col:44
+10::Expected CLHead: POINTER  LookaHeadToken = POINTER Line:4
+     11.0:a:Enter DeclParamArray  Lookahead = pM LexBuffer 'pM' Gfunc: CHAR:POINTER:FUNC::Address=00000000  Value=0000
+Line:4 Col:47
+     12.0:a:Enter DeclareParamIdentList  Lookahead = pM LexBuffer 'pM' Gfunc: CHAR:POINTER:FUNC::Address=00000000  Value=0000
+Line:4 Col:47
+     13.0:a:Enter DeclareParamIdent  Lookahead = pM LexBuffer 'pM' Gfunc: CHAR:POINTER:FUNC::Address=00000000  Value=0000
+Line:4 Col:47
+13::Expected CLHead: pM  Lookahead = pM Line:4
+     12.0:c:Exit DeclareParamIdent Lookahead CLHead: ) LexBuffer 'pM' Gfunc: CHAR:POINTER:FUNC::Address=00000000  Value=0000
+	Parameters
+	pM: CARD:POINTER::Address=00000000  Value=0000
+ Line:4 Col:48
+     11.0:c:Exit DeclareParamIdentList Lookahead CLHead: ) LexBuffer 'pM' Gfunc: CHAR:POINTER:FUNC::Address=00000000  Value=0000
+	Parameters
+	pM: CARD:POINTER::Address=00000000  Value=0000
+ Line:4 Col:48
+     10.0:c:Exit DeclParamArray Lookahead CLHead: ) LexBuffer 'pM' Gfunc: CHAR:POINTER:FUNC::Address=00000000  Value=0000
+	Parameters
+	pM: CARD:POINTER::Address=00000000  Value=0000
+ Line:4 Col:48
+      9.0:c:Exit DeclPramPointer Lookahead CLHead: ) LexBuffer 'pM' Gfunc: CHAR:POINTER:FUNC::Address=00000000  Value=0000
+	Parameters
+	pM: CARD:POINTER::Address=00000000  Value=0000
+ Line:4 Col:48
+      8.0:c:Exit DeclParamList Lookahead CLHead: ) LexBuffer 'pM' Gfunc: CHAR:POINTER:FUNC::Address=00000000  Value=0000
+	Parameters
+	pM: CARD:POINTER::Address=00000000  Value=0000
+ Line:4 Col:48
+      7.0:c:Exit DeclareParams Lookahead CLHead: ) LexBuffer 'pM' Gfunc: CHAR:POINTER:FUNC::Address=00000000  Value=0000
+	Parameters
+	pM: CARD:POINTER::Address=00000000  Value=0000
+ Line:4 Col:48
 7::Expected CLHead: )  LookaHeadToken = ) Line:4
-      6.0:c:Exit DeclareEnd Lookahead CLHead: DECLARE LexBuffer 'DECLARE' Aproc: PROC::Address=00000000  Value=0000
+      6.0:c:Exit DeclareEnd Lookahead CLHead: DECLARE LexBuffer 'DECLARE' Gfunc: CHAR:POINTER:FUNC::Address=00000000  Value=0000
+	Parameters
+	pM: CARD:POINTER::Address=00000000  Value=0000
  Line:5 Col:7
       7.0:c:Enter FundDecl Lookahead CLHead: DECLARE LexBuffer 'DECLARE'  Line:5 Col:7
       8.0:c:Enter FundPointerDecl Lookahead CLHead: DECLARE LexBuffer 'DECLARE'  Line:5 Col:7
@@ -197,87 +242,98 @@ Line:4 Col:18
       7.0:c:Exit FundPointerDecl Lookahead CLHead: DECLARE LexBuffer 'DECLARE'  Line:5 Col:7
       6.0:c:Exit FundDecl Lookahead CLHead: DECLARE LexBuffer 'DECLARE'  Line:5 Col:7
 6::Expected CLHead: DECLARE  LookaHeadToken = DECLARE Line:5
-      7.0:c:Enter DeclareEnd Lookahead CLHead: PROC LexBuffer 'PROC' Aproc: PROC::Address=00000000  Value=0000
- Line:5 Col:12
-      8.0:c:Enter DeclareParams Lookahead CLHead: PROC LexBuffer 'PROC' Aproc: PROC::Address=00000000  Value=0000
- Line:5 Col:12
-      9.0:c:Enter DeclarFuncName Lookahead CLHead: PROC LexBuffer 'PROC' Aproc: PROC::Address=00000000  Value=0000
- Line:5 Col:12
-     10.0:c:Enter DeclareType Lookahead CLHead: PROC LexBuffer 'PROC' Aproc: PROC::Address=00000000  Value=0000
- Line:5 Col:12
-     11.0:c:Enter DeclarePointer Lookahead CLHead: PROC LexBuffer 'PROC' Aproc: PROC::Address=00000000  Value=0000
- Line:5 Col:12
-     12.0:c:Enter Func DeclareArray Lookahead CLHead: PROC LexBuffer 'PROC' Aproc: PROC::Address=00000000  Value=0000
- Line:5 Col:12
-     13.0:c:Enter DeclarFuncType Lookahead CLHead: PROC LexBuffer 'PROC' Aproc: PROC::Address=00000000  Value=0000
- Line:5 Col:12
-13::Expected CLHead: PROC  LookaHeadToken = PROC Line:5
-     12.0:a:Exit DeclarFuncType  Lookahead = Bproc LexBuffer 'Bproc' Aproc: PROC::Address=00000000  Value=0000
-Line:5 Col:18
-     11.0:a:Exit Func DeclareArray  Lookahead = Bproc LexBuffer 'Bproc' Aproc: PROC::Address=00000000  Value=0000
-Line:5 Col:18
-     10.0:a:Exit DeclarePointer  Lookahead = Bproc LexBuffer 'Bproc' Aproc: PROC::Address=00000000  Value=0000
-Line:5 Col:18
-      9.0:a:Exit DeclareType  Lookahead = Bproc LexBuffer 'Bproc' Aproc: PROC::Address=00000000  Value=0000
-Line:5 Col:18
-9::Expected CLHead: Bproc  Lookahead = Bproc Line:5
-      8.0:c:Exit DeclarFuncName Lookahead CLHead: ( LexBuffer 'Bproc' Bproc: PROC::Address=00000000  Value=0000
- Line:5 Col:19
+      7.0:c:Enter DeclareEnd Lookahead CLHead: BYTE LexBuffer 'BYTE'  Line:5 Col:12
+      8.0:c:Enter DeclareParams Lookahead CLHead: BYTE LexBuffer 'BYTE'  Line:5 Col:12
+      9.0:c:Enter DeclarFuncName Lookahead CLHead: BYTE LexBuffer 'BYTE'  Line:5 Col:12
+     10.0:c:Enter DeclareType Lookahead CLHead: BYTE LexBuffer 'BYTE'  Line:5 Col:12
+     11.0:c:Enter DeclarePointer Lookahead CLHead: BYTE LexBuffer 'BYTE'  Line:5 Col:12
+     12.0:c:Enter Func DeclareArray Lookahead CLHead: BYTE LexBuffer 'BYTE'  Line:5 Col:12
+     13.0:c:Enter DeclarFuncType Lookahead CLHead: BYTE LexBuffer 'BYTE'  Line:5 Col:12
+     12.0:c:Exit DeclarFuncType Lookahead CLHead: BYTE LexBuffer 'BYTE'  Line:5 Col:12
+     11.0:c:Exit Func DeclareArray Lookahead CLHead: BYTE LexBuffer 'BYTE'  Line:5 Col:12
+     10.0:c:Exit DeclarePointer Lookahead CLHead: BYTE LexBuffer 'BYTE'  Line:5 Col:12
+10::Expected CLHead: BYTE  LookaHeadToken = BYTE Line:5
+     11.0:c:Enter DeclarePointer Lookahead CLHead: FUNC LexBuffer 'FUNC'  Line:5 Col:17
+     12.0:c:Enter Func DeclareArray Lookahead CLHead: FUNC LexBuffer 'FUNC'  Line:5 Col:17
+     13.0:c:Enter DeclarFuncType Lookahead CLHead: FUNC LexBuffer 'FUNC'  Line:5 Col:17
+13::Expected CLHead: FUNC  LookaHeadToken = FUNC Line:5
+     12.0:a:Exit DeclarFuncType  Lookahead = Hfunc LexBuffer 'Hfunc' Line:5 Col:23
+     11.0:a:Exit Func DeclareArray  Lookahead = Hfunc LexBuffer 'Hfunc' Line:5 Col:23
+     10.0:a:Exit DeclarePointer  Lookahead = Hfunc LexBuffer 'Hfunc' Line:5 Col:23
+      9.0:a:Exit DeclareType  Lookahead = Hfunc LexBuffer 'Hfunc' Line:5 Col:23
+9::Expected CLHead: Hfunc  Lookahead = Hfunc Line:5
+      8.0:c:Exit DeclarFuncName Lookahead CLHead: ( LexBuffer 'Hfunc' Hfunc: BYTE:FUNC::Address=00000000  Value=0000
+ Line:5 Col:24
 8::Expected CLHead: (  LookaHeadToken = ( Line:5
-      9.0:c:Enter DeclParamList Lookahead CLHead: INT LexBuffer 'INT' Bproc: PROC::Address=00000000  Value=0000
- Line:5 Col:22
-     10.0:c:Enter DeclPramPointer Lookahead CLHead: INT LexBuffer 'INT' Bproc: PROC::Address=00000000  Value=0000
- Line:5 Col:22
-     11.0:c:Enter DeclParamArray Lookahead CLHead: INT LexBuffer 'INT' Bproc: PROC::Address=00000000  Value=0000
- Line:5 Col:22
-     12.0:c:Enter DeclareParamIdentList Lookahead CLHead: INT LexBuffer 'INT' Bproc: PROC::Address=00000000  Value=0000
- Line:5 Col:22
-     13.0:c:Enter DeclareParamIdent Lookahead CLHead: INT LexBuffer 'INT' Bproc: PROC::Address=00000000  Value=0000
- Line:5 Col:22
-     12.0:c:Exit DeclareParamIdent Lookahead CLHead: INT LexBuffer 'INT' Bproc: PROC::Address=00000000  Value=0000
- Line:5 Col:22
-     11.0:c:Exit DeclareParamIdentList Lookahead CLHead: INT LexBuffer 'INT' Bproc: PROC::Address=00000000  Value=0000
- Line:5 Col:22
-     10.0:c:Exit DeclParamArray Lookahead CLHead: INT LexBuffer 'INT' Bproc: PROC::Address=00000000  Value=0000
- Line:5 Col:22
-      9.0:c:Exit DeclPramPointer Lookahead CLHead: INT LexBuffer 'INT' Bproc: PROC::Address=00000000  Value=0000
- Line:5 Col:22
-9::Expected CLHead: INT  LookaHeadToken = INT Line:5
-     10.0:a:Enter DeclPramPointer  Lookahead = a LexBuffer 'a' Bproc: PROC::Address=00000000  Value=0000
-Line:5 Col:24
-     11.0:a:Enter DeclParamArray  Lookahead = a LexBuffer 'a' Bproc: PROC::Address=00000000  Value=0000
-Line:5 Col:24
-     12.0:a:Enter DeclareParamIdentList  Lookahead = a LexBuffer 'a' Bproc: PROC::Address=00000000  Value=0000
-Line:5 Col:24
-     13.0:a:Enter DeclareParamIdent  Lookahead = a LexBuffer 'a' Bproc: PROC::Address=00000000  Value=0000
-Line:5 Col:24
-13::Expected CLHead: a  Lookahead = a Line:5
-     12.0:c:Exit DeclareParamIdent Lookahead CLHead: , LexBuffer 'a' Bproc: PROC::Address=00000000  Value=0000
- Line:5 Col:25
-12::Expected CLHead: ,  LookaHeadToken = , Line:5
-     13.0:a:Enter DeclareParamIdent  Lookahead = b LexBuffer 'b' Bproc: PROC::Address=00000000  Value=0000
-Line:5 Col:26
-13::Expected CLHead: b  Lookahead = b Line:5
-     12.0:c:Exit DeclareParamIdent Lookahead CLHead: , LexBuffer 'b' Bproc: PROC::Address=00000000  Value=0000
- Line:5 Col:27
-12::Expected CLHead: ,  LookaHeadToken = , Line:5
-     13.0:a:Enter DeclareParamIdent  Lookahead = c LexBuffer 'c' Bproc: PROC::Address=00000000  Value=0000
-Line:5 Col:28
-13::Expected CLHead: c  Lookahead = c Line:5
-     12.0:c:Exit DeclareParamIdent Lookahead CLHead: ) LexBuffer 'c' Bproc: PROC::Address=00000000  Value=0000
- Line:5 Col:29
-     11.0:c:Exit DeclareParamIdentList Lookahead CLHead: ) LexBuffer 'c' Bproc: PROC::Address=00000000  Value=0000
- Line:5 Col:29
-     10.0:c:Exit DeclParamArray Lookahead CLHead: ) LexBuffer 'c' Bproc: PROC::Address=00000000  Value=0000
- Line:5 Col:29
-      9.0:c:Exit DeclPramPointer Lookahead CLHead: ) LexBuffer 'c' Bproc: PROC::Address=00000000  Value=0000
- Line:5 Col:29
-      8.0:c:Exit DeclParamList Lookahead CLHead: ) LexBuffer 'c' Bproc: PROC::Address=00000000  Value=0000
- Line:5 Col:29
-      7.0:c:Exit DeclareParams Lookahead CLHead: ) LexBuffer 'c' Bproc: PROC::Address=00000000  Value=0000
- Line:5 Col:29
+      9.0:c:Enter DeclParamList Lookahead CLHead: CARD LexBuffer 'CARD' Hfunc: BYTE:FUNC::Address=00000000  Value=0000
+ Line:5 Col:28
+     10.0:c:Enter DeclPramPointer Lookahead CLHead: CARD LexBuffer 'CARD' Hfunc: BYTE:FUNC::Address=00000000  Value=0000
+ Line:5 Col:28
+     11.0:c:Enter DeclParamArray Lookahead CLHead: CARD LexBuffer 'CARD' Hfunc: BYTE:FUNC::Address=00000000  Value=0000
+ Line:5 Col:28
+     12.0:c:Enter DeclareParamIdentList Lookahead CLHead: CARD LexBuffer 'CARD' Hfunc: BYTE:FUNC::Address=00000000  Value=0000
+ Line:5 Col:28
+     13.0:c:Enter DeclareParamIdent Lookahead CLHead: CARD LexBuffer 'CARD' Hfunc: BYTE:FUNC::Address=00000000  Value=0000
+ Line:5 Col:28
+     12.0:c:Exit DeclareParamIdent Lookahead CLHead: CARD LexBuffer 'CARD' Hfunc: BYTE:FUNC::Address=00000000  Value=0000
+ Line:5 Col:28
+     11.0:c:Exit DeclareParamIdentList Lookahead CLHead: CARD LexBuffer 'CARD' Hfunc: BYTE:FUNC::Address=00000000  Value=0000
+ Line:5 Col:28
+     10.0:c:Exit DeclParamArray Lookahead CLHead: CARD LexBuffer 'CARD' Hfunc: BYTE:FUNC::Address=00000000  Value=0000
+ Line:5 Col:28
+      9.0:c:Exit DeclPramPointer Lookahead CLHead: CARD LexBuffer 'CARD' Hfunc: BYTE:FUNC::Address=00000000  Value=0000
+ Line:5 Col:28
+9::Expected CLHead: CARD  LookaHeadToken = CARD Line:5
+     10.0:c:Enter DeclPramPointer Lookahead CLHead: POINTER LexBuffer 'POINTER' Hfunc: BYTE:FUNC::Address=00000000  Value=0000
+ Line:5 Col:36
+     11.0:c:Enter DeclParamArray Lookahead CLHead: POINTER LexBuffer 'POINTER' Hfunc: BYTE:FUNC::Address=00000000  Value=0000
+ Line:5 Col:36
+     12.0:c:Enter DeclareParamIdentList Lookahead CLHead: POINTER LexBuffer 'POINTER' Hfunc: BYTE:FUNC::Address=00000000  Value=0000
+ Line:5 Col:36
+     13.0:c:Enter DeclareParamIdent Lookahead CLHead: POINTER LexBuffer 'POINTER' Hfunc: BYTE:FUNC::Address=00000000  Value=0000
+ Line:5 Col:36
+     12.0:c:Exit DeclareParamIdent Lookahead CLHead: POINTER LexBuffer 'POINTER' Hfunc: BYTE:FUNC::Address=00000000  Value=0000
+ Line:5 Col:36
+     11.0:c:Exit DeclareParamIdentList Lookahead CLHead: POINTER LexBuffer 'POINTER' Hfunc: BYTE:FUNC::Address=00000000  Value=0000
+ Line:5 Col:36
+     10.0:c:Exit DeclParamArray Lookahead CLHead: POINTER LexBuffer 'POINTER' Hfunc: BYTE:FUNC::Address=00000000  Value=0000
+ Line:5 Col:36
+10::Expected CLHead: POINTER  LookaHeadToken = POINTER Line:5
+     11.0:a:Enter DeclParamArray  Lookahead = pN LexBuffer 'pN' Hfunc: BYTE:FUNC::Address=00000000  Value=0000
+Line:5 Col:39
+     12.0:a:Enter DeclareParamIdentList  Lookahead = pN LexBuffer 'pN' Hfunc: BYTE:FUNC::Address=00000000  Value=0000
+Line:5 Col:39
+     13.0:a:Enter DeclareParamIdent  Lookahead = pN LexBuffer 'pN' Hfunc: BYTE:FUNC::Address=00000000  Value=0000
+Line:5 Col:39
+13::Expected CLHead: pN  Lookahead = pN Line:5
+     12.0:c:Exit DeclareParamIdent Lookahead CLHead: ) LexBuffer 'pN' Hfunc: BYTE:FUNC::Address=00000000  Value=0000
+	Parameters
+	pN: CARD:POINTER::Address=00000000  Value=0000
+ Line:5 Col:40
+     11.0:c:Exit DeclareParamIdentList Lookahead CLHead: ) LexBuffer 'pN' Hfunc: BYTE:FUNC::Address=00000000  Value=0000
+	Parameters
+	pN: CARD:POINTER::Address=00000000  Value=0000
+ Line:5 Col:40
+     10.0:c:Exit DeclParamArray Lookahead CLHead: ) LexBuffer 'pN' Hfunc: BYTE:FUNC::Address=00000000  Value=0000
+	Parameters
+	pN: CARD:POINTER::Address=00000000  Value=0000
+ Line:5 Col:40
+      9.0:c:Exit DeclPramPointer Lookahead CLHead: ) LexBuffer 'pN' Hfunc: BYTE:FUNC::Address=00000000  Value=0000
+	Parameters
+	pN: CARD:POINTER::Address=00000000  Value=0000
+ Line:5 Col:40
+      8.0:c:Exit DeclParamList Lookahead CLHead: ) LexBuffer 'pN' Hfunc: BYTE:FUNC::Address=00000000  Value=0000
+	Parameters
+	pN: CARD:POINTER::Address=00000000  Value=0000
+ Line:5 Col:40
+      7.0:c:Exit DeclareParams Lookahead CLHead: ) LexBuffer 'pN' Hfunc: BYTE:FUNC::Address=00000000  Value=0000
+	Parameters
+	pN: CARD:POINTER::Address=00000000  Value=0000
+ Line:5 Col:40
 7::Expected CLHead: )  LookaHeadToken = ) Line:5
-      6.0:c:Exit DeclareEnd Lookahead CLHead: DECLARE LexBuffer 'DECLARE' Bproc: PROC::Address=00000000  Value=0000
+      6.0:c:Exit DeclareEnd Lookahead CLHead: DECLARE LexBuffer 'DECLARE' Hfunc: BYTE:FUNC::Address=00000000  Value=0000
+	Parameters
+	pN: CARD:POINTER::Address=00000000  Value=0000
  Line:6 Col:7
       7.0:c:Enter FundDecl Lookahead CLHead: DECLARE LexBuffer 'DECLARE'  Line:6 Col:7
       8.0:c:Enter FundPointerDecl Lookahead CLHead: DECLARE LexBuffer 'DECLARE'  Line:6 Col:7
@@ -292,84 +348,588 @@ Line:5 Col:28
       7.0:c:Exit FundPointerDecl Lookahead CLHead: DECLARE LexBuffer 'DECLARE'  Line:6 Col:7
       6.0:c:Exit FundDecl Lookahead CLHead: DECLARE LexBuffer 'DECLARE'  Line:6 Col:7
 6::Expected CLHead: DECLARE  LookaHeadToken = DECLARE Line:6
-      7.0:c:Enter DeclareEnd Lookahead CLHead: INTERRUPT LexBuffer 'INTERRUPT' Bproc: PROC::Address=00000000  Value=0000
- Line:6 Col:17
-      8.0:c:Enter DeclareParams Lookahead CLHead: INTERRUPT LexBuffer 'INTERRUPT' Bproc: PROC::Address=00000000  Value=0000
- Line:6 Col:17
-      9.0:c:Enter DeclarFuncName Lookahead CLHead: INTERRUPT LexBuffer 'INTERRUPT' Bproc: PROC::Address=00000000  Value=0000
- Line:6 Col:17
-     10.0:c:Enter DeclareType Lookahead CLHead: INTERRUPT LexBuffer 'INTERRUPT' Bproc: PROC::Address=00000000  Value=0000
- Line:6 Col:17
-     11.0:c:Enter DeclarePointer Lookahead CLHead: INTERRUPT LexBuffer 'INTERRUPT' Bproc: PROC::Address=00000000  Value=0000
- Line:6 Col:17
-     12.0:c:Enter Func DeclareArray Lookahead CLHead: INTERRUPT LexBuffer 'INTERRUPT' Bproc: PROC::Address=00000000  Value=0000
- Line:6 Col:17
-     13.0:c:Enter DeclarFuncType Lookahead CLHead: INTERRUPT LexBuffer 'INTERRUPT' Bproc: PROC::Address=00000000  Value=0000
- Line:6 Col:17
-13::Expected CLHead: INTERRUPT  LookaHeadToken = INTERRUPT Line:6
-     12.0:a:Exit DeclarFuncType  Lookahead = IrqProc LexBuffer 'IrqProc' Bproc: PROC::Address=00000000  Value=0000
-Line:6 Col:25
-     11.0:a:Exit Func DeclareArray  Lookahead = IrqProc LexBuffer 'IrqProc' Bproc: PROC::Address=00000000  Value=0000
-Line:6 Col:25
-     10.0:a:Exit DeclarePointer  Lookahead = IrqProc LexBuffer 'IrqProc' Bproc: PROC::Address=00000000  Value=0000
-Line:6 Col:25
-      9.0:a:Exit DeclareType  Lookahead = IrqProc LexBuffer 'IrqProc' Bproc: PROC::Address=00000000  Value=0000
-Line:6 Col:25
-9::Expected CLHead: IrqProc  Lookahead = IrqProc Line:6
-      8.0:c:Exit DeclarFuncName Lookahead CLHead: ( LexBuffer 'IrqProc' IrqProc: INTERRUPT::Address=00000000  Value=0000
- Line:6 Col:26
+      7.0:c:Enter DeclareEnd Lookahead CLHead: CARD LexBuffer 'CARD'  Line:6 Col:12
+      8.0:c:Enter DeclareParams Lookahead CLHead: CARD LexBuffer 'CARD'  Line:6 Col:12
+      9.0:c:Enter DeclarFuncName Lookahead CLHead: CARD LexBuffer 'CARD'  Line:6 Col:12
+     10.0:c:Enter DeclareType Lookahead CLHead: CARD LexBuffer 'CARD'  Line:6 Col:12
+     11.0:c:Enter DeclarePointer Lookahead CLHead: CARD LexBuffer 'CARD'  Line:6 Col:12
+     12.0:c:Enter Func DeclareArray Lookahead CLHead: CARD LexBuffer 'CARD'  Line:6 Col:12
+     13.0:c:Enter DeclarFuncType Lookahead CLHead: CARD LexBuffer 'CARD'  Line:6 Col:12
+     12.0:c:Exit DeclarFuncType Lookahead CLHead: CARD LexBuffer 'CARD'  Line:6 Col:12
+     11.0:c:Exit Func DeclareArray Lookahead CLHead: CARD LexBuffer 'CARD'  Line:6 Col:12
+     10.0:c:Exit DeclarePointer Lookahead CLHead: CARD LexBuffer 'CARD'  Line:6 Col:12
+10::Expected CLHead: CARD  LookaHeadToken = CARD Line:6
+     11.0:c:Enter DeclarePointer Lookahead CLHead: FUNC LexBuffer 'FUNC'  Line:6 Col:17
+     12.0:c:Enter Func DeclareArray Lookahead CLHead: FUNC LexBuffer 'FUNC'  Line:6 Col:17
+     13.0:c:Enter DeclarFuncType Lookahead CLHead: FUNC LexBuffer 'FUNC'  Line:6 Col:17
+13::Expected CLHead: FUNC  LookaHeadToken = FUNC Line:6
+     12.0:a:Exit DeclarFuncType  Lookahead = IFunc LexBuffer 'IFunc' Line:6 Col:23
+     11.0:a:Exit Func DeclareArray  Lookahead = IFunc LexBuffer 'IFunc' Line:6 Col:23
+     10.0:a:Exit DeclarePointer  Lookahead = IFunc LexBuffer 'IFunc' Line:6 Col:23
+      9.0:a:Exit DeclareType  Lookahead = IFunc LexBuffer 'IFunc' Line:6 Col:23
+9::Expected CLHead: IFunc  Lookahead = IFunc Line:6
+      8.0:c:Exit DeclarFuncName Lookahead CLHead: ( LexBuffer 'IFunc' IFunc: CARD:FUNC::Address=00000000  Value=0000
+ Line:6 Col:24
 8::Expected CLHead: (  LookaHeadToken = ( Line:6
-      9.0:c:Enter DeclParamList Lookahead CLHead: ) LexBuffer 'IrqProc' IrqProc: INTERRUPT::Address=00000000  Value=0000
- Line:6 Col:27
-     10.0:c:Enter DeclPramPointer Lookahead CLHead: ) LexBuffer 'IrqProc' IrqProc: INTERRUPT::Address=00000000  Value=0000
- Line:6 Col:27
-     11.0:c:Enter DeclParamArray Lookahead CLHead: ) LexBuffer 'IrqProc' IrqProc: INTERRUPT::Address=00000000  Value=0000
- Line:6 Col:27
-     12.0:c:Enter DeclareParamIdentList Lookahead CLHead: ) LexBuffer 'IrqProc' IrqProc: INTERRUPT::Address=00000000  Value=0000
- Line:6 Col:27
-     13.0:c:Enter DeclareParamIdent Lookahead CLHead: ) LexBuffer 'IrqProc' IrqProc: INTERRUPT::Address=00000000  Value=0000
- Line:6 Col:27
-     12.0:c:Exit DeclareParamIdent Lookahead CLHead: ) LexBuffer 'IrqProc' IrqProc: INTERRUPT::Address=00000000  Value=0000
- Line:6 Col:27
-     11.0:c:Exit DeclareParamIdentList Lookahead CLHead: ) LexBuffer 'IrqProc' IrqProc: INTERRUPT::Address=00000000  Value=0000
- Line:6 Col:27
-     10.0:c:Exit DeclParamArray Lookahead CLHead: ) LexBuffer 'IrqProc' IrqProc: INTERRUPT::Address=00000000  Value=0000
- Line:6 Col:27
-      9.0:c:Exit DeclPramPointer Lookahead CLHead: ) LexBuffer 'IrqProc' IrqProc: INTERRUPT::Address=00000000  Value=0000
- Line:6 Col:27
-      8.0:c:Exit DeclParamList Lookahead CLHead: ) LexBuffer 'IrqProc' IrqProc: INTERRUPT::Address=00000000  Value=0000
- Line:6 Col:27
-      7.0:c:Exit DeclareParams Lookahead CLHead: ) LexBuffer 'IrqProc' IrqProc: INTERRUPT::Address=00000000  Value=0000
- Line:6 Col:27
+      9.0:c:Enter DeclParamList Lookahead CLHead: CARD LexBuffer 'CARD' IFunc: CARD:FUNC::Address=00000000  Value=0000
+ Line:6 Col:28
+     10.0:c:Enter DeclPramPointer Lookahead CLHead: CARD LexBuffer 'CARD' IFunc: CARD:FUNC::Address=00000000  Value=0000
+ Line:6 Col:28
+     11.0:c:Enter DeclParamArray Lookahead CLHead: CARD LexBuffer 'CARD' IFunc: CARD:FUNC::Address=00000000  Value=0000
+ Line:6 Col:28
+     12.0:c:Enter DeclareParamIdentList Lookahead CLHead: CARD LexBuffer 'CARD' IFunc: CARD:FUNC::Address=00000000  Value=0000
+ Line:6 Col:28
+     13.0:c:Enter DeclareParamIdent Lookahead CLHead: CARD LexBuffer 'CARD' IFunc: CARD:FUNC::Address=00000000  Value=0000
+ Line:6 Col:28
+     12.0:c:Exit DeclareParamIdent Lookahead CLHead: CARD LexBuffer 'CARD' IFunc: CARD:FUNC::Address=00000000  Value=0000
+ Line:6 Col:28
+     11.0:c:Exit DeclareParamIdentList Lookahead CLHead: CARD LexBuffer 'CARD' IFunc: CARD:FUNC::Address=00000000  Value=0000
+ Line:6 Col:28
+     10.0:c:Exit DeclParamArray Lookahead CLHead: CARD LexBuffer 'CARD' IFunc: CARD:FUNC::Address=00000000  Value=0000
+ Line:6 Col:28
+      9.0:c:Exit DeclPramPointer Lookahead CLHead: CARD LexBuffer 'CARD' IFunc: CARD:FUNC::Address=00000000  Value=0000
+ Line:6 Col:28
+9::Expected CLHead: CARD  LookaHeadToken = CARD Line:6
+     10.0:c:Enter DeclPramPointer Lookahead CLHead: POINTER LexBuffer 'POINTER' IFunc: CARD:FUNC::Address=00000000  Value=0000
+ Line:6 Col:36
+     11.0:c:Enter DeclParamArray Lookahead CLHead: POINTER LexBuffer 'POINTER' IFunc: CARD:FUNC::Address=00000000  Value=0000
+ Line:6 Col:36
+     12.0:c:Enter DeclareParamIdentList Lookahead CLHead: POINTER LexBuffer 'POINTER' IFunc: CARD:FUNC::Address=00000000  Value=0000
+ Line:6 Col:36
+     13.0:c:Enter DeclareParamIdent Lookahead CLHead: POINTER LexBuffer 'POINTER' IFunc: CARD:FUNC::Address=00000000  Value=0000
+ Line:6 Col:36
+     12.0:c:Exit DeclareParamIdent Lookahead CLHead: POINTER LexBuffer 'POINTER' IFunc: CARD:FUNC::Address=00000000  Value=0000
+ Line:6 Col:36
+     11.0:c:Exit DeclareParamIdentList Lookahead CLHead: POINTER LexBuffer 'POINTER' IFunc: CARD:FUNC::Address=00000000  Value=0000
+ Line:6 Col:36
+     10.0:c:Exit DeclParamArray Lookahead CLHead: POINTER LexBuffer 'POINTER' IFunc: CARD:FUNC::Address=00000000  Value=0000
+ Line:6 Col:36
+10::Expected CLHead: POINTER  LookaHeadToken = POINTER Line:6
+     11.0:a:Enter DeclParamArray  Lookahead = pO LexBuffer 'pO' IFunc: CARD:FUNC::Address=00000000  Value=0000
+Line:6 Col:39
+     12.0:a:Enter DeclareParamIdentList  Lookahead = pO LexBuffer 'pO' IFunc: CARD:FUNC::Address=00000000  Value=0000
+Line:6 Col:39
+     13.0:a:Enter DeclareParamIdent  Lookahead = pO LexBuffer 'pO' IFunc: CARD:FUNC::Address=00000000  Value=0000
+Line:6 Col:39
+13::Expected CLHead: pO  Lookahead = pO Line:6
+     12.0:c:Exit DeclareParamIdent Lookahead CLHead: ) LexBuffer 'pO' IFunc: CARD:FUNC::Address=00000000  Value=0000
+	Parameters
+	pO: CARD:POINTER::Address=00000000  Value=0000
+ Line:6 Col:40
+     11.0:c:Exit DeclareParamIdentList Lookahead CLHead: ) LexBuffer 'pO' IFunc: CARD:FUNC::Address=00000000  Value=0000
+	Parameters
+	pO: CARD:POINTER::Address=00000000  Value=0000
+ Line:6 Col:40
+     10.0:c:Exit DeclParamArray Lookahead CLHead: ) LexBuffer 'pO' IFunc: CARD:FUNC::Address=00000000  Value=0000
+	Parameters
+	pO: CARD:POINTER::Address=00000000  Value=0000
+ Line:6 Col:40
+      9.0:c:Exit DeclPramPointer Lookahead CLHead: ) LexBuffer 'pO' IFunc: CARD:FUNC::Address=00000000  Value=0000
+	Parameters
+	pO: CARD:POINTER::Address=00000000  Value=0000
+ Line:6 Col:40
+      8.0:c:Exit DeclParamList Lookahead CLHead: ) LexBuffer 'pO' IFunc: CARD:FUNC::Address=00000000  Value=0000
+	Parameters
+	pO: CARD:POINTER::Address=00000000  Value=0000
+ Line:6 Col:40
+      7.0:c:Exit DeclareParams Lookahead CLHead: ) LexBuffer 'pO' IFunc: CARD:FUNC::Address=00000000  Value=0000
+	Parameters
+	pO: CARD:POINTER::Address=00000000  Value=0000
+ Line:6 Col:40
 7::Expected CLHead: )  LookaHeadToken = ) Line:6
+      6.0:c:Exit DeclareEnd Lookahead CLHead: DECLARE LexBuffer 'DECLARE' IFunc: CARD:FUNC::Address=00000000  Value=0000
+	Parameters
+	pO: CARD:POINTER::Address=00000000  Value=0000
+ Line:7 Col:7
+      7.0:c:Enter FundDecl Lookahead CLHead: DECLARE LexBuffer 'DECLARE'  Line:7 Col:7
+      8.0:c:Enter FundPointerDecl Lookahead CLHead: DECLARE LexBuffer 'DECLARE'  Line:7 Col:7
+      9.0:c:Enter FundArrayDecl Lookahead CLHead: DECLARE LexBuffer 'DECLARE'  Line:7 Col:7
+     10.0:c:Enter FunctionDecl Lookahead CLHead: DECLARE LexBuffer 'DECLARE'  Line:7 Col:7
+     11.0:c:Enter IdentList Lookahead CLHead: DECLARE LexBuffer 'DECLARE'  Line:7 Col:7
+     12.0:c:Enter Ident Lookahead CLHead: DECLARE LexBuffer 'DECLARE'  Line:7 Col:7
+     11.0:c:Exit Ident Lookahead CLHead: DECLARE LexBuffer 'DECLARE'  Line:7 Col:7
+     10.0:c:Exit IdenrtList Lookahead CLHead: DECLARE LexBuffer 'DECLARE'  Line:7 Col:7
+      9.0:c:Exit FunctionDecl Lookahead CLHead: DECLARE LexBuffer 'DECLARE'  Line:7 Col:7
+      8.0:c:Exit FundArrayDecl Lookahead CLHead: DECLARE LexBuffer 'DECLARE'  Line:7 Col:7
+      7.0:c:Exit FundPointerDecl Lookahead CLHead: DECLARE LexBuffer 'DECLARE'  Line:7 Col:7
+      6.0:c:Exit FundDecl Lookahead CLHead: DECLARE LexBuffer 'DECLARE'  Line:7 Col:7
+6::Expected CLHead: DECLARE  LookaHeadToken = DECLARE Line:7
+      7.0:c:Enter DeclareEnd Lookahead CLHead: BOOL LexBuffer 'BOOL'  Line:7 Col:12
+      8.0:c:Enter DeclareParams Lookahead CLHead: BOOL LexBuffer 'BOOL'  Line:7 Col:12
+      9.0:c:Enter DeclarFuncName Lookahead CLHead: BOOL LexBuffer 'BOOL'  Line:7 Col:12
+     10.0:c:Enter DeclareType Lookahead CLHead: BOOL LexBuffer 'BOOL'  Line:7 Col:12
+     11.0:c:Enter DeclarePointer Lookahead CLHead: BOOL LexBuffer 'BOOL'  Line:7 Col:12
+     12.0:c:Enter Func DeclareArray Lookahead CLHead: BOOL LexBuffer 'BOOL'  Line:7 Col:12
+     13.0:c:Enter DeclarFuncType Lookahead CLHead: BOOL LexBuffer 'BOOL'  Line:7 Col:12
+     12.0:c:Exit DeclarFuncType Lookahead CLHead: BOOL LexBuffer 'BOOL'  Line:7 Col:12
+     11.0:c:Exit Func DeclareArray Lookahead CLHead: BOOL LexBuffer 'BOOL'  Line:7 Col:12
+     10.0:c:Exit DeclarePointer Lookahead CLHead: BOOL LexBuffer 'BOOL'  Line:7 Col:12
+10::Expected CLHead: BOOL  LookaHeadToken = BOOL Line:7
+     11.0:c:Enter DeclarePointer Lookahead CLHead: FUNC LexBuffer 'FUNC'  Line:7 Col:17
+     12.0:c:Enter Func DeclareArray Lookahead CLHead: FUNC LexBuffer 'FUNC'  Line:7 Col:17
+     13.0:c:Enter DeclarFuncType Lookahead CLHead: FUNC LexBuffer 'FUNC'  Line:7 Col:17
+13::Expected CLHead: FUNC  LookaHeadToken = FUNC Line:7
+     12.0:a:Exit DeclarFuncType  Lookahead = Jfunc LexBuffer 'Jfunc' Line:7 Col:23
+     11.0:a:Exit Func DeclareArray  Lookahead = Jfunc LexBuffer 'Jfunc' Line:7 Col:23
+     10.0:a:Exit DeclarePointer  Lookahead = Jfunc LexBuffer 'Jfunc' Line:7 Col:23
+      9.0:a:Exit DeclareType  Lookahead = Jfunc LexBuffer 'Jfunc' Line:7 Col:23
+9::Expected CLHead: Jfunc  Lookahead = Jfunc Line:7
+      8.0:c:Exit DeclarFuncName Lookahead CLHead: ( LexBuffer 'Jfunc' Jfunc: BOOL:FUNC::Address=00000000  Value=0000
+ Line:7 Col:24
+8::Expected CLHead: (  LookaHeadToken = ( Line:7
+      9.0:c:Enter DeclParamList Lookahead CLHead: CARD LexBuffer 'CARD' Jfunc: BOOL:FUNC::Address=00000000  Value=0000
+ Line:7 Col:28
+     10.0:c:Enter DeclPramPointer Lookahead CLHead: CARD LexBuffer 'CARD' Jfunc: BOOL:FUNC::Address=00000000  Value=0000
+ Line:7 Col:28
+     11.0:c:Enter DeclParamArray Lookahead CLHead: CARD LexBuffer 'CARD' Jfunc: BOOL:FUNC::Address=00000000  Value=0000
+ Line:7 Col:28
+     12.0:c:Enter DeclareParamIdentList Lookahead CLHead: CARD LexBuffer 'CARD' Jfunc: BOOL:FUNC::Address=00000000  Value=0000
+ Line:7 Col:28
+     13.0:c:Enter DeclareParamIdent Lookahead CLHead: CARD LexBuffer 'CARD' Jfunc: BOOL:FUNC::Address=00000000  Value=0000
+ Line:7 Col:28
+     12.0:c:Exit DeclareParamIdent Lookahead CLHead: CARD LexBuffer 'CARD' Jfunc: BOOL:FUNC::Address=00000000  Value=0000
+ Line:7 Col:28
+     11.0:c:Exit DeclareParamIdentList Lookahead CLHead: CARD LexBuffer 'CARD' Jfunc: BOOL:FUNC::Address=00000000  Value=0000
+ Line:7 Col:28
+     10.0:c:Exit DeclParamArray Lookahead CLHead: CARD LexBuffer 'CARD' Jfunc: BOOL:FUNC::Address=00000000  Value=0000
+ Line:7 Col:28
+      9.0:c:Exit DeclPramPointer Lookahead CLHead: CARD LexBuffer 'CARD' Jfunc: BOOL:FUNC::Address=00000000  Value=0000
+ Line:7 Col:28
+9::Expected CLHead: CARD  LookaHeadToken = CARD Line:7
+     10.0:c:Enter DeclPramPointer Lookahead CLHead: POINTER LexBuffer 'POINTER' Jfunc: BOOL:FUNC::Address=00000000  Value=0000
+ Line:7 Col:36
+     11.0:c:Enter DeclParamArray Lookahead CLHead: POINTER LexBuffer 'POINTER' Jfunc: BOOL:FUNC::Address=00000000  Value=0000
+ Line:7 Col:36
+     12.0:c:Enter DeclareParamIdentList Lookahead CLHead: POINTER LexBuffer 'POINTER' Jfunc: BOOL:FUNC::Address=00000000  Value=0000
+ Line:7 Col:36
+     13.0:c:Enter DeclareParamIdent Lookahead CLHead: POINTER LexBuffer 'POINTER' Jfunc: BOOL:FUNC::Address=00000000  Value=0000
+ Line:7 Col:36
+     12.0:c:Exit DeclareParamIdent Lookahead CLHead: POINTER LexBuffer 'POINTER' Jfunc: BOOL:FUNC::Address=00000000  Value=0000
+ Line:7 Col:36
+     11.0:c:Exit DeclareParamIdentList Lookahead CLHead: POINTER LexBuffer 'POINTER' Jfunc: BOOL:FUNC::Address=00000000  Value=0000
+ Line:7 Col:36
+     10.0:c:Exit DeclParamArray Lookahead CLHead: POINTER LexBuffer 'POINTER' Jfunc: BOOL:FUNC::Address=00000000  Value=0000
+ Line:7 Col:36
+10::Expected CLHead: POINTER  LookaHeadToken = POINTER Line:7
+     11.0:a:Enter DeclParamArray  Lookahead = pP LexBuffer 'pP' Jfunc: BOOL:FUNC::Address=00000000  Value=0000
+Line:7 Col:39
+     12.0:a:Enter DeclareParamIdentList  Lookahead = pP LexBuffer 'pP' Jfunc: BOOL:FUNC::Address=00000000  Value=0000
+Line:7 Col:39
+     13.0:a:Enter DeclareParamIdent  Lookahead = pP LexBuffer 'pP' Jfunc: BOOL:FUNC::Address=00000000  Value=0000
+Line:7 Col:39
+13::Expected CLHead: pP  Lookahead = pP Line:7
+     12.0:c:Exit DeclareParamIdent Lookahead CLHead: ) LexBuffer 'pP' Jfunc: BOOL:FUNC::Address=00000000  Value=0000
+	Parameters
+	pP: CARD:POINTER::Address=00000000  Value=0000
+ Line:7 Col:40
+     11.0:c:Exit DeclareParamIdentList Lookahead CLHead: ) LexBuffer 'pP' Jfunc: BOOL:FUNC::Address=00000000  Value=0000
+	Parameters
+	pP: CARD:POINTER::Address=00000000  Value=0000
+ Line:7 Col:40
+     10.0:c:Exit DeclParamArray Lookahead CLHead: ) LexBuffer 'pP' Jfunc: BOOL:FUNC::Address=00000000  Value=0000
+	Parameters
+	pP: CARD:POINTER::Address=00000000  Value=0000
+ Line:7 Col:40
+      9.0:c:Exit DeclPramPointer Lookahead CLHead: ) LexBuffer 'pP' Jfunc: BOOL:FUNC::Address=00000000  Value=0000
+	Parameters
+	pP: CARD:POINTER::Address=00000000  Value=0000
+ Line:7 Col:40
+      8.0:c:Exit DeclParamList Lookahead CLHead: ) LexBuffer 'pP' Jfunc: BOOL:FUNC::Address=00000000  Value=0000
+	Parameters
+	pP: CARD:POINTER::Address=00000000  Value=0000
+ Line:7 Col:40
+      7.0:c:Exit DeclareParams Lookahead CLHead: ) LexBuffer 'pP' Jfunc: BOOL:FUNC::Address=00000000  Value=0000
+	Parameters
+	pP: CARD:POINTER::Address=00000000  Value=0000
+ Line:7 Col:40
+7::Expected CLHead: )  LookaHeadToken = ) Line:7
+      6.0:c:Exit DeclareEnd Lookahead CLHead: DECLARE LexBuffer 'DECLARE' Jfunc: BOOL:FUNC::Address=00000000  Value=0000
+	Parameters
+	pP: CARD:POINTER::Address=00000000  Value=0000
+ Line:8 Col:7
+      7.0:c:Enter FundDecl Lookahead CLHead: DECLARE LexBuffer 'DECLARE'  Line:8 Col:7
+      8.0:c:Enter FundPointerDecl Lookahead CLHead: DECLARE LexBuffer 'DECLARE'  Line:8 Col:7
+      9.0:c:Enter FundArrayDecl Lookahead CLHead: DECLARE LexBuffer 'DECLARE'  Line:8 Col:7
+     10.0:c:Enter FunctionDecl Lookahead CLHead: DECLARE LexBuffer 'DECLARE'  Line:8 Col:7
+     11.0:c:Enter IdentList Lookahead CLHead: DECLARE LexBuffer 'DECLARE'  Line:8 Col:7
+     12.0:c:Enter Ident Lookahead CLHead: DECLARE LexBuffer 'DECLARE'  Line:8 Col:7
+     11.0:c:Exit Ident Lookahead CLHead: DECLARE LexBuffer 'DECLARE'  Line:8 Col:7
+     10.0:c:Exit IdenrtList Lookahead CLHead: DECLARE LexBuffer 'DECLARE'  Line:8 Col:7
+      9.0:c:Exit FunctionDecl Lookahead CLHead: DECLARE LexBuffer 'DECLARE'  Line:8 Col:7
+      8.0:c:Exit FundArrayDecl Lookahead CLHead: DECLARE LexBuffer 'DECLARE'  Line:8 Col:7
+      7.0:c:Exit FundPointerDecl Lookahead CLHead: DECLARE LexBuffer 'DECLARE'  Line:8 Col:7
+      6.0:c:Exit FundDecl Lookahead CLHead: DECLARE LexBuffer 'DECLARE'  Line:8 Col:7
+6::Expected CLHead: DECLARE  LookaHeadToken = DECLARE Line:8
+      7.0:c:Enter DeclareEnd Lookahead CLHead: PROC LexBuffer 'PROC'  Line:8 Col:12
+      8.0:c:Enter DeclareParams Lookahead CLHead: PROC LexBuffer 'PROC'  Line:8 Col:12
+      9.0:c:Enter DeclarFuncName Lookahead CLHead: PROC LexBuffer 'PROC'  Line:8 Col:12
+     10.0:c:Enter DeclareType Lookahead CLHead: PROC LexBuffer 'PROC'  Line:8 Col:12
+     11.0:c:Enter DeclarePointer Lookahead CLHead: PROC LexBuffer 'PROC'  Line:8 Col:12
+     12.0:c:Enter Func DeclareArray Lookahead CLHead: PROC LexBuffer 'PROC'  Line:8 Col:12
+     13.0:c:Enter DeclarFuncType Lookahead CLHead: PROC LexBuffer 'PROC'  Line:8 Col:12
+13::Expected CLHead: PROC  LookaHeadToken = PROC Line:8
+     12.0:a:Exit DeclarFuncType  Lookahead = Aproc LexBuffer 'Aproc' Line:8 Col:18
+     11.0:a:Exit Func DeclareArray  Lookahead = Aproc LexBuffer 'Aproc' Line:8 Col:18
+     10.0:a:Exit DeclarePointer  Lookahead = Aproc LexBuffer 'Aproc' Line:8 Col:18
+      9.0:a:Exit DeclareType  Lookahead = Aproc LexBuffer 'Aproc' Line:8 Col:18
+9::Expected CLHead: Aproc  Lookahead = Aproc Line:8
+      8.0:c:Exit DeclarFuncName Lookahead CLHead: ( LexBuffer 'Aproc' Aproc: PROC::Address=00000000  Value=0000
+ Line:8 Col:19
+8::Expected CLHead: (  LookaHeadToken = ( Line:8
+      9.0:c:Enter DeclParamList Lookahead CLHead: CHAR LexBuffer 'CHAR' Aproc: PROC::Address=00000000  Value=0000
+ Line:8 Col:23
+     10.0:c:Enter DeclPramPointer Lookahead CLHead: CHAR LexBuffer 'CHAR' Aproc: PROC::Address=00000000  Value=0000
+ Line:8 Col:23
+     11.0:c:Enter DeclParamArray Lookahead CLHead: CHAR LexBuffer 'CHAR' Aproc: PROC::Address=00000000  Value=0000
+ Line:8 Col:23
+     12.0:c:Enter DeclareParamIdentList Lookahead CLHead: CHAR LexBuffer 'CHAR' Aproc: PROC::Address=00000000  Value=0000
+ Line:8 Col:23
+     13.0:c:Enter DeclareParamIdent Lookahead CLHead: CHAR LexBuffer 'CHAR' Aproc: PROC::Address=00000000  Value=0000
+ Line:8 Col:23
+     12.0:c:Exit DeclareParamIdent Lookahead CLHead: CHAR LexBuffer 'CHAR' Aproc: PROC::Address=00000000  Value=0000
+ Line:8 Col:23
+     11.0:c:Exit DeclareParamIdentList Lookahead CLHead: CHAR LexBuffer 'CHAR' Aproc: PROC::Address=00000000  Value=0000
+ Line:8 Col:23
+     10.0:c:Exit DeclParamArray Lookahead CLHead: CHAR LexBuffer 'CHAR' Aproc: PROC::Address=00000000  Value=0000
+ Line:8 Col:23
+      9.0:c:Exit DeclPramPointer Lookahead CLHead: CHAR LexBuffer 'CHAR' Aproc: PROC::Address=00000000  Value=0000
+ Line:8 Col:23
+9::Expected CLHead: CHAR  LookaHeadToken = CHAR Line:8
+     10.0:c:Enter DeclPramPointer Lookahead CLHead: POINTER LexBuffer 'POINTER' Aproc: PROC::Address=00000000  Value=0000
+ Line:8 Col:31
+     11.0:c:Enter DeclParamArray Lookahead CLHead: POINTER LexBuffer 'POINTER' Aproc: PROC::Address=00000000  Value=0000
+ Line:8 Col:31
+     12.0:c:Enter DeclareParamIdentList Lookahead CLHead: POINTER LexBuffer 'POINTER' Aproc: PROC::Address=00000000  Value=0000
+ Line:8 Col:31
+     13.0:c:Enter DeclareParamIdent Lookahead CLHead: POINTER LexBuffer 'POINTER' Aproc: PROC::Address=00000000  Value=0000
+ Line:8 Col:31
+     12.0:c:Exit DeclareParamIdent Lookahead CLHead: POINTER LexBuffer 'POINTER' Aproc: PROC::Address=00000000  Value=0000
+ Line:8 Col:31
+     11.0:c:Exit DeclareParamIdentList Lookahead CLHead: POINTER LexBuffer 'POINTER' Aproc: PROC::Address=00000000  Value=0000
+ Line:8 Col:31
+     10.0:c:Exit DeclParamArray Lookahead CLHead: POINTER LexBuffer 'POINTER' Aproc: PROC::Address=00000000  Value=0000
+ Line:8 Col:31
+10::Expected CLHead: POINTER  LookaHeadToken = POINTER Line:8
+     11.0:a:Enter DeclParamArray  Lookahead = pChar LexBuffer 'pChar' Aproc: PROC::Address=00000000  Value=0000
+Line:8 Col:37
+     12.0:a:Enter DeclareParamIdentList  Lookahead = pChar LexBuffer 'pChar' Aproc: PROC::Address=00000000  Value=0000
+Line:8 Col:37
+     13.0:a:Enter DeclareParamIdent  Lookahead = pChar LexBuffer 'pChar' Aproc: PROC::Address=00000000  Value=0000
+Line:8 Col:37
+13::Expected CLHead: pChar  Lookahead = pChar Line:8
+     12.0:c:Exit DeclareParamIdent Lookahead CLHead: INT LexBuffer 'INT' Aproc: PROC::Address=00000000  Value=0000
+	Parameters
+	pChar: CARD:POINTER::Address=00000000  Value=0000
+ Line:8 Col:41
+     11.0:c:Exit DeclareParamIdentList Lookahead CLHead: INT LexBuffer 'INT' Aproc: PROC::Address=00000000  Value=0000
+	Parameters
+	pChar: CARD:POINTER::Address=00000000  Value=0000
+ Line:8 Col:41
+     10.0:c:Exit DeclParamArray Lookahead CLHead: INT LexBuffer 'INT' Aproc: PROC::Address=00000000  Value=0000
+	Parameters
+	pChar: CARD:POINTER::Address=00000000  Value=0000
+ Line:8 Col:41
+      9.0:c:Exit DeclPramPointer Lookahead CLHead: INT LexBuffer 'INT' Aproc: PROC::Address=00000000  Value=0000
+	Parameters
+	pChar: CARD:POINTER::Address=00000000  Value=0000
+ Line:8 Col:41
+9::Expected CLHead: INT  LookaHeadToken = INT Line:8
+     10.0:c:Enter DeclPramPointer Lookahead CLHead: ARRAY LexBuffer 'ARRAY' Aproc: PROC::Address=00000000  Value=0000
+	Parameters
+	pChar: CARD:POINTER::Address=00000000  Value=0000
+ Line:8 Col:47
+     11.0:c:Enter DeclParamArray Lookahead CLHead: ARRAY LexBuffer 'ARRAY' Aproc: PROC::Address=00000000  Value=0000
+	Parameters
+	pChar: CARD:POINTER::Address=00000000  Value=0000
+ Line:8 Col:47
+     12.0:c:Enter DeclareParamIdentList Lookahead CLHead: ARRAY LexBuffer 'ARRAY' Aproc: PROC::Address=00000000  Value=0000
+	Parameters
+	pChar: CARD:POINTER::Address=00000000  Value=0000
+ Line:8 Col:47
+     13.0:c:Enter DeclareParamIdent Lookahead CLHead: ARRAY LexBuffer 'ARRAY' Aproc: PROC::Address=00000000  Value=0000
+	Parameters
+	pChar: CARD:POINTER::Address=00000000  Value=0000
+ Line:8 Col:47
+     12.0:c:Exit DeclareParamIdent Lookahead CLHead: ARRAY LexBuffer 'ARRAY' Aproc: PROC::Address=00000000  Value=0000
+	Parameters
+	pChar: CARD:POINTER::Address=00000000  Value=0000
+ Line:8 Col:47
+     11.0:c:Exit DeclareParamIdentList Lookahead CLHead: ARRAY LexBuffer 'ARRAY' Aproc: PROC::Address=00000000  Value=0000
+	Parameters
+	pChar: CARD:POINTER::Address=00000000  Value=0000
+ Line:8 Col:47
+11::Expected CLHead: ARRAY  LookaHeadToken = ARRAY Line:8
+     12.0:a:Enter DeclareParamIdentList  Lookahead = aInt LexBuffer 'aInt' Aproc: PROC::Address=00000000  Value=0000
+	Parameters
+	pChar: CARD:POINTER::Address=00000000  Value=0000
+Line:8 Col:52
+     13.0:a:Enter DeclareParamIdent  Lookahead = aInt LexBuffer 'aInt' Aproc: PROC::Address=00000000  Value=0000
+	Parameters
+	pChar: CARD:POINTER::Address=00000000  Value=0000
+Line:8 Col:52
+13::Expected CLHead: aInt  Lookahead = aInt Line:8
+     12.0:c:Exit DeclareParamIdent Lookahead CLHead: ) LexBuffer 'aInt' Aproc: PROC::Address=00000000  Value=0000
+	Parameters
+	pChar: CARD:POINTER::Address=00000000  Value=0000
+	aInt: INT:ARRAY::Address=00000000  Value=0000
+ Line:8 Col:53
+     11.0:c:Exit DeclareParamIdentList Lookahead CLHead: ) LexBuffer 'aInt' Aproc: PROC::Address=00000000  Value=0000
+	Parameters
+	pChar: CARD:POINTER::Address=00000000  Value=0000
+	aInt: INT:ARRAY::Address=00000000  Value=0000
+ Line:8 Col:53
+     10.0:c:Exit DeclParamArray Lookahead CLHead: ) LexBuffer 'aInt' Aproc: PROC::Address=00000000  Value=0000
+	Parameters
+	pChar: CARD:POINTER::Address=00000000  Value=0000
+	aInt: INT:ARRAY::Address=00000000  Value=0000
+ Line:8 Col:53
+      9.0:c:Exit DeclPramPointer Lookahead CLHead: ) LexBuffer 'aInt' Aproc: PROC::Address=00000000  Value=0000
+	Parameters
+	pChar: CARD:POINTER::Address=00000000  Value=0000
+	aInt: INT:ARRAY::Address=00000000  Value=0000
+ Line:8 Col:53
+      8.0:c:Exit DeclParamList Lookahead CLHead: ) LexBuffer 'aInt' Aproc: PROC::Address=00000000  Value=0000
+	Parameters
+	pChar: CARD:POINTER::Address=00000000  Value=0000
+	aInt: INT:ARRAY::Address=00000000  Value=0000
+ Line:8 Col:53
+      7.0:c:Exit DeclareParams Lookahead CLHead: ) LexBuffer 'aInt' Aproc: PROC::Address=00000000  Value=0000
+	Parameters
+	pChar: CARD:POINTER::Address=00000000  Value=0000
+	aInt: INT:ARRAY::Address=00000000  Value=0000
+ Line:8 Col:53
+7::Expected CLHead: )  LookaHeadToken = ) Line:8
+      6.0:c:Exit DeclareEnd Lookahead CLHead: DECLARE LexBuffer 'DECLARE' Aproc: PROC::Address=00000000  Value=0000
+	Parameters
+	pChar: CARD:POINTER::Address=00000000  Value=0000
+	aInt: INT:ARRAY::Address=00000000  Value=0000
+ Line:9 Col:7
+      7.0:c:Enter FundDecl Lookahead CLHead: DECLARE LexBuffer 'DECLARE'  Line:9 Col:7
+      8.0:c:Enter FundPointerDecl Lookahead CLHead: DECLARE LexBuffer 'DECLARE'  Line:9 Col:7
+      9.0:c:Enter FundArrayDecl Lookahead CLHead: DECLARE LexBuffer 'DECLARE'  Line:9 Col:7
+     10.0:c:Enter FunctionDecl Lookahead CLHead: DECLARE LexBuffer 'DECLARE'  Line:9 Col:7
+     11.0:c:Enter IdentList Lookahead CLHead: DECLARE LexBuffer 'DECLARE'  Line:9 Col:7
+     12.0:c:Enter Ident Lookahead CLHead: DECLARE LexBuffer 'DECLARE'  Line:9 Col:7
+     11.0:c:Exit Ident Lookahead CLHead: DECLARE LexBuffer 'DECLARE'  Line:9 Col:7
+     10.0:c:Exit IdenrtList Lookahead CLHead: DECLARE LexBuffer 'DECLARE'  Line:9 Col:7
+      9.0:c:Exit FunctionDecl Lookahead CLHead: DECLARE LexBuffer 'DECLARE'  Line:9 Col:7
+      8.0:c:Exit FundArrayDecl Lookahead CLHead: DECLARE LexBuffer 'DECLARE'  Line:9 Col:7
+      7.0:c:Exit FundPointerDecl Lookahead CLHead: DECLARE LexBuffer 'DECLARE'  Line:9 Col:7
+      6.0:c:Exit FundDecl Lookahead CLHead: DECLARE LexBuffer 'DECLARE'  Line:9 Col:7
+6::Expected CLHead: DECLARE  LookaHeadToken = DECLARE Line:9
+      7.0:c:Enter DeclareEnd Lookahead CLHead: PROC LexBuffer 'PROC'  Line:9 Col:12
+      8.0:c:Enter DeclareParams Lookahead CLHead: PROC LexBuffer 'PROC'  Line:9 Col:12
+      9.0:c:Enter DeclarFuncName Lookahead CLHead: PROC LexBuffer 'PROC'  Line:9 Col:12
+     10.0:c:Enter DeclareType Lookahead CLHead: PROC LexBuffer 'PROC'  Line:9 Col:12
+     11.0:c:Enter DeclarePointer Lookahead CLHead: PROC LexBuffer 'PROC'  Line:9 Col:12
+     12.0:c:Enter Func DeclareArray Lookahead CLHead: PROC LexBuffer 'PROC'  Line:9 Col:12
+     13.0:c:Enter DeclarFuncType Lookahead CLHead: PROC LexBuffer 'PROC'  Line:9 Col:12
+13::Expected CLHead: PROC  LookaHeadToken = PROC Line:9
+     12.0:a:Exit DeclarFuncType  Lookahead = Bproc LexBuffer 'Bproc' Line:9 Col:18
+     11.0:a:Exit Func DeclareArray  Lookahead = Bproc LexBuffer 'Bproc' Line:9 Col:18
+     10.0:a:Exit DeclarePointer  Lookahead = Bproc LexBuffer 'Bproc' Line:9 Col:18
+      9.0:a:Exit DeclareType  Lookahead = Bproc LexBuffer 'Bproc' Line:9 Col:18
+9::Expected CLHead: Bproc  Lookahead = Bproc Line:9
+      8.0:c:Exit DeclarFuncName Lookahead CLHead: ( LexBuffer 'Bproc' Bproc: PROC::Address=00000000  Value=0000
+ Line:9 Col:19
+8::Expected CLHead: (  LookaHeadToken = ( Line:9
+      9.0:c:Enter DeclParamList Lookahead CLHead: INT LexBuffer 'INT' Bproc: PROC::Address=00000000  Value=0000
+ Line:9 Col:22
+     10.0:c:Enter DeclPramPointer Lookahead CLHead: INT LexBuffer 'INT' Bproc: PROC::Address=00000000  Value=0000
+ Line:9 Col:22
+     11.0:c:Enter DeclParamArray Lookahead CLHead: INT LexBuffer 'INT' Bproc: PROC::Address=00000000  Value=0000
+ Line:9 Col:22
+     12.0:c:Enter DeclareParamIdentList Lookahead CLHead: INT LexBuffer 'INT' Bproc: PROC::Address=00000000  Value=0000
+ Line:9 Col:22
+     13.0:c:Enter DeclareParamIdent Lookahead CLHead: INT LexBuffer 'INT' Bproc: PROC::Address=00000000  Value=0000
+ Line:9 Col:22
+     12.0:c:Exit DeclareParamIdent Lookahead CLHead: INT LexBuffer 'INT' Bproc: PROC::Address=00000000  Value=0000
+ Line:9 Col:22
+     11.0:c:Exit DeclareParamIdentList Lookahead CLHead: INT LexBuffer 'INT' Bproc: PROC::Address=00000000  Value=0000
+ Line:9 Col:22
+     10.0:c:Exit DeclParamArray Lookahead CLHead: INT LexBuffer 'INT' Bproc: PROC::Address=00000000  Value=0000
+ Line:9 Col:22
+      9.0:c:Exit DeclPramPointer Lookahead CLHead: INT LexBuffer 'INT' Bproc: PROC::Address=00000000  Value=0000
+ Line:9 Col:22
+9::Expected CLHead: INT  LookaHeadToken = INT Line:9
+     10.0:a:Enter DeclPramPointer  Lookahead = aParam LexBuffer 'aParam' Bproc: PROC::Address=00000000  Value=0000
+Line:9 Col:29
+     11.0:a:Enter DeclParamArray  Lookahead = aParam LexBuffer 'aParam' Bproc: PROC::Address=00000000  Value=0000
+Line:9 Col:29
+     12.0:a:Enter DeclareParamIdentList  Lookahead = aParam LexBuffer 'aParam' Bproc: PROC::Address=00000000  Value=0000
+Line:9 Col:29
+     13.0:a:Enter DeclareParamIdent  Lookahead = aParam LexBuffer 'aParam' Bproc: PROC::Address=00000000  Value=0000
+Line:9 Col:29
+13::Expected CLHead: aParam  Lookahead = aParam Line:9
+     12.0:c:Exit DeclareParamIdent Lookahead CLHead: , LexBuffer 'aParam' Bproc: PROC::Address=00000000  Value=0000
+	Parameters
+	aParam: INT::Address=00000000  Value=0000
+ Line:9 Col:30
+12::Expected CLHead: ,  LookaHeadToken = , Line:9
+     13.0:a:Enter DeclareParamIdent  Lookahead = bParam LexBuffer 'bParam' Bproc: PROC::Address=00000000  Value=0000
+	Parameters
+	aParam: INT::Address=00000000  Value=0000
+Line:9 Col:36
+13::Expected CLHead: bParam  Lookahead = bParam Line:9
+     12.0:c:Exit DeclareParamIdent Lookahead CLHead: , LexBuffer 'bParam' Bproc: PROC::Address=00000000  Value=0000
+	Parameters
+	aParam: INT::Address=00000000  Value=0000
+	bParam: INT::Address=00000000  Value=0000
+ Line:9 Col:37
+12::Expected CLHead: ,  LookaHeadToken = , Line:9
+     13.0:a:Enter DeclareParamIdent  Lookahead = cParam LexBuffer 'cParam' Bproc: PROC::Address=00000000  Value=0000
+	Parameters
+	aParam: INT::Address=00000000  Value=0000
+	bParam: INT::Address=00000000  Value=0000
+Line:9 Col:43
+13::Expected CLHead: cParam  Lookahead = cParam Line:9
+     12.0:c:Exit DeclareParamIdent Lookahead CLHead: ) LexBuffer 'cParam' Bproc: PROC::Address=00000000  Value=0000
+	Parameters
+	aParam: INT::Address=00000000  Value=0000
+	bParam: INT::Address=00000000  Value=0000
+	cParam: INT::Address=00000000  Value=0000
+ Line:9 Col:44
+     11.0:c:Exit DeclareParamIdentList Lookahead CLHead: ) LexBuffer 'cParam' Bproc: PROC::Address=00000000  Value=0000
+	Parameters
+	aParam: INT::Address=00000000  Value=0000
+	bParam: INT::Address=00000000  Value=0000
+	cParam: INT::Address=00000000  Value=0000
+ Line:9 Col:44
+     10.0:c:Exit DeclParamArray Lookahead CLHead: ) LexBuffer 'cParam' Bproc: PROC::Address=00000000  Value=0000
+	Parameters
+	aParam: INT::Address=00000000  Value=0000
+	bParam: INT::Address=00000000  Value=0000
+	cParam: INT::Address=00000000  Value=0000
+ Line:9 Col:44
+      9.0:c:Exit DeclPramPointer Lookahead CLHead: ) LexBuffer 'cParam' Bproc: PROC::Address=00000000  Value=0000
+	Parameters
+	aParam: INT::Address=00000000  Value=0000
+	bParam: INT::Address=00000000  Value=0000
+	cParam: INT::Address=00000000  Value=0000
+ Line:9 Col:44
+      8.0:c:Exit DeclParamList Lookahead CLHead: ) LexBuffer 'cParam' Bproc: PROC::Address=00000000  Value=0000
+	Parameters
+	aParam: INT::Address=00000000  Value=0000
+	bParam: INT::Address=00000000  Value=0000
+	cParam: INT::Address=00000000  Value=0000
+ Line:9 Col:44
+      7.0:c:Exit DeclareParams Lookahead CLHead: ) LexBuffer 'cParam' Bproc: PROC::Address=00000000  Value=0000
+	Parameters
+	aParam: INT::Address=00000000  Value=0000
+	bParam: INT::Address=00000000  Value=0000
+	cParam: INT::Address=00000000  Value=0000
+ Line:9 Col:44
+7::Expected CLHead: )  LookaHeadToken = ) Line:9
+      6.0:c:Exit DeclareEnd Lookahead CLHead: DECLARE LexBuffer 'DECLARE' Bproc: PROC::Address=00000000  Value=0000
+	Parameters
+	aParam: INT::Address=00000000  Value=0000
+	bParam: INT::Address=00000000  Value=0000
+	cParam: INT::Address=00000000  Value=0000
+ Line:10 Col:7
+      7.0:c:Enter FundDecl Lookahead CLHead: DECLARE LexBuffer 'DECLARE'  Line:10 Col:7
+      8.0:c:Enter FundPointerDecl Lookahead CLHead: DECLARE LexBuffer 'DECLARE'  Line:10 Col:7
+      9.0:c:Enter FundArrayDecl Lookahead CLHead: DECLARE LexBuffer 'DECLARE'  Line:10 Col:7
+     10.0:c:Enter FunctionDecl Lookahead CLHead: DECLARE LexBuffer 'DECLARE'  Line:10 Col:7
+     11.0:c:Enter IdentList Lookahead CLHead: DECLARE LexBuffer 'DECLARE'  Line:10 Col:7
+     12.0:c:Enter Ident Lookahead CLHead: DECLARE LexBuffer 'DECLARE'  Line:10 Col:7
+     11.0:c:Exit Ident Lookahead CLHead: DECLARE LexBuffer 'DECLARE'  Line:10 Col:7
+     10.0:c:Exit IdenrtList Lookahead CLHead: DECLARE LexBuffer 'DECLARE'  Line:10 Col:7
+      9.0:c:Exit FunctionDecl Lookahead CLHead: DECLARE LexBuffer 'DECLARE'  Line:10 Col:7
+      8.0:c:Exit FundArrayDecl Lookahead CLHead: DECLARE LexBuffer 'DECLARE'  Line:10 Col:7
+      7.0:c:Exit FundPointerDecl Lookahead CLHead: DECLARE LexBuffer 'DECLARE'  Line:10 Col:7
+      6.0:c:Exit FundDecl Lookahead CLHead: DECLARE LexBuffer 'DECLARE'  Line:10 Col:7
+6::Expected CLHead: DECLARE  LookaHeadToken = DECLARE Line:10
+      7.0:c:Enter DeclareEnd Lookahead CLHead: INTERRUPT LexBuffer 'INTERRUPT'  Line:10 Col:17
+      8.0:c:Enter DeclareParams Lookahead CLHead: INTERRUPT LexBuffer 'INTERRUPT'  Line:10 Col:17
+      9.0:c:Enter DeclarFuncName Lookahead CLHead: INTERRUPT LexBuffer 'INTERRUPT'  Line:10 Col:17
+     10.0:c:Enter DeclareType Lookahead CLHead: INTERRUPT LexBuffer 'INTERRUPT'  Line:10 Col:17
+     11.0:c:Enter DeclarePointer Lookahead CLHead: INTERRUPT LexBuffer 'INTERRUPT'  Line:10 Col:17
+     12.0:c:Enter Func DeclareArray Lookahead CLHead: INTERRUPT LexBuffer 'INTERRUPT'  Line:10 Col:17
+     13.0:c:Enter DeclarFuncType Lookahead CLHead: INTERRUPT LexBuffer 'INTERRUPT'  Line:10 Col:17
+13::Expected CLHead: INTERRUPT  LookaHeadToken = INTERRUPT Line:10
+     12.0:a:Exit DeclarFuncType  Lookahead = IrqProc LexBuffer 'IrqProc' Line:10 Col:25
+     11.0:a:Exit Func DeclareArray  Lookahead = IrqProc LexBuffer 'IrqProc' Line:10 Col:25
+     10.0:a:Exit DeclarePointer  Lookahead = IrqProc LexBuffer 'IrqProc' Line:10 Col:25
+      9.0:a:Exit DeclareType  Lookahead = IrqProc LexBuffer 'IrqProc' Line:10 Col:25
+9::Expected CLHead: IrqProc  Lookahead = IrqProc Line:10
+      8.0:c:Exit DeclarFuncName Lookahead CLHead: ( LexBuffer 'IrqProc' IrqProc: INTERRUPT::Address=00000000  Value=0000
+ Line:10 Col:26
+8::Expected CLHead: (  LookaHeadToken = ( Line:10
+      9.0:c:Enter DeclParamList Lookahead CLHead: ) LexBuffer 'IrqProc' IrqProc: INTERRUPT::Address=00000000  Value=0000
+ Line:10 Col:27
+     10.0:c:Enter DeclPramPointer Lookahead CLHead: ) LexBuffer 'IrqProc' IrqProc: INTERRUPT::Address=00000000  Value=0000
+ Line:10 Col:27
+     11.0:c:Enter DeclParamArray Lookahead CLHead: ) LexBuffer 'IrqProc' IrqProc: INTERRUPT::Address=00000000  Value=0000
+ Line:10 Col:27
+     12.0:c:Enter DeclareParamIdentList Lookahead CLHead: ) LexBuffer 'IrqProc' IrqProc: INTERRUPT::Address=00000000  Value=0000
+ Line:10 Col:27
+     13.0:c:Enter DeclareParamIdent Lookahead CLHead: ) LexBuffer 'IrqProc' IrqProc: INTERRUPT::Address=00000000  Value=0000
+ Line:10 Col:27
+     12.0:c:Exit DeclareParamIdent Lookahead CLHead: ) LexBuffer 'IrqProc' IrqProc: INTERRUPT::Address=00000000  Value=0000
+ Line:10 Col:27
+     11.0:c:Exit DeclareParamIdentList Lookahead CLHead: ) LexBuffer 'IrqProc' IrqProc: INTERRUPT::Address=00000000  Value=0000
+ Line:10 Col:27
+     10.0:c:Exit DeclParamArray Lookahead CLHead: ) LexBuffer 'IrqProc' IrqProc: INTERRUPT::Address=00000000  Value=0000
+ Line:10 Col:27
+      9.0:c:Exit DeclPramPointer Lookahead CLHead: ) LexBuffer 'IrqProc' IrqProc: INTERRUPT::Address=00000000  Value=0000
+ Line:10 Col:27
+      8.0:c:Exit DeclParamList Lookahead CLHead: ) LexBuffer 'IrqProc' IrqProc: INTERRUPT::Address=00000000  Value=0000
+ Line:10 Col:27
+      7.0:c:Exit DeclareParams Lookahead CLHead: ) LexBuffer 'IrqProc' IrqProc: INTERRUPT::Address=00000000  Value=0000
+ Line:10 Col:27
+7::Expected CLHead: )  LookaHeadToken = ) Line:10
       6.0:c:Exit DeclareEnd Lookahead CLHead: End Of File LexBuffer 'IrqProc' IrqProc: INTERRUPT::Address=00000000  Value=0000
- Line:7 Col:1
-      7.0:c:Enter FundDecl Lookahead CLHead: End Of File LexBuffer 'IrqProc'  Line:7 Col:1
-      8.0:c:Enter FundPointerDecl Lookahead CLHead: End Of File LexBuffer 'IrqProc'  Line:7 Col:1
-      9.0:c:Enter FundArrayDecl Lookahead CLHead: End Of File LexBuffer 'IrqProc'  Line:7 Col:1
-     10.0:c:Enter FunctionDecl Lookahead CLHead: End Of File LexBuffer 'IrqProc'  Line:7 Col:1
-     11.0:c:Enter IdentList Lookahead CLHead: End Of File LexBuffer 'IrqProc'  Line:7 Col:1
-     12.0:c:Enter Ident Lookahead CLHead: End Of File LexBuffer 'IrqProc'  Line:7 Col:1
-     11.0:c:Exit Ident Lookahead CLHead: End Of File LexBuffer 'IrqProc'  Line:7 Col:1
-     10.0:c:Exit IdenrtList Lookahead CLHead: End Of File LexBuffer 'IrqProc'  Line:7 Col:1
-      9.0:c:Exit FunctionDecl Lookahead CLHead: End Of File LexBuffer 'IrqProc'  Line:7 Col:1
-      8.0:c:Exit FundArrayDecl Lookahead CLHead: End Of File LexBuffer 'IrqProc'  Line:7 Col:1
-      7.0:c:Exit FundPointerDecl Lookahead CLHead: End Of File LexBuffer 'IrqProc'  Line:7 Col:1
-      6.0:c:Exit FundDecl Lookahead CLHead: End Of File LexBuffer 'IrqProc'  Line:7 Col:1
-      5.0:c:Exit Declare Lookahead CLHead: End Of File LexBuffer 'IrqProc'  Line:7 Col:1
-      4.0:c:Exit TypeDefDecl Lookahead CLHead: End Of File LexBuffer 'IrqProc'  Line:7 Col:1
-      3.0:c:Exit SysDecl Lookahead CLHead: End Of File LexBuffer 'IrqProc'  Line:7 Col:1
-      2.0:c:Exit Vector Lookahead CLHead: End Of File LexBuffer 'IrqProc'  Line:7 Col:1
-      1.0:d:Exit Module TOKEN:End Of File LexBuffer:'IrqProc' AST node:MODULE Line:7 Col:1
-     1     -1     -1 +-MODULE
-      0.0:d:Exit Action65 TOKEN:End Of File LexBuffer:'IrqProc' AST node:MODULE Line:7 Col:1
-     1     -1     -1 +-MODULE
+ Line:11 Col:1
+      7.0:c:Enter FundDecl Lookahead CLHead: End Of File LexBuffer 'IrqProc'  Line:11 Col:1
+      8.0:c:Enter FundPointerDecl Lookahead CLHead: End Of File LexBuffer 'IrqProc'  Line:11 Col:1
+      9.0:c:Enter FundArrayDecl Lookahead CLHead: End Of File LexBuffer 'IrqProc'  Line:11 Col:1
+     10.0:c:Enter FunctionDecl Lookahead CLHead: End Of File LexBuffer 'IrqProc'  Line:11 Col:1
+     11.0:c:Enter IdentList Lookahead CLHead: End Of File LexBuffer 'IrqProc'  Line:11 Col:1
+     12.0:c:Enter Ident Lookahead CLHead: End Of File LexBuffer 'IrqProc'  Line:11 Col:1
+     11.0:c:Exit Ident Lookahead CLHead: End Of File LexBuffer 'IrqProc'  Line:11 Col:1
+     10.0:c:Exit IdenrtList Lookahead CLHead: End Of File LexBuffer 'IrqProc'  Line:11 Col:1
+      9.0:c:Exit FunctionDecl Lookahead CLHead: End Of File LexBuffer 'IrqProc'  Line:11 Col:1
+      8.0:c:Exit FundArrayDecl Lookahead CLHead: End Of File LexBuffer 'IrqProc'  Line:11 Col:1
+      7.0:c:Exit FundPointerDecl Lookahead CLHead: End Of File LexBuffer 'IrqProc'  Line:11 Col:1
+      6.0:c:Exit FundDecl Lookahead CLHead: End Of File LexBuffer 'IrqProc'  Line:11 Col:1
+      5.0:c:Exit Declare Lookahead CLHead: End Of File LexBuffer 'IrqProc'  Line:11 Col:1
+      4.0:c:Exit TypeDefDecl Lookahead CLHead: End Of File LexBuffer 'IrqProc'  Line:11 Col:1
+      3.0:c:Exit SysDecl Lookahead CLHead: End Of File LexBuffer 'IrqProc'  Line:11 Col:1
+      2.0:c:Exit Vector Lookahead CLHead: End Of File LexBuffer 'IrqProc'  Line:11 Col:1
+      1.0:c:Exit Module Lookahead CLHead: End Of File LexBuffer 'IrqProc'  Line:11 Col:1
+      0.0:c:Exit Action65 Lookahead CLHead: End Of File LexBuffer 'IrqProc'  Line:11 Col:1
+------------ Symbol Table --------------
 Bproc: PROC::Address=00000000  Value=0000
+	Parameters
+	aParam: INT::Address=00000000  Value=0000
+	bParam: INT::Address=00000000  Value=0000
+	cParam: INT::Address=00000000  Value=0000
 
 IrqProc: INTERRUPT::Address=00000000  Value=0000
 
-Ffunc: FUNC::Address=00000000  Value=0000
+IFunc: CARD:FUNC::Address=00000000  Value=0000
+	Parameters
+	pO: CARD:POINTER::Address=00000000  Value=0000
+
+Ffunc: INT:ARRAY:POINTER:FUNC::Address=00000000  Value=0000
+	Parameters
+	pL: CARD:POINTER::Address=00000000  Value=0000
+
+Gfunc: CHAR:POINTER:FUNC::Address=00000000  Value=0000
+	Parameters
+	pM: CARD:POINTER::Address=00000000  Value=0000
+
+Jfunc: BOOL:FUNC::Address=00000000  Value=0000
+	Parameters
+	pP: CARD:POINTER::Address=00000000  Value=0000
+
+Hfunc: BYTE:FUNC::Address=00000000  Value=0000
+	Parameters
+	pN: CARD:POINTER::Address=00000000  Value=0000
 
 Aproc: PROC::Address=00000000  Value=0000
+	Parameters
+	pChar: CARD:POINTER::Address=00000000  Value=0000
+	aInt: INT:ARRAY::Address=00000000  Value=0000
 
-Lines Compiled:7
+Lines Compiled:11

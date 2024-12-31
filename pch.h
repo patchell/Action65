@@ -589,6 +589,7 @@ public:
 #include "Act65UpperPart.h"
 #include "Act65CurrentLocation.h"
 //------------------------------------
+#include "Act65ParamList.h"
 #include "Act65PROCname.h"
 #include "Act65IDENT.h"
 #include "Act65CONSTANT.h"

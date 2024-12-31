@@ -47,11 +47,12 @@ int CParameterChain::Print(char* pS, int l)
 {
 	CSymbol* pSym;
 	int ls = 0;
+	int size;
 
 	pSym = (CSymbol*)GetHead();
 	while (pSym)
 	{
-		ls += pSym->Print(pS, l - ls, "::");
+		ls += pSym->Print(&pS[ls], l - ls, "\t");
 		pSym = (CSymbol*)pSym->GetNext();
 	}
 	return ls;

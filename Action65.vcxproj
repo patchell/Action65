@@ -211,6 +211,7 @@
     <ClCompile Include="Act65Opcode.cpp" />
     <ClCompile Include="Act65OptNOT.cpp" />
     <ClCompile Include="Act65ORG.cpp" />
+    <ClCompile Include="Act65ParamList.cpp" />
     <ClCompile Include="Act65POINTER.cpp" />
     <ClCompile Include="Act65PointerDeREF.cpp" />
     <ClCompile Include="Act65POP.cpp" />
@@ -378,6 +379,7 @@
     <ClInclude Include="Act65Opcode.h" />
     <ClInclude Include="Act65OptNOT.h" />
     <ClInclude Include="Act65ORG.h" />
+    <ClInclude Include="Act65ParamList.h" />
     <ClInclude Include="Act65POINTER.h" />
     <ClInclude Include="Act65PointerDeREF.h" />
     <ClInclude Include="Act65POP.h" />
