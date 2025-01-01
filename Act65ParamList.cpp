@@ -22,4 +22,4 @@ CValue* CAct65ParamList::Process()
 void CAct65ParamList::Print(FILE* pOut, int Indent, char* s)
 {
 	CAstNode::Print(pOut, Indent, s);
-}}
+}

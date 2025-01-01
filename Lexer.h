@@ -259,6 +259,17 @@ private:
 		{ Token::TXS,"TXS", 1,0x9a, Processor::R6502, NULL,0 },
 		{ Token::TSX,"TSX", 1,0xba, Processor::R6502, NULL,0 },
 		//--------------------------------------------
+		// W65C02 Opcodes
+		//--------------------------------------------
+		{ Token::BRA,"BRA", 2,0xba, Processor::W65C02, NULL,0 },	//  Branch Always
+		{ Token::PHX,"PHX", 1,0xba, Processor::W65C02, NULL,0 },	// push index reg X
+		{ Token::PHY,"PHY", 1,0xba, Processor::W65C02, NULL,0 },	// push Y register
+		{ Token::PLX,"PLX", 1,0xba, Processor::W65C02, NULL,0 },	// pop stack to X
+		{ Token::PLY,"PLY", 1,0xba, Processor::W65C02, NULL,0 },	// pop stack to Y
+		{ Token::STZ,"STZ", 3,0xba, Processor::W65C02, NULL,0 },	// Store Zero to Memory
+		{ Token::TRB,"TRB", 3,0xba, Processor::W65C02, NULL,0 },	// Test and reset bits
+		{ Token::TSB,"TSB", 3,0xba, Processor::W65C02, NULL,0 },	// Test and Set bits
+		//--------------------------------------------
 		// Lower Case Opcodes
 		//--------------------------------------------
 		{ Token::ADC,"adc", 3 ,0X61, Processor::R6502, &LUT_Order8,8 },
@@ -317,6 +328,17 @@ private:
 		{ Token::TYA,"tya", 1,0x98, Processor::R6502, NULL,0 },
 		{ Token::TXS,"txs", 1,0x9a, Processor::R6502, NULL,0 },
 		{ Token::TSX,"tsx", 1,0xba, Processor::R6502, NULL,0 },
+		//--------------------------------------------
+		// W65C02 Opcodes
+		//--------------------------------------------
+		{ Token::BRA,"bra", 2,0xba, Processor::W65C02, NULL,0 },	//  Branch Always
+		{ Token::PHX,"phx", 1,0xba, Processor::W65C02, NULL,0 },	// push index reg X
+		{ Token::PHY,"phy", 1,0xba, Processor::W65C02, NULL,0 },	// push Y register
+		{ Token::PLX,"plx", 1,0xba, Processor::W65C02, NULL,0 },	// pop stack to X
+		{ Token::PLY,"ply", 1,0xba, Processor::W65C02, NULL,0 },	// pop stack to Y
+		{ Token::STZ,"stz", 3,0xba, Processor::W65C02, NULL,0 },	// Store Zero to Memory
+		{ Token::TRB,"trb", 3,0xba, Processor::W65C02, NULL,0 },	// Test and reset bits
+		{ Token::TSB,"tsb", 3,0xba, Processor::W65C02, NULL,0 },	// Test and Set bits
 		{ Token::ENDOFOPCODES,"EOO", 0, 0, Processor::ALL,NULL,0 },
 		//------- Lables -------------
 		{ Token::LOCAL_LABEL,"Local Lable", 0,0,Processor::ALL,NULL,0 },

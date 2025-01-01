@@ -29,6 +29,9 @@
 // VAR_GLOBAL...Token
 // VAR_PARAM....Token
 //
+//	VERSION 0.0.5
+//	Added DefineParamIdent and DefineParamIdentList
+//
 //----------------------------------
 
 TERMINALS
@@ -836,11 +839,17 @@ PramPointer		-> ParamArray ParamPointer_1;
 ParamPointer_1	-> 'POINTER'  ParamArray
 				-> .
 				;
-ParamArray		-> IdentList ParamArray_1;
-ParamArray_1	-> 'ARRAY' IdentList
+ParamArray		-> DefineParamIdentList ParamArray_1;
+ParamArray_1	-> 'ARRAY' DefineParamIdentList
 				-> .
 				;
-				;			
+				
+DefineParamIdentList	-> DefineParamIdent DefineParamIdentList_1;
+DefineParamIdentList_1	-> ',' DefineParamIdent DefineParamIdentList_1
+						-> .
+						;
+
+DefineParamIdent		-> 'IDENT';
 //-----------------------------------------------
 // Local Variableas
 //-----------------------------------------------

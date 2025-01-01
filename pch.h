@@ -110,7 +110,7 @@ enum  class Token {
 	DAS,	//define action! string
 	DCS,	//define C String
 	DS,		//define storage
-	//------- Opcodes
+	//------- Opcodes ALL
 	ADC,
 	AND,	//Logical Action or ASM AND  Opcode
 	ASL,
@@ -167,6 +167,17 @@ enum  class Token {
 	TYA,
 	TXS,
 	TSX,
+	//---------------------
+	// 65C02S opcodes
+	//---------------------
+	BRA,		//  Branch Always
+	PHX,		// push index reg X
+	PHY,		// push Y register
+	PLX,		// pop stack to X
+	PLY,		// pop stack to Y
+	STZ,		// Store Zero to Memory
+	TRB,		// Test and reset bits
+	TSB,		// Test and Set bits
 	ENDOFOPCODES,
 	//----- Registers
 	AREG,		//accumulator
@@ -237,8 +248,8 @@ enum class AddressModesClass {	//ToDo: Delete?
 enum class Processor {
 	ALL,
 	R6502,
-	WD65C02,
-	WD65C816
+	W65C02,
+	W65C816
 };
 
 struct AdressModeItem {

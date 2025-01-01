@@ -240,6 +240,8 @@ private:
 	CLkHead ParamList(CLkHead LookaHead);
 	CLkHead PramPointer(CLkHead LookaHead);
 	CLkHead ParamArray(CLkHead LookaHead);
+	CLkHead DefineParamIdentList(CLkHead LookaHead);
+	CLkHead DefineParamIdent(CLkHead LookaHead);
 	//-----------------------------------------------
 	// Local Variableas
 	//-----------------------------------------------
