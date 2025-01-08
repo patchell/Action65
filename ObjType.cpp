@@ -20,7 +20,6 @@ int CObjTypeChain::Print(char* pSO, int l)
 {
 	int ls = 0;
 	const char* pObjName = FindName(m_SpecType);
-	int size;
 
 	if(pObjName)
 		ls += sprintf_s(pSO, l, "%s:", pObjName);

@@ -242,3 +242,8 @@ bool CSymTab::FindAll(CBin::BinType Type, int NumberOfObject, CBin** ppObjects)
 	return rV;
 }
 
+int CSymTab::RemoveAllOfType(IdentType Type)
+{
+	return 0;
+}
+

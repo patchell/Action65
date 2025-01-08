@@ -213,8 +213,10 @@ enum class IdentType {
 	LABEL,
 	PROC,
 	FUNC,
+	IRQPROC,
 	GLOBAL,
 	LOCAL,
+	PARAMETER,
 	SECTION
 };
 
@@ -628,10 +630,13 @@ public:
 #include "Act65MUL.h"
 #include "Act65MOD.h"
 #include "Act65DIV.h"
+#include "Act65NUMBER.h"
 #include "AstTree.h"
 #include "ActionAstTree.h"
 
 #include "LkHead.h"
+
+#include "CodeGeneration.h"
 
 #include "Lexer.h"
 #include "Parser.h"

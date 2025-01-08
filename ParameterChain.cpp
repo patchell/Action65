@@ -2,6 +2,8 @@
 
 CParameterChain::CParameterChain()
 {
+	m_pHead = 0;
+	m_pTail = 0;
 }
 
 CParameterChain::~CParameterChain()
@@ -47,7 +49,6 @@ int CParameterChain::Print(char* pS, int l)
 {
 	CSymbol* pSym;
 	int ls = 0;
-	int size;
 
 	pSym = (CSymbol*)GetHead();
 	while (pSym)

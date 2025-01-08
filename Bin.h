@@ -18,6 +18,7 @@ private:
 	char* m_pName;
 	BinType m_Type;
 	Token m_Token;
+	IdentType m_IdentType;
 public:
 	CBin() {
 		m_pHead = 0;
@@ -28,6 +29,7 @@ public:
 		m_pName = 0;
 		m_Type = BinType(0);
 		m_Token = Token(0);
+		m_IdentType = IdentType::NEW_SYMBOL;
 	}
 	CBin(BinType type) {
 		m_pName = 0;
@@ -37,6 +39,7 @@ public:
 		m_pTail = 0;
 		m_Token = Token::ENDOFTOKENS;
 		m_Type = type;
+		m_IdentType = IdentType::NEW_SYMBOL;
 	}
 	virtual ~CBin() {
 		if (m_pName)
@@ -47,7 +50,9 @@ public:
 	void SetNext(CBin* pB) { m_pNext = pB; }
 	CBin* GetPrev() { return m_pPrev; }
 	void SetPrev(CBin* pB) { m_pPrev = pB; }
-	 virtual char* GetName(void) { return m_pName; }
+	virtual void SetIdentType(IdentType IT) { m_IdentType = IT; }
+	virtual IdentType GetIdentType() { return m_IdentType; }
+	virtual char* GetName(void) { return m_pName; }
 	 virtual void SetName(const char* pName) {
 		int l = (int)strlen(pName) + 1;
 		if (m_pName) delete m_pName;

@@ -12,7 +12,6 @@ class CSymbol: public CBin
 	int m_Value;
 	int m_Scope;
 	CSection* m_pSection;
-	IdentType m_IdentType;
 	bool m_UnResolved;
 	class CIdentType {
 		IdentType m_Type;
@@ -48,7 +47,6 @@ public:
 		m_Value = 0;
 		m_Scope = SYMBOL_SCOPE_ANY;
 		m_pSection = 0;
-		m_IdentType = IdentType::NEW_SYMBOL;
 		m_UnResolved = true;
 		m_pTypeChain = 0;
 		m_pParamChain = 0;
@@ -69,20 +67,18 @@ public:
 		m_pParamChain = new CParameterChain;
 		m_pParamChain->Create();
 	}
-	unsigned GetAddress() { return m_Address; }
+	unsigned GetAddress() const { return m_Address; }
 	void SetAddress(unsigned A) { m_Address = A; }
-	int GetValue() { return m_Value; }
+	int GetValue() const { return m_Value; }
 	void SetValue(int v) { m_Value = v; }
-	int GetScope() { return m_Scope; }
+	int GetScope() const { return m_Scope; }
 	void SetScope(int S) { m_Scope = S; }
 	CSection* GetSection() { return m_pSection; }
 	void SetSection(CSection* pS) { m_pSection = pS; }
-	void SetIdentType(IdentType IT) { m_IdentType = IT; }
-	IdentType GetIdentType() { return m_IdentType; }
-	bool IsUnResolved() {
+	bool IsUnResolved() const {
 		return m_UnResolved;
 	}
-	bool IsResolved() {
+	bool IsResolved() const {
 		return !m_UnResolved;
 	}
 	void SetResolved() { m_UnResolved = false; }

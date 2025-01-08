@@ -207,6 +207,7 @@
     <ClCompile Include="Act65LTEQ.cpp" />
     <ClCompile Include="Act65MUL.cpp" />
     <ClCompile Include="Act65NotEquelTO.cpp" />
+    <ClCompile Include="Act65NUMBER.cpp" />
     <ClCompile Include="Act65OD.cpp" />
     <ClCompile Include="Act65Opcode.cpp" />
     <ClCompile Include="Act65OptNOT.cpp" />
@@ -277,6 +278,7 @@
     <ClCompile Include="Act65UnaryNEG.cpp" />
     <ClCompile Include="Bin.cpp" />
     <ClCompile Include="Bucket.cpp" />
+    <ClCompile Include="CodeGeneration.cpp" />
     <ClCompile Include="Lexer.cpp" />
     <ClCompile Include="LkHead.cpp" />
     <ClCompile Include="ObjFormatCode.cpp" />
@@ -375,6 +377,7 @@
     <ClInclude Include="Act65LTEQ.h" />
     <ClInclude Include="Act65MUL.h" />
     <ClInclude Include="Act65NotEquelTO.h" />
+    <ClInclude Include="Act65NUMBER.h" />
     <ClInclude Include="Act65OD.h" />
     <ClInclude Include="Act65Opcode.h" />
     <ClInclude Include="Act65OptNOT.h" />
@@ -444,6 +447,7 @@
     <ClInclude Include="Act65Module.h" />
     <ClInclude Include="Act65TypeDotField.h" />
     <ClInclude Include="Act65UnaryNEG.h" />
+    <ClInclude Include="CodeGeneration.h" />
     <ClInclude Include="LkHead.h" />
     <ClInclude Include="ObjFormatCode.h" />
     <ClInclude Include="ObjFormatData.h" />
