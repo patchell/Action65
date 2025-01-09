@@ -631,6 +631,7 @@ public:
 #include "Act65MOD.h"
 #include "Act65DIV.h"
 #include "Act65NUMBER.h"
+#include "Act65DeclareParams.h"
 #include "AstTree.h"
 #include "ActionAstTree.h"
 

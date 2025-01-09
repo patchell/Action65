@@ -531,6 +531,9 @@
     <ClCompile Include="Act65NUMBER.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Act65DeclareParams.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -1038,6 +1041,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Act65NUMBER.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Act65DeclareParams.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

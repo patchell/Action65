@@ -2,11 +2,10 @@
 
 class CLkHead
 {
-public:
 	Token m_Token;
 	CAstNode* m_pNode;
-	CSymbol* m_pSymbol;
 	CTypeChain* m_pTypeChain;
+	CBin* m_pSymbol;
 public:
 	CLkHead();
 	CLkHead(Token T, CAstNode* pN) {
@@ -23,10 +22,16 @@ public:
 	CAstNode* GetNode() const {
 		return m_pNode;
 	}
-	CSymbol* GetSymbol() { return m_pSymbol; }
-	void SetSymbol(CSymbol* pS) { m_pSymbol = pS; }
+	CSymbol* GetSymbol() { return (CSymbol*)m_pSymbol; }
+	void SetSymbol(CSymbol* pS) { m_pSymbol = (CBin*)pS; }
+	CSection* GetSection() { return (CSection*)m_pSymbol; }
+	void SetSection(CSection* pS) { m_pSymbol = (CBin*)pS; }
 	CTypeChain* GetTypeChain() { return m_pTypeChain; }
 	void SetTypeChain(CTypeChain* pTC) { m_pTypeChain = pTC; }
+	void DestroyTypeChain() { 
+		delete m_pTypeChain;
+		m_pTypeChain = 0;
+	}
 	void operator=(const CLkHead & pLH);
 };
 
