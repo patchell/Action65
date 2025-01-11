@@ -8,13 +8,10 @@ CAct65IDENT::~CAct65IDENT()
 {
 }
 
-bool CAct65IDENT::Create(CBin* pSym)
+bool CAct65IDENT::Create(CAstNode* pChild, CAstNode* pNext)
 {
-	bool rV = true;
-	CValue* pV = new CValue;
-	pV->Create(pSym);
-	CAstNode::Create();
-	return rV;
+	SetNodeName(m_pNodeTyypeName);
+	return CAstNode::Create(pChild, pNext);
 }
 
 CValue* CAct65IDENT::Process()

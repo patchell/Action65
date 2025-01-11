@@ -275,6 +275,8 @@ CLkHead CParser::Action65(CLkHead LookaHead)
 	//--------------------------------------------
 	PrintLookahead(LogFile(), LookaHead, "Enter Action65", ++m_Recursion);
 	LookaHead = Modules(LookaHead);
+	GetAstTree()->SetRootNode(LookaHead.GetNode());
+	GetAstTree()->Print(LogFile());
 	PrintLookahead(LogFile(), LookaHead, "Exit Action65", --m_Recursion);
 	return LookaHead;
 }
@@ -3346,8 +3348,8 @@ CLkHead CParser::DeclPramPointer(CLkHead LookaHead)
 	//--------------------------------------------
 	CAstNode* pN = 0;
 	CLkHead LHChild, LHNext;
-	CObjTypeChain* pOTC;
-	
+	CObjTypeChain* pOTC = 0;
+
 	PrintLookahead(LogFile(), LookaHead, "Enter DeclPramPointer", ++m_Recursion);
 	LHChild = DeclParamArray(LookaHead);
 	switch (LHChild.GetToken())
@@ -3378,7 +3380,7 @@ CLkHead CParser::DeclParamArray(CLkHead LookaHead)
 	//--------------------------------------------
 	CAstNode* pN = 0;
 	CLkHead LHChild, LHNext;
-	CObjTypeChain* pOTC;
+	CObjTypeChain* pOTC = 0;
 
 	PrintLookahead(LogFile(), LookaHead, "Enter DeclParamArray", ++m_Recursion);
 	LHChild = DeclareParamIdentList(LookaHead);
@@ -3525,7 +3527,7 @@ CLkHead CParser::DeclareType(CLkHead LookaHead)
 	//--------------------------------------------
 	CAstNode* pN = 0;
 	CLkHead LHChild, LHNext;
-	CObjTypeChain* pOTC;
+	CObjTypeChain* pOTC = 0;
 
 	PrintLookahead(LogFile(), LookaHead, "Enter DeclareType", ++m_Recursion);
 	LHChild = DeclarePointer(LookaHead);
@@ -3663,7 +3665,7 @@ CLkHead CParser::DeclareArray(CLkHead LookaHead)
 	//------					--------------------------------------
 	CAstNode* pN = 0;
 	CLkHead LHChild;
-	CObjTypeChain* pOTC;
+	CObjTypeChain* pOTC = 0;
 
 	PrintLookahead(LogFile(), LookaHead, "Enter Func DeclareArray", ++m_Recursion);
 	LHChild = DeclarFuncType(LookaHead);
@@ -3697,7 +3699,7 @@ CLkHead CParser::DeclarFuncType(CLkHead LookaHead)
 	//--------------------------------------------
 	bool Loop = true;
 	CLkHead LHChild;
-	CObjTypeChain* pOTC;
+	CObjTypeChain* pOTC = 0;
 
 	PrintLookahead(LogFile(), LookaHead, "Enter DeclarFuncType", ++m_Recursion);
 	LHChild = LookaHead;
@@ -3781,21 +3783,19 @@ CLkHead CParser::FundDecl(CLkHead LookaHead)
 		{
 		case Token::RECORDTYPE:
 			//------------ Declaration - Create Type Chain ---------
+			LHChild.SetSymbol(0);
 			if (LHChild.GetTypeChain())
 			{
 				LHChild.DestroyTypeChain();
 			}
-						LHChild.SetTypeChain(new CTypeChain);
+			LHChild.SetTypeChain(new CTypeChain);
 			LHChild.GetTypeChain()->Create();
 			pOTC = new CObjTypeChain;
 			pOTC->Create();
 			pOTC->SetSpec(CObjTypeChain::Spec::TYPE);
-			pTC = new CTypeChain;
-			pTC->Create();
-			pTC->AddToTail(pOTC);
+			LHChild.GetTypeChain()->AddToTail(pOTC);
 			//------------- Parsing -----------------------
 			LHNext = Expect(LHChild, Token::RECORDTYPE);
-			LHNext.SetTypeChain(pTC);
 			LHNext = FundPointerDecl(LHNext);
 			//------------------ Abstract Syntax Tree ---------------------------
 			pN = new CAct65RECTYPE;
@@ -3806,21 +3806,19 @@ CLkHead CParser::FundDecl(CLkHead LookaHead)
 			break;
 		case Token::CHAR:
 			//------------ Declaration - Create Type Chain ---------
+			LHChild.SetSymbol(0);
 			if (LHChild.GetTypeChain())
 			{
 				LHChild.DestroyTypeChain();
 			}
-						LHChild.SetTypeChain(new CTypeChain);
+			LHChild.SetTypeChain(new CTypeChain);
 			LHChild.GetTypeChain()->Create();
 			pOTC = new CObjTypeChain;
 			pOTC->Create();
 			pOTC->SetSpec(CObjTypeChain::Spec::CHAR);
-			pTC = new CTypeChain;
-			pTC->Create();
-			pTC->AddToTail(pOTC);
+			LHChild.GetTypeChain()->AddToTail(pOTC);
 			//--------------- Parsing ---------------------------
 			LHNext = Expect(LHChild, Token::CHAR);
-			LHNext.SetTypeChain(pTC);
 			LHNext = FundPointerDecl(LHNext);
 			//------------- Abstract Syntax Tree Node --------------
 			pN = new CAct65CHAR;
@@ -3831,21 +3829,19 @@ CLkHead CParser::FundDecl(CLkHead LookaHead)
 			break;
 		case Token::BYTE:
 			//------------ Declaration - Create Type Chain ---------
+			LHChild.SetSymbol(0);
 			if (LHChild.GetTypeChain())
 			{
 				LHChild.DestroyTypeChain();
 			}
-						LHChild.SetTypeChain(new CTypeChain);
+			LHChild.SetTypeChain(new CTypeChain);
 			LHChild.GetTypeChain()->Create();
 			pOTC = new CObjTypeChain;
 			pOTC->Create();
 			pOTC->SetSpec(CObjTypeChain::Spec::BYTE);
-			pTC = new CTypeChain;
-			pTC->Create();
-			pTC->AddToTail(pOTC);
+			LHChild.GetTypeChain()->AddToTail(pOTC);
 			//--------------- Parsing ---------------------------
 			LHNext = Expect(LHChild, Token::BYTE);
-			LHNext.SetTypeChain(pTC);
 			LHNext = FundPointerDecl(LHNext);
 			//------------- Abstract Sumtax Tree Node --------------
 			pN = new CAct65BYTE;
@@ -3856,21 +3852,19 @@ CLkHead CParser::FundDecl(CLkHead LookaHead)
 			break;
 		case Token::CARD:
 			//------------ Declaration - Create Type Chain ---------
+			LHChild.SetSymbol(0);
 			if (LHChild.GetTypeChain())
 			{
 				LHChild.DestroyTypeChain();
 			}
-						LHChild.SetTypeChain(new CTypeChain);
+			LHChild.SetTypeChain(new CTypeChain);
 			LHChild.GetTypeChain()->Create();
 			pOTC = new CObjTypeChain;
 			pOTC->Create();
 			pOTC->SetSpec(CObjTypeChain::Spec::CARD);
-			pTC = new CTypeChain;
-			pTC->Create();
-			pTC->AddToTail(pOTC);
+			LHChild.GetTypeChain()->AddToTail(pOTC);
 			//--------------- Parsing ---------------------------
 			LHNext = Expect(LHChild, Token::CARD);
-			LHNext.SetTypeChain(pTC);
 			LHNext = FundPointerDecl(LHNext);
 			//---------- Abstract Syntax Tree Node -------------
 			pN = new CAct65CARD;
@@ -3881,21 +3875,19 @@ CLkHead CParser::FundDecl(CLkHead LookaHead)
 			break;
 		case Token::INT:
 			//------------ Declaration - Create Type Chain ---------
+			LHChild.SetSymbol(0);
 			if (LHChild.GetTypeChain())
 			{
 				LHChild.DestroyTypeChain();
 			}
-						LHChild.SetTypeChain(new CTypeChain);
+			LHChild.SetTypeChain(new CTypeChain);
 			LHChild.GetTypeChain()->Create();
 			pOTC = new CObjTypeChain;
 			pOTC->Create();
 			pOTC->SetSpec(CObjTypeChain::Spec::INT);
-			pTC = new CTypeChain;
-			pTC->Create();
-			pTC->AddToTail(pOTC);
+			LHChild.GetTypeChain()->AddToTail(pOTC);
 			//--------------- Parsing ---------------------------
 			LHNext = Expect(LHChild, Token::INT);
-			LHNext.SetTypeChain(pTC);
 			LHNext = FundPointerDecl(LHNext);
 			//------------ Abstract Syntax Tree Node --------------
 			pN = new CAct65INT;
@@ -3906,21 +3898,19 @@ CLkHead CParser::FundDecl(CLkHead LookaHead)
 			break;
 		case Token::BOOL:
 			//------------ Declaration - Create Type Chain ---------
+			LHChild.SetSymbol(0);
 			if (LHChild.GetTypeChain())
 			{
 				LHChild.DestroyTypeChain();
 			}
-						LHChild.SetTypeChain(new CTypeChain);
+			LHChild.SetTypeChain(new CTypeChain);
 			LHChild.GetTypeChain()->Create();
 			pOTC = new CObjTypeChain;
 			pOTC->Create();
 			pOTC->SetSpec(CObjTypeChain::Spec::BOOL);
-			pTC = new CTypeChain;
-			pTC->Create();
-			pTC->AddToTail(pOTC);
+			LHChild.GetTypeChain()->AddToTail(pOTC);
 			//--------------- Parsing ---------------------------
 			LHNext = Expect(LHChild, Token::BOOL);
-			LHNext.SetTypeChain(pTC);
 			LHNext = FundPointerDecl(LHNext);
 			//-------------- Abstract Syntax Tree Node ------------
 			pN = new CAct65BOOL;
@@ -3948,8 +3938,9 @@ CLkHead CParser::FundPointerDecl(CLkHead LookaHead)
 	//--------------------------------------------
 	CAstNode* pN= 0;
 	CLkHead LHChild, LHNext;
-	CObjTypeChain* pOTC;
+	CObjTypeChain* pOTC = 0;
 
+	//------ CRASH! -------
 	PrintLookahead(LogFile(), LookaHead, "Enter FundPointerDecl", ++m_Recursion);
 	LHChild = FundArrayDecl(LookaHead);
 	switch (LHChild.GetToken())
@@ -3988,7 +3979,7 @@ CLkHead CParser::FundArrayDecl(CLkHead LookaHead)
 	//--------------------------------------------
 	CAstNode* pN= 0;
 	CLkHead LHChild, LHNext;
-	CObjTypeChain* pOTC;
+	CObjTypeChain* pOTC = 0;
 
 	PrintLookahead(LogFile(), LookaHead, "Enter FundArrayDecl", ++m_Recursion);
 	LHChild = FunctionDecl(LookaHead);
@@ -4029,7 +4020,7 @@ CLkHead CParser::FunctionDecl(CLkHead LookaHead)
 	//--------------------------------------------
 	CAstNode* pN= 0;
 	CLkHead LHChild, LHNext;
-	CObjTypeChain* pOTC;
+	CObjTypeChain* pOTC = 0;
 
 	PrintLookahead(LogFile(), LookaHead, "Enter FunctionDecl", ++m_Recursion);
 	LHChild = IdentList(LookaHead);
@@ -4039,7 +4030,7 @@ CLkHead CParser::FunctionDecl(CLkHead LookaHead)
 		//-------------- Declaration -------------------
 		if (LHChild.GetTypeChain() == 0)
 		{
-						LHChild.SetTypeChain(new CTypeChain);
+			LHChild.SetTypeChain(new CTypeChain);
 			LHChild.GetTypeChain()->Create();
 		}
 		LHChild.GetTypeChain()->Create();
@@ -4059,7 +4050,7 @@ CLkHead CParser::FunctionDecl(CLkHead LookaHead)
 		//--------------- Declaration ----------------------
 		if (LHChild.GetTypeChain() == 0)
 		{
-						LHChild.SetTypeChain(new CTypeChain);
+			LHChild.SetTypeChain(new CTypeChain);
 			LHChild.GetTypeChain()->Create();
 		}
 		LHChild.GetTypeChain()->Create();
@@ -4081,7 +4072,7 @@ CLkHead CParser::FunctionDecl(CLkHead LookaHead)
 		//-------------- Declaration ------------------
 		if (LHChild.GetTypeChain() == 0)
 		{
-						LHChild.SetTypeChain(new CTypeChain);
+			LHChild.SetTypeChain(new CTypeChain);
 			LHChild.GetTypeChain()->Create();
 		}
 		LHChild.GetTypeChain()->Create();
@@ -4219,11 +4210,12 @@ CLkHead CParser::ProcDecl(CLkHead LookaHead)
 	case Token::IDENT:
 		if (LHChild.GetTypeChain() == 0)
 		{
-						LHChild.SetTypeChain(new CTypeChain);
+			LHChild.SetTypeChain(new CTypeChain);
 			LHChild.GetTypeChain()->Create();
 		}
 		pSym = (CSymbol*)GetLexer()->GetLexSymbol();
 		pSym->SetIdentType(IdentType::PROC);
+		//-------- Duplicate and Add Typechain to Symbol ---------
 		pTC = new CTypeChain;
 		pTC->Create();
 		pTC->CopyTypeChain(LHChild.GetTypeChain());
@@ -4267,6 +4259,9 @@ CLkHead CParser::ProcDeclParams(CLkHead LookaHead)
 		//----------- Abstract Syntax Tree Node -------
 		pN = new CAct65ParamList;
 		pN->Create(LHChild.GetNode(), LHNext.GetNode());
+		//--------------- Wrap Up ---------------------
+		LHChild = LHNext;
+		LHChild.SetNode(pN);
 		break;
 	default:
 		break;
@@ -4312,6 +4307,7 @@ CLkHead CParser::FuncDecl(CLkHead LookaHead)
 	pN = new CAct65Ident;
 	pN->Create(LHChild.GetNode(), LHNext.GetNode());
 	pN->SetSymbol(pSym);
+	//-----------------------------------------
 	LHChild = LHNext;
 	LHChild.SetNode(pN);
 	PrintLookahead(LogFile(), LHChild, "Exit FuncDecl", --m_Recursion);
@@ -4430,19 +4426,28 @@ CLkHead CParser::Ident(CLkHead LookaHead)
 	//--------------------------------------------
 	CAstNode* pN= 0;
 	CLkHead LHChild, LHNext;
+	CSymbol* pSym = 0;
+	CTypeChain* pTC = 0;
 
 	PrintLookahead(LogFile(), LookaHead, "Enter Ident", ++m_Recursion);
 	LHChild = IdentInitType(LookaHead);
 	switch (LHChild.GetToken())
 	{
 	case Token::IDENT:
-		pN = new CAct65IDENT;
-		pN->Create(LHChild.GetNode(), LHNext.GetNode());
-		LHChild.SetNode(pN);
+		pSym = GetLexer()->GetLexSymbol();
+		pTC = new CTypeChain;
+		pTC->Create();
+		pTC->CopyTypeChain(LHChild.GetTypeChain());
+		pSym->SetTypeChain(pTC);
+		LHChild.SetSymbol(pSym);
+		GetLexer()->GetSymTab()->AddSymbol(pSym);
+		//---------------- Parse --------------------------
 		LHNext = Expect(LHChild, Token::IDENT);
 		LHNext = IdentInitType(LHNext);
-		pN = new CAct65CONSTANT;
+		//--------------Create AST Node -------------------
+		pN = new CAct65IDENT;
 		pN->Create(LHChild.GetNode(), LHNext.GetNode());
+		//----------------- Wrap Up -----------------------
 		LHChild = LHNext;
 		LHChild.SetNode(pN);
 		break;
@@ -4470,7 +4475,7 @@ CLkHead CParser::IdentInitType(CLkHead LookaHead)
 	case Token('('):
 		LHChild = Expect(LHChild, Token('('));
 		LHChild = CompConst(LHChild);
-		pN = new CAct65CONSTANT;
+		pN = new CAct65InitDATA;
 		pN->Create(LHChild.GetNode(), LHNext.GetNode());
 		LHChild = LHNext;
 		LHChild.SetNode(pN);
@@ -4551,8 +4556,8 @@ CLkHead CParser::ParamList(CLkHead LookaHead)
 	bool Loop = true;
 	CAstNode* pN= 0;
 	CLkHead LHChild, LHNext;
-	CObjTypeChain* pOTC;
-	CTypeChain* pTC;
+	CObjTypeChain* pOTC = 0;
+	CTypeChain* pTC = 0;
 
 	PrintLookahead(LogFile(), LookaHead, "Enter ParamList", ++m_Recursion);
 	LHChild = PramPointer(LookaHead);
@@ -4777,7 +4782,7 @@ CLkHead CParser::ParamArray(CLkHead LookaHead)
 	//--------------------------------------------
 	CAstNode* pN= 0;
 	CLkHead LHChild, LHNext;
-	CObjTypeChain* pOTC;
+	CObjTypeChain* pOTC = 0;
 
 	PrintLookahead(LogFile(), LookaHead, "Enter ParamArray", ++m_Recursion);
 	LHChild = IdentList(LookaHead);
@@ -4924,8 +4929,8 @@ CLkHead CParser::LocalDecls(CLkHead LookaHead)
 	bool Loop = true;
 	CAstNode* pN= 0;
 	CLkHead LHChild, LHNext;
-	CObjTypeChain* pOTC;
-	CTypeChain* pTC;
+	CObjTypeChain* pOTC = 0;
+	CTypeChain* pTC = 0;
 
 	PrintLookahead(LogFile(), LookaHead, "Enter LocalDecls", ++m_Recursion);
 	LHChild = LocalPointerDecl(LookaHead);

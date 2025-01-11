@@ -99,7 +99,7 @@ int CTypeChain::Print(char* pSO, int l)
 	int ls = 0;
 	CObjTypeChain* pOTC = GetHead();
 
-	while (pOTC)
+	while (pOTC) //fucked up here
 	{
 		ls += pOTC->Print(&pSO[ls], l - ls);
 		pOTC = pOTC->GetNext();

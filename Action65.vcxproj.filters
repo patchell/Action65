@@ -1057,5 +1057,11 @@
     <None Include="README.md">
       <Filter>Readme</Filter>
     </None>
+    <None Include="test4.act">
+      <Filter>Action</Filter>
+    </None>
+    <None Include="test5.act">
+      <Filter>Action</Filter>
+    </None>
   </ItemGroup>
 </Project>

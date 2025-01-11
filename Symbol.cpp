@@ -101,7 +101,7 @@ int CSymbol::Print(char* pSO, int l, const char* s)
 		size = l - ls;
 		ls += sprintf_s(&pSO[ls], size, "%s: ", GetName());
 	}
-	if (GetTypeChain())
+	if (GetTypeChain())	//fucks up here
 	{
 		ls += GetTypeChain()->Print(&pSO[ls], l - ls);
 	}

@@ -18,7 +18,9 @@ public:
 	void Delete(CObjTypeChain* pOTC);
 	void Unlink(CObjTypeChain* pOTC);
 	void SetHead(CObjTypeChain* pOTC) { m_pHead = pOTC; }
-	CObjTypeChain* GetHead() { return m_pHead; }
+	CObjTypeChain* GetHead() { 
+		return m_pHead; 
+	}
 	void SetTail(CObjTypeChain* pOTC) { m_pTail = pOTC; }
 	CObjTypeChain* GetTail() { return m_pTail; }
 	void CopyTypeChain(CTypeChain* pSrcTC);
