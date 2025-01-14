@@ -212,7 +212,13 @@ private:
 	CLkHead FundDecl(CLkHead LookaHead);
 	CLkHead FundPointerDecl(CLkHead LookaHead);
 	CLkHead FundArrayDecl(CLkHead LookaHead);
-	CLkHead FunctionDecl(CLkHead LookaHead);
+	//----------------------------------
+	// Identifiers
+	//----------------------------------
+	CLkHead IdentList(CLkHead LookaHead);
+	CLkHead Ident(CLkHead LookaHead);
+	CLkHead IdentInitType(CLkHead LookaHead);
+	CLkHead InitData(CLkHead LookaHead);
 	//------------------
 	CLkHead IrqDecl(CLkHead LookaHead);
 	CLkHead IrqDeclParams(CLkHead LookaHead);
@@ -227,13 +233,6 @@ private:
 	CLkHead FuncBody(CLkHead LookaHead);
 	//------------------
 	CLkHead OptInit(CLkHead LookaHead);
-	//----------------------------------
-	// Identifiers
-	//----------------------------------
-	CLkHead IdentList(CLkHead LookaHead);
-	CLkHead Ident(CLkHead LookaHead);
-	CLkHead IdentInitType(CLkHead LookaHead);
-	CLkHead InitData(CLkHead LookaHead);
 	//-------------------------------------------
 	// Parameter Declarations
 	//-------------------------------------------

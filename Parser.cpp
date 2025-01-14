@@ -131,6 +131,13 @@ CLkHead CParser::Run()
 				BooBoo.GetErrorString()
 			);
 			break;
+		case Exception::ExceptionType::EXPECTED_IDENT:
+			fprintf(
+				ErrorDest,
+				"Error:%s\n",
+				BooBoo.GetErrorString()
+			);
+			break;
 		default:
 			fprintf(ErrorDest, "Unknown Exception\n");
 			break;
@@ -2451,7 +2458,7 @@ CLkHead CParser::Unary(CLkHead LookaHead)
 
 	PrintLookahead(LogFile(), LookaHead, "Enter Urnary", ++m_Recursion);
 	LHChild = LookaHead;
-	while (Loop)
+	while (Loop) 
 	{
 		switch (LHChild.GetToken())
 		{
@@ -3766,6 +3773,8 @@ CLkHead CParser::FundDecl(CLkHead LookaHead)
 	//				-> 'INT' FundPointerDecl FundDecl_1
 	//				-> 'CARD' FundPointerDecl FundDecl_1
 	//				-> 'RECORDTYPE' FundPointerDecl FundDecl_1
+	//				-> 'PROC' ProcDecl
+	//				-> 'INTERRUPT' IrqDecl
 	//				-> .
 	//					;
 	//--------------------------------------------
@@ -3776,7 +3785,8 @@ CLkHead CParser::FundDecl(CLkHead LookaHead)
 	CTypeChain* pTC = 0;
 
 	PrintLookahead(LogFile(), LookaHead, "Enter FundDecl", ++m_Recursion);
-	LHChild = FundPointerDecl(LookaHead);
+//	LHChild = FundPointerDecl(LookaHead);
+	LHChild = LookaHead;
 	while (Loop)
 	{
 		switch (LHChild.GetToken())
@@ -3919,6 +3929,50 @@ CLkHead CParser::FundDecl(CLkHead LookaHead)
 			LHChild = LHNext;
 			LHChild.SetNode(pN);
 			break;
+		case Token::PROC:
+			//--------------- Declaration ----------------------
+			if (LHChild.GetTypeChain() == 0)
+			{
+				LHChild.SetTypeChain(new CTypeChain);
+				LHChild.GetTypeChain()->Create();
+			}
+			LHChild.GetTypeChain()->Create();
+			pOTC = new CObjTypeChain;
+			pOTC->Create();
+			pOTC->SetSpec(CObjTypeChain::Spec::PROC);
+			LHChild.GetTypeChain()->AddToTail(pOTC);
+			//------------------- Parsing ----------------------
+			LHNext = Expect(LHChild, Token::PROC);
+			LHNext = ProcDecl(LHNext);
+			//------------Abstract syntax Tree Node -----------
+			pN = new CAct65PROC;
+			pN->Create(LHChild.GetNode(), LHNext.GetNode());
+			//------------------ Wrap Up ------------------------
+			LHChild = LHNext;
+			LHChild.SetNode(pN);
+			break;
+		case Token::INTERRUPT:
+			//-------------- Declaration ------------------
+			if (LHChild.GetTypeChain() == 0)
+			{
+				LHChild.SetTypeChain(new CTypeChain);
+				LHChild.GetTypeChain()->Create();
+			}
+			LHChild.GetTypeChain()->Create();
+			pOTC = new CObjTypeChain;
+			pOTC->Create();
+			pOTC->SetSpec(CObjTypeChain::Spec::INTERRUPT);
+			LHChild.GetTypeChain()->AddToTail(pOTC);
+			//----------------- Parsing -------------------
+			LHNext = Expect(LHChild, Token::INTERRUPT);
+			LHNext = IrqDecl(LHNext);
+			//------------Abstract syntax Tree Node -----------
+			pN = new CAct65INTERRUPT;
+			pN->Create(LHChild.GetNode(), LHNext.GetNode());
+			//------------------ Wrap Up ------------------------
+			LHChild = LHNext;
+			LHChild.SetNode(pN);
+			break;
 		default:
 			Loop = false;
 			break;
@@ -3940,7 +3994,6 @@ CLkHead CParser::FundPointerDecl(CLkHead LookaHead)
 	CLkHead LHChild, LHNext;
 	CObjTypeChain* pOTC = 0;
 
-	//------ CRASH! -------
 	PrintLookahead(LogFile(), LookaHead, "Enter FundPointerDecl", ++m_Recursion);
 	LHChild = FundArrayDecl(LookaHead);
 	switch (LHChild.GetToken())
@@ -3972,8 +4025,8 @@ CLkHead CParser::FundPointerDecl(CLkHead LookaHead)
 CLkHead CParser::FundArrayDecl(CLkHead LookaHead)
 {
 	//--------------------------------------------
-	//	FundArrayDecl	->FunctionDecl FundArrayDecl_1;
-	//	FundArrayDecl_1	-> 'ARRAY' FunctionDecl
+	//	FundArrayDecl	->IdentList FundArrayDecl_1;
+	//	FundArrayDecl_1	-> 'ARRAY'  IdentList
 	//					-> .
 	//					;
 	//--------------------------------------------
@@ -3982,7 +4035,7 @@ CLkHead CParser::FundArrayDecl(CLkHead LookaHead)
 	CObjTypeChain* pOTC = 0;
 
 	PrintLookahead(LogFile(), LookaHead, "Enter FundArrayDecl", ++m_Recursion);
-	LHChild = FunctionDecl(LookaHead);
+	LHChild = IdentList(LookaHead);
 	switch (LHChild.GetToken())
 	{
 	case Token::ARRAY:
@@ -3993,7 +4046,7 @@ CLkHead CParser::FundArrayDecl(CLkHead LookaHead)
 		LHChild.GetTypeChain()->AddToTail(pOTC);
 		//-------------- Parsing ------------------------
 		LHNext = Expect(LHChild, Token::ARRAY);
-		LHNext = FunctionDecl(LHNext);
+		LHNext = IdentList(LHNext);
 		//------- Abstract Syntax Tree Node --------------
 		pN = new CAct65ARRAY;
 		pN->Create(LHChild.GetNode(), LHNext.GetNode());
@@ -4008,24 +4061,88 @@ CLkHead CParser::FundArrayDecl(CLkHead LookaHead)
 	return LHChild;
 }
 
-CLkHead CParser::FunctionDecl(CLkHead LookaHead)
+//----------------------------------
+// Identifiers
+//BYTE a,b;
+//BYTE x=$a0
+//BYTE y=[15]
+//BYTE ARRAY a=$2000
+//BYTE ARRAY b =["This is a string"]
+//BYTE ARRAY c = [1 2 3 4 55 6]
+//BYTE ARRAY d(156) =$2100
+//----------------------------------
+
+CLkHead CParser::IdentList(CLkHead LookaHead)
 {
 	//--------------------------------------------
-	//	FunctionDecl	->IdentList FunctionDecl_1;;
-	//	FunctionDecl_1	-> 'FUNC' FuncDecl
-	//					-> 'PROC' ProcDecl
-	//					-> 'INTERRUPT' IrqDecl
-	//					-> .
-	//					;
+	// IdentList	-> Ident IdentList_1;
+	// IdentList_1	-> ',' Ident IdentList_1
+	//				-> .
+	//				;
 	//--------------------------------------------
-	CAstNode* pN= 0;
+	bool Loop = true;
+	CAstNode* pN = 0;
 	CLkHead LHChild, LHNext;
+
+	PrintLookahead(LogFile(), LookaHead, "Enter IdentList", ++m_Recursion);
+	LHChild = Ident(LookaHead);
+	while (Loop)
+	{
+		switch (LHChild.GetToken())
+		{
+		case Token(','):
+			LHNext = Expect(LHChild, Token(','));
+			LHNext = Ident(LHNext);
+			pN = new CAct65Ident;
+			pN->Create(LHChild.GetNode(), LHNext.GetNode());
+			LHChild = LHNext;
+			LHChild.SetNode(pN);
+			break;
+		default:
+			Loop = false;
+			break;
+		}
+	}
+	PrintLookahead(LogFile(), LHChild, "Exit IdenrtList", --m_Recursion);
+	return LHChild;
+}
+
+CLkHead CParser::Ident(CLkHead LookaHead)
+{
+	//--------------------------------------------
+	//	Ident	-> 'IDENT' IdentInitType
+	//			-> 'FUNC' FuncDecl
+	//			;
+	//--------------------------------------------
+	CAstNode* pN = 0;
+	CLkHead LHChild, LHNext;
+	CSymbol* pSym = 0;
+	CTypeChain* pTC = 0;
 	CObjTypeChain* pOTC = 0;
 
-	PrintLookahead(LogFile(), LookaHead, "Enter FunctionDecl", ++m_Recursion);
-	LHChild = IdentList(LookaHead);
+	PrintLookahead(LogFile(), LookaHead, "Enter Ident", ++m_Recursion);
+	LHChild = LookaHead;
 	switch (LHChild.GetToken())
 	{
+	case Token::IDENT:
+		pSym = GetLexer()->GetLexSymbol();
+		pTC = new CTypeChain;
+		pTC->Create();
+		pTC->CopyTypeChain(LHChild.GetTypeChain());
+		pSym->SetTypeChain(pTC);
+		LHChild.SetSymbol(pSym);
+		GetLexer()->GetSymTab()->AddSymbol(pSym);
+		//---------------- Parse --------------------------
+		LHNext = Expect(LHChild, Token::IDENT);
+		LHNext = IdentInitType(LHNext);
+		//--------------Create AST Node -------------------
+		pN = new CAct65IDENT;
+		pN->CreateValue(pSym);
+		pN->Create(LHChild.GetNode(), LHNext.GetNode());
+		//----------------- Wrap Up -----------------------
+		LHChild = LHNext;
+		LHChild.SetNode(pN);
+		break;
 	case Token::FUNC:
 		//-------------- Declaration -------------------
 		if (LHChild.GetTypeChain() == 0)
@@ -4046,56 +4163,97 @@ CLkHead CParser::FunctionDecl(CLkHead LookaHead)
 		LHChild = LHNext;
 		LHChild.SetNode(pN);
 		break;
-	case Token::PROC:
-		//--------------- Declaration ----------------------
-		if (LHChild.GetTypeChain() == 0)
-		{
-			LHChild.SetTypeChain(new CTypeChain);
-			LHChild.GetTypeChain()->Create();
-		}
-		LHChild.GetTypeChain()->Create();
-		pOTC = new CObjTypeChain;
-		pOTC->Create();
-		pOTC->SetSpec(CObjTypeChain::Spec::PROC);
-		LHChild.GetTypeChain()->AddToTail(pOTC);
-		//------------------- Parsing ----------------------
-		LHNext = Expect(LHChild, Token::PROC);
-		LHNext = ProcDecl(LHNext);
-		//------------Abstract syntax Tree Node -----------
-		pN = new CAct65PROC;
+	default:
+		//ThrownException.SetXCeptType(Exception::ExceptionType::EXPECTED_IDENT);
+		//sprintf_s(
+		//	ThrownException.GetErrorString(),
+		//	ThrownException.GetMaxStringLen(),
+		//	"Line %d: Col %d Expected An Identifier\nGot a %s\n",
+		//	GetLexer()->GetLineNumber(),
+		//	GetLexer()->GetColunm(),
+		//	GetLexer()->LookupToName(LHChild.GetToken())
+		//);
+		//throw(ThrownException);
+		break;
+	}
+	PrintLookahead(LogFile(), LHChild, "Exit Ident", --m_Recursion);
+	return LHChild;
+}
+
+CLkHead CParser::IdentInitType(CLkHead LookaHead)
+{
+	//--------------------------------------------
+	//	IdentInitType	-> '(' CompConst ')'
+	//					-> '=' InitData
+	//					.
+	//					;
+	//--------------------------------------------
+	CAstNode* pN = 0;
+	CLkHead LHChild, LHNext;
+
+	LHChild = LookaHead;
+	switch (LHChild.GetToken())
+	{
+	case Token('('):
+		LHChild = Expect(LHChild, Token('('));
+		LHChild = CompConst(LHChild);
+		pN = new CAct65InitDATA;
 		pN->Create(LHChild.GetNode(), LHNext.GetNode());
-		//------------------ Wrap Up ------------------------
 		LHChild = LHNext;
 		LHChild.SetNode(pN);
+		//---------------------------------------
+		LHChild = Expect(LookaHead, Token(')'));
 		break;
-	case Token::INTERRUPT:
-		//-------------- Declaration ------------------
-		if (LHChild.GetTypeChain() == 0)
-		{
-			LHChild.SetTypeChain(new CTypeChain);
-			LHChild.GetTypeChain()->Create();
-		}
-		LHChild.GetTypeChain()->Create();
-		pOTC = new CObjTypeChain;
-		pOTC->Create();
-		pOTC->SetSpec(CObjTypeChain::Spec::INTERRUPT);
-		LHChild.GetTypeChain()->AddToTail(pOTC);
-		//----------------- Parsing -------------------
-		LHNext = Expect(LHChild, Token::INTERRUPT);
-		LHNext = IrqDecl(LHNext);
-		//------------Abstract syntax Tree Node -----------
-		pN = new CAct65INTERRUPT;
+	case Token('='):
+		LHChild = Expect(LHChild, Token('='));
+		LHChild = InitData(LHChild);
+		pN = new CAct65InitDATA;;
 		pN->Create(LHChild.GetNode(), LHNext.GetNode());
-		//------------------ Wrap Up ------------------------
 		LHChild = LHNext;
 		LHChild.SetNode(pN);
 		break;
 	default:
+		LHChild.SetNode(0);  //this tree path has ended
 		break;
 	}
-	PrintLookahead(LogFile(), LHChild, "Exit FunctionDecl", --m_Recursion);
 	return LHChild;
+}
 
+CLkHead CParser::InitData(CLkHead LookaHead)
+{
+	//--------------------------------------------
+	//	InitData	->CompConst InitData_1;
+	//	InitData_1	-> 'STRING'
+	//				-> '[' ConstList ']'
+	//				-> .
+	//				;
+	//--------------------------------------------
+	CAstNode* pN = 0;
+	CLkHead LHChild, LHNext;
+
+	LHChild = CompConst(LookaHead);
+	switch (LHChild.GetToken())
+	{
+	case Token('['):
+		LHNext = Expect(LHChild, Token('['));
+		LHNext = ConstList(LHNext);
+		pN = new CAct65ConstLIST;;
+		pN->Create(LHChild.GetNode(), LHNext.GetNode());
+		LHChild = LHNext;
+		LHChild.SetNode(pN);
+		//-----------------------------------------
+		LHChild = Expect(LHChild, Token(']'));
+		break;
+	case Token::STRING:
+		pN = new CAct65STRING;
+		pN->Create(LHChild.GetNode(), LHNext.GetNode());
+		LHChild.SetNode(pN);
+		LHChild = Expect(LHChild, Token::STRING);
+		break;
+	default:
+		break;
+	}
+	return LHChild;
 }
 
 //---------------- INTERRUPT ----------------
@@ -4370,168 +4528,6 @@ CLkHead CParser::OptInit(CLkHead LookaHead)
 	return LHChild;
 }
 
-//----------------------------------
-// Identifiers
-//BYTE a,b;
-//BYTE x=$a0
-//BYTE y=[15]
-//BYTE ARRAY a=$2000
-//BYTE ARRAY b =["This is a string"]
-//BYTE ARRAY c = [1 2 3 4 55 6]
-//BYTE ARRAY d(156) =$2100
-//----------------------------------
-
-CLkHead CParser::IdentList(CLkHead LookaHead)
-{
-	//--------------------------------------------
-	// IdentList	-> Ident IdentList_1;
-	// IdentList_1	-> ',' Ident IdentList_1
-	//				-> .
-	//				;
-	//--------------------------------------------
-	bool Loop = true;
-	CAstNode* pN= 0;
-	CLkHead LHChild, LHNext;
-
-	PrintLookahead(LogFile(), LookaHead, "Enter IdentList", ++m_Recursion);
-	LHChild = Ident(LookaHead);
-	while (Loop)
-	{
-		switch (LHChild.GetToken())
-		{
-		case Token(','):
-			LHNext = Expect(LHChild, Token(','));
-			LHNext = Ident(LHNext);
-			pN = new CAct65Ident;
-			pN->Create(LHChild.GetNode(), LHNext.GetNode());
-			LHChild = LHNext;
-			LHChild.SetNode(pN);
-			break;
-		default:
-			Loop = false;
-			break;
-		}
-	}
-	PrintLookahead(LogFile(), LHChild, "Exit IdenrtList", --m_Recursion);
-	return LHChild;
-}
-
-CLkHead CParser::Ident(CLkHead LookaHead)
-{
-	//--------------------------------------------
-	//	Ident	->IdentInitType Ident_1;
-	//	Ident_1	-> 'IDENT' IdentInitType
-	//			-> .
-	//			;
-	//--------------------------------------------
-	CAstNode* pN= 0;
-	CLkHead LHChild, LHNext;
-	CSymbol* pSym = 0;
-	CTypeChain* pTC = 0;
-
-	PrintLookahead(LogFile(), LookaHead, "Enter Ident", ++m_Recursion);
-	LHChild = IdentInitType(LookaHead);
-	switch (LHChild.GetToken())
-	{
-	case Token::IDENT:
-		pSym = GetLexer()->GetLexSymbol();
-		pTC = new CTypeChain;
-		pTC->Create();
-		pTC->CopyTypeChain(LHChild.GetTypeChain());
-		pSym->SetTypeChain(pTC);
-		LHChild.SetSymbol(pSym);
-		GetLexer()->GetSymTab()->AddSymbol(pSym);
-		//---------------- Parse --------------------------
-		LHNext = Expect(LHChild, Token::IDENT);
-		LHNext = IdentInitType(LHNext);
-		//--------------Create AST Node -------------------
-		pN = new CAct65IDENT;
-		pN->Create(LHChild.GetNode(), LHNext.GetNode());
-		//----------------- Wrap Up -----------------------
-		LHChild = LHNext;
-		LHChild.SetNode(pN);
-		break;
-	default:
-		break;
-	}
-	PrintLookahead(LogFile(), LHChild, "Exit Ident", --m_Recursion);
-	return LHChild;
-}
-
-CLkHead CParser::IdentInitType(CLkHead LookaHead)
-{
-	//--------------------------------------------
-	//	IdentInitType	-> '(' CompConst ')'
-	//					-> '=' InitData
-	//					.
-	//					;
-	//--------------------------------------------
-	CAstNode* pN = 0;
-	CLkHead LHChild, LHNext;
-
-	LHChild = LookaHead;
-	switch (LHChild.GetToken())
-	{
-	case Token('('):
-		LHChild = Expect(LHChild, Token('('));
-		LHChild = CompConst(LHChild);
-		pN = new CAct65InitDATA;
-		pN->Create(LHChild.GetNode(), LHNext.GetNode());
-		LHChild = LHNext;
-		LHChild.SetNode(pN);
-		//---------------------------------------
-		LHChild = Expect(LookaHead, Token(')'));
-		break;
-	case Token('='):
-		LHChild = Expect(LHChild, Token('='));
-		LHChild = InitData(LHChild);
-		pN = new CAct65InitDATA;;
-		pN->Create(LHChild.GetNode(), LHNext.GetNode());
-		LHChild = LHNext;
-		LHChild.SetNode(pN);
-		break;
-	default:
-		break;
-	}
-	return LHChild;
-}
-
-CLkHead CParser::InitData(CLkHead LookaHead)
-{
-	//--------------------------------------------
-	//	InitData	->CompConst InitData_1;
-	//	InitData_1	-> 'STRING'
-	//				-> '[' ConstList ']'
-	//				-> .
-	//				;
-	//--------------------------------------------
-	CAstNode* pN = 0;
-	CLkHead LHChild, LHNext;
-
-	LHChild = CompConst(LookaHead);
-	switch (LHChild.GetToken())
-	{
-	case Token('['):
-		LHNext = Expect(LHChild, Token('['));
-		LHNext = ConstList(LHNext);
-		pN = new CAct65ConstLIST;;
-		pN->Create(LHChild.GetNode(), LHNext.GetNode());
-		LHChild = LHNext;
-		LHChild.SetNode(pN);
-		//-----------------------------------------
-		LHChild = Expect(LHChild, Token(']'));
-		break;
-	case Token::STRING:
-		pN = new CAct65STRING;
-		pN->Create(LHChild.GetNode(), LHNext.GetNode());
-		LHChild.SetNode(pN);
-		LHChild = Expect(LHChild, Token::STRING);
-		break;
-	default:
-		break;
-	}
-	return LHChild;
-}
 
 //-------------------------------------------
 // Function Parameters Declarations
@@ -7223,15 +7219,15 @@ CLkHead CParser::Immediate(CLkHead LookaHead)
 	CAstNode* pN= 0;
 	CLkHead LHChild, LHNext;
 	AdrModeType AdrMode = AdrModeType::IMMEDIATE_ADR;
-	KeyWord* pKW = LHChild.GetNode()->GetVvalue()->GetAsmInst()->GetKeyWord();
+	KeyWord* pKW = LHChild.GetNode()->GetValue()->GetAsmInst()->GetKeyWord();
 
 	PrintLookahead(LogFile(), LookaHead, "Enter Immediate", ++m_Recursion);
 	LHChild = LookaHead;
 	LHNext = Expect(LHChild, Token('#'));
 	LHNext = AsmConstant(LHNext);
 	OpCodeInc = pKW->FindInc(AdrMode);
-	OpCode = LHChild.GetNode()->GetVvalue()->GetAsmInst()->GetOpCode();
-	LHChild.GetNode()->GetVvalue()->GetAsmInst()->SetOpCode(OpCode + OpCodeInc);
+	OpCode = LHChild.GetNode()->GetValue()->GetAsmInst()->GetOpCode();
+	LHChild.GetNode()->GetValue()->GetAsmInst()->SetOpCode(OpCode + OpCodeInc);
 	LHChild = LHNext;
 	PrintLookahead(LogFile(), LHChild, "Exit Immediate", --m_Recursion);
 	return LHChild;
@@ -7377,7 +7373,7 @@ void CParser::PrintLookahead(
 		}
 	}
 	if (token.GetNode())
-		token.GetNode()->Print(LogFile(), 0,(char*) "");
+		token.GetNode()->Print(LogFile(), 0, pSymData, 2048);
 	delete[] pSymData;
 	delete[] pLineCol;
 }

@@ -8,7 +8,7 @@ public:
 	virtual ~CAct65CHAR();
 	bool Create(CAstNode* pChild = 0, CAstNode* pNext = 0);
 	virtual CValue* Process();
-	virtual void Print(FILE* pOut, int Indent, char* s);
+	virtual void Print(FILE* pOut, int Indent, char* s, int l);
 };
 
 

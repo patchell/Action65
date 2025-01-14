@@ -19,7 +19,7 @@ CValue* CAct65ForTO::Process()
 	return nullptr;
 }
 
-void CAct65ForTO::Print(FILE* pOut, int Indent, char* s)
+void CAct65ForTO::Print(FILE* pOut, int Indent, char* s, int l)
 {
-	CAstNode::Print(pOut, Indent, s);
+	CAstNode::Print(pOut, Indent, s,l);
 }

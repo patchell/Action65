@@ -18,7 +18,7 @@ CValue* CAct65DS::Process()
     return nullptr;
 }
 
-void CAct65DS::Print(FILE* pOut, int Indent, char* s)
+void CAct65DS::Print(FILE* pOut, int Indent, char* s, int l)
 {
 	//char* pIndentStr = new char[256];
 	//int i = 0, l = 0;
@@ -43,6 +43,6 @@ void CAct65DS::Print(FILE* pOut, int Indent, char* s)
 	//	pIndentStr,
 	//	GetNodeName()
 	//);
-	CAstNode::Print(pOut, Indent + 1, s);
+	CAstNode::Print(pOut, Indent + 1, s, l);
 	//delete[] pIndentStr;
 }

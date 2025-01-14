@@ -38,7 +38,7 @@ CValue* CAct65UpperPart::Process()
 	return pValueChild;
 }
 
-void CAct65UpperPart::Print(FILE* pOut, int Indent, char* s)
+void CAct65UpperPart::Print(FILE* pOut, int Indent, char* s, int l)
 {
-	CAstNode::Print(pOut, Indent, s);
+	CAstNode::Print(pOut, Indent, s,l);
 }

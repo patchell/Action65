@@ -11,7 +11,8 @@ public:
 	void TraverseTree(
 		FILE* pOut, 
 		CAstNode* pNode, 
-		char* s
+		char* s,
+		int strLen
 	);
 	//--------------------------------
 	void SetRootNode(CAstNode* pRoot) { m_pRoot = pRoot; }

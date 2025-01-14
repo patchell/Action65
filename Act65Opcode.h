@@ -19,7 +19,7 @@ public:
 	// Node Processor
 	//-----------------------------
 	virtual CValue* Process();
-	virtual void Print(FILE* pOut, int Indent, char* s);
+	virtual void Print(FILE* pOut, int Indent, char* s, int l);
 	//-----------------------------
 	// Setter/Getter Methods
 	//-----------------------------

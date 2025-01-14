@@ -37,9 +37,9 @@ CValue* CAct65ADD::Process()
 	//-----------------------
     return pValueChild;
 }
-void CAct65ADD::Print(FILE* pOut, int Indent, char* s)
+void CAct65ADD::Print(FILE* pOut, int Indent, char* s, int l)
 {
-	CAstNode::Print(pOut, Indent, s);
+	CAstNode::Print(pOut, Indent, s, l);
 }
 /*
 static value* binary(NODE* n, int op)

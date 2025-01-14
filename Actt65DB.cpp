@@ -18,7 +18,7 @@ CValue* CAct65DB::Process()
 	return nullptr;
 }
 
-void CAct65DB::Print(FILE* pOut, int Indent, char* s)
+void CAct65DB::Print(FILE* pOut, int Indent, char* s, int l)
 {
-	CAstNode::Print(pOut, Indent, s);
+	CAstNode::Print(pOut, Indent, s,l);
 }

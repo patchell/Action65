@@ -38,7 +38,7 @@ CValue* CAct65LogicalOR::Process()
 	return pValueChild;
 }
 
-void CAct65LogicalOR::Print(FILE* pOut, int Indent, char* s)
+void CAct65LogicalOR::Print(FILE* pOut, int Indent, char* s, int l)
 {
-	CAstNode::Print(pOut, Indent, s);
+	CAstNode::Print(pOut, Indent, s,l);
 }

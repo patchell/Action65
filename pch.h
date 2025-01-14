@@ -349,7 +349,10 @@ public:
 		TOKEN_OUT_OF_PLACE,
 		VALUE_EXCEEDS_RANGE,
 		STACK,
-		INTERNAL_ERROR
+		INTERNAL_ERROR,
+		EXPECTED_IDENT,
+		EXPECTED_CONSTANT,
+		EXPECTED_DATABLOCK
 	};
 	enum class ExceptionSubType {
 		WHOKNOWS,
@@ -408,6 +411,9 @@ private:
 		{ ExceptionType::TOKEN_OUT_OF_PLACE, "TOKEN OUT OF PLACE" },
 		{ ExceptionType::VALUE_EXCEEDS_RANGE, "VALUE EXCEEDS RANGE" },
 		{ ExceptionType::INTERNAL_ERROR, "This is too much, INTERNAL ERROR!" },
+		{ ExceptionType::EXPECTED_IDENT, "Expected an Identifier::ERROR!" },
+		{ ExceptionType::EXPECTED_CONSTANT, "Expected a Constant::ERROR!" },
+		{ ExceptionType::EXPECTED_DATABLOCK, "Expected a Data Block::ERROR!" },
 		{ ExceptionType(-1), NULL}
 	};
 	//--------------------------------------------------

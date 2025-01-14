@@ -19,7 +19,7 @@ CValue* CAct65ParamList::Process()
 	return nullptr;
 }
 
-void CAct65ParamList::Print(FILE* pOut, int Indent, char* s)
+void CAct65ParamList::Print(FILE* pOut, int Indent, char* s, int l)
 {
-	CAstNode::Print(pOut, Indent, s);
+	CAstNode::Print(pOut, Indent, s,l);
 }

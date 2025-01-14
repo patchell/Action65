@@ -38,7 +38,7 @@ CValue* CAct65AssignDIV::Process()
 	return pValueChild;
 }
 
-void CAct65AssignDIV::Print(FILE* pOut, int Indent, char* s)
+void CAct65AssignDIV::Print(FILE* pOut, int Indent, char* s, int l)
 {
-	CAstNode::Print(pOut, Indent, s);
+	CAstNode::Print(pOut, Indent, s,l);
 }

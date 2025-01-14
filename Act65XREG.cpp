@@ -38,7 +38,7 @@ CValue* CAct65XREG::Process()
 	return pValueChild;
 }
 
-void CAct65XREG::Print(FILE* pOut, int Indent, char* s)
+void CAct65XREG::Print(FILE* pOut, int Indent, char* s, int l)
 {
-	CAstNode::Print(pOut, Indent, s);
+	CAstNode::Print(pOut, Indent, s,l);
 }

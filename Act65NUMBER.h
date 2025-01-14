@@ -8,6 +8,6 @@ public:
 	virtual ~CAct65NUMBER();
 	bool Create(CAstNode* pChild, CAstNode* pNext);
 	virtual CValue* Process();
-	virtual void Print(FILE* pOut, int Indent, char* s);
+	virtual void Print(FILE* pOut, int Indent, char* s, int l);
 };
 

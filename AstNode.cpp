@@ -32,6 +32,8 @@ CAstNode::CAstNode(int NodeType)
 
 CAstNode::~CAstNode()
 {
+	if (m_pValue)
+		delete m_pValue;
 }
 
 bool CAstNode::Create(
@@ -50,12 +52,18 @@ bool CAstNode::Create(
     return true;
 }
 
-void CAstNode::Print(FILE* pOut, int Indent, char* s)
+void CAstNode::CreateValue(CSymbol* pSym)
+{
+	m_pValue = new CValue;
+	m_pValue->Create(pSym);
+}
+
+void CAstNode::Print(FILE* pOut, int Indent, char* s, int Strlen)
 {
 
-	char* pIndentStr = new char[256];
 	int i = 0, l = 0;
 	int Id, Child, Next;
+	int size;
 
 	Id = GetID();
 	if (GetChild())
@@ -66,17 +74,29 @@ void CAstNode::Print(FILE* pOut, int Indent, char* s)
 		Next = GetNext()->GetID();
 	else
 		Next = -1;
-	l += sprintf_s(pIndentStr, 256, "%6d %6d %6d ", Id, Child, Next);
+	size = Strlen - l;
+	l += sprintf_s(&s[l],size, "%6d %6d %6d  ", Id, Child, Next);
 	for (i = 0; i < Indent; ++i)
 	{
-		l += sprintf_s(&pIndentStr[l], 256 - l, "| ");
+		size = Strlen - l;
+		l += sprintf_s(&s[l], size, "| ");
 	}
-	l += sprintf_s(&pIndentStr[l], 256 - l, "+-");
-	fprintf(pOut, "%s%s\n",
-		pIndentStr,
-		GetNodeName()
+	size = Strlen - l;
+	l += sprintf_s(&s[l], size, "+-%s", GetNodeName());
+	if (GetValue())
+	{
+		if (GetValue()->GetSymbol())
+		{
+			if (GetValue()->GetSymbol()->GetName())
+			{
+				size = Strlen - l;
+				l += sprintf_s(&s[l], size, ": %s", GetValue()->GetSymbol()->GetName());
+			}
+		}
+	}
+	fprintf(pOut, "%s\n",
+		s
 	);
-	delete[] pIndentStr;
 
 	//CAstNode* pN;
 

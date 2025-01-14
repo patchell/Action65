@@ -32,15 +32,6 @@
 //	VERSION 0.0.5
 //	Added DefineParamIdent and DefineParamIdentList
 //
-// VERSION 0.0.6  Jan 13, 2025
-// Discovered a problem with the FundDecl grammar.
-// Had to move things around just a little bit to
-// hopefully make it so I can code it.
-// Every time I have to change the grammar I say, "OK,
-// This is it, it won't have to cange again."
-// I am also amazed at how much I learn about writing
-// parsers every time some little thing goes wrong
-//
 //----------------------------------
 
 TERMINALS
@@ -758,49 +749,29 @@ FundDecl_1	-> 'BOOL' FundPointerDecl FundDecl_1
 			-> 'INT' FundPointerDecl FundDecl_1
 			-> 'CARD' FundPointerDecl FundDecl_1
 			-> 'RECORDTYPE' FundPointerDecl FundDecl_1
-			-> 'PROC' ProcDecl
-			-> 'INTERRUPT' IrqDecl
 			-> .
 			;
-
 
 FundPointerDecl		-> FundArrayDecl FundPointerDecl_1;
 FundPointerDecl_1	-> 'POINTER' FundArrayDecl
 					-> .
 					;
 
-FundArrayDecl	-> IdentList FundArrayDecl_1;
-FundArrayDecl_1	-> 'ARRAY'  IdentList
+FundArrayDecl	-> FunctionDecl FundArrayDecl_1;
+FundArrayDecl_1	-> 'ARRAY' FunctionDecl 
 				-> .
-				;
-
-IdentList	-> Ident IdentList_1;
-IdentList_1	-> ',' Ident IdentList_1
-			-> .
-			;
-
-Ident		-> 'IDENT' IdentInitType
-			-> 'FUNC' FuncDecl
-			;
-
-
-//-----------------------
-IdentInitType	-> '(' CompConst ')'
-				-> '=' InitData
-				.
-				;
-
-InitData		-> CompConst InitData_1;
-InitData_1		-> 'STRING'
-				-> '[' ConstList ']'
-				-> .
-				;
 				;
 
 
 //------------------------------------------------
 // Proceedure, Functions, Interrupt Routines
 //------------------------------------------------
+FunctionDecl	-> IdentList FunctionDecl_1;
+FunctionDecl_1	-> 'FUNC' FuncDecl
+				-> 'PROC' ProcDecl
+				-> 'INTERRUPT' IrqDecl
+				-> .
+				;
 
 IrqDecl			-> 'IDENT' OptInit IrqDeclParams;
 IrqDeclParams	-> '(' ')' IrqBody;
@@ -830,6 +801,25 @@ OptInit		-> '=' CompConst
 //BYTE ARRAY c = [1 2 3 4 55 6]
 //BYTE ARRAY d(156) =$2100
 //----------------------------------
+IdentList	-> Ident IdentList_1;
+IdentList_1	-> ',' Ident IdentList_1
+			-> .
+			;
+
+Ident		-> IdentInitType Ident_1;
+Ident_1		-> 'IDENT' IdentInitType
+			-> .
+			;
+IdentInitType	-> '(' CompConst ')'
+				-> '=' InitData
+				.
+				;
+
+InitData		-> CompConst InitData_1;
+InitData_1		-> 'STRING'
+				-> '[' ConstList ']'
+				-> .
+				;
 
 //-------------------------------------------
 // Parameter Declarations

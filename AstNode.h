@@ -22,6 +22,7 @@ public:
 		CAstNode* pChild = 0,
 		CAstNode* pNext = 0
 	);
+	virtual void CreateValue(CSymbol* pSym);
 	virtual void SetChildNext(
 		CAstNode* pChild = 0,
 		CAstNode* pNext = 0
@@ -30,7 +31,7 @@ public:
 		m_pNext = pNext;
 	}
 	virtual CValue* Process() = 0;
-	virtual void Print(FILE* pOut, int Indent, char* s);
+	virtual void Print(FILE* pOut, int Indent, char* s, int strLen);
 	void AddToHead(CAstNode* pN);
 	void AddToTail(CAstNode* pN);
 	// Getter/Setter Methods
@@ -74,7 +75,7 @@ public:
 		return pSym; 
 	}
 	void SetValue(CValue* pV) { m_pValue = pV; }
-	CValue* GetVvalue() {
+	CValue* GetValue() {
 		return m_pValue
 			;
 	}

@@ -19,7 +19,7 @@ CValue* CAct65InitDATA::Process()
 	return nullptr;
 }
 
-void CAct65InitDATA::Print(FILE* pOut, int Indent, char* s)
+void CAct65InitDATA::Print(FILE* pOut, int Indent, char* s, int l)
 {
-	CAstNode::Print(pOut, Indent, s);
+	CAstNode::Print(pOut, Indent, s,l);
 }

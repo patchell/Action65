@@ -39,8 +39,8 @@ CValue* CAct65AssignMULT::Process()
 	return pValueChild;
 }
 
-void CAct65AssignMULT::Print(FILE* pOut, int Indent, char* s)
+void CAct65AssignMULT::Print(FILE* pOut, int Indent, char* s, int l)
 {
-	CAstNode::Print(pOut, Indent, s);
+	CAstNode::Print(pOut, Indent, s,l);
 }
 
