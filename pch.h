@@ -638,6 +638,7 @@ public:
 #include "Act65DIV.h"
 #include "Act65NUMBER.h"
 #include "Act65DeclareParams.h"
+#include "Act65ROOT.h"
 #include "AstTree.h"
 #include "ActionAstTree.h"
 

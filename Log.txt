@@ -1,0 +1,109 @@
+File:test5.act has 55 Bytes
+Parser Created
+      1.0:d:Enter Action65 TOKEN:CHAR LexBuffer:'CHAR' AST node:ROOT Line:3 Col:4
+      2.0:d:Enter Modules TOKEN:CHAR LexBuffer:'CHAR' AST node:ROOT Line:3 Col:4
+      3.0:d:Enter Vector TOKEN:CHAR LexBuffer:'CHAR' AST node:ROOT Line:3 Col:4
+      4.0:d:Enter SysDecl TOKEN:CHAR LexBuffer:'CHAR' AST node:ROOT Line:3 Col:4
+      5.0:d:Enter TypeDefDecl TOKEN:CHAR LexBuffer:'CHAR' AST node:ROOT Line:3 Col:4
+      6.0:d:Enter Declare TOKEN:CHAR LexBuffer:'CHAR' AST node:ROOT Line:3 Col:4
+      7.0:d:Enter FundDecl TOKEN:CHAR LexBuffer:'CHAR' AST node:ROOT Line:3 Col:4
+7::Expected CLHead: CHAR  LookaHeadToken = CHAR Line:3
+      8.0:a:Enter FundPointerDecl  Lookahead = aChar LexBuffer 'aChar' Line:3 Col:10
+      9.0:a:Enter FundArrayDecl  Lookahead = aChar LexBuffer 'aChar' Line:3 Col:10
+     10.0:a:Enter IdentList  Lookahead = aChar LexBuffer 'aChar' Line:3 Col:10
+     11.0:a:Enter Ident  Lookahead = aChar LexBuffer 'aChar' Line:3 Col:10
+11::Expected CLHead: aChar  Lookahead = aChar Line:3
+     10.0:d:Exit Ident TOKEN:INT LexBuffer:'INT' AST node:IDENT Line:4 Col:3
+     2     -1     -1  +-IDENT: aChar
+      9.0:d:Exit IdenrtList TOKEN:INT LexBuffer:'INT' AST node:IDENT Line:4 Col:3
+     2     -1     -1  +-IDENT: aChar
+      8.0:d:Exit FundArrayDecl TOKEN:INT LexBuffer:'INT' AST node:IDENT Line:4 Col:3
+     2     -1     -1  +-IDENT: aChar
+      7.0:d:Exit FundPointerDecl TOKEN:INT LexBuffer:'INT' AST node:IDENT Line:4 Col:3
+     2     -1     -1  +-IDENT: aChar
+7::Expected CLHead: INT  LookaHeadToken = INT Line:4
+      8.0:a:Enter FundPointerDecl  Lookahead = aInt LexBuffer 'aInt' Line:4 Col:8
+      9.0:a:Enter FundArrayDecl  Lookahead = aInt LexBuffer 'aInt' Line:4 Col:8
+     10.0:a:Enter IdentList  Lookahead = aInt LexBuffer 'aInt' Line:4 Col:8
+     11.0:a:Enter Ident  Lookahead = aInt LexBuffer 'aInt' Line:4 Col:8
+11::Expected CLHead: aInt  Lookahead = aInt Line:4
+     10.0:d:Exit Ident TOKEN:CARD LexBuffer:'CARD' AST node:IDENT Line:5 Col:4
+     4     -1     -1  +-IDENT: aInt
+      9.0:d:Exit IdenrtList TOKEN:CARD LexBuffer:'CARD' AST node:IDENT Line:5 Col:4
+     4     -1     -1  +-IDENT: aInt
+      8.0:d:Exit FundArrayDecl TOKEN:CARD LexBuffer:'CARD' AST node:IDENT Line:5 Col:4
+     4     -1     -1  +-IDENT: aInt
+      7.0:d:Exit FundPointerDecl TOKEN:CARD LexBuffer:'CARD' AST node:IDENT Line:5 Col:4
+     4     -1     -1  +-IDENT: aInt
+7::Expected CLHead: CARD  LookaHeadToken = CARD Line:5
+      8.0:a:Enter FundPointerDecl  Lookahead = aCard LexBuffer 'aCard' Line:5 Col:10
+      9.0:a:Enter FundArrayDecl  Lookahead = aCard LexBuffer 'aCard' Line:5 Col:10
+     10.0:a:Enter IdentList  Lookahead = aCard LexBuffer 'aCard' Line:5 Col:10
+     11.0:a:Enter Ident  Lookahead = aCard LexBuffer 'aCard' Line:5 Col:10
+11::Expected CLHead: aCard  Lookahead = aCard Line:5
+     10.0:d:Exit Ident TOKEN:BYTE LexBuffer:'BYTE' AST node:IDENT Line:6 Col:4
+     6     -1     -1  +-IDENT: aCard
+      9.0:d:Exit IdenrtList TOKEN:BYTE LexBuffer:'BYTE' AST node:IDENT Line:6 Col:4
+     6     -1     -1  +-IDENT: aCard
+      8.0:d:Exit FundArrayDecl TOKEN:BYTE LexBuffer:'BYTE' AST node:IDENT Line:6 Col:4
+     6     -1     -1  +-IDENT: aCard
+      7.0:d:Exit FundPointerDecl TOKEN:BYTE LexBuffer:'BYTE' AST node:IDENT Line:6 Col:4
+     6     -1     -1  +-IDENT: aCard
+7::Expected CLHead: BYTE  LookaHeadToken = BYTE Line:6
+      8.0:a:Enter FundPointerDecl  Lookahead = aByte LexBuffer 'aByte' Line:6 Col:10
+      9.0:a:Enter FundArrayDecl  Lookahead = aByte LexBuffer 'aByte' Line:6 Col:10
+     10.0:a:Enter IdentList  Lookahead = aByte LexBuffer 'aByte' Line:6 Col:10
+     11.0:a:Enter Ident  Lookahead = aByte LexBuffer 'aByte' Line:6 Col:10
+11::Expected CLHead: aByte  Lookahead = aByte Line:6
+     10.0:d:Exit Ident TOKEN:BOOL LexBuffer:'BOOL' AST node:IDENT Line:7 Col:4
+     8     -1     -1  +-IDENT: aByte
+      9.0:d:Exit IdenrtList TOKEN:BOOL LexBuffer:'BOOL' AST node:IDENT Line:7 Col:4
+     8     -1     -1  +-IDENT: aByte
+      8.0:d:Exit FundArrayDecl TOKEN:BOOL LexBuffer:'BOOL' AST node:IDENT Line:7 Col:4
+     8     -1     -1  +-IDENT: aByte
+      7.0:d:Exit FundPointerDecl TOKEN:BOOL LexBuffer:'BOOL' AST node:IDENT Line:7 Col:4
+     8     -1     -1  +-IDENT: aByte
+7::Expected CLHead: BOOL  LookaHeadToken = BOOL Line:7
+      8.0:a:Enter FundPointerDecl  Lookahead = bBool LexBuffer 'bBool' Line:7 Col:10
+      9.0:a:Enter FundArrayDecl  Lookahead = bBool LexBuffer 'bBool' Line:7 Col:10
+     10.0:a:Enter IdentList  Lookahead = bBool LexBuffer 'bBool' Line:7 Col:10
+     11.0:a:Enter Ident  Lookahead = bBool LexBuffer 'bBool' Line:7 Col:10
+11::Expected CLHead: bBool  Lookahead = bBool Line:7
+     10.0:d:Exit Ident TOKEN:End Of File LexBuffer:'bBool' AST node:IDENT Line:8 Col:1
+    10     -1     -1  +-IDENT: bBool
+      9.0:d:Exit IdenrtList TOKEN:End Of File LexBuffer:'bBool' AST node:IDENT Line:8 Col:1
+    10     -1     -1  +-IDENT: bBool
+      8.0:d:Exit FundArrayDecl TOKEN:End Of File LexBuffer:'bBool' AST node:IDENT Line:8 Col:1
+    10     -1     -1  +-IDENT: bBool
+      7.0:d:Exit FundPointerDecl TOKEN:End Of File LexBuffer:'bBool' AST node:IDENT Line:8 Col:1
+    10     -1     -1  +-IDENT: bBool
+      6.0:d:Exit FundDecl TOKEN:End Of File LexBuffer:'bBool' AST node:ROOT Line:8 Col:1
+      5.0:d:Exit Declare TOKEN:End Of File LexBuffer:'bBool' AST node:ROOT Line:8 Col:1
+      4.0:d:Exit TypeDefDecl TOKEN:End Of File LexBuffer:'bBool' AST node:ROOT Line:8 Col:1
+      3.0:d:Exit SysDecl TOKEN:End Of File LexBuffer:'bBool' AST node:ROOT Line:8 Col:1
+      2.0:d:Exit Vector TOKEN:End Of File LexBuffer:'bBool' AST node:ROOT Line:8 Col:1
+      1.0:d:Exit Module TOKEN:End Of File LexBuffer:'bBool' AST node:ROOT Line:8 Col:1
+	 NUMB  CHILD  NEXT
+     1     -1      3  +-ROOT
+     3      2      5  +-CHAR
+     2     -1     -1  | +-IDENT: aChar
+     5      4      7  +-INT
+     4     -1     -1  | +-IDENT: aInt
+     7      6      9  +-CARD
+     6     -1     -1  | +-IDENT: aCard
+     9      8     11  +-BYTE
+     8     -1     -1  | +-IDENT: aByte
+    11     10     -1  +-BOOL
+    10     -1     -1  | +-IDENT: bBool
+------------ Symbol Table --------------
+aChar: CHAR::Address=00000000  Value=0000
+
+aCard: CARD::Address=00000000  Value=0000
+
+aByte: BYTE::Address=00000000  Value=0000
+
+bBool: BOOL::Address=00000000  Value=0000
+
+aInt: INT::Address=00000000  Value=0000
+
+Lines Compiled:8

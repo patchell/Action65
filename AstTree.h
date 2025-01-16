@@ -12,7 +12,8 @@ public:
 		FILE* pOut, 
 		CAstNode* pNode, 
 		char* s,
-		int strLen
+		int strLen,
+		int Indent
 	);
 	//--------------------------------
 	void SetRootNode(CAstNode* pRoot) { m_pRoot = pRoot; }

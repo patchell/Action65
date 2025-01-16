@@ -230,6 +230,7 @@
     <ClCompile Include="Act65AssignLSh.cpp" />
     <ClCompile Include="Act65RETURN.cpp" />
     <ClCompile Include="Act65ROL.cpp" />
+    <ClCompile Include="Act65ROOT.cpp" />
     <ClCompile Include="Act65ROR.cpp" />
     <ClCompile Include="Act65RSH.cpp" />
     <ClCompile Include="Act65SecAtrbFALSE.cpp" />
@@ -401,6 +402,7 @@
     <ClInclude Include="Act65AssignLSH.h" />
     <ClInclude Include="Act65RETURN.h" />
     <ClInclude Include="Act65ROL.h" />
+    <ClInclude Include="Act65ROOT.h" />
     <ClInclude Include="Act65ROR.h" />
     <ClInclude Include="Act65RSH.h" />
     <ClInclude Include="Act65SecAtrbFALSE.h" />

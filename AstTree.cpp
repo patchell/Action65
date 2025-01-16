@@ -11,7 +11,10 @@ CAstTree::~CAstTree()
 
 bool CAstTree::Create()
 {
-	return false;
+	bool rV = true;
+
+	m_pRoot = new CAct65ROOT;
+	return true;
 }
 
 void CAstTree::Print(FILE* pOut)
@@ -24,9 +27,9 @@ void CAstTree::Print(FILE* pOut)
 		memset(s, 0, 4096);
 		fprintf(
 			pOut,
-			"\t NUMB  DOWN  NEXT\n"
+			"\t NUMB  CHILD  NEXT\n"
 		);
-		TraverseTree(pOut, GetRootNode(), s, 4096);
+		TraverseTree(pOut, GetRootNode(), s, 4096, 0);
 		delete[] s;
 	}
 	else
@@ -36,14 +39,20 @@ void CAstTree::Print(FILE* pOut)
 	}
 }
 
-void CAstTree::TraverseTree(FILE* pOut, CAstNode* pNode, char* s, int StringSize)
+void CAstTree::TraverseTree(
+	FILE* pOut, 
+	CAstNode* pNode, 
+	char* s, 
+	int StringSize, 
+	int Indent
+)
 {
 	//-------------------------------
 	// Navigate the Syntax Tree
 	//-------------------------------
 	static int Recursions = 0;
-	char* pNS = 0;
-	int l = 0;
+	CAstNode* pAN = 0;
+	int Loops = 0;
 
 	if (++Recursions > 100)
 	{
@@ -52,35 +61,35 @@ void CAstTree::TraverseTree(FILE* pOut, CAstNode* pNode, char* s, int StringSize
 		Act()->CloseAll();
 		exit(2);
 	}
-	while (pNode->GetNext())	/*	while next pointer points to valid node	*/
+	
+	//pAN = pNode->GetHead();
+	//while (pAN)
+	//{
+	//	fprintf(Act()->GetParser()->LogFile(),"%d:Node Name:%s\n",pAN->GetID(),pAN->GetNodeName());
+	//	pAN = pAN->GetNext();
+	//}
+	pAN = pNode;
+	while (pAN && pAN->GetNext())	/*	while next pointer points to valid node	*/
 	{
-		strcat_s(&s[l], StringSize - l, "+-");
-		l += 2;
-		pNode->Print(pOut, 0,&s[l],StringSize - l );
-		l -= 2;
-		s[l] = 0;
-		if (pNode->GetChild())
+		pAN->Print(Indent,s,StringSize);
+		fprintf(pOut, "%s\n", s);
+		if (pAN->GetChild())
 		{
-			strcat_s(&s[l], StringSize - l, "| ");
-			l += 2;
-			TraverseTree(pOut, pNode->GetChild(),&s[l], StringSize - l);
-			l -= 2;
-			s[l] = 0;
+			TraverseTree(pOut, pAN->GetChild(),s, StringSize, Indent+1);
 		}
-		pNode = pNode->GetNext();
+		pAN = pAN->GetNext();
+		if (++Loops > 10)
+		{
+			Act()->CloseAll();
+			exit(7);
+		}
 	}
-	strcat_s(&s[l], StringSize - l, "+-");
-	l += 2;
-	pNode->Print(pOut, 0,&s[l], StringSize - l);
-	l -= 2;
-	s[l] = 0;
-	if (pNode->GetChild())
+	pAN->Print(Indent,s, StringSize);
+	fprintf(pOut, "%s\n", s);
+	if (pAN->GetChild())
 	{
-		strcat_s(&s[l], StringSize - l, "  ");
-		l += 2;
-		TraverseTree(pOut, pNode->GetChild(),&s[l], StringSize - l);
-		l -= 2;
-		s[l] = 0;
+		TraverseTree(pOut, pAN->GetChild(),s, StringSize, Indent + 1);
 	}
+	Recursions--;
 }
 

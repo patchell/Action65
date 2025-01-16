@@ -42,12 +42,7 @@ bool CAstNode::Create(
 )
 {
 	SetChild(pChild);
-	SetNext(pNext);
-	if (pChild)
-	{
-		pChild->AddToTail(pNext);
-	}
-	if(pNext)GetNext()->SetPrev(this);
+	AddThatToThisNext(pNext);
 	SetStart(Act()->GetParser()->GetAstTree()->GetRootNode());
     return true;
 }
@@ -61,6 +56,16 @@ void CAstNode::CreateValue(CSymbol* pSym)
 void CAstNode::Print(FILE* pOut, int Indent, char* s, int Strlen)
 {
 
+	if (pOut)
+	{
+		fprintf(pOut, "%s\n",
+			Print(Indent,s,Strlen)
+		);
+	}	
+}
+
+char* CAstNode::Print(int Indent, char* s, int Strlen)
+{
 	int i = 0, l = 0;
 	int Id, Child, Next;
 	int size;
@@ -75,7 +80,7 @@ void CAstNode::Print(FILE* pOut, int Indent, char* s, int Strlen)
 	else
 		Next = -1;
 	size = Strlen - l;
-	l += sprintf_s(&s[l],size, "%6d %6d %6d  ", Id, Child, Next);
+	l += sprintf_s(&s[l], size, "%6d %6d %6d  ", Id, Child, Next);
 	for (i = 0; i < Indent; ++i)
 	{
 		size = Strlen - l;
@@ -94,23 +99,10 @@ void CAstNode::Print(FILE* pOut, int Indent, char* s, int Strlen)
 			}
 		}
 	}
-	fprintf(pOut, "%s\n",
-		s
-	);
-
-	//CAstNode* pN;
-
-	//if (GetChild())
-	//	GetChild()->Print(pOut, Indent, s);
-	//pN = GetHead();
-	//while (pN)
-	//{
-	//	pN->Print(pOut, Indent, s);
-	//	pN = pN->GetNext();
-	//}
+	return s;
 }
 
-void CAstNode::AddToHead(CAstNode* pN)
+void CAstNode::AddToHeadNextChain(CAstNode* pN)
 {
 	if (GetHead())
 	{
@@ -126,7 +118,7 @@ void CAstNode::AddToHead(CAstNode* pN)
 }
 
 
-void CAstNode::AddToTail(CAstNode* pNode)
+void CAstNode::AddToTailNextChain(CAstNode* pNode)
 {
 	if (GetHead())
 	{
@@ -139,4 +131,29 @@ void CAstNode::AddToTail(CAstNode* pNode)
 		SetTail(pNode);
 		SetHead(pNode);
 	}
+}
+
+void CAstNode::InsertThatIntoThisNext(CAstNode* pN)
+{
+	CAstNode* pTemp;
+
+	pTemp = GetNext();
+	SetNext(pN);
+	pN->SetNext(pTemp);
+}
+
+void CAstNode::AddThatToThisNext(CAstNode* pN)
+{
+	CAstNode* pNode = this;
+	while (pNode->GetNext())
+		pNode = pNode->GetNext();
+	pNode->SetNext(pN);
+}
+
+void CAstNode::AddThisToThatNext(CAstNode* pN)
+{
+	CAstNode* pNode = pN;
+	while (pNode->GetNext())
+		pNode = pNode->GetNext();
+	pNode->SetNext(this);
 }

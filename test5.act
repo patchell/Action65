@@ -4,3 +4,4 @@ CHAR aChar
 INT aInt
 CARD aCard
 BYTE aByte
+BOOL bBool

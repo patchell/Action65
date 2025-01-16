@@ -7,11 +7,11 @@ class CAstNode
 	int m_NodeType;
 	const char* m_pNodeName;
 	CAstNode* m_pStart;
-	CAstNode* m_pNext;
+	CAstNode* m_pNext;	//next node in chain
 	CAstNode* m_pPrev;
 	CAstNode* m_pHead;
 	CAstNode* m_pTail;
-	CAstNode* m_pChild;
+	CAstNode* m_pChild;	// Child node
 	CAstNode* m_pParent;
 	CValue* m_pValue;
 public:
@@ -26,14 +26,19 @@ public:
 	virtual void SetChildNext(
 		CAstNode* pChild = 0,
 		CAstNode* pNext = 0
-	) {
+	) 
+	{
 		m_pChild = pChild;
 		m_pNext = pNext;
 	}
 	virtual CValue* Process() = 0;
 	virtual void Print(FILE* pOut, int Indent, char* s, int strLen);
-	void AddToHead(CAstNode* pN);
-	void AddToTail(CAstNode* pN);
+	virtual char* Print(int Indent, char* s, int strLen);
+	void AddToHeadNextChain(CAstNode* pN);
+	void AddToTailNextChain(CAstNode* pN);
+	void InsertThatIntoThisNext(CAstNode* pN);
+	void AddThatToThisNext(CAstNode* pN);
+	void AddThisToThatNext(CAstNode* pN);
 	// Getter/Setter Methods
 	CAstNode* GetHead() { return m_pHead; }
 	CAstNode* GetTail() { return m_pTail; }
@@ -50,9 +55,9 @@ public:
 	void SetChild(CAstNode* pAN) { m_pChild = pAN; }
 	void SetParent(CAstNode* pAN) { m_pParent = pAN; }
 	//---------------------------------------------------
-	int GetID() { return m_NodeID; }
+	int GetID() const { return m_NodeID; }
 	void SetID(int Id) { m_NodeID = Id; }
-	int GetNodeType() { return m_NodeType; }
+	int GetNodeType() const { return m_NodeType; }
 	void SetNodeType(int Nt) { m_NodeType = Nt; }
 	const char* GetNodeName() { return m_pNodeName; }
 	void SetNodeName(const char* pName) {
