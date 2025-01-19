@@ -765,7 +765,7 @@ FundDecl_1	-> 'BOOL' FundPointerDecl FundDecl_1
 
 
 FundPointerDecl		-> FundArrayDecl FundPointerDecl_1;
-FundPointerDecl_1	-> 'POINTER' FundArrayDecl
+FundPointerDecl_1	-> 'POINTER' IdentList FundArrayDecl
 					-> .
 					;
 

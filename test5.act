@@ -1,7 +1,5 @@
 
 
-CHAR aChar
-INT aInt
-CARD aCard
-BYTE aByte
-BOOL bBool
+CHAR ARRAY POINTER aChar, bChar, cChar
+CHAR POINTER ARRAY dChar,eChar, fChar
+CHAR POINTER ARRAY ARRAY POINTER POINTER ARRAY rediculous

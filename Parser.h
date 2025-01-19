@@ -378,6 +378,7 @@ private:
 	void Absolute(int Address, AdrModeType ModeType);
 	bool CheckZeroPageAddress(int A);
 	//---------------- Utillity ----------------------
+public:
 	void PrintLookahead(
 		FILE* pLog,
 		CLkHead token,
@@ -385,6 +386,9 @@ private:
 		int RecursionLevel,
 		int Bump = 0
 	);
+	void LookaheadDebug(const char* s, CLkHead* pChild, CLkHead* pNext);
+	void PrintChild(const char* s, CAstNode* pChild);
+	void PrintNode(const char* s, int TabIndent, CAstNode* pNode);
 	//---------------------------------
 };
 

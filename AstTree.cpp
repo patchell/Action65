@@ -54,7 +54,7 @@ void CAstTree::TraverseTree(
 	CAstNode* pAN = 0;
 	int Loops = 0;
 
-	if (++Recursions > 100)
+	if (++Recursions > 10)
 	{
 		fprintf(stderr, "Too Many Recursions\n");
 		fprintf(pOut, "Too Many Recursions\n");

@@ -41,8 +41,19 @@ bool CAstNode::Create(
 	CAstNode* pNext
 )
 {
+	FILE* pOut = Act()->GetParser()->LogFile();
+
+	if (pChild)
+	{
+		fprintf(pOut, "Child: % d - % s  ", pChild->GetID(), pChild->GetNodeName());
+	}
+	if (pNext)
+	{
+		fprintf(pOut, "Next: % d - % s", pNext->GetID(), pNext->GetNodeName());
+	}
 	SetChild(pChild);
-	AddThatToThisNext(pNext);
+	if(pNext)
+		AddThatToThisNext(pNext);
 	SetStart(Act()->GetParser()->GetAstTree()->GetRootNode());
     return true;
 }
@@ -145,9 +156,18 @@ void CAstNode::InsertThatIntoThisNext(CAstNode* pN)
 void CAstNode::AddThatToThisNext(CAstNode* pN)
 {
 	CAstNode* pNode = this;
-	while (pNode->GetNext())
-		pNode = pNode->GetNext();
-	pNode->SetNext(pN);
+	if (pN)
+	{
+		Act()->GetParser()->PrintNode("Add THAT:",1, pN);
+		Act()->GetParser()->PrintNode("To THIS Next:",1, this);
+		while (pNode->GetNext())
+		{
+			Act()->GetParser()->PrintNode("SCAN:Next:",2, pNode);
+			pNode = pNode->GetNext();
+		}
+		Act()->GetParser()->PrintNode("SCAN:Nexts:",2, pNode);
+		pNode->SetNext(pN);
+	}
 }
 
 void CAstNode::AddThisToThatNext(CAstNode* pN)
@@ -156,4 +176,27 @@ void CAstNode::AddThisToThatNext(CAstNode* pN)
 	while (pNode->GetNext())
 		pNode = pNode->GetNext();
 	pNode->SetNext(this);
+}
+
+void CAstNode::AddThatToThisChild(CAstNode* pN)
+{
+	CAstNode* pNode = GetChild();
+	if (pN)
+	{
+		Act()->GetParser()->PrintNode("Add THAT:", 1, pN);
+		Act()->GetParser()->PrintNode("To THIS Child:", 1, this);
+		if (!pNode)
+			SetChild(pN);
+		else
+		{
+			while (pNode->GetNext())
+			{
+				Act()->GetParser()->PrintNode("SCAN:Child:", 2, pNode);
+				pNode = pNode->GetNext();
+			}
+			Act()->GetParser()->PrintNode("SCAN:Child:", 2, pNode);
+			pNode->SetNext(pN);
+		}
+
+	}
 }

@@ -1,6 +1,37 @@
 This is yet another attempt on my part to create an ACTION! cross compiler 
 for the 6502.
 
+Jan 18, 2025
+
+Finally, I hope, I have generating AST trees down.  I am,
+so far, only generating 6 different nodes, and hopefully
+they will start falling in place.  Only about 130 to go.
+
+Example of the first AST generated:
+
+	 NUMB  CHILD  NEXT
+     1     -1      2  +-ROOT
+     2      3      8  +-CHAR
+     3      4     -1  | +-ARRAY
+     4      5     -1  | | +-POINTER
+     5     -1      6  | | | +-IDENT: aChar
+     6     -1      7  | | | +-IDENT: bChar
+     7     -1     -1  | | | +-IDENT: cChar
+     8      9     14  +-CHAR
+     9     10     -1  | +-POINTER
+    10     11     -1  | | +-ARRAY
+    11     -1     12  | | | +-IDENT: dChar
+    12     -1     13  | | | +-IDENT: eChar
+    13     -1     -1  | | | +-IDENT: fChar
+    14     15     -1  +-CHAR
+    15     16     -1  | +-POINTER
+    16     17     -1  | | +-ARRAY
+    17     18     -1  | | | +-ARRAY
+    18     19     -1  | | | | +-POINTER
+    19     20     -1  | | | | | +-POINTER
+    20     21     -1  | | | | | | +-ARRAY
+    21     -1     -1  | | | | | | | +-IDENT: rediculous
+
 December 26, 2024.
 Things are progressing.  While the intent is to create a
 fully compatable ACTION! compiler, And so far, it is looking that

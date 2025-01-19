@@ -39,6 +39,7 @@ public:
 	void InsertThatIntoThisNext(CAstNode* pN);
 	void AddThatToThisNext(CAstNode* pN);
 	void AddThisToThatNext(CAstNode* pN);
+	void AddThatToThisChild(CAstNode* pN);
 	// Getter/Setter Methods
 	CAstNode* GetHead() { return m_pHead; }
 	CAstNode* GetTail() { return m_pTail; }
