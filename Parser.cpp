@@ -53,7 +53,8 @@ CLkHead CParser::Run()
 		LookaHead = Action65(LookaHead);
 		GetLexer()->GetSymTab()->PrintTable(LogFile());
 //		GetAstTree()->Print(LogFile());
-		fprintf(LogFile(), "Lines Compiled:%d\n", GetLexer()->GetLineNumber());
+		if(LogFile())
+			fprintf(LogFile(), "Lines Compiled:%d\n", GetLexer()->GetLineNumber());
 	}
 	catch (Exception& BooBoo)
 	{
@@ -3801,7 +3802,6 @@ CLkHead CParser::FundDecl(CLkHead LookaHead)
 	LHNext = LookaHead;
 	while (Loop)
 	{
-		LookaheadDebug("\n-------\n-Fund Decl", 0, &LHNext);
 		if (++RecurseLoop > 100)
 		{
 			Act()->CloseAll();
@@ -3810,7 +3810,6 @@ CLkHead CParser::FundDecl(CLkHead LookaHead)
 		switch (LHNext.GetToken())
 		{
 		case Token::RECORDTYPE:
-			fprintf(LogFile(), "_______________\nRECORDTYPE\n");
 			//------------ Declaration - Create Type Chain ---------
 			LHNext.SetSymbol(0);
 			if (LHNext.GetTypeChain())
@@ -3842,7 +3841,6 @@ CLkHead CParser::FundDecl(CLkHead LookaHead)
 			LHNext.SetToken(LHChild.GetToken());
 			break;
 		case Token::CHAR:
-			fprintf(LogFile(), "_______________\nCHAR\n");
 			//------------ Declaration - Create Type Chain ---------
 			LHNext.SetSymbol(0);
 			if (LHNext.GetTypeChain())
@@ -3874,7 +3872,6 @@ CLkHead CParser::FundDecl(CLkHead LookaHead)
 			LHNext.SetToken(LHChild.GetToken());
 			break;
 		case Token::BYTE:
-			fprintf(LogFile(), "_______________\nBYTE\n");
 			//------------ Declaration - Create Type Chain ---------
 			LHNext.SetSymbol(0);
 			if (LHNext.GetTypeChain())
@@ -3906,7 +3903,6 @@ CLkHead CParser::FundDecl(CLkHead LookaHead)
 			LHNext.SetToken(LHChild.GetToken());
 			break;
 		case Token::CARD:
-			fprintf(LogFile(), "_______________\nCARD\n");
 			//------------ Declaration - Create Type Chain ---------
 			LHNext.SetSymbol(0);
 			if (LHNext.GetTypeChain())
@@ -3938,7 +3934,6 @@ CLkHead CParser::FundDecl(CLkHead LookaHead)
 			LHNext.SetToken(LHChild.GetToken());
 			break;
 		case Token::INT:
-			fprintf(LogFile(), "_______________\nINT\n");
 			//------------ Declaration - Create Type Chain ---------
 			LHNext.SetSymbol(0);
 			if (LHNext.GetTypeChain())
@@ -3970,7 +3965,6 @@ CLkHead CParser::FundDecl(CLkHead LookaHead)
 			LHNext.SetToken(LHChild.GetToken());
 			break;
 		case Token::BOOL:
-			fprintf(LogFile(), "_______________\nBOOL\n");
 			//------------ Declaration - Create Type Chain ---------
 			LHNext.SetSymbol(0);
 			if (LHNext.GetTypeChain())
@@ -4068,7 +4062,6 @@ CLkHead CParser::FundPointerDecl(CLkHead LookaHead)
 	CObjTypeChain* pOTC = 0;
 
 	PrintLookahead(LogFile(), LookaHead, "Enter FundPointerDecl", ++m_Recursion);
-	fprintf(LogFile(), "------ ENTER POINTER -----------\n");
 	LHNext = FundArrayDecl(LookaHead);
 	switch (LHNext.GetToken())
 	{
@@ -4105,13 +4098,11 @@ CLkHead CParser::FundPointerDecl(CLkHead LookaHead)
 		default:
 			break;
 		}
-		PrintNode("Exit Pointer Next", 1, LHNext.GetNode());
 		//----------------------------------------------
 		break;
 	default:
 		break;
 	}
-	fprintf(LogFile(), "------ Exit POINTER -----------\n");
 	PrintLookahead(LogFile(), LHNext, "Exit FundPointerDecl", --m_Recursion);
 	return LHNext;
 
@@ -4129,7 +4120,6 @@ CLkHead CParser::FundArrayDecl(CLkHead LookaHead)
 	CLkHead LHNext, LHChild;
 	CObjTypeChain* pOTC = 0;
 
-	fprintf(LogFile(), "------ ENTER ARRAY -----------\n");
 	LHNext = IdentList(LookaHead);
 	switch (LHNext.GetToken())
 	{
@@ -4171,7 +4161,6 @@ CLkHead CParser::FundArrayDecl(CLkHead LookaHead)
 		break;
 	}
 	PrintLookahead(LogFile(), LHNext, "Exit FundArrayDecl", --m_Recursion);
-	fprintf(LogFile(), "------ Exit ARRAY -----------\n");
 	return LHNext;
 }
 
@@ -4234,7 +4223,6 @@ CLkHead CParser::Ident(CLkHead LookaHead)
 	CObjTypeChain* pOTC = 0;
 
 	PrintLookahead(LogFile(), LookaHead, "Enter Ident", ++m_Recursion);
-	fprintf(LogFile(), "------ ENTER IDENT -----------\n");
 	LHNext = LookaHead;
 	switch (LHNext.GetToken())
 	{
@@ -4255,7 +4243,6 @@ CLkHead CParser::Ident(CLkHead LookaHead)
 		pN->SetSymbol(pSym);
 //		LHChild = IdentInitType(LHChild); //TODO Add Later
 		//----------------- Wrap Up -----------------------
-//		PrintNode("Next in IDENT", 1, LHNext.GetNode());
 		LHNext.GetNode()->AddThatToThisChild(pN);
 		LHNext.SetToken(LHChild.GetToken());
 		break;
@@ -4293,7 +4280,6 @@ CLkHead CParser::Ident(CLkHead LookaHead)
 		break;
 	}
 	PrintLookahead(LogFile(), LHNext, "Exit Ident", --m_Recursion);
-	fprintf(LogFile(), "------ Exit IDENT -----------\n");
 	return LHNext;
 }
 

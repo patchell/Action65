@@ -43,14 +43,6 @@ bool CAstNode::Create(
 {
 	FILE* pOut = Act()->GetParser()->LogFile();
 
-	if (pChild)
-	{
-		fprintf(pOut, "Child: % d - % s  ", pChild->GetID(), pChild->GetNodeName());
-	}
-	if (pNext)
-	{
-		fprintf(pOut, "Next: % d - % s", pNext->GetID(), pNext->GetNodeName());
-	}
 	SetChild(pChild);
 	if(pNext)
 		AddThatToThisNext(pNext);
@@ -156,16 +148,13 @@ void CAstNode::InsertThatIntoThisNext(CAstNode* pN)
 void CAstNode::AddThatToThisNext(CAstNode* pN)
 {
 	CAstNode* pNode = this;
+
 	if (pN)
 	{
-		Act()->GetParser()->PrintNode("Add THAT:",1, pN);
-		Act()->GetParser()->PrintNode("To THIS Next:",1, this);
 		while (pNode->GetNext())
 		{
-			Act()->GetParser()->PrintNode("SCAN:Next:",2, pNode);
 			pNode = pNode->GetNext();
 		}
-		Act()->GetParser()->PrintNode("SCAN:Nexts:",2, pNode);
 		pNode->SetNext(pN);
 	}
 }
@@ -183,18 +172,14 @@ void CAstNode::AddThatToThisChild(CAstNode* pN)
 	CAstNode* pNode = GetChild();
 	if (pN)
 	{
-		Act()->GetParser()->PrintNode("Add THAT:", 1, pN);
-		Act()->GetParser()->PrintNode("To THIS Child:", 1, this);
 		if (!pNode)
 			SetChild(pN);
 		else
 		{
 			while (pNode->GetNext())
 			{
-				Act()->GetParser()->PrintNode("SCAN:Child:", 2, pNode);
 				pNode = pNode->GetNext();
 			}
-			Act()->GetParser()->PrintNode("SCAN:Child:", 2, pNode);
 			pNode->SetNext(pN);
 		}
 
