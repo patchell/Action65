@@ -170,6 +170,7 @@ void CAstNode::AddThisToThatNext(CAstNode* pN)
 void CAstNode::AddThatToThisChild(CAstNode* pN)
 {
 	CAstNode* pNode = GetChild();
+
 	if (pN)
 	{
 		if (!pNode)
@@ -184,4 +185,15 @@ void CAstNode::AddThatToThisChild(CAstNode* pN)
 		}
 
 	}
+}
+
+void CAstNode::AddThatToThisChildChain(CAstNode* pN)
+{
+	CAstNode* pNode = this;
+
+	while (pNode->GetChild())
+	{
+		pNode = pNode->GetChild();
+	}
+	pNode->SetChild(pN);
 }

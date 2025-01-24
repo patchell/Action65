@@ -1,40 +1,36 @@
-File:test5.act has 137 Bytes
+File:test5.act has 59 Bytes
 Parser Created
+  Loop:1-:ID-2:Name-CHAR
+  Next:-:ID-2:Name-CHAR
+  Child:-:ID-3:Name-ARRAY
+  Loop:2-:ID-2:Name-CHAR
+    CHILD-:ID-3:Name-ARRAY
+  Next:-:ID-2:Name-CHAR
+    CHILD-:ID-3:Name-ARRAY
+  Child:-:ID-4:Name-POINTER
+    CHILD-:ID-5:Name-IDENT-Sym:aChar
+  Loop:3-:ID-2:Name-CHAR
+    CHILD-:ID-3:Name-ARRAY
+    CHILD-:ID-4:Name-POINTER
+    CHILD-:ID-5:Name-IDENT-Sym:aChar
 	 NUMB  CHILD  NEXT
      1     -1      2  +-ROOT
-     2      3      8  +-CHAR
+     2      3     10  +-CHAR
      3      4     -1  | +-ARRAY
      4      5     -1  | | +-POINTER
      5     -1      6  | | | +-IDENT: aChar
-     6     -1      7  | | | +-IDENT: bChar
-     7     -1     -1  | | | +-IDENT: cChar
-     8      9     14  +-CHAR
-     9     10     -1  | +-POINTER
-    10     11     -1  | | +-ARRAY
-    11     -1     12  | | | +-IDENT: dChar
-    12     -1     13  | | | +-IDENT: eChar
-    13     -1     -1  | | | +-IDENT: fChar
-    14     15     -1  +-CHAR
-    15     16     -1  | +-POINTER
-    16     17     -1  | | +-ARRAY
-    17     18     -1  | | | +-ARRAY
-    18     19     -1  | | | | +-POINTER
-    19     20     -1  | | | | | +-POINTER
-    20     21     -1  | | | | | | +-ARRAY
-    21     -1     -1  | | | | | | | +-IDENT: rediculous
+     6     -1      7  | | | +-IDENT: e
+     7     -1      8  | | | +-IDENT: g
+     8     -1     -1  | | | +-IDENT: f
+    10      9     -1  +-IRQ
+     9     -1     -1  | +-IDENT: AnInteruption
 ------------ Symbol Table --------------
-bChar: CHAR:ARRAY:POINTER::Address=00000000  Value=0000
+e: CHAR:ARRAY:POINTER::Address=00000000  Value=0000
 
-cChar: CHAR:ARRAY:POINTER::Address=00000000  Value=0000
+f: CHAR:ARRAY:POINTER::Address=00000000  Value=0000
+
+g: CHAR:ARRAY:POINTER::Address=00000000  Value=0000
 
 aChar: CHAR:ARRAY:POINTER::Address=00000000  Value=0000
 
-fChar: CHAR:POINTER:ARRAY::Address=00000000  Value=0000
-
-dChar: CHAR:POINTER:ARRAY::Address=00000000  Value=0000
-
-eChar: CHAR:POINTER:ARRAY::Address=00000000  Value=0000
-
-rediculous: CHAR:POINTER:ARRAY:ARRAY:POINTER:POINTER:ARRAY::Address=00000000  Value=0000
-
-Lines Compiled:6
+Lines Compiled:5

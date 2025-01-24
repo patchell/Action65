@@ -210,8 +210,7 @@ private:
 	// Fundamental Declarations
 	//----------------------------------------
 	CLkHead FundDecl(CLkHead LookaHead);
-	CLkHead FundPointerDecl(CLkHead LookaHead);
-	CLkHead FundArrayDecl(CLkHead LookaHead);
+	CLkHead FundTypeSpec(CLkHead LookaHead);
 	//----------------------------------
 	// Identifiers
 	//----------------------------------
@@ -237,15 +236,14 @@ private:
 	// Parameter Declarations
 	//-------------------------------------------
 	CLkHead ParamList(CLkHead LookaHead);
-	CLkHead PramPointer(CLkHead LookaHead);
-	CLkHead ParamArray(CLkHead LookaHead);
+	CLkHead ParamTypeSpec(CLkHead LookaHead);
 	CLkHead DefineParamIdentList(CLkHead LookaHead);
 	CLkHead DefineParamIdent(CLkHead LookaHead);
 	//-----------------------------------------------
 	// Local Variableas
 	//-----------------------------------------------
 	CLkHead LocalDecls(CLkHead LookaHead);
-	CLkHead LocalPointerDecl(CLkHead LookaHead);
+	CLkHead LocalTypeSpec(CLkHead LookaHead);
 	CLkHead LocalArrayDecl(CLkHead LookaHead);
 	//-------------------------------
 	// Compiler Constants

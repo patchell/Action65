@@ -14,6 +14,10 @@ CLkHead::~CLkHead()
 
 bool CLkHead::Create()
 {
+	m_Token = Token(0);
+	m_pNode = 0;
+	m_pSymbol = 0;
+	m_pTypeChain = 0;
 	return true;
 }
 
