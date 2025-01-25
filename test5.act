@@ -1,4 +1,2 @@
-
-
-CHAR ARRAY POINTER aChar,e,g,f
+//
 INTERRUPT AnInteruption()

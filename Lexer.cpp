@@ -70,6 +70,15 @@ int CLexer::LexGet()
 
 int CLexer::LexLook(int index)
 {
+	//--------------------------------------
+	// Looks at characters in the future
+	// from the current character pointed
+	// by the code buffer pointer 
+	// ( m_FileIndex )
+	// 0 is the current next character
+	// 1 is the one following that
+	// ... ext.
+	//--------------------------------------
 	int c = EOF;
 	int i;
 
@@ -364,8 +373,8 @@ Token CLexer::Lex()
 			}
 			else
 			{
-				c1 = LexLook(1);
-				c2 = LexLook(2);
+				c1 = LexLook(0);
+				c2 = LexLook(1);
 				if (!IsValidNameChar(c2))
 				{
 					switch (c1)
@@ -428,7 +437,7 @@ Token CLexer::Lex()
 			Loop = false;
 			break;
 		case '/':
-			if (LexLook(1) == '/')	//comment?
+			if (LexLook(0) == '/')	//comment?
 			{
 				auxLoop = true;
 				while (auxLoop)

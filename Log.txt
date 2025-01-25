@@ -1,36 +1,8 @@
-File:test5.act has 59 Bytes
+File:test5.act has 29 Bytes
 Parser Created
-  Loop:1-:ID-2:Name-CHAR
-  Next:-:ID-2:Name-CHAR
-  Child:-:ID-3:Name-ARRAY
-  Loop:2-:ID-2:Name-CHAR
-    CHILD-:ID-3:Name-ARRAY
-  Next:-:ID-2:Name-CHAR
-    CHILD-:ID-3:Name-ARRAY
-  Child:-:ID-4:Name-POINTER
-    CHILD-:ID-5:Name-IDENT-Sym:aChar
-  Loop:3-:ID-2:Name-CHAR
-    CHILD-:ID-3:Name-ARRAY
-    CHILD-:ID-4:Name-POINTER
-    CHILD-:ID-5:Name-IDENT-Sym:aChar
 	 NUMB  CHILD  NEXT
-     1     -1      2  +-ROOT
-     2      3     10  +-CHAR
-     3      4     -1  | +-ARRAY
-     4      5     -1  | | +-POINTER
-     5     -1      6  | | | +-IDENT: aChar
-     6     -1      7  | | | +-IDENT: e
-     7     -1      8  | | | +-IDENT: g
-     8     -1     -1  | | | +-IDENT: f
-    10      9     -1  +-IRQ
-     9     -1     -1  | +-IDENT: AnInteruption
+     1     -1      3  +-ROOT
+     3      2     -1  +-IRQ
+     2     -1     -1  | +-IDENT: AnInteruption
 ------------ Symbol Table --------------
-e: CHAR:ARRAY:POINTER::Address=00000000  Value=0000
-
-f: CHAR:ARRAY:POINTER::Address=00000000  Value=0000
-
-g: CHAR:ARRAY:POINTER::Address=00000000  Value=0000
-
-aChar: CHAR:ARRAY:POINTER::Address=00000000  Value=0000
-
-Lines Compiled:5
+Lines Compiled:3
