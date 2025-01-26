@@ -3820,6 +3820,10 @@ CLkHead CParser::FundDecl(CLkHead LookaHead)
 			LHNext.GetTypeChain()->Create();
 			pOTC = new CObjTypeChain;
 			pOTC->Create();
+			pOTC->SetSpec(CObjTypeChain::Spec::GLOBAL);
+			LHNext.GetTypeChain()->AddToTail(pOTC);		//node -> ROOT
+			pOTC = new CObjTypeChain;
+			pOTC->Create();
 			pOTC->SetSpec(CObjTypeChain::Spec::TYPE);
 			LHNext.GetTypeChain()->AddToTail(pOTC);
 			//------------- Parsing -----------------------
@@ -3849,6 +3853,10 @@ CLkHead CParser::FundDecl(CLkHead LookaHead)
 			}
 			LHNext.SetTypeChain(new CTypeChain);
 			LHNext.GetTypeChain()->Create();
+			pOTC = new CObjTypeChain;
+			pOTC->Create();
+			pOTC->SetSpec(CObjTypeChain::Spec::GLOBAL);
+			LHNext.GetTypeChain()->AddToTail(pOTC);		//node -> ROOT
 			pOTC = new CObjTypeChain;
 			pOTC->Create();
 			pOTC->SetSpec(CObjTypeChain::Spec::CHAR);
@@ -3882,6 +3890,10 @@ CLkHead CParser::FundDecl(CLkHead LookaHead)
 			LHNext.GetTypeChain()->Create();
 			pOTC = new CObjTypeChain;
 			pOTC->Create();
+			pOTC->SetSpec(CObjTypeChain::Spec::GLOBAL);
+			LHNext.GetTypeChain()->AddToTail(pOTC);		//node -> ROOT
+			pOTC = new CObjTypeChain;
+			pOTC->Create();
 			pOTC->SetSpec(CObjTypeChain::Spec::BYTE);
 			LHNext.GetTypeChain()->AddToTail(pOTC);
 			//--------------- Parsing ---------------------------
@@ -3911,6 +3923,10 @@ CLkHead CParser::FundDecl(CLkHead LookaHead)
 			}
 			LHNext.SetTypeChain(new CTypeChain);
 			LHNext.GetTypeChain()->Create();
+			pOTC = new CObjTypeChain;
+			pOTC->Create();
+			pOTC->SetSpec(CObjTypeChain::Spec::GLOBAL);
+			LHNext.GetTypeChain()->AddToTail(pOTC);		//node -> ROOT
 			pOTC = new CObjTypeChain;
 			pOTC->Create();
 			pOTC->SetSpec(CObjTypeChain::Spec::CARD);
@@ -3944,13 +3960,17 @@ CLkHead CParser::FundDecl(CLkHead LookaHead)
 			LHNext.GetTypeChain()->Create();
 			pOTC = new CObjTypeChain;
 			pOTC->Create();
+			pOTC->SetSpec(CObjTypeChain::Spec::GLOBAL);
+			LHNext.GetTypeChain()->AddToTail(pOTC);		//node -> ROOT
+			pOTC = new CObjTypeChain;
+			pOTC->Create();
 			pOTC->SetSpec(CObjTypeChain::Spec::INT);
 			LHNext.GetTypeChain()->AddToTail(pOTC);
 			//--------------- Parsing ---------------------------
 			LHChild = Expect(LHNext, Token::INT);
 			//------------ Abstract Syntax Tree Node --------------
 			pN = new CAct65INT;
-			pN->Create(LHChild.GetNode());
+			pN->Create();
 			LHChild.SetNode(pN);
 			LHChild = FundTypeSpec(LHChild);
 			//-------------- Wrap Up --------------------
@@ -3975,13 +3995,17 @@ CLkHead CParser::FundDecl(CLkHead LookaHead)
 			LHNext.GetTypeChain()->Create();
 			pOTC = new CObjTypeChain;
 			pOTC->Create();
+			pOTC->SetSpec(CObjTypeChain::Spec::GLOBAL);
+			LHNext.GetTypeChain()->AddToTail(pOTC);		//node -> ROOT
+			pOTC = new CObjTypeChain;
+			pOTC->Create();
 			pOTC->SetSpec(CObjTypeChain::Spec::BOOL);
 			LHNext.GetTypeChain()->AddToTail(pOTC);
 			//--------------- Parsing ---------------------------
 			LHChild = Expect(LHNext, Token::BOOL);
 			//-------------- Abstract Syntax Tree Node ------------
 			pN = new CAct65BOOL;
-			pN->Create(LHChild.GetNode());
+			pN->Create();
 			LHChild.SetNode(pN);
 			LHChild = FundTypeSpec(LHChild);
 			//-------------- Wrap Up ----------------------
@@ -4005,6 +4029,10 @@ CLkHead CParser::FundDecl(CLkHead LookaHead)
 			LHNext.GetTypeChain()->Create();
 			pOTC = new CObjTypeChain;
 			pOTC->Create();
+			pOTC->SetSpec(CObjTypeChain::Spec::GLOBAL);
+			LHNext.GetTypeChain()->AddToTail(pOTC);		//node -> ROOT
+			pOTC = new CObjTypeChain;
+			pOTC->Create();
 			pOTC->SetSpec(CObjTypeChain::Spec::PROC);
 			LHNext.GetTypeChain()->AddToTail(pOTC);
 			//------------------- Parsing ----------------------
@@ -4019,11 +4047,11 @@ CLkHead CParser::FundDecl(CLkHead LookaHead)
 			break;
 		case Token::INTERRUPT:
 			//-------------- Declaration ------------------
-			if (LHNext.GetTypeChain() == 0)
+			if (LHNext.GetTypeChain())
 			{
-				LHNext.SetTypeChain(new CTypeChain);
-				LHNext.GetTypeChain()->Create();
+				LHNext.DestroyTypeChain();
 			}
+			LHNext.SetTypeChain(new CTypeChain);
 			LHNext.GetTypeChain()->Create();
 			pOTC = new CObjTypeChain;
 			pOTC->Create();
@@ -4091,8 +4119,6 @@ CLkHead CParser::FundTypeSpec(CLkHead LookaHead)
 			LHChild = IdentList(LHChild);
 			//----------------------------------------------
 			LHNext.SetToken(LHChild.GetToken());
-			PrintNode("Next:", 1, LHNext.GetNode());
-			PrintNode("Child:", 1, LHChild.GetNode());
 			LHNext.GetNode()->AddThatToThisChildChain(LHChild.GetNode());
 			break;
 		case Token::ARRAY:
@@ -4110,8 +4136,6 @@ CLkHead CParser::FundTypeSpec(CLkHead LookaHead)
 			LHChild.SetNode(pN);
 			LHChild = IdentList(LHChild);
 			LHNext.SetToken(LHChild.GetToken());
-			PrintNode("Next:", 1, LHNext.GetNode());
-			PrintNode("Child:", 1, LHChild.GetNode());
 			LHNext.GetNode()->AddThatToThisChild(LHChild.GetNode());
 			break;
 		default:
@@ -4341,17 +4365,14 @@ CLkHead CParser::IrqDecl(CLkHead LookaHead)
 	{
 	case Token::IDENT:
 		//--------------- Declaration --------------
-		if (LHNext.GetTypeChain() == 0)
-		{
-			LHNext.SetTypeChain(new CTypeChain);
-			LHNext.GetTypeChain()->Create();
-		}
+		//--------------------------
 		pSym = (CSymbol*)GetLexer()->GetLexSymbol();
 		pTC = new CTypeChain;
 		pTC->Create();
 		pTC->CopyTypeChain(LHNext.GetTypeChain());
 		pSym->SetTypeChain(pTC);
 		pSym->SetIdentType(IdentType::IRQPROC);
+		GetLexer()->GetSymTab()->AddSymbol(pSym);
 		//------------- Parsing ------------
 		LHNext = Expect(LHNext, Token::IDENT);
 		//------- Abstract Syntax Tree Node ---------
@@ -4362,10 +4383,10 @@ CLkHead CParser::IrqDecl(CLkHead LookaHead)
 		{
 			LHInit = OptInit(LHNext);
 			LHNext.SetToken(LHInit.GetToken());
-			pN->SetChild(LHInit.GetNode());
+			pN->SetNext(LHInit.GetNode());
 		}
 		LHChild = IrqDeclParams(LHNext);
-		pN->SetNext(LHChild.GetNode());
+		pN->SetChild(LHChild.GetNode());
 		//--------------- Wrap Up ------------------------
 		LHNext.SetToken(LHChild.GetToken());
 		LHNext.SetNode(pN);
@@ -4384,10 +4405,17 @@ CLkHead CParser::IrqDeclParams(CLkHead LookaHead)
 	//	IrqDeclParams	-> '(' ')' IrqBody;
 	//--------------------------------------------
 	CLkHead LHNext;
+	CAstNode* pN = 0;
 
 	LHNext = Expect(LookaHead, Token('('));
+	pN = new CAct65ParamList;
+	pN->Create();
+	if (LHNext.GetNode())
+		LHNext.GetNode()->AddThatToThisNext(pN);
+	else
+		LHNext.SetNode(pN);
 	LHNext = Expect(LHNext, Token(')'));
-//	LHNext = IrqBody(LHNext);
+	LHNext = IrqBody(LHNext);
 	return LHNext;
 }
 
@@ -4629,8 +4657,9 @@ CLkHead CParser::ParamList(CLkHead LookaHead)
 	{
 		switch (LHNext.GetToken())
 		{
-		case Token::RECORDTYPE:
+		case Token::CHAR:
 			//--------------- Declaration -------------
+			LHNext.SetSymbol(0);
 			if (LHNext.GetTypeChain())
 			{
 				LHNext.DestroyTypeChain();
@@ -4639,45 +4668,30 @@ CLkHead CParser::ParamList(CLkHead LookaHead)
 			LHNext.GetTypeChain()->Create();
 			pOTC = new CObjTypeChain;
 			pOTC->Create();
-			pOTC->SetSpec(CObjTypeChain::Spec::TYPE);
-			pTC = new CTypeChain;
-			pTC->Create();
-			pTC->AddToTail(pOTC);
-			//------------------ Parse ------------------------
-			LHChild = Expect(LHNext, Token::RECORDTYPE);
-			LHChild.SetTypeChain(pTC);
-			LHChild = ParamTypeSpec(LHChild);
-			//-------------- Abstract Syntax Tree Node -----------
-			pN = new CAct65RECTYPE;;
-			pN->Create(LHChild.GetNode(), LHNext.GetNode());
-			//------------------ Wrap Up -----------------------------
-			LHNext = LHChild;
-			LHNext.SetNode(pN);
-			break;
-		case Token::CHAR:
-			//--------------- Declaration -------------
-			if (LHNext.GetTypeChain())
-			{
-				LHNext.DestroyTypeChain();
-			}
-			LHNext.SetTypeChain(new CTypeChain);
-			LHNext.GetTypeChain()->Create();
+			pOTC->SetSpec(CObjTypeChain::Spec::PARAM);
+			LHNext.GetTypeChain()->AddToTail(pOTC);		//node -> ROOT
 			pOTC = new CObjTypeChain;
 			pOTC->Create();
 			pOTC->SetSpec(CObjTypeChain::Spec::CHAR);
-			pTC = new CTypeChain;
-			pTC->Create();
-			pTC->AddToTail(pOTC);
+			LHNext.GetTypeChain()->AddToTail(pOTC);		//node -> ROOT
 			//------------------ Parse ------------------------
 			LHChild = Expect(LHNext, Token::CHAR);
-			LHChild.SetTypeChain(pTC);
 			LHChild = ParamTypeSpec(LHChild);
-			//---------- Abstract Syntax Tree Node -----------
-			pN = new CAct65CHAR;;
-			pN->Create(LHChild.GetNode(), LHNext.GetNode());
-			//------------------ Wrap Up -----------------------------
-			LHNext = LHChild;
-			LHNext.SetNode(pN);
+			//-------- Abstract Syntax Tree Node --------------
+			pN = new CAct65CHAR;
+			pN->Create();				//Node CHAR.child = IDENT
+			LHChild.SetNode(pN);
+			LHChild = FundTypeSpec(LHChild);			//LHChild node -> IDENT
+			//-------------- Wrap UP ------------------------
+			if (LHNext.GetNode())
+			{
+				LHNext.GetNode()->AddThatToThisNext(pN);
+			}
+			else
+			{
+				LHNext.SetNode(pN);
+			}
+			LHNext.SetToken(LHChild.GetToken());
 			break;
 		case Token::BYTE:
 			//--------------- Declaration -------------
@@ -4689,20 +4703,30 @@ CLkHead CParser::ParamList(CLkHead LookaHead)
 			LHNext.GetTypeChain()->Create();
 			pOTC = new CObjTypeChain;
 			pOTC->Create();
+			pOTC->SetSpec(CObjTypeChain::Spec::PARAM);
+			LHNext.GetTypeChain()->AddToTail(pOTC);		//node -> ROOT
+			pOTC = new CObjTypeChain;
+			pOTC->Create();
 			pOTC->SetSpec(CObjTypeChain::Spec::BYTE);
-			pTC = new CTypeChain;
-			pTC->Create();
-			pTC->AddToTail(pOTC);
+			LHNext.GetTypeChain()->AddToTail(pOTC);		//node -> ROOT
 			//------------------ Parse ------------------------
 			LHChild = Expect(LHNext, Token::BYTE);
-			LHChild.SetTypeChain(pTC);
 			LHChild = ParamTypeSpec(LHChild);
-			//---------- Abstract Syntax Tree Node -----------
+			//-------- Abstract Syntax Tree Node --------------
 			pN = new CAct65BYTE;;
-			pN->Create(LHChild.GetNode(), LHNext.GetNode());
-			//------------------ Wrap Up -----------------------------
-			LHNext = LHChild;
-			LHNext.SetNode(pN);
+			pN->Create();				//Node CHAR.child = IDENT
+			LHChild.SetNode(pN);
+			LHChild = FundTypeSpec(LHChild);			//LHChild node -> IDENT
+			//-------------- Wrap UP ------------------------
+			if (LHNext.GetNode())
+			{
+				LHNext.GetNode()->AddThatToThisNext(pN);
+			}
+			else
+			{
+				LHNext.SetNode(pN);
+			}
+			LHNext.SetToken(LHChild.GetToken());
 			break;
 		case Token::CARD:
 			//--------------- Declaration -------------
@@ -4714,20 +4738,30 @@ CLkHead CParser::ParamList(CLkHead LookaHead)
 			LHNext.GetTypeChain()->Create();
 			pOTC = new CObjTypeChain;
 			pOTC->Create();
+			pOTC->SetSpec(CObjTypeChain::Spec::PARAM);
+			LHNext.GetTypeChain()->AddToTail(pOTC);		//node -> ROOT
+			pOTC = new CObjTypeChain;
+			pOTC->Create();
 			pOTC->SetSpec(CObjTypeChain::Spec::CARD);
-			pTC = new CTypeChain;
-			pTC->Create();
-			pTC->AddToTail(pOTC);
+			LHNext.GetTypeChain()->AddToTail(pOTC);		//node -> ROOT
 			//------------------ Parse ------------------------
 			LHChild = Expect(LHNext, Token::CARD);
-			LHChild.SetTypeChain(pTC);
 			LHChild = ParamTypeSpec(LHChild);
-			//---------- Abstract Syntax Tree Node -----------
+			//-------- Abstract Syntax Tree Node --------------
 			pN = new CAct65CARD;;
-			pN->Create(LHChild.GetNode(), LHNext.GetNode());
-			//------------------ Wrap Up -----------------------------
-			LHNext = LHChild;
-			LHNext.SetNode(pN);
+			pN->Create();				//Node CHAR.child = IDENT
+			LHChild.SetNode(pN);
+			LHChild = FundTypeSpec(LHChild);			//LHChild node -> IDENT
+			//-------------- Wrap UP ------------------------
+			if (LHNext.GetNode())
+			{
+				LHNext.GetNode()->AddThatToThisNext(pN);
+			}
+			else
+			{
+				LHNext.SetNode(pN);
+			}
+			LHNext.SetToken(LHChild.GetToken());
 			break;
 		case Token::INT:
 			//--------------- Declaration -------------
@@ -4739,20 +4773,30 @@ CLkHead CParser::ParamList(CLkHead LookaHead)
 			LHNext.GetTypeChain()->Create();
 			pOTC = new CObjTypeChain;
 			pOTC->Create();
+			pOTC->SetSpec(CObjTypeChain::Spec::PARAM);
+			LHNext.GetTypeChain()->AddToTail(pOTC);		//node -> ROOT
+			pOTC = new CObjTypeChain;
+			pOTC->Create();
 			pOTC->SetSpec(CObjTypeChain::Spec::INT);
-			pTC = new CTypeChain;
-			pTC->Create();
-			pTC->AddToTail(pOTC);
+			LHNext.GetTypeChain()->AddToTail(pOTC);		//node -> ROOT
 			//------------------ Parse ------------------------
 			LHChild = Expect(LHNext, Token::INT);
-			LHChild.SetTypeChain(pTC);
 			LHChild = ParamTypeSpec(LHChild);
-			//---------- Abstract Syntax Tree Node -----------
+			//-------- Abstract Syntax Tree Node --------------
 			pN = new CAct65INT;;
-			pN->Create(LHChild.GetNode(), LHNext.GetNode());
-			//------------------ Wrap Up -----------------------------
-			LHNext = LHChild;
-			LHNext.SetNode(pN);
+			pN->Create();				//Node CHAR.child = IDENT
+			LHChild.SetNode(pN);
+			LHChild = FundTypeSpec(LHChild);			//LHChild node -> IDENT
+			//-------------- Wrap UP ------------------------
+			if (LHNext.GetNode())
+			{
+				LHNext.GetNode()->AddThatToThisNext(pN);
+			}
+			else
+			{
+				LHNext.SetNode(pN);
+			}
+			LHNext.SetToken(LHChild.GetToken());
 			break;
 		case Token::BOOL:
 			//--------------- Declaration -------------
@@ -4764,20 +4808,65 @@ CLkHead CParser::ParamList(CLkHead LookaHead)
 			LHNext.GetTypeChain()->Create();
 			pOTC = new CObjTypeChain;
 			pOTC->Create();
+			pOTC->SetSpec(CObjTypeChain::Spec::PARAM);
+			LHNext.GetTypeChain()->AddToTail(pOTC);		//node -> ROOT
+			pOTC = new CObjTypeChain;
+			pOTC->Create();
 			pOTC->SetSpec(CObjTypeChain::Spec::BOOL);
-			pTC = new CTypeChain;
-			pTC->Create();
-			pTC->AddToTail(pOTC);
+			LHNext.GetTypeChain()->AddToTail(pOTC);		//node -> ROOT
 			//------------------ Parse ------------------------
 			LHChild = Expect(LHNext, Token::BOOL);
-			LHChild.SetTypeChain(pTC);
 			LHChild = ParamTypeSpec(LHChild);
-			//---------- Abstract Syntax Tree Node -----------
+			//-------- Abstract Syntax Tree Node --------------
 			pN = new CAct65BOOL;;
-			pN->Create(LHChild.GetNode(), LHNext.GetNode());
-			//------------------ Wrap Up -----------------------------
-			LHNext = LHChild;
-			LHNext.SetNode(pN);
+			pN->Create();				//Node CHAR.child = IDENT
+			LHChild.SetNode(pN);
+			LHChild = FundTypeSpec(LHChild);			//LHChild node -> IDENT
+			//-------------- Wrap UP ------------------------
+			if (LHNext.GetNode())
+			{
+				LHNext.GetNode()->AddThatToThisNext(pN);
+			}
+			else
+			{
+				LHNext.SetNode(pN);
+			}
+			LHNext.SetToken(LHChild.GetToken());
+			break;
+		case Token::RECORDTYPE:
+			//--------------- Declaration -------------
+			if (LHNext.GetTypeChain())
+			{
+				LHNext.DestroyTypeChain();
+			}
+			LHNext.SetTypeChain(new CTypeChain);
+			LHNext.GetTypeChain()->Create();
+			pOTC = new CObjTypeChain;
+			pOTC->Create();
+			pOTC->SetSpec(CObjTypeChain::Spec::PARAM);
+			LHNext.GetTypeChain()->AddToTail(pOTC);		//node -> ROOT
+			pOTC = new CObjTypeChain;
+			pOTC->Create();
+			pOTC->SetSpec(CObjTypeChain::Spec::TYPE);
+			LHNext.GetTypeChain()->AddToTail(pOTC);		//node -> ROOT
+			//------------------ Parse ------------------------
+			LHChild = Expect(LHNext, Token::RECORDTYPE);
+			LHChild = ParamTypeSpec(LHChild);
+			//-------- Abstract Syntax Tree Node --------------
+			pN = new CAct65RECTYPE;;
+			pN->Create();				//Node CHAR.child = IDENT
+			LHChild.SetNode(pN);
+			LHChild = FundTypeSpec(LHChild);			//LHChild node -> IDENT
+			//-------------- Wrap UP ------------------------
+			if (LHNext.GetNode())
+			{
+				LHNext.GetNode()->AddThatToThisNext(pN);
+			}
+			else
+			{
+				LHNext.SetNode(pN);
+			}
+			LHNext.SetToken(LHChild.GetToken());
 			break;
 		default:
 			Loop = false;
@@ -4980,6 +5069,7 @@ CLkHead CParser::LocalDecls(CLkHead LookaHead)
 		{
 		case Token::CHAR:
 			//--------------- Declaration -------------
+			LHNext.SetSymbol(0);
 			if (LHNext.GetTypeChain())
 			{
 				LHNext.DestroyTypeChain();
@@ -4988,19 +5078,29 @@ CLkHead CParser::LocalDecls(CLkHead LookaHead)
 			LHNext.GetTypeChain()->Create();
 			pOTC = new CObjTypeChain;
 			pOTC->Create();
+			pOTC->SetSpec(CObjTypeChain::Spec::LOCAL);
+			LHNext.GetTypeChain()->AddToTail(pOTC);		//node -> ROOT
+			pOTC = new CObjTypeChain;
+			pOTC->Create();
 			pOTC->SetSpec(CObjTypeChain::Spec::CHAR);
-			pTC = new CTypeChain;
-			pTC->Create();
-			pTC->AddToTail(pOTC);
+			LHNext.GetTypeChain()->AddToTail(pOTC);		//node -> ROOT
 			//------------------ Parse ------------------------
 			LHChild = Expect(LHNext, Token::CHAR);
-			LHChild = LocalTypeSpec(LHChild);
 			//-------- Abstract Syntax Tree Node --------------
-			pN = new CAct65CHAR;;
-			pN->Create(LHChild.GetNode(), LHNext.GetNode());
+			pN = new CAct65CHAR;
+			pN->Create();				//Node CHAR.child = IDENT
+			LHChild.SetNode(pN);
+			LHChild = LocalTypeSpec(LHChild);
 			//-------------- Wrap UP ------------------------
-			LHNext = LHChild;
-			LHNext.SetNode(pN);
+			if (LHNext.GetNode())
+			{
+				LHNext.GetNode()->AddThatToThisNext(pN);
+			}
+			else
+			{
+				LHNext.SetNode(pN);
+			}
+			LHNext.SetToken(LHChild.GetToken());
 			break;
 		case Token::BYTE:
 			//--------------- Declaration -------------
@@ -5012,19 +5112,29 @@ CLkHead CParser::LocalDecls(CLkHead LookaHead)
 			LHNext.GetTypeChain()->Create();
 			pOTC = new CObjTypeChain;
 			pOTC->Create();
+			pOTC->SetSpec(CObjTypeChain::Spec::LOCAL);
+			LHNext.GetTypeChain()->AddToTail(pOTC);		//node -> ROOT
+			pOTC = new CObjTypeChain;
+			pOTC->Create();
 			pOTC->SetSpec(CObjTypeChain::Spec::BYTE);
-			pTC = new CTypeChain;
-			pTC->Create();
-			pTC->AddToTail(pOTC);
+			LHNext.GetTypeChain()->AddToTail(pOTC);		//node -> ROOT
 			//------------------ Parse ------------------------
 			LHChild = Expect(LHNext, Token::BYTE);
-			LHChild = LocalTypeSpec(LHChild);
 			//-------- Abstract Syntax Tree Node --------------
 			pN = new CAct65BYTE;;
-			pN->Create(LHChild.GetNode(), LHNext.GetNode());
+			pN->Create();				//Node CHAR.child = IDENT
+			LHChild.SetNode(pN);
+			LHChild = LocalTypeSpec(LHChild);
 			//-------------- Wrap UP ------------------------
-			LHNext = LHChild;
-			LHNext.SetNode(pN);
+			if (LHNext.GetNode())
+			{
+				LHNext.GetNode()->AddThatToThisNext(pN);
+			}
+			else
+			{
+				LHNext.SetNode(pN);
+			}
+			LHNext.SetToken(LHChild.GetToken());
 			break;
 		case Token::CARD:
 			//--------------- Declaration -------------
@@ -5036,19 +5146,29 @@ CLkHead CParser::LocalDecls(CLkHead LookaHead)
 			LHNext.GetTypeChain()->Create();
 			pOTC = new CObjTypeChain;
 			pOTC->Create();
+			pOTC->SetSpec(CObjTypeChain::Spec::LOCAL);
+			LHNext.GetTypeChain()->AddToTail(pOTC);		//node -> ROOT
+			pOTC = new CObjTypeChain;
+			pOTC->Create();
 			pOTC->SetSpec(CObjTypeChain::Spec::CARD);
-			pTC = new CTypeChain;
-			pTC->Create();
-			pTC->AddToTail(pOTC);
+			LHNext.GetTypeChain()->AddToTail(pOTC);		//node -> ROOT
 			//------------------ Parse ------------------------
 			LHChild = Expect(LHNext, Token::CARD);
-			LHChild = LocalTypeSpec(LHChild);
 			//-------- Abstract Syntax Tree Node --------------
 			pN = new CAct65CARD;;
-			pN->Create(LHChild.GetNode(), LHNext.GetNode());
+			pN->Create();				//Node CHAR.child = IDENT
+			LHChild.SetNode(pN);
+			LHChild = LocalTypeSpec(LHChild);
 			//-------------- Wrap UP ------------------------
-			LHNext = LHChild;
-			LHNext.SetNode(pN);
+			if (LHNext.GetNode())
+			{
+				LHNext.GetNode()->AddThatToThisNext(pN);
+			}
+			else
+			{
+				LHNext.SetNode(pN);
+			}
+			LHNext.SetToken(LHChild.GetToken());
 			break;
 		case Token::INT:
 			//--------------- Declaration -------------
@@ -5060,19 +5180,29 @@ CLkHead CParser::LocalDecls(CLkHead LookaHead)
 			LHNext.GetTypeChain()->Create();
 			pOTC = new CObjTypeChain;
 			pOTC->Create();
+			pOTC->SetSpec(CObjTypeChain::Spec::LOCAL);
+			LHNext.GetTypeChain()->AddToTail(pOTC);		//node -> ROOT
+			pOTC = new CObjTypeChain;
+			pOTC->Create();
 			pOTC->SetSpec(CObjTypeChain::Spec::INT);
-			pTC = new CTypeChain;
-			pTC->Create();
-			pTC->AddToTail(pOTC);
+			LHNext.GetTypeChain()->AddToTail(pOTC);		//node -> ROOT
 			//------------------ Parse ------------------------
 			LHChild = Expect(LHNext, Token::INT);
-			LHChild = LocalTypeSpec(LHChild);
 			//-------- Abstract Syntax Tree Node --------------
 			pN = new CAct65INT;;
-			pN->Create(LHChild.GetNode(), LHNext.GetNode());
+			pN->Create();				//Node CHAR.child = IDENT
+			LHChild.SetNode(pN);
+			LHChild = LocalTypeSpec(LHChild);
 			//-------------- Wrap UP ------------------------
-			LHNext = LHChild;
-			LHNext.SetNode(pN);
+			if (LHNext.GetNode())
+			{
+				LHNext.GetNode()->AddThatToThisNext(pN);
+			}
+			else
+			{
+				LHNext.SetNode(pN);
+			}
+			LHNext.SetToken(LHChild.GetToken());
 			break;
 		case Token::BOOL:
 			//--------------- Declaration -------------
@@ -5084,19 +5214,29 @@ CLkHead CParser::LocalDecls(CLkHead LookaHead)
 			LHNext.GetTypeChain()->Create();
 			pOTC = new CObjTypeChain;
 			pOTC->Create();
+			pOTC->SetSpec(CObjTypeChain::Spec::LOCAL);
+			LHNext.GetTypeChain()->AddToTail(pOTC);		//node -> ROOT
+			pOTC = new CObjTypeChain;
+			pOTC->Create();
 			pOTC->SetSpec(CObjTypeChain::Spec::BOOL);
-			pTC = new CTypeChain;
-			pTC->Create();
-			pTC->AddToTail(pOTC);
+			LHNext.GetTypeChain()->AddToTail(pOTC);		//node -> ROOT
 			//------------------ Parse ------------------------
 			LHChild = Expect(LHNext, Token::BOOL);
-			LHChild = LocalTypeSpec(LHChild);
 			//-------- Abstract Syntax Tree Node --------------
 			pN = new CAct65BOOL;;
-			pN->Create(LHChild.GetNode(), LHNext.GetNode());
+			pN->Create();				//Node CHAR.child = IDENT
+			LHChild.SetNode(pN);
+			LHChild = LocalTypeSpec(LHChild);
 			//-------------- Wrap UP ------------------------
-			LHNext = LHChild;
-			LHNext.SetNode(pN);
+			if (LHNext.GetNode())
+			{
+				LHNext.GetNode()->AddThatToThisNext(pN);
+			}
+			else
+			{
+				LHNext.SetNode(pN);
+			}
+			LHNext.SetToken(LHChild.GetToken());
 			break;
 		case Token::RECORDTYPE:
 			//--------------- Declaration -------------
@@ -5108,19 +5248,29 @@ CLkHead CParser::LocalDecls(CLkHead LookaHead)
 			LHNext.GetTypeChain()->Create();
 			pOTC = new CObjTypeChain;
 			pOTC->Create();
+			pOTC->SetSpec(CObjTypeChain::Spec::LOCAL);
+			LHNext.GetTypeChain()->AddToTail(pOTC);		//node -> ROOT
+			pOTC = new CObjTypeChain;
+			pOTC->Create();
 			pOTC->SetSpec(CObjTypeChain::Spec::TYPE);
-			pTC = new CTypeChain;
-			pTC->Create();
-			pTC->AddToTail(pOTC);
+			LHNext.GetTypeChain()->AddToTail(pOTC);		//node -> ROOT
 			//------------------ Parse ------------------------
 			LHChild = Expect(LHNext, Token::RECORDTYPE);
-			LHChild = LocalTypeSpec(LHChild);
 			//-------- Abstract Syntax Tree Node --------------
 			pN = new CAct65RECTYPE;;
-			pN->Create(LHChild.GetNode(), LHNext.GetNode());
+			pN->Create();				//Node CHAR.child = IDENT
+			LHChild.SetNode(pN);
+			LHChild = LocalTypeSpec(LHChild);
 			//-------------- Wrap UP ------------------------
-			LHNext = LHChild;
-			LHNext.SetNode(pN);
+			if (LHNext.GetNode())
+			{
+				LHNext.GetNode()->AddThatToThisNext(pN);
+			}
+			else
+			{
+				LHNext.SetNode(pN);
+			}
+			LHNext.SetToken(LHChild.GetToken());
 			break;
 		default:
 			Loop = false;

@@ -16,7 +16,10 @@ public:
 		POINTER,
 		PROC,
 		FUNC,
-		INTERRUPT
+		INTERRUPT,
+		LOCAL,
+		PARAM,
+		GLOBAL
 	};
 private:
 	struct Types {
@@ -46,6 +49,9 @@ private:
 		{Spec::PROC,"PROC"},
 		{Spec::FUNC,"FUNC"},
 		{Spec::INTERRUPT,"INTERRUPT"},
+		{Spec::LOCAL,"LOCAL"},
+		{Spec::PARAM,"PARAM"},
+		{Spec::GLOBAL,"GLOBAL"},
 		{Spec(-1),0}
 	};
 	Spec m_SpecType;

@@ -1,2 +1,4 @@
-//
+BOOL xyz
 INTERRUPT AnInteruption()
+	BYTE a
+	INT x

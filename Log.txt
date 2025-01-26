@@ -1,8 +1,25 @@
-File:test5.act has 29 Bytes
+File:test5.act has 50 Bytes
 Parser Created
+  Loop:1-:ID-2:Name-BOOL
+    CHILD-:ID-3:Name-IDENT-Sym:xyz
 	 NUMB  CHILD  NEXT
-     1     -1      3  +-ROOT
-     3      2     -1  +-IRQ
-     2     -1     -1  | +-IDENT: AnInteruption
+     1     -1      2  +-ROOT
+     2      3     10  +-BOOL
+     3     -1     -1  | +-IDENT: xyz
+    10      4     -1  +-IRQ
+     4      5     -1  | +-IDENT: AnInteruption
+     5     -1      6  | | +-Param LIST
+     6      7      8  | | +-BYTE
+     7     -1     -1  | | | +-IDENT: a
+     8      9     -1  | | +-INT
+     9     -1     -1  | | | +-IDENT: x
 ------------ Symbol Table --------------
-Lines Compiled:3
+xyz: GLOBAL:BOOL::Address=00000000  Value=0000
+
+x: LOCAL:INT::Address=00000000  Value=0000
+
+AnInteruption: INTERRUPT::Address=00000000  Value=0000
+
+a: LOCAL:BYTE::Address=00000000  Value=0000
+
+Lines Compiled:5
