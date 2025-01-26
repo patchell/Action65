@@ -1,25 +1,25 @@
 #include "pch.h"
 
-CActBREAK::CActBREAK()
+CAct65BREAK::CAct65BREAK()
 {
 }
 
-CActBREAK::~CActBREAK()
+CAct65BREAK::~CAct65BREAK()
 {
 }
 
-bool CActBREAK::Create(CAstNode* pChild, CAstNode* pNext)
+bool CAct65BREAK::Create(CAstNode* pChild, CAstNode* pNext)
 {
 	SetNodeName(m_pNodeTyypeName);
 	return CAstNode::Create(pChild, pNext);
 }
 
-CValue* CActBREAK::Process()
+CValue* CAct65BREAK::Process()
 {
     return nullptr;
 }
 
-void CActBREAK::Print(FILE* pOut, int Indent, char* s, int l)
+void CAct65BREAK::Print(FILE* pOut, int Indent, char* s, int l)
 {
 	CAstNode::Print(pOut, Indent, s,l);
 }

@@ -133,7 +133,9 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Acrt65ProcADDR.cpp" />
+    <ClCompile Include="Act65BODY.cpp" />
     <ClCompile Include="Act65DeclareParams.cpp" />
+    <ClCompile Include="Act65LocalVar.cpp" />
     <ClCompile Include="Act65MOD.cpp" />
     <ClCompile Include="Act65ACC.cpp" />
     <ClCompile Include="Act65ADD.cpp" />
@@ -241,6 +243,7 @@
     <ClCompile Include="Act65SecAtrbSTART.cpp" />
     <ClCompile Include="Act65SecAtrbZEROPAGE.cpp" />
     <ClCompile Include="Act65SECTION.cpp" />
+    <ClCompile Include="Act65Statements.cpp" />
     <ClCompile Include="Act65StatusFLAGS.cpp" />
     <ClCompile Include="Act65STRING.cpp" />
     <ClCompile Include="Act65SUB.cpp" />
@@ -305,7 +308,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Acrt65ProcADDR.h" />
+    <ClInclude Include="Act65BODY.h" />
     <ClInclude Include="Act65DeclareParams.h" />
+    <ClInclude Include="Act65LocalVar.h" />
     <ClInclude Include="Act65MOD.h" />
     <ClInclude Include="Act65ACC.h" />
     <ClInclude Include="Act65ADD.h" />
@@ -413,6 +418,7 @@
     <ClInclude Include="Act65SecAtrbSTART.h" />
     <ClInclude Include="Act65SecAtrbZEROPAGE.h" />
     <ClInclude Include="Act65SECTION.h" />
+    <ClInclude Include="Act65Statements.h" />
     <ClInclude Include="Act65StatusFLAGS.h" />
     <ClInclude Include="Act65STRING.h" />
     <ClInclude Include="Act65SUB.h" />

@@ -2,3 +2,7 @@ BOOL xyz
 INTERRUPT AnInteruption()
 	BYTE a
 	INT x
+
+	BREAK
+	RTI
+INT zyx

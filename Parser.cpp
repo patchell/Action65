@@ -1829,7 +1829,7 @@ CLkHead CParser::Break(CLkHead LookaHead)
 	//--------------------------------------------
 	bool Loop = true;
 	CAstNode* pN= 0;
-	CLkHead LHNext, LHChild;
+	CLkHead LHNext;
 
 	PrintLookahead(LogFile(), LookaHead, "Enter Break", ++m_Recursion);
 	LHNext = Rti(LookaHead);
@@ -1838,8 +1838,14 @@ CLkHead CParser::Break(CLkHead LookaHead)
 		switch (LHNext.GetToken())
 		{
 		case Token::BREAK:
-			LookaHead = Expect(LookaHead, Token::BREAK);
-			LookaHead = Rti(LookaHead);
+			LHNext = Expect(LHNext, Token::BREAK);
+			pN = new CAct65BREAK;
+			pN->Create();
+			if (LHNext.GetNode())
+				LHNext.GetNode()->AddThatToThisNext(pN);
+			else
+				LHNext.SetNode(pN);
+			LHNext = Rti(LHNext);
 			break;
 		default:
 			Loop = false;
@@ -1864,7 +1870,7 @@ CLkHead CParser::Rti(CLkHead LookaHead)
 	//--------------------------------------------
 	bool Loop = true;
 	CAstNode* pN= 0;
-	CLkHead LHNext, LHChild;
+	CLkHead LHNext;
 
 	PrintLookahead(LogFile(), LookaHead, "Enter Rti", ++m_Recursion);
 	LHNext = Assignment(LookaHead);
@@ -1873,8 +1879,14 @@ CLkHead CParser::Rti(CLkHead LookaHead)
 		switch (LHNext.GetToken())
 		{
 		case Token::RTI:
-			LookaHead = Expect(LookaHead, Token::RTI);
-			LookaHead = Assignment(LookaHead);
+			LHNext = Expect(LHNext, Token::RTI);
+			pN = new CAct65RTI;
+			pN->Create();
+			if (LHNext.GetNode())
+				LHNext.GetNode()->AddThatToThisNext(pN);
+			else
+				LHNext.SetNode(pN);
+			LHNext = Assignment(LHNext);
 			break;
 		default:
 			Loop = false;
@@ -4429,10 +4441,24 @@ CLkHead CParser::IrqBody(CLkHead LookaHead)
 	CLkHead LHNext;
 
 	PrintLookahead(LogFile(), LookaHead, "Enter IrqBody", ++m_Recursion);
-	LookaHead.SetSymbol(0);
-	LookaHead.SetTypeChain(0);
-	LHNext = LocalDecls(LookaHead);
+	LHNext = LookaHead;
+	LHNext.SetSymbol(0);
+	LHNext.SetTypeChain(0);
+	LHNext.SetNode(0);
+	LHNext = LocalDecls(LHNext);
+	pN = new CAct65LocalVar;
+	pN->Create();
+	pN->SetChild(LHNext.GetNode());
+	LookaHead.GetNode()->SetChild(pN);
+	//-------------------
+	LHNext.SetNode(0);
 	LHNext = Statements(LHNext);
+	pN = new CAct65Statements;
+	pN->Create();
+	pN->SetChild(LHNext.GetNode());
+	LookaHead.GetNode()->AddThatToThisChild(pN);
+	LookaHead.SetToken(LHNext.GetToken());
+	LHNext = LookaHead;
 	PrintLookahead(LogFile(), LHNext, "Exit IrqBody", --m_Recursion);
 	return LHNext;
 

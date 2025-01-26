@@ -1,11 +1,11 @@
 #pragma once
 
-class CAct65BREAK : public CAstNode
+class CAct65BODY : public CAstNode
 {
-	inline static const char* m_pNodeTyypeName = "BREAK";
+	inline static const char* m_pNodeTyypeName = "Body";
 public:
-	CAct65BREAK();
-	virtual ~CAct65BREAK();
+	CAct65BODY();
+	virtual ~CAct65BODY();
 	bool Create(CAstNode* pChild = 0, CAstNode* pNext = 0);
 	virtual CValue* Process();
 	virtual void Print(FILE* pOut, int Indent, char* s, int l);
