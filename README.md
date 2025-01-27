@@ -21,21 +21,22 @@ AST:
 
 	 NUMB  CHILD  NEXT
      1     -1      2  +-ROOT
-     2      3     14  +-BOOL
+     2      3     15  +-BOOL
      3     -1     -1  | +-IDENT: xyz
-    14      4     15  +-IRQ
+    15      4     16  +-IRQ
      4      5     -1  | +-IDENT: AnInteruption
-     5     10     -1  | | +-Param LIST
+     5     -1     14  | | +-Param LIST
+    14     10     -1  | | +-Body
     10      6     13  | | | +-LOCAL Vars
-     6      7      8  | | | | +-BYTE
+     6      7      8  | | | | +-CHAR
      7     -1     -1  | | | | | +-IDENT: a
      8      9     -1  | | | | +-INT
      9     -1     -1  | | | | | +-IDENT: x
     13     11     -1  | | | +-STATEMENTS
     11     -1     12  | | | | +-BREAK
     12     -1     -1  | | | | +-RTI
-    15     16     -1  +-INT
-    16     -1     -1  | +-IDENT: zyx
+    16     17     -1  +-INT
+    17     -1     -1  | +-IDENT: zyx
 
 Jan 18, 2025
 

@@ -1,6 +1,6 @@
 BOOL xyz
 INTERRUPT AnInteruption()
-	BYTE a
+	CHAR a
 	INT x
 
 	BREAK
