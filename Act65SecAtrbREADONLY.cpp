@@ -8,10 +8,10 @@ CAct65SecAtrbREADONLY::~CAct65SecAtrbREADONLY()
 {
 }
 
-bool CAct65SecAtrbREADONLY::Create(CAstNode* pChild, CAstNode* pNext)
+bool CAct65SecAtrbREADONLY::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
 	SetNodeName(m_pNodeTyypeName);
-	return CAstNode::Create(pChild, pNext);
+	return CAstNode::Create(pChild, pNext, pSym);
 }
 
 CValue* CAct65SecAtrbREADONLY::Process()

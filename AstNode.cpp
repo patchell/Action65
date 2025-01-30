@@ -38,19 +38,36 @@ CAstNode::~CAstNode()
 
 bool CAstNode::Create(
 	CAstNode* pChild,
-	CAstNode* pNext
+	CAstNode* pNext,
+	CBin* pSym
 )
 {
-	FILE* pOut = Act()->GetParser()->LogFile();
+	CAstNode* pNode = 0;
+	int LoopCount = 10;
+	bool rV = true;
 
+	SetSymbol(pSym);
 	SetChild(pChild);
-	if(pNext)
-		AddThatToThisNext(pNext);
-	SetStart(Act()->GetParser()->GetAstTree()->GetRootNode());
-    return true;
+	pNode = pChild;
+	if (pNode)
+	{
+		while (pNode->GetNext())
+		{
+			--LoopCount;
+			if (!LoopCount)
+			{
+				Act()->CloseAll();
+				fprintf(Act()->LogFile(), "AstNode::Create Infinate Loop");
+				exit(19);
+			}
+			pNode = pNode->GetNext();
+		}
+		pNode->SetNext(pNext);
+	}
+	return rV;
 }
 
-void CAstNode::CreateValue(CSymbol* pSym)
+void CAstNode::CreateValue(CBin* pSym)
 {
 	m_pValue = new CValue;
 	m_pValue->Create(pSym);
@@ -90,7 +107,7 @@ char* CAstNode::Print(int Indent, char* s, int Strlen)
 		l += sprintf_s(&s[l], size, "| ");
 	}
 	size = Strlen - l;
-	l += sprintf_s(&s[l], size, "+-%s", GetNodeName());
+	l += sprintf_s(&s[l], size, "+- \'%s\'", GetNodeName());
 	if (GetValue())
 	{
 		if (GetValue()->GetSymbol())
@@ -148,13 +165,47 @@ void CAstNode::InsertThatIntoThisNext(CAstNode* pN)
 void CAstNode::AddThatToThisNext(CAstNode* pN)
 {
 	CAstNode* pNode = this;
+	int LoopCount = 10;
+	const char* pSthis = 0, * pSthat = 0;
+	CSymbol* pSym = 0;
 
 	if (pN)
 	{
+		fprintf(Act()->LogFile(), "-\n");
+		if (pN->GetSymbol())
+		{
+			pSthat = pN->GetSymbol()->GetName();
+		}
+		else 
+			pSthat = "<No Sym>";
 		while (pNode->GetNext())
 		{
+			if (!LoopCount--)
+			{
+				fprintf(Act()->LogFile(), "Infinate Loop\n");
+				Act()->CloseAll();
+				exit(20);
+			}
+			fprintf(Act()->LogFile(), "\t%s NODE ID=%d ",pNode->GetNodeName(), pNode->GetID());
+			if (pNode->GetSymbol())
+				fprintf(Act()->LogFile(), "Sym: %s", pNode->GetSymbol()->GetName());
+			fprintf(Act()->LogFile(), "\n");
 			pNode = pNode->GetNext();
 		}
+		if (pNode->GetSymbol())
+		{
+			pSthis = pNode->GetSymbol()->GetName();
+		}
+		else
+			pSthis = "<No Sym>";
+		fprintf(Act()->LogFile(), "AddThatToThisNext %s::%s ID=%d TO %s::%s NODE ID=%d\n",
+			pN->GetNodeName(), 
+			pSthat,
+			pN->GetID(),
+			pNode->GetNodeName(),
+			pSthis,
+			pNode->GetID()
+		);
 		pNode->SetNext(pN);
 	}
 }
@@ -196,4 +247,34 @@ void CAstNode::AddThatToThisChildChain(CAstNode* pN)
 		pNode = pNode->GetChild();
 	}
 	pNode->SetChild(pN);
+}
+
+void CAstNode::SetChild(CAstNode* pAN)
+{
+	CAstNode* pC = m_pChild;
+	int RecursionCount = 10;
+
+	while (pC && RecursionCount)
+	{
+		fprintf(Act()->LogFile(), "\tSetChild Name:%s", pC->GetNodeName());
+		if(pC->GetSymbol())
+			fprintf(Act()->LogFile(), " Sym Name:%s", pC->GetSymbol()->GetName());
+		pC = pC->GetNext();
+		--RecursionCount;
+		if (RecursionCount == 0)
+			fprintf(Act()->LogFile(), "-This is just wrong\n");
+		else
+			fprintf(Act()->LogFile(), "\n");
+	}
+	if (pAN)
+	{
+		fprintf(Act()->LogFile(), "Set Child Node Of %s", GetNodeName());
+		if(GetSymbol())
+			fprintf(Act()->LogFile(), ":Sym:%s ", GetSymbol()->GetName());
+		fprintf(Act()->LogFile(), " To %s" ,pAN->GetNodeName());
+		if (pAN->GetSymbol())
+			fprintf(Act()->LogFile(), ":Sym:%s", pAN->GetSymbol()->GetName());
+		fprintf(Act()->LogFile(), "\n");
+	}
+	m_pChild = pAN;
 }

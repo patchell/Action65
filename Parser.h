@@ -387,6 +387,7 @@ public:
 	void LookaheadDebug(const char* s, CLkHead* pChild, CLkHead* pNext);
 	void PrintChild(const char* s, CAstNode* pChild);
 	void PrintNode(const char* s, int TabIndent, CAstNode* pNode);
+	void LHPrint(CLkHead* pLH, const char* s);
 	//---------------------------------
 };
 

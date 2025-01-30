@@ -8,7 +8,7 @@ CAct65ParamList::~CAct65ParamList()
 {
 }
 
-bool CAct65ParamList::Create(CAstNode* pChild, CAstNode* pNext)
+bool CAct65ParamList::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
 	SetNodeName(m_pNodeTyypeName);
 	return CAstNode::Create(pChild,pNext);

@@ -8,10 +8,10 @@ CAct65FFI::~CAct65FFI()
 {
 }
 
-bool CAct65FFI::Create(CAstNode* pChild, CAstNode* pNext)
+bool CAct65FFI::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
 	SetNodeName(m_pNodeTyypeName);
-	return CAstNode::Create(pChild, pNext);
+	return CAstNode::Create(pChild, pNext, pSym);
 }
 
 CValue* CAct65FFI::Process()

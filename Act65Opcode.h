@@ -14,7 +14,7 @@ class CAct65Opcode : public CAstNode
 public:
 	CAct65Opcode();
 	virtual ~CAct65Opcode();
-	bool Create(CAstNode* pChild = 0, CAstNode* pNext = 0);
+	virtual bool Create(CAstNode* pChild = 0, CAstNode* pNext = 0, CBin* pSym = 0);
 	//-----------------------------
 	// Node Processor
 	//-----------------------------

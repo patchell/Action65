@@ -9,6 +9,7 @@ and Statements, although very soparse.
 Source:
 
 BOOL xyz
+
 INTERRUPT AnInteruption()
 	BYTE a
 	INT x

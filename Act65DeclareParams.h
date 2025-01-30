@@ -6,7 +6,7 @@ class CAct65DeclareParams : public CAstNode
 public:
 	CAct65DeclareParams();
 	virtual ~CAct65DeclareParams();
-	bool Create(CAstNode* pChild, CAstNode* pNext);
+	virtual bool Create(CAstNode* pChild = 0, CAstNode* pNext = 0, CBin* pSym = 0);
 	virtual CValue* Process();
 	virtual void Print(FILE* pOut, int Indent, char* s, int l);
 };

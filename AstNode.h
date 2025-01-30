@@ -20,9 +20,10 @@ public:
 	virtual ~CAstNode();
 	virtual bool Create(
 		CAstNode* pChild = 0,
-		CAstNode* pNext = 0
+		CAstNode* pNext = 0,
+		CBin* pSym = 0
 	);
-	virtual void CreateValue(CSymbol* pSym);
+	virtual void CreateValue(CBin* pSym);
 	virtual void SetChildNext(
 		CAstNode* pChild = 0,
 		CAstNode* pNext = 0
@@ -54,7 +55,8 @@ public:
 	void SetStart(CAstNode* pAN) { m_pStart = pAN; }
 	void SetNext(CAstNode* pAN) { m_pNext = pAN; }
 	void SetPrev(CAstNode* pAN) { m_pPrev = pAN; }
-	void SetChild(CAstNode* pAN) { m_pChild = pAN; }
+	void SetChild(CAstNode* pAN);
+	//	void SetChild(CAstNode* pAN) { m_pChild = pAN; }
 	void SetParent(CAstNode* pAN) { m_pParent = pAN; }
 	//---------------------------------------------------
 	int GetID() const { return m_NodeID; }
@@ -71,7 +73,9 @@ public:
 		if (m_pValue)
 			m_pValue->SetSymbol(pSym);
 		else
-			rV = false;
+		{
+			CreateValue(pSym);
+		}
 		return rV;
 	}
 	CBin* GetSymbol() { 
@@ -83,7 +87,6 @@ public:
 	}
 	void SetValue(CValue* pV) { m_pValue = pV; }
 	CValue* GetValue() {
-		return m_pValue
-			;
+		return m_pValue;
 	}
 };

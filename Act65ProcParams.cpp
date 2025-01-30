@@ -8,10 +8,10 @@ CAct65ProcParams::~CAct65ProcParams()
 {
 }
 
-bool CAct65ProcParams::Create(CAstNode* pChild, CAstNode* pNext)
+bool CAct65ProcParams::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
 	SetNodeName(m_pNodeTyypeName);
-	return CAstNode::Create(pChild, pNext);
+	return CAstNode::Create(pChild, pNext, pSym);
 }
 
 CValue* CAct65ProcParams::Process()

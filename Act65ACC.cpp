@@ -8,7 +8,7 @@ CAct65ACC::~CAct65ACC()
 {
 }
 
-bool CAct65ACC::Create(CAstNode* pChild, CAstNode* pNext)
+bool CAct65ACC::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
 	SetNodeName(m_pNodeTyypeName);
 	return CAstNode::Create(pChild,pNext);

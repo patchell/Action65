@@ -8,10 +8,10 @@ CAct65LTEQ::~CAct65LTEQ()
 {
 }
 
-bool CAct65LTEQ::Create(CAstNode* pChild, CAstNode* pNext)
+bool CAct65LTEQ::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
 	SetNodeName(m_pNodeTyypeName);
-	return CAstNode::Create(pChild, pNext);
+	return CAstNode::Create(pChild, pNext, pSym);
 }
 
 CValue* CAct65LTEQ::Process()

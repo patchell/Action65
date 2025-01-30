@@ -6,7 +6,7 @@ class CAct65NUMBER : public CAstNode
 public:
 	CAct65NUMBER();
 	virtual ~CAct65NUMBER();
-	bool Create(CAstNode* pChild, CAstNode* pNext);
+	virtual bool Create(CAstNode* pChild = 0, CAstNode* pNext = 0, CBin* pSym = 0);
 	virtual CValue* Process();
 	virtual void Print(FILE* pOut, int Indent, char* s, int l);
 };

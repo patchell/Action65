@@ -6,7 +6,7 @@ class CAct65ASMstatement : public CAstNode
 public:
 	CAct65ASMstatement();
 	virtual ~CAct65ASMstatement();
-	bool Create(CAstNode* pChild = 0, CAstNode* pNext = 0);
+	virtual bool Create(CAstNode* pChild = 0, CAstNode* pNext = 0, CBin* pSym = 0);
 	virtual CValue* Process();
 	virtual void Print(FILE* pOut, int Indent, char* s, int l);
 };

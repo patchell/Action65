@@ -2,7 +2,13 @@ BOOL xyz
 INTERRUPT AnInteruption()
 	CHAR a
 	INT x
+	INT c
+	INT d
+	INT e
 
+	xyz = a + x - c + d - e
+	POP .A
 	BREAK
+	EXIT
 	RTI
 INT zyx

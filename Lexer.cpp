@@ -381,47 +381,47 @@ Token CLexer::Lex()
 					{
 					case 'A':	//accumulator
 						TokenValue = Token::AREG;
-						m_LexBuffIndex++;
+						m_FileIndex++;
 						break;
 					case 'P':	//proecssor status
 						TokenValue = Token::PSREG;
-						m_LexBuffIndex++;
+						m_FileIndex++;
 						break;
 					case 'S':	// stack pointer
 						TokenValue = Token::SPREG;
-						m_LexBuffIndex++;
+						m_FileIndex++;
 						break;
 					case 'X':	// X index register
 						TokenValue = Token::XREG;
-						m_LexBuffIndex++;
+						m_FileIndex++;
 						break;
 					case 'Y':	// Y index register
 						TokenValue = Token::YREG;
-						m_LexBuffIndex++;
+						m_FileIndex++;
 						break;
 					case 'C':	// carry flag
 						TokenValue = Token::CARRY;
-						m_LexBuffIndex++;
+						m_FileIndex++;
 						break;
 					case 'D':
 						TokenValue = Token::DECIMAL_MODE;
-						m_LexBuffIndex++;
+						m_FileIndex++;
 						break;
 					case 'I':	// interrupt flag
 						TokenValue = Token::IRQENABLE;
-						m_LexBuffIndex++;
+						m_FileIndex++;
 						break;
 					case 'N':	// negative flag
 						TokenValue = Token::NEG;
-						m_LexBuffIndex++;
+						m_FileIndex++;
 						break;
 					case 'O':
 						TokenValue = Token::OVERFLOW;
-						m_LexBuffIndex++;
+						m_FileIndex++;
 						break;
 					case 'Z':
 						TokenValue = Token::ZERO;
-						m_LexBuffIndex++;
+						m_FileIndex++;
 						break;
 					default:
 						TokenValue = Token('.');

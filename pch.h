@@ -642,6 +642,7 @@ public:
 #include "Act65LocalVar.h"
 #include "Act65BODY.h"
 #include "Act65Statements.h"
+#include "Act65PSReg.h"
 #include "AstTree.h"
 #include "ActionAstTree.h"
 

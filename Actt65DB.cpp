@@ -8,7 +8,7 @@ CAct65DB::~CAct65DB()
 {
 }
 
-bool CAct65DB::Create(CAstNode* pChild, CAstNode* pNext)
+bool CAct65DB::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
     return false;
 }

@@ -350,6 +350,7 @@ CLkHead CParser::Statements(CLkHead LookaHead)
 	CLkHead LHNext, LHChild;
 
 	PrintLookahead(LogFile(), LookaHead, "Enter Statements", ++m_Recursion,1);
+	LHPrint(&LookaHead, "---- Entry Statements ----");
 	LHNext = ForStmt(LookaHead);
 	while (Loop)
 	{
@@ -455,6 +456,7 @@ CLkHead CParser::ForStmt(CLkHead LookaHead)
 	CLkHead LHNext, LHChild;
 
 	PrintLookahead(LogFile(), LookaHead, "Enter ForStmt", ++m_Recursion);
+	LHPrint(&LookaHead, "---- Entry For Statements ----");
 	LHNext = IfStmt(LookaHead);
 	while (Loop)
 	{
@@ -637,6 +639,7 @@ CLkHead CParser::IfStmt(CLkHead LookaHead)
 	CLkHead LHNext, LHChild;
 
 	PrintLookahead(LogFile(), LookaHead, "Enter IfStmt", ++m_Recursion);
+	LHPrint(&LookaHead, "---- Entry IF Statements ----");
 	LHNext = IffStmt(LookaHead);
 	while (Loop)
 	{
@@ -808,6 +811,7 @@ CLkHead CParser::IffStmt(CLkHead LookaHead)
 	CLkHead LHNext, LHChild;
 
 	PrintLookahead(LogFile(), LookaHead, "Enter IFFStmt", ++m_Recursion);
+	LHPrint(&LookaHead, "---- Entry IFF Statements ----");
 	LHNext = WhileStmt(LookaHead);
 	while (Loop)
 	{
@@ -1168,6 +1172,7 @@ CLkHead CParser::WhileStmt(CLkHead LookaHead)
 	CLkHead LHNext, LHChild;
 
 	PrintLookahead(LogFile(), LookaHead, "Enter WhileStmt", ++m_Recursion);
+	LHPrint(&LookaHead, "---- Entry WHILE Statements ----");
 	LHNext = DoStmt(LookaHead);
 	while (Loop)
 	{
@@ -1268,6 +1273,7 @@ CLkHead CParser::DoStmt(CLkHead LookaHead)
 	CLkHead LHNext, LHChild;
 
 	PrintLookahead(LogFile(), LookaHead, "Enter DO Stmt", ++m_Recursion);
+	LHPrint(&LookaHead, "---- Entry DO Statements ----");
 	LHNext = EXITstmt(LookaHead);
 	while (Loop)
 	{
@@ -1339,12 +1345,14 @@ CLkHead CParser::EXITstmt(CLkHead LookaHead)
 		switch (LHNext.GetToken())
 		{
 		case Token::EXIT:
-			LHChild = Expect(LHNext, Token::EXIT);
-			LHChild = RetStmt(LHChild);
+			LHNext = Expect(LHNext, Token::EXIT);
 			pN = new CAct65EXIT;
-			pN->Create(LHChild.GetNode(), LHNext.GetNode());
-			LHNext = LHChild;
-			LHNext.SetNode(pN);
+			pN->Create();
+			if (LHNext.GetNode())
+				LHNext.GetNode()->AddThatToThisNext(pN);
+			else
+				LHNext.SetNode(pN);
+			LHNext = RetStmt(LHNext);
 			break;
 		default:
 			Loop = false;
@@ -1371,6 +1379,7 @@ CLkHead CParser::RetStmt(CLkHead LookaHead)
 	CLkHead LHNext, LHChild;
 
 	PrintLookahead(LogFile(), LookaHead, "Enter RetStmt", ++m_Recursion);
+	LHPrint(&LookaHead, "---- Entry RETURN Statements ----");
 	LHNext = InlineAssembly(LookaHead);
 	while (Loop)
 	{
@@ -1426,6 +1435,7 @@ CLkHead CParser::InlineAssembly(CLkHead LookaHead)
 	CLkHead LHNext, LHChild;
 
 	PrintLookahead(LogFile(), LookaHead, "Enter InLineAssembly", ++m_Recursion);
+	LHPrint(&LookaHead, "---- Entry ASM Statements ----");
 	LHNext = CodeBlock(LookaHead);
 	while (Loop)
 	{
@@ -1519,6 +1529,7 @@ CLkHead CParser::CodeBlock(CLkHead LookaHead)
 	CLkHead LHNext, LHChild;
 
 	PrintLookahead(LogFile(), LookaHead, "Enter CodeBlock", ++m_Recursion);
+	LHPrint(&LookaHead, "---- Entry CODE BLOCK Statements ----");
 	LHNext = UntillStmt(LookaHead);
 	while (Loop)
 	{
@@ -1581,6 +1592,7 @@ CLkHead CParser::UntillStmt(CLkHead LookaHead)
 	CLkHead LHNext, LHChild;
 
 	PrintLookahead(LogFile(), LookaHead, "Enter UntillStmt", ++m_Recursion);
+	LHPrint(&LookaHead, "---- Entry UNTIL Statements ----");
 	LHNext = Push(LookaHead);
 	while (Loop)
 	{
@@ -1616,6 +1628,7 @@ CLkHead CParser::Push(CLkHead LookaHead)
 	CLkHead LHNext, LHChild;
 
 	PrintLookahead(LogFile(), LookaHead, "Enter Push", ++m_Recursion);
+	LHPrint(&LookaHead, "---- Entry PUSH Statements ----");
 	LHNext = Pop(LookaHead);
 	while (Loop)
 	{
@@ -1719,27 +1732,44 @@ CLkHead CParser::Pop(CLkHead LookaHead)
 	//	Pop_1	-> 'POP' PopDestList Break Pop_1
 	//			-> .
 	//			;
+	// LHNext really has nothing of interest in it
+	// The Node from LHChild will be added to the
+	// child node of POP
 	//--------------------------------------------
 	bool Loop = true;
 	CAstNode* pN= 0;
 	CLkHead LHNext, LHChild;
+	int LoopCount = 0;
 
 	PrintLookahead(LogFile(), LookaHead, "Enter Pop", ++m_Recursion);
+	LHPrint(&LookaHead, "---- Entry POP Statements ----");
 	LHNext = Break(LookaHead);
 	while (Loop)
 	{
+		LHPrint(&LHNext, "---- LOOP POP Statements ----");
 		switch (LHNext.GetToken())
 		{
 		case Token::POP:
-			LookaHead = Expect(LookaHead, Token::POP);
-			LookaHead = PopDestList(LookaHead);
-			LookaHead = Break(LookaHead);
+			LHChild = Expect(LHNext, Token::POP);
+			LHChild.SetNode(0);
+			LHChild = PopDestList(LHChild);
+			pN = new CAct65POP;
+			pN->Create();
+			pN->SetChild(LHChild.GetNode());
+			if (LHNext.GetNode())
+				LHNext.GetNode()->AddThatToThisNext(pN);
+			else
+				LHNext.SetNode(pN);
+			LHPrint(&LHNext, "POP LHnext");
+			LHNext.SetToken(LHChild.GetToken());
+			LHNext = Break(LHNext);
 			break;
 		default:
 			Loop = false;
 			break;
 		}
 	}
+	LHPrint(&LookaHead, "---- Entry POP Statements ----");
 	PrintLookahead(LogFile(), LHNext, "Exit Pop", --m_Recursion);
 	return LHNext;
 
@@ -1764,8 +1794,12 @@ CLkHead CParser::PopDestList(CLkHead LookaHead)
 		switch (LHNext.GetToken())
 		{
 		case Token(','):
-			LookaHead = Expect(LookaHead, Token(','));
-			LookaHead = PopDest(LookaHead);
+			LHChild = Expect(LHNext, Token(','));
+			LHChild = PopDest(LHChild);
+			if (LHNext.GetNode())
+				LHNext.GetNode()->AddThatToThisNext(LHChild.GetNode());
+			else
+				LHNext.SetNode(pN);
 			break;
 		default:
 			Loop = false;
@@ -1796,16 +1830,40 @@ CLkHead CParser::PopDest(CLkHead LookaHead)
 	switch (LHNext.GetToken())
 	{
 	case Token::AREG:
-		LookaHead = Expect(LookaHead, Token::AREG);
+		pN = new CAct65ACC;
+		pN->Create();
+		if (LHNext.GetNode())
+			LHNext.GetNode()->AddThatToThisNext(pN);
+		else
+			LHNext.SetNode(pN);
+		LHNext = Expect(LHNext, Token::AREG);
 		break;
 	case Token::XREG:
+		pN = new CAct65XREG;;
+		pN->Create();
+		if (LHNext.GetNode())
+			LHNext.GetNode()->AddThatToThisNext(pN);
+		else
+			LHNext.SetNode(pN);
 		LookaHead = Expect(LookaHead, Token::XREG);
 		break;
 	case Token::YREG:
+		pN = new CAct65YREG;
+		pN->Create();
+		if (LHNext.GetNode())
+			LHNext.GetNode()->AddThatToThisNext(pN);
+		else
+			LHNext.SetNode(pN);
 		LookaHead = Expect(LookaHead, Token::YREG);
 		break;
 	case Token::PSREG:
-		LookaHead = Expect(LookaHead, Token::PSREG);
+		pN = new CAct65PSReg;
+		pN->Create();
+		if (LHNext.GetNode())
+			LHNext.GetNode()->AddThatToThisNext(pN);
+		else
+			LHNext.SetNode(pN);
+		LHNext = Expect(LHNext, Token::PSREG);
 		break;
 	default:
 		break;
@@ -1832,6 +1890,7 @@ CLkHead CParser::Break(CLkHead LookaHead)
 	CLkHead LHNext;
 
 	PrintLookahead(LogFile(), LookaHead, "Enter Break", ++m_Recursion);
+	LHPrint(&LookaHead, "---- Entry BREAK Statements ----");
 	LHNext = Rti(LookaHead);
 	while (Loop)
 	{
@@ -1873,6 +1932,7 @@ CLkHead CParser::Rti(CLkHead LookaHead)
 	CLkHead LHNext;
 
 	PrintLookahead(LogFile(), LookaHead, "Enter Rti", ++m_Recursion);
+	LHPrint(&LookaHead, "---- Entry RTI Statements ----");
 	LHNext = Assignment(LookaHead);
 	while (Loop)
 	{
@@ -1920,6 +1980,30 @@ CLkHead CParser::Assignment(CLkHead LookaHead)
 	//				->  '==RSH' ArithExpr Assignment_1
 	//				-> .
 	//				;
+	// This is complicated.  The parent node will
+	// be Assign<something> with a MemContents
+	// child with the next being what is assinged
+	// 
+	// +-Assign
+	// | + Destination
+	// | +-Source
+	// 
+	// And more extensively
+	// +-Assign
+	// | + Destination
+	// | +-OPER
+	// | | +- V1
+	// | | | +- OPER
+	// | | | | +- V2
+	// | | | | +- V3
+	// +- Other statments(s)
+	// The above would be the tree for X = A + B - C
+	// for instance.
+	// So the parent node will be ASSING<?>
+	// The node that is aquired in LHNext
+	// will be the child of that node
+	// The node that comes from LHChild will be
+	// the next of that node.
 	//--------------------------------------------
 	bool Loop = true;
 	CAstNode* pN= 0;
@@ -1927,33 +2011,39 @@ CLkHead CParser::Assignment(CLkHead LookaHead)
 
 
 	PrintLookahead(LogFile(), LookaHead, "Enter Assignment", ++m_Recursion);
+	LHPrint(&LookaHead, "**Enter** Assign LookaHead");
 	LHNext = MemContents(LookaHead);
+	LHPrint(&LHNext, "Ret Frm MemCont Assign LHNext");
 	while (Loop)
 	{
 		switch (LHNext.GetToken())
 		{
 		case Token('='):
 			LHChild = Expect(LHNext, Token('='));
+			LHChild.SetNode(0);
 			LHChild = ArithExpr(LHChild);
+			LHPrint(&LHChild, "Assign 1 LHChild *Return From ArithExpr*");
 			pN = new CAct65Assignment;
 			pN->Create(LHChild.GetNode(), LHNext.GetNode());
-			LHNext.SetNode(pN);
 			LHNext = LHChild;
+			LHNext.SetNode(pN);
 			//-----------------------------------
 			LHNext = MemContents(LHNext);
 			break;
 		case Token::ASSIGN_ADD:
 			LHChild = Expect(LHNext, Token::ASSIGN_ADD);
+			LHChild.SetNode(0);
 			LHChild = ArithExpr(LHChild);
 			pN = new CAct65AssignADD;
 			pN->Create(LHChild.GetNode(), LHNext.GetNode());
-			LHNext.SetNode(pN);
 			LHNext = LHChild;
+			LHNext.SetNode(pN);
 			//----------------------------------
 			LHNext = MemContents(LHNext);
 			break;
 		case Token::ASSIGN_AND:
 			LHChild = Expect(LHNext, Token::ASSIGN_AND);
+			LHChild.SetNode(0);
 			LHChild = ArithExpr(LHChild);
 			pN = new CAct65AssignAND;
 			pN->Create(LHChild.GetNode(), LHNext.GetNode());
@@ -1964,6 +2054,7 @@ CLkHead CParser::Assignment(CLkHead LookaHead)
 			break;
 		case Token::ASSIGN_DIV:
 			LHChild = Expect(LHNext, Token::ASSIGN_DIV);
+			LHChild.SetNode(0);
 			LHChild = ArithExpr(LHChild);
 			pN = new CAct65AssignDIV;
 			pN->Create(LHChild.GetNode(), LHNext.GetNode());
@@ -1974,6 +2065,7 @@ CLkHead CParser::Assignment(CLkHead LookaHead)
 			break;
 		case Token::ASSIGN_LSH:
 			LHChild = Expect(LHNext, Token::ASSIGN_LSH);
+			LHChild.SetNode(0);
 			LHChild = ArithExpr(LHChild);
 			pN = new CAct65AssignLSh;
 			pN->Create(LHChild.GetNode(), LHNext.GetNode());
@@ -1984,6 +2076,7 @@ CLkHead CParser::Assignment(CLkHead LookaHead)
 			break;
 		case Token::ASSIGN_MOD:
 			LHChild = Expect(LHNext, Token::ASSIGN_MOD);
+			LHChild.SetNode(0);
 			LHChild = ArithExpr(LHChild);
 			pN = new CAct65AssignMOD;
 			pN->Create(LHChild.GetNode(), LHNext.GetNode());
@@ -1994,6 +2087,7 @@ CLkHead CParser::Assignment(CLkHead LookaHead)
 			break;
 		case Token::ASSIGN_MUL:
 			LHChild = Expect(LHNext, Token::ASSIGN_MUL);
+			LHChild.SetNode(0);
 			LHChild = ArithExpr(LHChild);
 			pN = new CAct65AssignMULT;
 			pN->Create(LHChild.GetNode(), LHNext.GetNode());
@@ -2004,6 +2098,7 @@ CLkHead CParser::Assignment(CLkHead LookaHead)
 			break;
 		case Token::ASSIGN_OR:
 			LHChild = Expect(LHNext, Token::ASSIGN_OR);
+			LHChild.SetNode(0);
 			LHChild = ArithExpr(LHChild);
 			pN = new CAct65AssignOR;
 			pN->Create(LHChild.GetNode(), LHNext.GetNode());
@@ -2014,6 +2109,7 @@ CLkHead CParser::Assignment(CLkHead LookaHead)
 			break;
 		case Token::ASSIGN_RSH:
 			LHChild = Expect(LHNext, Token::ASSIGN_RSH);
+			LHChild.SetNode(0);
 			LHChild = ArithExpr(LHChild);
 			pN = new CAct65AssignRSH;
 			pN->Create(LHChild.GetNode(), LHNext.GetNode());
@@ -2024,6 +2120,7 @@ CLkHead CParser::Assignment(CLkHead LookaHead)
 			break;
 		case Token::ASSIGN_SUB:
 			LHChild = Expect(LHNext, Token::ASSIGN_SUB);
+			LHChild.SetNode(0);
 			LHChild = ArithExpr(LHChild);
 			pN = new CAct65AssignSUB;
 			pN->Create(LHChild.GetNode(), LHNext.GetNode());
@@ -2034,6 +2131,7 @@ CLkHead CParser::Assignment(CLkHead LookaHead)
 			break;
 		case Token::ASSIGN_XOR:
 			LHChild = Expect(LHNext, Token::ASSIGN_XOR);
+			LHChild.SetNode(0);
 			LHChild = ArithExpr(LHChild);
 			pN = new CAct65AssignXOR;
 			pN->Create(LHChild.GetNode(), LHNext.GetNode());
@@ -2047,6 +2145,7 @@ CLkHead CParser::Assignment(CLkHead LookaHead)
 			break;
 		}
 	}
+	LHPrint(&LookaHead, "Exit Assign LookaHead");
 	PrintLookahead(LogFile(), LHNext, "Exit Assignment", --m_Recursion);
 	return LHNext;
 }
@@ -2080,6 +2179,7 @@ CLkHead CParser::RelOperation(CLkHead LookaHead)
 		{
 		case Token::GTEQ:
 			LHChild = Expect(LHNext, Token::GTEQ);
+			LHChild.SetNode(0);
 			LHChild = LogicalOR(LHChild);
 			pN = new CAct65GTEQ;;
 			pN->Create(LHChild.GetNode(), LHNext.GetNode());
@@ -2088,6 +2188,7 @@ CLkHead CParser::RelOperation(CLkHead LookaHead)
 			break;
 		case Token::LTEQ:
 			LHChild = Expect(LHNext, Token::LTEQ);
+			LHChild.SetNode(0);
 			LHChild = LogicalOR(LHChild);
 			pN = new CAct65LTEQ;
 			pN->Create(LHChild.GetNode(), LHNext.GetNode());
@@ -2096,6 +2197,7 @@ CLkHead CParser::RelOperation(CLkHead LookaHead)
 			break;
 		case Token('<'):
 			LHChild = Expect(LHNext, Token('<'));
+			LHChild.SetNode(0);
 			LHChild = LogicalOR(LHChild);
 			pN = new CAct65LessTHAN;
 			pN->Create(LHChild.GetNode(), LHNext.GetNode());
@@ -2104,6 +2206,7 @@ CLkHead CParser::RelOperation(CLkHead LookaHead)
 			break;
 		case Token('>'):
 			LHChild = Expect(LHNext, Token('>'));
+			LHChild.SetNode(0);
 			LHChild = LogicalOR(LHChild);
 			pN = new CAct65GreaterTHAN;
 			pN->Create(LHChild.GetNode(), LHNext.GetNode());
@@ -2112,6 +2215,7 @@ CLkHead CParser::RelOperation(CLkHead LookaHead)
 			break;
 		case Token('='):
 			LHChild = Expect(LHNext, Token('='));
+			LHChild.SetNode(0);
 			LHChild = LogicalOR(LHChild);
 			pN = new CAct65EqualTO;
 			pN->Create(LHChild.GetNode(), LHNext.GetNode());
@@ -2120,6 +2224,7 @@ CLkHead CParser::RelOperation(CLkHead LookaHead)
 			break;
 		case Token('#'):	// not equals
 			LHChild = Expect(LHNext, Token('#'));
+			LHChild.SetNode(0);
 			LHChild = LogicalOR(LHChild);
 			pN = new CAct65NotEquelTO;
 			pN->Create(LHChild.GetNode(), LHNext.GetNode());
@@ -2153,8 +2258,9 @@ CLkHead CParser::LogicalOR(CLkHead LookaHead)
 	{
 		switch (LHNext.GetToken())
 		{
-		case Token::OR:
+		case Token::OR:	//logical and
 			LHChild = Expect(LHNext, Token::OR);
+			LHChild.SetNode(0);
 			LHChild = LogicalOR(LHChild);
 			pN = new CAct65GreaterTHAN;
 			pN->Create(LHChild.GetNode(), LHNext.GetNode());
@@ -2188,8 +2294,9 @@ CLkHead CParser::LogicalAND(CLkHead LookaHead)
 	{
 		switch (LHNext.GetToken())
 		{
-		case Token::AND:
+		case Token::AND:	//Logical AND
 			LHChild = Expect(LookaHead, Token::AND);
+			LHChild.SetNode(0);
 			LHChild = ArithExpr(LookaHead);
 			pN = new CAct65LogicalAND;
 			pN->Create(LHChild.GetNode(), LHNext.GetNode());
@@ -2228,8 +2335,9 @@ CLkHead CParser::ArithExpr(CLkHead LookaHead)
 	{
 		switch (LHNext.GetToken())
 		{
-		case Token('%'):	
+		case Token('%'):	// botwise OR
 			LHChild = Expect(LHNext, Token('%'));
+			LHChild.SetNode(0);
 			LHChild = BitwiseAND(LHChild);
 			pN = new CAct65BitWiseOR;
 			pN->Create(LHChild.GetNode(), LHNext.GetNode());
@@ -2248,7 +2356,7 @@ CLkHead CParser::ArithExpr(CLkHead LookaHead)
 CLkHead CParser::BitwiseAND(CLkHead LookaHead)
 {
 	//--------------------------------------------
-	// BitwiseAND		-> BitwiseXOR BitwiseAND_1;
+	// BitwiseAND	-> BitwiseXOR BitwiseAND_1;
 	// BitwiseAND_1	-> '&' BitwiseXOR BitwiseAND_1
 	//				-> .
 	//				;
@@ -2263,8 +2371,9 @@ CLkHead CParser::BitwiseAND(CLkHead LookaHead)
 	{
 		switch (LHNext.GetToken())
 		{
-		case Token('&'):	// 
+		case Token('&'):	// Bitwise AND
 			LHChild = Expect(LHNext, Token('&'));
+			LHChild.SetNode(0);
 			LHChild = BitwiseXOR(LHChild);
 			pN = new CAct65BitWiseAND;
 			pN->Create(LHChild.GetNode(), LHNext.GetNode());
@@ -2304,6 +2413,7 @@ CLkHead CParser::BitwiseXOR(CLkHead LookaHead)
 		case Token::EOR:
 		case Token::XOR:	
 			LHChild = Expect(LHNext, Token::XOR);
+			LHChild.SetNode(0);
 			LHChild = AddExpr(LHChild);
 			pN = new CAct65XOR;
 			pN->Create(LHChild.GetNode(), LHNext.GetNode());
@@ -2340,14 +2450,16 @@ CLkHead CParser::AddExpr(CLkHead LookaHead)
 		{
 		case Token('+'):	
 			LHChild = Expect(LHNext, Token('+'));
+			LHChild.SetNode(0);
 			LHChild = ShifExpr(LHChild);
 			pN = new CAct65ADD;
-			pN->Create(LHChild.GetNode(), LHNext.GetNode());
+			pN->Create(LHChild.GetNode(),LHNext.GetNode());
 			LHNext = LHChild;
 			LHNext.SetNode(pN);
 			break;
 		case Token('-'):	
 			LHChild = Expect(LHNext, Token('-'));
+			LHChild.SetNode(0);
 			LHChild = ShifExpr(LookaHead);
 			pN = new CAct65SUB;
 			pN->Create(LHChild.GetNode(), LHNext.GetNode());
@@ -2384,6 +2496,7 @@ CLkHead CParser::ShifExpr(CLkHead LookaHead)
 		{
 		case Token::LSH:
 			LHChild = Expect(LHNext, Token::LSH);
+			LHChild.SetNode(0);
 			LHChild = MultExpr(LHChild);
 			pN = new CAct65LSH;
 			pN->Create(LHChild.GetNode(), LHNext.GetNode());
@@ -2392,6 +2505,7 @@ CLkHead CParser::ShifExpr(CLkHead LookaHead)
 			break;
 		case Token::RSH:
 			LHChild = Expect(LHNext, Token::RSH);
+			LHChild.SetNode(0);
 			LHChild = MultExpr(LookaHead);
 			pN = new CAct65RSH;
 			pN->Create(LHChild.GetNode(), LHNext.GetNode());
@@ -2429,6 +2543,7 @@ CLkHead CParser::MultExpr(CLkHead LookaHead)
 		{
 		case Token('*'):
 			LHChild = Expect(LHNext, Token('*'));
+			LHChild.SetNode(0);
 			LHChild = Unary(LHChild);
 			pN = new CAct65MUL;
 			pN->Create(LHChild.GetNode(), LHNext.GetNode());
@@ -2437,6 +2552,7 @@ CLkHead CParser::MultExpr(CLkHead LookaHead)
 			break;
 		case Token('/'):
 			LHChild = Expect(LHNext, Token('/'));
+			LHChild.SetNode(0);
 			LHChild = Unary(LHChild);
 			pN = new CAct65DIV;
 			pN->Create(LHChild.GetNode(), LHNext.GetNode());
@@ -2445,13 +2561,13 @@ CLkHead CParser::MultExpr(CLkHead LookaHead)
 			break;
 		case Token::MOD:
 			LHChild = Expect(LHNext, Token::MOD);
+			LHChild.SetNode(0);
 			LHChild = Unary(LHChild);
 			pN = new CAct65MOD;
 			pN->Create(LHChild.GetNode(), LHNext.GetNode());
 			LHNext = LHChild;
 			LHNext.SetNode(pN);
 			break;
-
 		default:
 			Loop = false;
 			break;
@@ -2484,17 +2600,20 @@ CLkHead CParser::Unary(CLkHead LookaHead)
 			LHChild = Expect(LHNext, Token('-'));
 			pN = new CAct65UnaryNEG;
 			pN->Create();
-			LHNext.GetNode()->AddToTailNextChain(pN);
-			LHNext = LHChild;
+			pN->SetChild(LHChild.GetNode());
+			if (LHNext.GetNode())
+				LHNext.GetNode()->AddThatToThisNext(pN);
+			else
+				LHNext.SetNode(pN);
+			LHNext.SetToken(LHChild.GetToken());
 			break;
 		default:
+			LHChild = Value(LHNext);
+			LHNext = LHChild;
 			Loop = false;
 			break;
 		}
 	}
-	LHChild = Value(LHNext);
-	LHNext.GetNode()->AddToTailNextChain(LHChild.GetNode());
-	LHNext = LHChild;
 	PrintLookahead(LogFile(), LHNext, "Exit Unary", --m_Recursion);
 	return LHNext;
 }
@@ -2526,8 +2645,11 @@ CLkHead CParser::ValueList(CLkHead LookaHead)
 		case Token(','):
 			LHChild = Expect(LHNext, Token(','));
 			LHChild = Value(LHChild);
-			LHNext.GetNode()->AddToTailNextChain(LHChild.GetNode());
-			LHNext = LHChild;
+			if (LHNext.GetNode())
+				LHNext.GetNode()->AddThatToThisNext(pN);
+			else
+				LHNext.SetNode(pN);
+			LHNext.SetToken(LHChild.GetToken());
 			break;
 		default:
 			Loop = false;
@@ -2698,9 +2820,13 @@ CLkHead CParser::MemContents(CLkHead LookaHead)
 	CAstNode* pN = 0;
 	CLkHead LHNext, LHChild;
 	CSymbol* pSym;
+	static int Recursion = 0;
 
 	PrintLookahead(LogFile(), LookaHead, "Enter MemContents", ++m_Recursion);
+	++Recursion;
+//	fprintf(LogFile(), "\n**Enter MemContents Recursion %d**\n\n", Recursion);
 	LHNext = Factor(LookaHead);
+//	LHPrint(&LHNext, "MemContents 1:");
 	switch (LHNext.GetToken())
 	{
 	case Token::IDENT:
@@ -2708,14 +2834,16 @@ CLkHead CParser::MemContents(CLkHead LookaHead)
 		LHChild = Expect(LHNext, Token::IDENT);
 		LHChild = ArrayIndex(LHChild);
 		pN = new CAct65IDENT;
-		pN->Create(LHChild.GetNode(), LHNext.GetNode());
-		pN->SetSymbol(pSym);
+		pN->Create(LHChild.GetNode(), LHNext.GetNode(), pSym);
 		LHNext = LHChild;
 		LHNext.SetNode(pN);
+//		LHPrint(&LHNext, "MemContents 2:");
 		break;
 	default:
 		break;
 	}
+//	fprintf(LogFile(), "\n**Exit MemContents Recursion %d**\n\n", Recursion);
+	--Recursion;
 	PrintLookahead(LogFile(), LHNext, "Exit MemCoontents", --m_Recursion);
 	return LHNext;
 }
@@ -2736,8 +2864,8 @@ CLkHead CParser::ArrayIndex(CLkHead LookaHead)
 	switch (LHNext.GetToken())
 	{
 	case Token('('):
-		LHNext = Expect(LHNext, Token('('));
-		LHChild = ArithExpr(LHNext);
+		LHChild = Expect(LHNext, Token('('));
+		LHChild = ArithExpr(LHChild);
 		LHChild = Expect(LHChild, Token(')'));
 		pN = new CAct65ArrayINDEX;;
 		pN->Create(LHChild.GetNode(), LHNext.GetNode());
@@ -4113,8 +4241,7 @@ CLkHead CParser::FundTypeSpec(CLkHead LookaHead)
 	LHNext = IdentList(LookaHead);
 	while (Loop)
 	{
-		sprintf_s(pS, 256, "Loop:%d", ++LoopCount);
-		PrintNode(pS, 1, LHNext.GetNode());
+		sprintf_s(pS, 256, "FundTypeSpec:Loop:%d", ++LoopCount);
 		switch (LHNext.GetToken())
 		{
 		case Token::POINTER:
@@ -7511,6 +7638,17 @@ void CParser::PrintLookahead(
 	int bump
 )
 {
+
+}
+
+//void CParser::PrintLookahead(
+//	FILE* pLog,
+//	CLkHead token,
+//	const char* pS,
+//	int RecursionLevel,
+//	int bump
+//)
+//{
 	//char* pLookaheadToken;
 	//int TokenValue;
 	//char* pLexBuff;
@@ -7592,7 +7730,7 @@ void CParser::PrintLookahead(
 	//	token.GetNode()->Print(LogFile(), 0, pSymData, 2048);
 	//delete[] pSymData;
 	//delete[] pLineCol;
-}
+//}
 
 void CParser::LookaheadDebug(const char* s, CLkHead* pChild, CLkHead* pNext)
 {
@@ -7692,6 +7830,61 @@ void CParser::PrintNode(const char* s, int TabIndent, CAstNode* pNode)
 	}
 	delete[] TabString;
 	--Recursions;
+}
+
+void CParser::LHPrint(CLkHead* pLH, const char* s)
+{
+	fprintf(LogFile(), "<%s:>", s);
+	if (int(pLH->GetToken()) >= 256)
+	{
+		fprintf(LogFile(), "Nxt Token(%s %03x) " , GetLexer()->LookupToName(pLH->GetToken()),int(pLH->GetToken()));
+	}
+	else if (int(pLH->GetToken()) > ' ' && int(pLH->GetToken()) < 128)
+	{
+		fprintf(LogFile(), "Nxt Token(%c %02x) ", int(pLH->GetToken()), int(pLH->GetToken()));
+	}
+	else
+	{
+		fprintf(LogFile(), "Invalid Token %02x :", int(pLH->GetToken()));
+	}
+	//----------------------------------
+	if (pLH->GetSymbol())
+	{
+		fprintf(LogFile(), " LH-Symbol:%s ", pLH->GetSymbol()->GetName());
+	}
+	if (pLH->GetNode())
+	{
+		fprintf(LogFile(), " NodeName:%s ", pLH->GetNode()->GetNodeName());
+		if (pLH->GetNode()->GetSymbol())
+			fprintf(LogFile(), "Sym Name:%s ", pLH->GetNode()->GetSymbol()->GetName());
+		if (pLH->GetNode()->GetChild())
+		{
+			fprintf(LogFile(), " ChildName:%s ", pLH->GetNode()->GetChild()->GetNodeName());
+			if (pLH->GetNode()->GetChild()->GetSymbol())
+				fprintf(LogFile(), " Sym::%s:", pLH->GetNode()->GetChild()->GetSymbol()->GetName());
+		}
+		if (pLH->GetNode()->GetNext())
+		{
+			fprintf(LogFile(), " NextName:%s ", pLH->GetNode()->GetNext()->GetNodeName());
+			if (pLH->GetNode()->GetNext()->GetSymbol())
+				fprintf(LogFile(), " Sym::%s ", pLH->GetNode()->GetNext()->GetSymbol()->GetName());
+			if (pLH->GetNode()->GetNext()->GetNext())
+			{
+				CAstNode* pNode = pLH->GetNode()->GetNext()->GetNext();
+				int LoopCount = 10;
+
+				while (pNode->GetNext() && --LoopCount)
+				{
+					pNode = pNode->GetNext();
+				}
+				if (LoopCount)
+					fprintf(LogFile(), " Last Next:%s", pNode->GetNodeName());
+				else
+					fprintf(LogFile(), " Next Chain Infinate Loop");
+			}
+		}
+	}
+	fprintf(LogFile(), "\n");
 }
 
 const char* CParser::PHASE_LUT::LookupPhaseName(PHASE phase)

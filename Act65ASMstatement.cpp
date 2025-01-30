@@ -8,10 +8,10 @@ CAct65ASMstatement::~CAct65ASMstatement()
 {
 }
 
-bool CAct65ASMstatement::Create(CAstNode* pChild, CAstNode* pNext)
+bool CAct65ASMstatement::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
 	SetNodeName(m_pNodeTyypeName);
-	return CAstNode::Create(pChild, pNext);
+	return CAstNode::Create(pChild, pNext, pSym);
 }
 
 CValue* CAct65ASMstatement::Process()

@@ -340,7 +340,12 @@ private:
 		{ Token::TRB,"trb", 3,0xba, Processor::W65C02, NULL,0 },	// Test and reset bits
 		{ Token::TSB,"tsb", 3,0xba, Processor::W65C02, NULL,0 },	// Test and Set bits
 		{ Token::ENDOFOPCODES,"EOO", 0, 0, Processor::ALL,NULL,0 },
-		//------- Lables -------------
+		//------------------ Registers -------------------
+		{ Token::AREG,".A", 0,0, Processor::R6502, NULL,0 },	// Accumulator
+		{ Token::XREG,".X", 0,0, Processor::R6502, NULL,0 },	// X Index Register
+		{ Token::YREG,".Y", 0,0, Processor::R6502, NULL,0 },	// Y Index Register
+		{ Token::SPREG,".S", 0,0, Processor::R6502, NULL,0 },	// Stack Pointer
+		{ Token::PSREG,".P", 0,0, Processor::R6502, NULL,0 },	// Processor Status Register
 		{ Token::LOCAL_LABEL,"Local Lable", 0,0,Processor::ALL,NULL,0 },
 		{ Token::GLOBAL_LABLE,"Global Lable", 0,0,Processor::ALL,NULL,0 },
 		//-------- Processor Selection -------
@@ -381,15 +386,15 @@ private:
 	};
 	CSymTab m_SymbolTable;
 	int m_UngetBuffer;
-	char m_aLexBuff[256];
-	int m_LexBuffIndex;
+	char m_aLexBuff[256];	// Buffer for the current token string
+	int m_LexBuffIndex;		// index into ^
 	int m_Line;
 	int m_Col;
 	int m_LexValue;
 	CSymbol* m_pLexSymbol;
-	char* m_pFileBuffeer;
-	int m_InFileSize;
-	int m_FileIndex;
+	char* m_pFileBuffeer;	// Buffer the source file is stored in
+	int m_InFileSize;	// Size of the buffer
+	int m_FileIndex;	// Current index into file buffer
 	bool m_bAsmMode;
 public:
 	CLexer();

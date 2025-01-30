@@ -8,10 +8,10 @@ CAct65TRUE::~CAct65TRUE()
 {
 }
 
-bool CAct65TRUE::Create(CAstNode* pChild, CAstNode* pNext)
+bool CAct65TRUE::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
 	SetNodeName(m_pNodeTyypeName);
-	return CAstNode::Create(pChild, pNext);
+	return CAstNode::Create(pChild, pNext, pSym);
 }
 
 CValue* CAct65TRUE::Process()

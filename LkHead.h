@@ -16,6 +16,11 @@ public:
 	}
 	virtual ~CLkHead();
 	bool Create();
+	void Set(Token Tk, CAstNode* pN)
+	{
+		m_Token = Tk;
+		m_pNode = pN;
+	}
 	void SetToken(Token T) { m_Token = T; }
 	Token GetToken() { return m_Token; }
 	void SetNode(CAstNode* pN) { m_pNode = pN; }
