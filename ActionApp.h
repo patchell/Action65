@@ -62,6 +62,7 @@ public:
 		unsigned StartAddress, 
 		unsigned Size
 	);
+	void Exit(int Err);
 	//-----------------------------------------
 	char* CreateIndentString(char* s, int n, int Indent, int c = ' ');
 };

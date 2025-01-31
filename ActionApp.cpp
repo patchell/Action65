@@ -146,7 +146,7 @@ bool CActionApp::OpenSource()
 		{
 			fprintf(stderr, "Could not open %s\n", m_pSourceFile);
 			CloseAll();
-			exit(1);
+			Act()->Exit(1);
 		}
 	}
 	return rV;
@@ -300,6 +300,12 @@ void CActionApp::Dump(
 		}
 	}
 	delete[] s;
+}
+
+void CActionApp::Exit(int Err)
+{
+	CloseAll();
+	exit(Err);
 }
 
 char* CActionApp::CreateIndentString(char* s, int n, int Indent, int c)

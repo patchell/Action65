@@ -1,10 +1,9 @@
-BOOL xyz
 INTERRUPT AnInteruption()
 	CHAR a
-	INT x
+	INT x,xx,xxx
 	INT c
-	INT d
-	INT e
+	CHAR d
+	CHAR e
 
 	xyz = a + x - c + d - e
 	POP .A

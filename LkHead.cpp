@@ -21,6 +21,32 @@ bool CLkHead::Create()
 	return true;
 }
 
+void CLkHead::AddNode(CAstNode* pN) 
+{
+	CAstNode* pNode = 0;
+	int MaxLoops = 10;
+	static int EntryCount = 0;
+
+	++EntryCount;
+	pNode = GetNode();
+	if (pNode)
+	{
+		while (pNode->GetNext())
+		{
+			--MaxLoops;
+			if (!MaxLoops)
+			{
+				Act()->CloseAll();
+				Act()->Exit(33);
+			}
+			pNode = pNode->GetNext();
+		}
+		pNode->SetNext(pN);
+	}
+	else
+		SetNode(pN);
+}
+
 void CLkHead::operator=(const CLkHead& pLH)
 {
 	m_Token = pLH.m_Token;

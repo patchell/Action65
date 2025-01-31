@@ -1,153 +1,45 @@
 File:test5.act has 131 Bytes
 Parser Created
-Set Child Node Of BOOL To IDENT:Sym:xyz
--
-AddThatToThisNext BOOL::<No Sym> ID=2 TO ROOT::<No Sym> NODE ID=1
-Set Child Node Of CHAR To IDENT:Sym:a
-Set Child Node Of INT To IDENT:Sym:x
--
-AddThatToThisNext INT::<No Sym> ID=8 TO CHAR::<No Sym> NODE ID=6
-Set Child Node Of INT To IDENT:Sym:c
--
-	CHAR NODE ID=6 
-AddThatToThisNext INT::<No Sym> ID=10 TO INT::<No Sym> NODE ID=8
-Set Child Node Of INT To IDENT:Sym:d
--
-	CHAR NODE ID=6 
-	INT NODE ID=8 
-AddThatToThisNext INT::<No Sym> ID=12 TO INT::<No Sym> NODE ID=10
-Set Child Node Of INT To IDENT:Sym:e
--
-	CHAR NODE ID=6 
-	INT NODE ID=8 
-	INT NODE ID=10 
-AddThatToThisNext INT::<No Sym> ID=14 TO INT::<No Sym> NODE ID=12
-Set Child Node Of LOCAL Vars To CHAR
-<---- Entry Statements ----:>Nxt Token(IDENT 100) 
-<---- Entry For Statements ----:>Nxt Token(IDENT 100) 
-<---- Entry IF Statements ----:>Nxt Token(IDENT 100) 
-<---- Entry IFF Statements ----:>Nxt Token(IDENT 100) 
-<---- Entry WHILE Statements ----:>Nxt Token(IDENT 100) 
-<---- Entry DO Statements ----:>Nxt Token(IDENT 100) 
-<---- Entry RETURN Statements ----:>Nxt Token(IDENT 100) 
-<---- Entry ASM Statements ----:>Nxt Token(IDENT 100) 
-<---- Entry CODE BLOCK Statements ----:>Nxt Token(IDENT 100) 
-<---- Entry UNTIL Statements ----:>Nxt Token(IDENT 100) 
-<---- Entry PUSH Statements ----:>Nxt Token(IDENT 100) 
-<---- Entry POP Statements ----:>Nxt Token(IDENT 100) 
-<---- Entry BREAK Statements ----:>Nxt Token(IDENT 100) 
-<---- Entry RTI Statements ----:>Nxt Token(IDENT 100) 
-<**Enter** Assign LookaHead:>Nxt Token(IDENT 100) 
-<Ret Frm MemCont Assign LHNext:>Nxt Token(= 3d)  NodeName:IDENT Sym Name:xyz 
-Set Child Node Of ADD To IDENT:Sym:x
-Set Child Node Of SUB To IDENT:Sym:c
-Set Child Node Of ADD To IDENT:Sym:d
-Set Child Node Of SUB To IDENT:Sym:e
-<Assign 1 LHChild *Return From ArithExpr*:>Nxt Token(POP 13c)  NodeName:SUB  ChildName:IDENT  Sym::e:
-Set Child Node Of Assign = To SUB
-<Exit Assign LookaHead:>Nxt Token(IDENT 100) 
-<---- LOOP POP Statements ----:>Nxt Token(POP 13c)  NodeName:Assign =  ChildName:SUB 
-Set Child Node Of POP To .A
--
-AddThatToThisNext POP::<No Sym> ID=29 TO Assign =::<No Sym> NODE ID=27
-<POP LHnext:>Nxt Token(POP 13c)  NodeName:Assign =  ChildName:SUB  NextName:POP 
-<---- Entry BREAK Statements ----:>Nxt Token(BREAK 13d)  NodeName:Assign =  ChildName:SUB  NextName:POP 
-<---- Entry RTI Statements ----:>Nxt Token(BREAK 13d)  NodeName:Assign =  ChildName:SUB  NextName:POP 
-<**Enter** Assign LookaHead:>Nxt Token(BREAK 13d)  NodeName:Assign =  ChildName:SUB  NextName:POP 
-<Ret Frm MemCont Assign LHNext:>Nxt Token(BREAK 13d)  NodeName:Assign =  ChildName:SUB  NextName:POP 
-<Exit Assign LookaHead:>Nxt Token(BREAK 13d)  NodeName:Assign =  ChildName:SUB  NextName:POP 
--
-	Assign = NODE ID=27 
-AddThatToThisNext BREAK::<No Sym> ID=30 TO POP::<No Sym> NODE ID=29
-<---- Entry RTI Statements ----:>Nxt Token(EXIT 138)  NodeName:Assign =  ChildName:SUB  NextName:POP  Last Next:BREAK
-<**Enter** Assign LookaHead:>Nxt Token(EXIT 138)  NodeName:Assign =  ChildName:SUB  NextName:POP  Last Next:BREAK
-<Ret Frm MemCont Assign LHNext:>Nxt Token(EXIT 138)  NodeName:Assign =  ChildName:SUB  NextName:POP  Last Next:BREAK
-<Exit Assign LookaHead:>Nxt Token(EXIT 138)  NodeName:Assign =  ChildName:SUB  NextName:POP  Last Next:BREAK
-<---- LOOP POP Statements ----:>Nxt Token(EXIT 138)  NodeName:Assign =  ChildName:SUB  NextName:POP  Last Next:BREAK
-<---- Entry POP Statements ----:>Nxt Token(IDENT 100) 
--
-	Assign = NODE ID=27 
-	POP NODE ID=29 
-AddThatToThisNext EXIT::<No Sym> ID=31 TO BREAK::<No Sym> NODE ID=30
-<---- Entry RETURN Statements ----:>Nxt Token(RTI 17f)  NodeName:Assign =  ChildName:SUB  NextName:POP  Last Next:EXIT
-<---- Entry ASM Statements ----:>Nxt Token(RTI 17f)  NodeName:Assign =  ChildName:SUB  NextName:POP  Last Next:EXIT
-<---- Entry CODE BLOCK Statements ----:>Nxt Token(RTI 17f)  NodeName:Assign =  ChildName:SUB  NextName:POP  Last Next:EXIT
-<---- Entry UNTIL Statements ----:>Nxt Token(RTI 17f)  NodeName:Assign =  ChildName:SUB  NextName:POP  Last Next:EXIT
-<---- Entry PUSH Statements ----:>Nxt Token(RTI 17f)  NodeName:Assign =  ChildName:SUB  NextName:POP  Last Next:EXIT
-<---- Entry POP Statements ----:>Nxt Token(RTI 17f)  NodeName:Assign =  ChildName:SUB  NextName:POP  Last Next:EXIT
-<---- Entry BREAK Statements ----:>Nxt Token(RTI 17f)  NodeName:Assign =  ChildName:SUB  NextName:POP  Last Next:EXIT
-<---- Entry RTI Statements ----:>Nxt Token(RTI 17f)  NodeName:Assign =  ChildName:SUB  NextName:POP  Last Next:EXIT
-<**Enter** Assign LookaHead:>Nxt Token(RTI 17f)  NodeName:Assign =  ChildName:SUB  NextName:POP  Last Next:EXIT
-<Ret Frm MemCont Assign LHNext:>Nxt Token(RTI 17f)  NodeName:Assign =  ChildName:SUB  NextName:POP  Last Next:EXIT
-<Exit Assign LookaHead:>Nxt Token(RTI 17f)  NodeName:Assign =  ChildName:SUB  NextName:POP  Last Next:EXIT
--
-	Assign = NODE ID=27 
-	POP NODE ID=29 
-	BREAK NODE ID=30 
-AddThatToThisNext RTI::<No Sym> ID=32 TO EXIT::<No Sym> NODE ID=31
-<**Enter** Assign LookaHead:>Nxt Token(INT 11f)  NodeName:Assign =  ChildName:SUB  NextName:POP  Last Next:RTI
-<Ret Frm MemCont Assign LHNext:>Nxt Token(INT 11f)  NodeName:Assign =  ChildName:SUB  NextName:POP  Last Next:RTI
-<Exit Assign LookaHead:>Nxt Token(INT 11f)  NodeName:Assign =  ChildName:SUB  NextName:POP  Last Next:RTI
-<---- LOOP POP Statements ----:>Nxt Token(INT 11f)  NodeName:Assign =  ChildName:SUB  NextName:POP  Last Next:RTI
-<---- Entry POP Statements ----:>Nxt Token(RTI 17f)  NodeName:Assign =  ChildName:SUB  NextName:POP  Last Next:RTI
-Set Child Node Of STATEMENTS To Assign =
--
-AddThatToThisNext STATEMENTS::<No Sym> ID=33 TO LOCAL Vars::<No Sym> NODE ID=16
-Set Child Node Of Body To LOCAL Vars
--
-AddThatToThisNext Body::<No Sym> ID=34 TO Param LIST::<No Sym> NODE ID=5
-Set Child Node Of IDENT:Sym:AnInteruption  To Param LIST
-Set Child Node Of IRQ-PROC To IDENT:Sym:AnInteruption
--
-	ROOT NODE ID=1 
-AddThatToThisNext IRQ-PROC::<No Sym> ID=35 TO BOOL::<No Sym> NODE ID=2
-Set Child Node Of INT To IDENT:Sym:zyx
--
-	ROOT NODE ID=1 
-	BOOL NODE ID=2 
-AddThatToThisNext INT::<No Sym> ID=36 TO IRQ-PROC::<No Sym> NODE ID=35
 	 NUMB  CHILD  NEXT
-     1     -1      2  +- 'ROOT'
-     2      3     35  +- 'BOOL'
-     3     -1     -1  | +- 'IDENT': xyz
-    35      4     36  +- 'IRQ-PROC'
-     4      5     -1  | +- 'IDENT': AnInteruption
-     5     -1     34  | | +- 'Param LIST'
-    34     16     -1  | | +- 'Body'
-    16      6     33  | | | +- 'LOCAL Vars'
-     6      7      8  | | | | +- 'CHAR'
-     7     -1     -1  | | | | | +- 'IDENT': a
-     8      9     10  | | | | +- 'INT'
-     9     -1     -1  | | | | | +- 'IDENT': x
-    10     11     12  | | | | +- 'INT'
-    11     -1     -1  | | | | | +- 'IDENT': c
-    12     13     14  | | | | +- 'INT'
-    13     -1     -1  | | | | | +- 'IDENT': d
-    14     15     -1  | | | | +- 'INT'
-    15     -1     -1  | | | | | +- 'IDENT': e
-    33     27     -1  | | | +- 'STATEMENTS'
-    27     26     29  | | | | +- 'Assign ='
-    26     25     17  | | | | | +- 'SUB'
-    25     -1     24  | | | | | | +- 'IDENT': e
-    24     23     -1  | | | | | | +- 'ADD'
-    23     -1     22  | | | | | | | +- 'IDENT': d
-    22     21     -1  | | | | | | | +- 'SUB'
-    21     -1     20  | | | | | | | | +- 'IDENT': c
-    20     19     -1  | | | | | | | | +- 'ADD'
-    19     -1     18  | | | | | | | | | +- 'IDENT': x
-    18     -1     -1  | | | | | | | | | +- 'IDENT': a
-    17     -1     -1  | | | | | +- 'IDENT': xyz
-    29     28     30  | | | | +- 'POP'
-    28     -1     -1  | | | | | +- '.A'
-    30     -1     31  | | | | +- 'BREAK'
-    31     -1     32  | | | | +- 'EXIT'
-    32     -1     -1  | | | | +- 'RTI'
-    36     37     -1  +- 'INT'
-    37     -1     -1  | +- 'IDENT': zyx
+    37     36     -1  +- 'ROOT'
+    36     35     -1  |  +- 'INT'
+    35     -1     34  |  |  +- 'IDENT': zyx
+    34      1     -1  |  |  +- 'IRQ-PROC'
+     1      2     -1  |  |  |  +- 'IDENT': AnInteruption
+     2     -1     33  |  |  |  |  +- 'Param LIST'
+    33     15     -1  |  |  |  |  +- 'Body'
+    15      4     32  |  |  |  |  |  +- 'LOCAL Vars'
+     4      3      8  |  |  |  |  |  |  +- 'CHAR'
+     3     -1     -1  |  |  |  |  |  |  |  +- 'IDENT': a
+     8      5     10  |  |  |  |  |  |  +- 'INT'
+     5     -1      6  |  |  |  |  |  |  |  +- 'IDENT': x
+     6     -1      7  |  |  |  |  |  |  |  +- 'IDENT': xx
+     7     -1     -1  |  |  |  |  |  |  |  +- 'IDENT': xxx
+    10      9     12  |  |  |  |  |  |  +- 'INT'
+     9     -1     -1  |  |  |  |  |  |  |  +- 'IDENT': c
+    12     11     14  |  |  |  |  |  |  +- 'CHAR'
+    11     -1     -1  |  |  |  |  |  |  |  +- 'IDENT': d
+    14     13     -1  |  |  |  |  |  |  +- 'CHAR'
+    13     -1     -1  |  |  |  |  |  |  |  +- 'IDENT': e
+    32     26     -1  |  |  |  |  |  +- 'STATEMENTS'
+    26     25     28  |  |  |  |  |  |  +- 'Assign ='
+    25     24     16  |  |  |  |  |  |  |  +- 'SUB'
+    24     -1     23  |  |  |  |  |  |  |  |  +- 'IDENT': e
+    23     22     -1  |  |  |  |  |  |  |  |  +- 'ADD'
+    22     -1     21  |  |  |  |  |  |  |  |  |  +- 'IDENT': d
+    21     20     -1  |  |  |  |  |  |  |  |  |  +- 'SUB'
+    20     -1     19  |  |  |  |  |  |  |  |  |  |  +- 'IDENT': c
+    19     18     -1  |  |  |  |  |  |  |  |  |  |  +- 'ADD'
+    18     -1     17  |  |  |  |  |  |  |  |  |  |  |  +- 'IDENT': x
+    17     -1     -1  |  |  |  |  |  |  |  |  |  |  |  +- 'IDENT': a
+    16     -1     -1  |  |  |  |  |  |  |  +- 'IDENT': xyz
+    28     27     29  |  |  |  |  |  |  +- 'POP'
+    27     -1     -1  |  |  |  |  |  |  |  +- '.A'
+    29     -1     30  |  |  |  |  |  |  +- 'BREAK'
+    30     -1     31  |  |  |  |  |  |  +- 'EXIT'
+    31     -1     -1  |  |  |  |  |  |  +- 'RTI'
 ------------ Symbol Table --------------
-e: LOCAL:INT::Address=00000000  Value=0000
-
-xyz: GLOBAL:BOOL::Address=00000000  Value=0000
+e: LOCAL:CHAR::Address=00000000  Value=0000
 
 zyx: GLOBAL:INT::Address=00000000  Value=0000
 
@@ -155,10 +47,14 @@ x: LOCAL:INT::Address=00000000  Value=0000
 
 AnInteruption: INTERRUPT::Address=00000000  Value=0000
 
+xxx: LOCAL:INT::Address=00000000  Value=0000
+
+xx: LOCAL:INT::Address=00000000  Value=0000
+
 a: LOCAL:CHAR::Address=00000000  Value=0000
 
 c: LOCAL:INT::Address=00000000  Value=0000
 
-d: LOCAL:INT::Address=00000000  Value=0000
+d: LOCAL:CHAR::Address=00000000  Value=0000
 
-Lines Compiled:15
+Lines Compiled:14

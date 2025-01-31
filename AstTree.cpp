@@ -54,12 +54,12 @@ void CAstTree::TraverseTree(
 	CAstNode* pAN = 0;
 	int Loops = 0;
 
-	if (++Recursions > 10)
+	if (++Recursions > 20)
 	{
 		fprintf(stderr, "Too Many Recursions\n");
 		fprintf(pOut, "Too Many Recursions\n");
 		Act()->CloseAll();
-		exit(2);
+		Act()->Exit(2);
 	}
 	
 	//pAN = pNode->GetHead();
@@ -81,7 +81,7 @@ void CAstTree::TraverseTree(
 		if (++Loops > 10)
 		{
 			Act()->CloseAll();
-			exit(7);
+			Act()->Exit(7);
 		}
 	}
 	pAN->Print(Indent,s, StringSize);
