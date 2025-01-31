@@ -43,7 +43,7 @@ bool CAstNode::Create(
 )
 {
 	CAstNode* pNode = 0;
-	int LoopCount = 10;
+	int LoopCount = 30;
 	bool rV = true;
 
 	SetSymbol(pSym);
@@ -56,8 +56,11 @@ bool CAstNode::Create(
 			--LoopCount;
 			if (!LoopCount)
 			{
+				fprintf(Act()->LogFile(), "Infinate Loop in CAstNode::Create  Line:%d Col:%d\n",
+					Act()->GetParser()->GetLexer()->GetLineNumber(),
+					Act()->GetParser()->GetLexer()->GetColunm()
+				);
 				Act()->CloseAll();
-				fprintf(Act()->LogFile(), "AstNode::Create Infinate Loop");
 				Act()->Exit(19);
 			}
 			pNode = pNode->GetNext();
@@ -182,7 +185,10 @@ void CAstNode::AddThatToThisNext(CAstNode* pN)
 		{
 			if (!LoopCount--)
 			{
-				fprintf(Act()->LogFile(), "Infinate Loop\n");
+				fprintf(Act()->LogFile(), "Infinate Loop in CAstNode::AddThatToThisNext  Line:%d Col:%d\n",
+					Act()->GetParser()->GetLexer()->GetLineNumber(),
+					Act()->GetParser()->GetLexer()->GetColunm()
+				);
 				Act()->CloseAll();
 				Act()->Exit(20);
 			}

@@ -24,7 +24,7 @@ bool CLkHead::Create()
 void CLkHead::AddNode(CAstNode* pN) 
 {
 	CAstNode* pNode = 0;
-	int MaxLoops = 10;
+	int MaxLoops = 30;
 	static int EntryCount = 0;
 
 	++EntryCount;
@@ -36,6 +36,10 @@ void CLkHead::AddNode(CAstNode* pN)
 			--MaxLoops;
 			if (!MaxLoops)
 			{
+				fprintf(Act()->LogFile(), "Infinate Loop in AddNode  Line:%d Col:%d\n",
+					Act()->GetParser()->GetLexer()->GetLineNumber(),
+					Act()->GetParser()->GetLexer()->GetColunm()
+				);
 				Act()->CloseAll();
 				Act()->Exit(33);
 			}

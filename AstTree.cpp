@@ -50,14 +50,17 @@ void CAstTree::TraverseTree(
 	//-------------------------------
 	// Navigate the Syntax Tree
 	//-------------------------------
-	static int Recursions = 0;
+	static int Recursions = 20;
 	CAstNode* pAN = 0;
 	int Loops = 0;
 
-	if (++Recursions > 20)
+	--Recursions;
+	if (!Recursions)
 	{
-		fprintf(stderr, "Too Many Recursions\n");
-		fprintf(pOut, "Too Many Recursions\n");
+		fprintf(Act()->LogFile(), "Too Many Recursions in CAstTree::TraverseTree  Line:%d Col:%d\n",
+			Act()->GetParser()->GetLexer()->GetLineNumber(),
+			Act()->GetParser()->GetLexer()->GetColunm()
+		);
 		Act()->CloseAll();
 		Act()->Exit(2);
 	}
@@ -78,8 +81,12 @@ void CAstTree::TraverseTree(
 			TraverseTree(pOut, pAN->GetChild(),s, StringSize, Indent+1);
 		}
 		pAN = pAN->GetNext();
-		if (++Loops > 10)
+		if (++Loops > 30)
 		{
+			fprintf(Act()->LogFile(), "Infinate Loop in CAstTree::TraverseTree  Line:%d Col:%d\n",
+				Act()->GetParser()->GetLexer()->GetLineNumber(),
+				Act()->GetParser()->GetLexer()->GetColunm()
+			);
 			Act()->CloseAll();
 			Act()->Exit(7);
 		}
@@ -90,6 +97,6 @@ void CAstTree::TraverseTree(
 	{
 		TraverseTree(pOut, pAN->GetChild(),s, StringSize, Indent + 1);
 	}
-	Recursions--;
+	Recursions++;
 }
 

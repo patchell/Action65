@@ -1,3 +1,10 @@
+INT aa,bb,cc
+CARD dd,ee
+CHAR ff
+BYTE gg,hh,ii,jj,kk
+
+MODULE
+
 INTERRUPT AnInteruption()
 	CHAR a
 	INT x,xx,xxx
@@ -10,4 +17,5 @@ INTERRUPT AnInteruption()
 	BREAK
 	EXIT
 	RTI
-INT zyx
+
+INT qr,st

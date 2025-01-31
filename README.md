@@ -1,43 +1,100 @@
 This is yet another attempt on my part to create an ACTION! cross compiler 
 for the 6502.
 
+Jan 31, 2025
+
+By Jove, I think I got it.  Had a bit of confusion about how
+building an AST went, after looking at code I wrote about 12 years
+ago, I realized I was sadly mistaken.  All straitened out now, I hope.
+So here are the current state of afairs.
+
+Source:
+
+INT aa,bb,cc
+CARD dd,ee
+CHAR ff
+BYTE gg,hh,ii,jj,kk
+
+MODULE
+
+INTERRUPT AnInteruption()
+	CHAR a
+	INT x,xx,xxx
+	INT c
+	CHAR d
+	CHAR e
+
+	xyz = a + x - c + d - e
+	POP .A
+	BREAK
+	EXIT
+	RTI
+
+INT qr,st
+
+Abstract Syntax Tree
+
+	 NUMB  CHILD  NEXT
+    54      4     -1  +- 'ROOT'
+     4      1      7  |  +- 'INT'
+     1     -1      2  |  |  +- 'IDENT': aa
+     2     -1      3  |  |  +- 'IDENT': bb
+     3     -1     -1  |  |  +- 'IDENT': cc
+     7      5      9  |  +- 'CARD'
+     5     -1      6  |  |  +- 'IDENT': dd
+     6     -1     -1  |  |  +- 'IDENT': ee
+     9      8     15  |  +- 'CHAR'
+     8     -1     -1  |  |  +- 'IDENT': ff
+    15     10     53  |  +- 'BYTE'
+    10     -1     11  |  |  +- 'IDENT': gg
+    11     -1     12  |  |  +- 'IDENT': hh
+    12     -1     13  |  |  +- 'IDENT': ii
+    13     -1     14  |  |  +- 'IDENT': jj
+    14     -1     -1  |  |  +- 'IDENT': kk
+    53     49     -1  |  +- 'MODULE'
+    49     16     52  |  |  +- 'IRQ-PROC'
+    16     17     -1  |  |  |  +- 'IDENT': AnInteruption
+    17     -1     48  |  |  |  |  +- 'Param LIST'
+    48     30     -1  |  |  |  |  +- 'Body'
+    30     19     47  |  |  |  |  |  +- 'LOCAL Vars'
+    19     18     23  |  |  |  |  |  |  +- 'CHAR'
+    18     -1     -1  |  |  |  |  |  |  |  +- 'IDENT': a
+    23     20     25  |  |  |  |  |  |  +- 'INT'
+    20     -1     21  |  |  |  |  |  |  |  +- 'IDENT': x
+    21     -1     22  |  |  |  |  |  |  |  +- 'IDENT': xx
+    22     -1     -1  |  |  |  |  |  |  |  +- 'IDENT': xxx
+    25     24     27  |  |  |  |  |  |  +- 'INT'
+    24     -1     -1  |  |  |  |  |  |  |  +- 'IDENT': c
+    27     26     29  |  |  |  |  |  |  +- 'CHAR'
+    26     -1     -1  |  |  |  |  |  |  |  +- 'IDENT': d
+    29     28     -1  |  |  |  |  |  |  +- 'CHAR'
+    28     -1     -1  |  |  |  |  |  |  |  +- 'IDENT': e
+    47     41     -1  |  |  |  |  |  +- 'STATEMENTS'
+    41     40     43  |  |  |  |  |  |  +- 'Assign ='
+    40     39     31  |  |  |  |  |  |  |  +- 'SUB'
+    39     -1     38  |  |  |  |  |  |  |  |  +- 'IDENT': e
+    38     37     -1  |  |  |  |  |  |  |  |  +- 'ADD'
+    37     -1     36  |  |  |  |  |  |  |  |  |  +- 'IDENT': d
+    36     35     -1  |  |  |  |  |  |  |  |  |  +- 'SUB'
+    35     -1     34  |  |  |  |  |  |  |  |  |  |  +- 'IDENT': c
+    34     33     -1  |  |  |  |  |  |  |  |  |  |  +- 'ADD'
+    33     -1     32  |  |  |  |  |  |  |  |  |  |  |  +- 'IDENT': x
+    32     -1     -1  |  |  |  |  |  |  |  |  |  |  |  +- 'IDENT': a
+    31     -1     -1  |  |  |  |  |  |  |  +- 'IDENT': xyz
+    43     42     44  |  |  |  |  |  |  +- 'POP'
+    42     -1     -1  |  |  |  |  |  |  |  +- '.A'
+    44     -1     45  |  |  |  |  |  |  +- 'BREAK'
+    45     -1     46  |  |  |  |  |  |  +- 'EXIT'
+    46     -1     -1  |  |  |  |  |  |  +- 'RTI'
+    52     50     -1  |  |  +- 'INT'
+    50     -1     51  |  |  |  +- 'IDENT': qr
+    51     -1     -1  |  |  |  +- 'IDENT': st
+
 Jan 26, 2025
 
 A bit more progress.  Starting to get AST generation for proceedures
 and Statements, although very soparse.
 
-Source:
-
-BOOL xyz
-
-INTERRUPT AnInteruption()
-	BYTE a
-	INT x
-
-	BREAK
-	RTI
-INT zyx
-
-AST:
-
-	 NUMB  CHILD  NEXT
-     1     -1      2  +-ROOT
-     2      3     15  +-BOOL
-     3     -1     -1  | +-IDENT: xyz
-    15      4     16  +-IRQ
-     4      5     -1  | +-IDENT: AnInteruption
-     5     -1     14  | | +-Param LIST
-    14     10     -1  | | +-Body
-    10      6     13  | | | +-LOCAL Vars
-     6      7      8  | | | | +-CHAR
-     7     -1     -1  | | | | | +-IDENT: a
-     8      9     -1  | | | | +-INT
-     9     -1     -1  | | | | | +-IDENT: x
-    13     11     -1  | | | +-STATEMENTS
-    11     -1     12  | | | | +-BREAK
-    12     -1     -1  | | | | +-RTI
-    16     17     -1  +-INT
-    17     -1     -1  | +-IDENT: zyx
 
 Jan 18, 2025
 
