@@ -10,6 +10,7 @@ CAct65SecAtrbFALSE::~CAct65SecAtrbFALSE()
 
 bool CAct65SecAtrbFALSE::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
+	SetNodeType(NodeType::SECTION_ATTRIBUTE_FALSE);
 	SetNodeName(m_pNodeTyypeName);
 	return CAstNode::Create(pChild, pNext, pSym);
 }

@@ -10,6 +10,7 @@ CAct65ARRAY::~CAct65ARRAY()
 
 bool CAct65ARRAY::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
+	SetNodeType(NodeType::ARRAY);
 	SetNodeName(m_pNodeTyypeName);
 	return CAstNode::Create(pChild, pNext, pSym);
 }

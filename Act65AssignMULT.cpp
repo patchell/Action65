@@ -11,6 +11,7 @@ CAct65AssignMULT::~CAct65AssignMULT()
 
 bool CAct65AssignMULT::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
+	SetNodeType(NodeType::ASSIGN_MULT);
 	SetNodeName(m_pNodeTyypeName);
 	return CAstNode::Create(pChild, pNext, pSym);
 }

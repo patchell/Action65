@@ -10,6 +10,7 @@ CAct65XREG::~CAct65XREG()
 
 bool CAct65XREG::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
+	SetNodeType(NodeType::XREG);
 	SetNodeName(m_pNodeTyypeName);
 	return CAstNode::Create(pChild, pNext, pSym);
 }

@@ -10,6 +10,7 @@ CAct65THEN::~CAct65THEN()
 
 bool CAct65THEN::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
+	SetNodeType(NodeType::THEN);
 	SetNodeName(m_pNodeTyypeName);
 	return CAstNode::Create(pChild, pNext, pSym);
 }

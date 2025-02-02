@@ -10,6 +10,7 @@ CAct65SecAtrbREADWRITE::~CAct65SecAtrbREADWRITE()
 
 bool CAct65SecAtrbREADWRITE::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
+	SetNodeType(NodeType::SECTION_ATTRIBUTE_READ_WRITE);
 	SetNodeName(m_pNodeTyypeName);
 	return CAstNode::Create(pChild, pNext, pSym);
 }

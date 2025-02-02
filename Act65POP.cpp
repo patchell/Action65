@@ -10,6 +10,7 @@ CAct65POP::~CAct65POP()
 
 bool CAct65POP::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
+	SetNodeType(NodeType::POP);
 	SetNodeName(m_pNodeTyypeName);
 	return CAstNode::Create(pChild, pNext, pSym);
 }

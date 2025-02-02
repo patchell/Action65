@@ -10,6 +10,7 @@ CAct65LogicalOR::~CAct65LogicalOR()
 
 bool CAct65LogicalOR::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
+	SetNodeType(NodeType::LOGICAL_OR);
 	SetNodeName(m_pNodeTyypeName);
 	return CAstNode::Create(pChild, pNext, pSym);
 }

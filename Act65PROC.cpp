@@ -10,6 +10,7 @@ CAct65PROC::~CAct65PROC()
 
 bool CAct65PROC::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
+	SetNodeType(NodeType::PROC);
 	SetNodeName(m_pNodeTyypeName);
 	return CAstNode::Create(pChild, pNext, pSym);
 }

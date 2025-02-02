@@ -447,7 +447,7 @@
     <ClCompile Include="Act65FuncADDR.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Acrt65ProcADDR.cpp">
+    <ClCompile Include="Act65ProcADDR.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Act65IdentList.cpp">
@@ -974,7 +974,7 @@
     <ClInclude Include="Act65FuncADDR.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Acrt65ProcADDR.h">
+    <ClInclude Include="Act65ProcADDR.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Act65IdentList.h">

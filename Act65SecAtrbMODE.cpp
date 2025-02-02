@@ -10,6 +10,7 @@ CAct65SecAtrbMODE::~CAct65SecAtrbMODE()
 
 bool CAct65SecAtrbMODE::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
+	SetNodeType(NodeType::SECTION_ATTRIBUTE_MODE);
 	SetNodeName(m_pNodeTyypeName);
 	return CAstNode::Create(pChild, pNext, pSym);
 }

@@ -10,6 +10,7 @@ CAct65BitWiseOR::~CAct65BitWiseOR()
 
 bool CAct65BitWiseOR::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
+	SetNodeType(NodeType::BITWISE_OR);
 	SetNodeName(m_pNodeTyypeName);
 	return CAstNode::Create(pChild, pNext, pSym);
 }

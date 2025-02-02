@@ -132,7 +132,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Acrt65ProcADDR.cpp" />
+    <ClCompile Include="Act65ProcADDR.cpp" />
     <ClCompile Include="Act65BODY.cpp" />
     <ClCompile Include="Act65DeclareParams.cpp" />
     <ClCompile Include="Act65LocalVar.cpp" />
@@ -308,7 +308,7 @@
     <ClCompile Include="WhereSymbolIsUsed.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Acrt65ProcADDR.h" />
+    <ClInclude Include="Act65ProcADDR.h" />
     <ClInclude Include="Act65BODY.h" />
     <ClInclude Include="Act65DeclareParams.h" />
     <ClInclude Include="Act65LocalVar.h" />

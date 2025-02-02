@@ -10,6 +10,7 @@ CAct65Label::~CAct65Label()
 
 bool CAct65Label::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
+	SetNodeType(NodeType::LABEL);
 	SetNodeName(m_pNodeTyypeName);
 	return CAstNode::Create(pChild, pNext, pSym);
 }

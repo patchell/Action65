@@ -10,6 +10,7 @@ CAct65Module::~CAct65Module()
 
 bool CAct65Module::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
+	SetNodeType(NodeType::MODULE);
 	SetNodeName(m_pNodeTyypeName);
 	return CAstNode::Create(pChild, pNext, pSym);
 }

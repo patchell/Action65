@@ -10,6 +10,7 @@ CAct65ADD::~CAct65ADD()
 
 bool CAct65ADD::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
+	SetNodeType(NodeType::ADDEXPR);
 	SetNodeName(m_pNodeTyypeName);
 	return CAstNode::Create(pChild, pNext, pSym);
 }

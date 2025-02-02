@@ -10,6 +10,7 @@ CAct65ASM::~CAct65ASM()
 
 bool CAct65ASM::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
+	SetNodeType(NodeType::ASM);
 	SetNodeName(m_pNodeTyypeName);
 	return CAstNode::Create(pChild, pNext, pSym);
 }

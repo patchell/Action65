@@ -11,6 +11,7 @@ CAct65CARD::~CAct65CARD()
 
 bool CAct65CARD::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
+	SetNodeType(NodeType::CARD);
 	SetNodeName(m_pNodeTyypeName);
 	return CAstNode::Create(pChild, pNext, pSym);
 }

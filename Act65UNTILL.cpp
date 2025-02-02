@@ -10,6 +10,7 @@ CAct65UNTILL::~CAct65UNTILL()
 
 bool CAct65UNTILL::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
+	SetNodeType(NodeType::UNTIL);
 	SetNodeName(m_pNodeTyypeName);
 	return CAstNode::Create(pChild, pNext, pSym);
 }

@@ -10,6 +10,7 @@ CAct65OptNOT::~CAct65OptNOT()
 
 bool CAct65OptNOT::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
+	SetNodeType(NodeType::OPTIONAL_NOT);
 	SetNodeName(m_pNodeTyypeName);
 	return CAstNode::Create(pChild, pNext, pSym);
 }

@@ -10,6 +10,7 @@ CAct65AssignMOD::~CAct65AssignMOD()
 
 bool CAct65AssignMOD::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
+	SetNodeType(NodeType::MOD);
 	SetNodeName(m_pNodeTyypeName);
 	return CAstNode::Create(pChild, pNext, pSym);
 }

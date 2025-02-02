@@ -10,6 +10,7 @@ CAct65R6502::~CAct65R6502()
 
 bool CAct65R6502::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
+	SetNodeType(NodeType::R6502);
 	SetNodeName(m_pNodeTyypeName);
 	return CAstNode::Create(pChild, pNext, pSym);
 }

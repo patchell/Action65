@@ -10,6 +10,7 @@ CAct65DW::~CAct65DW()
 
 bool CAct65DW::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
+	SetNodeType(NodeType::DEFINE_WORD);
 	SetNodeName(m_pNodeTyypeName);
 	return CAstNode::Create(pChild, pNext, pSym);
 }

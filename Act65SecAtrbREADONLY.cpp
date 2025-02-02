@@ -10,6 +10,7 @@ CAct65SecAtrbREADONLY::~CAct65SecAtrbREADONLY()
 
 bool CAct65SecAtrbREADONLY::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
+	SetNodeType(NodeType::SECTION_ATRRIBUTE_READ_ONLY);
 	SetNodeName(m_pNodeTyypeName);
 	return CAstNode::Create(pChild, pNext, pSym);
 }

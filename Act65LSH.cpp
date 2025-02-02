@@ -10,6 +10,7 @@ CAct65LSH::~CAct65LSH()
 
 bool CAct65LSH::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
+	SetNodeType(NodeType::LSH);
 	SetNodeName(m_pNodeTyypeName);
 	return CAstNode::Create(pChild, pNext, pSym);
 }

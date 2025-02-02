@@ -10,6 +10,7 @@ CAct65ASMstatement::~CAct65ASMstatement()
 
 bool CAct65ASMstatement::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
+	SetNodeType(NodeType::ASM_STATEMENT);
 	SetNodeName(m_pNodeTyypeName);
 	return CAstNode::Create(pChild, pNext, pSym);
 }

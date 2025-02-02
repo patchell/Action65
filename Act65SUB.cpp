@@ -10,6 +10,7 @@ CAct65SUB::~CAct65SUB()
 
 bool CAct65SUB::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
+	SetNodeType(NodeType::SUBTRACT);
 	SetNodeName(m_pNodeTyypeName);
 	return CAstNode::Create(pChild, pNext, pSym);
 }

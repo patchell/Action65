@@ -10,6 +10,7 @@ CAct65AddrOfINTERRUPT::~CAct65AddrOfINTERRUPT()
 
 bool CAct65AddrOfINTERRUPT::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
+	SetNodeType(NodeType::ADDRESS_OF_INTERRUPT);
 	SetNodeName(m_pNodeTyypeName);
 	return CAstNode::Create(pChild, pNext, pSym);
 }

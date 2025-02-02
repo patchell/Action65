@@ -10,6 +10,7 @@ CAct65DAS::~CAct65DAS()
 
 bool CAct65DAS::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
+	SetNodeType(NodeType::DEFINE_ACTION_STRING);
 	SetNodeName(m_pNodeTyypeName);
 	return CAstNode::Create(pChild, pNext, pSym);
 }

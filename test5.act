@@ -12,8 +12,12 @@ INTERRUPT AnInteruption()
 	CHAR d
 	CHAR e
 
-	xyz = a + x - c + d - e
-	POP .A
+	PUSH .A,.X,.Y,.P
+	DO
+		xyz = a + x - c + d - e
+		UNTIL xyz = e
+	OD
+	POP .Y,.X,.A
 	BREAK
 	EXIT
 	RTI

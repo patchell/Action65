@@ -10,6 +10,7 @@ CAct65GTEQ::~CAct65GTEQ()
 
 bool CAct65GTEQ::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
+	SetNodeType(NodeType::GREATER_THAN_OR_EQUAL);
 	SetNodeName(m_pNodeTyypeName);
 	return CAstNode::Create(pChild, pNext, pSym);
 }

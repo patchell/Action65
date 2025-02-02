@@ -616,7 +616,7 @@ public:
 #include "Act65AdrOfCONST.h"
 #include "Act65FuncADDR.h"
 #include "Act65AddrOfINTERRUPT.h"
-#include "Acrt65ProcADDR.h"
+#include "Act65ProcADDR.h"
 #include "Act65IdentList.h"
 #include "Act65ConstLIST.h"
 #include "Act65STRING.h"

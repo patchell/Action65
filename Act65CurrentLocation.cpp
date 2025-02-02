@@ -10,6 +10,7 @@ CAct65CurrentLocation::~CAct65CurrentLocation()
 
 bool CAct65CurrentLocation::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
+	SetNodeType(NodeType::CURRENT_LOCATION);
 	SetNodeName(m_pNodeTyypeName);
 	return CAstNode::Create(pChild, pNext, pSym);
 }

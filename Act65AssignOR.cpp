@@ -10,6 +10,7 @@ CAct65AssignOR::~CAct65AssignOR()
 
 bool CAct65AssignOR::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
+	SetNodeType(NodeType::ASSIGN_OR);
 	SetNodeName(m_pNodeTyypeName);
 	return CAstNode::Create(pChild, pNext, pSym);
 }

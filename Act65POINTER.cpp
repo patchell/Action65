@@ -10,6 +10,7 @@ CAct65POINTER::~CAct65POINTER()
 
 bool CAct65POINTER::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
+	SetNodeType(NodeType::POINTER);
 	SetNodeName(m_pNodeTyypeName);
 	return CAstNode::Create(pChild, pNext, pSym);
 }

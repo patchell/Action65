@@ -10,6 +10,7 @@ CAct65TRUE::~CAct65TRUE()
 
 bool CAct65TRUE::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
+	SetNodeType(NodeType::TRUE);
 	SetNodeName(m_pNodeTyypeName);
 	return CAstNode::Create(pChild, pNext, pSym);
 }

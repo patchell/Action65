@@ -10,6 +10,7 @@ CAct65ForItterator::~CAct65ForItterator()
 
 bool CAct65ForItterator::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
+	SetNodeType(NodeType::FOR_ITTERATOR);
 	SetNodeName(m_pNodeTyypeName);
 	return CAstNode::Create(pChild, pNext, pSym);
 }

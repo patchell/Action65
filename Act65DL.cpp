@@ -10,6 +10,7 @@ CAct65DL::~CAct65DL()
 
 bool CAct65DL::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
+	SetNodeType(NodeType::DEFINE_LONG);
 	SetNodeName(m_pNodeTyypeName);
 	return CAstNode::Create(pChild, pNext, pSym);
 }

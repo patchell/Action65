@@ -16,6 +16,7 @@ bool CAct65FuncCall::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 
 CValue* CAct65FuncCall::Process()
 {
+	SetNodeType(NodeType::FUNCTION_CALL);
 	CAstNode* pChild = 0, * pNext = 0;
 	CValue* pValueChild = 0, * pValueNext = 0
 		;

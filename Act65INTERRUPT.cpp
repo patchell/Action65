@@ -10,6 +10,7 @@ CAct65INTERRUPT::~CAct65INTERRUPT()
 
 bool CAct65INTERRUPT::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
+	SetNodeType(NodeType::INTERRUPT);
 	SetNodeName(m_pNodeTyypeName);
 	return CAstNode::Create(pChild, pNext, pSym);
 }

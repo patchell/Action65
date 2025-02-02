@@ -10,6 +10,7 @@ CAct65CodeBlock::~CAct65CodeBlock()
 
 bool CAct65CodeBlock::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
+	SetNodeType(NodeType::CODE_BLOCK);
 	SetNodeName(m_pNodeTyypeName);
 	return CAstNode::Create(pChild, pNext, pSym);
 }

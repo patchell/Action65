@@ -10,6 +10,7 @@ CAct65Ident::~CAct65Ident()
 
 bool CAct65Ident::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
+	SetNodeType(NodeType::IDENTIFIER);
 	SetNodeName(m_pNodeTyypeName);
 	return CAstNode::Create(pChild, pNext, pSym);
 }

@@ -10,6 +10,7 @@ CAct65PushSource::~CAct65PushSource()
 
 bool CAct65PushSource::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
+	SetNodeType(NodeType::PUSH_SOURCE);
 	SetNodeName(m_pNodeTyypeName);
 	return CAstNode::Create(pChild, pNext, pSym);
 }

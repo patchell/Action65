@@ -10,6 +10,7 @@ CAct65SecAtrbSTART::~CAct65SecAtrbSTART()
 
 bool CAct65SecAtrbSTART::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
+	SetNodeType(NodeType::SECTION_ATTRIBUTE_START);
 	SetNodeName(m_pNodeTyypeName);
 	return CAstNode::Create(pChild, pNext, pSym);
 }

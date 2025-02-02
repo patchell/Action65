@@ -10,6 +10,7 @@ CAct65FFI::~CAct65FFI()
 
 bool CAct65FFI::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
+	SetNodeType(NodeType::FFI);
 	SetNodeName(m_pNodeTyypeName);
 	return CAstNode::Create(pChild, pNext, pSym);
 }

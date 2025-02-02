@@ -10,6 +10,7 @@ CAct65VECTOR::~CAct65VECTOR()
 
 bool CAct65VECTOR::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
+	SetNodeType(NodeType::VECTOR);
 	SetNodeName(m_pNodeTyypeName);
 	return CAstNode::Create(pChild, pNext, pSym);
 }

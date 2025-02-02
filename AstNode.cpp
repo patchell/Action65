@@ -3,7 +3,7 @@
 CAstNode::CAstNode()
 {
 	m_NodeID = ++m_NodeCount;
-	m_NodeType = 0;
+	m_NodeType = NodeType::BASE;
 	m_pStart = 0;
 	m_pNext = 0;
 	m_pPrev = 0;
@@ -15,10 +15,10 @@ CAstNode::CAstNode()
 	m_pTail = 0;
 }
 
-CAstNode::CAstNode(int NodeType)
+CAstNode::CAstNode(NodeType NT)
 {
 	m_NodeID = ++m_NodeCount;
-	m_NodeType = NodeType;
+	m_NodeType = NT;
 	m_pStart = 0;
 	m_pNext = 0;
 	m_pPrev = 0;

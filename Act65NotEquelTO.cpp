@@ -10,6 +10,7 @@ CAct65NotEquelTO::~CAct65NotEquelTO()
 
 bool CAct65NotEquelTO::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
+	SetNodeType(NodeType::EQUAL_TO);
 	SetNodeName(m_pNodeTyypeName);
 	return CAstNode::Create(pChild, pNext, pSym);
 }

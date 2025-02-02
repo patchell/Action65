@@ -10,6 +10,7 @@ CAct65PSReg::~CAct65PSReg()
 
 bool CAct65PSReg::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
+	SetNodeType(NodeType::PROCESSOR_STATUS_REGISTER);
 	SetNodeName(m_pNodeTyypeName);
 	return CAstNode::Create(pChild, pNext, pSym);
 }

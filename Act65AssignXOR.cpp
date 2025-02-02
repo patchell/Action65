@@ -10,6 +10,7 @@ CAct65AssignXOR::~CAct65AssignXOR()
 
 bool CAct65AssignXOR::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
+	SetNodeType(NodeType::ASSIGN_XOR);
 	SetNodeName(m_pNodeTyypeName);
 	return CAstNode::Create(pChild, pNext, pSym);
 }
