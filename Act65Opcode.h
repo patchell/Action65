@@ -1,16 +1,52 @@
 #pragma once
 
+
 class CAct65Opcode : public CAstNode
 {
-	inline static const char* m_pNodeTyypeName = "OP";
-	Token m_OpcodeToken;
-	const char* m_pOpCodeName;
+	struct OperandByteCount {
+		AdrModeType m_AdrMode;
+		int m_OperandByteCount;
+		OperandByteCount() {
+			m_AdrMode = AdrModeType::NA;
+			m_OperandByteCount = 0;
+		}
+		OperandByteCount(AdrModeType AMT, int Cnt)
+		{
+			m_AdrMode = AMT;
+			m_OperandByteCount = Cnt;
+		}
+		static int GetOperandByteCount(AdrModeType AdrMode);
+	};
+	inline static OperandByteCount OperByteCntLUT[] = {
+		{AdrModeType::IMPLIED,0},
+		{AdrModeType::INDIRECT_X_ADR,1},
+		{AdrModeType::ZERO_PAGE_ADR,1},
+		{AdrModeType::IMMEDIATE_ADR,1},
+		{AdrModeType::ABSOLUTE_ADR,2},
+		{AdrModeType::INDIRECT_Y_ADR,1},
+		{AdrModeType::ZERO_PAGE_X_ADR,1},
+		{AdrModeType::ABSOLUTE_Y_ADR,2},
+		{AdrModeType::ABSOLUTE_X_ADR,2},
+		{AdrModeType::ZERO_PAGE_Y_ADR,1},
+		{AdrModeType::INDIRECT_ADR,2},
+		{AdrModeType::ACCUMULATOR,0},
+		{AdrModeType::NA,-1}
+	};
+
+	inline static const char* m_pNodeTyypeName = "OPCODE";
+	//----------- Source Location ------------------
 	int m_LineNumber;
 	int m_ColumnNumber;
+	//------------------------
+	Token m_OpcodeToken;
+	KeyWord* m_pKeyWord;
+	AdrModeType m_AdressMode;
+	int m_OpCode;
+	int m_Operand;
+	int m_ByteCount;
+	//-----------------------
 	CSymbol* m_pSym;	// Symbol for argument
 	CSymbol* m_pLabel;	// Symbol for instruction location
-	AdrModeType m_AdressMode;
-//	CInstruction* m_pInstruction;
 public:
 	CAct65Opcode();
 	virtual ~CAct65Opcode();
@@ -19,17 +55,29 @@ public:
 	// Node Processor
 	//-----------------------------
 	virtual CValue* Process();
-	virtual void Print(FILE* pOut, int Indent, char* s, int l);
+	virtual void Print(FILE* pOut, int Indent);
+	virtual void PrepareInstruction(
+		Token Tk, 
+		AdrModeType AddressMode,
+		CAstNode* pOperandValue_Node
+	);
+	int SaveInstruction(char* pM);
 	//-----------------------------
 	// Setter/Getter Methods
 	//-----------------------------
-	Token GetToken() { return m_OpcodeToken; }
+	Token GetToken() const { return m_OpcodeToken; }
 	void SetToken(Token t) { m_OpcodeToken = t; }
-	const char* GetOpcodeName() { return m_pOpCodeName; }
-	void SetOpcodeName(const char* pN) { m_pOpCodeName = pN; }
-	int GetLineNumber() { return m_LineNumber; }
+	const char* GetOpcodeName();
+	int GetLineNumber() const  { return m_LineNumber; }
 	void SetLineNumber(int n) { m_LineNumber = n; }
-	int GetColumnNumber() { return m_ColumnNumber; }
+	int GetColumnNumber() const { return m_ColumnNumber; }
 	void SetColumnNumber(int c) { m_ColumnNumber = c; }
+	int GetOpCode() const { return m_OpCode; }
+	void SetOpCode(int Op) { m_OpCode = Op; }
+	int GetOperand() const { return m_Operand; }
+	void SetOperand(int Oprnd) { m_Operand = Oprnd; }
+	AdrModeType GetAdrModeType() const { return m_AdressMode; }
+	void SetAdrModeType(AdrModeType AMT) { m_AdressMode = AMT; }
+	int GetByteCount() const { return m_ByteCount; }
+	void SetByteCount(int BC) { m_ByteCount = BC; }
 };
-

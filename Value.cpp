@@ -13,12 +13,39 @@ bool CValue::Create(CBin* pSym)
 {
 	bool rV = true;
 
-	SetSymbol(pSym);
+	if (pSym)
+	{
+		SetSymbol(pSym);
+		m_ValType = ValueType::SYMBOL;
+	}
+	else
+		m_ValType = ValueType::CONSTANT;
     return rV;
 }
 
-bool CValue::AsmInstruction::Create()
+void CValue::SetSymbol(CBin* pSym)
 {
-	bool rV = true;
-    return rV;
+	m_pSym = pSym;
+	if (pSym)
+		m_ValType = ValueType::SYMBOL;
+}
+
+int CValue::GetConstVal()
+{
+	int rV = 0;
+	CSymbol* pSym = 0;
+
+	switch (m_ValType)
+	{
+	case ValueType::NONE:
+		break;
+	case ValueType::CONSTANT:
+		rV = m_ConstantValue;
+		break;
+	case ValueType::SYMBOL:
+		pSym = (CSymbol*)GetSymbol();
+		rV = pSym->GetAddress();
+		break;
+	}
+	return rV;
 }

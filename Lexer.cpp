@@ -470,6 +470,12 @@ Token CLexer::Lex()
 				}
 			}
 			break;
+		case '\'':
+			m_LexValue = LexGet();
+			if (LexLook(0) == '\'')
+				c = LexGet();
+			TokenValue = Token::CHAR_CONSTANT;
+			break;
 		default:	//Keywords and Identifiers
 			m_aLexBuff[m_LexBuffIndex++] = c;
 			auxLoop = true;
@@ -607,6 +613,17 @@ int CLexer::LookupOpcode(Token OpcodeToken)
 			OpCode = KeyWords[i].m_OpCode;
 		}
 	}
+	return OpCode;
+}
+
+int CLexer::MakeOpcode(Token OpCodeToken, AdrModeType AddressMode)
+{
+	int OpCode;
+	KeyWord* pK;
+
+	pK = FindKeyword(OpCodeToken);
+	OpCode = pK->m_OpCode;
+	OpCode += pK->FindInc(AddressMode);
 	return OpCode;
 }
 

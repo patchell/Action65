@@ -20,7 +20,7 @@ CValue* CAct65R6502::Process()
 	return nullptr;
 }
 
-void CAct65R6502::Print(FILE* pOut, int Indent, char* s, int l)
+void CAct65R6502::Print(FILE* pOut, int Indent)
 {
-	CAstNode::Print(pOut, Indent, s,l);
+	CAstNode::Print(pOut, Indent);
 }

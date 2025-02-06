@@ -2,6 +2,7 @@
 
 CAct65YREG::CAct65YREG()
 {
+	m_Reg = RegType::Y;
 }
 
 CAct65YREG::~CAct65YREG()
@@ -39,7 +40,18 @@ CValue* CAct65YREG::Process()
 	return pValueChild;
 }
 
-void CAct65YREG::Print(FILE* pOut, int Indent, char* s, int l)
+void CAct65YREG::Print(FILE* pOut, int Indent)
 {
-	CAstNode::Print(pOut, Indent, s,l);
+	if (pOut)
+	{
+		char* s = new char[256];
+		int l = 0;
+		int size = 0;
+
+		l = CAstNode::Print(Indent, s, l);
+		size = 256 - l;
+		sprintf_s(&s[l], size, " - \'Y\'");
+		fprintf(pOut, "%s\n", s);
+		delete[]s;
+	}
 }

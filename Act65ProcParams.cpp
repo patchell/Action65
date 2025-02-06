@@ -39,7 +39,7 @@ CValue* CAct65ProcParams::Process()
 	return pValueChild;
 }
 
-void CAct65ProcParams::Print(FILE* pOut, int Indent, char* s, int l)
+void CAct65ProcParams::Print(FILE* pOut, int Indent)
 {
-	CAstNode::Print(pOut, Indent, s,l);
+	CAstNode::Print(pOut, Indent);
 }

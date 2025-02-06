@@ -387,7 +387,7 @@
     <ClCompile Include="Act65ACC.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Act65CharCibstabt.cpp">
+    <ClCompile Include="Act65CharConstant.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Act65LowerPart.cpp">
@@ -914,7 +914,7 @@
     <ClInclude Include="Act65ACC.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Act65CharCibstabt.h">
+    <ClInclude Include="Act65CharConstant.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Act65LowerPart.h">

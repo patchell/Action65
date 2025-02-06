@@ -38,7 +38,7 @@ CValue* CAct65Private::Process()
 	return pValueChild;
 }
 
-void CAct65Private::Print(FILE* pOut, int Indent, char* s, int l)
+void CAct65Private::Print(FILE* pOut, int Indent)
 {
-	CAstNode::Print(pOut, Indent, s,l);
+	CAstNode::Print(pOut, Indent);
 }

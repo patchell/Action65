@@ -20,7 +20,7 @@ CValue* CAct65TypeDotField::Process()
 	return nullptr;
 }
 
-void CAct65TypeDotField::Print(FILE* pOut, int Indent, char* s, int l)
+void CAct65TypeDotField::Print(FILE* pOut, int Indent)
 {
-	CAstNode::Print(pOut, Indent, s,l);
+	CAstNode::Print(pOut, Indent);
 }

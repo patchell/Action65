@@ -2,6 +2,7 @@
 
 CAct65CharConstant::CAct65CharConstant()
 {
+	m_Value = ' ';
 }
 
 CAct65CharConstant::~CAct65CharConstant()
@@ -39,7 +40,16 @@ CValue* CAct65CharConstant::Process()
 	return pValueChild;
 }
 
-void CAct65CharConstant::Print(FILE* pOut, int Indent, char* s, int l)
+void CAct65CharConstant::Print(FILE* pOut, int Indent)
 {
-	CAstNode::Print(pOut, Indent, s,l);
+	if (pOut)
+	{
+		int l = 0;
+		char* s = new char[256];
+		
+		l = CAstNode::Print(Indent, s, 256);
+		sprintf_s(&s[l], 256, " \%c'\'", GetValue());
+		fprintf(pOut, "%s\n");
+		delete[] s;
+	}
 }

@@ -66,7 +66,6 @@ public:
 	CLkHead Expect(CLkHead LookaheadToken, Token Expected);
 	bool Accept(Token LookaheadToken, Token Expected);
 private:
-	void PrepareInstruction(Token OpToken, CValue* pVal);
 	//---------------------------------
 	// Parsing Methods
 	//---------------------------------
@@ -302,67 +301,66 @@ private:
 	// Lables
 	//---------------------------------------------
 	CLkHead Labels(CLkHead LookaHead);
-	CLkHead LocalGlobal(CLkHead LookaHead);
+	CLkHead LocalGlobal(CLkHead LookaHead, bool& IsLocal);	
 	//-----------------------------------
 	//ALU Addressing Mode
 	//-----------------------------------
-	CLkHead AluAdrModes(CLkHead LookaHead);
-	CLkHead Indirect(CLkHead LookaHead);
+	CLkHead AluAdrModes(CLkHead LookaHead, Token OpCodeToken);
 	//---------------------------------------------
 	// STA addressing mode
 	//---------------------------------------------
-	CLkHead StaAddressingModes(CLkHead LookaHead);
+	CLkHead StaAddressingModes(CLkHead LookaHead, Token OpCodeToken);
 	//-----------------------------------------
 	// ASL LSR ROR and ROL addressing modes
 	//-----------------------------------------
-	CLkHead ShiftAddressingModes(CLkHead LookaHead);
+	CLkHead ShiftAddressingModes(CLkHead LookaHead, Token OpCodeToken);
 	//------------------------------------------
 	// Branch Instructions Addressing Mode
 	//------------------------------------------
-	CLkHead RelAddressingMode(CLkHead LookaHead);
+	CLkHead RelAddressingMode(CLkHead LookaHead, Token OpCodeToken);
 	//------------------------------------------
 	// BIT Instructions Addressing Mode
 	//------------------------------------------
-	CLkHead BitAddressModes(CLkHead LookaHead);
+	CLkHead BitAddressModes(CLkHead LookaHead, Token OpCodeToken);
 	//------------------------------------------
 	// INC DEC Instructions Addressing Mode
 	//------------------------------------------
-	CLkHead IncAddressingMOdes(CLkHead LookaHead);
+	CLkHead IncAddressingMOdes(CLkHead LookaHead, Token OpCodeToken);
 	//------------------------------------------
 	// JMP Instructions Addressing Mode
 	//------------------------------------------
-	CLkHead JumpAddressingModes(CLkHead LookaHead);
+	CLkHead JumpAddressingModes(CLkHead LookaHead, Token OpCodeToken);
 	//------------------------------------------
 	// JSR Instructions Addressing Mode
 	//------------------------------------------
-	CLkHead CallAddressingMode(CLkHead LookaHead);
+	CLkHead CallAddressingMode(CLkHead LookaHead, Token OpCodeToken);
 	//------------------------------------------
 	// LDX Instructions Addressing Mode
 	//------------------------------------------
-	CLkHead LdxAddressingMode(CLkHead LookaHead);
+	CLkHead LdxAddressingMode(CLkHead LookaHead, Token OpCodeToken);
 	//------------------------------------------
 	// CPX & CPY Instructions Addressing Mode
 	//------------------------------------------
-	CLkHead CPX_CPY_AddressingMode(CLkHead LookaHead);
+	CLkHead CPX_CPY_AddressingMode(CLkHead LookaHead, Token OpCodeToken);
 	//------------------------------------------
 	// STX Instructions Addressing Mode
 	//------------------------------------------
-	CLkHead StxAddressingMode(CLkHead LookaHead);
+	CLkHead StxAddressingMode(CLkHead LookaHead, Token OpCodeToken);
 	//------------------------------------------
 	// LDY Instructions Addressing Mode
 	//------------------------------------------
-	CLkHead LdyAddressingMode(CLkHead LookaHead);
+	CLkHead LdyAddressingMode(CLkHead LookaHead, Token OpCodeToken);
 	//------------------------------------------
 	// STY Instructions Addressing Mode
 	//------------------------------------------
-	CLkHead StyAddressingMode(CLkHead LookaHead);
+	CLkHead StyAddressingMode(CLkHead LookaHead, Token OpCodeToken);
 	//---------------------------------------------
 	//	Optional Index Registers
 	//---------------------------------------------
-	CLkHead OptIndexReg(CLkHead LookaHead);
-	CLkHead OptIndexReg_1(CLkHead LookaHead);
-	CLkHead OptXReg(CLkHead LookaHead);
-	CLkHead OptYReg(CLkHead LookaHead);
+	CLkHead OptIndexReg(CLkHead LookaHead, RegType& Reg);
+	CLkHead OptIndexReg_1(CLkHead LookaHead, RegType& Reg);
+	CLkHead OptXReg(CLkHead LookaHead, RegType& Reg);
+	CLkHead OptYReg(CLkHead LookaHead, RegType& Reg);
 	//---------------------------------------
 	// Assembler Constants
 	//---------------------------------------
@@ -371,9 +369,11 @@ private:
 	CLkHead AsmConstant(CLkHead LookaHead);
 	CLkHead AsmConstAddSub(CLkHead LookaHead);
 	CLkHead BaseAsmConstant(CLkHead LookaHead);
-	CLkHead Immediate(CLkHead LookaHead);
-	void PageZero(int Address, AdrModeType ModeType);
-	void Absolute(int Address, AdrModeType ModeType);
+	//------------------------------------------------
+	CLkHead Indirect(CLkHead LookaHead, Token OpCodeToken);
+	CLkHead Immediate(CLkHead LookaHead, Token OpCodeToken);
+	CLkHead Absolute(CLkHead LookaHead, Token OpCodeToken);
+	bool IsZeroPageYIndexValid(Token OpCodeToken);
 	bool CheckZeroPageAddress(int A);
 	//---------------- Utillity ----------------------
 public:

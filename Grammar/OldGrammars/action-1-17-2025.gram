@@ -751,21 +751,26 @@ DeclarFuncType	-> 'FUNC'
 // Fundemental Declarations.  These are the
 // base types that every thing is based on
 //--------------------------------------------
-FundDecl	->FundTypeSpec FundDecl_1;
-FundDecl_1	-> 'BOOL' FundTypeSpec FundDecl_1
-			-> 'CHAR' FundTypeSpec FundDecl_1
-			-> 'BYTE' FundTypeSpec FundDecl_1
-			-> 'INT' FundTypeSpec FundDecl_1
-			-> 'CARD' FundTypeSpec FundDecl_1
-			-> 'RECORDTYPE' FundTypeSpec FundDecl_1
-			-> 'PROC' ProcDecl FundDecl_1
-			-> 'INTERRUPT' IrqDecl FundDecl_1
+FundDecl	->FundPointerDecl FundDecl_1;
+FundDecl_1	-> 'BOOL' FundPointerDecl FundDecl_1
+			-> 'CHAR' FundPointerDecl FundDecl_1
+			-> 'BYTE' FundPointerDecl FundDecl_1
+			-> 'INT' FundPointerDecl FundDecl_1
+			-> 'CARD' FundPointerDecl FundDecl_1
+			-> 'RECORDTYPE' FundPointerDecl FundDecl_1
+			-> 'PROC' ProcDecl
+			-> 'INTERRUPT' IrqDecl
 			-> .
 			;
 
-FundTypeSpec	-> IdentList FundTypeSpec_1;
-FundTypeSpec_1	-> 'POINTER' IdentList FundTypeSpec_1
-				-> 'ARRAY'  IdentList FundTypeSpec_1
+
+FundPointerDecl		-> FundArrayDecl FundPointerDecl_1;
+FundPointerDecl_1	-> 'POINTER' IdentList FundArrayDecl
+					-> .
+					;
+
+FundArrayDecl	-> IdentList FundArrayDecl_1;
+FundArrayDecl_1	-> 'ARRAY'  IdentList
 				-> .
 				;
 
@@ -830,19 +835,22 @@ OptInit		-> '=' CompConst
 // Parameter Declarations
 //-------------------------------------------
 
-ParamList	-> ParamTypeSpec Param_1;
-Param_1		-> 'RECORDTYPE' ParamTypeSpec Param_1
-			-> 'CHAR' ParamTypeSpec Param_1 
-			-> 'BYTE' ParamTypeSpec Param_1 
-			-> 'INT' ParamTypeSpec Param_1 
-			-> 'CARD' ParamTypeSpec Param_1 
-			-> 'BOOL' ParamTypeSpec Param_1 
+ParamList	-> PramPointer Param_1;
+Param_1		-> 'RECORDTYPE' PramPointer Param_1
+			-> 'CHAR' PramPointer Param_1 
+			-> 'BYTE' PramPointer Param_1 
+			-> 'INT' PramPointer Param_1 
+			-> 'CARD' PramPointer Param_1 
+			-> 'BOOL' PramPointer Param_1 
 			-> .
 			;
 
-ParamTypeSpec	-> DefineParamIdentList ParamTypeSpec_1;
-ParamTypeSpec_1	-> 'POINTER' DefineParamIdentList ParamTypeSpec_1
-				-> 'ARRAY' DefineParamIdentList ParamTypeSpec_1
+PramPointer		-> ParamArray ParamPointer_1;
+ParamPointer_1	-> 'POINTER'  ParamArray
+				-> .
+				;
+ParamArray		-> DefineParamIdentList ParamArray_1;
+ParamArray_1	-> 'ARRAY' DefineParamIdentList
 				-> .
 				;
 				
@@ -856,21 +864,25 @@ DefineParamIdent		-> 'IDENT';
 // Local Variableas
 //-----------------------------------------------
 
-LocalDecls		-> LocalTypeSpec LocalDecls_1;
-LocalDecls_1	-> 'CHAR' LocalTypeSpec  LocalDecls_1
-				-> 'BYTE' LocalTypeSpec  LocalDecls_1
-				-> 'INT' LocalTypeSpec  LocalDecls_1
-				-> 'CARD' LocalTypeSpec  LocalDecls_1
-				-> 'BOOL' LocalTypeSpec LocalDecls_1
-				-> 'RECORDTYPE' LocalTypeSpec LocalDecls_1
+LocalDecls		-> LocalPointerDecl LocalDecls_1;
+LocalDecls_1	-> 'CHAR' LocalPointerDecl  LocalDecls_1
+				-> 'BYTE' LocalPointerDecl  LocalDecls_1
+				-> 'INT' LocalPointerDecl  LocalDecls_1
+				-> 'CARD' LocalPointerDecl  LocalDecls_1
+				-> 'BOOL' LocalPointerDecl LocalDecls_1
+				-> 'RECORDTYPE' LocalPointerDecl LocalDecls_1
 				-> .
 				;
 
-LocalTypeSpec	-> IdentList LocalTypeSpec_1;
-LocalTypeSpec_1	-> 'POINTER' IdentList LocalTypeSpec_1
-				-> 'ARRAY' IdentList LocalTypeSpec_1
-				-> .
-				;
+LocalPointerDecl	-> LocalArrayDecl LocalPointerDecl_1;
+LocalPointerDecl_1	-> 'POINTER' LocalArrayDecl
+					-> .
+					;
+
+LocalArrayDecl		-> IdentList LocalArrayDecl_1;
+LocalArrayDecl_1	-> 'ARRAY' IdentList
+					-> .
+					;
 
 //-------------------------------
 // Compiler Constants, from Compile time

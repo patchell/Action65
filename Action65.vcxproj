@@ -162,7 +162,7 @@
     <ClCompile Include="Act65BYTE.cpp" />
     <ClCompile Include="Act65CARD.cpp" />
     <ClCompile Include="Act65CHAR.cpp" />
-    <ClCompile Include="Act65CharCibstabt.cpp" />
+    <ClCompile Include="Act65CharConstant.cpp" />
     <ClCompile Include="Act65CodeBlock.cpp" />
     <ClCompile Include="Act65CONSTANT.cpp" />
     <ClCompile Include="Act65ConstLIST.cpp" />
@@ -338,7 +338,7 @@
     <ClInclude Include="Act65BYTE.h" />
     <ClInclude Include="Act65CARD.h" />
     <ClInclude Include="Act65CHAR.h" />
-    <ClInclude Include="Act65CharCibstabt.h" />
+    <ClInclude Include="Act65CharConstant.h" />
     <ClInclude Include="Act65CodeBlock.h" />
     <ClInclude Include="Act65CONSTANT.h" />
     <ClInclude Include="Act65ConstLIST.h" />

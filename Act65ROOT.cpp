@@ -20,6 +20,6 @@ CValue* CAct65ROOT::Process()
 	return nullptr;
 }
 
-void CAct65ROOT::Print(FILE* pOut, int Indent, char* s, int l)
+void CAct65ROOT::Print(FILE* pOut, int Indent)
 {
 }

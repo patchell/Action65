@@ -76,18 +76,18 @@ void CAstNode::CreateValue(CBin* pSym)
 	m_pValue->Create(pSym);
 }
 
-void CAstNode::Print(FILE* pOut, int Indent, char* s, int Strlen)
+void CAstNode::Print(FILE* pOut, int Indent)
 {
-
 	if (pOut)
 	{
-		fprintf(pOut, "%s\n",
-			Print(Indent,s,Strlen)
-		);
+		char* s = new char[256];
+		Print(Indent, s, 256);
+		fprintf(pOut, "%s\n",s);
+		delete[] s;
 	}	
 }
 
-char* CAstNode::Print(int Indent, char* s, int Strlen)
+int CAstNode::Print(int Indent, char* s, int Strlen)
 {
 	int i = 0, l = 0;
 	int Id, Child, Next;
@@ -122,7 +122,7 @@ char* CAstNode::Print(int Indent, char* s, int Strlen)
 			}
 		}
 	}
-	return s;
+	return l;
 }
 
 void CAstNode::AddToHeadNextChain(CAstNode* pN)

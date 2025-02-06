@@ -20,7 +20,7 @@ CValue* CAct65BREAK::Process()
     return nullptr;
 }
 
-void CAct65BREAK::Print(FILE* pOut, int Indent, char* s, int l)
+void CAct65BREAK::Print(FILE* pOut, int Indent)
 {
-	CAstNode::Print(pOut, Indent, s,l);
+	CAstNode::Print(pOut, Indent);
 }

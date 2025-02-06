@@ -38,12 +38,18 @@ CValue* CAct65STRING::Process()
 	return nullptr;
 }
 
-void CAct65STRING::Print(FILE* pOut, int Indent, char* s, int l)
+void CAct65STRING::Print(FILE* pOut, int Indent)
 {
+	if (pOut)
+	{
+		char* s = new char[512];
+		int l = 0;
+		int size = 0;
 
-	
-	fprintf(pOut, "%s-\"%s\"\n",
-		CAstNode::Print(Indent, s, l),
-		m_pString
-	);
+		l = CAstNode::Print(Indent, s, 512);
+		size = 256 - l;
+		sprintf_s(&s[l], size, " = \"%s\"", GetString());
+		fprintf(pOut, "%s\n", s);
+		delete[] s;
+	}
 }

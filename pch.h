@@ -12,6 +12,14 @@ constexpr auto MAX_SYMBOL_NAME_LEN = 256;
 constexpr auto MAX_NAME_LEN = 64;
 constexpr auto MAX_STRING_LEN = 512;
 
+enum class RegType {
+	NONE,
+	A,
+	X,
+	Y,
+	S,
+	P
+};
 enum  class Token {
 	ENDOFFILE = -1,	// 1
 	NONE,
@@ -187,7 +195,7 @@ enum  class Token {
 	PSREG,		//processor status register
 	//---------- Lables 
 	LOCAL_LABEL,
-	GLOBAL_LABLE,
+	GLOBAL_LABEL,
 	//-------- Status Register bits
 	NEG,
 	ZERO,
@@ -285,7 +293,7 @@ struct AdressModeItem {
 };
 
 struct AdressModeLUT {
-	AdressModeItem* ModeInc;
+	AdressModeItem* m_pModeInc;
 	int m_nElements;
 	AdressModeLUT() {
 		ModeInc = 0;
@@ -293,7 +301,7 @@ struct AdressModeLUT {
 	}
 	//--------------------
 	AdressModeLUT(int n, AdressModeItem* MI) {
-		ModeInc = MI;
+		m_pModeInc = MI;
 		m_nElements = n;
 	}
 	//-------------------
@@ -303,12 +311,13 @@ struct AdressModeLUT {
 
 		for (i = 0; Loop && i < m_nElements; ++i)
 		{
-			rV = ModeInc[i].GetInc(Type);
+			rV = m_pModeInc[i].GetInc(Type);
 			if (rV >= 0)
 				Loop = false;
 		}
 		return rV;
 	}
+	bool ValidAddressingMode(AdrModeType AMT);
 };
 
 struct KeyWord {
@@ -352,7 +361,8 @@ public:
 		INTERNAL_ERROR,
 		EXPECTED_IDENT,
 		EXPECTED_CONSTANT,
-		EXPECTED_DATABLOCK
+		EXPECTED_DATABLOCK,
+		EXPECTED_INDEX_REG
 	};
 	enum class ExceptionSubType {
 		WHOKNOWS,
@@ -603,7 +613,7 @@ public:
 #include "Act65XREG.h"
 #include "Act65YREG.h"
 #include "Act65ACC.h"
-#include "Act65CharCibstabt.h"
+#include "Act65CharConstant.h"
 #include "Act65LowerPart.h"
 #include "Act65UpperPart.h"
 #include "Act65CurrentLocation.h"

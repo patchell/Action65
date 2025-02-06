@@ -95,3 +95,20 @@ Token KeyWord::LookupToToken(const char* pName)
 	}
 	return pKW[i].m_TokenID;
 }
+
+bool AdressModeLUT::ValidAddressingMode(AdrModeType AMT)
+{
+	bool rV = false;
+	int i, rV = -1;
+	bool Loop = true;
+
+	for (i = 0; Loop && i < m_nElements; ++i)
+	{
+		if (m_pModeInc[i].Mode == AMT)
+		{
+			rV = true;
+			Loop = false;
+		}
+	}
+	return rV;
+}

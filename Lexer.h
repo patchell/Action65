@@ -102,6 +102,7 @@ private:
 		{AdrModeType::ABSOLUTE_ADR,0 }
 	};
 	static inline AdressModeLUT LUT_Order1 = { 3, Order1 };
+	//-------------------------------------------------
 	static inline KeyWord KeyWords[] = {
 		{Token::ENDOFFILE,"End Of File"},		//1
 		{Token::IDENT,"IDENT"},					//2
@@ -347,7 +348,7 @@ private:
 		{ Token::SPREG,".S", 0,0, Processor::R6502, NULL,0 },	// Stack Pointer
 		{ Token::PSREG,".P", 0,0, Processor::R6502, NULL,0 },	// Processor Status Register
 		{ Token::LOCAL_LABEL,"Local Lable", 0,0,Processor::ALL,NULL,0 },
-		{ Token::GLOBAL_LABLE,"Global Lable", 0,0,Processor::ALL,NULL,0 },
+		{ Token::GLOBAL_LABEL,"Global Lable", 0,0,Processor::ALL,NULL,0 },
 		//-------- Processor Selection -------
 		{ Token::PROCESSOR,"PROCESSOR", 0,0,Processor::ALL,NULL,0 },
 		{ Token::R6502,"R6502", 0,0, Processor::ALL,NULL,0 },
@@ -425,6 +426,7 @@ public:
 	KeyWord* FindKeyword(Token KeywordToken);
 	Processor LookupProcessor(Token KeywordToken);
 	int LookupOpcode(Token OpcodeToken);
+	int MakeOpcode(Token OpCodeToken, AdrModeType AddressMode);
 	int GetOpcode(Token OpCodeToken);
 	const char* LookupToName(Token Toke);
 	Token LookupToToken(const char* pName);

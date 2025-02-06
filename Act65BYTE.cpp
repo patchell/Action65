@@ -39,7 +39,7 @@ CValue* CAct65BYTE::Process()
 	return pValueChild;
 }
 
-void CAct65BYTE::Print(FILE* pOut, int Indent, char* s, int l)
+void CAct65BYTE::Print(FILE* pOut, int Indent)
 {
-	CAstNode::Print(pOut, Indent, s,l);
+	CAstNode::Print(pOut, Indent);
 }

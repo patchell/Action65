@@ -2,7 +2,7 @@
 
 CAct65ORG::CAct65ORG()
 {
-}
+	m_Address = 0;}
 
 CAct65ORG::~CAct65ORG()
 {
@@ -39,7 +39,18 @@ CValue* CAct65ORG::Process()
 	return pValueChild;
 }
 
-void CAct65ORG::Print(FILE* pOut, int Indent, char* s, int l)
+void CAct65ORG::Print(FILE* pOut, int Indent)
 {
-	CAstNode::Print(pOut, Indent, s,l);
+	if (pOut)
+	{
+		char* s = new char[256];
+		int l = 0;
+		int size;
+
+		l = CAstNode::Print(Indent, s, 256);
+		size = 256 - l;
+		sprintf_s(&s[l], size, "- Address:$%04X", GetAddress() & 0x0ffff);
+		fprintf(pOut, "%s\n", s);
+		delete[] s;
+	}
 }

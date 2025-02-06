@@ -3,12 +3,12 @@
 CAct65Opcode::CAct65Opcode()
 {
 	m_OpcodeToken = Token(-1);
-	m_pOpCodeName = 0;
 	m_LineNumber = 0;
 	m_ColumnNumber = 0;
 	m_pSym = 0;
 	m_pLabel = 0;
 	m_AdressMode = AdrModeType::NA;
+	m_pKeyWord = 0;
 }
 
 CAct65Opcode::~CAct65Opcode()
@@ -46,7 +46,56 @@ CValue* CAct65Opcode::Process()
 	return pValueChild;
 }
 
-void CAct65Opcode::Print(FILE* pOut, int Indent, char* s, int l)
+void CAct65Opcode::Print(FILE* pOut, int Indent)
 {
-	CAstNode::Print(pOut, Indent, s,l);
+	CAstNode::Print(pOut, Indent);
+}
+
+void CAct65Opcode::PrepareInstruction(
+	Token OpToken, 
+	AdrModeType AddressMode,
+	CAstNode* pOperandValue_Node
+)
+{
+	CLexer* pLex = Act()->GetParser()->GetLexer();
+
+	m_pKeyWord = pLex->FindKeyword(OpToken);
+	m_AdressMode = AddressMode;
+	SetLineNumber(pLex->GetLineNumber());
+	SetColumnNumber(pLex->GetColunm());
+	SetOpCode(pLex->MakeOpcode(OpToken, AddressMode));
+	SetByteCount(OperandByteCount::GetOperandByteCount(AddressMode) + 1);
+	SetChild(pOperandValue_Node);
+}
+
+int CAct65Opcode::SaveInstruction(char* pM)
+{
+	*pM++ = (char)GetOpCode();
+	if (GetByteCount() > 1)
+		*pM++ = (char)GetOperand() & 0xff;
+	if(GetByteCount() > 2)
+		*pM++ = (char)((GetOperand() & 0xff00) >> 8);
+	return GetByteCount();
+}
+
+const char* CAct65Opcode::GetOpcodeName()
+{
+	return m_pKeyWord->m_Name;
+}
+
+int CAct65Opcode::OperandByteCount::GetOperandByteCount(AdrModeType AdrMode)
+{
+	int rV = -1;
+	int i;
+	bool Loop = true;
+
+	for (i = 0; (OperByteCntLUT[i].m_OperandByteCount >= 0) && Loop; ++i)
+	{
+		if (OperByteCntLUT[i].m_AdrMode == AdrMode)
+		{
+			Loop = false;
+			rV = OperByteCntLUT[i].m_OperandByteCount;
+		}
+	}
+	return 0;
 }
