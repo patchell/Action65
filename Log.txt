@@ -1,7 +1,7 @@
-File:test2.act has 212 Bytes
+File:test2.act has 210 Bytes
 Parser Created
 	 NUMB  CHILD  NEXT
-    48      4     -1  +- 'ROOT'
+    50      4     -1  +- 'ROOT'
      4      1      7  |  +- 'INT'
      1     -1      2  |  |  +- 'IDENT': aa
      2     -1      3  |  |  +- 'IDENT': bb
@@ -11,18 +11,18 @@ Parser Created
      6     -1     -1  |  |  +- 'IDENT': ee
      9      8     15  |  +- 'CHAR'
      8     -1     -1  |  |  +- 'IDENT': ff
-    15     10     47  |  +- 'BYTE'
+    15     10     49  |  +- 'BYTE'
     10     -1     11  |  |  +- 'IDENT': gg
     11     -1     12  |  |  +- 'IDENT': hh
     12     -1     13  |  |  +- 'IDENT': ii
     13     -1     14  |  |  +- 'IDENT': jj
     14     -1     -1  |  |  +- 'IDENT': kk
-    47     43     -1  |  +- 'MODULE'
-    43     16     46  |  |  +- 'IRQ-PROC'
+    49     45     -1  |  +- 'MODULE'
+    45     16     48  |  |  +- 'IRQ-PROC'
     16     17     -1  |  |  |  +- 'IDENT': AnInteruption
-    17     -1     42  |  |  |  |  +- 'Param LIST'
-    42     30     -1  |  |  |  |  +- 'Body'
-    30     19     41  |  |  |  |  |  +- 'LOCAL Vars'
+    17     -1     44  |  |  |  |  +- 'Param LIST'
+    44     30     -1  |  |  |  |  +- 'Body'
+    30     19     43  |  |  |  |  |  +- 'LOCAL Vars'
     19     18     23  |  |  |  |  |  |  +- 'CHAR'
     18     -1     -1  |  |  |  |  |  |  |  +- 'IDENT': a
     23     20     25  |  |  |  |  |  |  +- 'INT'
@@ -35,8 +35,8 @@ Parser Created
     26     -1     -1  |  |  |  |  |  |  |  +- 'IDENT': d
     29     28     -1  |  |  |  |  |  |  +- 'CHAR'
     28     -1     -1  |  |  |  |  |  |  |  +- 'IDENT': e
-    41     39     -1  |  |  |  |  |  +- 'STATEMENTS'
-    39     32     40  |  |  |  |  |  |  +- 'ASM'
+    43     41     -1  |  |  |  |  |  +- 'STATEMENTS'
+    41     32     42  |  |  |  |  |  |  +- 'ASM'
     32     31     33  |  |  |  |  |  |  |  +- 'OPCODE' LDA ($A9)
     31     -1     -1  |  |  |  |  |  |  |  |  +- 'NUMBER'$0055
     33     -1     34  |  |  |  |  |  |  |  +- 'OPCODE' PHA ($48)
@@ -44,11 +44,13 @@ Parser Created
     35     -1     36  |  |  |  |  |  |  |  +- 'OPCODE' PHA ($48)
     36     -1     37  |  |  |  |  |  |  |  +- 'OPCODE' PLA ($68)
     37     -1     38  |  |  |  |  |  |  |  +- 'OPCODE' TAY ($A8)
-    38     -1     -1  |  |  |  |  |  |  |  +- 'OPCODE' PLA ($68)
-    40     -1     -1  |  |  |  |  |  |  +- 'RTI'
-    46     44     -1  |  |  +- 'INT'
-    44     -1     45  |  |  |  +- 'IDENT': qr
-    45     -1     -1  |  |  |  +- 'IDENT': st
+    38     -1     40  |  |  |  |  |  |  |  +- 'OPCODE' PLA ($68)
+    40     39     -1  |  |  |  |  |  |  |  +- 'OPCODE' STA ($8D)
+    39     -1     -1  |  |  |  |  |  |  |  |  +- 'NUMBER'$1000
+    42     -1     -1  |  |  |  |  |  |  +- 'RTI'
+    48     46     -1  |  |  +- 'INT'
+    46     -1     47  |  |  |  +- 'IDENT': qr
+    47     -1     -1  |  |  |  +- 'IDENT': st
 ------------ Symbol Table --------------
 ee: GLOBAL:CARD::Address=00000000  Value=0000
 

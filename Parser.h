@@ -243,7 +243,6 @@ private:
 	//-----------------------------------------------
 	CLkHead LocalDecls(CLkHead LookaHead);
 	CLkHead LocalTypeSpec(CLkHead LookaHead);
-	CLkHead LocalArrayDecl(CLkHead LookaHead);
 	//-------------------------------
 	// Compiler Constants
 	//-------------------------------

@@ -492,9 +492,6 @@
     <ClCompile Include="Act65TypeDotField.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Act65VALUE.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Act65UnaryNEG.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -1023,9 +1020,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Act65TypeDotField.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Act65VALUE.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Act65UnaryNEG.h">

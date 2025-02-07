@@ -643,7 +643,6 @@ public:
 #include "Act65ArrayINDEX.h"
 #include "Act65PointerDeREF.h"
 #include "Act65TypeDotField.h"
-#include "Act65VALUE.h"
 #include "Act65UnaryNEG.h"
 #include "Act65MUL.h"
 #include "Act65MOD.h"

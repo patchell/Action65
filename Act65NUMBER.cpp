@@ -2,7 +2,6 @@
 
 CAct65NUMBER::CAct65NUMBER()
 {
-	m_Value = 0;
 }
 
 CAct65NUMBER::~CAct65NUMBER()
@@ -31,7 +30,7 @@ int CAct65NUMBER::PrintNode(FILE* pOut, int Indent)
 		char* s = new char[256];
 		l = Print(Indent, s, 256);
 		size = 256 - l;
-		sprintf_s(&s[l], size, "%04X", GetValue());
+		sprintf_s(&s[l], size, "%04X", GetValue()->GetConstVal());
 		fprintf(pOut, "%s\n", s);
 		delete[] s;
 	}
@@ -63,6 +62,6 @@ int CAct65NUMBER::Print(int Indent, char* s, int Strlen)
 	size = Strlen - l;
 	l += sprintf_s(&s[l], size, "+- \'%s\'", GetNodeName());
 	size = Strlen - l;
-	l += sprintf_s(&s[l], size, "$%04X", GetValue());
+	l += sprintf_s(&s[l], size, "$%04X", GetValue()->GetConstVal());
 	return l;
 }

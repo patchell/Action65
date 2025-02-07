@@ -255,7 +255,6 @@
     <ClCompile Include="Act65TYPE.cpp" />
     <ClCompile Include="Act65TypeFIELDS.cpp" />
     <ClCompile Include="Act65UNTILL.cpp" />
-    <ClCompile Include="Act65VALUE.cpp" />
     <ClCompile Include="Act65VECTOR.cpp" />
     <ClCompile Include="Act65W65C02.cpp" />
     <ClCompile Include="Act65W65C816.cpp" />
@@ -433,7 +432,6 @@
     <ClInclude Include="Act65TYPE.h" />
     <ClInclude Include="Act65TypeFIELDS.h" />
     <ClInclude Include="Act65UNTILL.h" />
-    <ClInclude Include="Act65VALUE.h" />
     <ClInclude Include="Act65VECTOR.h" />
     <ClInclude Include="Act65W65C02.h" />
     <ClInclude Include="Act65W65C816.h" />

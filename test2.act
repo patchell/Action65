@@ -20,7 +20,7 @@ INTERRUPT AnInteruption()
 	PLA
 	TAY
 	PLA
-//	STA $1000
+	STA $1000
 	}
 	RTI
 
