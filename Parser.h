@@ -373,7 +373,6 @@ private:
 	CLkHead Indirect(CLkHead LookaHead, Token OpCodeToken);
 	CLkHead Immediate(CLkHead LookaHead, Token OpCodeToken);
 	CLkHead Absolute(CLkHead LookaHead, Token OpCodeToken);
-	bool IsZeroPageYIndexValid(Token OpCodeToken);
 	bool CheckZeroPageAddress(int A);
 	//---------------- Utillity ----------------------
 public:

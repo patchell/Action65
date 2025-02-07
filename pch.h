@@ -241,7 +241,8 @@ enum class AdrModeType {
 	ABSOLUTE_X_ADR,
 	ZERO_PAGE_Y_ADR,
 	INDIRECT_ADR,
-	ACCUMULATOR
+	ACCUMULATOR,
+	RELATIVE
 };
 
 enum class AddressModesClass {	//ToDo: Delete?
@@ -296,7 +297,7 @@ struct AdressModeLUT {
 	AdressModeItem* m_pModeInc;
 	int m_nElements;
 	AdressModeLUT() {
-		ModeInc = 0;
+		m_pModeInc = 0;
 		m_nElements = 0;
 	}
 	//--------------------
@@ -317,7 +318,7 @@ struct AdressModeLUT {
 		}
 		return rV;
 	}
-	bool ValidAddressingMode(AdrModeType AMT);
+	bool ValidAddressingMode(AdrModeType AMT) const;
 };
 
 struct KeyWord {
@@ -362,7 +363,8 @@ public:
 		EXPECTED_IDENT,
 		EXPECTED_CONSTANT,
 		EXPECTED_DATABLOCK,
-		EXPECTED_INDEX_REG
+		EXPECTED_INDEX_REG,
+		EXPECTED_STRING
 	};
 	enum class ExceptionSubType {
 		WHOKNOWS,
@@ -653,6 +655,8 @@ public:
 #include "Act65BODY.h"
 #include "Act65Statements.h"
 #include "Act65PSReg.h"
+#include "Act65PROCasm.h"
+#include "Act65SECTIONname.h"
 #include "AstTree.h"
 #include "ActionAstTree.h"
 

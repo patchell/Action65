@@ -2,6 +2,8 @@
 
 CAct65DS::CAct65DS()
 {
+	m_pSection = 0;
+	m_SizeInBytes = 0;
 }
 
 CAct65DS::~CAct65DS()
@@ -10,7 +12,9 @@ CAct65DS::~CAct65DS()
 
 bool CAct65DS::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
-    return false;
+	SetNodeType(NodeType::OPCODE);
+	SetNodeName(m_pNodeTyypeName);
+	return CAstNode::Create(pChild, pNext, pSym);
 }
 
 CValue* CAct65DS::Process()

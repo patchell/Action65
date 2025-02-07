@@ -221,6 +221,7 @@
     <ClCompile Include="Act65POP.cpp" />
     <ClCompile Include="Act65Private.cpp" />
     <ClCompile Include="Act65PROC.cpp" />
+    <ClCompile Include="Act65PROCasm.cpp" />
     <ClCompile Include="Act65ProcCall.cpp" />
     <ClCompile Include="Act65PROCESSOR.cpp" />
     <ClCompile Include="Act65PROCname.cpp" />
@@ -244,6 +245,7 @@
     <ClCompile Include="Act65SecAtrbSTART.cpp" />
     <ClCompile Include="Act65SecAtrbZEROPAGE.cpp" />
     <ClCompile Include="Act65SECTION.cpp" />
+    <ClCompile Include="Act65SECTIONname.cpp" />
     <ClCompile Include="Act65Statements.cpp" />
     <ClCompile Include="Act65StatusFLAGS.cpp" />
     <ClCompile Include="Act65STRING.cpp" />
@@ -397,6 +399,7 @@
     <ClInclude Include="Act65POP.h" />
     <ClInclude Include="Act65Private.h" />
     <ClInclude Include="Act65PROC.h" />
+    <ClInclude Include="Act65PROCasm.h" />
     <ClInclude Include="Act65ProcCall.h" />
     <ClInclude Include="Act65PROCESSOR.h" />
     <ClInclude Include="Act65PROCname.h" />
@@ -420,6 +423,7 @@
     <ClInclude Include="Act65SecAtrbSTART.h" />
     <ClInclude Include="Act65SecAtrbZEROPAGE.h" />
     <ClInclude Include="Act65SECTION.h" />
+    <ClInclude Include="Act65SECTIONname.h" />
     <ClInclude Include="Act65Statements.h" />
     <ClInclude Include="Act65StatusFLAGS.h" />
     <ClInclude Include="Act65STRING.h" />

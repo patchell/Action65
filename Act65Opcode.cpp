@@ -60,12 +60,26 @@ void CAct65Opcode::PrepareInstruction(
 	CLexer* pLex = Act()->GetParser()->GetLexer();
 
 	m_pKeyWord = pLex->FindKeyword(OpToken);
-	m_AdressMode = AddressMode;
-	SetLineNumber(pLex->GetLineNumber());
-	SetColumnNumber(pLex->GetColunm());
-	SetOpCode(pLex->MakeOpcode(OpToken, AddressMode));
-	SetByteCount(OperandByteCount::GetOperandByteCount(AddressMode) + 1);
-	SetChild(pOperandValue_Node);
+	if (m_pKeyWord->m_pAddresModeLUT->ValidAddressingMode(AddressMode))
+	{
+		m_AdressMode = AddressMode;
+		SetLineNumber(pLex->GetLineNumber());
+		SetColumnNumber(pLex->GetColunm());
+		SetOpCode(pLex->MakeOpcode(OpToken, AddressMode));
+		SetByteCount(OperandByteCount::GetOperandByteCount(AddressMode) + 1);
+		SetChild(pOperandValue_Node);
+	}
+	else   // :(
+	{
+		ThrownException.SetXCeptType(Exception::ExceptionType::ILLEGAL_ADDRESSING_MODE);
+		sprintf_s(
+			ThrownException.GetErrorString(),
+			ThrownException.GetMaxStringLen(),
+			"Line %d: Illegal Addressing Mode\n",
+			Act()->GetParser()->GetLexer()->GetLineNumber()
+		);
+		throw(ThrownException);
+	}
 }
 
 int CAct65Opcode::SaveInstruction(char* pM)

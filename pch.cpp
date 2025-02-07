@@ -96,10 +96,10 @@ Token KeyWord::LookupToToken(const char* pName)
 	return pKW[i].m_TokenID;
 }
 
-bool AdressModeLUT::ValidAddressingMode(AdrModeType AMT)
+bool AdressModeLUT::ValidAddressingMode(AdrModeType AMT) const
 {
 	bool rV = false;
-	int i, rV = -1;
+	int i;
 	bool Loop = true;
 
 	for (i = 0; Loop && i < m_nElements; ++i)

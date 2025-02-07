@@ -27,9 +27,10 @@ private:
 		{AdrModeType::ABSOLUTE_Y_ADR, 24},
 		{AdrModeType::ABSOLUTE_X_ADR, 28}
 	};
-	static inline AdressModeLUT LUT_Order7 = { 8, Order7 };
+	static inline AdressModeLUT LUT_Order7 = { 7, Order7 };
 	//---------------------------------------
 	// ASL, LSR, ROR, ROL
+	//---------------------------------------
 	static inline AdressModeItem Order5[5] = {
 		{AdrModeType::ZERO_PAGE_ADR, 0},
 		{AdrModeType::ACCUMULATOR,4},
@@ -90,22 +91,27 @@ private:
 		{AdrModeType::ABSOLUTE_ADR,0 },
 		{AdrModeType::INDIRECT_ADR,32 }
 	};
-	static inline AdressModeLUT LUT_Order2 = { 3, Order2 };
+	static inline AdressModeLUT LUT_Order2 = { 2, Order2 };
 	//---------------------------------------------
 	static inline AdressModeItem Order2_BIT[2] = {
 		{AdrModeType::ZERO_PAGE_ADR,0 },
 		{AdrModeType::ABSOLUTE_ADR,8 }
 	};
-	static inline AdressModeLUT LUT_Order2_BIT = { 3, Order2_BIT };
+	static inline AdressModeLUT LUT_Order2_BIT = { 2, Order2_BIT };
 	//---------------------------------------------
 	static inline AdressModeItem Order1[1] = {
 		{AdrModeType::ABSOLUTE_ADR,0 }
 	};
-	static inline AdressModeLUT LUT_Order1 = { 3, Order1 };
+	static inline AdressModeLUT LUT_Order1 = { 1, Order1 };
 	//-------------------------------------------------
+	static inline AdressModeItem Order_BRANCH[1] = {
+		{AdrModeType::RELATIVE, 0}
+	};
+	static inline AdressModeLUT LUT_Relative = { 1, Order_BRANCH };
+	//------------------------------------------------00
 	static inline KeyWord KeyWords[] = {
 		{Token::ENDOFFILE,"End Of File"},		//1
-		{Token::IDENT,"IDENT"},					//2
+		{Token::IDENT," IDENT"},					//2
 		{Token::NUMBER,"NUMBER"},				//3
 		{Token::MOD,"MOD"},
 		{Token::DEFINED_IDENT, "DEFINED IDENT"},
@@ -206,14 +212,14 @@ private:
 		{Token::ADC,"ADC", 3 ,0X61, Processor::R6502, &LUT_Order8,8},
 		{Token::AND,"AND", 3,0X21, Processor::R6502, &LUT_Order8,8},
 		{Token::ASL,"ASL", 3,0X06, Processor::R6502, &LUT_Order5,5},
-		{Token::BCC,"BCC", 2,0x90, Processor::R6502, NULL,0},
-		{Token::BCS,"BCS", 2,0XB0, Processor::R6502, NULL,0},
-		{Token::BEQ,"BEQ", 2,0XF0, Processor::R6502, NULL,0},
-		{Token::BMI,"BMI", 2,0x30, Processor::R6502, NULL,0},
-		{Token::BNE,"BNE", 2,0XD0, Processor::R6502, NULL,0},
-		{Token::BPL,"BPL", 2,0x10, Processor::R6502, NULL,0},
-		{Token::BVC,"BVC", 2,0x50, Processor::R6502, NULL,0},
-		{Token::BVS,"BVS", 2,0x70, Processor::R6502, NULL,0},
+		{Token::BCC,"BCC", 2,0x90, Processor::R6502, &LUT_Relative,1},
+		{Token::BCS,"BCS", 2,0XB0, Processor::R6502, &LUT_Relative,1},
+		{Token::BEQ,"BEQ", 2,0XF0, Processor::R6502, &LUT_Relative,1},
+		{Token::BMI,"BMI", 2,0x30, Processor::R6502, &LUT_Relative,1},
+		{Token::BNE,"BNE", 2,0XD0, Processor::R6502, &LUT_Relative,1},
+		{Token::BPL,"BPL", 2,0x10, Processor::R6502, &LUT_Relative,1},
+		{Token::BVC,"BVC", 2,0x50, Processor::R6502, &LUT_Relative,1},
+		{Token::BVS,"BVS", 2,0x70, Processor::R6502, &LUT_Relative,1},
 		{Token::BIT,"BIT", 3,0X24, Processor::R6502, &LUT_Order2_BIT,2},
 		{Token::BRK,"BRK", 1,0x00, Processor::R6502, NULL,0},
 		{Token::CLC,"CLC", 1,0X18, Processor::R6502, NULL,0},

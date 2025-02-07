@@ -2,6 +2,7 @@
 
 class CAct65DS : public CAstNode
 {
+	CSection* m_pSection;
 	int m_SizeInBytes;
 	inline static const char* m_pNodeTyypeName = "DS";
 public:
@@ -12,5 +13,7 @@ public:
 	virtual void Print(FILE* pOut, int Indent);
 	int GetSize() { return m_SizeInBytes; }
 	void SetSize(int S) { m_SizeInBytes = S; }
+	CSection* GetSection() { return m_pSection; }
+	void SetSection(CSection* pS) { m_pSection = pS; }
 };
 
