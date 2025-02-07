@@ -1434,7 +1434,7 @@ CLkHead CParser::InlineAssembly(CLkHead LookaHead)
 		case Token::ASM:
 			LHChild = Expect(LHNext, Token::ASM);
 			LHChild.SetNode(0);
-			LHChild = InlineAssBlock(LHChild);
+			LHChild = EndAsmBlock(LHChild);
 			pN = new CAct65ASM;
 			pN->Create(LHChild.GetNode());
 			LHNext.AddNode(pN);
@@ -1463,7 +1463,7 @@ CLkHead CParser::EndAsmBlock(CLkHead LookaHead)
 	CLkHead LHNext, LHChild;
 
 	PrintLookahead(LogFile(), LookaHead, "Enter EndAsmBlock", ++m_Recursion);
-	LHNext = AsmStmt(LookaHead);
+	LHNext = InlineAssBlock(LookaHead);
 	switch (LHNext.GetToken())
 	{
 	case Token('}'):
@@ -1489,20 +1489,19 @@ CLkHead CParser::InlineAssBlock(CLkHead LookaHead)
 	CLkHead LHNext, LHChild;
 
 	PrintLookahead(LogFile(), LookaHead, "Enter InLineAsmBlock", ++m_Recursion);
-	LHNext = EndAsmBlock(LookaHead);
-	while (Loop)
+	LHNext = LookaHead;
+	switch (LHNext.GetToken())
 	{
-		switch (LHNext.GetToken())
-		{
-		case Token('{'):
-			GetLexer()->SetAsmMode();
-			LHChild = Expect(LHNext, Token('{'));
-			GetLexer()->SetAsmMode();
-			LookaHead = EndAsmBlock(LookaHead);
-			break;
-		default:
-			break;
-		}
+	case Token('{'):
+		GetLexer()->SetAsmMode();
+		LHChild = Expect(LHNext, Token('{'));
+		LHChild.SetNode(0);
+		LHChild = AsmStmt(LHChild);
+		LHNext.AddNode(LHChild.GetNode());
+		LHNext.SetToken(LHChild.GetToken());
+		break;
+	default:
+		break;
 	}
 	PrintLookahead(LogFile(), LHNext, "Exit InLineAsmBlock", --m_Recursion);
 	return LHNext;
@@ -6110,7 +6109,6 @@ CLkHead CParser::DefineStorage(CLkHead LookaHead)
 	bool Loop = true;
 	CAct65DS* pN= 0;
 	CLkHead LHNext, LHChild;
-	int BlockSize;
 
 	PrintLookahead(LogFile(), LookaHead, "Enter DefineStorage", ++m_Recursion);
 	LHNext = Proceedure(LookaHead);
@@ -6660,7 +6658,6 @@ CLkHead CParser::JumpAddressingModes(CLkHead LookaHead, Token OpCodeToken)
 	//						;
 	//--------------------------------------------------
 	int Address = 0;
-	int OpCodeInc;
 	CAct65Opcode* pN= 0;
 	CLkHead LHNext, LHChild;
 
@@ -7047,7 +7044,6 @@ CLkHead CParser::AsmConstList_1(CLkHead LookaHead)
 	//					;
 	//---------------------------------------------------
 	bool Loop = true;
-	int ObjectSize;
 	CAstNode* pN= 0;
 	CLkHead LHNext, LHChild;
 
@@ -7124,7 +7120,6 @@ CLkHead CParser::AsmConstAddSub(CLkHead LookaHead)
 	//				;
 	//--------------------------------------------------
 	bool Loop = true;
-	int Value;
 	CAstNode* pN= 0;
 	CLkHead LHNext, LHChild;
 
@@ -7179,6 +7174,7 @@ CLkHead CParser::BaseAsmConstant(CLkHead LookaHead)
 	int Value = 0;
 
 	PrintLookahead(LogFile(), LookaHead, "Enter BaseAsmConstant", ++m_Recursion);
+	LHNext = LookaHead;
 	switch (LHNext.GetToken())
 	{
 	case Token::LOCAL_LABEL:
@@ -7322,11 +7318,14 @@ CLkHead CParser::Immediate(CLkHead LookaHead, Token OpCodeToken)
 
 	PrintLookahead(LogFile(), LookaHead, "Enter Immediate", ++m_Recursion);
 	LHNext = LookaHead;
+	LHChild = LHNext;
+	LHChild.SetNode(0);
 	LHChild = AsmConstant(LHChild);
 	pN = new CAct65Opcode;
 	pN->Create();
 	pN->PrepareInstruction(OpCodeToken, AdrModeType::IMMEDIATE_ADR, LHChild.GetNode() );
-	LHNext = LHChild;
+	LHNext.AddNode(pN);
+	LHNext.SetToken(LHChild.GetToken());
 	PrintLookahead(LogFile(), LHNext, "Exit Immediate", --m_Recursion);
 	return LHNext;
 }

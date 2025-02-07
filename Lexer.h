@@ -102,12 +102,17 @@ private:
 	static inline AdressModeItem Order1[1] = {
 		{AdrModeType::ABSOLUTE_ADR,0 }
 	};
-	static inline AdressModeLUT LUT_Order1 = { 1, Order1 };
+	static inline AdressModeLUT LUT_Order1 = {1, Order1};
 	//-------------------------------------------------
 	static inline AdressModeItem Order_BRANCH[1] = {
 		{AdrModeType::RELATIVE, 0}
 	};
 	static inline AdressModeLUT LUT_Relative = { 1, Order_BRANCH };
+	//------------------------------------------------00
+	static inline AdressModeItem Implied[1] = {
+		{AdrModeType::IMPLIED, 0}
+	};
+	static inline AdressModeLUT LUT_Implied = { 1, Implied };
 	//------------------------------------------------00
 	static inline KeyWord KeyWords[] = {
 		{Token::ENDOFFILE,"End Of File"},		//1
@@ -221,50 +226,50 @@ private:
 		{Token::BVC,"BVC", 2,0x50, Processor::R6502, &LUT_Relative,1},
 		{Token::BVS,"BVS", 2,0x70, Processor::R6502, &LUT_Relative,1},
 		{Token::BIT,"BIT", 3,0X24, Processor::R6502, &LUT_Order2_BIT,2},
-		{Token::BRK,"BRK", 1,0x00, Processor::R6502, NULL,0},
-		{Token::CLC,"CLC", 1,0X18, Processor::R6502, NULL,0},
-		{Token::CLD,"CLD", 1,0xd8, Processor::R6502, NULL,0},
-		{Token::CLI,"CLI", 1,0X58, Processor::R6502, NULL,0},
-		{Token::CLV,"CLV", 1,0xb8, Processor::R6502, NULL,0},
+		{Token::BRK,"BRK", 1,0x00, Processor::R6502, &LUT_Implied,1},
+		{Token::CLC,"CLC", 1,0X18, Processor::R6502, &LUT_Implied,1 },
+		{Token::CLD,"CLD", 1,0xd8, Processor::R6502, &LUT_Implied,1 },
+		{Token::CLI,"CLI", 1,0X58, Processor::R6502, &LUT_Implied,1 },
+		{Token::CLV,"CLV", 1,0xb8, Processor::R6502, &LUT_Implied,1 },
 		{Token::CMP,"CMP", 3,0xc1, Processor::R6502, &LUT_Order8,8},
 		{Token::CPX,"CPX", 3,0XE0, Processor::R6502, &LUT_Order3__CPY_CPX,3},
 		{Token::CPY,"CPY", 3,0XC0, Processor::R6502, &LUT_Order3__CPY_CPX,3},
 		{Token::DEC,"DEC", 3,0xc6, Processor::R6502, &LUT_Order4,4},
-		{Token::DEX,"DEX", 1,0xca, Processor::R6502, NULL,0},
-		{Token::DEY,"DEY", 1,0x88, Processor::R6502, NULL,0},
+		{Token::DEX,"DEX", 1,0xca, Processor::R6502, &LUT_Implied,1 },
+		{Token::DEY,"DEY", 1,0x88, Processor::R6502, &LUT_Implied,1 },
 		{Token::EOR,"EOR", 3,0X41, Processor::R6502, &LUT_Order8,8},
 		{Token::INC,"INC", 3,0xe6, Processor::R6502, &LUT_Order4,4},
-		{Token::INX,"INX", 1,0xe8, Processor::R6502, NULL,0},
-		{Token::INY,"INY", 1,0xc8, Processor::R6502, NULL,0},
+		{Token::INX,"INX", 1,0xe8, Processor::R6502, &LUT_Implied,1 },
+		{Token::INY,"INY", 1,0xc8, Processor::R6502, &LUT_Implied,1 },
 		{Token::JMP,"JMP", 3,0X4C, Processor::R6502, &LUT_Order2,2},
 		{Token::JSR,"JSR", 3,0x20, Processor::R6502, &LUT_Order1,1},
 		{Token::LDA, "LDA", 3, 0xa1, Processor::R6502, & LUT_Order8, 8},
 		{ Token::LDX,"LDX", 3,0xA2, Processor::R6502, &LUT_Order5_LDX,5 },
 		{ Token::LDY,"LDY", 3,0xa0, Processor::R6502, &LUT_Order5_LDY,5 },
 		{ Token::LSR,"LSR", 3,0X46, Processor::R6502, &LUT_Order5,5 },
-		{ Token::NOP,"NOP", 1,0xea, Processor::R6502, NULL,0 },
+		{ Token::NOP,"NOP", 1,0xea, Processor::R6502, &LUT_Implied,1 },
 		{ Token::ORA,"ORA", 3,0X01, Processor::R6502, &LUT_Order8,8 },
-		{ Token::PHA,"PHA", 1,0X48, Processor::R6502, NULL,0 },
-		{ Token::PLA,"PLA", 1,0x68, Processor::R6502, NULL,0 },
-		{ Token::PHP,"PHP", 1,0X08, Processor::R6502, NULL,0 },
-		{ Token::PLP,"PLP", 1,0X28, Processor::R6502, NULL,0 },
+		{ Token::PHA,"PHA", 1,0X48, Processor::R6502, &LUT_Implied,1 },
+		{ Token::PLA,"PLA", 1,0x68, Processor::R6502, &LUT_Implied,1 },
+		{ Token::PHP,"PHP", 1,0X08, Processor::R6502, &LUT_Implied,1 },
+		{ Token::PLP,"PLP", 1,0X28, Processor::R6502, &LUT_Implied,1 },
 		{ Token::ROL,"ROL",3,0X26, Processor::R6502, &LUT_Order5,5 },
 		{ Token::ROR,"ROR",3,0X66, Processor::R6502, &LUT_Order5,5 },
-		{ Token::RTI,"RTI", 1,0x40, Processor::R6502, NULL,0 },
-		{ Token::RTS,"RTS", 1,0x60, Processor::R6502, NULL,0 },
+		{ Token::RTI,"RTI", 1,0x40, Processor::R6502, &LUT_Implied,1 },
+		{ Token::RTS,"RTS", 1,0x60, Processor::R6502, &LUT_Implied,1 },
 		{ Token::SBC,"SBC",3,0xe1, Processor::R6502, &LUT_Order8,8 },
 		{ Token::STA,"STA",3,0x81, Processor::R6502, &LUT_Order7,7 },
-		{ Token::SEC,"SEC", 1,0x38, Processor::R6502, NULL,0 },
-		{ Token::SED,"SED", 1,0Xf8, Processor::R6502, NULL,0 },
-		{ Token::SEI,"SEI", 1,0x78, Processor::R6502, NULL,0 },
+		{ Token::SEC,"SEC", 1,0x38, Processor::R6502, &LUT_Implied,1 },
+		{ Token::SED,"SED", 1,0Xf8, Processor::R6502, &LUT_Implied,1 },
+		{ Token::SEI,"SEI", 1,0x78, Processor::R6502, &LUT_Implied,1 },
 		{ Token::STX,"STX",3,0x86, Processor::R6502, &LUT_Order3_STX,3 },
 		{ Token::STY,"STY",3,0x84, Processor::R6502, &LUT_Order3_STY,3 },
-		{ Token::TAX,"TAX", 1,0xaa, Processor::R6502, NULL,0 },
-		{ Token::TAY,"TAY", 1,0xa8, Processor::R6502, NULL,0 },
-		{ Token::TXA,"TXA", 1,0x8a, Processor::R6502, NULL,0 },
-		{ Token::TYA,"TYA", 1,0x98, Processor::R6502, NULL,0 },
-		{ Token::TXS,"TXS", 1,0x9a, Processor::R6502, NULL,0 },
-		{ Token::TSX,"TSX", 1,0xba, Processor::R6502, NULL,0 },
+		{ Token::TAX,"TAX", 1,0xaa, Processor::R6502, &LUT_Implied,1 },
+		{ Token::TAY,"TAY", 1,0xa8, Processor::R6502,&LUT_Implied,1 },
+		{ Token::TXA,"TXA", 1,0x8a, Processor::R6502, &LUT_Implied,1 },
+		{ Token::TYA,"TYA", 1,0x98, Processor::R6502, &LUT_Implied,1 },
+		{ Token::TXS,"TXS", 1,0x9a, Processor::R6502, &LUT_Implied,1 },
+		{ Token::TSX,"TSX", 1,0xba, Processor::R6502, &LUT_Implied,1 },
 		//--------------------------------------------
 		// W65C02 Opcodes
 		//--------------------------------------------
@@ -435,8 +440,6 @@ public:
 	int MakeOpcode(Token OpCodeToken, AdrModeType AddressMode);
 	int GetOpcode(Token OpCodeToken);
 	const char* LookupToName(Token Toke);
-	Token LookupToToken(const char* pName);
-	int FindInc(AdrModeType AdrMode);
 	KeyWord* GetKeyWords() { return KeyWords; }
 	//--------------------------------------
 	// Symbol Methods

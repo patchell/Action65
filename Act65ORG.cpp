@@ -39,7 +39,34 @@ CValue* CAct65ORG::Process()
 	return pValueChild;
 }
 
-void CAct65ORG::Print(FILE* pOut, int Indent)
+int CAct65ORG::Print(int Indent, char* s, int Strlen)
+{
+	int i = 0, l = 0;
+	int Id, Child, Next;
+	int size;
+
+	Id = GetID();
+	if (GetChild())
+		Child = GetChild()->GetID();
+	else
+		Child = -1;
+	if (GetNext())
+		Next = GetNext()->GetID();
+	else
+		Next = -1;
+	size = Strlen - l;
+	l += sprintf_s(&s[l], size, "%6d %6d %6d  ", Id, Child, Next);
+	for (i = 0; i < Indent; ++i)
+	{
+		size = Strlen - l;
+		l += sprintf_s(&s[l], size, "|  ");
+	}
+	size = Strlen - l;
+	l += sprintf_s(&s[l], size, "+- \'%s\'", GetNodeName());
+	return l;
+}
+
+int CAct65ORG::PrintNode(FILE* pOut, int Indent)
 {
 	if (pOut)
 	{
@@ -47,10 +74,11 @@ void CAct65ORG::Print(FILE* pOut, int Indent)
 		int l = 0;
 		int size;
 
-		l = CAstNode::Print(Indent, s, 256);
+		l = Print(Indent, s, 256);
 		size = 256 - l;
 		sprintf_s(&s[l], size, "- Address:$%04X", GetAddress() & 0x0ffff);
 		fprintf(pOut, "%s\n", s);
 		delete[] s;
 	}
+	return 0;
 }

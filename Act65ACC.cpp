@@ -39,7 +39,45 @@ CValue* CAct65ACC::Process()
 	return pValueChild;
 }
 
-void CAct65ACC::Print(FILE* pOut, int Indent)
+int CAct65ACC::Print(int Indent, char* s, int Strlen)
 {
-	CAstNode::Print(pOut, Indent);
+		int i = 0, l = 0;
+		int Id, Child, Next;
+		int size;
+
+		Id = GetID();
+		if (GetChild())
+			Child = GetChild()->GetID();
+		else
+			Child = -1;
+		if (GetNext())
+			Next = GetNext()->GetID();
+		else
+			Next = -1;
+		size = Strlen - l;
+		l += sprintf_s(&s[l], size, "%6d %6d %6d  ", Id, Child, Next);
+		for (i = 0; i < Indent; ++i)
+		{
+			size = Strlen - l;
+			l += sprintf_s(&s[l], size, "|  ");
+		}
+		size = Strlen - l;
+		l += sprintf_s(&s[l], size, "+- \'%s\'", GetNodeName());
+		if (GetValue())
+		{
+			if (GetValue()->GetSymbol())
+			{
+				if (GetValue()->GetSymbol()->GetName())
+				{
+					size = Strlen - l;
+					l += sprintf_s(&s[l], size, ": %s", GetValue()->GetSymbol()->GetName());
+				}
+			}
+		}
+		return l;
+}
+
+int CAct65ACC::PrintNode(FILE* pOut, int Indent)
+{
+	return CAstNode::PrintNode(pOut, Indent);
 }

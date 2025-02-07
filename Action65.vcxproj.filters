@@ -1105,5 +1105,8 @@
     <None Include="test5.act">
       <Filter>Action</Filter>
     </None>
+    <None Include="test2.act">
+      <Filter>Action</Filter>
+    </None>
   </ItemGroup>
 </Project>

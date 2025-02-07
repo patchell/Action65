@@ -1,0 +1,27 @@
+INT aa,bb,cc
+CARD dd,ee
+CHAR ff
+BYTE gg,hh,ii,jj,kk
+
+MODULE
+
+INTERRUPT AnInteruption()
+	CHAR a
+	INT x,xx,xxx
+	INT c
+	CHAR d
+	CHAR e
+
+	ASM {
+	LDA #$55
+	PHA
+	TYA
+	PHA
+	PLA
+	TAY
+	PLA
+//	STA $1000
+	}
+	RTI
+
+INT qr,st

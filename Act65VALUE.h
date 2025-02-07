@@ -2,12 +2,14 @@
 
 class CAct65VALUE : public CAstNode
 {
+	int m_Value;
 	inline static const char* m_pNodeTyypeName = "VALUE";
 public:
 	CAct65VALUE();
 	virtual ~CAct65VALUE();
 	virtual bool Create(CAstNode* pChild = 0, CAstNode* pNext = 0, CBin* pSym = 0);
 	virtual CValue* Process();
-	virtual void Print(FILE* pOut, int Indent);
+	virtual int Print(int Indent, char* s, int l);
+	virtual int PrintNode(FILE* pOut, int Indent);
 };
 

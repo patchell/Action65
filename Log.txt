@@ -1,7 +1,7 @@
-File:test5.act has 244 Bytes
+File:test2.act has 212 Bytes
 Parser Created
 	 NUMB  CHILD  NEXT
-    66      4     -1  +- 'ROOT'
+    48      4     -1  +- 'ROOT'
      4      1      7  |  +- 'INT'
      1     -1      2  |  |  +- 'IDENT': aa
      2     -1      3  |  |  +- 'IDENT': bb
@@ -11,18 +11,18 @@ Parser Created
      6     -1     -1  |  |  +- 'IDENT': ee
      9      8     15  |  +- 'CHAR'
      8     -1     -1  |  |  +- 'IDENT': ff
-    15     10     65  |  +- 'BYTE'
+    15     10     47  |  +- 'BYTE'
     10     -1     11  |  |  +- 'IDENT': gg
     11     -1     12  |  |  +- 'IDENT': hh
     12     -1     13  |  |  +- 'IDENT': ii
     13     -1     14  |  |  +- 'IDENT': jj
     14     -1     -1  |  |  +- 'IDENT': kk
-    65     61     -1  |  +- 'MODULE'
-    61     16     64  |  |  +- 'IRQ-PROC'
+    47     43     -1  |  +- 'MODULE'
+    43     16     46  |  |  +- 'IRQ-PROC'
     16     17     -1  |  |  |  +- 'IDENT': AnInteruption
-    17     -1     60  |  |  |  |  +- 'Param LIST'
-    60     30     -1  |  |  |  |  +- 'Body'
-    30     19     59  |  |  |  |  |  +- 'LOCAL Vars'
+    17     -1     42  |  |  |  |  +- 'Param LIST'
+    42     30     -1  |  |  |  |  +- 'Body'
+    30     19     41  |  |  |  |  |  +- 'LOCAL Vars'
     19     18     23  |  |  |  |  |  |  +- 'CHAR'
     18     -1     -1  |  |  |  |  |  |  |  +- 'IDENT': a
     23     20     25  |  |  |  |  |  |  +- 'INT'
@@ -35,38 +35,20 @@ Parser Created
     26     -1     -1  |  |  |  |  |  |  |  +- 'IDENT': d
     29     28     -1  |  |  |  |  |  |  +- 'CHAR'
     28     -1     -1  |  |  |  |  |  |  |  +- 'IDENT': e
-    59     35     -1  |  |  |  |  |  +- 'STATEMENTS'
-    35     31     51  |  |  |  |  |  |  +- 'PUSH'
-    31     -1     32  |  |  |  |  |  |  |  +- '.A'
-    32     -1     33  |  |  |  |  |  |  |  +- '.X'
-    33     -1     34  |  |  |  |  |  |  |  +- '.Y'
-    34     -1     -1  |  |  |  |  |  |  |  +- 'Stutus Reg (SR)'
-    51     46     55  |  |  |  |  |  |  +- 'DO'
-    46     45     50  |  |  |  |  |  |  |  +- 'Assign ='
-    45     44     36  |  |  |  |  |  |  |  |  +- 'SUB'
-    44     -1     43  |  |  |  |  |  |  |  |  |  +- 'IDENT': e
-    43     42     -1  |  |  |  |  |  |  |  |  |  +- 'ADD'
-    42     -1     41  |  |  |  |  |  |  |  |  |  |  +- 'IDENT': d
-    41     40     -1  |  |  |  |  |  |  |  |  |  |  +- 'SUB'
-    40     -1     39  |  |  |  |  |  |  |  |  |  |  |  +- 'IDENT': c
-    39     38     -1  |  |  |  |  |  |  |  |  |  |  |  +- 'ADD'
-    38     -1     37  |  |  |  |  |  |  |  |  |  |  |  |  +- 'IDENT': x
-    37     -1     -1  |  |  |  |  |  |  |  |  |  |  |  |  +- 'IDENT': a
-    36     -1     -1  |  |  |  |  |  |  |  |  +- 'IDENT': xyz
-    50     49     -1  |  |  |  |  |  |  |  +- 'UNTILL'
-    49     48     -1  |  |  |  |  |  |  |  |  +- 'EQU-TO'
-    48     -1     47  |  |  |  |  |  |  |  |  |  +- 'IDENT': e
-    47     -1     -1  |  |  |  |  |  |  |  |  |  +- 'IDENT': xyz
-    55     52     56  |  |  |  |  |  |  +- 'POP'
-    52     -1     53  |  |  |  |  |  |  |  +- '.Y'
-    53     -1     54  |  |  |  |  |  |  |  +- '.X'
-    54     -1     -1  |  |  |  |  |  |  |  +- '.A'
-    56     -1     57  |  |  |  |  |  |  +- 'BREAK'
-    57     -1     58  |  |  |  |  |  |  +- 'EXIT'
-    58     -1     -1  |  |  |  |  |  |  +- 'RTI'
-    64     62     -1  |  |  +- 'INT'
-    62     -1     63  |  |  |  +- 'IDENT': qr
-    63     -1     -1  |  |  |  +- 'IDENT': st
+    41     39     -1  |  |  |  |  |  +- 'STATEMENTS'
+    39     32     40  |  |  |  |  |  |  +- 'ASM'
+    32     31     33  |  |  |  |  |  |  |  +- 'OPCODE' LDA ($A9)
+    31     -1     -1  |  |  |  |  |  |  |  |  +- 'NUMBER'$0055
+    33     -1     34  |  |  |  |  |  |  |  +- 'OPCODE' PHA ($48)
+    34     -1     35  |  |  |  |  |  |  |  +- 'OPCODE' TYA ($98)
+    35     -1     36  |  |  |  |  |  |  |  +- 'OPCODE' PHA ($48)
+    36     -1     37  |  |  |  |  |  |  |  +- 'OPCODE' PLA ($68)
+    37     -1     38  |  |  |  |  |  |  |  +- 'OPCODE' TAY ($A8)
+    38     -1     -1  |  |  |  |  |  |  |  +- 'OPCODE' PLA ($68)
+    40     -1     -1  |  |  |  |  |  |  +- 'RTI'
+    46     44     -1  |  |  +- 'INT'
+    44     -1     45  |  |  |  +- 'IDENT': qr
+    45     -1     -1  |  |  |  +- 'IDENT': st
 ------------ Symbol Table --------------
 ee: GLOBAL:CARD::Address=00000000  Value=0000
 
@@ -110,4 +92,4 @@ c: LOCAL:INT::Address=00000000  Value=0000
 
 d: LOCAL:CHAR::Address=00000000  Value=0000
 
-Lines Compiled:26
+Lines Compiled:28

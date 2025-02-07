@@ -55,7 +55,8 @@ public:
 	// Node Processor
 	//-----------------------------
 	virtual CValue* Process();
-	virtual void Print(FILE* pOut, int Indent);
+	virtual int PrintNode(FILE* pOut, int Indent);
+	virtual int Print(int Indent, char* s, int l);
 	virtual void PrepareInstruction(
 		Token Tk, 
 		AdrModeType AddressMode,
@@ -80,4 +81,5 @@ public:
 	void SetAdrModeType(AdrModeType AMT) { m_AdressMode = AMT; }
 	int GetByteCount() const { return m_ByteCount; }
 	void SetByteCount(int BC) { m_ByteCount = BC; }
+	KeyWord* GetKeyWord() { return m_pKeyWord; }
 };

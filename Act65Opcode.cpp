@@ -1,6 +1,6 @@
 #include "pch.h"
 
-CAct65Opcode::CAct65Opcode()
+CAct65Opcode::CAct65Opcode():CAstNode()
 {
 	m_OpcodeToken = Token(-1);
 	m_LineNumber = 0;
@@ -9,6 +9,9 @@ CAct65Opcode::CAct65Opcode()
 	m_pLabel = 0;
 	m_AdressMode = AdrModeType::NA;
 	m_pKeyWord = 0;
+	m_ByteCount = 0;
+	m_OpCode = 0;
+	m_Operand = 0;
 }
 
 CAct65Opcode::~CAct65Opcode()
@@ -25,8 +28,7 @@ bool CAct65Opcode::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 CValue* CAct65Opcode::Process()
 {
 	CAstNode* pChild = 0, * pNext = 0;
-	CValue* pValueChild = 0, * pValueNext = 0
-		;
+	CValue* pValueChild = 0, * pValueNext = 0;
 	pChild = GetChild();
 	if (pChild)
 	{
@@ -46,9 +48,48 @@ CValue* CAct65Opcode::Process()
 	return pValueChild;
 }
 
-void CAct65Opcode::Print(FILE* pOut, int Indent)
+int CAct65Opcode::PrintNode(FILE* pOut, int Indent)
 {
-	CAstNode::Print(pOut, Indent);
+	if (pOut)
+	{
+		char* s = new char[256];
+		int l = 0;
+		
+		l = Print(Indent, s, l);
+		sprintf_s(&s[l], 256 - l, " %s", GetKeyWord()->m_Name);
+		fprintf(pOut, "%s\n", s);
+		delete[]s;
+	}
+	return 0;
+}
+
+int CAct65Opcode::Print(int Indent, char* s, int Strlen)
+{
+	int i = 0, l = 0;
+	int Id, Child, Next;
+	int size;
+
+	Id = GetID();
+	if (GetChild())
+		Child = GetChild()->GetID();
+	else
+		Child = -1;
+	if (GetNext())
+		Next = GetNext()->GetID();
+	else
+		Next = -1;
+	size = Strlen - l;
+	l += sprintf_s(&s[l], size, "%6d %6d %6d  ", Id, Child, Next);
+	for (i = 0; i < Indent; ++i)
+	{
+		size = Strlen - l;
+		l += sprintf_s(&s[l], size, "|  ");
+	}
+	size = Strlen - l;
+	l += sprintf_s(&s[l], size, "+- \'%s\'", GetNodeName());
+	size = Strlen - l;
+	l += sprintf_s(&s[l],size, " %s ($%02X)", GetKeyWord()->m_Name, GetOpCode() &0x0ff);
+	return l;
 }
 
 void CAct65Opcode::PrepareInstruction(
@@ -63,6 +104,7 @@ void CAct65Opcode::PrepareInstruction(
 	if (m_pKeyWord->m_pAddresModeLUT->ValidAddressingMode(AddressMode))
 	{
 		m_AdressMode = AddressMode;
+		SetToken(OpToken);
 		SetLineNumber(pLex->GetLineNumber());
 		SetColumnNumber(pLex->GetColunm());
 		SetOpCode(pLex->MakeOpcode(OpToken, AddressMode));

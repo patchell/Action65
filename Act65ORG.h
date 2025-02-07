@@ -9,7 +9,8 @@ public:
 	virtual ~CAct65ORG();
 	virtual bool Create(CAstNode* pChild = 0, CAstNode* pNext = 0, CBin* pSym = 0);
 	virtual CValue* Process();
-	virtual void Print(FILE* pOut, int Indent);
+	virtual int Print(int Indent, char* s, int l);
+	virtual int PrintNode(FILE* pOut, int Indent);
 	int GetAddress() const { return m_Address; }
 	void SetAddress(int A) { m_Address = A; }
 };

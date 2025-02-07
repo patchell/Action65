@@ -178,8 +178,8 @@ public:
 	);
 	virtual void CreateValue(CBin* pSym);
 	virtual CValue* Process() = 0;
-	virtual void Print(FILE* pOut, int Indent);
-	int Print(int Indent, char* s, int strLen);
+	virtual int PrintNode(FILE* pOut, int Indent);
+	virtual int Print(int Indent, char* s, int strLen) = 0;
 	void AddToHeadNextChain(CAstNode* pN);
 	void AddToTailNextChain(CAstNode* pN);
 	void InsertThatIntoThisNext(CAstNode* pN);
