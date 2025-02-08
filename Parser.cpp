@@ -6510,6 +6510,7 @@ CLkHead CParser::AluAdrModes(CLkHead LookaHead, Token OpCodeToken)
 		break;
 	case Token('('):
 		LHChild = Expect(LHNext, Token('('));
+		LHChild.SetNode(0);
 		LHChild = Indirect(LHChild, OpCodeToken);
 		LHNext.AddNode(LHChild.GetNode());
 		LHNext.SetToken(LHChild.GetToken());
@@ -7284,22 +7285,22 @@ CLkHead CParser::Indirect(CLkHead LookaHead, Token OpCodeToken)
 	}
 	switch (LHChild.GetToken())
 	{
-	case Token(')'):	//indirect Y xxx (vv),Y
+	case Token(')'):	//indirect indexed,Y
 		CheckZeroPageAddress(Address);
 		pN = new CAct65Opcode;
 		pN->Create();
-		pN->PrepareInstruction(OpCodeToken, AdrModeType::INDIRECT_Y_ADR, LHChild.GetNode());
+		pN->PrepareInstruction(OpCodeToken, AdrModeType::INDIRECT_INDEXED_Y_ADR, LHChild.GetNode());
 		LHNext.SetToken(LHChild.GetToken());
 		LHNext = Expect(LHNext, Token(')'));
 		LHNext = Expect(LHNext, Token(','));
 		LHNext = Expect(LHNext, Token::YREG);
 		LHNext.AddNode(pN);
 		break;
-	case Token(','):	//indirect X xxx (vv,X)
+	case Token(','):	// indexed indirect X 
 		CheckZeroPageAddress(Address);
 		pN = new CAct65Opcode;
 		pN->Create();
-		pN->PrepareInstruction(OpCodeToken, AdrModeType::INDIRECT_Y_ADR, LHChild.GetNode());
+		pN->PrepareInstruction(OpCodeToken, AdrModeType::INDEXED_INDIRECT_X_ADR, LHChild.GetNode());
 		LHNext.SetToken(LHChild.GetToken());
 		LHNext = Expect(LHNext, Token(','));
 		LHNext = Expect(LHNext, Token::XREG);

@@ -19,11 +19,11 @@ class CAct65Opcode : public CAstNode
 	};
 	inline static OperandByteCount OperByteCntLUT[] = {
 		{AdrModeType::IMPLIED,0},
-		{AdrModeType::INDIRECT_X_ADR,1},
+		{AdrModeType::INDEXED_INDIRECT_X_ADR,1},
 		{AdrModeType::ZERO_PAGE_ADR,1},
 		{AdrModeType::IMMEDIATE_ADR,1},
 		{AdrModeType::ABSOLUTE_ADR,2},
-		{AdrModeType::INDIRECT_Y_ADR,1},
+		{AdrModeType::INDIRECT_INDEXED_Y_ADR,1},
 		{AdrModeType::ZERO_PAGE_X_ADR,1},
 		{AdrModeType::ABSOLUTE_Y_ADR,2},
 		{AdrModeType::ABSOLUTE_X_ADR,2},

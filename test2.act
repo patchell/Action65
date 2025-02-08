@@ -13,6 +13,7 @@ INTERRUPT AnInteruption()
 	CHAR e
 
 	ASM {
+	ADC ($52),.Y
 	LDA #$55
 	PHA
 	TYA
@@ -21,6 +22,14 @@ INTERRUPT AnInteruption()
 	TAY
 	PLA
 	STA $1000
+	RTS
+	RTI
+	ADC ($44, .X)
+//	SUB $12
+//	CMP $13,.X
+//	AND $400,.X
+//	ORA $410,.Y
+//	ASL .A
 	}
 	RTI
 

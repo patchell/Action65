@@ -6,11 +6,11 @@ class CLexer
 private:
 	//alu access modes
 	static inline AdressModeItem Order8[8] = {
-		{AdrModeType::INDIRECT_X_ADR, 0},
+		{AdrModeType::INDEXED_INDIRECT_X_ADR, 0},
 		{AdrModeType::ZERO_PAGE_ADR, 4},
 		{AdrModeType::IMMEDIATE_ADR, 8},
 		{AdrModeType::ABSOLUTE_ADR, 12},
-		{AdrModeType::INDIRECT_Y_ADR, 16},
+		{AdrModeType::INDIRECT_INDEXED_Y_ADR, 16},
 		{AdrModeType::ZERO_PAGE_X_ADR, 20},
 		{AdrModeType::ABSOLUTE_Y_ADR, 24},
 		{AdrModeType::ABSOLUTE_X_ADR, 28}
@@ -19,10 +19,10 @@ private:
 
 	// sta address modes
 	static inline AdressModeItem Order7[7] = {
-		{AdrModeType::INDIRECT_X_ADR, 0},
+		{AdrModeType::INDEXED_INDIRECT_X_ADR, 0},
 		{AdrModeType::ZERO_PAGE_ADR, 4},
 		{AdrModeType::ABSOLUTE_ADR, 12},
-		{AdrModeType::INDIRECT_Y_ADR, 16},
+		{AdrModeType::INDIRECT_INDEXED_Y_ADR, 16},
 		{AdrModeType::ZERO_PAGE_X_ADR, 20},
 		{AdrModeType::ABSOLUTE_Y_ADR, 24},
 		{AdrModeType::ABSOLUTE_X_ADR, 28}

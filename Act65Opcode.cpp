@@ -88,7 +88,11 @@ int CAct65Opcode::Print(int Indent, char* s, int Strlen)
 	size = Strlen - l;
 	l += sprintf_s(&s[l], size, "+- \'%s\'", GetNodeName());
 	size = Strlen - l;
-	l += sprintf_s(&s[l],size, " %s ($%02X)", GetKeyWord()->m_Name, GetOpCode() &0x0ff);
+	l += sprintf_s(&s[l],size, " %s ($%02X) %s", 
+		GetKeyWord()->m_Name, 
+		GetOpCode() &0x0ff,
+		AdrModeToTxtTabel.LookupAddressingMode(GetAdrModeType())
+	);
 	return l;
 }
 

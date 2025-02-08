@@ -231,11 +231,11 @@ enum class IdentType {
 enum class AdrModeType {
 	NA,
 	IMPLIED,
-	INDIRECT_X_ADR,
+	INDEXED_INDIRECT_X_ADR,
 	ZERO_PAGE_ADR,
 	IMMEDIATE_ADR,
 	ABSOLUTE_ADR,
-	INDIRECT_Y_ADR,
+	INDIRECT_INDEXED_Y_ADR,
 	ZERO_PAGE_X_ADR,
 	ABSOLUTE_Y_ADR,
 	ABSOLUTE_X_ADR,
@@ -244,6 +244,64 @@ enum class AdrModeType {
 	ACCUMULATOR,
 	RELATIVE
 };
+
+
+struct AdrModeToTextLUT {
+	struct AdrModeTypeToStringItem {
+		AdrModeType m_AdressMode;
+		const char* m_pName;
+		AdrModeTypeToStringItem() {
+			m_AdressMode = AdrModeType::NA;
+			m_pName = 0;
+		}
+		AdrModeTypeToStringItem(AdrModeType T, const char* pName) {
+			m_AdressMode = T;
+			m_pName = pName;
+		}
+		const char* GetName(AdrModeType T) const {
+			const char* pName = 0;
+
+			if (T == m_AdressMode)
+				pName = m_pName;
+			return pName;
+		}
+	};
+	inline static AdrModeTypeToStringItem AdrModeLUT[14] = {
+		{AdrModeType::NA,""},
+		{AdrModeType::IMPLIED,"IMPLIED"},
+		{AdrModeType::INDEXED_INDIRECT_X_ADR,"INDEXED INDIRECT"},
+		{AdrModeType::ZERO_PAGE_ADR,"ZERO PAGE"},
+		{AdrModeType::IMMEDIATE_ADR,"IMMEDIATE"},
+		{AdrModeType::ABSOLUTE_ADR,"ABSOLUTE"},
+		{AdrModeType::INDIRECT_INDEXED_Y_ADR,"INDIRECT INDEXED"},
+		{AdrModeType::ZERO_PAGE_X_ADR,"PAGE ZERO,X"},
+		{AdrModeType::ABSOLUTE_Y_ADR,"ABSOLUTE,Y"},
+		{AdrModeType::ABSOLUTE_X_ADR,"ABSOLUTE,X"},
+		{AdrModeType::ZERO_PAGE_Y_ADR,"PAGE ZERO,Y"},
+		{AdrModeType::INDIRECT_ADR,"INDIRECT"},
+		{AdrModeType::ACCUMULATOR,"ACCUMULATOR"},
+		{AdrModeType::RELATIVE,"RELATIVE"}
+	};
+	static const char* LookupAddressingMode(AdrModeType T)
+	{
+		const char* pN = 0;
+		int i;
+		bool Loop = true;
+
+		for (i = 0; Loop && (i < 14); ++i)
+		{
+			if (AdrModeLUT[i].GetName(T))
+			{
+				pN = AdrModeLUT[i].GetName(T);
+				Loop = false;
+			}
+		}
+		return pN;
+	}
+
+};
+
+extern AdrModeToTextLUT AdrModeToTxtTabel;
 
 enum class AddressModesClass {	//ToDo: Delete?
 	IMPLIED,		//0
@@ -306,7 +364,7 @@ struct AdressModeLUT {
 		m_nElements = n;
 	}
 	//-------------------
-	int GetInc(AdrModeType Type) {
+	int GetInc(AdrModeType Type) const {
 		int i, rV = -1;
 		bool Loop = true;
 

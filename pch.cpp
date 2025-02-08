@@ -2,6 +2,7 @@
 
 
 Exception ThrownException;
+AdrModeToTextLUT AdrModeToTxtTabel;
 
 const char* Exception::GetExceptionTypeString(ExceptionType xType)
 {
