@@ -218,7 +218,8 @@ enum  class Token {
 
 enum class IdentType {
 	NEW_SYMBOL,
-	LABEL,
+	LABEL_GLOBAL,
+	LABEL_PRIVATE,
 	PROC,
 	FUNC,
 	IRQPROC,

@@ -132,6 +132,15 @@ bool CLexer::IsValidNumber(int c)
 	return IsValid;
 }
 
+bool CLexer::IsValidNameFirstChar(int c)
+{
+	bool IsValid = false;
+
+	if (isalpha(c) || c == '_')
+		IsValid = true;
+	return IsValid;;
+}
+
 bool CLexer::IsValidNameChar(int c)
 {
 	bool IsValid = false;
@@ -304,6 +313,48 @@ Token CLexer::Lex()
 				}
 			}
 			Loop = false;
+			break;
+		case ':':	// Label
+			if (IsValidNameFirstChar(LexLook(0)) )
+			{
+				m_LexBuffIndex = 0;
+				auxLoop = true;
+				while (auxLoop)
+				{
+					c = LexGet();
+					if (IsValidNameChar(c))
+						m_aLexBuff[m_LexBuffIndex++] = c;
+					else
+						auxLoop = false;
+				}
+				m_aLexBuff[m_LexBuffIndex] = 0;
+				//Lookup Name
+				m_pLexSymbol = (CSymbol*)GetSymTab()->FindSymbol(m_aLexBuff, 0);
+				if (!m_pLexSymbol)	//new lable
+				{
+					m_pLexSymbol = new CSymbol;
+					m_pLexSymbol->Create();
+					m_pLexSymbol->SetName(m_aLexBuff);
+					if (c == ':')
+					{
+						m_pLexSymbol->SetIdentType(IdentType::LABEL_PRIVATE);
+						m_pLexSymbol->SetToken(Token::LOCAL_LABEL);
+					}
+					else
+					{
+						LexUnGet(c);
+						m_pLexSymbol->SetIdentType(IdentType::LABEL_GLOBAL);
+						m_pLexSymbol->SetToken(Token::GLOBAL_LABEL);
+					}
+				}
+				TokenValue = m_pLexSymbol->GetToken();
+				Loop = false;
+			}
+			else
+			{
+				TokenValue = Token(':');
+				Loop = false;
+			}
 			break;
 		case '[':
 		case ']':
@@ -493,6 +544,7 @@ Token CLexer::Lex()
 					LexUnGet(c);
 				}
 			}	//END OF collecting characters for word
+
 			//---------------------------------
 			// First check to see if it is a
 			// Keyword

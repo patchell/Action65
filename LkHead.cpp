@@ -24,7 +24,7 @@ bool CLkHead::Create()
 void CLkHead::AddNode(CAstNode* pN) 
 {
 	CAstNode* pNode = 0;
-	int MaxLoops = 30;
+	int MaxLoops = 300;
 	static int EntryCount = 0;
 
 	++EntryCount;

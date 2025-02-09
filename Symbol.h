@@ -29,7 +29,8 @@ class CSymbol: public CBin
 	};
 	inline static CSymbol::CIdentType IdentTypeLUT[] = {
 		{IdentType::NEW_SYMBOL , "NEW SYMBOL"},
-		{IdentType::LABEL , "LABEL"},
+		{IdentType::LABEL_GLOBAL , "Global LABEL"},
+		{IdentType::LABEL_PRIVATE , "Private LABEL"},
 		{IdentType::PROC , "PROC"},
 		{IdentType::FUNC , "FUNC"},
 		{IdentType::GLOBAL , "GLOBAL"},

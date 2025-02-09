@@ -6363,7 +6363,6 @@ CLkHead CParser::Instruction(CLkHead LookaHead)
 			LHChild = Expect(LHNext, LHNext.GetToken());
 			LHChild.SetNode(0);
 			LHChild = JumpAddressingModes(LHChild, OpCodeToken);
-			LHNext = LHChild;
 			LHNext.AddNode(LHChild.GetNode());
 			LHNext.SetToken(LHChild.GetToken());
 			LHNext = Labels(LHNext);
@@ -6420,7 +6419,8 @@ CLkHead CParser::Instruction(CLkHead LookaHead)
 CLkHead CParser::Labels(CLkHead LookaHead)
 {
 	//--------------------------------------------------
-	//	Labels	-> IDENT LocalGlobal
+	//	Labels	-> LOCAL_LABEL 
+	//			-> GLOBAL_LABEL
 	//			-> .
 	//			;
 	//--------------------------------------------------
@@ -6434,20 +6434,26 @@ CLkHead CParser::Labels(CLkHead LookaHead)
 	LHNext = LookaHead;
 	switch (LHNext.GetToken())
 	{
-	case Token::IDENT:
+	case Token::LOCAL_LABEL:
 		pSym = GetLexer()->GetLexSymbol();
-		Address = GetCurrentSection()->GetLocationCounter();
+//		Address = GetCurrentSection()->GetLocationCounter();
 		pSym->SetAddress(Address);
 		pSym->SetResolved();
 		pSym->SetSection(GetCurrentSection());
-		pSym->SetIdentType(IdentType::LABEL);
 		pSym->BackFillUnresolved();
-		LHNext = Expect(LHNext, Token::IDENT);
-		LHNext = LocalGlobal(LHNext, IsLocal);
-		if (IsLocal)
-			pSym->SetToken(Token::LOCAL_LABEL);
-		else
-			pSym->SetToken(Token::GLOBAL_LABEL);
+		LHNext = Expect(LHNext, Token::LOCAL_LABEL);
+		pN = new CAct65Label;
+		pN->Create(0, 0, pSym);
+		LHNext.AddNode(pN);
+		break;
+	case Token::GLOBAL_LABEL:
+		pSym = GetLexer()->GetLexSymbol();
+		//		Address = GetCurrentSection()->GetLocationCounter();
+		pSym->SetAddress(Address);
+		pSym->SetResolved();
+		pSym->SetSection(GetCurrentSection());
+		pSym->BackFillUnresolved();
+		LHNext = Expect(LHNext, Token::GLOBAL_LABEL);
 		pN = new CAct65Label;
 		pN->Create(0, 0, pSym);
 		LHNext.AddNode(pN);
@@ -6572,13 +6578,11 @@ CLkHead CParser::ShiftAddressingModes(CLkHead LookaHead, Token OpCodeToken)
 	switch (LHNext.GetToken())
 	{
 	case Token::AREG:
-		LHChild = Expect(LHNext, Token::AREG);
+		LHNext = Expect(LHNext, Token::AREG);
 		pN = new CAct65Opcode;
 		pN->Create();
-		LHChild.SetNode(0);
 		pN->PrepareInstruction(OpCodeToken, AdrModeType::ACCUMULATOR, 0);
 		LHNext.AddNode(pN);
-		LHNext.SetToken(LHChild.GetToken());
 		break;
 	default:
 		LHChild = LHNext;
@@ -6671,7 +6675,7 @@ CLkHead CParser::JumpAddressingModes(CLkHead LookaHead, Token OpCodeToken)
 		LHChild = Expect(LookaHead, Token('('));
 		LHChild.SetNode(0);
 		LHChild = AsmConstant(LHChild);
-		LookaHead = Expect(LookaHead, Token(')'));
+		LHChild = Expect(LHChild, Token(')'));
 		pN = new CAct65Opcode;
 		pN->Create();
 		pN->PrepareInstruction(OpCodeToken, AdrModeType::INDIRECT_ADR, LHChild.GetNode());
@@ -6759,13 +6763,16 @@ CLkHead CParser::CPX_CPY_AddressingMode(CLkHead LookaHead, Token OpCodeToken)
 	switch (LHNext.GetToken())
 	{
 	case Token('#'):
-		LHNext = Expect(LHNext, Token('#'));
-		LHChild = Absolute(LHNext, OpCodeToken);
+		LHChild = Expect(LHNext, Token('#'));
+		LHChild.SetNode(0);
+		LHChild = Immediate(LHChild, OpCodeToken);
 		LHNext.AddNode(LHChild.GetNode());
-		LHChild = Immediate(LHNext, OpCodeToken);
+		LHNext.SetToken(LHChild.GetToken());
 		break;
 	default:
-		LHChild = Absolute(LHNext, OpCodeToken);
+		LHChild = LHNext;
+		LHChild.SetNode(0);
+		LHChild = Absolute(LHChild, OpCodeToken);
 		LHNext.AddNode(LHChild.GetNode());
 		LHNext.SetToken(LHChild.GetToken());
 		break;
@@ -6786,7 +6793,9 @@ CLkHead CParser::StxAddressingMode(CLkHead LookaHead, Token OpCodeToken)
 
 	PrintLookahead(LogFile(), LookaHead, "Enter StxAddressingMode", ++m_Recursion);
 	LHNext = LookaHead;
-	LHChild = Absolute(LHNext, OpCodeToken);
+	LHChild = LHNext;
+	LHChild.SetNode(0);
+	LHChild = Absolute(LHChild, OpCodeToken);
 	LHNext.AddNode(LHChild.GetNode());
 	LHNext.SetToken(LHChild.GetToken());
 	PrintLookahead(LogFile(), LHNext, "Exit StxAddressingMode", --m_Recursion);
@@ -6805,6 +6814,7 @@ CLkHead CParser::LdyAddressingMode(CLkHead LookaHead, Token OpCodeToken)
 	CLkHead LHNext, LHChild;
 
 	PrintLookahead(LogFile(), LookaHead, "Enter LdyAddressingMode", ++m_Recursion);
+	LHNext = LookaHead;
 	switch (LHNext.GetToken())
 	{
 	case Token('#'):
@@ -6815,7 +6825,9 @@ CLkHead CParser::LdyAddressingMode(CLkHead LookaHead, Token OpCodeToken)
 		LHNext.SetToken(LHChild.GetToken());
 		break;
 	default:
-		LHChild = Absolute(LHNext, OpCodeToken);
+		LHChild = LHNext;
+		LHChild.SetNode(0);
+		LHChild = Absolute(LHChild, OpCodeToken);
 		LHNext.AddNode(LHChild.GetNode());
 		LHNext.SetToken(LHChild.GetToken());
 		break;
@@ -6829,53 +6841,15 @@ CLkHead CParser::StyAddressingMode(CLkHead LookaHead, Token OpCodeToken)
 	//--------------------------------------------------
 	//	StyAddressingMode	-> AsmConstant OptXReg;
 	//--------------------------------------------------
-	int Address = 0;
-	CAct65Opcode* pN= 0;
-	CLkHead LHNext, LHChild, LHIndexReg;
-	RegType Reg = RegType::NONE;
+	CLkHead LHNext, LHChild;
 
 	PrintLookahead(LogFile(), LookaHead, "Enter StyAddressingMode", ++m_Recursion);
 	LHNext = LookaHead;
-	LHChild = AsmConstant(LHNext);
-	LHIndexReg = LHChild;
-	LHIndexReg.SetNode(0);
-	LHIndexReg = OptXReg(LHChild,Reg);
-	switch (Reg)
-	{
-	case RegType::X:
-		if (Address >= 0x100)
-		{
-			fprintf(stderr, "Warning:STY Zero page: Truncated %04X\n",
-				Address & 0x0ffff
-			);
-		}
-		pN = new CAct65Opcode;
-		pN->Create();
-		pN->PrepareInstruction(OpCodeToken, AdrModeType::ZERO_PAGE_X_ADR, LHChild.GetNode());
-		pN->GetChild()->SetChild(LHIndexReg.GetNode());	//  index register
-		LHNext.AddNode(pN);
-		LHNext.SetToken(LHChild.GetToken());
-		break;
-	case RegType::NONE:
-		if (Address < 0x100)
-		{
-			pN = new CAct65Opcode;
-			pN->Create();
-			pN->PrepareInstruction(OpCodeToken, AdrModeType::ZERO_PAGE_ADR, LHChild.GetNode());
-			LHNext.AddNode(pN);
-			LHNext.SetToken(LHChild.GetToken());
-
-		}
-		else
-		{
-			pN = new CAct65Opcode;
-			pN->Create();
-			pN->PrepareInstruction(OpCodeToken, AdrModeType::ABSOLUTE_ADR, LHChild.GetNode());
-			LHNext.AddNode(pN);
-			LHNext.SetToken(LHChild.GetToken());
-		}
-		break;
-	}
+	LHChild = LHNext;
+	LHChild.SetNode(0);
+	LHChild = Absolute(LHChild, OpCodeToken);
+	LHNext.AddNode(LHChild.GetNode());
+	LHNext.SetToken(LHChild.GetToken());
 	PrintLookahead(LogFile(), LHNext, "Exit StyAddressingMode", --m_Recursion);
 	return LHNext;
 }
@@ -6916,7 +6890,7 @@ CLkHead CParser::OptIndexReg_1(CLkHead LookaHead, RegType& Reg)
 	//					;
 	//--------------------------------------------------
 	CAstNode* pN= 0;
-	CLkHead LHNext, LHChild;
+	CLkHead LHNext;
 
 	PrintLookahead(LogFile(), LookaHead, "Enter OptIndexReg_1", ++m_Recursion);
 	LHNext = LookaHead;
@@ -7347,7 +7321,7 @@ CLkHead CParser::Absolute(
 	// with or without index registers
 	//---------------------------------------
 
-	CLkHead LHNext, LHChild;
+	CLkHead LHNext, LHChild, LHReg;
 	RegType Reg = RegType::NONE;
 	CAct65Opcode* pN;
 	int Opcode = 0;
@@ -7382,7 +7356,7 @@ CLkHead CParser::Absolute(
 			break;
 		}
 		pValue = LHChild.GetNode()->GetValue();
-		pOperandNode = LHChild.GetNode();
+//		pOperandNode = LHChild.GetNode();
 	}
 	else
 	{
@@ -7397,11 +7371,14 @@ CLkHead CParser::Absolute(
 		);
 		throw(ThrownException);
 	}
+	LHNext.SetToken(LHChild.GetToken());
 	switch (LHNext.GetToken())
 	{
 	case Token(','):
 		LHNext = Expect(LHNext, Token(','));
-		LHNext = OptIndexReg_1(LHNext, Reg);
+		LHReg = LHNext;
+		LHReg.SetNode(0);
+		LHReg = OptIndexReg_1(LHReg, Reg);
 		switch (Reg)
 		{
 		case RegType::X:
@@ -7410,16 +7387,21 @@ CLkHead CParser::Absolute(
 				pN = new CAct65Opcode;
 				pN->Create();
 				AddressMode = AdrModeType::ZERO_PAGE_X_ADR;
-				pN->PrepareInstruction(OpCodeToken, AddressMode, pOperandNode);
-				pN->SetOperand(pValue->GetConstVal());	//Set address
+				LHChild.GetNode()->SetChild(LHReg.GetNode());
+				pN->PrepareInstruction(OpCodeToken, AddressMode, LHChild.GetNode());
+//				pN->SetOperand(pValue->GetConstVal());	//Set address
+				LHNext.AddNode(pN);
+				LHNext.SetToken(LHReg.GetToken());
 			}
 			else
 			{
 				pN = new CAct65Opcode;
 				pN->Create();
 				AddressMode = AdrModeType::ABSOLUTE_X_ADR;
-				pN->PrepareInstruction(OpCodeToken, AddressMode, pOperandNode);
-				pN->SetOperand(pValue->GetConstVal());	//Set address
+				LHChild.GetNode()->SetChild(LHReg.GetNode());
+				pN->PrepareInstruction(OpCodeToken, AddressMode, LHChild.GetNode());
+				LHNext.AddNode(pN);
+				LHNext.SetToken(LHReg.GetToken());
 			}
 			break;
 		case RegType::Y:
@@ -7428,16 +7410,20 @@ CLkHead CParser::Absolute(
 				pN = new CAct65Opcode;
 				pN->Create();
 				AddressMode = AdrModeType::ZERO_PAGE_Y_ADR;
-				pN->PrepareInstruction(OpCodeToken, AddressMode, pOperandNode);
-				pN->SetOperand(pValue->GetConstVal());	//Set address
+				LHChild.GetNode()->SetChild(LHReg.GetNode());
+				pN->PrepareInstruction(OpCodeToken, AddressMode, LHChild.GetNode());
+				LHNext.AddNode(pN);
+				LHNext.SetToken(LHReg.GetToken());
 			}
 			else
 			{
 				pN = new CAct65Opcode;
 				pN->Create();
 				AddressMode = AdrModeType::ABSOLUTE_Y_ADR;
-				pN->PrepareInstruction(OpCodeToken, AddressMode, pOperandNode);
-				pN->SetOperand(pValue->GetConstVal());	//Set address
+				LHChild.GetNode()->SetChild(LHReg.GetNode());
+				pN->PrepareInstruction(OpCodeToken, AddressMode, LHChild.GetNode());
+				LHNext.AddNode(pN);
+				LHNext.SetToken(LHReg.GetToken());
 			}
 			break;
 		default:
@@ -7465,7 +7451,6 @@ CLkHead CParser::Absolute(
 			pN = new CAct65Opcode;
 			pN->Create();
 			pN->PrepareInstruction(OpCodeToken, AdrModeType::ABSOLUTE_ADR, LHChild.GetNode());
-//			pN->SetOperand(pValue->GetConstVal());	//Set address
 			LHNext.AddNode(pN);
 			LHNext.SetToken(LHChild.GetToken());
 		}

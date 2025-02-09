@@ -421,6 +421,7 @@ public:
 	void LexUnGet(int c);
 	bool IsValidHexNumber(int c);
 	bool IsValidNumber(int c);
+	bool IsValidNameFirstChar(int c);
 	bool IsValidNameChar(int c);
 	bool IsWhiteSpace(int c);
 	bool IsValidAssignmentOperator(int c);

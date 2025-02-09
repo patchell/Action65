@@ -50,7 +50,7 @@ void CAstTree::TraverseTree(
 	//-------------------------------
 	// Navigate the Syntax Tree
 	//-------------------------------
-	static int Recursions = 20;
+	static int Recursions = 300;
 	CAstNode* pAN = 0;
 	int Loops = 0;
 
@@ -81,7 +81,7 @@ void CAstTree::TraverseTree(
 			TraverseTree(pOut, pAN->GetChild(),s, StringSize, Indent+1);
 		}
 		pAN = pAN->GetNext();
-		if (++Loops > 30)
+		if (++Loops > 300)
 		{
 			fprintf(Act()->LogFile(), "Infinate Loop in CAstTree::TraverseTree  Line:%d Col:%d\n",
 				Act()->GetParser()->GetLexer()->GetLineNumber(),

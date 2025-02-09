@@ -43,7 +43,7 @@ bool CAstNode::Create(
 )
 {
 	CAstNode* pNode = 0;
-	int LoopCount = 30;
+	int LoopCount = 300;
 	bool rV = true;
 
 	SetSymbol(pSym);

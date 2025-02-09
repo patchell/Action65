@@ -13,11 +13,14 @@ INTERRUPT AnInteruption()
 	CHAR e
 
 	ASM {
-	ADC ($52),.Y
+	:START ADC ($52),.Y
 	LDA #$55
 	PHA
 	TYA
-	PHA
+	:HERE: PHA
+	JMP $BAD1
+	JMP ($432A)
+	JSR $F00D
 	PLA
 	TAY
 	PLA
@@ -25,11 +28,43 @@ INTERRUPT AnInteruption()
 	RTS
 	RTI
 	ADC ($44, .X)
-//	SUB $12
-//	CMP $13,.X
-//	AND $400,.X
-//	ORA $410,.Y
-//	ASL .A
+	SBC $12
+	CMP $13 , .X
+	AND $400,.X
+	ORA $410,.Y
+	CPX #23
+	CPX $B0
+	CPX $A8EE
+	ASL $8C
+	ASL $8B,.X
+	ASL $AACC
+	ASL $CCAA,.X
+	ASL .A
+	LDX #$1F
+	LDX $C1
+	LDX $C2,.Y
+	LDX $56AB
+	LDX $64BE,.Y
+	LDY #$1F
+	LDY $C1
+	LDY $C2,.X
+	LDY $56AB
+	LDY $64BE,.X
+	STY $7C
+	STY $7D,.X
+	STY $D00D
+	STX $62
+	STX $63,.Y
+	STX $B00B
+
+	INC $D0
+	INC $62, .X
+	INC $63DA
+	INC $B00B, .X
+	DEC $D0
+	DEC $62, .X
+	DEC $63DA
+	DEC $B00B, .X
 	}
 	RTI
 
