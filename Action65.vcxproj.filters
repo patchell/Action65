@@ -25,13 +25,13 @@
       <UniqueIdentifier>{75978b1d-1d29-491d-b1fa-78e0e644189f}</UniqueIdentifier>
       <Extensions>md</Extensions>
     </Filter>
-    <Filter Include="Binary">
-      <UniqueIdentifier>{35343137-6ad7-45eb-b479-e1091a8c5d54}</UniqueIdentifier>
-      <Extensions>.exe</Extensions>
-    </Filter>
     <Filter Include="LogFiles">
       <UniqueIdentifier>{a5ee637a-8dbf-407e-b306-ff30332592b4}</UniqueIdentifier>
       <Extensions>.txt</Extensions>
+    </Filter>
+    <Filter Include="Bin">
+      <UniqueIdentifier>{f7ebbfe5-9ce1-41a8-bd41-b5010090d409}</UniqueIdentifier>
+      <Extensions>exe</Extensions>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -1125,8 +1125,8 @@
     <None Include="test3.act">
       <Filter>Action</Filter>
     </None>
-    <None Include="x64\Debug\action.exe">
-      <Filter>Binary</Filter>
+    <None Include="Bin\action.exe">
+      <Filter>Bin</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
