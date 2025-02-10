@@ -34,6 +34,10 @@ FILE* CParser::LogFile()
 
 CLkHead CParser::Run()
 {
+	//-------------------------------------
+	// Run
+	// Run the parser and catch exceptions
+	//-------------------------------------
 	CLkHead LookaHead;
 	CAct65ROOT* pRoot = 0;
 

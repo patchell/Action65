@@ -29,6 +29,10 @@
       <UniqueIdentifier>{35343137-6ad7-45eb-b479-e1091a8c5d54}</UniqueIdentifier>
       <Extensions>.exe</Extensions>
     </Filter>
+    <Filter Include="LogFiles">
+      <UniqueIdentifier>{a5ee637a-8dbf-407e-b306-ff30332592b4}</UniqueIdentifier>
+      <Extensions>.txt</Extensions>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Bin.cpp">
@@ -1124,5 +1128,10 @@
     <None Include="x64\Debug\action.exe">
       <Filter>Binary</Filter>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="log.txt">
+      <Filter>LogFiles</Filter>
+    </Text>
   </ItemGroup>
 </Project>
