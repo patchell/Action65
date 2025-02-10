@@ -1,26 +1,31 @@
 #include "pch.h"
 
-CAct65SECTIONname::CAct65SECTIONname()
+CAct65SECTIONattributes::CAct65SECTIONattributes()
 {
 }
 
-CAct65SECTIONname::~CAct65SECTIONname()
+CAct65SECTIONattributes::~CAct65SECTIONattributes()
 {
 }
 
-bool CAct65SECTIONname::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
+bool CAct65SECTIONattributes::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
-	SetNodeType(NodeType::SECTION_NAME);
+	SetNodeType(NodeType::SECTION_ATTRIBUTES);
 	SetNodeName(m_pNodeTyypeName);
 	return CAstNode::Create(pChild, pNext, pSym);
 }
 
-CValue* CAct65SECTIONname::Process()
+CValue* CAct65SECTIONattributes::Process()
 {
 	return nullptr;
 }
 
-int CAct65SECTIONname::Print(int Indent, char* s, int Strlen)
+int CAct65SECTIONattributes::PrintNode(FILE* pOut, int Indent)
+{
+	return 0;
+}
+
+int CAct65SECTIONattributes::Print(int Indent, char* s, int Strlen)
 {
 	int i = 0, l = 0;
 	int Id, Child, Next;
@@ -45,9 +50,4 @@ int CAct65SECTIONname::Print(int Indent, char* s, int Strlen)
 	size = Strlen - l;
 	l += sprintf_s(&s[l], size, "+- \'%s\'", GetNodeName());
 	return l;
-}
-
-int CAct65SECTIONname::PrintNode(FILE* pOut, int Indent)
-{
-	return CAstNode::PrintNode(pOut, Indent);
 }

@@ -552,6 +552,12 @@
     <ClCompile Include="Act65SECTIONname.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Act65SET.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Act65SECTIONattributes.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -1080,6 +1086,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Act65SECTIONname.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Act65SET.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Act65SECTIONattributes.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

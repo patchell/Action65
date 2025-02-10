@@ -715,6 +715,8 @@ public:
 #include "Act65PSReg.h"
 #include "Act65PROCasm.h"
 #include "Act65SECTIONname.h"
+#include "Act65SET.h"
+#include "Act65SECTIONattributes.h"
 #include "AstTree.h"
 #include "ActionAstTree.h"
 

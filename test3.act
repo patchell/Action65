@@ -5,6 +5,11 @@ BYTE gg,hh,ii,jj,kk
 
 MODULE
 
+DEFINE SECTION RAM [
+	START = $200,
+	SIZE = $400
+]
+
 INTERRUPT AnInteruption()
 	CHAR a
 	INT x,xx,xxx

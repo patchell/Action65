@@ -287,67 +287,67 @@ private:
 		{ Token::ADC,"adc", 3 ,0X61, Processor::R6502, &LUT_Order8,8 },
 		{ Token::AND,"and", 3,0X21, Processor::R6502, &LUT_Order8,8 },
 		{ Token::ASL,"asl", 3,0X06, Processor::R6502, &LUT_Order5,5 },
-		{ Token::BCC,"bcc", 2,0x90, Processor::R6502, NULL,0 },
-		{ Token::BCS,"bcs", 2,0XB0, Processor::R6502, NULL,0 },
-		{ Token::BEQ,"beq", 2,0XF0, Processor::R6502, NULL,0 },
-		{ Token::BMI,"bmi", 2,0x30, Processor::R6502, NULL,0 },
-		{ Token::BNE,"bne", 2,0XD0, Processor::R6502, NULL,0 },
-		{ Token::BPL,"bpl", 2,0x10, Processor::R6502, NULL,0 },
-		{ Token::BVC,"bvc", 2,0x50, Processor::R6502, NULL,0 },
-		{ Token::BVS,"bvs", 2,0x70, Processor::R6502, NULL,0 },
+		{ Token::BCC,"bcc", 2,0x90, Processor::R6502, &LUT_Relative,1 },
+		{ Token::BCS,"bcs", 2,0XB0, Processor::R6502, &LUT_Relative,1 },
+		{ Token::BEQ,"beq", 2,0XF0, Processor::R6502, &LUT_Relative,1 },
+		{ Token::BMI,"bmi", 2,0x30, Processor::R6502, &LUT_Relative,1 },
+		{ Token::BNE,"bne", 2,0XD0, Processor::R6502, &LUT_Relative,1 },
+		{ Token::BPL,"bpl", 2,0x10, Processor::R6502, &LUT_Relative,1 },
+		{ Token::BVC,"bvc", 2,0x50, Processor::R6502, &LUT_Relative,1 },
+		{ Token::BVS,"bvs", 2,0x70, Processor::R6502, &LUT_Relative,1 },
 		{ Token::BIT,"bit", 3,0X24, Processor::R6502, &LUT_Order2_BIT,2 },
-		{ Token::BRK,"brk", 1,0x00, Processor::R6502, NULL,0 },
-		{ Token::CLC,"clc", 1,0X18, Processor::R6502, NULL,0 },
-		{ Token::CLD,"cld", 1,0xd8, Processor::R6502, NULL,0 },
-		{ Token::CLI,"cli", 1,0X58, Processor::R6502, NULL,0 },
-		{ Token::CLV,"clv", 1,0xb8, Processor::R6502, NULL,0 },
+		{ Token::BRK,"brk", 1,0x00, Processor::R6502, &LUT_Implied,1 },
+		{ Token::CLC,"clc", 1,0X18, Processor::R6502, &LUT_Implied,1 },
+		{ Token::CLD,"cld", 1,0xd8, Processor::R6502,&LUT_Implied,1 },
+		{ Token::CLI,"cli", 1,0X58, Processor::R6502,&LUT_Implied,1 },
+		{ Token::CLV,"clv", 1,0xb8, Processor::R6502, &LUT_Implied,1 },
 		{ Token::CMP,"cmp", 3,0xc1, Processor::R6502, &LUT_Order8,8 },
 		{ Token::CPX,"cpx", 3,0XE0, Processor::R6502, &LUT_Order3__CPY_CPX,3 },
 		{ Token::CPY,"cpy", 3,0XC0, Processor::R6502, &LUT_Order3__CPY_CPX,3 },
 		{ Token::DEC,"dec", 3,0xc6, Processor::R6502, &LUT_Order4,4 },
-		{ Token::DEX,"dex", 1,0xca, Processor::R6502, NULL,0 },
-		{ Token::DEY,"dey", 1,0x88, Processor::R6502, NULL,0 },
+		{ Token::DEX,"dex", 1,0xca, Processor::R6502, &LUT_Implied,1 },
+		{ Token::DEY,"dey", 1,0x88, Processor::R6502, &LUT_Implied,1 },
 		{ Token::EOR,"eor", 3,0X41, Processor::R6502, &LUT_Order8,8 },
 		{ Token::INC,"inc", 3,0xe6, Processor::R6502, &LUT_Order4,4 },
-		{ Token::INX,"inx", 1,0xe8, Processor::R6502, NULL,0 },
-		{ Token::INY,"iny", 1,0xc8, Processor::R6502, NULL,0 },
+		{ Token::INX,"inx", 1,0xe8, Processor::R6502, &LUT_Implied,1 },
+		{ Token::INY,"iny", 1,0xc8, Processor::R6502, &LUT_Implied,1 },
 		{ Token::JMP,"jmp", 3,0X4C, Processor::R6502, &LUT_Order2,2 },
 		{ Token::JSR,"jsr", 3,0x20, Processor::R6502, &LUT_Order1,1 },
 		{ Token::LDA,"lda", 3,0xa1, Processor::R6502, &LUT_Order8,8 },
 		{ Token::LDX,"ldx", 3,0xA2, Processor::R6502, &LUT_Order5_LDX,5 },
 		{ Token::LDY,"ldy", 3,0xa0, Processor::R6502, &LUT_Order5_LDY,5 },
 		{ Token::LSR,"lsr", 3,0X46, Processor::R6502, &LUT_Order5,5 },
-		{ Token::NOP,"nop", 1,0xea, Processor::R6502, NULL,0 },
+		{ Token::NOP,"nop", 1,0xea, Processor::R6502, &LUT_Implied,1 },
 		{ Token::ORA,"ora", 3,0X01, Processor::R6502, &LUT_Order8,8 },
-		{ Token::PHA,"pha", 1,0X48, Processor::R6502, NULL,0 },
-		{ Token::PLA,"pla", 1,0x68, Processor::R6502, NULL,0 },
-		{ Token::PHP,"php", 1,0X08, Processor::R6502, NULL,0 },
-		{ Token::PLP,"plp", 1,0X28, Processor::R6502, NULL,0 },
+		{ Token::PHA,"pha", 1,0X48, Processor::R6502, &LUT_Implied,1 },
+		{ Token::PLA,"pla", 1,0x68, Processor::R6502, &LUT_Implied,1 },
+		{ Token::PHP,"php", 1,0X08, Processor::R6502, &LUT_Implied,1 },
+		{ Token::PLP,"plp", 1,0X28, Processor::R6502, &LUT_Implied,1 },
 		{ Token::ROL,"rol",3,0X26, Processor::R6502, &LUT_Order5,5 },
 		{ Token::ROR,"ror",3,0X66, Processor::R6502, &LUT_Order5,5 },
-		{ Token::RTI,"rti", 1,0x40, Processor::R6502, NULL,0 },
-		{ Token::RTS,"rts", 1,0x60, Processor::R6502, NULL,0 },
+		{ Token::RTI,"rti", 1,0x40, Processor::R6502, &LUT_Implied,1 },
+		{ Token::RTS,"rts", 1,0x60, Processor::R6502, &LUT_Implied,1 },
 		{ Token::SBC,"sbc",3,0xe1, Processor::R6502, &LUT_Order8,8 },
 		{ Token::STA,"sta",3,0x81, Processor::R6502, &LUT_Order7,7 },
-		{ Token::SEC,"sec", 1,0x38, Processor::R6502, NULL,0 },
-		{ Token::SED,"sed", 1,0Xf8, Processor::R6502, NULL,0 },
-		{ Token::SEI,"sei", 1,0x78, Processor::R6502, NULL,0 },
+		{ Token::SEC,"sec", 1,0x38, Processor::R6502, &LUT_Implied,1 },
+		{ Token::SED,"sed", 1,0Xf8, Processor::R6502, &LUT_Implied,1 },
+		{ Token::SEI,"sei", 1,0x78, Processor::R6502, &LUT_Implied,1 },
 		{ Token::STX,"stx",3,0x86, Processor::R6502, &LUT_Order3_STX,3 },
 		{ Token::STY,"sty",3,0x84, Processor::R6502, &LUT_Order3_STY,3 },
-		{ Token::TAX,"tax", 1,0xaa, Processor::R6502, NULL,0 },
-		{ Token::TAY,"tay", 1,0xa8, Processor::R6502, NULL,0 },
-		{ Token::TXA,"txa", 1,0x8a, Processor::R6502, NULL,0 },
-		{ Token::TYA,"tya", 1,0x98, Processor::R6502, NULL,0 },
-		{ Token::TXS,"txs", 1,0x9a, Processor::R6502, NULL,0 },
-		{ Token::TSX,"tsx", 1,0xba, Processor::R6502, NULL,0 },
+		{ Token::TAX,"tax", 1,0xaa, Processor::R6502, &LUT_Implied,1 },
+		{ Token::TAY,"tay", 1,0xa8, Processor::R6502, &LUT_Implied,1 },
+		{ Token::TXA,"txa", 1,0x8a, Processor::R6502, &LUT_Implied,1 },
+		{ Token::TYA,"tya", 1,0x98, Processor::R6502, &LUT_Implied,1 },
+		{ Token::TXS,"txs", 1,0x9a, Processor::R6502, &LUT_Implied,1 },
+		{ Token::TSX,"tsx", 1,0xba, Processor::R6502, &LUT_Implied,1 },
 		//--------------------------------------------
 		// W65C02 Opcodes
 		//--------------------------------------------
-		{ Token::BRA,"bra", 2,0xba, Processor::W65C02, NULL,0 },	//  Branch Always
-		{ Token::PHX,"phx", 1,0xba, Processor::W65C02, NULL,0 },	// push index reg X
-		{ Token::PHY,"phy", 1,0xba, Processor::W65C02, NULL,0 },	// push Y register
-		{ Token::PLX,"plx", 1,0xba, Processor::W65C02, NULL,0 },	// pop stack to X
-		{ Token::PLY,"ply", 1,0xba, Processor::W65C02, NULL,0 },	// pop stack to Y
+		{ Token::BRA,"bra", 2,0xba, Processor::W65C02, &LUT_Relative,1 },	//  Branch Always
+		{ Token::PHX,"phx", 1,0xba, Processor::W65C02, &LUT_Implied,1 },	// push index reg X
+		{ Token::PHY,"phy", 1,0xba, Processor::W65C02, &LUT_Implied,1 },	// push Y register
+		{ Token::PLX,"plx", 1,0xba, Processor::W65C02, &LUT_Implied,1 },	// pop stack to X
+		{ Token::PLY,"ply", 1,0xba, Processor::W65C02, &LUT_Implied,1 },	// pop stack to Y
 		{ Token::STZ,"stz", 3,0xba, Processor::W65C02, NULL,0 },	// Store Zero to Memory
 		{ Token::TRB,"trb", 3,0xba, Processor::W65C02, NULL,0 },	// Test and reset bits
 		{ Token::TSB,"tsb", 3,0xba, Processor::W65C02, NULL,0 },	// Test and Set bits
@@ -446,6 +446,7 @@ public:
 	// Symbol Methods
 	//--------------------------------------
 	CSymbol* GetLexSymbol() { return m_pLexSymbol; }
+	CSection* GetLexSection() { return (CSection*)m_pLexSymbol; }
 	int GetLexValue() { return m_LexValue; }
 	char* GetLexBuffer() { return m_aLexBuff; }
 	int GetLineNumber() { return m_Line; }

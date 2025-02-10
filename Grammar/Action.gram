@@ -41,12 +41,18 @@
 // I am also amazed at how much I learn about writing
 // parsers every time some little thing goes wrong
 //
+// VERSION 0.0.7
+// Added 'SET' Keyword for both Assembler and Action
+// Compiler.  Added Section definition to Action
+// Compiler as well
+//
 //----------------------------------
 
 TERMINALS
 	"IDENT" = 256,
 	"NUMBER",
 	"STRING",
+	"SET",
 	"VECTOR",
 	"MODULE",
 	"RETURN",
@@ -102,6 +108,7 @@ TERMINALS
 	"ASM",
 	//Assembler Tokens
 	"SECTION",
+	"SECTION_NAME",
 	"START",
 	"SIZE",
 	"MODE",
@@ -230,11 +237,21 @@ GRAMMAR
 //--------------------------------
 Action65	-> Modules;
 
-Modules		-> SysDecl Modules_1;
-Modules_1	-> 'MODULE' SysDecl Modules_1
+Modules		-> Set Modules_1;
+Modules_1	-> 'MODULE' Set Modules_1
 			-> .
 			;
 
+Set			-> SysDecl Set_1;
+Set_1		-> 'SET' SetObjects SysDecl Set_1
+			-> .
+			;
+
+SetObjects	-> 'SECTION' SetSectionName
+			-> .
+			;
+
+SetSectionName		-> 'SECTION_NAME';
 
 //------------------------------------------
 // Grammar for code
@@ -618,8 +635,6 @@ ArrayIndex			-> '(' ArithExpr ')'
 Factor				-> '(' RelOperation ')'
 					-> .
 					;
-
-
 		 
 //-------------------------------------------
 // Declarations Grammars
@@ -644,9 +659,15 @@ VectorAddress	-> '('  CompConst;
 // DEFINE declaration  Sort of a MACRO defination
 //-------------------------------------------
 Define		-> TypeDefDecl Define_1;
-Define_1	-> 'DEFINE' DefList TypeDefDecl Define
+Define_1	-> 'DEFINE' DefObject TypeDefDecl Define
 			-> .
 			;
+
+DefObject	-> DefList DefObject_1;
+DefObject_1	-> 'SECTION' SectionName
+			-> DefList
+			;
+
 DefList	-> Def DefList_1;
 DefList_1	-> ',' Def DefList_1
 			-> .
@@ -661,6 +682,7 @@ TypeDefDecl		-> Declare TypeDefDecl_1;
 TypeDefDecl_1	-> 'TYPE' EndTypeDef Declare TypeDefDecl_1
 				-> .
 				;
+
 EndTypeDef		-> RecDefField EndTypeDef_1;
 EndTypeDef_1	-> ']'
 				-> .
@@ -901,8 +923,8 @@ BaseCompConst	-> 'NUMBER'
 //	Statements
 //----------------------------------------
 
-AsmStmt			-> Section Processor_1;
-Processor_1		-> 'PROCESSOR' ProcessorType Section Processor_1
+AsmStmt			-> AsmSet Processor_1;
+Processor_1		-> 'PROCESSOR' ProcessorType AsmSet Processor_1
 				-> .
 				;
 ProcessorType	-> 'R6502'
@@ -918,8 +940,23 @@ ProcessorType	-> 'R6502'
 //-----------------------------------------
 
 //-----------------------------------------
+// SET
+//-----------------------------------------
+AsmSet		-> Section AsmSet_1;
+AsmSet_1	-> 'SET' AsmSetObjects Section AsmSet_1
+			-> .
+			;
+
+AsmSetObjects	-> 'SECTION' AsmSectionName
+				-> .
+				;
+
+AsmSectionName	-> SECTION_NAME;
+				
+//-----------------------------------------
 // SECITON
 //-----------------------------------------
+
 Section		-> Org Section_1;
 Section_1	-> 'SECTION' SectionName Org Section_1
 				-> .

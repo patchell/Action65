@@ -64,7 +64,7 @@ int CAct65Label::Print(int Indent, char* s, int Strlen)
 	size = Strlen - l;
 	l += sprintf_s(&s[l], size, "+- \'%s\'", GetNodeName());
 	size = Strlen - l;
-	l += sprintf_s(&s[l], size, "+- \'%s\' ($%04X)", GetSymbol()->GetName(), GetValue()->GetConstVal());
+	l += sprintf_s(&s[l], size, "- \'%s\' ($%04X)", GetSymbol()->GetName(), GetValue()->GetConstVal());
 	return l;
 }
 

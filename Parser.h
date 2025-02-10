@@ -73,6 +73,12 @@ private:
 	//---------------------------------
 	CLkHead Action65(CLkHead LookaHead);
 	CLkHead Modules(CLkHead LookaHead);
+	//---------------------------------
+	// SET
+	//---------------------------------
+	CLkHead Set(CLkHead LookaHead);
+	CLkHead SetObjects(CLkHead LookaHead);
+	CLkHead SetSectionName(CLkHead LookaHead);
 	//------------------------------------------
 	// Statements
 	//------------------------------------------
@@ -136,7 +142,7 @@ private:
 	CLkHead Break(CLkHead LookaHead);
 	//---- RTI
 	CLkHead Rti(CLkHead LookaHead);
-	//---- Assogmemt
+	//---- Assigmemt
 	CLkHead Assignment(CLkHead LookaHead);
 	//--------------------------------------
 	// Logical Expressions
@@ -179,6 +185,7 @@ private:
 	// DEFINE
 	//------------------------------------------
 	CLkHead Define(CLkHead LookaHead);
+	CLkHead DefObject(CLkHead LookaHead);
 	CLkHead DefList(CLkHead LookaHead);
 	CLkHead Def(CLkHead LookaHead);
 	//--------------------------------------
@@ -265,6 +272,12 @@ private:
 	// code that is executed
 	//-----------------------------------------
 
+	//-----------------------------------------
+	// SET
+	//-----------------------------------------
+	CLkHead AsmSet(CLkHead LookaHead);
+	CLkHead AsmSetObjects(CLkHead LookaHead);
+	CLkHead AsmSectionName(CLkHead LookaHead);
 	//-----------------------------------------
 	// SECITON
 	//-----------------------------------------
