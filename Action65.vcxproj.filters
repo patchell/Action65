@@ -25,6 +25,10 @@
       <UniqueIdentifier>{75978b1d-1d29-491d-b1fa-78e0e644189f}</UniqueIdentifier>
       <Extensions>md</Extensions>
     </Filter>
+    <Filter Include="Binary">
+      <UniqueIdentifier>{35343137-6ad7-45eb-b479-e1091a8c5d54}</UniqueIdentifier>
+      <Extensions>.exe</Extensions>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Bin.cpp">
@@ -1113,6 +1117,12 @@
     </None>
     <None Include="test2.act">
       <Filter>Action</Filter>
+    </None>
+    <None Include="test3.act">
+      <Filter>Action</Filter>
+    </None>
+    <None Include="x64\Debug\action.exe">
+      <Filter>Binary</Filter>
     </None>
   </ItemGroup>
 </Project>

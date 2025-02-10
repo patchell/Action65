@@ -495,8 +495,10 @@
     <None Include="Grammar\Action.gram" />
     <None Include="README.md" />
     <None Include="test2.act" />
+    <None Include="test3.act" />
     <None Include="test4.act" />
     <None Include="test5.act" />
+    <None Include="x64\Debug\action.exe" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
