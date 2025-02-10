@@ -1,6 +1,19 @@
 This is yet another attempt on my part to create an ACTION! cross compiler 
 for the 6502.
 
+Feb 10, 2025
+
+Added, finally, the binary file.  Please keep in mind this
+thing is no where near complete.  But, you still might have
+some fun with it.  It most likely will either crash, or hang 
+if you do anything that hasn't beeb finished, which covers
+pretty much the whole thing.
+
+The only file that I know will compile is "test3.act"
+
+Also, if you want to compile the program, you will need at
+least C++ 20
+
 Feb 8, 2025
 
 Making loads of progress.  The inline assembler AST geration is
