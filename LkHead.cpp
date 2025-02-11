@@ -50,6 +50,7 @@ void CLkHead::AddNode(CAstNode* pN)
 			pNode = pNode->GetNext();
 		}
 		pNode->SetNext(pN);
+		pN->SetPrev(pNode);
 	}
 	else
 		SetNode(pN);

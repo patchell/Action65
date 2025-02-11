@@ -118,6 +118,7 @@ private:
 		{Token::ENDOFFILE,"End Of File"},		//1
 		{Token::IDENT," IDENT"},					//2
 		{Token::NUMBER,"NUMBER"},				//3
+		{Token::CUR_LOC, "Current Location"},
 		{Token::MOD,"MOD"},
 		{Token::DEFINED_IDENT, "DEFINED IDENT"},
 		//--------- Assignment -------------

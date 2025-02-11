@@ -17,6 +17,7 @@ INTERRUPT AnInteruption()
 	CHAR d
 	CHAR e
 
+	e = x + xxx * a - xx
 	ASM {
 	PROCESSOR R6502
 SECTION ROM [
@@ -29,6 +30,7 @@ SECTION ROM [
 				DL 550066
 :Storage:	DS $A7F
 :START ADC ($52),.Y
+	LDA xxx
 	LDA #$55
 	PHA
 	TYA

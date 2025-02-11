@@ -26,6 +26,7 @@ enum  class Token {
 	IDENT = 256,	//2
 	STRING,			//3
 	NUMBER,			//4
+	CUR_LOC,
 	DEFINED_IDENT,
 	//------ Assignment
 	ASSIGN_ADD,		//5

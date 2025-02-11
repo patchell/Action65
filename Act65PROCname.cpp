@@ -44,6 +44,15 @@ int CAct65PROCname::Print(int Indent, char* s, int Strlen)
 	}
 	size = Strlen - l;
 	l += sprintf_s(&s[l], size, "+- \'%s\'", GetNodeName());
+	if (GetSymbol())
+	{
+		if (GetSymbol()->GetName())
+		{
+			char* z = GetSymbol()->GetName();
+			size = Strlen - l;
+			l += sprintf_s(&s[l], size, " - \'%s\'", z);
+		}
+	}
 	return l;
 }
 

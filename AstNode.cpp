@@ -51,21 +51,22 @@ bool CAstNode::Create(
 	pNode = pChild;
 	if (pNode)
 	{
-		while (pNode->GetNext())
-		{
-			--LoopCount;
-			if (!LoopCount)
-			{
-				fprintf(Act()->LogFile(), "Infinate Loop in CAstNode::Create  Line:%d Col:%d\n",
-					Act()->GetParser()->GetLexer()->GetLineNumber(),
-					Act()->GetParser()->GetLexer()->GetColunm()
-				);
-				Act()->CloseAll();
-				Act()->Exit(19);
-			}
-			pNode = pNode->GetNext();
-		}
-		pNode->SetNext(pNext);
+		pNode->AddThatToThisNext(pNext);
+		//while (pNode->GetNext())
+		//{
+		//	--LoopCount;
+		//	if (!LoopCount)
+		//	{
+		//		fprintf(Act()->LogFile(), "Infinate Loop in CAstNode::Create  Line:%d Col:%d\n",
+		//			Act()->GetParser()->GetLexer()->GetLineNumber(),
+		//			Act()->GetParser()->GetLexer()->GetColunm()
+		//		);
+		//		Act()->CloseAll();
+		//		Act()->Exit(19);
+		//	}
+		//	pNode = pNode->GetNext();
+		//}
+		//pNode->SetNext(pNext);
 	}
 	return rV;
 }
@@ -169,7 +170,7 @@ void CAstNode::InsertThatIntoThisNext(CAstNode* pN)
 void CAstNode::AddThatToThisNext(CAstNode* pN)
 {
 	CAstNode* pNode = this;
-	int LoopCount = 10;
+	int LoopCount = 1000;
 	const char* pSthis = 0, * pSthat = 0;
 	CSymbol* pSym = 0;
 
@@ -190,7 +191,6 @@ void CAstNode::AddThatToThisNext(CAstNode* pN)
 					Act()->GetParser()->GetLexer()->GetLineNumber(),
 					Act()->GetParser()->GetLexer()->GetColunm()
 				);
-				Act()->CloseAll();
 				Act()->Exit(20);
 			}
 			//fprintf(Act()->LogFile(), "\t%s NODE ID=%d ",pNode->GetNodeName(), pNode->GetID());
@@ -219,30 +219,7 @@ void CAstNode::AddThatToThisNext(CAstNode* pN)
 
 void CAstNode::SetChild(CAstNode* pAN)
 {
-	//CAstNode* pC = m_pChild;
-	//int RecursionCount = 10;
-
-	//while (pC && RecursionCount)
-	//{
-	//	fprintf(Act()->LogFile(), "\tSetChild Name:%s", pC->GetNodeName());
-	//	if(pC->GetSymbol())
-	//		fprintf(Act()->LogFile(), " Sym Name:%s", pC->GetSymbol()->GetName());
-	//	pC = pC->GetNext();
-	//	--RecursionCount;
-	//	if (RecursionCount == 0)
-	//		fprintf(Act()->LogFile(), "-This is just wrong\n");
-	//	else
-	//		fprintf(Act()->LogFile(), "\n");
-	//}
-	//if (pAN)
-	//{
-	//	fprintf(Act()->LogFile(), "Set Child Node Of %s", GetNodeName());
-	//	if(GetSymbol())
-	//		fprintf(Act()->LogFile(), ":Sym:%s ", GetSymbol()->GetName());
-	//	fprintf(Act()->LogFile(), " To %s" ,pAN->GetNodeName());
-	//	if (pAN->GetSymbol())
-	//		fprintf(Act()->LogFile(), ":Sym:%s", pAN->GetSymbol()->GetName());
-	//	fprintf(Act()->LogFile(), "\n");
-	//}
 	m_pChild = pAN;
+	if(pAN)
+		pAN->SetParent(this);
 }

@@ -1,6 +1,16 @@
 This is yet another attempt on my part to create an ACTION! cross compiler 
 for the 6502.
 
+Compatability Issues with the real ACTION!
+1. Action! used the '*' character to mean "Current Location".
+	Unfortunatly, this has a conflict with the meaning
+	of Multiply, so I had to make the current location
+	Symbol be '.*'  :(
+	Hopefully, in the future I will find a way to fix
+	this conflict.
+
+
+
 Feb 10, 2025
 
 Added, finally, the binary file.  Please keep in mind this

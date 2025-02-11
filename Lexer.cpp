@@ -474,6 +474,15 @@ Token CLexer::Lex()
 						TokenValue = Token::ZERO;
 						m_FileIndex++;
 						break;
+					case '*':
+						//-------------------------------------
+						// 	Unfortunatly, this has a conflict with the meaning
+						// of Multiply, so I had to make the current location
+						//	Symbol be '.*' : (
+						//-------------------------------------
+						TokenValue = Token::CUR_LOC;
+						m_FileIndex++;
+						break;
 					default:
 						TokenValue = Token('.');
 						break;
