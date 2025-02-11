@@ -18,7 +18,17 @@ INTERRUPT AnInteruption()
 	CHAR e
 
 	ASM {
-	:START ADC ($52),.Y
+	PROCESSOR R6502
+SECTION ROM [
+	START = $F000,
+	SIZE = $1000
+]
+	ORG $4000
+	:SomeData	DB 5
+				DW 599
+				DL 550066
+:Storage:	DS $A7F
+:START ADC ($52),.Y
 	LDA #$55
 	PHA
 	TYA
@@ -28,10 +38,12 @@ INTERRUPT AnInteruption()
 	JSR $F00D
 	PLA
 	TAY
+	PROC AsmProc BEGIN
 	PLA
 	STA $1000
 	RTS
 	RTI
+	EPROC
 	ADC ($44, .X)
 	SBC $12
 	CMP $13 , .X

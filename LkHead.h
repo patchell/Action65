@@ -23,7 +23,7 @@ public:
 		m_pNode = pN;
 	}
 	void SetToken(Token T) { m_Token = T; }
-	Token GetToken() { return m_Token; }
+	Token GetToken() const { return m_Token; }
 	void SetNode(CAstNode* pN) { m_pNode = pN; }
 	CAstNode* GetNode() const {
 		return m_pNode;

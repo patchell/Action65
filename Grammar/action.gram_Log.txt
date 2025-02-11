@@ -1758,7 +1758,7 @@ TERMINALS['Terminals'] { 'IDENT','NUMBER','STRING','SET','VECTOR','MODULE','RETU
 ,'@','.','^','!','XOR','&','%','#','>','<','{','}','=','==+','==-','==*','==/','==MOD'
 ,'==&','==!','==XOR','==%','==LSH','==RSH','[',']',',',';','+','-','*','/','MOD','LSH'
 ,'RSH','(',')','NEG','CARRY','ZERO','OVERFLOW','CUR_LOC','AREG','PROCESSOR','R6502'
-,'WD65C02','WD65C816',':','CHAR_CONSTANT','e','$' }
+,'WD65C02','WD65C816','BEFIN',':','CHAR_CONSTANT','e','$' }
 NONTERMINALS['Non Terminals'] { 'Action65','Modules','Modules_1','Set','Set_1','SetObjects'
 ,'SetSectionName','Statements','ProcCall_1','ProcParams','ProcParams_1','ProcParamsEnd'
 ,'ProcParamsEnd_1','ForStmt','ForStmt_1','ForDOend','ForDOend_1','ForDO','ForDO_1'
@@ -1794,8 +1794,9 @@ NONTERMINALS['Non Terminals'] { 'Action65','Modules','Modules_1','Set','Set_1','
 ,'ProcessorType','AsmSet','AsmSet_1','AsmSetObjects','AsmSectionName','Section','Section_1'
 ,'SectionName','SectionName_1','SectionDef','SectionAttributesList','SectionAttributesList_1'
 ,'SectionAtribute','Modes','TrueFalse','Org','Org_1','DefineMemory','DefineMemory_1'
-,'DefineStorage','DefineStorage_1','Proceedure','Proceedure_1','Instruction','Instruction_1'
-,'Labels','Label_1','AluAdrModes','Indirect','Indirect_1','StaAddressingModes','ShiftAddressingModes'
+,'DefineStorage','DefineStorage_1','Proceedure','Proceedure_1','AsmProcEnd','AsmProcEnd_1'
+,'AsmProcBody','AsmProcBody_1','AsmProcName','Instruction','Instruction_1','Labels'
+,'Label_1','AluAdrModes','Indirect','Indirect_1','StaAddressingModes','ShiftAddressingModes'
 ,'RelAddressingMode','BitAddressModes','IncAddressingMOdes','JumpAddressingModes'
 ,'JumpIndirect','JumpDirect','CallAddressingMode','LdxAddressingMode','CPX_CPY_AddressingMode'
 ,'StxAddressingMode','LdyAddressingMode','StyAddressingMode','OptIndexReg','OptIndexReg_1'
@@ -2043,7 +2044,12 @@ FIRST['DefineMemory_1'] { 'DB','DW','DL','DAS','DCS','e' }
 FIRST['DefineStorage'] { 'IDENT' }
 FIRST['DefineStorage_1'] { 'DS','e' }
 FIRST['Proceedure'] { 'IDENT' }
-FIRST['Proceedure_1'] { 'ASMPROC','e' }
+FIRST['Proceedure_1'] { 'PROC','e' }
+FIRST['AsmProcEnd'] { 'IDENT' }
+FIRST['AsmProcEnd_1'] { 'EPROC' }
+FIRST['AsmProcBody'] { 'IDENT' }
+FIRST['AsmProcBody_1'] { 'BEFIN' }
+FIRST['AsmProcName'] { 'IDENT' }
 FIRST['Instruction'] { 'e','IDENT' }
 FIRST['Instruction_1'] { 'ADC','AND','EOR','ORA','CMP','SBC','LDA','STA','ASL','ROL'
 ,'LSR','ROR','BCC','BCS','BEQ','BMI','BNE','BPL','BVC','BVS','BIT','BRK','CLC','CLD'
@@ -2466,16 +2472,21 @@ FOLLOW['Proceedure'] { 'DS','DB','DW','DL','DAS','DCS','ORG','SECTION','SET','PR
  }
 FOLLOW['Proceedure_1'] { 'DS','DB','DW','DL','DAS','DCS','ORG','SECTION','SET','PROCESSOR'
  }
-FOLLOW['Instruction'] { 'ASMPROC','DS','DB','DW','DL','DAS','DCS','ORG','SECTION','SET'
+FOLLOW['AsmProcEnd'] { }
+FOLLOW['AsmProcEnd_1'] { }
+FOLLOW['AsmProcBody'] { 'EPROC' }
+FOLLOW['AsmProcBody_1'] { 'EPROC' }
+FOLLOW['AsmProcName'] { 'BEFIN' }
+FOLLOW['Instruction'] { 'PROC','DS','DB','DW','DL','DAS','DCS','ORG','SECTION','SET'
 ,'PROCESSOR' }
-FOLLOW['Instruction_1'] { 'ASMPROC','DS','DB','DW','DL','DAS','DCS','ORG','SECTION'
-,'SET','PROCESSOR' }
+FOLLOW['Instruction_1'] { 'PROC','DS','DB','DW','DL','DAS','DCS','ORG','SECTION','SET'
+,'PROCESSOR' }
 FOLLOW['Labels'] { 'ADC','AND','EOR','ORA','CMP','SBC','LDA','STA','ASL','ROL','LSR'
 ,'ROR','BCC','BCS','BEQ','BMI','BNE','BPL','BVC','BVS','BIT','BRK','CLC','CLD','CLI'
 ,'CLV','DEX','DEY','INX','INY','NOP','PHA','PLA','PHP','PLP','RTI','RTS','SEC','SED'
 ,'SEI','TAX','TAY','TXA','TYA','TXS','TSX','INC','DEC','JMP','JSR','CPX','CPY','LDX'
-,'LDY','STX','STY','ASMPROC','DS','DB','DW','DL','DAS','DCS','ORG','SECTION','SET'
-,'PROCESSOR' }
+,'LDY','STX','STY','PROC','DS','DB','DW','DL','DAS','DCS','ORG','SECTION','SET','PROCESSOR'
+ }
 FOLLOW['Label_1'] { }
 FOLLOW['AluAdrModes'] { }
 FOLLOW['Indirect'] { }
@@ -2507,5 +2518,5 @@ FOLLOW['AsmConstAddSub'] { '>','<',',',')','(' }
 FOLLOW['AsmConstAddSub_1'] { '>','<',',',')','(' }
 FOLLOW['BaseAsmConstant'] { '+','-','>','<',',',')','(' }
 ---------------- Create Parse Table --------------
-Table Entries = 1820
+Table Entries = 1825
 ------------ Check For Conflicts-------------

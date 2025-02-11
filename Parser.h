@@ -305,6 +305,9 @@ private:
 	// Proceedure
 	//-------------------------------------
 	CLkHead Proceedure(CLkHead LookaHead);
+	CLkHead AsmProcEnd(CLkHead LookaHead);
+	CLkHead AsmProcBody(CLkHead LookaHead);
+	CLkHead AsmProcName(CLkHead LookaHead);
 	//--------------------------------------
 	// Opcodes
 	//--------------------------------------

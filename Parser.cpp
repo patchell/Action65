@@ -5711,12 +5711,12 @@ CLkHead CParser::AsmStmt(CLkHead LookaHead)
 {
 	//--------------------------------------------------
 	//	AsmStmt		-> Section Processor_1;
-	//	Processor	->PROCESSOR ProcessorType Processor
+	//	Processor	->PROCESSOR ProcessorType Section Processor
 	//				-> .
 	//				;
 	//--------------------------------------------------
 	bool Loop = true;
-	CAstNode* pN= 0;
+	CAct65PROCESSOR* pN= 0;
 	CLkHead LHNext, LHChild;
 
 	PrintLookahead(LogFile(), LookaHead, "Enter AsmStmt", ++m_Recursion);
@@ -5734,7 +5734,7 @@ CLkHead CParser::AsmStmt(CLkHead LookaHead)
 			LHNext.AddNode(pN);
 			LHNext.SetToken(LHChild.GetToken());
 			//--------------------------------------------
-			LHNext = Section(LookaHead);
+			LHNext = Section(LHNext);
 			break;
 		default:
 			Loop = false;
@@ -6251,7 +6251,7 @@ CLkHead CParser::DefineMemory(CLkHead LookaHead)
 			LHNext = DefineStorage(LHNext);
 			break;
 		case Token::DL:
-			LookaHead = Expect(LHNext, Token::DL);
+			LHChild = Expect(LHNext, Token::DL);
 			LHChild.SetNode(0);
 			LHChild = AsmConstList(LHChild);
 			pNDL = new CAct65DL;
@@ -6354,8 +6354,8 @@ CLkHead CParser::DefineStorage(CLkHead LookaHead)
 CLkHead CParser::Proceedure(CLkHead LookaHead)
 {
 	//--------------------------------------------------
-	//	Procedure	-> Instruction Proceedure_1;
-	//	Procedure_1	-> PROC Section EPROC Instruction Proceedure_1
+	//	Proceedure		->Instruction Proceedure_1;
+	//	Proceedure_1	-> 'PROC' AsmProcEnd Instruction Proceedure_1
 	//					-> .
 	//					;
 	//--------------------------------------------------
@@ -6373,16 +6373,12 @@ CLkHead CParser::Proceedure(CLkHead LookaHead)
 		case Token::PROC:
 			LHChild = Expect(LHNext, Token::PROC);
 			LHChild.SetNode(0);
-			LHChild = Section(LHChild);
+			LHChild = AsmProcEnd(LHChild);
 			pN = new CAct65PROCasm;
-			pN->Create();
-			pN->SetChild(LHChild.GetNode());
+			pN->Create(LHChild.GetNode());
 			LHNext.AddNode(pN);
-			LHChild = Expect(LHChild, Token::EPROC);
-			pNEproc = new CAct65EPROC;
-			pNEproc->Create();
-			pN->GetChild()->AddThatToThisNext(pNEproc);
 			LHNext.SetToken(LHChild.GetToken());
+			//-----------------------------------
 			LHNext = Instruction(LHNext);
 			break;
 		default:
@@ -6393,6 +6389,82 @@ CLkHead CParser::Proceedure(CLkHead LookaHead)
 	PrintLookahead(LogFile(), LHNext, "Exit PROC", --m_Recursion);
 	return LHNext;
 }
+
+CLkHead CParser::AsmProcEnd(CLkHead LookaHead)
+{
+	//--------------------------------------------------
+	//	AsmProcEnd-> AsmProcBody AsmProcEnd_1;
+	//	AsmProcEnd_1	-> 'EPROC';
+	//--------------------------------------------------
+	CAct65EPROC* pN = 0;
+	CLkHead LHNext, LHChild;
+
+	LHNext = AsmProcBody(LookaHead);
+	switch (LHNext.GetToken())
+	{
+	case Token::EPROC:
+		LHChild = Expect(LHNext, Token::EPROC);
+		LHNext = LHChild;
+		break;
+	default:
+		break;
+	}
+	return LHNext;
+}
+
+CLkHead CParser::AsmProcBody(CLkHead LookaHead)
+{
+	//--------------------------------------------------
+	//	AsmProcBody		->AsmProcName AsmProcBody_1;
+	//	AsmProcBody_1	-> 'BEFIN' AsmStmt;
+	//--------------------------------------------------
+	CAct65EPROC* pN = 0;
+	CLkHead LHNext, LHChild;
+
+	LHNext = AsmProcName(LookaHead);
+	switch (LHNext.GetToken())
+	{
+	case Token::BEGIN:
+		LHChild = Expect(LHNext, Token::BEGIN);
+		LHChild.SetNode(0);
+		LHChild = AsmStmt(LHChild);
+		LHNext.AddNode(LHChild.GetNode());
+		LHNext.SetToken(LHChild.GetToken());
+		break;
+	default:
+		break;
+	}
+	return LHNext;
+}
+
+CLkHead CParser::AsmProcName(CLkHead LookaHead)
+{
+	//--------------------------------------------------
+	//	AsmProcName->IDENT;
+	//--------------------------------------------------
+	CLkHead LHNext, LHChild;
+	CAct65PROCasm* pN = 0;
+	CSymbol* pSym = 0;
+
+	LHNext = LookaHead;
+	switch (LHNext.GetToken())
+	{
+	case Token::IDENT:
+		pSym = GetLexer()->GetLexSymbol();
+		LHNext = Expect(LHNext, Token::IDENT);
+		pN = new CAct65PROCasm;
+		pN->Create(0, 0, pSym);
+		LHNext.AddNode(pN);
+		break;
+	default:
+		break;
+	}
+	return LHNext;
+}
+
+//--------------------------------------------------
+// Instruction Parsing
+//--------------------------------------------------
 
 CLkHead CParser::Instruction(CLkHead LookaHead)
 {
@@ -7209,6 +7281,7 @@ CLkHead CParser::AsmConstList(CLkHead LookaHead)
 	CLkHead LHNext, LHChild;
 
 	PrintLookahead(LogFile(), LookaHead, "Enter AsmConstList", ++m_Recursion);
+	LHNext = LookaHead;
 	switch (LHNext.GetToken())
 	{
 	case Token::STRING:

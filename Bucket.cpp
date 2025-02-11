@@ -9,7 +9,6 @@ CBucket::~CBucket()
 
 	while (pBin)
 	{
-		pBin->Print(stdout);
 		m_pHead = pBin->GetNext();
 		delete pBin;
 		pBin = m_pHead;

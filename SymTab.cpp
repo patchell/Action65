@@ -165,7 +165,6 @@ void CSymTab::PrintTable(FILE* pOut)
 	int maxStringLen = 0;
 	int l;
 
-	printf("------------ Symbol Table --------------\n");
 	fprintf(pOut, "------------ Symbol Table --------------\n");
 	//------------------------------
 	// Scan table to find longest

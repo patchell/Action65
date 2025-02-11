@@ -1025,9 +1025,18 @@ DefineStorage_1	-> 'DS' AsmConstant Proceedure DefineStorage_1
 // Proceedure
 //-------------------------------------
 Proceedure		-> Instruction Proceedure_1;
-Proceedure_1	-> 'ASMPROC' Section 'EPROC' Instruction Proceedure_1
+Proceedure_1	-> 'PROC' AsmProcEnd Instruction Proceedure_1
 				-> .
 				;
+
+AsmProcEnd		-> AsmProcBody AsmProcEnd_1;
+AsmProcEnd_1	-> 'EPROC';
+
+AsmProcBody		-> AsmProcName AsmProcBody_1;
+AsmProcBody_1	-> 'BEFIN' AsmStmt;
+	
+AsmProcName		-> IDENT;
+
 
 //--------------------------------------
 // Opcodes

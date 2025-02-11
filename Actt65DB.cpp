@@ -10,7 +10,9 @@ CAct65DB::~CAct65DB()
 
 bool CAct65DB::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
-    return false;
+	SetNodeType(NodeType::SECTION_NAME);
+	SetNodeName(m_pNodeTyypeName);
+	return CAstNode::Create(pChild, pNext, pSym);
 }
 
 CValue* CAct65DB::Process()
