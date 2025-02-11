@@ -6428,7 +6428,7 @@ CLkHead CParser::AsmProcBody(CLkHead LookaHead)
 		LHChild = Expect(LHNext, Token::BEGIN);
 		LHChild.SetNode(0);
 		LHChild = AsmStmt(LHChild);
-		LHNext.AddNode(LHChild.GetNode());
+		LHNext.GetNode()->SetChild(LHChild.GetNode());
 		LHNext.SetToken(LHChild.GetToken());
 		break;
 	default:
@@ -6443,7 +6443,7 @@ CLkHead CParser::AsmProcName(CLkHead LookaHead)
 	//	AsmProcName->IDENT;
 	//--------------------------------------------------
 	CLkHead LHNext, LHChild;
-	CAct65PROCasm* pN = 0;
+	CAct65PROCname* pN = 0;
 	CSymbol* pSym = 0;
 
 	LHNext = LookaHead;
@@ -6452,7 +6452,7 @@ CLkHead CParser::AsmProcName(CLkHead LookaHead)
 	case Token::IDENT:
 		pSym = GetLexer()->GetLexSymbol();
 		LHNext = Expect(LHNext, Token::IDENT);
-		pN = new CAct65PROCasm;
+		pN = new CAct65PROCname;
 		pN->Create(0, 0, pSym);
 		LHNext.AddNode(pN);
 		break;

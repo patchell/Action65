@@ -2,7 +2,7 @@
 
 class CAct65PROCasm : public CAstNode
 {
-	inline static const char* m_pNodeTyypeName = "CONSTANT";
+	inline static const char* m_pNodeTyypeName = "Asm PROC";
 public:
 	CAct65PROCasm();
 	virtual ~CAct65PROCasm();

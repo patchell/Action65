@@ -83,13 +83,13 @@ Parser Created
     73     -1     -1  |  |  |  |  |  |  |  |  +- 'NUMBER'$F00D
     75     -1     76  |  |  |  |  |  |  |  +- 'OPCODE' PLA ($68) IMPLIED
     76     -1     83  |  |  |  |  |  |  |  +- 'OPCODE' TAY ($A8) IMPLIED
-    83     77     85  |  |  |  |  |  |  |  +- 'CONSTANT'
-    77     -1     78  |  |  |  |  |  |  |  |  +- 'CONSTANT'
-    78     -1     80  |  |  |  |  |  |  |  |  +- 'OPCODE' PLA ($68) IMPLIED
-    80     79     81  |  |  |  |  |  |  |  |  +- 'OPCODE' STA ($8D) ABSOLUTE
-    79     -1     -1  |  |  |  |  |  |  |  |  |  +- 'NUMBER'$1000
-    81     -1     82  |  |  |  |  |  |  |  |  +- 'OPCODE' RTS ($60) IMPLIED
-    82     -1     -1  |  |  |  |  |  |  |  |  +- 'OPCODE' RTI ($40) IMPLIED
+    83     77     85  |  |  |  |  |  |  |  +- 'Asm PROC'
+    77     78     -1  |  |  |  |  |  |  |  |  +- 'PROC name'
+    78     -1     80  |  |  |  |  |  |  |  |  |  +- 'OPCODE' PLA ($68) IMPLIED
+    80     79     81  |  |  |  |  |  |  |  |  |  +- 'OPCODE' STA ($8D) ABSOLUTE
+    79     -1     -1  |  |  |  |  |  |  |  |  |  |  +- 'NUMBER'$1000
+    81     -1     82  |  |  |  |  |  |  |  |  |  +- 'OPCODE' RTS ($60) IMPLIED
+    82     -1     -1  |  |  |  |  |  |  |  |  |  +- 'OPCODE' RTI ($40) IMPLIED
     85     84     87  |  |  |  |  |  |  |  +- 'OPCODE' ADC ($61) INDEXED INDIRECT
     84     -1     -1  |  |  |  |  |  |  |  |  +- 'NUMBER'$0044
     87     86     90  |  |  |  |  |  |  |  +- 'OPCODE' SBC ($E5) ZERO PAGE
