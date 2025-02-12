@@ -9,6 +9,9 @@ Compatability Issues with the real ACTION!
 	Hopefully, in the future I will find a way to fix
 	this conflict.
 
+I do not know why the AST is all messed up.  In the Github
+editor it looks just fine, but not when displayed.
+Go figure
 
 Cleaned up the AST
 
