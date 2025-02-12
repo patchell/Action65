@@ -20,7 +20,13 @@ bool CAstTree::Create()
 void CAstTree::Print(FILE* pOut)
 {
 	char* s = 0;
+	bool* pbNextFlags = 0;
+	int i = 0;
+	int Indent = 0;
 
+	pbNextFlags = new bool[2048];
+	for (i = 0; i < 2048; ++i)
+		pbNextFlags[i] = false;
 	if (GetRootNode() && pOut)
 	{
 		s = new char[4096];
@@ -29,7 +35,9 @@ void CAstTree::Print(FILE* pOut)
 			pOut,
 			"\t NUMB  CHILD  NEXT\n"
 		);
-		TraverseTree(pOut, GetRootNode(), s, 4096, 0);
+		if (GetRootNode()->GetNext())
+			pbNextFlags[Indent] = true;
+		TraverseTree(pOut, GetRootNode(), s, 4096, Indent, pbNextFlags);
 		delete[] s;
 	}
 	else
@@ -40,11 +48,12 @@ void CAstTree::Print(FILE* pOut)
 }
 
 void CAstTree::TraverseTree(
-	FILE* pOut, 
-	CAstNode* pNode, 
-	char* s, 
-	int StringSize, 
-	int Indent
+	FILE* pOut,
+	CAstNode* pNode,
+	char* s,
+	int StringSize,
+	int Indent,
+	bool* pbNextFlags
 )
 {
 	//-------------------------------
@@ -65,23 +74,25 @@ void CAstTree::TraverseTree(
 		Act()->Exit(2);
 	}
 	
-	//pAN = pNode->GetHead();
-	//while (pAN)
-	//{
-	//	fprintf(Act()->GetParser()->LogFile(),"%d:Node Name:%s\n",pAN->GetID(),pAN->GetNodeName());
-	//	pAN = pAN->GetNext();
-	//}
 	pAN = pNode;
 	while (pAN && pAN->GetNext())	/*	while next pointer points to valid node	*/
 	{
-		pAN->Print(Indent,s,StringSize);
+		if (pAN->GetNext())
+			pbNextFlags[Indent] = true;
+		else
+			pbNextFlags[Indent] = false;
+		pAN->Print(Indent, s, StringSize, pbNextFlags);
 		fprintf(pOut, "%s\n", s);
 		if (pAN->GetChild())
 		{
-			TraverseTree(pOut, pAN->GetChild(),s, StringSize, Indent+1);
+			if (pAN->GetNext())
+				pbNextFlags[Indent] = true;
+			else
+				pbNextFlags[Indent] = false;
+			TraverseTree(pOut, pAN->GetChild(), s, StringSize, Indent + 1, pbNextFlags);
 		}
 		pAN = pAN->GetNext();
-		if (++Loops > 300)
+		if (++Loops > 3000)
 		{
 			fprintf(Act()->LogFile(), "Infinate Loop in CAstTree::TraverseTree  Line:%d Col:%d\n",
 				Act()->GetParser()->GetLexer()->GetLineNumber(),
@@ -91,12 +102,17 @@ void CAstTree::TraverseTree(
 			Act()->Exit(7);
 		}
 	}
-	pAN->Print(Indent,s, StringSize);
+	pAN->Print(Indent, s, StringSize, pbNextFlags);
 	fprintf(pOut, "%s\n", s);
 	if (pAN->GetChild())
 	{
-		TraverseTree(pOut, pAN->GetChild(),s, StringSize, Indent + 1);
+		if (pAN->GetNext())
+			pbNextFlags[Indent] = true;
+		else
+			pbNextFlags[Indent] = false;
+		TraverseTree(pOut, pAN->GetChild(), s, StringSize, Indent + 1, pbNextFlags);
 	}
+	pbNextFlags[Indent] = false;
 	Recursions++;
 }
 

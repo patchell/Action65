@@ -20,34 +20,15 @@ CValue* CAct65PROCasm::Process()
 	return nullptr;
 }
 
-int CAct65PROCasm::Print(int Indent, char* s, int Strlen)
+int CAct65PROCasm::Print(int Indent, char* s, int Strlen, bool* pbNextFlag)
 {
-	int i = 0, l = 0;
-	int Id, Child, Next;
-	int size;
+	int l = 0;
 
-	Id = GetID();
-	if (GetChild())
-		Child = GetChild()->GetID();
-	else
-		Child = -1;
-	if (GetNext())
-		Next = GetNext()->GetID();
-	else
-		Next = -1;
-	size = Strlen - l;
-	l += sprintf_s(&s[l], size, "%6d %6d %6d  ", Id, Child, Next);
-	for (i = 0; i < Indent; ++i)
-	{
-		size = Strlen - l;
-		l += sprintf_s(&s[l], size, "|  ");
-	}
-	size = Strlen - l;
-	l += sprintf_s(&s[l], size, "+- \'%s\'", GetNodeName());
+	l = CAstNode::Print(Indent, s, Strlen, pbNextFlag);
 	return l;
 }
 
-int CAct65PROCasm::PrintNode(FILE* pOut, int Indent)
+void CAct65PROCasm::PrintNode(FILE* pOut, int Indent, bool* pbNextFlag)
 {
 	if (pOut)
 	{
@@ -55,9 +36,8 @@ int CAct65PROCasm::PrintNode(FILE* pOut, int Indent)
 		int l = 0;
 		int size = 0;
 
-		l = Print(Indent, pS, 256);
+		l = Print(Indent, pS, 256, pbNextFlag);
 		fprintf(pOut, "%s\n", pS);
 		delete[]pS;
 	}
-	return 0;
 }

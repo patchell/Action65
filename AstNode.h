@@ -181,8 +181,8 @@ public:
 	);
 	virtual void CreateValue(CBin* pSym);
 	virtual CValue* Process() = 0;
-	virtual int PrintNode(FILE* pOut, int Indent);
-	virtual int Print(int Indent, char* s, int strLen) = 0;
+	virtual void PrintNode(FILE* pOut, int Indent, bool* pbNextFlag);
+	virtual int Print(int Indent, char* s, int strLen, bool* pbNextFlag);
 	void AddToHeadNextChain(CAstNode* pN);
 	void AddToTailNextChain(CAstNode* pN);
 	void InsertThatIntoThisNext(CAstNode* pN);
@@ -193,7 +193,7 @@ public:
 	CAstNode* GetStart() { return m_pStart; }
 	CAstNode* GetNext() { return m_pNext; }
 	CAstNode* GetPrev() { return m_pPrev; }
-	CAstNode* GetChild() { return m_pChild; }
+	CAstNode* GetChild() { return m_pChild; } 
 	CAstNode* GetParent() { return m_pParent; }
 	void SetHead(CAstNode* pAN) { m_pHead = pAN; }
 	void SetTail(CAstNode* pAN) { m_pTail = pAN; }
@@ -234,4 +234,5 @@ public:
 	CValue* GetValue() {
 		return m_pValue;
 	}
+	int MakeIndentString(char* s, int size, int Indent, bool* pbNextFlag);
 };

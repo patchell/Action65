@@ -10,8 +10,8 @@ public:
 	virtual ~CAct65DS();
 	virtual bool Create(CAstNode* pChild = 0, CAstNode* pNext = 0, CBin* pSym = 0);
 	virtual CValue* Process();
-	virtual int Print(int Indent, char* s, int l);
-	virtual int PrintNode(FILE* pOut, int Indent);
+	virtual int Print(int Indent, char* s, int l, bool* pbNextFlag);
+	virtual void PrintNode(FILE* pOut, int Indent, bool* pbNextFlag);
 	int GetSize() { return m_SizeInBytes; }
 	void SetSize(int S) { m_SizeInBytes = S; }
 	CSection* GetSection() { return m_pSection; }

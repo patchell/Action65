@@ -13,7 +13,8 @@ public:
 		CAstNode* pNode, 
 		char* s,
 		int strLen,
-		int Indent
+		int Indent,
+		bool* pbNextFlag
 	);
 	//--------------------------------
 	void SetRootNode(CAstNode* pRoot) { m_pRoot = pRoot; }

@@ -18,6 +18,10 @@ INTERRUPT AnInteruption()
 	CHAR e
 
 	e = x + xxx * a - xx
+	DO
+		e = x - 8
+		UNTIL e = xx
+	OD
 	ASM {
 	PROCESSOR R6502
 SECTION ROM [

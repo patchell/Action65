@@ -476,7 +476,7 @@ Token CLexer::Lex()
 						break;
 					case '*':
 						//-------------------------------------
-						// 	Unfortunatly, this has a conflict with the meaning
+						// 	Unfortunately, this has a conflict with the meaning
 						// of Multiply, so I had to make the current location
 						//	Symbol be '.*' : (
 						//-------------------------------------

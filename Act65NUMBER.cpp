@@ -20,7 +20,7 @@ CValue* CAct65NUMBER::Process()
 	return nullptr;
 }
 
-int CAct65NUMBER::PrintNode(FILE* pOut, int Indent)
+void CAct65NUMBER::PrintNode(FILE* pOut, int Indent, bool* pbNextFlag)
 {
 	int l = 0;
 	int size = 0;
@@ -28,40 +28,20 @@ int CAct65NUMBER::PrintNode(FILE* pOut, int Indent)
 	if (pOut)
 	{
 		char* s = new char[256];
-		l = Print(Indent, s, 256);
+		l = Print(Indent, s, 256, pbNextFlag);
 		size = 256 - l;
 		sprintf_s(&s[l], size, "%04X", GetValue()->GetConstVal());
 		fprintf(pOut, "%s\n", s);
 		delete[] s;
 	}
-	return 0;
 }
 
-int CAct65NUMBER::Print(int Indent, char* s, int Strlen)
+int CAct65NUMBER::Print(int Indent, char* s, int Strlen, bool* pbNextFlag)
 {
-	int i = 0, l = 0;
-	int Id, Child, Next;
-	int size;
+	int l = 0;
 
-	Id = GetID();
-	if (GetChild())
-		Child = GetChild()->GetID();
-	else
-		Child = -1;
-	if (GetNext())
-		Next = GetNext()->GetID();
-	else
-		Next = -1;
-	size = Strlen - l;
-	l += sprintf_s(&s[l], size, "%6d %6d %6d  ", Id, Child, Next);
-	for (i = 0; i < Indent; ++i)
-	{
-		size = Strlen - l;
-		l += sprintf_s(&s[l], size, "|  ");
-	}
-	size = Strlen - l;
-	l += sprintf_s(&s[l], size, "+- \'%s\'", GetNodeName());
-	size = Strlen - l;
+	l = CAstNode::Print(Indent, s, Strlen, pbNextFlag);
+	int size = Strlen - l;
 	l += sprintf_s(&s[l], size, "$%04X", GetValue()->GetConstVal());
 	return l;
 }

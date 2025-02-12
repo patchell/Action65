@@ -1417,14 +1417,22 @@ CLkHead CParser::DoEND(CLkHead LookaHead)
 	//	DoEnd_1		-> 'OD';
 	//--------------------------------------------
 	CAstNode* pN= 0;
-	CLkHead LHNext;
+	CLkHead LHNext, LHChild;
 
 	PrintLookahead(LogFile(), LookaHead, "Enter DoEND", ++m_Recursion);
-	LHNext = Statements(LookaHead);
-	switch (LHNext.GetToken())
+	LHNext = LookaHead;
+	LHChild = LHNext;
+	LHChild.SetNode(0);
+	LHChild = Statements(LHChild);
+	switch (LHChild.GetToken())
 	{
 	case Token::OD:
-		LHNext = Expect(LHNext, Token::OD);
+		LHChild = Expect(LHChild, Token::OD);
+		pN = new CAct65OD;
+		pN->Create();
+		LHChild.AddNode(pN);
+		LHNext.AddNode(LHChild.GetNode());
+		LHNext.SetToken(LHChild.GetToken());
 		break;
 	default:
 		break;

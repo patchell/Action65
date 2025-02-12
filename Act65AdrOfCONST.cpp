@@ -20,37 +20,18 @@ CValue* CAct65AdrOfCONST::Process()
 	return nullptr;
 }
 
-int CAct65AdrOfCONST::Print(int Indent, char* s, int Strlen)
+int CAct65AdrOfCONST::Print(int Indent, char* s, int Strlen, bool* pbNextFlag)
 {
-	int i = 0, l = 0;
-	int Id, Child, Next;
-	int size;
+	int l = 0;
 
-	Id = GetID();
-	if (GetChild())
-		Child = GetChild()->GetID();
-	else
-		Child = -1;
-	if (GetNext())
-		Next = GetNext()->GetID();
-	else
-		Next = -1;
-	size = Strlen - l;
-	l += sprintf_s(&s[l], size, "%6d %6d %6d  ", Id, Child, Next);
-	for (i = 0; i < Indent; ++i)
-	{
-		size = Strlen - l;
-		l += sprintf_s(&s[l], size, "|  ");
-	}
-	size = Strlen - l;
-	l += sprintf_s(&s[l], size, "+- \'%s\'", GetNodeName());
+	l = CAstNode::Print(Indent, s, Strlen, pbNextFlag);
 	if (GetValue())
 	{
 		if (GetValue()->GetSymbol())
 		{
 			if (GetValue()->GetSymbol()->GetName())
 			{
-				size = Strlen - l;
+				int size = Strlen - l;
 				l += sprintf_s(&s[l], size, ": %s", GetValue()->GetSymbol()->GetName());
 			}
 		}
@@ -58,7 +39,7 @@ int CAct65AdrOfCONST::Print(int Indent, char* s, int Strlen)
 	return l;
 }
 
-int CAct65AdrOfCONST::PrintNode(FILE* pOut, int Indent)
+void CAct65AdrOfCONST::PrintNode(FILE* pOut, int Indent, bool* pbNextFlag)
 {
-	return CAstNode::PrintNode(pOut, Indent);
+	CAstNode::PrintNode(pOut, Indent, pbNextFlag);
 }

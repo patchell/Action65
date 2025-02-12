@@ -3,7 +3,7 @@ for the 6502.
 
 Compatability Issues with the real ACTION!
 1. Action! used the '*' character to mean "Current Location".
-	Unfortunatly, this has a conflict with the meaning
+	Unfortunately, this has a conflict with the meaning
 	of Multiply, so I had to make the current location
 	Symbol be '.*'  :(
 	Hopefully, in the future I will find a way to fix
