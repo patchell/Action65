@@ -10,6 +10,216 @@ Compatability Issues with the real ACTION!
 	this conflict.
 
 
+Cleaned up the AST
+
+	 NUMB  CHILD  NEXT
+   207      4     -1  +- 'ROOT'
+     4      1      7     +- 'INT'
+     1     -1      2     |  +- 'IDENT': aa
+     2     -1      3     |  +- 'IDENT': bb
+     3     -1     -1     |  +- 'IDENT': cc
+     7      5      9     +- 'CARD'
+     5     -1      6     |  +- 'IDENT': dd
+     6     -1     -1     |  +- 'IDENT': ee
+     9      8     15     +- 'CHAR'
+     8     -1     -1     |  +- 'IDENT': ff
+    15     10    206     +- 'BYTE'
+    10     -1     11     |  +- 'IDENT': gg
+    11     -1     12     |  +- 'IDENT': hh
+    12     -1     13     |  +- 'IDENT': ii
+    13     -1     14     |  +- 'IDENT': jj
+    14     -1     -1     |  +- 'IDENT': kk
+   206     23     -1     +- 'MODULE'
+    23     22    202        +- 'DEFINE'
+    22     21     -1        |  +- 'SECTION'
+    21     20     -1        |     +- 'SECTION Name'
+    20     17     -1        |        +- 'SECTION Attributes'
+    17     16     19        |           +- 'ATRB-START'
+    16     -1     -1        |           |  +- 'NUMBER'$0200
+    19     18     -1        |           +- 'SIZE'
+    18     -1     -1        |              +- 'NUMBER'$0400
+   202     24    205        +- 'IRQ-PROC'
+    24     25     -1        |  +- 'IDENT': AnInteruption
+    25     -1    201        |     +- 'Param LIST'
+   201     38     -1        |     +- 'Body'
+    38     27    200        |        +- 'LOCAL Vars'
+    27     26     31        |        |  +- 'CHAR'
+    26     -1     -1        |        |  |  +- 'IDENT': a
+    31     28     33        |        |  +- 'INT'
+    28     -1     29        |        |  |  +- 'IDENT': x
+    29     -1     30        |        |  |  +- 'IDENT': xx
+    30     -1     -1        |        |  |  +- 'IDENT': xxx
+    33     32     35        |        |  +- 'INT'
+    32     -1     -1        |        |  |  +- 'IDENT': c
+    35     34     37        |        |  +- 'CHAR'
+    34     -1     -1        |        |  |  +- 'IDENT': d
+    37     36     -1        |        |  +- 'CHAR'
+    36     -1     -1        |        |     +- 'IDENT': e
+   200     39     -1        |        +- 'STATEMENTS'
+    39     47     58        |           +- 'IDENT': e
+    47     46     -1        |           |  +- 'Assign ='
+    46     45     -1        |           |     +- 'SUB'
+    45     -1     44        |           |        +- 'IDENT': xx
+    44     43     -1        |           |        +- 'ADD'
+    43     42     40        |           |           +- 'MUL'
+    42     -1     41        |           |           |  +- 'IDENT': a
+    41     -1     -1        |           |           |  +- 'IDENT': xxx
+    40     -1     -1        |           |           +- 'IDENT': x
+    58     48    198        |           +- 'DO'
+    48     52     56        |           |  +- 'IDENT': e
+    52     51     -1        |           |  |  +- 'Assign ='
+    51     50     -1        |           |  |     +- 'SUB'
+    50     -1     49        |           |  |        +- 'IDENT': x
+    49     -1     -1        |           |  |        +- 'IDENT': x
+    56     55     57        |           |  +- 'UNTILL'
+    55     54     -1        |           |  |  +- 'EQU-TO'
+    54     -1     53        |           |  |     +- 'IDENT': xx
+    53     -1     -1        |           |  |     +- 'IDENT': e
+    57     -1     -1        |           |  +- 'OD'
+   198     60    199        |           +- 'ASM'
+    60     59     67        |           |  +- 'PROCESSOR'
+    59     -1     -1        |           |  |  +- 'R6502'
+    67     66     69        |           |  +- 'SECTION'
+    66     65     -1        |           |  |  +- 'SECTION Name'
+    65     62     -1        |           |  |     +- 'SECTION Attributes'
+    62     61     64        |           |  |        +- 'ATRB-START'
+    61     -1     -1        |           |  |        |  +- 'NUMBER'$F000
+    64     63     -1        |           |  |        +- 'SIZE'
+    63     -1     -1        |           |  |           +- 'NUMBER'$1000
+    69     68     70        |           |  +- 'ORG'
+    68     -1     -1        |           |  |  +- 'NUMBER'$4000
+    70     -1     72        |           |  +- 'LABEL'
+    72     71     74        |           |  +- 'DB'
+    71     -1     -1        |           |  |  +- 'NUMBER'$0005
+    74     73     76        |           |  +- 'DW'
+    73     -1     -1        |           |  |  +- 'NUMBER'$0257
+    76     75     77        |           |  +- 'DL'
+    75     -1     -1        |           |  |  +- 'NUMBER'$864B2
+    77     -1     79        |           |  +- 'LABEL'
+    79     78     80        |           |  +- 'DS'
+    78     -1     -1        |           |  |  +- 'NUMBER'$0A7F
+    80     -1     82        |           |  +- 'LABEL'
+    82     81     84        |           |  +- 'OPCODE' ADC ($71) INDIRECT INDEXED
+    81     -1     -1        |           |  |  +- 'NUMBER'$0052
+    84     83     86        |           |  +- 'OPCODE' LDA ($A5) ZERO PAGE
+    83     -1     -1        |           |  |  +- 'LABEL'
+    86     85     87        |           |  +- 'OPCODE' LDA ($A9) IMMEDIATE
+    85     -1     -1        |           |  |  +- 'NUMBER'$0055
+    87     -1     88        |           |  +- 'OPCODE' PHA ($48) IMPLIED
+    88     -1     89        |           |  +- 'OPCODE' TYA ($98) IMPLIED
+    89     -1     90        |           |  +- 'LABEL'
+    90     -1     92        |           |  +- 'OPCODE' PHA ($48) IMPLIED
+    92     91     94        |           |  +- 'OPCODE' JMP ($4C) ABSOLUTE
+    91     -1     -1        |           |  |  +- 'NUMBER'$BAD1
+    94     93     96        |           |  +- 'OPCODE' JMP ($6C) INDIRECT
+    93     -1     -1        |           |  |  +- 'NUMBER'$432A
+    96     95     97        |           |  +- 'OPCODE' JSR ($20) ABSOLUTE
+    95     -1     -1        |           |  |  +- 'NUMBER'$F00D
+    97     -1     98        |           |  +- 'OPCODE' PLA ($68) IMPLIED
+    98     -1    105        |           |  +- 'OPCODE' TAY ($A8) IMPLIED
+   105     99    107        |           |  +- 'Asm PROC'
+    99    100     -1        |           |  |  +- 'PROC name' - 'AsmProc'
+   100     -1    102        |           |  |     +- 'OPCODE' PLA ($68) IMPLIED
+   102    101    103        |           |  |     +- 'OPCODE' STA ($8D) ABSOLUTE
+   101     -1     -1        |           |  |     |  +- 'NUMBER'$1000
+   103     -1    104        |           |  |     +- 'OPCODE' RTS ($60) IMPLIED
+   104     -1     -1        |           |  |     +- 'OPCODE' RTI ($40) IMPLIED
+   107    106    109        |           |  +- 'OPCODE' ADC ($61) INDEXED INDIRECT
+   106     -1     -1        |           |  |  +- 'NUMBER'$0044
+   109    108    112        |           |  +- 'OPCODE' SBC ($E5) ZERO PAGE
+   108     -1     -1        |           |  |  +- 'NUMBER'$0012
+   112    110    115        |           |  +- 'OPCODE' CMP ($D5) PAGE ZERO,X
+   110    111     -1        |           |  |  +- 'NUMBER'$0013
+   111     -1     -1        |           |  |     +- '.X'
+   115    113    118        |           |  +- 'OPCODE' AND ($3D) ABSOLUTE,X
+   113    114     -1        |           |  |  +- 'NUMBER'$0400
+   114     -1     -1        |           |  |     +- '.X'
+   118    116    120        |           |  +- 'OPCODE' ORA ($19) ABSOLUTE,Y
+   116    117     -1        |           |  |  +- 'NUMBER'$0410
+   117     -1     -1        |           |  |     +- '.Y'
+   120    119    122        |           |  +- 'OPCODE' CPX ($E0) IMMEDIATE
+   119     -1     -1        |           |  |  +- 'NUMBER'$0017
+   122    121    124        |           |  +- 'OPCODE' CPX ($E4) ZERO PAGE
+   121     -1     -1        |           |  |  +- 'NUMBER'$00B0
+   124    123    126        |           |  +- 'OPCODE' CPX ($EC) ABSOLUTE
+   123     -1     -1        |           |  |  +- 'NUMBER'$A8EE
+   126    125    129        |           |  +- 'OPCODE' ASL ($06) ZERO PAGE
+   125     -1     -1        |           |  |  +- 'NUMBER'$008C
+   129    127    131        |           |  +- 'OPCODE' ASL ($16) PAGE ZERO,X
+   127    128     -1        |           |  |  +- 'NUMBER'$008B
+   128     -1     -1        |           |  |     +- '.X'
+   131    130    134        |           |  +- 'OPCODE' ASL ($0E) ABSOLUTE
+   130     -1     -1        |           |  |  +- 'NUMBER'$AACC
+   134    132    135        |           |  +- 'OPCODE' ASL ($1E) ABSOLUTE,X
+   132    133     -1        |           |  |  +- 'NUMBER'$CCAA
+   133     -1     -1        |           |  |     +- '.X'
+   135     -1    137        |           |  +- 'OPCODE' ASL ($0A) ACCUMULATOR
+   137    136    139        |           |  +- 'OPCODE' LDX ($A2) IMMEDIATE
+   136     -1     -1        |           |  |  +- 'NUMBER'$001F
+   139    138    142        |           |  +- 'OPCODE' LDX ($A6) ZERO PAGE
+   138     -1     -1        |           |  |  +- 'NUMBER'$00C1
+   142    140    144        |           |  +- 'OPCODE' LDX ($B6) PAGE ZERO,Y
+   140    141     -1        |           |  |  +- 'NUMBER'$00C2
+   141     -1     -1        |           |  |     +- '.Y'
+   144    143    147        |           |  +- 'OPCODE' LDX ($AE) ABSOLUTE
+   143     -1     -1        |           |  |  +- 'NUMBER'$56AB
+   147    145    149        |           |  +- 'OPCODE' LDX ($BE) ABSOLUTE,Y
+   145    146     -1        |           |  |  +- 'NUMBER'$64BE
+   146     -1     -1        |           |  |     +- '.Y'
+   149    148    151        |           |  +- 'OPCODE' LDY ($A0) IMMEDIATE
+   148     -1     -1        |           |  |  +- 'NUMBER'$001F
+   151    150    154        |           |  +- 'OPCODE' LDY ($A4) ZERO PAGE
+   150     -1     -1        |           |  |  +- 'NUMBER'$00C1
+   154    152    156        |           |  +- 'OPCODE' LDY ($B4) PAGE ZERO,X
+   152    153     -1        |           |  |  +- 'NUMBER'$00C2
+   153     -1     -1        |           |  |     +- '.X'
+   156    155    159        |           |  +- 'OPCODE' LDY ($AC) ABSOLUTE
+   155     -1     -1        |           |  |  +- 'NUMBER'$56AB
+   159    157    161        |           |  +- 'OPCODE' LDY ($BC) ABSOLUTE,X
+   157    158     -1        |           |  |  +- 'NUMBER'$64BE
+   158     -1     -1        |           |  |     +- '.X'
+   161    160    164        |           |  +- 'OPCODE' STY ($84) ZERO PAGE
+   160     -1     -1        |           |  |  +- 'NUMBER'$007C
+   164    162    166        |           |  +- 'OPCODE' STY ($94) PAGE ZERO,X
+   162    163     -1        |           |  |  +- 'NUMBER'$007D
+   163     -1     -1        |           |  |     +- '.X'
+   166    165    168        |           |  +- 'OPCODE' STY ($8C) ABSOLUTE
+   165     -1     -1        |           |  |  +- 'NUMBER'$D00D
+   168    167    171        |           |  +- 'OPCODE' STX ($86) ZERO PAGE
+   167     -1     -1        |           |  |  +- 'NUMBER'$0062
+   171    169    173        |           |  +- 'OPCODE' STX ($96) PAGE ZERO,Y
+   169    170     -1        |           |  |  +- 'NUMBER'$0063
+   170     -1     -1        |           |  |     +- '.Y'
+   173    172    175        |           |  +- 'OPCODE' STX ($8E) ABSOLUTE
+   172     -1     -1        |           |  |  +- 'NUMBER'$B00B
+   175    174    178        |           |  +- 'OPCODE' INC ($E6) ZERO PAGE
+   174     -1     -1        |           |  |  +- 'NUMBER'$00D0
+   178    176    180        |           |  +- 'OPCODE' INC ($F6) PAGE ZERO,X
+   176    177     -1        |           |  |  +- 'NUMBER'$0062
+   177     -1     -1        |           |  |     +- '.X'
+   180    179    183        |           |  +- 'OPCODE' INC ($EE) ABSOLUTE
+   179     -1     -1        |           |  |  +- 'NUMBER'$63DA
+   183    181    185        |           |  +- 'OPCODE' INC ($FE) ABSOLUTE,X
+   181    182     -1        |           |  |  +- 'NUMBER'$B00B
+   182     -1     -1        |           |  |     +- '.X'
+   185    184    188        |           |  +- 'OPCODE' DEC ($C6) ZERO PAGE
+   184     -1     -1        |           |  |  +- 'NUMBER'$00D0
+   188    186    190        |           |  +- 'OPCODE' DEC ($D6) PAGE ZERO,X
+   186    187     -1        |           |  |  +- 'NUMBER'$0062
+   187     -1     -1        |           |  |     +- '.X'
+   190    189    193        |           |  +- 'OPCODE' DEC ($CE) ABSOLUTE
+   189     -1     -1        |           |  |  +- 'NUMBER'$63DA
+   193    191    195        |           |  +- 'OPCODE' DEC ($DE) ABSOLUTE,X
+   191    192     -1        |           |  |  +- 'NUMBER'$B00B
+   192     -1     -1        |           |  |     +- '.X'
+   195    194    197        |           |  +- 'OPCODE' BIT ($24) ZERO PAGE
+   194     -1     -1        |           |  |  +- 'NUMBER'$00A8
+   197    196     -1        |           |  +- 'OPCODE' BIT ($2C) ABSOLUTE
+   196     -1     -1        |           |     +- 'NUMBER'$9AB0
+   199     -1     -1        |           +- 'RTI'
+   205    203     -1        +- 'INT'
+   203     -1    204           +- 'IDENT': qr
+   204     -1     -1           +- 'IDENT': st
 
 Feb 10, 2025
 
@@ -31,157 +241,6 @@ about 1/2 done.  Still need to test the branch instructions and
 all of the directives.  The AST for my tests is really starting to
 get quite long.
 
-	 NUMB  CHILD  NEXT
-   150      4     -1  +- 'ROOT'
-     4      1      7  |  +- 'INT'
-     1     -1      2  |  |  +- 'IDENT': aa
-     2     -1      3  |  |  +- 'IDENT': bb
-     3     -1     -1  |  |  +- 'IDENT': cc
-     7      5      9  |  +- 'CARD'
-     5     -1      6  |  |  +- 'IDENT': dd
-     6     -1     -1  |  |  +- 'IDENT': ee
-     9      8     15  |  +- 'CHAR'
-     8     -1     -1  |  |  +- 'IDENT': ff
-    15     10    149  |  +- 'BYTE'
-    10     -1     11  |  |  +- 'IDENT': gg
-    11     -1     12  |  |  +- 'IDENT': hh
-    12     -1     13  |  |  +- 'IDENT': ii
-    13     -1     14  |  |  +- 'IDENT': jj
-    14     -1     -1  |  |  +- 'IDENT': kk
-   149    145     -1  |  +- 'MODULE'
-   145     16    148  |  |  +- 'IRQ-PROC'
-    16     17     -1  |  |  |  +- 'IDENT': AnInteruption
-    17     -1    144  |  |  |  |  +- 'Param LIST'
-   144     30     -1  |  |  |  |  +- 'Body'
-    30     19    143  |  |  |  |  |  +- 'LOCAL Vars'
-    19     18     23  |  |  |  |  |  |  +- 'CHAR'
-    18     -1     -1  |  |  |  |  |  |  |  +- 'IDENT': a
-    23     20     25  |  |  |  |  |  |  +- 'INT'
-    20     -1     21  |  |  |  |  |  |  |  +- 'IDENT': x
-    21     -1     22  |  |  |  |  |  |  |  +- 'IDENT': xx
-    22     -1     -1  |  |  |  |  |  |  |  +- 'IDENT': xxx
-    25     24     27  |  |  |  |  |  |  +- 'INT'
-    24     -1     -1  |  |  |  |  |  |  |  +- 'IDENT': c
-    27     26     29  |  |  |  |  |  |  +- 'CHAR'
-    26     -1     -1  |  |  |  |  |  |  |  +- 'IDENT': d
-    29     28     -1  |  |  |  |  |  |  +- 'CHAR'
-    28     -1     -1  |  |  |  |  |  |  |  +- 'IDENT': e
-   143    141     -1  |  |  |  |  |  +- 'STATEMENTS'
-   141     31    142  |  |  |  |  |  |  +- 'ASM'
-    31     -1     33  |  |  |  |  |  |  |  +- 'LABEL'+- 'START' ($0000)
-    33     32     35  |  |  |  |  |  |  |  +- 'OPCODE' ADC ($71) INDIRECT INDEXED
-    32     -1     -1  |  |  |  |  |  |  |  |  +- 'NUMBER'$0052
-    35     34     36  |  |  |  |  |  |  |  +- 'OPCODE' LDA ($A9) IMMEDIATE
-    34     -1     -1  |  |  |  |  |  |  |  |  +- 'NUMBER'$0055
-    36     -1     37  |  |  |  |  |  |  |  +- 'OPCODE' PHA ($48) IMPLIED
-    37     -1     38  |  |  |  |  |  |  |  +- 'OPCODE' TYA ($98) IMPLIED
-    38     -1     39  |  |  |  |  |  |  |  +- 'LABEL'+- 'HERE' ($0000)
-    39     -1     41  |  |  |  |  |  |  |  +- 'OPCODE' PHA ($48) IMPLIED
-    41     40     43  |  |  |  |  |  |  |  +- 'OPCODE' JMP ($4C) ABSOLUTE
-    40     -1     -1  |  |  |  |  |  |  |  |  +- 'NUMBER'$BAD1
-    43     42     45  |  |  |  |  |  |  |  +- 'OPCODE' JMP ($6C) INDIRECT
-    42     -1     -1  |  |  |  |  |  |  |  |  +- 'NUMBER'$432A
-    45     44     46  |  |  |  |  |  |  |  +- 'OPCODE' JSR ($20) ABSOLUTE
-    44     -1     -1  |  |  |  |  |  |  |  |  +- 'NUMBER'$F00D
-    46     -1     47  |  |  |  |  |  |  |  +- 'OPCODE' PLA ($68) IMPLIED
-    47     -1     48  |  |  |  |  |  |  |  +- 'OPCODE' TAY ($A8) IMPLIED
-    48     -1     50  |  |  |  |  |  |  |  +- 'OPCODE' PLA ($68) IMPLIED
-    50     49     51  |  |  |  |  |  |  |  +- 'OPCODE' STA ($8D) ABSOLUTE
-    49     -1     -1  |  |  |  |  |  |  |  |  +- 'NUMBER'$1000
-    51     -1     52  |  |  |  |  |  |  |  +- 'OPCODE' RTS ($60) IMPLIED
-    52     -1     54  |  |  |  |  |  |  |  +- 'OPCODE' RTI ($40) IMPLIED
-    54     53     56  |  |  |  |  |  |  |  +- 'OPCODE' ADC ($61) INDEXED INDIRECT
-    53     -1     -1  |  |  |  |  |  |  |  |  +- 'NUMBER'$0044
-    56     55     59  |  |  |  |  |  |  |  +- 'OPCODE' SBC ($E5) ZERO PAGE
-    55     -1     -1  |  |  |  |  |  |  |  |  +- 'NUMBER'$0012
-    59     57     62  |  |  |  |  |  |  |  +- 'OPCODE' CMP ($D5) PAGE ZERO,X
-    57     58     -1  |  |  |  |  |  |  |  |  +- 'NUMBER'$0013
-    58     -1     -1  |  |  |  |  |  |  |  |  |  +- '.X'
-    62     60     65  |  |  |  |  |  |  |  +- 'OPCODE' AND ($3D) ABSOLUTE,X
-    60     61     -1  |  |  |  |  |  |  |  |  +- 'NUMBER'$0400
-    61     -1     -1  |  |  |  |  |  |  |  |  |  +- '.X'
-    65     63     67  |  |  |  |  |  |  |  +- 'OPCODE' ORA ($19) ABSOLUTE,Y
-    63     64     -1  |  |  |  |  |  |  |  |  +- 'NUMBER'$0410
-    64     -1     -1  |  |  |  |  |  |  |  |  |  +- '.Y'
-    67     66     69  |  |  |  |  |  |  |  +- 'OPCODE' CPX ($E0) IMMEDIATE
-    66     -1     -1  |  |  |  |  |  |  |  |  +- 'NUMBER'$0017
-    69     68     71  |  |  |  |  |  |  |  +- 'OPCODE' CPX ($E4) ZERO PAGE
-    68     -1     -1  |  |  |  |  |  |  |  |  +- 'NUMBER'$00B0
-    71     70     73  |  |  |  |  |  |  |  +- 'OPCODE' CPX ($EC) ABSOLUTE
-    70     -1     -1  |  |  |  |  |  |  |  |  +- 'NUMBER'$A8EE
-    73     72     76  |  |  |  |  |  |  |  +- 'OPCODE' ASL ($06) ZERO PAGE
-    72     -1     -1  |  |  |  |  |  |  |  |  +- 'NUMBER'$008C
-    76     74     78  |  |  |  |  |  |  |  +- 'OPCODE' ASL ($16) PAGE ZERO,X
-    74     75     -1  |  |  |  |  |  |  |  |  +- 'NUMBER'$008B
-    75     -1     -1  |  |  |  |  |  |  |  |  |  +- '.X'
-    78     77     81  |  |  |  |  |  |  |  +- 'OPCODE' ASL ($0E) ABSOLUTE
-    77     -1     -1  |  |  |  |  |  |  |  |  +- 'NUMBER'$AACC
-    81     79     82  |  |  |  |  |  |  |  +- 'OPCODE' ASL ($1E) ABSOLUTE,X
-    79     80     -1  |  |  |  |  |  |  |  |  +- 'NUMBER'$CCAA
-    80     -1     -1  |  |  |  |  |  |  |  |  |  +- '.X'
-    82     -1     84  |  |  |  |  |  |  |  +- 'OPCODE' ASL ($0A) ACCUMULATOR
-    84     83     86  |  |  |  |  |  |  |  +- 'OPCODE' LDX ($A2) IMMEDIATE
-    83     -1     -1  |  |  |  |  |  |  |  |  +- 'NUMBER'$001F
-    86     85     89  |  |  |  |  |  |  |  +- 'OPCODE' LDX ($A6) ZERO PAGE
-    85     -1     -1  |  |  |  |  |  |  |  |  +- 'NUMBER'$00C1
-    89     87     91  |  |  |  |  |  |  |  +- 'OPCODE' LDX ($B6) PAGE ZERO,Y
-    87     88     -1  |  |  |  |  |  |  |  |  +- 'NUMBER'$00C2
-    88     -1     -1  |  |  |  |  |  |  |  |  |  +- '.Y'
-    91     90     94  |  |  |  |  |  |  |  +- 'OPCODE' LDX ($AE) ABSOLUTE
-    90     -1     -1  |  |  |  |  |  |  |  |  +- 'NUMBER'$56AB
-    94     92     96  |  |  |  |  |  |  |  +- 'OPCODE' LDX ($BE) ABSOLUTE,Y
-    92     93     -1  |  |  |  |  |  |  |  |  +- 'NUMBER'$64BE
-    93     -1     -1  |  |  |  |  |  |  |  |  |  +- '.Y'
-    96     95     98  |  |  |  |  |  |  |  +- 'OPCODE' LDY ($A0) IMMEDIATE
-    95     -1     -1  |  |  |  |  |  |  |  |  +- 'NUMBER'$001F
-    98     97    101  |  |  |  |  |  |  |  +- 'OPCODE' LDY ($A4) ZERO PAGE
-    97     -1     -1  |  |  |  |  |  |  |  |  +- 'NUMBER'$00C1
-   101     99    103  |  |  |  |  |  |  |  +- 'OPCODE' LDY ($B4) PAGE ZERO,X
-    99    100     -1  |  |  |  |  |  |  |  |  +- 'NUMBER'$00C2
-   100     -1     -1  |  |  |  |  |  |  |  |  |  +- '.X'
-   103    102    106  |  |  |  |  |  |  |  +- 'OPCODE' LDY ($AC) ABSOLUTE
-   102     -1     -1  |  |  |  |  |  |  |  |  +- 'NUMBER'$56AB
-   106    104    108  |  |  |  |  |  |  |  +- 'OPCODE' LDY ($BC) ABSOLUTE,X
-   104    105     -1  |  |  |  |  |  |  |  |  +- 'NUMBER'$64BE
-   105     -1     -1  |  |  |  |  |  |  |  |  |  +- '.X'
-   108    107    111  |  |  |  |  |  |  |  +- 'OPCODE' STY ($84) ZERO PAGE
-   107     -1     -1  |  |  |  |  |  |  |  |  +- 'NUMBER'$007C
-   111    109    113  |  |  |  |  |  |  |  +- 'OPCODE' STY ($94) PAGE ZERO,X
-   109    110     -1  |  |  |  |  |  |  |  |  +- 'NUMBER'$007D
-   110     -1     -1  |  |  |  |  |  |  |  |  |  +- '.X'
-   113    112    115  |  |  |  |  |  |  |  +- 'OPCODE' STY ($8C) ABSOLUTE
-   112     -1     -1  |  |  |  |  |  |  |  |  +- 'NUMBER'$D00D
-   115    114    118  |  |  |  |  |  |  |  +- 'OPCODE' STX ($86) ZERO PAGE
-   114     -1     -1  |  |  |  |  |  |  |  |  +- 'NUMBER'$0062
-   118    116    120  |  |  |  |  |  |  |  +- 'OPCODE' STX ($96) PAGE ZERO,Y
-   116    117     -1  |  |  |  |  |  |  |  |  +- 'NUMBER'$0063
-   117     -1     -1  |  |  |  |  |  |  |  |  |  +- '.Y'
-   120    119    122  |  |  |  |  |  |  |  +- 'OPCODE' STX ($8E) ABSOLUTE
-   119     -1     -1  |  |  |  |  |  |  |  |  +- 'NUMBER'$B00B
-   122    121    125  |  |  |  |  |  |  |  +- 'OPCODE' INC ($E6) ZERO PAGE
-   121     -1     -1  |  |  |  |  |  |  |  |  +- 'NUMBER'$00D0
-   125    123    127  |  |  |  |  |  |  |  +- 'OPCODE' INC ($F6) PAGE ZERO,X
-   123    124     -1  |  |  |  |  |  |  |  |  +- 'NUMBER'$0062
-   124     -1     -1  |  |  |  |  |  |  |  |  |  +- '.X'
-   127    126    130  |  |  |  |  |  |  |  +- 'OPCODE' INC ($EE) ABSOLUTE
-   126     -1     -1  |  |  |  |  |  |  |  |  +- 'NUMBER'$63DA
-   130    128    132  |  |  |  |  |  |  |  +- 'OPCODE' INC ($FE) ABSOLUTE,X
-   128    129     -1  |  |  |  |  |  |  |  |  +- 'NUMBER'$B00B
-   129     -1     -1  |  |  |  |  |  |  |  |  |  +- '.X'
-   132    131    135  |  |  |  |  |  |  |  +- 'OPCODE' DEC ($C6) ZERO PAGE
-   131     -1     -1  |  |  |  |  |  |  |  |  +- 'NUMBER'$00D0
-   135    133    137  |  |  |  |  |  |  |  +- 'OPCODE' DEC ($D6) PAGE ZERO,X
-   133    134     -1  |  |  |  |  |  |  |  |  +- 'NUMBER'$0062
-   134     -1     -1  |  |  |  |  |  |  |  |  |  +- '.X'
-   137    136    140  |  |  |  |  |  |  |  +- 'OPCODE' DEC ($CE) ABSOLUTE
-   136     -1     -1  |  |  |  |  |  |  |  |  +- 'NUMBER'$63DA
-   140    138     -1  |  |  |  |  |  |  |  +- 'OPCODE' DEC ($DE) ABSOLUTE,X
-   138    139     -1  |  |  |  |  |  |  |  |  +- 'NUMBER'$B00B
-   139     -1     -1  |  |  |  |  |  |  |  |  |  +- '.X'
-   142     -1     -1  |  |  |  |  |  |  +- 'RTI'
-   148    146     -1  |  |  +- 'INT'
-   146     -1    147  |  |  |  +- 'IDENT': qr
-   147     -1     -1  |  |  |  +- 'IDENT': st
 
 Jan 31, 2025
 
