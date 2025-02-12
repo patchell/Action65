@@ -26,6 +26,12 @@ pretty much the whole thing.
 
 The only file that I know will compile is "test3.act".
 
+
+Also, if you want to compile the program, you will need at
+least C++ 20.
+
+
+=================================================
 	 NUMB  CHILD  NEXT
    207      4     -1  +- 'ROOT'
      4      1      7     +- 'INT'
@@ -234,10 +240,7 @@ The only file that I know will compile is "test3.act".
    205    203     -1        +- 'INT'
    203     -1    204           +- 'IDENT': qr
    204     -1     -1           +- 'IDENT': st
-
-Also, if you want to compile the program, you will need at
-least C++ 20
-
+===================================================
 
 Feb 8, 2025
 

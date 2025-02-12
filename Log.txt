@@ -1,5 +1,4 @@
-File:test3.act has 1001 Bytes
-Parser Created
+=================================================
 	 NUMB  CHILD  NEXT
    207      4     -1  +- 'ROOT'
      4      1      7     +- 'INT'
@@ -208,55 +207,4 @@ Parser Created
    205    203     -1        +- 'INT'
    203     -1    204           +- 'IDENT': qr
    204     -1     -1           +- 'IDENT': st
------------- Symbol Table --------------
-ee: GLOBAL:CARD::Address=00000000  Value=0000
-
-e: LOCAL:CHAR::Address=00000000  Value=0000
-
-START: :Address=00000000  Value=0000
-
-gg: GLOBAL:BYTE::Address=00000000  Value=0000
-
-x: LOCAL:INT::Address=00000000  Value=0000
-
-ii: GLOBAL:BYTE::Address=00000000  Value=0000
-
-AnInteruption: INTERRUPT::Address=00000000  Value=0000
-
-bb: GLOBAL:INT::Address=00000000  Value=0000
-
-Storage: :Address=00000000  Value=0000
-
-kk: GLOBAL:BYTE::Address=00000000  Value=0000
-
-HERE: :Address=00000000  Value=0000
-
-dd: GLOBAL:CARD::Address=00000000  Value=0000
-
-xxx: LOCAL:INT::Address=00000000  Value=0000
-
-ff: GLOBAL:CHAR::Address=00000000  Value=0000
-
-hh: GLOBAL:BYTE::Address=00000000  Value=0000
-
-xx: LOCAL:INT::Address=00000000  Value=0000
-
-aa: GLOBAL:INT::Address=00000000  Value=0000
-
-qr: GLOBAL:INT::Address=00000000  Value=0000
-
-jj: GLOBAL:BYTE::Address=00000000  Value=0000
-
-SomeData: :Address=00000000  Value=0000
-
-cc: GLOBAL:INT::Address=00000000  Value=0000
-
-st: GLOBAL:INT::Address=00000000  Value=0000
-
-a: LOCAL:CHAR::Address=00000000  Value=0000
-
-c: LOCAL:INT::Address=00000000  Value=0000
-
-d: LOCAL:CHAR::Address=00000000  Value=0000
-
-Lines Compiled:98
+===================================================
