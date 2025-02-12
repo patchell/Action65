@@ -11,7 +11,6 @@ Compatability Issues with the real ACTION!
 
 
 Cleaned up the AST
-(Sorry, but that is not what it should look like)
 
 	 NUMB  CHILD  NEXT
    207      4     -1  +- 'ROOT'
@@ -234,6 +233,7 @@ The only file that I know will compile is "test3.act"
 
 Also, if you want to compile the program, you will need at
 least C++ 20
+
 
 Feb 8, 2025
 
