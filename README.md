@@ -1,4 +1,4 @@
-This is yet another attempt on my part to create an ACTION! cross compiler 
+This is yet another attempt on my part to create an ACTION! cross compiler  
 for the 6502.
 
 Compatibility Issues with the real ACTION!
