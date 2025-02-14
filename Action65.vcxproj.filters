@@ -1110,9 +1110,6 @@
     <None Include="Grammar\Action.gram">
       <Filter>Grammar</Filter>
     </None>
-    <None Include="README.md">
-      <Filter>Readme</Filter>
-    </None>
     <None Include="test4.act">
       <Filter>Action</Filter>
     </None>
@@ -1132,6 +1129,9 @@
   <ItemGroup>
     <Text Include="log.txt">
       <Filter>LogFiles</Filter>
+    </Text>
+    <Text Include="README.txt">
+      <Filter>Readme</Filter>
     </Text>
   </ItemGroup>
 </Project>

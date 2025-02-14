@@ -1,0 +1,440 @@
+This is yet another attempt on my part to create an ACTION! cross compiler  
+for the 6502.
+
+Compatibility Issues with the real ACTION!
+1. Action! used the '*' character to mean "Current Location".
+	Unfortunately, this has a conflict with the meaning
+	of Multiply, so I had to make the current location
+	Symbol be '.*'  :(
+	Hopefully, in the future I will find a way to fix
+	this conflict.
+
+I do not know why the AST is all messed up.  In the Github
+editor it looks just fine, but not when displayed.
+Go figure
+
+Cleaned up the AST.
+
+
+Feb 10, 2025
+
+Added, finally, the binary file.  Please keep in mind this
+thing is no where near complete.  But, you still might have
+some fun with it.  It most likely will either crash, or hang 
+if you do anything that hasn't beeb finished, which covers
+pretty much the whole thing.
+
+The only file that I know will compile is "test3.act".
+
+
+Also, if you want to compile the program, you will need at
+least C++ 20.
+
+
+=================================================
+	 NUMB  CHILD  NEXT
+   254      4     -1  +- 'ROOT'
+     4      1      7     +- 'INT'
+     1     -1      2     |  +- 'IDENT': aa
+     2     -1      3     |  +- 'IDENT': bb
+     3     -1     -1     |  +- 'IDENT': cc
+     7      5      9     +- 'CARD'
+     5     -1      6     |  +- 'IDENT': dd
+     6     -1     -1     |  +- 'IDENT': ee
+     9      8     15     +- 'CHAR'
+     8     -1     -1     |  +- 'IDENT': ff
+    15     10    253     +- 'BYTE'
+    10     -1     11     |  +- 'IDENT': gg
+    11     -1     12     |  +- 'IDENT': hh
+    12     -1     13     |  +- 'IDENT': ii
+    13     -1     14     |  +- 'IDENT': jj
+    14     -1     -1     |  +- 'IDENT': kk
+   253     23     -1     +- 'MODULE'
+    23     22    249        +- 'DEFINE'
+    22     21     -1        |  +- 'SECTION'
+    21     20     -1        |     +- 'SECTION Name'
+    20     17     -1        |        +- 'SECTION Attributes'
+    17     16     19        |           +- 'ATRB-START'
+    16     -1     -1        |           |  +- 'NUMBER'$0200
+    19     18     -1        |           +- 'SIZE'
+    18     -1     -1        |              +- 'NUMBER'$0400
+   249     24    252        +- 'IRQ-PROC'
+    24     25     -1        |  +- 'IDENT': AnInteruption
+    25     -1    248        |     +- 'Param LIST'
+   248     38     -1        |     +- 'Body'
+    38     27    247        |        +- 'LOCAL Vars'
+    27     26     31        |        |  +- 'CHAR'
+    26     -1     -1        |        |  |  +- 'IDENT': a
+    31     28     33        |        |  +- 'INT'
+    28     -1     29        |        |  |  +- 'IDENT': x
+    29     -1     30        |        |  |  +- 'IDENT': xx
+    30     -1     -1        |        |  |  +- 'IDENT': xxx
+    33     32     35        |        |  +- 'INT'
+    32     -1     -1        |        |  |  +- 'IDENT': c
+    35     34     37        |        |  +- 'CHAR'
+    34     -1     -1        |        |  |  +- 'IDENT': d
+    37     36     -1        |        |  +- 'CHAR'
+    36     -1     -1        |        |     +- 'IDENT': e
+   247     44     -1        |        +- 'STATEMENTS'
+    44     39     53        |           +- 'CODE-BLOCK'
+    39     -1     40        |           |  +- 'NUMBER'$00AA
+    40     -1     41        |           |  +- 'NUMBER'$00BB
+    41     -1     42        |           |  +- 'NUMBER'$00CE
+    42     -1     43        |           |  +- 'NUMBER'$00A1
+    43     -1     -1        |           |  +- 'NUMBER'$00C0
+    53     51     62        |           +- 'DO'
+    51     45     52        |           |  +- 'Assign ='
+    45     -1     50        |           |  |  +- 'IDENT': c
+    50     49     -1        |           |  |  +- 'SUB'
+    49     48     46        |           |  |     +- 'MUL'
+    48     -1     47        |           |  |     |  +- 'IDENT': xx
+    47     -1     -1        |           |  |     |  +- 'IDENT': x
+    46     -1     -1        |           |  |     +- 'IDENT': e
+    52     -1     -1        |           |  +- 'OD'
+    62     54     73        |           +- 'Assign ='
+    54     -1     61        |           |  +- 'IDENT': d
+    61     60     -1        |           |  +- 'SUB'
+    60     -1     59        |           |     +- 'IDENT': xx
+    59     58     -1        |           |     +- 'ADD'
+    58     57     55        |           |        +- 'MUL'
+    57     -1     56        |           |        |  +- 'IDENT': a
+    56     -1     -1        |           |        |  +- 'IDENT': xxx
+    55     -1     -1        |           |        +- 'IDENT': x
+    73     65     94        |           +- 'WHILE'
+    65     64     71        |           |  +- '>='
+    64     -1     63        |           |  |  +- 'IDENT': d
+    63     -1     -1        |           |  |  +- 'IDENT': c
+    71     70     72        |           |  +- 'DO'
+    70     66     -1        |           |  |  +- 'Assign ='
+    66     -1     69        |           |  |     +- 'IDENT': ff
+    69     68     -1        |           |  |     +- 'ADD'
+    68     -1     67        |           |  |        +- 'NUMBER'$0001
+    67     -1     -1        |           |  |        +- 'IDENT': d
+    72     -1     -1        |           |  +- 'OD'
+    94     74    105        |           +- 'FOR'
+    74     -1     78        |           |  +- 'IDENT': a
+    78     77     82        |           |  +- 'Assign ='
+    77     76     -1        |           |  |  +- 'ADD'
+    76     -1     75        |           |  |     +- 'IDENT': xx
+    75     -1     -1        |           |  |     +- 'IDENT': x
+    82     81     84        |           |  +- 'TO'
+    81     80     -1        |           |  |  +- 'SUB'
+    80     -1     79        |           |  |     +- 'IDENT': c
+    79     -1     -1        |           |  |     +- 'IDENT': c
+    84     83     92        |           |  +- 'STEP'
+    83     -1     -1        |           |  |  +- 'NUMBER'$0003
+    92     91     93        |           |  +- 'DO'
+    91     85     -1        |           |  |  +- 'Assign ='
+    85     -1     90        |           |  |     +- 'IDENT': dd
+    90     89     -1        |           |  |     +- 'DIV'
+    89     -1     88        |           |  |        +- 'IDENT': e
+    88     87     -1        |           |  |        +- 'MUL'
+    87     -1     86        |           |  |           +- 'NUMBER'$0008
+    86     -1     -1        |           |  |           +- 'IDENT': d
+    93     -1     -1        |           |  +- 'OD'
+   105     99    245        |           +- 'DO'
+    99     95    103        |           |  +- 'Assign ='
+    95     -1     98        |           |  |  +- 'IDENT': gg
+    98     97     -1        |           |  |  +- 'SUB'
+    97     -1     96        |           |  |     +- 'IDENT': x
+    96     -1     -1        |           |  |     +- 'IDENT': x
+   103    102    104        |           |  +- 'UNTILL'
+   102    101     -1        |           |  |  +- 'EQU-TO'
+   101     -1    100        |           |  |     +- 'IDENT': xx
+   100     -1     -1        |           |  |     +- 'IDENT': e
+   104     -1     -1        |           |  +- 'OD'
+   245    107    246        |           +- 'ASM'
+   107    106    114        |           |  +- 'PROCESSOR'
+   106     -1     -1        |           |  |  +- 'R6502'
+   114    113    116        |           |  +- 'SECTION'
+   113    112     -1        |           |  |  +- 'SECTION Name'
+   112    109     -1        |           |  |     +- 'SECTION Attributes'
+   109    108    111        |           |  |        +- 'ATRB-START'
+   108     -1     -1        |           |  |        |  +- 'NUMBER'$F000
+   111    110     -1        |           |  |        +- 'SIZE'
+   110     -1     -1        |           |  |           +- 'NUMBER'$1000
+   116    115    117        |           |  +- 'ORG'
+   115     -1     -1        |           |  |  +- 'NUMBER'$4000
+   117     -1    119        |           |  +- 'LABEL'
+   119    118    121        |           |  +- 'DB'
+   118     -1     -1        |           |  |  +- 'NUMBER'$0005
+   121    120    123        |           |  +- 'DW'
+   120     -1     -1        |           |  |  +- 'NUMBER'$0257
+   123    122    124        |           |  +- 'DL'
+   122     -1     -1        |           |  |  +- 'NUMBER'$864B2
+   124     -1    126        |           |  +- 'LABEL'
+   126    125    127        |           |  +- 'DS'
+   125     -1     -1        |           |  |  +- 'NUMBER'$0A7F
+   127     -1    129        |           |  +- 'LABEL'
+   129    128    131        |           |  +- 'OPCODE' ADC ($71) INDIRECT INDEXED
+   128     -1     -1        |           |  |  +- 'NUMBER'$0052
+   131    130    133        |           |  +- 'OPCODE' LDA ($A5) ZERO PAGE
+   130     -1     -1        |           |  |  +- 'LABEL'
+   133    132    134        |           |  +- 'OPCODE' LDA ($A9) IMMEDIATE
+   132     -1     -1        |           |  |  +- 'NUMBER'$0055
+   134     -1    135        |           |  +- 'OPCODE' PHA ($48) IMPLIED
+   135     -1    136        |           |  +- 'OPCODE' TYA ($98) IMPLIED
+   136     -1    137        |           |  +- 'LABEL'
+   137     -1    139        |           |  +- 'OPCODE' PHA ($48) IMPLIED
+   139    138    141        |           |  +- 'OPCODE' JMP ($4C) ABSOLUTE
+   138     -1     -1        |           |  |  +- 'NUMBER'$BAD1
+   141    140    143        |           |  +- 'OPCODE' JMP ($6C) INDIRECT
+   140     -1     -1        |           |  |  +- 'NUMBER'$432A
+   143    142    144        |           |  +- 'OPCODE' JSR ($20) ABSOLUTE
+   142     -1     -1        |           |  |  +- 'NUMBER'$F00D
+   144     -1    145        |           |  +- 'OPCODE' PLA ($68) IMPLIED
+   145     -1    152        |           |  +- 'OPCODE' TAY ($A8) IMPLIED
+   152    146    154        |           |  +- 'Asm PROC'
+   146    147     -1        |           |  |  +- 'PROC name' - 'AsmProc'
+   147     -1    149        |           |  |     +- 'OPCODE' PLA ($68) IMPLIED
+   149    148    150        |           |  |     +- 'OPCODE' STA ($8D) ABSOLUTE
+   148     -1     -1        |           |  |     |  +- 'NUMBER'$1000
+   150     -1    151        |           |  |     +- 'OPCODE' RTS ($60) IMPLIED
+   151     -1     -1        |           |  |     +- 'OPCODE' RTI ($40) IMPLIED
+   154    153    156        |           |  +- 'OPCODE' ADC ($61) INDEXED INDIRECT
+   153     -1     -1        |           |  |  +- 'NUMBER'$0044
+   156    155    159        |           |  +- 'OPCODE' SBC ($E5) ZERO PAGE
+   155     -1     -1        |           |  |  +- 'NUMBER'$0012
+   159    157    162        |           |  +- 'OPCODE' CMP ($D5) PAGE ZERO,X
+   157    158     -1        |           |  |  +- 'NUMBER'$0013
+   158     -1     -1        |           |  |     +- '.X'
+   162    160    165        |           |  +- 'OPCODE' AND ($3D) ABSOLUTE,X
+   160    161     -1        |           |  |  +- 'NUMBER'$0400
+   161     -1     -1        |           |  |     +- '.X'
+   165    163    167        |           |  +- 'OPCODE' ORA ($19) ABSOLUTE,Y
+   163    164     -1        |           |  |  +- 'NUMBER'$0410
+   164     -1     -1        |           |  |     +- '.Y'
+   167    166    169        |           |  +- 'OPCODE' CPX ($E0) IMMEDIATE
+   166     -1     -1        |           |  |  +- 'NUMBER'$0017
+   169    168    171        |           |  +- 'OPCODE' CPX ($E4) ZERO PAGE
+   168     -1     -1        |           |  |  +- 'NUMBER'$00B0
+   171    170    173        |           |  +- 'OPCODE' CPX ($EC) ABSOLUTE
+   170     -1     -1        |           |  |  +- 'NUMBER'$A8EE
+   173    172    176        |           |  +- 'OPCODE' ASL ($06) ZERO PAGE
+   172     -1     -1        |           |  |  +- 'NUMBER'$008C
+   176    174    178        |           |  +- 'OPCODE' ASL ($16) PAGE ZERO,X
+   174    175     -1        |           |  |  +- 'NUMBER'$008B
+   175     -1     -1        |           |  |     +- '.X'
+   178    177    181        |           |  +- 'OPCODE' ASL ($0E) ABSOLUTE
+   177     -1     -1        |           |  |  +- 'NUMBER'$AACC
+   181    179    182        |           |  +- 'OPCODE' ASL ($1E) ABSOLUTE,X
+   179    180     -1        |           |  |  +- 'NUMBER'$CCAA
+   180     -1     -1        |           |  |     +- '.X'
+   182     -1    184        |           |  +- 'OPCODE' ASL ($0A) ACCUMULATOR
+   184    183    186        |           |  +- 'OPCODE' LDX ($A2) IMMEDIATE
+   183     -1     -1        |           |  |  +- 'NUMBER'$001F
+   186    185    189        |           |  +- 'OPCODE' LDX ($A6) ZERO PAGE
+   185     -1     -1        |           |  |  +- 'NUMBER'$00C1
+   189    187    191        |           |  +- 'OPCODE' LDX ($B6) PAGE ZERO,Y
+   187    188     -1        |           |  |  +- 'NUMBER'$00C2
+   188     -1     -1        |           |  |     +- '.Y'
+   191    190    194        |           |  +- 'OPCODE' LDX ($AE) ABSOLUTE
+   190     -1     -1        |           |  |  +- 'NUMBER'$56AB
+   194    192    196        |           |  +- 'OPCODE' LDX ($BE) ABSOLUTE,Y
+   192    193     -1        |           |  |  +- 'NUMBER'$64BE
+   193     -1     -1        |           |  |     +- '.Y'
+   196    195    198        |           |  +- 'OPCODE' LDY ($A0) IMMEDIATE
+   195     -1     -1        |           |  |  +- 'NUMBER'$001F
+   198    197    201        |           |  +- 'OPCODE' LDY ($A4) ZERO PAGE
+   197     -1     -1        |           |  |  +- 'NUMBER'$00C1
+   201    199    203        |           |  +- 'OPCODE' LDY ($B4) PAGE ZERO,X
+   199    200     -1        |           |  |  +- 'NUMBER'$00C2
+   200     -1     -1        |           |  |     +- '.X'
+   203    202    206        |           |  +- 'OPCODE' LDY ($AC) ABSOLUTE
+   202     -1     -1        |           |  |  +- 'NUMBER'$56AB
+   206    204    208        |           |  +- 'OPCODE' LDY ($BC) ABSOLUTE,X
+   204    205     -1        |           |  |  +- 'NUMBER'$64BE
+   205     -1     -1        |           |  |     +- '.X'
+   208    207    211        |           |  +- 'OPCODE' STY ($84) ZERO PAGE
+   207     -1     -1        |           |  |  +- 'NUMBER'$007C
+   211    209    213        |           |  +- 'OPCODE' STY ($94) PAGE ZERO,X
+   209    210     -1        |           |  |  +- 'NUMBER'$007D
+   210     -1     -1        |           |  |     +- '.X'
+   213    212    215        |           |  +- 'OPCODE' STY ($8C) ABSOLUTE
+   212     -1     -1        |           |  |  +- 'NUMBER'$D00D
+   215    214    218        |           |  +- 'OPCODE' STX ($86) ZERO PAGE
+   214     -1     -1        |           |  |  +- 'NUMBER'$0062
+   218    216    220        |           |  +- 'OPCODE' STX ($96) PAGE ZERO,Y
+   216    217     -1        |           |  |  +- 'NUMBER'$0063
+   217     -1     -1        |           |  |     +- '.Y'
+   220    219    222        |           |  +- 'OPCODE' STX ($8E) ABSOLUTE
+   219     -1     -1        |           |  |  +- 'NUMBER'$B00B
+   222    221    225        |           |  +- 'OPCODE' INC ($E6) ZERO PAGE
+   221     -1     -1        |           |  |  +- 'NUMBER'$00D0
+   225    223    227        |           |  +- 'OPCODE' INC ($F6) PAGE ZERO,X
+   223    224     -1        |           |  |  +- 'NUMBER'$0062
+   224     -1     -1        |           |  |     +- '.X'
+   227    226    230        |           |  +- 'OPCODE' INC ($EE) ABSOLUTE
+   226     -1     -1        |           |  |  +- 'NUMBER'$63DA
+   230    228    232        |           |  +- 'OPCODE' INC ($FE) ABSOLUTE,X
+   228    229     -1        |           |  |  +- 'NUMBER'$B00B
+   229     -1     -1        |           |  |     +- '.X'
+   232    231    235        |           |  +- 'OPCODE' DEC ($C6) ZERO PAGE
+   231     -1     -1        |           |  |  +- 'NUMBER'$00D0
+   235    233    237        |           |  +- 'OPCODE' DEC ($D6) PAGE ZERO,X
+   233    234     -1        |           |  |  +- 'NUMBER'$0062
+   234     -1     -1        |           |  |     +- '.X'
+   237    236    240        |           |  +- 'OPCODE' DEC ($CE) ABSOLUTE
+   236     -1     -1        |           |  |  +- 'NUMBER'$63DA
+   240    238    242        |           |  +- 'OPCODE' DEC ($DE) ABSOLUTE,X
+   238    239     -1        |           |  |  +- 'NUMBER'$B00B
+   239     -1     -1        |           |  |     +- '.X'
+   242    241    244        |           |  +- 'OPCODE' BIT ($24) ZERO PAGE
+   241     -1     -1        |           |  |  +- 'NUMBER'$00A8
+   244    243     -1        |           |  +- 'OPCODE' BIT ($2C) ABSOLUTE
+   243     -1     -1        |           |     +- 'NUMBER'$9AB0
+   246     -1     -1        |           +- 'RTI'
+   252    250     -1        +- 'INT'
+   250     -1    251           +- 'IDENT': qr
+   251     -1     -1           +- 'IDENT': st
+===================================================
+
+Feb 8, 2025
+
+Making loads of progress.  The inline assembler AST geration is
+about 1/2 done.  Still need to test the branch instructions and
+all of the directives.  The AST for my tests is really starting to
+get quite long.
+
+
+Jan 31, 2025
+
+By Jove, I think I got it.  Had a bit of confusion about how
+building an AST went, after looking at code I wrote about 12 years
+ago, I realized I was sadly mistaken.  All straitened out now, I hope.
+So here are the current state of afairs.
+
+
+Jan 26, 2025
+
+A bit more progress.  Starting to get AST generation for proceedures
+and Statements, although very soparse.
+
+
+Jan 18, 2025
+
+Finally, I hope, I have generating AST trees down.  I am,
+so far, only generating 6 different nodes, and hopefully
+they will start falling in place.  Only about 130 to go.
+
+
+December 26, 2024.
+Things are progressing.  While the intent is to create a
+fully compatable ACTION! compiler, And so far, it is looking that
+way, that hasn't stopped me from making a few additions.  One
+of the things I want to be able to do is produce fully ROM able 
+code for my various 6502/Non-Atari projects.  While it is
+possible to ROM the original ACITON! code, at best it is
+extremely clumbsy, at worst, close to unusable.  So here are the
+intended additions:
+
+	1 Parameters:  An options to pass parameters on the stack or
+or to have them alocated statically as in the Original.
+
+	2 Local Variables:  An options for these to be allocated
+either statically, as in the original, or have them allocated dynamically
+on a "stack like" structure.
+
+	3 IFF - THEN - ELSE - FFI Statements.  This is different that the 
+IF-FI statement that is in the original ACTION! compiler.  This statement
+is from the Rockwell PL/65 compiler, and I thought it was 
+useful enough to include.  It is a bill lower level than the 
+ACTION! IF-FI statment.  The original ACTION! if statements
+is also included.
+
+	4. PUSH/PUSHW: push data or registers onto the stack.  I thought this
+would come in handy, also from PL/65.
+
+	5. POP/POPW: pop data from the stack into registers or memrory.
+
+	6. BREAK: Break Instruction (BRK).  Also from PL/65.
+
+	7. BIT/BITS:  Test bits in memory.  A;sp frp, PL/65.
+
+	8. ASM:  Inline Assembly code.  This is real Assembly code,
+Not the same as the Code Block.
+
+	9. BOOL:  Boolen data type, like the C/C++ bool type.  Probably
+not really needed, but I thought it would make code a
+little bit clearer.
+
+	10. INTERRUPT:  Interrupt type proceedure.  Can't take
+parameters, and uses RTI to return.
+
+	11. VECTOR defines a verctor locations.  This can be
+used so set the RESET/IRQ/NMI vectors, or indirect JMP
+vectors.
+
+	12 DECLARE : Used like a C/C++ function prototype/declaration..
+This will allow for calling functions that are not yet 
+defined in the program.  This will, however, potentially
+a dangerous feature as it could be used to implement
+recursion in the program.  This is why there will be an
+option for dynamic local variables and parameters passed
+on the stack.
+
+	13. ROL: operator, just like the ROL asm statment.
+
+	14  ROR: operator, just like the ROR asm statement.
+
+In the original ACTION! compiler, you declared your global
+variables, and then your function definitions.  You could not declare any
+more global variables unless you used the MODULE keyword.
+
+I am not exactly sure how I managed to cure this problem,
+but the current grammar allows you to freely mix global
+declarations and function definitions any way you please.
+This happend while I was trying to solve the ambiguty
+that is caused by declaring global variables and FUNCtions:
+
+------------ Example 1 -------------------
+MODULE
+INT a,b,c
+
+INT FUNC Afunction()
+
+CHAR x,y,z	;In original ACTION!, this statement is not allowed.
+
+------------- Example 2 -------------------
+
+MODULE
+INT a,b,c
+
+INT FUNC Afunction()
+
+MODULE		; If we add another MODULE statement here
+CHAR x,y,z	;In original ACTION!, this statement is now allowed.
+-----------------------------------------------
+In this version, either will just the same, or you can
+just eliminate the MODULE statement entrirely.
+
+It sure looks easy enough, and it is if you are using an
+LR grammar, but to make the compiler friendly to anybody
+who might want to modify the compiler, I made it LL(1) using
+Recursive/Descent techniques.  Using an LR (LALR) parser
+pretty much requires a parser generator (YACC, Bison, Anagram, etc.).
+Of course, you can get parser generators for LL(k) parsers,
+most notable ANTLR, but they are easy enough to write, so why
+bother. (NOTE:  ANTLR is an LL(k) parser generator, which means
+that you can have as many lookaheads as you want.  The parser
+for this compiler is strictly LL(1), which means it only has
+one lookahead.)
+
+
+November 1, 2024.
+Working the kinks out of the Grammar (action.gram).  There were a few
+places where I overthought things just a bit.  "There is just no way
+that is correct!", but I was wrong, it was right, so I had to change it to what 
+it was supposed to be.
+So, if you thought you would turn this in as your compiler design class
+project, well, it won't happen this quarter.  Maybe next quarter. ;)
+-------
+As of Oct 30, 2024 I am in the process of testing the parser.
+The parser in an LL(1) grammar that is implemented with a recursive
+decent parseer.  Or, at least, I hope so.  I have expanded the language a little
+bit, such as adding a BOOL type, adding an INTERRUPT proceedure type,
+and in line assembly with syntax checking.
+
+This is all the easy part.  The hard part is code generation.  I purchased
+a new book, that I hope, will give me new insights on how to go about
+doing this sort of thing.
