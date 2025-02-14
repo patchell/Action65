@@ -19,6 +19,22 @@ INTERRUPT AnInteruption()
 
 	[$AA$BB$CE$A1$C0]
 	DO
+		IF c = xx THEN
+			PUSH .A
+			POP .Y
+		FI
+		UNTIL jj # gg
+		PUSH .A
+	OD
+	IF xxx > gg THEN
+		BREAK
+		EXIT
+	ELSE
+		gg ==+ e
+		PUSH .X
+	FI
+	[$AA$BB$CE$A1$C0]
+	DO
 		c = e - x * xx
 	OD
 	d = x + xxx * a - xx

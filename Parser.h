@@ -143,6 +143,7 @@ private:
 	CLkHead Rti(CLkHead LookaHead);
 	//---- Assigmemt
 	CLkHead Assignment(CLkHead LookaHead);
+	void AssignmentAUX(CLkHead& LeftHandSide, CLkHead &LHNext, CAstNode* pN, Token Tk);
 	//--------------------------------------
 	// Logical Expressions
 	//--------------------------------------

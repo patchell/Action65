@@ -42,8 +42,11 @@ CValue* CAct65Label::Process()
 int CAct65Label::Print(int Indent, char* s, int Strlen, bool* pbNextFlag)
 {
 	int l = 0;
+	int Size;
 
 	l = CAstNode::Print(Indent, s, Strlen, pbNextFlag);
+	Size = Strlen - l;
+	l += sprintf_s(&s[l], Size, " - \'%s\'", GetSymbol()->GetName());
 	return l;
 }
 
