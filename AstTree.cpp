@@ -53,22 +53,27 @@ void CAstTree::TraverseTree(
 	char* s,
 	int StringSize,
 	int Indent,
-	bool* pbNextFlags
+	bool* pbNextFlags,
+	int Recursions,
+	int MaxLoops
 )
 {
 	//-------------------------------
 	// Navigate the Syntax Tree
 	//-------------------------------
-	static int Recursions = 300;
 	CAstNode* pAN = 0;
-	int Loops = 0;
+	int Loops = MaxLoops;
+	static CAstNode* Buffer[15] = {
+		0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+	};
+	int i = 0;
 
 	--Recursions;
-	if (!Recursions)
+	if (Recursions <= 0)
 	{
 		fprintf(Act()->LogFile(), "Too Many Recursions in CAstTree::TraverseTree  Line:%d Col:%d\n",
-			Act()->GetParser()->GetLexer()->GetLineNumber(),
-			Act()->GetParser()->GetLexer()->GetColunm()
+			pNode->GetLine(),
+			pNode->GetColumn()
 		);
 		Act()->CloseAll();
 		Act()->Exit(2);
@@ -89,18 +94,45 @@ void CAstTree::TraverseTree(
 				pbNextFlags[Indent] = true;
 			else
 				pbNextFlags[Indent] = false;
-			TraverseTree(pOut, pAN->GetChild(), s, StringSize, Indent + 1, pbNextFlags);
+			TraverseTree(
+				pOut, 
+				pAN->GetChild(), 
+				s, 
+				StringSize, 
+				Indent + 1, 
+				pbNextFlags, 
+				Recursions, 
+				MaxLoops
+			);
 		}
-		pAN = pAN->GetNext();
-		if (++Loops > 3000)
+		if (Loops < 10)
+		{
+			Buffer[i++] = pAN;
+		}
+		if (--Loops < 0)
 		{
 			fprintf(Act()->LogFile(), "Infinate Loop in CAstTree::TraverseTree  Line:%d Col:%d\n",
-				Act()->GetParser()->GetLexer()->GetLineNumber(),
-				Act()->GetParser()->GetLexer()->GetColunm()
+				pAN->GetLine(),
+				pAN->GetColumn()
 			);
+			i = 0;
+			while (Buffer[i])
+			{
+				if(Buffer[i]->GetNodeName())
+					fprintf(Act()->LogFile(), "Node:%d Name:%s\n",
+						Buffer[i]->GetID(),
+						Buffer[i]->GetNodeName()
+					);
+				else
+					fprintf(Act()->LogFile(), "Node:%d\n",
+						Buffer[i]->GetID()	
+					);
+				++i;
+			}
 			Act()->CloseAll();
 			Act()->Exit(7);
 		}
+		pAN = pAN->GetNext();
 	}
 	pAN->Print(Indent, s, StringSize, pbNextFlags);
 	fprintf(pOut, "%s\n", s);
@@ -110,7 +142,16 @@ void CAstTree::TraverseTree(
 			pbNextFlags[Indent] = true;
 		else
 			pbNextFlags[Indent] = false;
-		TraverseTree(pOut, pAN->GetChild(), s, StringSize, Indent + 1, pbNextFlags);
+		TraverseTree(
+			pOut, 
+			pAN->GetChild(), 
+			s, 
+			StringSize, 
+			Indent + 1, 
+			pbNextFlags, 
+			Recursions, 
+			MaxLoops
+		);
 	}
 	pbNextFlags[Indent] = false;
 	Recursions++;

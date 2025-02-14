@@ -13,6 +13,8 @@ CAstNode::CAstNode()
 	m_pValue = 0;
 	m_pHead = 0;
 	m_pTail = 0;
+	m_Column = 0;
+	m_Line = 0;
 }
 
 CAstNode::CAstNode(NodeType NT)
@@ -28,6 +30,8 @@ CAstNode::CAstNode(NodeType NT)
 	m_pValue = 0;
 	m_pHead = 0;
 	m_pTail = 0;
+	m_Column = 0;
+	m_Line = 0;
 }
 
 CAstNode::~CAstNode()
@@ -46,27 +50,14 @@ bool CAstNode::Create(
 	int LoopCount = 300;
 	bool rV = true;
 
+	m_Line = Act()->GetParser()->GetLexer()->GetLineNumber();
+	m_Column = Act()->GetParser()->GetLexer()->GetColunm();
 	SetSymbol(pSym);
 	SetChild(pChild);
 	pNode = pChild;
-	if (pNode)
+	if (pNode && pNext)
 	{
 		pNode->AddThatToThisNext(pNext);
-		//while (pNode->GetNext())
-		//{
-		//	--LoopCount;
-		//	if (!LoopCount)
-		//	{
-		//		fprintf(Act()->LogFile(), "Infinate Loop in CAstNode::Create  Line:%d Col:%d\n",
-		//			Act()->GetParser()->GetLexer()->GetLineNumber(),
-		//			Act()->GetParser()->GetLexer()->GetColunm()
-		//		);
-		//		Act()->CloseAll();
-		//		Act()->Exit(19);
-		//	}
-		//	pNode = pNode->GetNext();
-		//}
-		//pNode->SetNext(pNext);
 	}
 	return rV;
 }

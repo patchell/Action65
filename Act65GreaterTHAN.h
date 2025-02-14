@@ -2,7 +2,7 @@
 
 class CAct65GreaterTHAN : public CAstNode
 {
-	inline static const char* m_pNodeTyypeName = "THAN";
+	inline static const char* m_pNodeTyypeName = ">";
 public:
 	CAct65GreaterTHAN();
 	virtual ~CAct65GreaterTHAN();

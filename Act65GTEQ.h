@@ -2,7 +2,7 @@
 
 class CAct65GTEQ : public CAstNode
 {
-	inline static const char* m_pNodeTyypeName = "GTEQ";
+	inline static const char* m_pNodeTyypeName = ">=";
 public:
 	CAct65GTEQ();
 	virtual ~CAct65GTEQ();

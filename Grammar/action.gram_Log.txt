@@ -1769,34 +1769,34 @@ NONTERMINALS['Non Terminals'] { 'Action65','Modules','Modules_1','Set','Set_1','
 ,'StatusFlags','StatusFlags_1','OptNot','WhileStmt','WhileStmt_1','WhileDOend','WhileDOend_1'
 ,'WhileDO','WhileDO_1','DoStmt','DoStmt_1','DoEnd','DoEnd_1','EXITstmt','EXITstmt_1'
 ,'RetStmt','RetStmt_1','OptReturnValue','InlineAssembly','InlineAssembly_1','EndAsmBlock'
-,'EndAsmBlock_1','InlineAssBlock','CodeBlock','CodeBlock_1','CodeBlockEnd','CodeBlockEnd_1'
-,'UntillStmt','UntillStmt_1','Push','Push_1','PushSourceList','PushSourceList_1','PushSource'
-,'PushSource_1','Pop','Pop_1','PopDestList','PopDestList_1','PopDest','PopDest_1'
-,'Break','Break_1','Rti','Rti_1','Assignment','Assignment_1','RelOperation','RelOperation_1'
-,'LogicalOR','LogicalOR_1','LogicalAND','LogicalAND_1','ArithExpr','BitwiseOR_1','BitwiseAND'
-,'BitwiseAND_1','BitwiseXOR','BitwiseXOR_1','AddExpr','AddExpr_1','ShifExpr','ShiftExpr_1'
-,'MultExpr','MultExpr_1','Unary','ValueList','ValueList_1','Value','Value_1','AddressOf'
-,'AddressOf_1','MemContentsType','MemContentsType_1','MemContents','MemContents_1'
-,'ArrayIndex','Factor','SysDecl','Vector_1','VectorEnd','VectorEnd_1','AddressEnd'
-,'AddressEnd_1','VectorAddress','Define','Define_1','DefObject','DefObject_1','DefList'
-,'DefList_1','Def','TypeDefDecl','TypeDefDecl_1','EndTypeDef','EndTypeDef_1','RecDefField'
-,'RecDefField_1','Fields','Declare','Declare_1','DeclareEnd','DeclareEnd_1','DeclareParams'
-,'DeclareParams_1','DeclParamList','DeclParamList_1','DeclPramPointer','DeclPramPointer_1'
-,'DeclParamArray','DeclParamArray_1','DeclareParamIdentList','DeclareParamIdentList_1'
-,'DeclareParamIdent','DeclarFuncName','DeclarFuncName_1','DeclareType','DeclareType_1'
-,'DeclarePointer','DeclarePointer_1','DeclareArray','DeclareArray_1','DeclarFuncType'
-,'FundDecl','FundDecl_1','FundTypeSpec','FundTypeSpec_1','IdentList','IdentList_1'
-,'Ident','IdentInitType','InitData','InitData_1','IrqDecl','IrqDeclParams','IrqBody'
-,'ProcDecl','ProcDeclParams','ProcBody','FuncDecl','FuncDeclParams','FuncBody','OptInit'
-,'ParamList','Param_1','ParamTypeSpec','ParamTypeSpec_1','DefineParamIdentList','DefineParamIdentList_1'
+,'EndAsmBlock_1','InlineAssBlock','CodeBlock','CodeBlock_1','UntillStmt','UntillStmt_1'
+,'Push','Push_1','PushSourceList','PushSourceList_1','PushSource','PushSource_1','Pop'
+,'Pop_1','PopDestList','PopDestList_1','PopDest','PopDest_1','Break','Break_1','Rti'
+,'Rti_1','Assignment','Assignment_1','RelOperation','RelOperation_1','LogicalOR','LogicalOR_1'
+,'LogicalAND','LogicalAND_1','ArithExpr','BitwiseOR_1','BitwiseAND','BitwiseAND_1'
+,'BitwiseXOR','BitwiseXOR_1','AddExpr','AddExpr_1','ShifExpr','ShiftExpr_1','MultExpr'
+,'MultExpr_1','Unary','ValueList','ValueList_1','Value','Value_1','AddressOf','AddressOf_1'
+,'MemContentsType','MemContentsType_1','MemContents','MemContents_1','ArrayIndex'
+,'Factor','SysDecl','Vector_1','VectorEnd','VectorEnd_1','AddressEnd','AddressEnd_1'
+,'VectorAddress','Define','Define_1','DefObject','DefObject_1','DefList','DefList_1'
+,'Def','TypeDefDecl','TypeDefDecl_1','EndTypeDef','EndTypeDef_1','RecDefField','RecDefField_1'
+,'Fields','Declare','Declare_1','DeclareEnd','DeclareEnd_1','DeclareParams','DeclareParams_1'
+,'DeclParamList','DeclParamList_1','DeclPramPointer','DeclPramPointer_1','DeclParamArray'
+,'DeclParamArray_1','DeclareParamIdentList','DeclareParamIdentList_1','DeclareParamIdent'
+,'DeclarFuncName','DeclarFuncName_1','DeclareType','DeclareType_1','DeclarePointer'
+,'DeclarePointer_1','DeclareArray','DeclareArray_1','DeclarFuncType','FundDecl','FundDecl_1'
+,'FundTypeSpec','FundTypeSpec_1','IdentList','IdentList_1','Ident','IdentInitType'
+,'InitData','InitData_1','IrqDecl','IrqDeclParams','IrqBody','ProcDecl','ProcDeclParams'
+,'ProcBody','FuncDecl','FuncDeclParams','FuncBody','OptInit','ParamList','Param_1'
+,'ParamTypeSpec','ParamTypeSpec_1','DefineParamIdentList','DefineParamIdentList_1'
 ,'DefineParamIdent','LocalDecls','LocalDecls_1','LocalTypeSpec','LocalTypeSpec_1'
-,'ConstList','ConstList_1','CompConst','CompConst_1','BaseCompConst','AsmStmt','Processor_1'
-,'ProcessorType','AsmSet','AsmSet_1','AsmSetObjects','AsmSectionName','Section','Section_1'
-,'SectionName','SectionName_1','SectionDef','SectionAttributesList','SectionAttributesList_1'
-,'SectionAtribute','Modes','TrueFalse','Org','Org_1','DefineMemory','DefineMemory_1'
-,'DefineStorage','DefineStorage_1','Proceedure','Proceedure_1','AsmProcEnd','AsmProcEnd_1'
-,'AsmProcBody','AsmProcBody_1','AsmProcName','Instruction','Instruction_1','Labels'
-,'Label_1','AluAdrModes','Indirect','Indirect_1','StaAddressingModes','ShiftAddressingModes'
+,'ComstListEnd','ComstListEnd_1','CompConst','CompConst_1','BaseCompConst','AsmStmt'
+,'Processor_1','ProcessorType','AsmSet','AsmSet_1','AsmSetObjects','AsmSectionName'
+,'Section','Section_1','SectionName','SectionName_1','SectionDef','SectionAttributesList'
+,'SectionAttributesList_1','SectionAtribute','Modes','TrueFalse','Org','Org_1','DefineMemory'
+,'DefineMemory_1','DefineStorage','DefineStorage_1','Proceedure','Proceedure_1','AsmProcEnd'
+,'AsmProcEnd_1','AsmProcBody','AsmProcBody_1','AsmProcName','Instruction','Instruction_1'
+,'Labels','Label_1','AluAdrModes','Indirect','Indirect_1','StaAddressingModes','ShiftAddressingModes'
 ,'RelAddressingMode','BitAddressModes','IncAddressingMOdes','JumpAddressingModes'
 ,'JumpIndirect','JumpDirect','CallAddressingMode','LdxAddressingMode','CPX_CPY_AddressingMode'
 ,'StxAddressingMode','LdyAddressingMode','StyAddressingMode','OptIndexReg','OptIndexReg_1'
@@ -1879,9 +1879,6 @@ FIRST['EndAsmBlock_1'] { '}' }
 FIRST['InlineAssBlock'] { '{' }
 FIRST['CodeBlock'] { '(' }
 FIRST['CodeBlock_1'] { '[','e' }
-FIRST['CodeBlockEnd'] { 'NUMBER','CUR_LOC','@','DEFINED_IDENT','INTERRUPT_IDENT','FUNC_IDENT'
-,'PROC_IDENT' }
-FIRST['CodeBlockEnd_1'] { ']' }
 FIRST['UntillStmt'] { '(' }
 FIRST['UntillStmt_1'] { 'UNTILL','e' }
 FIRST['Push'] { '(' }
@@ -2012,14 +2009,15 @@ FIRST['LocalDecls'] { 'IDENT','FUNC' }
 FIRST['LocalDecls_1'] { 'CHAR','BYTE','INT','CARD','BOOL','RECORDTYPE','e' }
 FIRST['LocalTypeSpec'] { 'IDENT','FUNC' }
 FIRST['LocalTypeSpec_1'] { 'POINTER','ARRAY','e' }
-FIRST['ConstList'] { 'NUMBER','CUR_LOC','@','DEFINED_IDENT','INTERRUPT_IDENT','FUNC_IDENT'
+FIRST['ComstListEnd'] { 'NUMBER','CUR_LOC','@','DEFINED_IDENT','INTERRUPT_IDENT','FUNC_IDENT'
 ,'PROC_IDENT' }
-FIRST['ConstList_1'] { ',','e' }
-FIRST['CompConst'] { 'e','NUMBER','CUR_LOC','@','DEFINED_IDENT','INTERRUPT_IDENT','FUNC_IDENT'
+FIRST['ComstListEnd_1'] { ']',',','NUMBER','CUR_LOC','@','DEFINED_IDENT','INTERRUPT_IDENT'
+,'FUNC_IDENT','PROC_IDENT' }
+FIRST['CompConst'] { 'NUMBER','CUR_LOC','@','DEFINED_IDENT','INTERRUPT_IDENT','FUNC_IDENT'
 ,'PROC_IDENT' }
 FIRST['CompConst_1'] { '+','-','e' }
 FIRST['BaseCompConst'] { 'NUMBER','CUR_LOC','@','DEFINED_IDENT','INTERRUPT_IDENT','FUNC_IDENT'
-,'PROC_IDENT','e' }
+,'PROC_IDENT' }
 FIRST['AsmStmt'] { 'IDENT' }
 FIRST['Processor_1'] { 'PROCESSOR','e' }
 FIRST['ProcessorType'] { 'R6502','WD65C02','WD65C816' }
@@ -2190,8 +2188,6 @@ FOLLOW['CodeBlock'] { 'ASM','RETURN','EXIT','DO','WHILE','IFF','IF','FOR','PROC_
 ,'FUNC_IDENT','OD' }
 FOLLOW['CodeBlock_1'] { 'ASM','RETURN','EXIT','DO','WHILE','IFF','IF','FOR','PROC_IDENT'
 ,'FUNC_IDENT','OD' }
-FOLLOW['CodeBlockEnd'] { }
-FOLLOW['CodeBlockEnd_1'] { }
 FOLLOW['UntillStmt'] { '[','ASM','RETURN','EXIT','DO','WHILE','IFF','IF','FOR','PROC_IDENT'
 ,'FUNC_IDENT','OD' }
 FOLLOW['UntillStmt_1'] { '[','ASM','RETURN','EXIT','DO','WHILE','IFF','IF','FOR','PROC_IDENT'
@@ -2438,11 +2434,14 @@ FOLLOW['LocalDecls'] { '(' }
 FOLLOW['LocalDecls_1'] { '(' }
 FOLLOW['LocalTypeSpec'] { 'CHAR','BYTE','INT','CARD','BOOL','RECORDTYPE','(' }
 FOLLOW['LocalTypeSpec_1'] { 'CHAR','BYTE','INT','CARD','BOOL','RECORDTYPE','(' }
-FOLLOW['ConstList'] { ']' }
-FOLLOW['ConstList_1'] { ']' }
-FOLLOW['CompConst'] { ')','STRING','[',',',']' }
-FOLLOW['CompConst_1'] { ')','STRING','[',',',']' }
-FOLLOW['BaseCompConst'] { '+','-',')','STRING','[',',',']' }
+FOLLOW['ComstListEnd'] { }
+FOLLOW['ComstListEnd_1'] { }
+FOLLOW['CompConst'] { ')','STRING','[',']',',','NUMBER','CUR_LOC','@','DEFINED_IDENT'
+,'INTERRUPT_IDENT','FUNC_IDENT','PROC_IDENT' }
+FOLLOW['CompConst_1'] { ')','STRING','[',']',',','NUMBER','CUR_LOC','@','DEFINED_IDENT'
+,'INTERRUPT_IDENT','FUNC_IDENT','PROC_IDENT' }
+FOLLOW['BaseCompConst'] { '+','-',')','STRING','[',']',',','NUMBER','CUR_LOC','@','DEFINED_IDENT'
+,'INTERRUPT_IDENT','FUNC_IDENT','PROC_IDENT' }
 FOLLOW['AsmStmt'] { }
 FOLLOW['Processor_1'] { }
 FOLLOW['ProcessorType'] { }
@@ -2518,5 +2517,5 @@ FOLLOW['AsmConstAddSub'] { '>','<',',',')','(' }
 FOLLOW['AsmConstAddSub_1'] { '>','<',',',')','(' }
 FOLLOW['BaseAsmConstant'] { '+','-','>','<',',',')','(' }
 ---------------- Create Parse Table --------------
-Table Entries = 1825
+Table Entries = 1816
 ------------ Check For Conflicts-------------

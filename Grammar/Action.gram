@@ -46,6 +46,11 @@
 // Compiler.  Added Section definition to Action
 // Compiler as well
 //
+// VERSION 0.0.8 Feb. 12, 2025
+// Changed the way Compiler Constants Lists (ConstList)
+// so that commas are no longer required between
+// values.
+//
 //----------------------------------
 
 TERMINALS
@@ -440,11 +445,9 @@ InlineAssBlock		-> '{' AsmStmt
 // CODE (Kluge) BLOCK statement
 //-----------------------------------------------
 CodeBlock		-> UntillStmt CodeBlock_1;
-CodeBlock_1		-> '[' CodeBlockEnd UntillStmt CodeBlock_1
+CodeBlock_1		-> '[' ComstListEnd UntillStmt CodeBlock_1
 				-> .
 				;
-CodeBlockEnd	-> ConstList CodeBlockEnd_1;
-CodeBlockEnd_1	-> ']'
 				;
 
 //---------------------------------------------------
@@ -808,7 +811,7 @@ IdentInitType	-> '(' CompConst ')'
 
 InitData		-> CompConst InitData_1;
 InitData_1		-> 'STRING'
-				-> '[' ConstList ']'
+				-> '[' ComstListEnd
 				-> .
 				;
 				;
@@ -896,23 +899,29 @@ LocalTypeSpec_1	-> 'POINTER' IdentList LocalTypeSpec_1
 //-------------------------------
 // Compiler Constants, from Compile time
 //-------------------------------
-ConstList	-> CompConst ConstList_1;
-ConstList_1	-> ',' CompConst ConstList_1
-			-> .
-			;
+//ConstList	-> '[' ComstListEnd
+//			-> .
+//			;
+//
+ComstListEnd	-> CompConst ComstListEnd_1;
+ComstListEnd_1	-> ']'
+				-> ',' CompConst ComstListEnd_1
+				-> CompConst ComstListEnd_1;
+
+
 CompConst		-> BaseCompConst CompConst_1;
 CompConst_1		-> '+' BaseCompConst CompConst_1
 				-> '-' BaseCompConst CompConst_1
 				-> .
 				;
+
 BaseCompConst	-> 'NUMBER'
 				-> 'CUR_LOC'
-				-> '@' IDENT
-				-> DEFINED_IDENT
+				-> '@' 'IDENT'
+				-> 'DEFINED_IDENT'
 				-> 'INTERRUPT_IDENT'
 				-> 'FUNC_IDENT'
 				-> 'PROC_IDENT'
-				-> .
 				;
 
 

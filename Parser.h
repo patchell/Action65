@@ -127,7 +127,6 @@ private:
 	CLkHead InlineAssBlock(CLkHead LookaHead);
 	//----CODE BLOCK
 	CLkHead CodeBlock(CLkHead LookaHead);
-	CLkHead CodeBlockEnd(CLkHead LookaHead);
 	//---- UNTIL
 	CLkHead UntillStmt(CLkHead LookaHead);
 	//---- PUSH
@@ -254,6 +253,7 @@ private:
 	// Compiler Constants
 	//-------------------------------
 	CLkHead ConstList(CLkHead LookaHead);
+	CLkHead ConstListEnd(CLkHead LookaHead);
 	CLkHead CompConst(CLkHead LookaHead);
 	CLkHead BaseCompConst(CLkHead LookaHead);
 	//****************************************
@@ -402,6 +402,7 @@ public:
 	void PrintChild(const char* s, CAstNode* pChild);
 	void PrintNode(const char* s, int TabIndent, CAstNode* pNode);
 	void LHPrint(CLkHead* pLH, const char* s);
+	void DebugTravers(CAstNode* pN, const char* pTitle, int MaxRecursions, int MaxLoops);
 	//---------------------------------
 };
 

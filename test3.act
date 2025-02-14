@@ -17,9 +17,21 @@ INTERRUPT AnInteruption()
 	CHAR d
 	CHAR e
 
-	e = x + xxx * a - xx
+	[$AA$BB$CE$A1$C0]
 	DO
-		e = x - 8
+		c = e - x * xx
+	OD
+	d = x + xxx * a - xx
+	WHILE c >= d
+	DO
+		ff = d + 1
+	OD
+	FOR a = x + xx TO c - 4 STEP 3
+	DO
+		dd = d * 8 / e
+	OD
+	DO
+		gg = x - 8
 		UNTIL e = xx
 	OD
 	ASM {

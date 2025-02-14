@@ -170,6 +170,8 @@ private:
 	CAstNode* m_pParent;
 	//---------- Value ---------------
 	CValue* m_pValue;
+	int m_Line;
+	int m_Column;
 public:
 	CAstNode();
 	CAstNode(NodeType NT);
@@ -235,4 +237,6 @@ public:
 		return m_pValue;
 	}
 	int MakeIndentString(char* s, int size, int Indent, bool* pbNextFlag);
+	int GetLine() const { return m_Line; }
+	int GetColumn() const { return m_Column; }
 };
