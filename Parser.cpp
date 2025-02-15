@@ -742,10 +742,8 @@ CLkHead CParser::IfStmt(CLkHead LookaHead)
 			pN->Create(LHChild.GetNode());
 			LHNext.AddNode(pN);
 			LHNext.SetToken(LHChild.GetToken());
-			DebugTravers(LHNext.GetNode(), "IF node LHNext Befpre IFF decent", 25, 1000);
 			//-------------------------------------------
 			LHNext = IffStmt(LHNext);
-			DebugTravers(LHNext.GetNode(), "IF After IFF node LHNext", 25, 1000);
 			break;
 		default:
 			Loop = false;
@@ -775,10 +773,8 @@ CLkHead CParser::EndIf(CLkHead LookaHead)
 		pN = new CAct65FI;
 		pN->Create();
 		LHChild.AddNode(pN);
-		DebugTravers(LHChild.GetNode(), "FI node LHChild After AddMpde([N)", 25, 1000);
 		LHNext.AddNode(LHChild.GetNode());
 		LHNext.SetToken(LHChild.GetToken());
-		DebugTravers(LHNext.GetNode(), "FI node LHNext At Exit", 25, 1000);
 		break;
 	default:
 		break;
@@ -872,7 +868,6 @@ CLkHead CParser::ThenPart(CLkHead LookaHead)
 		pN = new CAct65THEN;
 		pN->Create(LHChild.GetNode());
 		LHNext.AddNode(pN);
-		DebugTravers(LHNext.GetNode(), "THEN LHNext After Statements", 25, 1000);
 		LHNext.SetToken(LHChild.GetToken());
 		break;
 	default:
@@ -884,6 +879,7 @@ CLkHead CParser::ThenPart(CLkHead LookaHead)
 //------------------------------------------------
 // IFF Statement
 //------------------------------------------------
+
 CLkHead CParser::IffStmt(CLkHead LookaHead)
 {
 	//--------------------------------------------
@@ -926,23 +922,24 @@ CLkHead CParser::IFFend(CLkHead LookaHead)
 	//	IFFend		->IFFelse IFFend_1;
 	//	IFFend_1	-> 'FFI';
 	//--------------------------------------------
-	bool Loop = true;
-	CAstNode* pN= 0;
+	CAct65FFI* pN= 0;
 	CLkHead LHNext, LHChild;
 
-	LHNext = IFFelse(LookaHead);
-	switch (LHNext.GetToken())
+	LHNext = LookaHead;
+	LHChild = LHNext;
+	LHChild.SetNode(0);
+	LHChild = IFFelse(LHChild);
+	switch (LHChild.GetToken())
 	{
 	case Token::FFI:
-		LHChild = Expect(LHNext, Token::FFI);
-		pN = new CAct65IFF;
-		pN->Create(LHChild.GetNode());
-		LHNext.AddNode(pN);
+		LHChild = Expect(LHChild, Token::FFI);
+		pN = new CAct65FFI;
+		pN->Create();
+		LHChild.AddNode(pN);
+		LHNext.AddNode(LHChild.GetNode());
 		LHNext.SetToken(LHChild.GetToken());
-		Loop = false;
 		break;
 	default:
-		Loop = false;
 		break;
 	}
 	return LHNext;
@@ -957,7 +954,7 @@ CLkHead CParser::IFFelse(CLkHead LookaHead)
 	//				-> .
 	//				;
 	//--------------------------------------------
-	CAstNode* pN= 0;
+	CAct65ELSE* pN= 0;
 	CLkHead LHNext, LHChild;
 
 	LHNext = IFFthenpart(LookaHead);
@@ -982,7 +979,7 @@ CLkHead CParser::IFFelse(CLkHead LookaHead)
 CLkHead CParser::IFFthenpart(CLkHead LookaHead)
 {
 	//--------------------------------------------
-	//	IFFthenpart		->IffConditional IFFthenpart_1;
+	//	IFFthenpart		->IffRelOper IFFthenpart_1;
 	//	IFFthenpart_1	-> 'THEN' Statements
 	//					-> .
 	//					;
@@ -990,12 +987,13 @@ CLkHead CParser::IFFthenpart(CLkHead LookaHead)
 	CAstNode* pN= 0;
 	CLkHead LHNext, LHChild;
 
-	LHNext = IffConditional(LookaHead);
+	LHNext = IffRelOper(LookaHead);
 	switch (LHNext.GetToken())
 	{
 	case Token::THEN:
-		LookaHead = Expect(LookaHead, Token::THEN);
-		LookaHead = Statements(LookaHead);
+		LHChild = Expect(LHNext, Token::THEN);
+		LHChild.SetNode(0);
+		LHChild = Statements(LHChild);
 		pN = new CAct65THEN;
 		pN->Create(LHChild.GetNode());
 		LHNext.AddNode(pN);
@@ -1010,46 +1008,65 @@ CLkHead CParser::IFFthenpart(CLkHead LookaHead)
 
 }
 
-CLkHead CParser::IffConditional(CLkHead LookaHead)
+CLkHead CParser::IffRelOper(CLkHead LookaHead)
 {
 	//--------------------------------------------
-	//	IffConditional		->Bits IffConditional_1;
-	//	IffConditional_1	-> 'AREG' RelOper
-	//						-> 'XREG' RelOper
-	//						-> 'YREG' RelOper
-	//						-> .
-	//						;
+	//	IffRelOper		->IffRegister IffRelOper_1;
+	//	IffRelOper_1	-> '<' Value
+	//					-> 'GTEQ' Value
+	//					-> '=' Value
+	//					-> '^' '=' Value	//not equal
+	//					-> .
+	//					;
 	//--------------------------------------------
-	CAstNode* pN= 0;
+	CAstNode* pN = 0;
 	CLkHead LHNext, LHChild;
 
-	LHNext = Bits(LookaHead);
+	LHNext = IffRegister(LookaHead);
+	DebugTravers(LHNext.GetNode(), "IFF IffRelOper LHNext On Entry", 25, 1000);
 	switch (LHNext.GetToken())
 	{
-	case Token::AREG:
-		LHChild = Expect(LHNext, Token::AREG);
+	case Token('<'):
+		LHChild = Expect(LHNext, Token('<'));
 		LHChild.SetNode(0);
-		LHChild = RelOper(LHChild);
-		pN = new CAct65ACC;
-		pN->Create(LHChild.GetNode());
-		LHNext.AddNode(pN);
+		LHChild = Value(LHChild);
+		pN = new CAct65LessTHAN;
+		pN->Create(LHChild.GetNode(), LHNext.GetNode());
+		LHNext.SetNode(pN);
+		LHNext.SetToken(LHChild.GetToken());
+		DebugTravers(LHNext.GetNode(), "IFF IffRelOper LHNext On Exit", 25, 1000);
+		break;
+	case Token::GTEQ:	// >=
+		LHChild = Expect(LHNext, Token::GTEQ);
+		LHChild.SetNode(0);
+		LHChild = Value(LHChild);
+		pN = new CAct65GTEQ;
+		pN->Create(LHChild.GetNode(), LHNext.GetNode());
+		LHNext.SetNode(pN);
 		LHNext.SetToken(LHChild.GetToken());
 		break;
-	case Token::XREG:
-		LookaHead = Expect(LookaHead, Token::XREG);
-		LHChild = RelOper(LHChild);
-		pN = new CAct65XREG;
-		pN->Create(LHChild.GetNode());
-		LHNext.AddNode(pN);
+	case Token('='):
+		LHChild = Expect(LHNext, Token('='));
+		LHChild.SetNode(0);
+		LHChild = Value(LHChild);
+		DebugTravers(LHChild.GetNode(), "IFF IffRelOper LHChild After Value", 25, 1000);
+		pN = new CAct65EqualTO;
+		pN->Create(LHChild.GetNode(), LHNext.GetNode());
+		LHNext.SetNode(pN);
 		LHNext.SetToken(LHChild.GetToken());
+		DebugTravers(LHNext.GetNode(), "IFF IffRelOper LHNext On Exit", 25, 1000);
 		break;
-	case Token::YREG:
-		LookaHead = Expect(LookaHead, Token::YREG);
-		LHChild = RelOper(LHChild);
-		pN = new CAct65YREG;
-		pN->Create(LHChild.GetNode());
-		LHNext.AddNode(pN);
+	case Token('^'):
+		LHChild = Expect(LHNext, Token('^'));
+		LHChild = Expect(LHChild, Token('='));
+		LHChild.SetNode(0);
+		LHChild = Value(LHChild);
+		DebugTravers(LHChild.GetNode(), "IFF IffRelOper LHChild After Value", 25, 1000);
+		pN = new CAct65EqualTO;
+		pN->Create(LHChild.GetNode(), LHNext.GetNode());
+		LHNext.SetNode(pN);
 		LHNext.SetToken(LHChild.GetToken());
+		DebugTravers(LHNext.GetNode(), "IFF IffRelOper LHNext On Exit", 25, 1000);
 		break;
 	default:
 		break;
@@ -1058,46 +1075,40 @@ CLkHead CParser::IffConditional(CLkHead LookaHead)
 
 }
 
-CLkHead CParser::RelOper(CLkHead LookaHead)
+CLkHead CParser::IffRegister(CLkHead LookaHead)
 {
 	//--------------------------------------------
-	//	RelOper	-> '<' Value
-	//			-> 'GTEQ' Value
-	//			-> '=' Value
-	//			-> .
-	//			;
+	//	IffRegister		->Bits IffRegister_1;
+	//	IffRegister_1	-> 'AREG' 
+	//						-> 'XREG' 
+	//						-> 'YREG' 
+	//						-> .
+	//						;
 	//--------------------------------------------
 	CAstNode* pN= 0;
-	CLkHead LHNext, LHChild;
+	CLkHead LHNext;
 
+	LHNext = Bits(LookaHead);
 	switch (LHNext.GetToken())
 	{
-	case Token('<'):
-		LHChild = Expect(LHNext, Token('<'));
-		LHChild.SetNode(0);
-		LHChild = Value(LHChild);
-		pN = new CAct65LessTHAN;
-		pN->Create(LHChild.GetNode());
+	case Token::AREG:
+		LHNext = Expect(LHNext, Token::AREG);
+		pN = new CAct65ACC;
+		pN->Create();
 		LHNext.AddNode(pN);
-		LHNext.SetToken(LHChild.GetToken());
+		DebugTravers(LHNext.GetNode(), "IFF IffRegister LHNext node LHNext", 25, 1000);
 		break;
-	case Token::GTEQ:
-		LHChild = Expect(LHNext, Token::GTEQ);
-		LHChild.SetNode(0);
-		LHChild = Value(LHChild);
-		pN = new CAct65GTEQ;
-		pN->Create(LHChild.GetNode());
+	case Token::XREG:
+		LHNext = Expect(LHNext, Token::XREG);
+		pN = new CAct65XREG;
+		pN->Create();
 		LHNext.AddNode(pN);
-		LHNext.SetToken(LHChild.GetToken());
 		break;
-	case Token('='):
-		LHChild = Expect(LHNext, Token('='));
-		LHChild.SetNode(0);
-		LHChild = Value(LHChild);
-		pN = new CAct65EqualTO;
-		pN->Create(LHChild.GetNode());
+	case Token::YREG:
+		LHNext = Expect(LHNext, Token::YREG);
+		pN = new CAct65YREG;
+		pN->Create();
 		LHNext.AddNode(pN);
-		LHNext.SetToken(LHChild.GetToken());
 		break;
 	default:
 		break;
@@ -1115,17 +1126,17 @@ CLkHead CParser::Bits(CLkHead LookaHead)
 	//			;
 	//--------------------------------------------
 	bool Loop = true;
-	CAstNode* pN = 0;
+	CAct65BITS* pN = 0;
 	CLkHead LHNext, LHChild;
 
-	LHNext = LookaHead;
+	LHNext = StatusFlags(LookaHead);
 	switch (LHNext.GetToken())
 	{
 	case Token::BITS:
 		LHChild = Expect(LHNext, Token::BITS);
 		LHChild.SetNode(0);
 		LHChild = BitValue(LHChild);
-		pN = new CAct65EqualTO;
+		pN = new CAct65BITS;
 		pN->Create(LHChild.GetNode());
 		LHNext.AddNode(pN);
 		LHNext.SetToken(LHChild.GetToken());
@@ -1170,8 +1181,8 @@ CLkHead CParser::StatusFlags(CLkHead LookaHead)
 	case Token::NEG:
 		LHChild = Expect(LHNext, Token::NEG);
 		pN = new CAct65FlagNEG;
-		pN->Create(LHChild.GetNode());
-		LHNext.AddNode(pN);
+		pN->Create(LHChild.GetNode(), LHNext.GetNode());
+		LHNext.SetNode(pN);
 		LHNext.SetToken(LHChild.GetToken());
 		break;
 	case Token::ZERO:
@@ -1210,12 +1221,13 @@ CLkHead CParser::OptNot(CLkHead LookaHead)
 	//			;
 	//--------------------------------------------
 	CAstNode* pN= 0;
-	CLkHead LHNext, LHChild;
+	CLkHead LHNext;
 
-	switch (LookaHead.GetToken())
+	LHNext = LookaHead;
+	switch (LHNext.GetToken())
 	{
 	case Token('^'):
-		LookaHead = Expect(LookaHead, Token('^'));
+		LHNext = Expect(LHNext, Token('^'));
 		pN = new CAct65OptNOT;
 		pN->Create();
 		LHNext.AddNode(pN);
@@ -1356,7 +1368,6 @@ CLkHead CParser::DoStmt(CLkHead LookaHead)
 			pN->Create(LHChild.GetNode());
 			LHNext.AddNode(pN);
 			LHNext.SetToken(LHChild.GetToken());
-			DebugTravers(LHNext.GetNode(), "DO node LHNext", 25, 1000);
 			//--------------------------------------
 			LHNext = EXITstmt(LHNext);
 			break;
@@ -1389,7 +1400,6 @@ CLkHead CParser::DoEND(CLkHead LookaHead)
 		pN->Create();
 		LHChild.AddNode(pN);
 		LHNext.AddNode(LHChild.GetNode());
-		DebugTravers(LHNext.GetNode(), "OD node LHNext", 25, 1000);
 		LHNext.SetToken(LHChild.GetToken());
 		break;
 	default:
@@ -1672,9 +1682,7 @@ CLkHead CParser::Push(CLkHead LookaHead)
 	CAstNode* pN= 0;
 	CLkHead LHNext, LHChild;
 
-	DebugTravers(LookaHead.GetNode(), "Enter PUSH Lookahead node LHNext", 25, 1000);
 	LHNext = Pop(LookaHead);
-	DebugTravers(LHNext.GetNode(), "PUSH After First POP LHNext node LHNext", 25, 1000);
 	while (Loop)
 	{
 		switch (LHNext.GetToken())
@@ -1686,7 +1694,6 @@ CLkHead CParser::Push(CLkHead LookaHead)
 			pN = new CAct65PUSH;
 			pN->Create(LHChild.GetNode());
 			LHNext.AddNode(pN);
-			DebugTravers(LHNext.GetNode(), "PUSH After AddNode(pN) LHNext node LHNext", 25, 1000);
 			LHNext.SetToken(LHChild.GetToken());
 			//------------------------------------------
 			LHNext = Pop(LHNext);

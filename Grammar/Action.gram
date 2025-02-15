@@ -349,28 +349,33 @@ IFFelse		-> IFFthenpart IFFelse_1;
 IFFelse_1	-> 'ELSE' Statements
 			-> .
 			;
-IFFthenpart		-> IffConditional IFFthenpart_1;
+IFFthenpart		-> IffRelOper IFFthenpart_1;
 IFFthenpart_1	-> 'THEN' Statements
 				-> .
 				;
 
-IffConditional	-> Bits IffConditional_1;
-IffConditional_1-> 'AREG' RelOper 
-				-> 'XREG' RelOper 
-				-> 'YREG' RelOper 
-				-> .
-				;
-RelOper			-> '<' Value
+IffRelOper		-> IffRegister IffRelOper_1;
+IffRelOper_1	-> '<' Value
 				-> 'GTEQ' Value
 				-> '=' Value
+				-> '^' '=' Value	//not equal
+				-> .
+				;
+
+IffRegister		-> Bits IffRegister_1;
+IffRegister_1	-> 'AREG'  
+				-> 'XREG'  
+				-> 'YREG'  
 				-> .
 				;
 
 Bits			->StatusFlags Bits_1;
 Bits_1			-> 'BITS' BitValue
+				-> BIT BitValue
 				-> .
 				;
-BitValue		-> '[' ArithExpr ']';
+BitValue		-> '[' ArithExpr 
+				-> ']';
 
 StatusFlags		-> OptNot StatusFlags_1;
 StatusFlags_1	-> 'NEG'		//negative flag

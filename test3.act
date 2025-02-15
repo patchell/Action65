@@ -18,6 +18,15 @@ INTERRUPT AnInteruption()
 	CHAR e
 
 	[$AA$BB$CE$A1$C0]
+	IFF .A = 0 THEN
+		jj ==* 2
+	FFI
+	IFF .N THEN
+		kk ==MOD 5
+	FFI
+	IFF BITS[$05] THEN
+		ii ==LSH 2
+	FFI
 	DO
 		IF c = xx THEN
 			PUSH .A

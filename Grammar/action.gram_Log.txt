@@ -1765,30 +1765,30 @@ NONTERMINALS['Non Terminals'] { 'Action65','Modules','Modules_1','Set','Set_1','
 ,'STEPoption','STEPoption_1','ForTO','ForTO_1','Itterrator','Itterrator_1','IfStmt'
 ,'IfStmt_1','EndIF','EndIF_1','ElsePart','ElsePart_1','ElseIfPart','ElseIfPart_1'
 ,'ThenPart','ThenPart_1','Iff','Iff_1','IFFend','IFFend_1','IFFelse','IFFelse_1','IFFthenpart'
-,'IFFthenpart_1','IffConditional','IffConditional_1','RelOper','Bits','Bits_1','BitValue'
-,'StatusFlags','StatusFlags_1','OptNot','WhileStmt','WhileStmt_1','WhileDOend','WhileDOend_1'
-,'WhileDO','WhileDO_1','DoStmt','DoStmt_1','DoEnd','DoEnd_1','EXITstmt','EXITstmt_1'
-,'RetStmt','RetStmt_1','OptReturnValue','InlineAssembly','InlineAssembly_1','EndAsmBlock'
-,'EndAsmBlock_1','InlineAssBlock','CodeBlock','CodeBlock_1','UntillStmt','UntillStmt_1'
-,'Push','Push_1','PushSourceList','PushSourceList_1','PushSource','PushSource_1','Pop'
-,'Pop_1','PopDestList','PopDestList_1','PopDest','PopDest_1','Break','Break_1','Rti'
-,'Rti_1','Assignment','Assignment_1','RelOperation','RelOperation_1','LogicalOR','LogicalOR_1'
-,'LogicalAND','LogicalAND_1','ArithExpr','BitwiseOR_1','BitwiseAND','BitwiseAND_1'
-,'BitwiseXOR','BitwiseXOR_1','AddExpr','AddExpr_1','ShifExpr','ShiftExpr_1','MultExpr'
-,'MultExpr_1','Unary','ValueList','ValueList_1','Value','Value_1','AddressOf','AddressOf_1'
-,'MemContentsType','MemContentsType_1','MemContents','MemContents_1','ArrayIndex'
-,'Factor','SysDecl','Vector_1','VectorEnd','VectorEnd_1','AddressEnd','AddressEnd_1'
-,'VectorAddress','Define','Define_1','DefObject','DefObject_1','DefList','DefList_1'
-,'Def','TypeDefDecl','TypeDefDecl_1','EndTypeDef','EndTypeDef_1','RecDefField','RecDefField_1'
-,'Fields','Declare','Declare_1','DeclareEnd','DeclareEnd_1','DeclareParams','DeclareParams_1'
-,'DeclParamList','DeclParamList_1','DeclPramPointer','DeclPramPointer_1','DeclParamArray'
-,'DeclParamArray_1','DeclareParamIdentList','DeclareParamIdentList_1','DeclareParamIdent'
-,'DeclarFuncName','DeclarFuncName_1','DeclareType','DeclareType_1','DeclarePointer'
-,'DeclarePointer_1','DeclareArray','DeclareArray_1','DeclarFuncType','FundDecl','FundDecl_1'
-,'FundTypeSpec','FundTypeSpec_1','IdentList','IdentList_1','Ident','IdentInitType'
-,'InitData','InitData_1','IrqDecl','IrqDeclParams','IrqBody','ProcDecl','ProcDeclParams'
-,'ProcBody','FuncDecl','FuncDeclParams','FuncBody','OptInit','ParamList','Param_1'
-,'ParamTypeSpec','ParamTypeSpec_1','DefineParamIdentList','DefineParamIdentList_1'
+,'IFFthenpart_1','IffRelOper','IffRelOper_1','IffRegister','IffRegister_1','Bits'
+,'Bits_1','BitValue','StatusFlags','StatusFlags_1','OptNot','WhileStmt','WhileStmt_1'
+,'WhileDOend','WhileDOend_1','WhileDO','WhileDO_1','DoStmt','DoStmt_1','DoEnd','DoEnd_1'
+,'EXITstmt','EXITstmt_1','RetStmt','RetStmt_1','OptReturnValue','InlineAssembly','InlineAssembly_1'
+,'EndAsmBlock','EndAsmBlock_1','InlineAssBlock','CodeBlock','CodeBlock_1','UntillStmt'
+,'UntillStmt_1','Push','Push_1','PushSourceList','PushSourceList_1','PushSource','PushSource_1'
+,'Pop','Pop_1','PopDestList','PopDestList_1','PopDest','PopDest_1','Break','Break_1'
+,'Rti','Rti_1','Assignment','Assignment_1','RelOperation','RelOperation_1','LogicalOR'
+,'LogicalOR_1','LogicalAND','LogicalAND_1','ArithExpr','BitwiseOR_1','BitwiseAND'
+,'BitwiseAND_1','BitwiseXOR','BitwiseXOR_1','AddExpr','AddExpr_1','ShifExpr','ShiftExpr_1'
+,'MultExpr','MultExpr_1','Unary','ValueList','ValueList_1','Value','Value_1','AddressOf'
+,'AddressOf_1','MemContentsType','MemContentsType_1','MemContents','MemContents_1'
+,'ArrayIndex','Factor','SysDecl','Vector_1','VectorEnd','VectorEnd_1','AddressEnd'
+,'AddressEnd_1','VectorAddress','Define','Define_1','DefObject','DefObject_1','DefList'
+,'DefList_1','Def','TypeDefDecl','TypeDefDecl_1','EndTypeDef','EndTypeDef_1','RecDefField'
+,'RecDefField_1','Fields','Declare','Declare_1','DeclareEnd','DeclareEnd_1','DeclareParams'
+,'DeclareParams_1','DeclParamList','DeclParamList_1','DeclPramPointer','DeclPramPointer_1'
+,'DeclParamArray','DeclParamArray_1','DeclareParamIdentList','DeclareParamIdentList_1'
+,'DeclareParamIdent','DeclarFuncName','DeclarFuncName_1','DeclareType','DeclareType_1'
+,'DeclarePointer','DeclarePointer_1','DeclareArray','DeclareArray_1','DeclarFuncType'
+,'FundDecl','FundDecl_1','FundTypeSpec','FundTypeSpec_1','IdentList','IdentList_1'
+,'Ident','IdentInitType','InitData','InitData_1','IrqDecl','IrqDeclParams','IrqBody'
+,'ProcDecl','ProcDeclParams','ProcBody','FuncDecl','FuncDeclParams','FuncBody','OptInit'
+,'ParamList','Param_1','ParamTypeSpec','ParamTypeSpec_1','DefineParamIdentList','DefineParamIdentList_1'
 ,'DefineParamIdent','LocalDecls','LocalDecls_1','LocalTypeSpec','LocalTypeSpec_1'
 ,'ComstListEnd','ComstListEnd_1','CompConst','CompConst_1','BaseCompConst','AsmStmt'
 ,'Processor_1','ProcessorType','AsmSet','AsmSet_1','AsmSetObjects','AsmSectionName'
@@ -1848,12 +1848,13 @@ FIRST['IFFelse'] { '^' }
 FIRST['IFFelse_1'] { 'ELSE','e' }
 FIRST['IFFthenpart'] { '^' }
 FIRST['IFFthenpart_1'] { 'THEN','e' }
-FIRST['IffConditional'] { '^' }
-FIRST['IffConditional_1'] { 'AREG','XREG','YREG','e' }
-FIRST['RelOper'] { '<','GTEQ','=','e' }
+FIRST['IffRelOper'] { '^' }
+FIRST['IffRelOper_1'] { '<','GTEQ','=','^','e' }
+FIRST['IffRegister'] { '^' }
+FIRST['IffRegister_1'] { 'AREG','XREG','YREG','e' }
 FIRST['Bits'] { '^' }
-FIRST['Bits_1'] { 'BITS','e' }
-FIRST['BitValue'] { '[' }
+FIRST['Bits_1'] { 'BITS','BIT','e' }
+FIRST['BitValue'] { '[',']' }
 FIRST['StatusFlags'] { '^' }
 FIRST['StatusFlags_1'] { 'NEG','CARRY','ZERO','OVERFLOW' }
 FIRST['OptNot'] { '^','e' }
@@ -2150,14 +2151,17 @@ FOLLOW['IFFelse'] { 'FFI' }
 FOLLOW['IFFelse_1'] { 'FFI' }
 FOLLOW['IFFthenpart'] { 'ELSE','FFI' }
 FOLLOW['IFFthenpart_1'] { 'ELSE','FFI' }
-FOLLOW['IffConditional'] { 'THEN','ELSE','FFI' }
-FOLLOW['IffConditional_1'] { 'THEN','ELSE','FFI' }
-FOLLOW['RelOper'] { }
-FOLLOW['Bits'] { 'AREG','XREG','YREG','THEN','ELSE','FFI' }
-FOLLOW['Bits_1'] { 'AREG','XREG','YREG','THEN','ELSE','FFI' }
+FOLLOW['IffRelOper'] { 'THEN','ELSE','FFI' }
+FOLLOW['IffRelOper_1'] { 'THEN','ELSE','FFI' }
+FOLLOW['IffRegister'] { '<','GTEQ','=','^','THEN','ELSE','FFI' }
+FOLLOW['IffRegister_1'] { '<','GTEQ','=','^','THEN','ELSE','FFI' }
+FOLLOW['Bits'] { 'AREG','XREG','YREG','<','GTEQ','=','^','THEN','ELSE','FFI' }
+FOLLOW['Bits_1'] { 'AREG','XREG','YREG','<','GTEQ','=','^','THEN','ELSE','FFI' }
 FOLLOW['BitValue'] { }
-FOLLOW['StatusFlags'] { 'BITS','AREG','XREG','YREG','THEN','ELSE','FFI' }
-FOLLOW['StatusFlags_1'] { 'BITS','AREG','XREG','YREG','THEN','ELSE','FFI' }
+FOLLOW['StatusFlags'] { 'BITS','BIT','AREG','XREG','YREG','<','GTEQ','=','^','THEN'
+,'ELSE','FFI' }
+FOLLOW['StatusFlags_1'] { 'BITS','BIT','AREG','XREG','YREG','<','GTEQ','=','^','THEN'
+,'ELSE','FFI' }
 FOLLOW['OptNot'] { 'NEG','CARRY','ZERO','OVERFLOW' }
 FOLLOW['WhileStmt'] { 'IFF','IF','FOR','PROC_IDENT','FUNC_IDENT','OD' }
 FOLLOW['WhileStmt_1'] { 'IFF','IF','FOR','PROC_IDENT','FUNC_IDENT','OD' }
@@ -2230,72 +2234,72 @@ FOLLOW['LogicalAND'] { 'OR','>','<','GTEQ','LTEQ','=','#','THEN','ELSEIF','ELSE'
 ,'DO',')' }
 FOLLOW['LogicalAND_1'] { 'OR','>','<','GTEQ','LTEQ','=','#','THEN','ELSEIF','ELSE','FI'
 ,'DO',')' }
-FOLLOW['ArithExpr'] { ']',')','AREG','XREG','YREG','SR',',','=','==+','==-','==*','==/'
+FOLLOW['ArithExpr'] { ')','AREG','XREG','YREG','SR',',','=','==+','==-','==*','==/'
 ,'==MOD','==&','==!','==%','==LSH','==RSH','AND','OR','>','<','GTEQ','LTEQ','#','THEN'
 ,'ELSEIF','ELSE','FI','DO','RTI','BREAK','POP','PUSH','UNTILL','[','ASM','RETURN'
 ,'EXIT','WHILE','IFF','IF','FOR','PROC_IDENT','FUNC_IDENT','OD' }
-FOLLOW['BitwiseOR_1'] { ']',')','AREG','XREG','YREG','SR',',','=','==+','==-','==*'
+FOLLOW['BitwiseOR_1'] { ')','AREG','XREG','YREG','SR',',','=','==+','==-','==*','==/'
+,'==MOD','==&','==!','==%','==LSH','==RSH','AND','OR','>','<','GTEQ','LTEQ','#','THEN'
+,'ELSEIF','ELSE','FI','DO','RTI','BREAK','POP','PUSH','UNTILL','[','ASM','RETURN'
+,'EXIT','WHILE','IFF','IF','FOR','PROC_IDENT','FUNC_IDENT','OD' }
+FOLLOW['BitwiseAND'] { '%',')','AREG','XREG','YREG','SR',',','=','==+','==-','==*','==/'
+,'==MOD','==&','==!','==%','==LSH','==RSH','AND','OR','>','<','GTEQ','LTEQ','#','THEN'
+,'ELSEIF','ELSE','FI','DO','RTI','BREAK','POP','PUSH','UNTILL','[','ASM','RETURN'
+,'EXIT','WHILE','IFF','IF','FOR','PROC_IDENT','FUNC_IDENT','OD' }
+FOLLOW['BitwiseAND_1'] { '%',')','AREG','XREG','YREG','SR',',','=','==+','==-','==*'
 ,'==/','==MOD','==&','==!','==%','==LSH','==RSH','AND','OR','>','<','GTEQ','LTEQ'
 ,'#','THEN','ELSEIF','ELSE','FI','DO','RTI','BREAK','POP','PUSH','UNTILL','[','ASM'
 ,'RETURN','EXIT','WHILE','IFF','IF','FOR','PROC_IDENT','FUNC_IDENT','OD' }
-FOLLOW['BitwiseAND'] { '%',']',')','AREG','XREG','YREG','SR',',','=','==+','==-','==*'
+FOLLOW['BitwiseXOR'] { '&','%',')','AREG','XREG','YREG','SR',',','=','==+','==-','==*'
 ,'==/','==MOD','==&','==!','==%','==LSH','==RSH','AND','OR','>','<','GTEQ','LTEQ'
 ,'#','THEN','ELSEIF','ELSE','FI','DO','RTI','BREAK','POP','PUSH','UNTILL','[','ASM'
 ,'RETURN','EXIT','WHILE','IFF','IF','FOR','PROC_IDENT','FUNC_IDENT','OD' }
-FOLLOW['BitwiseAND_1'] { '%',']',')','AREG','XREG','YREG','SR',',','=','==+','==-','==*'
+FOLLOW['BitwiseXOR_1'] { '&','%',')','AREG','XREG','YREG','SR',',','=','==+','==-','==*'
 ,'==/','==MOD','==&','==!','==%','==LSH','==RSH','AND','OR','>','<','GTEQ','LTEQ'
 ,'#','THEN','ELSEIF','ELSE','FI','DO','RTI','BREAK','POP','PUSH','UNTILL','[','ASM'
 ,'RETURN','EXIT','WHILE','IFF','IF','FOR','PROC_IDENT','FUNC_IDENT','OD' }
-FOLLOW['BitwiseXOR'] { '&','%',']',')','AREG','XREG','YREG','SR',',','=','==+','==-'
+FOLLOW['AddExpr'] { '!','XOR','&','%',')','AREG','XREG','YREG','SR',',','=','==+','==-'
 ,'==*','==/','==MOD','==&','==!','==%','==LSH','==RSH','AND','OR','>','<','GTEQ','LTEQ'
 ,'#','THEN','ELSEIF','ELSE','FI','DO','RTI','BREAK','POP','PUSH','UNTILL','[','ASM'
 ,'RETURN','EXIT','WHILE','IFF','IF','FOR','PROC_IDENT','FUNC_IDENT','OD' }
-FOLLOW['BitwiseXOR_1'] { '&','%',']',')','AREG','XREG','YREG','SR',',','=','==+','==-'
-,'==*','==/','==MOD','==&','==!','==%','==LSH','==RSH','AND','OR','>','<','GTEQ','LTEQ'
-,'#','THEN','ELSEIF','ELSE','FI','DO','RTI','BREAK','POP','PUSH','UNTILL','[','ASM'
-,'RETURN','EXIT','WHILE','IFF','IF','FOR','PROC_IDENT','FUNC_IDENT','OD' }
-FOLLOW['AddExpr'] { '!','XOR','&','%',']',')','AREG','XREG','YREG','SR',',','=','==+'
+FOLLOW['AddExpr_1'] { '!','XOR','&','%',')','AREG','XREG','YREG','SR',',','=','==+'
 ,'==-','==*','==/','==MOD','==&','==!','==%','==LSH','==RSH','AND','OR','>','<','GTEQ'
 ,'LTEQ','#','THEN','ELSEIF','ELSE','FI','DO','RTI','BREAK','POP','PUSH','UNTILL','['
 ,'ASM','RETURN','EXIT','WHILE','IFF','IF','FOR','PROC_IDENT','FUNC_IDENT','OD' }
-FOLLOW['AddExpr_1'] { '!','XOR','&','%',']',')','AREG','XREG','YREG','SR',',','=','==+'
-,'==-','==*','==/','==MOD','==&','==!','==%','==LSH','==RSH','AND','OR','>','<','GTEQ'
-,'LTEQ','#','THEN','ELSEIF','ELSE','FI','DO','RTI','BREAK','POP','PUSH','UNTILL','['
-,'ASM','RETURN','EXIT','WHILE','IFF','IF','FOR','PROC_IDENT','FUNC_IDENT','OD' }
-FOLLOW['ShifExpr'] { '+','-','!','XOR','&','%',']',')','AREG','XREG','YREG','SR',','
+FOLLOW['ShifExpr'] { '+','-','!','XOR','&','%',')','AREG','XREG','YREG','SR',',','='
+,'==+','==-','==*','==/','==MOD','==&','==!','==%','==LSH','==RSH','AND','OR','>'
+,'<','GTEQ','LTEQ','#','THEN','ELSEIF','ELSE','FI','DO','RTI','BREAK','POP','PUSH'
+,'UNTILL','[','ASM','RETURN','EXIT','WHILE','IFF','IF','FOR','PROC_IDENT','FUNC_IDENT'
+,'OD' }
+FOLLOW['ShiftExpr_1'] { '+','-','!','XOR','&','%',')','AREG','XREG','YREG','SR',','
 ,'=','==+','==-','==*','==/','==MOD','==&','==!','==%','==LSH','==RSH','AND','OR'
 ,'>','<','GTEQ','LTEQ','#','THEN','ELSEIF','ELSE','FI','DO','RTI','BREAK','POP','PUSH'
 ,'UNTILL','[','ASM','RETURN','EXIT','WHILE','IFF','IF','FOR','PROC_IDENT','FUNC_IDENT'
 ,'OD' }
-FOLLOW['ShiftExpr_1'] { '+','-','!','XOR','&','%',']',')','AREG','XREG','YREG','SR'
-,',','=','==+','==-','==*','==/','==MOD','==&','==!','==%','==LSH','==RSH','AND','OR'
-,'>','<','GTEQ','LTEQ','#','THEN','ELSEIF','ELSE','FI','DO','RTI','BREAK','POP','PUSH'
-,'UNTILL','[','ASM','RETURN','EXIT','WHILE','IFF','IF','FOR','PROC_IDENT','FUNC_IDENT'
-,'OD' }
-FOLLOW['MultExpr'] { 'LSH','RSH','+','-','!','XOR','&','%',']',')','AREG','XREG','YREG'
+FOLLOW['MultExpr'] { 'LSH','RSH','+','-','!','XOR','&','%',')','AREG','XREG','YREG'
 ,'SR',',','=','==+','==-','==*','==/','==MOD','==&','==!','==%','==LSH','==RSH','AND'
 ,'OR','>','<','GTEQ','LTEQ','#','THEN','ELSEIF','ELSE','FI','DO','RTI','BREAK','POP'
 ,'PUSH','UNTILL','[','ASM','RETURN','EXIT','WHILE','IFF','IF','FOR','PROC_IDENT','FUNC_IDENT'
 ,'OD' }
-FOLLOW['MultExpr_1'] { 'LSH','RSH','+','-','!','XOR','&','%',']',')','AREG','XREG','YREG'
+FOLLOW['MultExpr_1'] { 'LSH','RSH','+','-','!','XOR','&','%',')','AREG','XREG','YREG'
 ,'SR',',','=','==+','==-','==*','==/','==MOD','==&','==!','==%','==LSH','==RSH','AND'
 ,'OR','>','<','GTEQ','LTEQ','#','THEN','ELSEIF','ELSE','FI','DO','RTI','BREAK','POP'
 ,'PUSH','UNTILL','[','ASM','RETURN','EXIT','WHILE','IFF','IF','FOR','PROC_IDENT','FUNC_IDENT'
 ,'OD' }
-FOLLOW['Unary'] { '*','/','MOD','LSH','RSH','+','-','!','XOR','&','%',']',')','AREG'
-,'XREG','YREG','SR',',','=','==+','==-','==*','==/','==MOD','==&','==!','==%','==LSH'
-,'==RSH','AND','OR','>','<','GTEQ','LTEQ','#','THEN','ELSEIF','ELSE','FI','DO','RTI'
-,'BREAK','POP','PUSH','UNTILL','[','ASM','RETURN','EXIT','WHILE','IFF','IF','FOR'
-,'PROC_IDENT','FUNC_IDENT','OD' }
+FOLLOW['Unary'] { '*','/','MOD','LSH','RSH','+','-','!','XOR','&','%',')','AREG','XREG'
+,'YREG','SR',',','=','==+','==-','==*','==/','==MOD','==&','==!','==%','==LSH','==RSH'
+,'AND','OR','>','<','GTEQ','LTEQ','#','THEN','ELSEIF','ELSE','FI','DO','RTI','BREAK'
+,'POP','PUSH','UNTILL','[','ASM','RETURN','EXIT','WHILE','IFF','IF','FOR','PROC_IDENT'
+,'FUNC_IDENT','OD' }
 FOLLOW['ValueList'] { ')' }
 FOLLOW['ValueList_1'] { ')' }
-FOLLOW['Value'] { '=','*','/','MOD','LSH','RSH','+','-','!','XOR','&','%',']',')','AREG'
+FOLLOW['Value'] { '=','*','/','MOD','LSH','RSH','+','-','!','XOR','&','%',')','AREG'
 ,'XREG','YREG','SR',',','==+','==-','==*','==/','==MOD','==&','==!','==%','==LSH'
 ,'==RSH','AND','OR','>','<','GTEQ','LTEQ','#','THEN','ELSEIF','ELSE','FI','DO','RTI'
 ,'BREAK','POP','PUSH','UNTILL','[','ASM','RETURN','EXIT','WHILE','IFF','IF','FOR'
 ,'PROC_IDENT','FUNC_IDENT','OD' }
-FOLLOW['Value_1'] { '=','*','/','MOD','LSH','RSH','+','-','!','XOR','&','%',']',')'
-,'AREG','XREG','YREG','SR',',','==+','==-','==*','==/','==MOD','==&','==!','==%','==LSH'
+FOLLOW['Value_1'] { '=','*','/','MOD','LSH','RSH','+','-','!','XOR','&','%',')','AREG'
+,'XREG','YREG','SR',',','==+','==-','==*','==/','==MOD','==&','==!','==%','==LSH'
 ,'==RSH','AND','OR','>','<','GTEQ','LTEQ','#','THEN','ELSEIF','ELSE','FI','DO','RTI'
 ,'BREAK','POP','PUSH','UNTILL','[','ASM','RETURN','EXIT','WHILE','IFF','IF','FOR'
 ,'PROC_IDENT','FUNC_IDENT','OD' }
@@ -2304,34 +2308,32 @@ FOLLOW['AddressOf_1'] { }
 FOLLOW['MemContentsType'] { 'AREG','XREG','YREG','SR',',','=','==+','==-','==*','==/'
 ,'==MOD','==&','==!','==%','==LSH','==RSH','RTI','BREAK','POP','PUSH','UNTILL','['
 ,'ASM','RETURN','EXIT','DO','WHILE','IFF','IF','FOR','PROC_IDENT','FUNC_IDENT','OD'
-,'NUMBER','CUR_LOC','@','*','/','MOD','LSH','RSH','+','-','!','XOR','&','%',']',')'
-,'AND','OR','>','<','GTEQ','LTEQ','#','THEN','ELSEIF','ELSE','FI','INTERRUPT_IDENT'
- }
+,'NUMBER','CUR_LOC','@','*','/','MOD','LSH','RSH','+','-','!','XOR','&','%',')','AND'
+,'OR','>','<','GTEQ','LTEQ','#','THEN','ELSEIF','ELSE','FI','INTERRUPT_IDENT' }
 FOLLOW['MemContentsType_1'] { 'AREG','XREG','YREG','SR',',','=','==+','==-','==*','==/'
 ,'==MOD','==&','==!','==%','==LSH','==RSH','RTI','BREAK','POP','PUSH','UNTILL','['
 ,'ASM','RETURN','EXIT','DO','WHILE','IFF','IF','FOR','PROC_IDENT','FUNC_IDENT','OD'
-,'NUMBER','CUR_LOC','@','*','/','MOD','LSH','RSH','+','-','!','XOR','&','%',']',')'
-,'AND','OR','>','<','GTEQ','LTEQ','#','THEN','ELSEIF','ELSE','FI','INTERRUPT_IDENT'
- }
+,'NUMBER','CUR_LOC','@','*','/','MOD','LSH','RSH','+','-','!','XOR','&','%',')','AND'
+,'OR','>','<','GTEQ','LTEQ','#','THEN','ELSEIF','ELSE','FI','INTERRUPT_IDENT' }
 FOLLOW['MemContents'] { '^','.','AREG','XREG','YREG','SR',',','=','==+','==-','==*'
 ,'==/','==MOD','==&','==!','==%','==LSH','==RSH','RTI','BREAK','POP','PUSH','UNTILL'
 ,'[','ASM','RETURN','EXIT','DO','WHILE','IFF','IF','FOR','PROC_IDENT','FUNC_IDENT'
-,'OD','NUMBER','CUR_LOC','@','*','/','MOD','LSH','RSH','+','-','!','XOR','&','%',']'
-,')','AND','OR','>','<','GTEQ','LTEQ','#','THEN','ELSEIF','ELSE','FI','INTERRUPT_IDENT'
+,'OD','NUMBER','CUR_LOC','@','*','/','MOD','LSH','RSH','+','-','!','XOR','&','%',')'
+,'AND','OR','>','<','GTEQ','LTEQ','#','THEN','ELSEIF','ELSE','FI','INTERRUPT_IDENT'
  }
 FOLLOW['MemContents_1'] { '^','.','AREG','XREG','YREG','SR',',','=','==+','==-','==*'
 ,'==/','==MOD','==&','==!','==%','==LSH','==RSH','RTI','BREAK','POP','PUSH','UNTILL'
 ,'[','ASM','RETURN','EXIT','DO','WHILE','IFF','IF','FOR','PROC_IDENT','FUNC_IDENT'
-,'OD','NUMBER','CUR_LOC','@','*','/','MOD','LSH','RSH','+','-','!','XOR','&','%',']'
-,')','AND','OR','>','<','GTEQ','LTEQ','#','THEN','ELSEIF','ELSE','FI','INTERRUPT_IDENT'
+,'OD','NUMBER','CUR_LOC','@','*','/','MOD','LSH','RSH','+','-','!','XOR','&','%',')'
+,'AND','OR','>','<','GTEQ','LTEQ','#','THEN','ELSEIF','ELSE','FI','INTERRUPT_IDENT'
  }
 FOLLOW['ArrayIndex'] { }
 FOLLOW['Factor'] { 'VAR_GLOBAL','VAR_LOCAL','VAR_PARAM','^','.','AREG','XREG','YREG'
 ,'SR',',','=','==+','==-','==*','==/','==MOD','==&','==!','==%','==LSH','==RSH','RTI'
 ,'BREAK','POP','PUSH','UNTILL','[','ASM','RETURN','EXIT','DO','WHILE','IFF','IF','FOR'
 ,'PROC_IDENT','FUNC_IDENT','OD','NUMBER','CUR_LOC','@','*','/','MOD','LSH','RSH','+'
-,'-','!','XOR','&','%',']',')','AND','OR','>','<','GTEQ','LTEQ','#','THEN','ELSEIF'
-,'ELSE','FI','INTERRUPT_IDENT' }
+,'-','!','XOR','&','%',')','AND','OR','>','<','GTEQ','LTEQ','#','THEN','ELSEIF','ELSE'
+,'FI','INTERRUPT_IDENT' }
 FOLLOW['SysDecl'] { 'SET','MODULE','$' }
 FOLLOW['Vector_1'] { 'SET','MODULE','$' }
 FOLLOW['VectorEnd'] { }
@@ -2517,5 +2519,5 @@ FOLLOW['AsmConstAddSub'] { '>','<',',',')','(' }
 FOLLOW['AsmConstAddSub_1'] { '>','<',',',')','(' }
 FOLLOW['BaseAsmConstant'] { '+','-','>','<',',',')','(' }
 ---------------- Create Parse Table --------------
-Table Entries = 1816
+Table Entries = 1820
 ------------ Check For Conflicts-------------

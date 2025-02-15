@@ -103,8 +103,8 @@ private:
 	CLkHead IFFend(CLkHead LookaHead);;
 	CLkHead IFFelse(CLkHead LookaHead);;
 	CLkHead IFFthenpart(CLkHead LookaHead);;
-	CLkHead IffConditional(CLkHead LookaHead);;
-	CLkHead RelOper(CLkHead LookaHead);;
+	CLkHead IffRelOper(CLkHead LookaHead);;
+	CLkHead IffRegister(CLkHead LookaHead);;
 	CLkHead Bits(CLkHead LookaHead);;
 	CLkHead BitValue(CLkHead LookaHead);;
 	CLkHead StatusFlags(CLkHead LookaHead);;
