@@ -56,7 +56,7 @@ CLkHead CParser::Run()
 		pRoot->Create(LookaHead.GetNode(),0);
 		GetAstTree()->SetRootNode(pRoot);
 		GetAstTree()->Print(LogFile());
-		GetLexer()->GetSymTab()->PrintTable(LogFile());
+//		GetLexer()->GetSymTab()->PrintTable(LogFile());
 		if(LogFile())
 			fprintf(LogFile(), "Lines Compiled:%d\n", GetLexer()->GetLineNumber());
 	}
@@ -475,9 +475,8 @@ CLkHead CParser::Call(CLkHead LookaHead)
 			LHChild.SetNode(0);
 			LHChild = ProcParams(LHChild);
 			pN = new CAct65ProcCall;
-			pN->Create(LHChild.GetNode(), LHNext.GetNode());
-			LHNext.SetToken(LHChild.GetToken());
-			LHNext.AddNode(pN);
+			LHChild = CLkHead::MakeChild(LHChild, pN);
+			LHNext = CLkHead::MakeList(LHNext, LHChild);
 			//--------------------------------------------
 			LHNext = ForStmt(LHNext);
 			break;
@@ -580,9 +579,8 @@ CLkHead CParser::ForStmt(CLkHead LookaHead)
 			LHChild.SetNode(0);
 			LHChild = ForDOend(LHChild);
 			pN = new CAct65FOR;;
-			pN->Create(LHChild.GetNode());
-			LHNext.AddNode(pN);
-			LHNext.SetToken(LHChild.GetToken());
+			LHChild = CLkHead::MakeChild(LHChild, pN);
+			LHNext = CLkHead::MakeList(LHNext, LHChild);
 			//-------------------------------------------------
 			LHNext = IfStmt(LHNext);
 			break;
@@ -765,9 +763,8 @@ CLkHead CParser::IfStmt(CLkHead LookaHead)
 			LHChild.SetNode(0);
 			LHChild = EndIf(LHChild);
 			pN = new CAct65IF;
-			pN->Create(LHChild.GetNode());
-			LHNext.AddNode(pN);
-			LHNext.SetToken(LHChild.GetToken());
+			LHChild = CLkHead::MakeChild(LHChild, pN);
+			LHNext = CLkHead::MakeList(LHNext, LHChild);
 			//-------------------------------------------
 			LHNext = IffStmt(LHNext);
 			break;
@@ -933,14 +930,9 @@ CLkHead CParser::IffStmt(CLkHead LookaHead)
 			LHChild = Expect(LHNext, Token::IFF);
 			LHChild.SetNode(0);
 			LHChild = IFFend(LHChild);
-			DebugTravers(LHChild.GetNode(), "IFF From IFFend LHChild", 25, 100);
 			pN = new CAct65IFF;
 			LHChild = CLkHead::MakeChild(LHChild, pN);
-//			LHNext = CLkHead::MakeNode(LHChild, LHNext, pN, 0);
-			DebugTravers(LHChild.GetNode(), "IFF after MakeChild Node", 25, 100, Recursion, "Recursion");
-//			DebugTravers(LookaHead.GetNode(), "IFF Redundent LookaHead", 25, 100, Recursion, "Recursion");
 			LHNext = CLkHead::MakeList(LHNext, LHChild);
-			DebugTravers(LHNext.GetNode(), "IFF After Make List LHNext", 25, 100, Recursion, "Recursion");
 			//-------------------------------------------
 			LHNext = WhileStmt(LHNext);
 			break;
@@ -1295,9 +1287,8 @@ CLkHead CParser::WhileStmt(CLkHead LookaHead)
 			LHChild.SetNode(0);
 			LHChild = WhileDOend(LHChild);
 			pN = new CAct65WHILE;
-			pN->Create(LHChild.GetNode());
-			LHNext.AddNode(pN);
-			LHNext.SetToken(LHChild.GetToken());
+			LHChild = CLkHead::MakeChild(LHChild, pN);
+			LHNext = CLkHead::MakeList(LHNext, LHChild);
 			//----------------------------------
 			LHNext = DoStmt(LHNext);
 			break;
@@ -1397,9 +1388,8 @@ CLkHead CParser::DoStmt(CLkHead LookaHead)
 			LHChild.SetNode(0);
 			LHChild = DoEND(LHChild);
 			pN = new CAct65DO;
-			pN->Create(LHChild.GetNode());
-			LHNext.AddNode(pN);
-			LHNext.SetToken(LHChild.GetToken());
+			LHChild = CLkHead::MakeChild(LHChild, pN);
+			LHNext = CLkHead::MakeList(LHNext, LHChild);
 			//--------------------------------------
 			LHNext = EXITstmt(LHNext);
 			break;
@@ -1455,7 +1445,7 @@ CLkHead CParser::EXITstmt(CLkHead LookaHead)
 	//--------------------------------------------
 	bool Loop = true;
 	CAstNode* pN= 0;
-	CLkHead LHNext;
+	CLkHead LHNext, LHChild;
 
 	DebugTravers(LookaHead.GetNode(), "EXIT Entry LookaHead", 25, 100);
 	LHNext = RetStmt(LookaHead);
@@ -1465,10 +1455,13 @@ CLkHead CParser::EXITstmt(CLkHead LookaHead)
 		switch (LHNext.GetToken())
 		{
 		case Token::EXIT:
-			LHNext = Expect(LHNext, Token::EXIT);
+			LHChild = Expect(LHNext, Token::EXIT);
 			pN = new CAct65EXIT;
 			pN->Create();
 			LHNext.AddNode(pN);
+			LHChild = CLkHead::MakeChild(LHChild, pN);
+			LHNext = CLkHead::MakeList(LHNext, LHChild);
+			//----------------------------------------
 			LHNext = RetStmt(LHNext);
 			break;
 		default:
@@ -1506,8 +1499,8 @@ CLkHead CParser::RetStmt(CLkHead LookaHead)
 			LHChild.SetNode(0);
 			LHChild = OptReturnValue(LHChild);
 			pN = new CAct65RETURN;
-			LHNext = CLkHead::MakeChild(LHChild, pN);
-			LHNext = CLkHead::MakeList(LookaHead, LHNext);
+			LHChild = CLkHead::MakeChild(LHChild, pN);
+			LHNext = CLkHead::MakeList(LHNext, LHChild);
 			//----------------------------------------
 			LHNext = InlineAssembly(LHNext);
 			break;
@@ -1564,9 +1557,8 @@ CLkHead CParser::InlineAssembly(CLkHead LookaHead)
 			LHChild.SetNode(0);
 			LHChild = EndAsmBlock(LHChild);
 			pN = new CAct65ASM;
-			pN->Create(LHChild.GetNode());
-			LHNext.AddNode(pN);
-			LHNext.SetToken(LHChild.GetToken());
+			LHChild = CLkHead::MakeChild(LHChild, pN);
+			LHNext = CLkHead::MakeList(LHNext, LHChild);
 			//---------------------------------------------
 			LHNext = CodeBlock(LHNext);
 			break;
@@ -1661,8 +1653,8 @@ CLkHead CParser::CodeBlock(CLkHead LookaHead)
 			LHChild.SetNode(0);
 			LHChild = ConstListEnd(LHChild);
 			pN = new CAct65CodeBlock;
-			LHNext = CLkHead::MakeNode(LHChild, LHNext, pN, 0);
-			LHNext = CLkHead::MakeList(LookaHead, LHNext);
+			LHChild = CLkHead::MakeChild(LHChild, pN);
+			LHNext = CLkHead::MakeList(LHNext, LHChild);
 			//------------------------------------------
 			LHNext = UntillStmt(LHNext);
 			break;
@@ -1702,9 +1694,8 @@ CLkHead CParser::UntillStmt(CLkHead LookaHead)
 			LHChild.SetNode(0);
 			LHChild = RelOperation(LHChild);
 			pN = new CAct65UNTILL;
-			pN->Create(LHChild.GetNode());
-			LHNext.AddNode(pN);
-			LHNext.SetToken(LHChild.GetToken());
+			LHChild = CLkHead::MakeChild(LHChild, pN);
+			LHNext = CLkHead::MakeList(LHNext, LHChild);
 			//----------------------------------------------------
 			LHNext = Push(LHNext);
 			break;
@@ -1743,9 +1734,8 @@ CLkHead CParser::Push(CLkHead LookaHead)
 			LHChild.SetNode(0);
 			LHChild = PushSourceList(LHChild);
 			pN = new CAct65PUSH;
-			pN->Create(LHChild.GetNode());
-			LHNext.AddNode(pN);
-			LHNext.SetToken(LHChild.GetToken());
+			LHChild = CLkHead::MakeChild(LHChild, pN);
+			LHNext = CLkHead::MakeList(LHNext, LHChild);
 			//------------------------------------------
 			LHNext = Pop(LHNext);
 			break;
@@ -1872,9 +1862,8 @@ CLkHead CParser::Pop(CLkHead LookaHead)
 			LHChild.SetNode(0);
 			LHChild = PopDestList(LHChild);
 			pN = new CAct65POP;
-			pN->Create(LHChild.GetNode());
-			LHNext.AddNode(pN);
-			LHNext.SetToken(LHChild.GetToken());
+			LHChild = CLkHead::MakeChild(LHChild, pN);
+			LHNext = CLkHead::MakeList(LHNext, LHChild);
 			//------------------------------------
 			LHNext = Break(LHNext);
 			break;
@@ -1982,7 +1971,7 @@ CLkHead CParser::Break(CLkHead LookaHead)
 	//--------------------------------------------
 	bool Loop = true;
 	CAstNode* pN= 0;
-	CLkHead LHNext;
+	CLkHead LHNext, LHChild;
 
 	DebugTravers(LookaHead.GetNode(), "BREAK Entry LookaHead", 25, 100);
 	LHNext = Rti(LookaHead);
@@ -1992,10 +1981,10 @@ CLkHead CParser::Break(CLkHead LookaHead)
 		switch (LHNext.GetToken())
 		{
 		case Token::BREAK:
-			LHNext = Expect(LHNext, Token::BREAK);
+			LHChild = Expect(LHNext, Token::BREAK);
 			pN = new CAct65BREAK;
-			pN->Create();
-			LHNext.AddNode(pN);
+			LHChild = CLkHead::MakeChild(LHChild, pN);
+			LHNext = CLkHead::MakeList(LHNext, LHChild);
 			//-------------------------------------
 			LHNext = Rti(LHNext);
 			break;
@@ -2021,7 +2010,7 @@ CLkHead CParser::Rti(CLkHead LookaHead)
 	//--------------------------------------------
 	bool Loop = true;
 	CAstNode* pN= 0;
-	CLkHead LHNext;
+	CLkHead LHNext, LHChild;
 
 	DebugTravers(LookaHead.GetNode(), "RTI Entry LookaHead", 25, 100);
 	LHNext = Assignment(LookaHead);
@@ -2031,12 +2020,16 @@ CLkHead CParser::Rti(CLkHead LookaHead)
 		switch (LHNext.GetToken())
 		{
 		case Token::RTI:
-			LHNext = Expect(LHNext, Token::RTI);
+			LHChild = Expect(LHNext, Token::RTI);
 			pN = new CAct65RTI;
-			pN->Create();
-			LHNext.AddNode(pN);
+			LHChild.SetNode(0);
+			LHChild = CLkHead::MakeChild(LHChild, pN);
+			DebugTravers(LHChild.GetNode(), "RTI MakeChild  LHChild", 25, 100);
+			LHNext = CLkHead::MakeList(LHNext, LHChild);
+			DebugTravers(LHNext.GetNode(), "RTI MakeList LHNext", 25, 100);
 			//--------------------------------------------
 			LHNext = Assignment(LHNext);
+			DebugTravers(LHNext.GetNode(), "RTI Perculatge LookaHead", 25, 100);
 			break;
 		default:
 			Loop = false;

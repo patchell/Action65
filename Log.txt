@@ -498,50 +498,6 @@ MemContents Exit LHNext <NODE is NULL>
     37     -1     35        +- 'NUMBER'$0002
     35     -1     -1        +- 'IDENT': jj
 ---- End ----
----- -------- IFF From IFFend LHChild -------- ----
-	 NUMB  CHILD  NEXT  Line:15  Col:15
-    33     32     38  +- 'EQU-TO'
-    32     -1     31  |  +- 'NUMBER'$0000
-    31     -1     -1  |  +- '.A'
-    38     34     39  +- 'THEN'
-    34     36     -1  |  +- 'STATEMENTS'
-    36     37     -1  |     +- '=ADD'
-    37     -1     35  |        +- 'NUMBER'$0002
-    35     -1     -1  |        +- 'IDENT': jj
-    39     -1     -1  +- 'FFI'
----- End ----
----- ------- Recursion : 1 - IFF after MakeChild Node -------- ----
-	 NUMB  CHILD  NEXT  Line:18  Col:4
-    40     33     -1  +- 'IFF'
-    33     32     38     +- 'EQU-TO'
-    32     -1     31     |  +- 'NUMBER'$0000
-    31     -1     -1     |  +- '.A'
-    38     34     39     +- 'THEN'
-    34     36     -1     |  +- 'STATEMENTS'
-    36     37     -1     |     +- '=ADD'
-    37     -1     35     |        +- 'NUMBER'$0002
-    35     -1     -1     |        +- 'IDENT': jj
-    39     -1     -1     +- 'FFI'
----- End ----
----- ------- Recursion : 1 - IFF After Make List LHNext -------- ----
-	 NUMB  CHILD  NEXT  Line:15  Col:4
-    30     25     40  +- 'CODE-BLOCK'
-    25     -1     26  |  +- 'NUMBER'$00AA
-    26     -1     27  |  +- 'NUMBER'$00BB
-    27     -1     28  |  +- 'NUMBER'$00CE
-    28     -1     29  |  +- 'NUMBER'$00A1
-    29     -1     -1  |  +- 'NUMBER'$00C0
-    40     33     -1  +- 'IFF'
-    33     32     38     +- 'EQU-TO'
-    32     -1     31     |  +- 'NUMBER'$0000
-    31     -1     -1     |  +- '.A'
-    38     34     39     +- 'THEN'
-    34     36     -1     |  +- 'STATEMENTS'
-    36     37     -1     |     +- '=ADD'
-    37     -1     35     |        +- 'NUMBER'$0002
-    35     -1     -1     |        +- 'IDENT': jj
-    39     -1     -1     +- 'FFI'
----- End ----
 ---- -------- WHILEstmt Entry LookaHead -------- ----
 	 NUMB  CHILD  NEXT  Line:15  Col:4
     30     25     40  +- 'CODE-BLOCK'
@@ -1323,54 +1279,6 @@ MemContents Exit LHNext <NODE is NULL>
     45     -1     43        +- 'NUMBER'$0005
     43     -1     -1        +- 'IDENT': kk
 ---- End ----
----- -------- IFF From IFFend LHChild -------- ----
-	 NUMB  CHILD  NEXT  Line:18  Col:11
-    41     -1     46  +- '.N'
-    46     42     47  +- 'THEN'
-    42     44     -1  |  +- 'STATEMENTS'
-    44     45     -1  |     +- 'Assign ='
-    45     -1     43  |        +- 'NUMBER'$0005
-    43     -1     -1  |        +- 'IDENT': kk
-    47     -1     -1  +- 'FFI'
----- End ----
----- ------- Recursion : 1 - IFF after MakeChild Node -------- ----
-	 NUMB  CHILD  NEXT  Line:21  Col:2
-    48     41     -1  +- 'IFF'
-    41     -1     46     +- '.N'
-    46     42     47     +- 'THEN'
-    42     44     -1     |  +- 'STATEMENTS'
-    44     45     -1     |     +- 'Assign ='
-    45     -1     43     |        +- 'NUMBER'$0005
-    43     -1     -1     |        +- 'IDENT': kk
-    47     -1     -1     +- 'FFI'
----- End ----
----- ------- Recursion : 1 - IFF After Make List LHNext -------- ----
-	 NUMB  CHILD  NEXT  Line:15  Col:4
-    30     25     40  +- 'CODE-BLOCK'
-    25     -1     26  |  +- 'NUMBER'$00AA
-    26     -1     27  |  +- 'NUMBER'$00BB
-    27     -1     28  |  +- 'NUMBER'$00CE
-    28     -1     29  |  +- 'NUMBER'$00A1
-    29     -1     -1  |  +- 'NUMBER'$00C0
-    40     33     48  +- 'IFF'
-    33     32     38  |  +- 'EQU-TO'
-    32     -1     31  |  |  +- 'NUMBER'$0000
-    31     -1     -1  |  |  +- '.A'
-    38     34     39  |  +- 'THEN'
-    34     36     -1  |  |  +- 'STATEMENTS'
-    36     37     -1  |  |     +- '=ADD'
-    37     -1     35  |  |        +- 'NUMBER'$0002
-    35     -1     -1  |  |        +- 'IDENT': jj
-    39     -1     -1  |  +- 'FFI'
-    48     41     -1  +- 'IFF'
-    41     -1     46     +- '.N'
-    46     42     47     +- 'THEN'
-    42     44     -1     |  +- 'STATEMENTS'
-    44     45     -1     |     +- 'Assign ='
-    45     -1     43     |        +- 'NUMBER'$0005
-    43     -1     -1     |        +- 'IDENT': kk
-    47     -1     -1     +- 'FFI'
----- End ----
 ---- -------- WHILEstmt Entry LookaHead -------- ----
 	 NUMB  CHILD  NEXT  Line:15  Col:4
     30     25     40  +- 'CODE-BLOCK'
@@ -2108,6 +2016,43 @@ ArrayIndex Entry LHNext <NODE is NULL>
     51     -1     -1     |  +- 'IDENT': c
     49     -1     -1     +- 'IDENT': a
 ---- End ----
+---- -------- RTI MakeChild  LHChild -------- ----
+	 NUMB  CHILD  NEXT  Line:24  Col:3
+    54     -1     -1  +- 'RTI'
+---- End ----
+---- -------- RTI MakeList LHNext -------- ----
+	 NUMB  CHILD  NEXT  Line:15  Col:4
+    30     25     40  +- 'CODE-BLOCK'
+    25     -1     26  |  +- 'NUMBER'$00AA
+    26     -1     27  |  +- 'NUMBER'$00BB
+    27     -1     28  |  +- 'NUMBER'$00CE
+    28     -1     29  |  +- 'NUMBER'$00A1
+    29     -1     -1  |  +- 'NUMBER'$00C0
+    40     33     48  +- 'IFF'
+    33     32     38  |  +- 'EQU-TO'
+    32     -1     31  |  |  +- 'NUMBER'$0000
+    31     -1     -1  |  |  +- '.A'
+    38     34     39  |  +- 'THEN'
+    34     36     -1  |  |  +- 'STATEMENTS'
+    36     37     -1  |  |     +- '=ADD'
+    37     -1     35  |  |        +- 'NUMBER'$0002
+    35     -1     -1  |  |        +- 'IDENT': jj
+    39     -1     -1  |  +- 'FFI'
+    48     41     50  +- 'IFF'
+    41     -1     46  |  +- '.N'
+    46     42     47  |  +- 'THEN'
+    42     44     -1  |  |  +- 'STATEMENTS'
+    44     45     -1  |  |     +- 'Assign ='
+    45     -1     43  |  |        +- 'NUMBER'$0005
+    43     -1     -1  |  |        +- 'IDENT': kk
+    47     -1     -1  |  +- 'FFI'
+    50     53     54  +- 'Assign ='
+    53     52     49  |  +- 'MUL'
+    52     -1     51  |  |  +- 'IDENT': d
+    51     -1     -1  |  |  +- 'IDENT': c
+    49     -1     -1  |  +- 'IDENT': a
+    54     -1     -1  +- 'RTI'
+---- End ----
 ---- ------- Recursions : 0 - Assign On Entry LookaHead -------- ----
 	 NUMB  CHILD  NEXT  Line:15  Col:4
     30     25     40  +- 'CODE-BLOCK'
@@ -2340,6 +2285,39 @@ ArrayIndex Entry LHNext <NODE is NULL>
     54     -1     -1  +- 'RTI'
 ---- End ----
 ---- ------- Recursions : 0 - Assign On Exit LHNext -------- ----
+	 NUMB  CHILD  NEXT  Line:15  Col:4
+    30     25     40  +- 'CODE-BLOCK'
+    25     -1     26  |  +- 'NUMBER'$00AA
+    26     -1     27  |  +- 'NUMBER'$00BB
+    27     -1     28  |  +- 'NUMBER'$00CE
+    28     -1     29  |  +- 'NUMBER'$00A1
+    29     -1     -1  |  +- 'NUMBER'$00C0
+    40     33     48  +- 'IFF'
+    33     32     38  |  +- 'EQU-TO'
+    32     -1     31  |  |  +- 'NUMBER'$0000
+    31     -1     -1  |  |  +- '.A'
+    38     34     39  |  +- 'THEN'
+    34     36     -1  |  |  +- 'STATEMENTS'
+    36     37     -1  |  |     +- '=ADD'
+    37     -1     35  |  |        +- 'NUMBER'$0002
+    35     -1     -1  |  |        +- 'IDENT': jj
+    39     -1     -1  |  +- 'FFI'
+    48     41     50  +- 'IFF'
+    41     -1     46  |  +- '.N'
+    46     42     47  |  +- 'THEN'
+    42     44     -1  |  |  +- 'STATEMENTS'
+    44     45     -1  |  |     +- 'Assign ='
+    45     -1     43  |  |        +- 'NUMBER'$0005
+    43     -1     -1  |  |        +- 'IDENT': kk
+    47     -1     -1  |  +- 'FFI'
+    50     53     54  +- 'Assign ='
+    53     52     49  |  +- 'MUL'
+    52     -1     51  |  |  +- 'IDENT': d
+    51     -1     -1  |  |  +- 'IDENT': c
+    49     -1     -1  |  +- 'IDENT': a
+    54     -1     -1  +- 'RTI'
+---- End ----
+---- -------- RTI Perculatge LookaHead -------- ----
 	 NUMB  CHILD  NEXT  Line:15  Col:4
     30     25     40  +- 'CODE-BLOCK'
     25     -1     26  |  +- 'NUMBER'$00AA
@@ -2897,37 +2875,4 @@ ArrayIndex Entry LHNext <NODE is NULL>
     59     57     -1        +- 'INT'
     57     -1     58           +- 'IDENT': qr
     58     -1     -1           +- 'IDENT': st
------------- Symbol Table --------------
-e: LOCAL:CHAR::Address=00000000  Value=0000
-
-gg: GLOBAL:BYTE::Address=00000000  Value=0000
-
-x: LOCAL:INT::Address=00000000  Value=0000
-
-ii: GLOBAL:BYTE::Address=00000000  Value=0000
-
-AnInteruption: INTERRUPT::Address=00000000  Value=0000
-
-kk: GLOBAL:BYTE::Address=00000000  Value=0000
-
-xxx: LOCAL:INT::Address=00000000  Value=0000
-
-ff: GLOBAL:CHAR::Address=00000000  Value=0000
-
-hh: GLOBAL:BYTE::Address=00000000  Value=0000
-
-xx: LOCAL:INT::Address=00000000  Value=0000
-
-qr: GLOBAL:INT::Address=00000000  Value=0000
-
-jj: GLOBAL:BYTE::Address=00000000  Value=0000
-
-st: GLOBAL:INT::Address=00000000  Value=0000
-
-a: LOCAL:CHAR::Address=00000000  Value=0000
-
-c: LOCAL:INT::Address=00000000  Value=0000
-
-d: LOCAL:CHAR::Address=00000000  Value=0000
-
 Lines Compiled:25
