@@ -1,6 +1,6 @@
 #include "pch.h"
 
-CAct65LessTHAN::CAct65LessTHAN()
+CAct65LessTHAN::CAct65LessTHAN() :CAstNode(NodeType::LESS_THAN)
 {
 }
 
@@ -10,8 +10,6 @@ CAct65LessTHAN::~CAct65LessTHAN()
 
 bool CAct65LessTHAN::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
-	SetNodeType(NodeType::LESS_THAN);
-	SetNodeName(m_pNodeTyypeName);
 	return CAstNode::Create(pChild, pNext, pSym);
 }
 

@@ -719,6 +719,7 @@ public:
 #include "Act65SET.h"
 #include "Act65SECTIONattributes.h"
 #include "Act65BITS.h"
+#include "Act65AssignEQ.h"
 #include "AstTree.h"
 #include "ActionAstTree.h"
 

@@ -62,6 +62,14 @@ bool CAstNode::Create(
 	return rV;
 }
 
+bool CAstNode::Branch(CAstNode* pBranch)
+{
+	AddThatToThisNext(pBranch);
+	return true;
+}
+
+
+
 void CAstNode::CreateValue(CBin* pSym)
 {
 	m_pValue = new CValue;
@@ -152,13 +160,6 @@ void CAstNode::AddThatToThisNext(CAstNode* pN)
 
 	if (pN)
 	{
-		//fprintf(Act()->LogFile(), "-\n");
-		//if (pN->GetSymbol())
-		//{
-		//	pSthat = pN->GetSymbol()->GetName();
-		//}
-		//else 
-		//	pSthat = "<No Sym>";
 		while (pNode->GetNext())
 		{
 			if (!LoopCount--)
@@ -169,26 +170,9 @@ void CAstNode::AddThatToThisNext(CAstNode* pN)
 				);
 				Act()->Exit(20);
 			}
-			//fprintf(Act()->LogFile(), "\t%s NODE ID=%d ",pNode->GetNodeName(), pNode->GetID());
-			//if (pNode->GetSymbol())
-			//	fprintf(Act()->LogFile(), "Sym: %s", pNode->GetSymbol()->GetName());
-			//fprintf(Act()->LogFile(), "\n");
 			pNode = pNode->GetNext();
 		}
-		//if (pNode->GetSymbol())
-		//{
-		//	pSthis = pNode->GetSymbol()->GetName();
-		//}
-		//else
-		//	pSthis = "<No Sym>";
-		//fprintf(Act()->LogFile(), "AddThatToThisNext %s::%s ID=%d TO %s::%s NODE ID=%d\n",
-		//	pN->GetNodeName(), 
-		//	pSthat,
-		//	pN->GetID(),
-		//	pNode->GetNodeName(),
-		//	pSthis,
-		//	pNode->GetID()
-		//);
+		pN->SetPrev(pNode);
 		pNode->SetNext(pN);
 	}
 }

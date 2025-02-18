@@ -1,6 +1,6 @@
 #include "pch.h"
 
-CAct65AssignLSh::CAct65AssignLSh()
+CAct65AssignLSh::CAct65AssignLSh() :CAstNode(NodeType::ASSIGN_LSH)
 {
 }
 
@@ -10,8 +10,6 @@ CAct65AssignLSh::~CAct65AssignLSh()
 
 bool CAct65AssignLSh::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
-	SetNodeType(NodeType::ASSIGN_LSH);
-	SetNodeName(m_pNodeTyypeName);
 	return CAstNode::Create(pChild, pNext, pSym);
 }
 

@@ -1,6 +1,6 @@
 #include "pch.h"
 
-CAct65SecAtrbZEROPAGE::CAct65SecAtrbZEROPAGE()
+CAct65SecAtrbZEROPAGE::CAct65SecAtrbZEROPAGE() :CAstNode(NodeType::SECTION_ATTRIBUTE_PAGE_ZERO)
 {
 
 }
@@ -11,8 +11,6 @@ CAct65SecAtrbZEROPAGE::~CAct65SecAtrbZEROPAGE()
 
 bool CAct65SecAtrbZEROPAGE::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
-	SetNodeType(NodeType::SECTION_ATTRIBUTE_PAGE_ZERO);
-	SetNodeName(m_pNodeTyypeName);
 	return CAstNode::Create(pChild, pNext, pSym);
 }
 

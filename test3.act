@@ -24,6 +24,18 @@ INTERRUPT AnInteruption()
 	IFF .N THEN
 		kk ==MOD 5
 	FFI
+	a = c * d
+	a ==+ c * d
+	a ==- c * d
+	a ==* c * d
+	a ==/ c * d
+	a ==MOD c * d
+	a ==! c * d
+	a ==& c * d
+	a ==% c * d
+	a ==LSH c * d
+	a ==RSH c * d
+	a ==+ c * d
 	IFF BITS[$05] THEN
 		ii ==LSH 2
 	FFI

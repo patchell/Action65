@@ -1,6 +1,6 @@
 #include "pch.h"
 
-CAct65ASMPROC::CAct65ASMPROC()
+CAct65ASMPROC::CAct65ASMPROC() :CAstNode(NodeType::ASM_PROC)
 {
 }
 
@@ -10,8 +10,6 @@ CAct65ASMPROC::~CAct65ASMPROC()
 
 bool CAct65ASMPROC::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
-	SetNodeType(NodeType::ASM_PROC);
-	SetNodeName(m_pNodeTyypeName);
 	return CAstNode::Create(pChild, pNext, pSym);
 }
 

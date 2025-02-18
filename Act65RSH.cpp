@@ -1,6 +1,6 @@
 #include "pch.h"
 
-CAct65RSH::CAct65RSH()
+CAct65RSH::CAct65RSH() :CAstNode(NodeType::RSH)
 {
 }
 
@@ -10,8 +10,6 @@ CAct65RSH::~CAct65RSH()
 
 bool CAct65RSH::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
-	SetNodeType(NodeType::RSH);
-	SetNodeName(m_pNodeTyypeName);
 	return CAstNode::Create(pChild, pNext, pSym);
 }
 

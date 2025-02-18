@@ -1,6 +1,6 @@
 #include "pch.h"
 
-CAct65SecAtrbSIZE::CAct65SecAtrbSIZE()
+CAct65SecAtrbSIZE::CAct65SecAtrbSIZE() :CAstNode(NodeType::SECTION_ATTRIBUTE_SIZE)
 {
 }
 
@@ -10,8 +10,6 @@ CAct65SecAtrbSIZE::~CAct65SecAtrbSIZE()
 
 bool CAct65SecAtrbSIZE::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
-	SetNodeType(NodeType::SECTION_ATTRIBUTE_SIZE);
-	SetNodeName(m_pNodeTyypeName);
 	return CAstNode::Create(pChild, pNext, pSym);
 }
 

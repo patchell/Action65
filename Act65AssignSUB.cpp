@@ -1,6 +1,6 @@
 #include "pch.h"
 
-CAct65AssignSUB::CAct65AssignSUB()
+CAct65AssignSUB::CAct65AssignSUB() :CAstNode(NodeType::ASSIGN_SUB)
 {
 }
 
@@ -10,8 +10,6 @@ CAct65AssignSUB::~CAct65AssignSUB()
 
 bool CAct65AssignSUB::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
-	SetNodeType(NodeType::ASSIGN_SUB);
-	SetNodeName(m_pNodeTyypeName);
 	return CAstNode::Create(pChild, pNext, pSym);
 }
 

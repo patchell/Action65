@@ -1,6 +1,6 @@
 #include "pch.h"
 
-CAct65FlagNEG::CAct65FlagNEG()
+CAct65FlagNEG::CAct65FlagNEG() :CAstNode(NodeType::NEG_FLAG)
 {
 }
 
@@ -10,8 +10,6 @@ CAct65FlagNEG::~CAct65FlagNEG()
 
 bool CAct65FlagNEG::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
-	SetNodeType(NodeType::NEG_FLAG);
-	SetNodeName(m_pNodeTyypeName);
 	return CAstNode::Create(pChild, pNext, pSym);
 }
 

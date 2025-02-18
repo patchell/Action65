@@ -1,6 +1,6 @@
 #include "pch.h"
 
-CAct65GreaterTHAN::CAct65GreaterTHAN()
+CAct65GreaterTHAN::CAct65GreaterTHAN() :CAstNode(NodeType::GREATER_THAN)
 {
 }
 
@@ -10,8 +10,6 @@ CAct65GreaterTHAN::~CAct65GreaterTHAN()
 
 bool CAct65GreaterTHAN::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
-	SetNodeType(NodeType::GREATER_THAN);
-	SetNodeName(m_pNodeTyypeName);
 	return CAstNode::Create(pChild, pNext, pSym);
 }
 

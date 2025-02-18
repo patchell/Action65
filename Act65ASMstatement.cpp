@@ -1,6 +1,6 @@
 #include "pch.h"
 
-CAct65ASMstatement::CAct65ASMstatement()
+CAct65ASMstatement::CAct65ASMstatement() :CAstNode(NodeType::ASM_STATEMENT)
 {
 }
 
@@ -10,8 +10,6 @@ CAct65ASMstatement::~CAct65ASMstatement()
 
 bool CAct65ASMstatement::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
-	SetNodeType(NodeType::ASM_STATEMENT);
-	SetNodeName(m_pNodeTyypeName);
 	return CAstNode::Create(pChild, pNext, pSym);
 }
 

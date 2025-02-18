@@ -1,6 +1,6 @@
 #include "pch.h"
 
-CAct65ROL::CAct65ROL()
+CAct65ROL::CAct65ROL() :CAstNode(NodeType::ROL)
 {
 }
 
@@ -10,8 +10,6 @@ CAct65ROL::~CAct65ROL()
 
 bool CAct65ROL::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
-	SetNodeType(NodeType::ROL);
-	SetNodeName(m_pNodeTyypeName);
 	return CAstNode::Create(pChild, pNext, pSym);
 }
 

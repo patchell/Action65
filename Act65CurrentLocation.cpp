@@ -1,6 +1,6 @@
 #include "pch.h"
 
-CAct65CurrentLocation::CAct65CurrentLocation()
+CAct65CurrentLocation::CAct65CurrentLocation() :CAstNode(NodeType::CURRENT_LOCATION)
 {
 }
 
@@ -10,8 +10,6 @@ CAct65CurrentLocation::~CAct65CurrentLocation()
 
 bool CAct65CurrentLocation::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
-	SetNodeType(NodeType::CURRENT_LOCATION);
-	SetNodeName(m_pNodeTyypeName);
 	return CAstNode::Create(pChild, pNext, pSym);
 }
 

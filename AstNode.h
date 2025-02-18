@@ -19,7 +19,7 @@ public:
 		ASSIGN_AND,
 		ASSIGN_DIV,
 		ASSIGN_LSH,
-		ASSIGN,
+		ASSIGN_EQ,
 		ASSIGN_MOD,
 		ASSIGN_MULT,
 		ASSIGN_OR,
@@ -28,6 +28,7 @@ public:
 		ASSIGN_XOR,
 		BEGIN,
 		BIT,
+		BITS,
 		BITWISE_AND,
 		BITWISE_OR,
 		BODY,
@@ -181,6 +182,7 @@ public:
 		CAstNode* pNext = 0,
 		CBin* pSym = 0
 	);
+	virtual bool Branch(CAstNode* pBranch);
 	virtual void CreateValue(CBin* pSym);
 	virtual CValue* Process() = 0;
 	virtual void PrintNode(FILE* pOut, int Indent, bool* pbNextFlag);
@@ -209,11 +211,7 @@ public:
 	int GetID() const { return m_NodeID; }
 	void SetID(int Id) { m_NodeID = Id; }
 	NodeType GetNodeType() const { return m_NodeType; }
-	void SetNodeType(NodeType Nt) { m_NodeType = Nt; }
-	const char* GetNodeName() { return m_pNodeName; }
-	void SetNodeName(const char* pName) {
-		m_pNodeName = pName;
-	}
+	virtual const char* GetNodeName() { return 0; }
 	bool SetSymbol(CBin* pSym) {
 		bool rV = true;
 

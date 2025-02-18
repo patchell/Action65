@@ -1,6 +1,6 @@
 #include "pch.h"
 
-CAct65FlagOVERFLOW::CAct65FlagOVERFLOW()
+CAct65FlagOVERFLOW::CAct65FlagOVERFLOW() :CAstNode(NodeType::OVERFLOW_FLAG)
 {
 }
 
@@ -10,8 +10,6 @@ CAct65FlagOVERFLOW::~CAct65FlagOVERFLOW()
 
 bool CAct65FlagOVERFLOW::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
-	SetNodeType(NodeType::OVERFLOW_FLAG);
-	SetNodeName(m_pNodeTyypeName);
 	return CAstNode::Create(pChild, pNext, pSym);
 }
 

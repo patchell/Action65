@@ -1,6 +1,6 @@
 #include "pch.h"
 
-CAct65ConstLIST::CAct65ConstLIST()
+CAct65ConstLIST::CAct65ConstLIST() :CAstNode(NodeType::CONSTANT_LIST)
 {
 }
 
@@ -10,8 +10,6 @@ CAct65ConstLIST::~CAct65ConstLIST()
 
 bool CAct65ConstLIST::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
-	SetNodeType(NodeType::CONSTANT_LIST);
-	SetNodeName(m_pNodeTyypeName);
 	return CAstNode::Create(pChild, pNext, pSym);
 }
 

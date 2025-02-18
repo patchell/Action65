@@ -1,6 +1,6 @@
 #include "pch.h"
 
-CAct65TypeFIELDS::CAct65TypeFIELDS()
+CAct65TypeFIELDS::CAct65TypeFIELDS() :CAstNode(NodeType::TYPE_FIELDS)
 {
 }
 
@@ -10,8 +10,6 @@ CAct65TypeFIELDS::~CAct65TypeFIELDS()
 
 bool CAct65TypeFIELDS::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
-	SetNodeType(NodeType::TYPE_FIELDS);
-	SetNodeName(m_pNodeTyypeName);
 	return CAstNode::Create(pChild, pNext, pSym);
 }
 

@@ -1,6 +1,6 @@
 #include "pch.h"
 
-CAct65BIT::CAct65BIT()
+CAct65BIT::CAct65BIT() :CAstNode(NodeType::BIT)
 {
 }
 
@@ -10,8 +10,6 @@ CAct65BIT::~CAct65BIT()
 
 bool CAct65BIT::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
-	SetNodeType(NodeType::BIT);
-	SetNodeName(m_pNodeTyypeName);
 	return CAstNode::Create(pChild, pNext, pSym);
 }
 

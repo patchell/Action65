@@ -1,6 +1,6 @@
 #include "pch.h"
 
-CAct65SECTIONname::CAct65SECTIONname()
+CAct65SECTIONname::CAct65SECTIONname() :CAstNode(NodeType::SECTION_NAME)
 {
 }
 
@@ -10,8 +10,6 @@ CAct65SECTIONname::~CAct65SECTIONname()
 
 bool CAct65SECTIONname::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
-	SetNodeType(NodeType::SECTION_NAME);
-	SetNodeName(m_pNodeTyypeName);
 	return CAstNode::Create(pChild, pNext, pSym);
 }
 

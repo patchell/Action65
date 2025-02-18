@@ -13,5 +13,6 @@ public:
 	int GetValue() { return m_Value; }
 	virtual int Print(int Indent, char* s, int l, bool* pbNextFlag);
 	void SetValue(int V) { m_Value = V; }
+	virtual const char* GetNodeName() { return m_pNodeTyypeName; }
 };
 

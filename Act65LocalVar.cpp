@@ -1,6 +1,6 @@
 #include "pch.h"
 
-CAct65LocalVar::CAct65LocalVar()
+CAct65LocalVar::CAct65LocalVar() :CAstNode(NodeType::LOCAL_VARIABLE)
 {
 }
 
@@ -10,8 +10,6 @@ CAct65LocalVar::~CAct65LocalVar()
 
 bool CAct65LocalVar::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
-	SetNodeType(NodeType::LOCAL_VARIABLE);
-	SetNodeName(m_pNodeTyypeName);
 	return CAstNode::Create(pChild, pNext, pSym);
 }
 

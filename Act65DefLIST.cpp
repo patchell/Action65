@@ -1,6 +1,6 @@
 #include "pch.h"
 
-CAct65DefLIST::CAct65DefLIST()
+CAct65DefLIST::CAct65DefLIST() :CAstNode(NodeType::DEFINE_LIST)
 {
 }
 
@@ -10,8 +10,6 @@ CAct65DefLIST::~CAct65DefLIST()
 
 bool CAct65DefLIST::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
-	SetNodeType(NodeType::DEFINE_LIST);
-	SetNodeName(m_pNodeTyypeName);
 	return CAstNode::Create(pChild, pNext, pSym);
 }
 

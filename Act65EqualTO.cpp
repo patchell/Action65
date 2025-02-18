@@ -1,8 +1,7 @@
 #include "pch.h"
 
-CAct65EqualTO::CAct65EqualTO()
+CAct65EqualTO::CAct65EqualTO() :CAstNode(NodeType::EQUAL_TO)
 {
-	SetNodeName(m_pNodeTyypeName);
 }
 
 CAct65EqualTO::~CAct65EqualTO()
@@ -11,8 +10,6 @@ CAct65EqualTO::~CAct65EqualTO()
 
 bool CAct65EqualTO::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
-	SetNodeType(NodeType::EQUAL_TO);
-	SetNodeName(m_pNodeTyypeName);
 	return CAstNode::Create(pChild, pNext, pSym);
 }
 

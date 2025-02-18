@@ -1,6 +1,6 @@
 #include "pch.h"
 
-CAct65CHAR::CAct65CHAR()
+CAct65CHAR::CAct65CHAR() :CAstNode(NodeType::CHAR)
 {
 }
 
@@ -10,8 +10,6 @@ CAct65CHAR::~CAct65CHAR()
 
 bool CAct65CHAR::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
-	SetNodeType(NodeType::CHAR);
-	SetNodeName(m_pNodeTyypeName);
 	return CAstNode::Create(pChild, pNext, pSym);
 }
 

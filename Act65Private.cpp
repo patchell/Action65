@@ -1,6 +1,6 @@
 #include "pch.h"
 
-CAct65Private::CAct65Private()
+CAct65Private::CAct65Private() :CAstNode(NodeType::PRIVATE)
 {
 }
 
@@ -10,7 +10,6 @@ CAct65Private::~CAct65Private()
 
 bool CAct65Private::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
-	SetNodeName(m_pNodeTyypeName);
 	return CAstNode::Create(pChild, pNext, pSym);
 }
 

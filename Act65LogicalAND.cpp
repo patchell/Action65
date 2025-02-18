@@ -1,6 +1,6 @@
 #include "pch.h"
 
-CAct65LogicalAND::CAct65LogicalAND()
+CAct65LogicalAND::CAct65LogicalAND() :CAstNode(NodeType::LOGICAL_AND)
 {
 }
 
@@ -10,8 +10,6 @@ CAct65LogicalAND::~CAct65LogicalAND()
 
 bool CAct65LogicalAND::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
-	SetNodeType(NodeType::LOGICAL_AND);
-	SetNodeName(m_pNodeTyypeName);
 	return CAstNode::Create(pChild, pNext, pSym);
 }
 

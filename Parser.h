@@ -82,7 +82,11 @@ private:
 	//------------------------------------------
 	// Statements
 	//------------------------------------------
-	CLkHead Statements(CLkHead LookaHead);	//ProcCal
+	CLkHead Statements(CLkHead LookaHead);
+	//------------------------------------------
+	// Statements
+	//------------------------------------------
+	CLkHead Call(CLkHead LookaHead);	//ProcCal
 	CLkHead ProcParams(CLkHead LookaHead);
 	CLkHead ProcParamsEnd(CLkHead LookaHead);
 	//----FOR
@@ -143,7 +147,7 @@ private:
 	CLkHead Rti(CLkHead LookaHead);
 	//---- Assigmemt
 	CLkHead Assignment(CLkHead LookaHead);
-	void AssignmentAUX(CLkHead& LeftHandSide, CLkHead &LHNext, CAstNode* pN, Token Tk);
+	CLkHead AssignmentAUX(CLkHead LHNext, CAstNode* pN);
 	//--------------------------------------
 	// Logical Expressions
 	//--------------------------------------
@@ -390,20 +394,19 @@ private:
 	CLkHead Immediate(CLkHead LookaHead, Token OpCodeToken);
 	CLkHead Absolute(CLkHead LookaHead, Token OpCodeToken);
 	bool CheckZeroPageAddress(int A);
-	//---------------- Utillity ----------------------
+	//---------------- Debug Utillity ----------------------
 public:
-	void PrintLookahead(
-		FILE* pLog,
-		CLkHead token,
-		const char* pS,
-		int RecursionLevel,
-		int Bump = 0
-	);
 	void LookaheadDebug(const char* s, CLkHead* pChild, CLkHead* pNext);
-	void PrintChild(const char* s, CAstNode* pChild);
 	void PrintNode(const char* s, int TabIndent, CAstNode* pNode);
 	void LHPrint(CLkHead* pLH, const char* s);
-	void DebugTravers(CAstNode* pN, const char* pTitle, int MaxRecursions, int MaxLoops);
+	void DebugTravers(
+		CAstNode* pN, 
+		const char* pTitle, 
+		int MaxRecursions, 
+		int MaxLoops,
+		int Misc = 0,
+		const char* pSmiscLabel = 0
+	);
 	//---------------------------------
 };
 

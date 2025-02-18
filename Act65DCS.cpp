@@ -1,6 +1,6 @@
 #include "pch.h"
 
-CAct65DCS::CAct65DCS()
+CAct65DCS::CAct65DCS() :CAstNode(NodeType::DEFINE_C_STRING)
 {
 }
 
@@ -10,8 +10,6 @@ CAct65DCS::~CAct65DCS()
 
 bool CAct65DCS::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
-	SetNodeType(NodeType::DEFINE_C_STRING);
-	SetNodeName(m_pNodeTyypeName);
 	return CAstNode::Create(pChild, pNext, pSym);
 }
 

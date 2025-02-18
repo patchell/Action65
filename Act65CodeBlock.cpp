@@ -1,7 +1,6 @@
 #include "pch.h"
-#include "Act65CodeBlock.h"
 
-CAct65CodeBlock::CAct65CodeBlock()
+CAct65CodeBlock::CAct65CodeBlock() :CAstNode(NodeType::CODE_BLOCK)
 {
 }
 
@@ -11,8 +10,6 @@ CAct65CodeBlock::~CAct65CodeBlock()
 
 bool CAct65CodeBlock::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
-	SetNodeType(NodeType::CODE_BLOCK);
-	SetNodeName(m_pNodeTyypeName);
 	return CAstNode::Create(pChild, pNext, pSym);
 }
 
@@ -65,8 +62,6 @@ CAct65CODEBLOCKend::~CAct65CODEBLOCKend()
 
 bool CAct65CODEBLOCKend::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
-	SetNodeType(NodeType::CODE_BLOCK);
-	SetNodeName(m_pNodeTyypeName);
 	return CAstNode::Create(pChild, pNext, pSym);
 }
 

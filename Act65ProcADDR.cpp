@@ -1,6 +1,6 @@
 #include "pch.h"
 
-CAct65ProcADDR::CAct65ProcADDR()
+CAct65ProcADDR::CAct65ProcADDR() :CAstNode(NodeType::PROC_ADDRESS)
 {
 }
 
@@ -10,8 +10,6 @@ CAct65ProcADDR::~CAct65ProcADDR()
 
 bool CAct65ProcADDR::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
-	SetNodeType(NodeType::PROC_ADDRESS);
-	SetNodeName(m_pNodeTyypeName);
 	return CAstNode::Create(pChild, pNext, pSym);
 }
 

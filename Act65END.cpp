@@ -1,6 +1,6 @@
 #include "pch.h"
 
-CAct65END::CAct65END()
+CAct65END::CAct65END() :CAstNode(NodeType::END)
 {
 }
 
@@ -10,8 +10,6 @@ CAct65END::~CAct65END()
 
 bool CAct65END::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
-	SetNodeType(NodeType::END);
-	SetNodeName(m_pNodeTyypeName);
 	return CAstNode::Create(pChild, pNext, pSym);
 }
 

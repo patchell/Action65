@@ -1,6 +1,6 @@
 #include "pch.h"
 
-CAct65UnaryNEG::CAct65UnaryNEG()
+CAct65UnaryNEG::CAct65UnaryNEG() :CAstNode(NodeType::UNARY_NEG)
 {
 }
 
@@ -10,8 +10,6 @@ CAct65UnaryNEG::~CAct65UnaryNEG()
 
 bool CAct65UnaryNEG::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
-	SetNodeType(NodeType::UNARY_NEG);
-	SetNodeName(m_pNodeTyypeName);
 	return CAstNode::Create(pChild, pNext, pSym);
 }
 

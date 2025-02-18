@@ -1,6 +1,6 @@
 #include "pch.h"
 
-CAct65DW::CAct65DW()
+CAct65DW::CAct65DW() :CAstNode(NodeType::DEFINE_WORD)
 {
 }
 
@@ -10,8 +10,6 @@ CAct65DW::~CAct65DW()
 
 bool CAct65DW::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
-	SetNodeType(NodeType::DEFINE_WORD);
-	SetNodeName(m_pNodeTyypeName);
 	return CAstNode::Create(pChild, pNext, pSym);
 }
 

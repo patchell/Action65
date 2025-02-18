@@ -1,6 +1,6 @@
 #include "pch.h"
 
-CAct65WHILE::CAct65WHILE()
+CAct65WHILE::CAct65WHILE() :CAstNode(NodeType::WHILE)
 {
 }
 
@@ -10,8 +10,6 @@ CAct65WHILE::~CAct65WHILE()
 
 bool CAct65WHILE::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
-	SetNodeType(NodeType::WHILE);
-	SetNodeName(m_pNodeTyypeName);
 	return CAstNode::Create(pChild, pNext, pSym);
 }
 

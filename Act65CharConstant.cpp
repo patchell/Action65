@@ -1,6 +1,6 @@
 #include "pch.h"
 
-CAct65CharConstant::CAct65CharConstant()
+CAct65CharConstant::CAct65CharConstant() :CAstNode(NodeType::CHAR_CONSTANT)
 {
 	m_Value = ' ';
 }
@@ -11,8 +11,6 @@ CAct65CharConstant::~CAct65CharConstant()
 
 bool CAct65CharConstant::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
-	SetNodeType(NodeType::CHAR_CONSTANT);
-	SetNodeName(m_pNodeTyypeName);
 	return CAstNode::Create(pChild, pNext, pSym);
 }
 

@@ -134,6 +134,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Act65AssignEQ.cpp" />
     <ClCompile Include="Act65BITS.cpp" />
     <ClCompile Include="Act65ProcADDR.cpp" />
     <ClCompile Include="Act65BODY.cpp" />
@@ -274,8 +275,8 @@
     <ClCompile Include="ActionAstTree.cpp" />
     <ClCompile Include="Act65PopDest.cpp" />
     <ClCompile Include="Act65RTI.cpp" />
-    <ClCompile Include="Actt65DB.cpp" />
-    <ClCompile Include="Actt65DS.cpp" />
+    <ClCompile Include="Act65DB.cpp" />
+    <ClCompile Include="Act65DS.cpp" />
     <ClCompile Include="Act65LowerPart.cpp" />
     <ClCompile Include="Act65TYPEDEF.cpp" />
     <ClCompile Include="Act65AssignAND.cpp" />
@@ -314,6 +315,7 @@
     <ClCompile Include="WhereSymbolIsUsed.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Act65AssignEQ.h" />
     <ClInclude Include="Act65BITS.h" />
     <ClInclude Include="Act65ProcADDR.h" />
     <ClInclude Include="Act65BODY.h" />
@@ -458,7 +460,6 @@
     <ClInclude Include="Act65LowerPart.h" />
     <ClInclude Include="Act65TYPEDEF.h" />
     <ClInclude Include="Act65RTI.h" />
-    <ClInclude Include="AddressSizeStackItem.h" />
     <ClInclude Include="Act65AssignAND.h" />
     <ClInclude Include="Act65AssignOR.h" />
     <ClInclude Include="Act65FuncCall.h" />
@@ -502,6 +503,7 @@
     <None Include="test3.act" />
     <None Include="test4.act" />
     <None Include="test5.act" />
+    <None Include="test6.act" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="log.txt" />

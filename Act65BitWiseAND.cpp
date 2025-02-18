@@ -1,6 +1,6 @@
 #include "pch.h"
 
-CAct65BitWiseAND::CAct65BitWiseAND()
+CAct65BitWiseAND::CAct65BitWiseAND() :CAstNode(NodeType::BITWISE_AND)
 {
 }
 
@@ -10,8 +10,6 @@ CAct65BitWiseAND::~CAct65BitWiseAND()
 
 bool CAct65BitWiseAND::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
-	SetNodeType(NodeType::BITWISE_AND);
-	SetNodeName(m_pNodeTyypeName);
 	return CAstNode::Create(pChild, pNext, pSym);
 }
 

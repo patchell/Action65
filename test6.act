@@ -1,0 +1,24 @@
+CHAR ff
+BYTE gg,hh,ii,jj,kk
+
+MODULE
+
+
+INTERRUPT AnInteruption()
+	CHAR a
+	INT x,xx,xxx
+	INT c
+	CHAR d
+	CHAR e
+
+	[$AA$BB$CE$A1$C0]
+	IFF .A = 0 THEN
+		jj ==+ 2
+	FFI
+	IFF .N THEN
+		kk = 5
+	FFI
+	a = c * d
+	RTI
+
+INT qr,st

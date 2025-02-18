@@ -1,6 +1,6 @@
 #include "pch.h"
 
-CAct65IDENT::CAct65IDENT()
+CAct65IDENT::CAct65IDENT() :CAstNode(NodeType::IDENT)
 {
 }
 
@@ -10,8 +10,6 @@ CAct65IDENT::~CAct65IDENT()
 
 bool CAct65IDENT::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
-	SetNodeType(NodeType::IDENT);
-	SetNodeName(m_pNodeTyypeName);
 	return CAstNode::Create(pChild, pNext, pSym);
 }
 

@@ -1,11 +1,11 @@
 #pragma once
 
-class CAct65ELSE : public CAstNode
+class CAct65AssignEQ : public CAstNode
 {
-	inline static const char* m_pNodeTyypeName = "ELSE";
+	inline static const char* m_pNodeTyypeName = "Assign =";
 public:
-	CAct65ELSE();
-	virtual ~CAct65ELSE();
+	CAct65AssignEQ();
+	virtual ~CAct65AssignEQ();
 	virtual bool Create(CAstNode* pChild = 0, CAstNode* pNext = 0, CBin* pSym = 0);
 	virtual CValue* Process();
 	virtual int Print(int Indent, char* s, int l, bool* pbNextFlag);

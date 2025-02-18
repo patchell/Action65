@@ -1,6 +1,6 @@
 #include "pch.h"
 
-CAct65DeclareParams::CAct65DeclareParams()
+CAct65DeclareParams::CAct65DeclareParams() :CAstNode(NodeType::DECLARE_PARAMS)
 {
 }
 
@@ -10,8 +10,6 @@ CAct65DeclareParams::~CAct65DeclareParams()
 
 bool CAct65DeclareParams::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
-	SetNodeType(NodeType::DECLARE_PARAMS);
-	SetNodeName(m_pNodeTyypeName);
 	return CAstNode::Create(pChild, pNext, pSym);
 }
 

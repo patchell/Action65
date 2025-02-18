@@ -1,6 +1,6 @@
 #include "pch.h"
 
-CAct65RETURN::CAct65RETURN()
+CAct65RETURN::CAct65RETURN() :CAstNode(NodeType::RETURN)
 {
 }
 
@@ -10,8 +10,6 @@ CAct65RETURN::~CAct65RETURN()
 
 bool CAct65RETURN::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
-	SetNodeType(NodeType::RETURN);
-	SetNodeName(m_pNodeTyypeName);
 	return CAstNode::Create(pChild, pNext, pSym);
 }
 

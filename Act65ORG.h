@@ -13,5 +13,6 @@ public:
 	virtual void PrintNode(FILE* pOut, int Indent, bool* pbNextFlag);
 	int GetAddress() const { return m_Address; }
 	void SetAddress(int A) { m_Address = A; }
+	virtual const char* GetNodeName() { return m_pNodeTyypeName; }
 };
 

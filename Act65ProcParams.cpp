@@ -1,6 +1,6 @@
 #include "pch.h"
 
-CAct65ProcParams::CAct65ProcParams()
+CAct65ProcParams::CAct65ProcParams() :CAstNode(NodeType::PROC_PARAMETERS)
 {
 }
 
@@ -10,8 +10,6 @@ CAct65ProcParams::~CAct65ProcParams()
 
 bool CAct65ProcParams::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
-	SetNodeType(NodeType::PROC_PARAMETERS);
-	SetNodeName(m_pNodeTyypeName);
 	return CAstNode::Create(pChild, pNext, pSym);
 }
 

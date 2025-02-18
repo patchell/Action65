@@ -1,6 +1,6 @@
 #include "pch.h"
 
-CAct65LTEQ::CAct65LTEQ()
+CAct65LTEQ::CAct65LTEQ() :CAstNode(NodeType::LESS_THAN_OR_EQUAL)
 {
 }
 
@@ -10,8 +10,6 @@ CAct65LTEQ::~CAct65LTEQ()
 
 bool CAct65LTEQ::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
-	SetNodeType(NodeType::LESS_THAN_OR_EQUAL);
-	SetNodeName(m_pNodeTyypeName);
 	return CAstNode::Create(pChild, pNext, pSym);
 }
 

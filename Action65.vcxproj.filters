@@ -353,7 +353,7 @@
     <ClCompile Include="Act65ORG.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Actt65DB.cpp">
+    <ClCompile Include="Act65DB.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Act65DW.cpp">
@@ -368,7 +368,7 @@
     <ClCompile Include="Act65DCS.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Actt65DS.cpp">
+    <ClCompile Include="Act65DS.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Act65ASMPROC.cpp">
@@ -569,6 +569,9 @@
     <ClCompile Include="Act65BITS.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Act65AssignEQ.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -596,9 +599,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="AstTree.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="AddressSizeStackItem.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ObjFormatCode.h">
@@ -1108,6 +1108,9 @@
     <ClInclude Include="Act65BITS.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Act65AssignEQ.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="ActionTestFiles\Test1.act">
@@ -1130,6 +1133,9 @@
     </None>
     <None Include="Bin\action.exe">
       <Filter>Bin</Filter>
+    </None>
+    <None Include="test6.act">
+      <Filter>Action</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

@@ -1,6 +1,6 @@
 #include "pch.h"
 
-CAct65FlagZERO::CAct65FlagZERO()
+CAct65FlagZERO::CAct65FlagZERO() :CAstNode(NodeType::ZERO_FLAG)
 {
 }
 
@@ -10,8 +10,6 @@ CAct65FlagZERO::~CAct65FlagZERO()
 
 bool CAct65FlagZERO::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
-	SetNodeType(NodeType::ZERO_FLAG);
-	SetNodeName(m_pNodeTyypeName);
 	return CAstNode::Create(pChild, pNext, pSym);
 }
 

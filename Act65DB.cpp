@@ -1,6 +1,6 @@
 #include "pch.h"
 
-CAct65DB::CAct65DB()
+CAct65DB::CAct65DB() :CAstNode(NodeType::DEFINE_BYTE)
 {
 }
 
@@ -10,8 +10,6 @@ CAct65DB::~CAct65DB()
 
 bool CAct65DB::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
-	SetNodeType(NodeType::SECTION_NAME);
-	SetNodeName(m_pNodeTyypeName);
 	return CAstNode::Create(pChild, pNext, pSym);
 }
 

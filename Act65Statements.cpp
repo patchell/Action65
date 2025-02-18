@@ -1,6 +1,6 @@
 #include "pch.h"
 
-CAct65Statements::CAct65Statements()
+CAct65Statements::CAct65Statements() :CAstNode(NodeType::STATEMENTS)
 {
 }
 
@@ -10,8 +10,6 @@ CAct65Statements::~CAct65Statements()
 
 bool CAct65Statements::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
-	SetNodeType(NodeType::STATEMENTS);
-	SetNodeName(m_pNodeTyypeName);
 	return CAstNode::Create(pChild, pNext, pSym);
 }
 

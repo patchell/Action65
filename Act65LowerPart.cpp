@@ -1,6 +1,6 @@
 #include "pch.h"
 
-CAct65LowerPart::CAct65LowerPart()
+CAct65LowerPart::CAct65LowerPart() :CAstNode(NodeType::LOWER_PART)
 {
 }
 
@@ -10,8 +10,6 @@ CAct65LowerPart::~CAct65LowerPart()
 
 bool CAct65LowerPart::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
-	SetNodeType(NodeType::LOWER_PART);
-	SetNodeName(m_pNodeTyypeName);
 	return CAstNode::Create(pChild, pNext, pSym);
 }
 

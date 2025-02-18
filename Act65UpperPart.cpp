@@ -1,6 +1,6 @@
 #include "pch.h"
 
-CAct65UpperPart::CAct65UpperPart()
+CAct65UpperPart::CAct65UpperPart() :CAstNode(NodeType::UPPER_PART)
 {
 }
 
@@ -10,8 +10,6 @@ CAct65UpperPart::~CAct65UpperPart()
 
 bool CAct65UpperPart::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
-	SetNodeType(NodeType::UPPER_PART);
-	SetNodeName(m_pNodeTyypeName);
 	return CAstNode::Create(pChild, pNext, pSym);
 }
 

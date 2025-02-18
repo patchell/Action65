@@ -1,6 +1,6 @@
 #include "pch.h"
 
-CAct65DefineOBJECT::CAct65DefineOBJECT()
+CAct65DefineOBJECT::CAct65DefineOBJECT() :CAstNode(NodeType::DEFINE_OBJECT)
 {
 }
 
@@ -10,8 +10,6 @@ CAct65DefineOBJECT::~CAct65DefineOBJECT()
 
 bool CAct65DefineOBJECT::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
-	SetNodeType(NodeType::DEFINE_OBJECT);
-	SetNodeName(m_pNodeTyypeName);
 	return CAstNode::Create(pChild, pNext, pSym);
 }
 

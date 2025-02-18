@@ -1,6 +1,6 @@
 #include "pch.h"
 
-CAct65RECTYPE::CAct65RECTYPE()
+CAct65RECTYPE::CAct65RECTYPE() :CAstNode(NodeType::RECORD_TYPE)
 {
 }
 
@@ -10,8 +10,6 @@ CAct65RECTYPE::~CAct65RECTYPE()
 
 bool CAct65RECTYPE::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
-	SetNodeType(NodeType::RECORD_TYPE);
-	SetNodeName(m_pNodeTyypeName);
 	return CAstNode::Create(pChild, pNext, pSym);
 }
 

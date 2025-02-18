@@ -25,6 +25,14 @@ public:
 	void SetToken(Token T) { m_Token = T; }
 	Token GetToken() const { return m_Token; }
 	void SetNode(CAstNode* pN) { m_pNode = pN; }
+	static CLkHead MakeNode(
+		CLkHead Child, 
+		CLkHead Next, 
+		CAstNode* pN, 
+		CBin* pSym = 0
+	);
+	static CLkHead MakeList(CLkHead Trunk, CLkHead Next);
+	static CLkHead MakeChild(CLkHead Child, CAstNode* pN);
 	CAstNode* GetNode() const {
 		return m_pNode;
 	}

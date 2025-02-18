@@ -1,6 +1,6 @@
 #include "pch.h"
 
-CAct65IF::CAct65IF()
+CAct65IF::CAct65IF() :CAstNode(NodeType::IF)
 {
 }
 
@@ -10,8 +10,6 @@ CAct65IF::~CAct65IF()
 
 bool CAct65IF::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
-	SetNodeType(NodeType::IF);
-	SetNodeName(m_pNodeTyypeName);
 	return CAstNode::Create(pChild, pNext, pSym);
 }
 

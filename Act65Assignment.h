@@ -2,7 +2,7 @@
 
 class CAct65Assignment : public CAstNode
 {
-	inline static const char* m_pNodeTyypeName = "Assign =";
+	inline static const char* m_pNodeTyypeName = "ASSIGN";
 public:
 	CAct65Assignment();
 	virtual ~CAct65Assignment();
@@ -10,5 +10,6 @@ public:
 	virtual CValue* Process();
 	virtual int Print(int Indent, char* s, int l, bool* pbNextFlag);
 	virtual void PrintNode(FILE* pOut, int Indent, bool* pbNextFlag);
+	virtual const char* GetNodeName() { return m_pNodeTyypeName; }
 };
 
