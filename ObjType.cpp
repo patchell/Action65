@@ -26,6 +26,24 @@ int CObjTypeChain::Print(char* pSO, int l)
 	return ls;
 }
 
+bool CObjTypeChain::IsGlobal() const
+{
+	bool rV = false;
+
+	if (m_SpecType == Spec::GLOBAL)
+		rV = true;
+    return rV;
+}
+
+bool CObjTypeChain::IsLocal() const
+{
+	bool rV = false;
+
+	if (m_SpecType == Spec::LOCAL)
+		rV = true;
+	return rV;
+}
+
 const char* CObjTypeChain::Types::FindName(Spec T)
 {
 	return TypesLUT[int(T)].m_pName;

@@ -71,5 +71,7 @@ public:
 	void SetPrev(CObjTypeChain* pP) { m_pPrev = pP; }
 	Spec GetSpec() { return m_SpecType; }
 	void SetSpec(Spec s) { m_SpecType = s; }
+	bool IsGlobal() const;
+	bool IsLocal() const;
 };
 

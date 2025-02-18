@@ -16,6 +16,17 @@ bool CWhereSymbolIsUsed::Create()
 	return CBin::Create();
 }
 
+bool CWhereSymbolIsUsed::Compare(const char* name, int scope)
+{
+	bool rV = false;
+
+	if (strcmp(GetName(), name) == 0)
+	{
+		rV = true;
+	}
+	return rV;
+}
+
 void CWhereSymbolIsUsed::SetAddress(int a)
 {
 	m_Address = a;

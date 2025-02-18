@@ -504,6 +504,7 @@
     <None Include="test4.act" />
     <None Include="test5.act" />
     <None Include="test6.act" />
+    <None Include="test7.act" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="log.txt" />

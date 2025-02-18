@@ -25,5 +25,7 @@ public:
 	CObjTypeChain* GetTail() { return m_pTail; }
 	void CopyTypeChain(CTypeChain* pSrcTC);
 	int Print(char* pSO, int l);
+	bool IsGlobal();
+	bool IsLocal();
 };
 

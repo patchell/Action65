@@ -31,8 +31,9 @@ public:
 	CWhereSymbolIsUsed();
 	virtual ~CWhereSymbolIsUsed();
 	bool Create();
+	virtual bool Compare(const char* name, int scope);
 	void SetAddress(int a);
-	int GetAddress() { return m_Address; }
+	int GetAddress() const { return m_Address; }
 	void SetSection(CSection* pS) { 
 		m_pSection = pS; 
 	}

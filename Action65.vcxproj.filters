@@ -1137,6 +1137,9 @@
     <None Include="test6.act">
       <Filter>Action</Filter>
     </None>
+    <None Include="test7.act">
+      <Filter>Action</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Text Include="log.txt">

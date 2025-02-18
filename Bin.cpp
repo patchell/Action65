@@ -1,13 +1,13 @@
 #include "pch.h"
 
-bool CBin::Compare(const char* name, int aux)
-{
-	bool rV = false;
-
-	if (strcmp(GetName(), name) == 0)
-		rV = true;
-    return rV;
-}
+//bool CBin::Compare(const char* name, int aux)
+//{
+//	bool rV = false;
+//
+//	if (strcmp(GetName(), name) == 0)
+//		rV = true;
+//    return rV;
+//}
 
 void CBin::Print(FILE* pOut, const char* s)
 {

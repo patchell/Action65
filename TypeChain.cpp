@@ -107,3 +107,35 @@ int CTypeChain::Print(char* pSO, int l)
 	return ls;
 }
 
+bool CTypeChain::IsGlobal()
+{
+	bool rV = false;
+	CObjTypeChain* pOT;
+
+	pOT = GetHead();
+	while (pOT && !rV)
+	{
+		if (pOT->IsGlobal())
+			rV = true;
+		else
+			pOT = pOT->GetNext();
+	}
+    return rV;
+}
+
+bool CTypeChain::IsLocal()
+{
+	bool rV = false;
+	CObjTypeChain* pOT;
+
+	pOT = GetHead();
+	while (pOT && !rV)
+	{
+		if (pOT->IsLocal())
+			rV = true;
+		else
+			pOT = pOT->GetNext();
+	}
+	return rV;
+}
+

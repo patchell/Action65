@@ -414,7 +414,7 @@ public:
 	virtual ~CLexer();
 	bool Create();
 	FILE* LogFile();
-	bool IsAsmMode() { return m_bAsmMode; }
+	bool IsAsmMode()const { return m_bAsmMode; }
 	void SetActionMode() { m_bAsmMode = false; }
 	void SetAsmMode() { m_bAsmMode = true; }
 	int LexGet();

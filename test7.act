@@ -1,0 +1,43 @@
+INT aa,bb,cc
+CARD dd,ee
+CHAR ff
+BYTE gg,hh,ii,jj,kk
+
+MODULE
+
+DEFINE SECTION RAM [
+	START = $200,
+	SIZE = $400
+]
+
+INTERRUPT AnInteruption()
+	CHAR a
+	INT x,xx,xxx
+	INT c
+	CHAR d
+	CHAR e
+
+	[$AA$BB$CE$A1$C0]
+	a = c + d
+	e = c * d
+//	a ==- c * d
+//	a ==* c * d
+//	a ==/ c * d
+//	a ==MOD c * d
+//	a ==! c * d
+//	a ==& c * d
+//	a ==% c * d
+//	a ==LSH c * d
+//	a ==RSH c * d
+//	a ==+ c * d
+	DO
+		IF c = xx THEN
+			PUSH .A
+			POP .Y
+		FI
+		UNTIL jj # gg
+		PUSH .A
+	OD
+	RTI
+
+INT qr,st

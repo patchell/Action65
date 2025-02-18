@@ -6,13 +6,14 @@ bool CSymbol::Compare(const char* name, int scope)
 
 	if (strcmp(GetName(), name) == 0)
 	{
-		if (scope > 0)
-		{
-			if (scope == GetScope())
-				rV = true;
-		}
-		else
-			rV = true;
+		rV = true;
+		//if (scope > 0)
+		//{
+		//	if (scope == GetScope())
+		//		rV = true;
+		//}
+		//else
+		//	rV = true;
 	}
 	return rV;
 }

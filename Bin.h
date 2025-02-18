@@ -59,15 +59,15 @@ public:
 		m_pName = new char[l];
 		strcpy_s(m_pName, l, pName);
 	}
-	 virtual bool Compare(const char *name, int aux = 0);
-	 BinType GetType() { return m_Type; }
+	 virtual bool Compare(const char *name, int aux = 0) = 0;
+	 BinType GetType() const { return m_Type; }
 	 //	virtual bool Compare(const char* name) {
 //		bool rV = false;
 //		if (strcmp(m_pName, name) == 0) rV = true;
 //		return rV;
 	//}
 	 void SetToken(Token t) { m_Token = t; }
-	 Token GetToken() { return m_Token; }
+	 Token GetToken() const { return m_Token; }
 	 virtual void Print(FILE* pOut, const char* s = 0);
 	 //------------------------------------------
 	 // SubList Methods

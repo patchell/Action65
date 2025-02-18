@@ -1,2878 +1,429 @@
-File:test6.act has 216 Bytes
+File:test7.act has 475 Bytes
 Parser Created
-Entry Statements LookaHead <NODE is NULL>
----- End ----
-Call Entry LookaHead <NODE is NULL>
----- End ----
-ForStmt Entry LookaHead <NODE is NULL>
----- End ----
-IFstmt Entry LookaHead <NODE is NULL>
----- End ----
-IFF entry LookaHead <NODE is NULL>
----- End ----
-WHILEstmt Entry LookaHead <NODE is NULL>
----- End ----
-DOstmt Entry LookaHead <NODE is NULL>
----- End ----
-EXIT Entry LookaHead <NODE is NULL>
----- End ----
-RETURN Entry LookaHead <NODE is NULL>
----- End ----
-ASM Entry LookaHead <NODE is NULL>
----- End ----
-CodeBlock Entry LookaHead <NODE is NULL>
----- End ----
-UNTIL Entry LookaHead <NODE is NULL>
----- End ----
-PUSH Entry LookaHead <NODE is NULL>
----- End ----
-POP Entry LookaHead <NODE is NULL>
----- End ----
-BREAK Entry LookaHead <NODE is NULL>
----- End ----
-RTI Entry LookaHead <NODE is NULL>
----- End ----
-Assign On Entry LookaHead <NODE is NULL>
----- End ----
-MemContents Entry LookaHead <NODE is NULL>
----- End ----
-Factor Entry LookaHead <NODE is NULL>
----- End ----
-Factor Exit LookaHead <NODE is NULL>
----- End ----
 MemContents Perculatge LookaHead <NODE is NULL>
----- End ----
-MemContents Exit LHNext <NODE is NULL>
----- End ----
-IfStmt Perculatge LookaHead <NODE is NULL>
----- End ----
-Assign On Exit LHNext <NODE is NULL>
----- End ----
-RTI Perculatge LookaHead <NODE is NULL>
----- End ----
-BREAK Perculatge LookaHead <NODE is NULL>
----- End ----
-POP Perculatge LookaHead <NODE is NULL>
----- End ----
-PUSH Perculatge LookaHead <NODE is NULL>
----- End ----
-UNTIL Perculatge LookaHead <NODE is NULL>
----- End ----
-CodeBlock Perculatge LookaHead <NODE is NULL>
 ---- End ----
     CodeBlock [
----- -------- UNTIL Entry LookaHead -------- ----
-	 NUMB  CHILD  NEXT  Line:15  Col:4
-    30     25     -1  +- 'CODE-BLOCK'
-    25     -1     26     +- 'NUMBER'$00AA
-    26     -1     27     +- 'NUMBER'$00BB
-    27     -1     28     +- 'NUMBER'$00CE
-    28     -1     29     +- 'NUMBER'$00A1
-    29     -1     -1     +- 'NUMBER'$00C0
----- End ----
----- -------- PUSH Entry LookaHead -------- ----
-	 NUMB  CHILD  NEXT  Line:15  Col:4
-    30     25     -1  +- 'CODE-BLOCK'
-    25     -1     26     +- 'NUMBER'$00AA
-    26     -1     27     +- 'NUMBER'$00BB
-    27     -1     28     +- 'NUMBER'$00CE
-    28     -1     29     +- 'NUMBER'$00A1
-    29     -1     -1     +- 'NUMBER'$00C0
----- End ----
----- -------- POP Entry LookaHead -------- ----
-	 NUMB  CHILD  NEXT  Line:15  Col:4
-    30     25     -1  +- 'CODE-BLOCK'
-    25     -1     26     +- 'NUMBER'$00AA
-    26     -1     27     +- 'NUMBER'$00BB
-    27     -1     28     +- 'NUMBER'$00CE
-    28     -1     29     +- 'NUMBER'$00A1
-    29     -1     -1     +- 'NUMBER'$00C0
----- End ----
----- -------- BREAK Entry LookaHead -------- ----
-	 NUMB  CHILD  NEXT  Line:15  Col:4
-    30     25     -1  +- 'CODE-BLOCK'
-    25     -1     26     +- 'NUMBER'$00AA
-    26     -1     27     +- 'NUMBER'$00BB
-    27     -1     28     +- 'NUMBER'$00CE
-    28     -1     29     +- 'NUMBER'$00A1
-    29     -1     -1     +- 'NUMBER'$00C0
----- End ----
----- -------- RTI Entry LookaHead -------- ----
-	 NUMB  CHILD  NEXT  Line:15  Col:4
-    30     25     -1  +- 'CODE-BLOCK'
-    25     -1     26     +- 'NUMBER'$00AA
-    26     -1     27     +- 'NUMBER'$00BB
-    27     -1     28     +- 'NUMBER'$00CE
-    28     -1     29     +- 'NUMBER'$00A1
-    29     -1     -1     +- 'NUMBER'$00C0
----- End ----
----- ------- Recursions : 0 - Assign On Entry LookaHead -------- ----
-	 NUMB  CHILD  NEXT  Line:15  Col:4
-    30     25     -1  +- 'CODE-BLOCK'
-    25     -1     26     +- 'NUMBER'$00AA
-    26     -1     27     +- 'NUMBER'$00BB
-    27     -1     28     +- 'NUMBER'$00CE
-    28     -1     29     +- 'NUMBER'$00A1
-    29     -1     -1     +- 'NUMBER'$00C0
----- End ----
----- -------- MemContents Entry LookaHead -------- ----
-	 NUMB  CHILD  NEXT  Line:15  Col:4
-    30     25     -1  +- 'CODE-BLOCK'
-    25     -1     26     +- 'NUMBER'$00AA
-    26     -1     27     +- 'NUMBER'$00BB
-    27     -1     28     +- 'NUMBER'$00CE
-    28     -1     29     +- 'NUMBER'$00A1
-    29     -1     -1     +- 'NUMBER'$00C0
----- End ----
----- -------- Factor Entry LookaHead -------- ----
-	 NUMB  CHILD  NEXT  Line:15  Col:4
-    30     25     -1  +- 'CODE-BLOCK'
-    25     -1     26     +- 'NUMBER'$00AA
-    26     -1     27     +- 'NUMBER'$00BB
-    27     -1     28     +- 'NUMBER'$00CE
-    28     -1     29     +- 'NUMBER'$00A1
-    29     -1     -1     +- 'NUMBER'$00C0
----- End ----
----- -------- Factor Exit LookaHead -------- ----
-	 NUMB  CHILD  NEXT  Line:15  Col:4
-    30     25     -1  +- 'CODE-BLOCK'
-    25     -1     26     +- 'NUMBER'$00AA
-    26     -1     27     +- 'NUMBER'$00BB
-    27     -1     28     +- 'NUMBER'$00CE
-    28     -1     29     +- 'NUMBER'$00A1
-    29     -1     -1     +- 'NUMBER'$00C0
----- End ----
 ---- -------- MemContents Perculatge LookaHead -------- ----
-	 NUMB  CHILD  NEXT  Line:15  Col:4
-    30     25     -1  +- 'CODE-BLOCK'
-    25     -1     26     +- 'NUMBER'$00AA
-    26     -1     27     +- 'NUMBER'$00BB
-    27     -1     28     +- 'NUMBER'$00CE
-    28     -1     29     +- 'NUMBER'$00A1
-    29     -1     -1     +- 'NUMBER'$00C0
----- End ----
----- -------- MemContents Exit LHNext -------- ----
-	 NUMB  CHILD  NEXT  Line:15  Col:4
-    30     25     -1  +- 'CODE-BLOCK'
-    25     -1     26     +- 'NUMBER'$00AA
-    26     -1     27     +- 'NUMBER'$00BB
-    27     -1     28     +- 'NUMBER'$00CE
-    28     -1     29     +- 'NUMBER'$00A1
-    29     -1     -1     +- 'NUMBER'$00C0
----- End ----
----- ------- Recursions : 1 - IfStmt Perculatge LookaHead -------- ----
-	 NUMB  CHILD  NEXT  Line:15  Col:4
-    30     25     -1  +- 'CODE-BLOCK'
-    25     -1     26     +- 'NUMBER'$00AA
-    26     -1     27     +- 'NUMBER'$00BB
-    27     -1     28     +- 'NUMBER'$00CE
-    28     -1     29     +- 'NUMBER'$00A1
-    29     -1     -1     +- 'NUMBER'$00C0
----- End ----
----- ------- Recursions : 0 - Assign On Exit LHNext -------- ----
-	 NUMB  CHILD  NEXT  Line:15  Col:4
-    30     25     -1  +- 'CODE-BLOCK'
-    25     -1     26     +- 'NUMBER'$00AA
-    26     -1     27     +- 'NUMBER'$00BB
-    27     -1     28     +- 'NUMBER'$00CE
-    28     -1     29     +- 'NUMBER'$00A1
-    29     -1     -1     +- 'NUMBER'$00C0
----- End ----
----- -------- RTI Perculatge LookaHead -------- ----
-	 NUMB  CHILD  NEXT  Line:15  Col:4
-    30     25     -1  +- 'CODE-BLOCK'
-    25     -1     26     +- 'NUMBER'$00AA
-    26     -1     27     +- 'NUMBER'$00BB
-    27     -1     28     +- 'NUMBER'$00CE
-    28     -1     29     +- 'NUMBER'$00A1
-    29     -1     -1     +- 'NUMBER'$00C0
----- End ----
----- -------- BREAK Perculatge LookaHead -------- ----
-	 NUMB  CHILD  NEXT  Line:15  Col:4
-    30     25     -1  +- 'CODE-BLOCK'
-    25     -1     26     +- 'NUMBER'$00AA
-    26     -1     27     +- 'NUMBER'$00BB
-    27     -1     28     +- 'NUMBER'$00CE
-    28     -1     29     +- 'NUMBER'$00A1
-    29     -1     -1     +- 'NUMBER'$00C0
----- End ----
----- -------- POP Perculatge LookaHead -------- ----
-	 NUMB  CHILD  NEXT  Line:15  Col:4
-    30     25     -1  +- 'CODE-BLOCK'
-    25     -1     26     +- 'NUMBER'$00AA
-    26     -1     27     +- 'NUMBER'$00BB
-    27     -1     28     +- 'NUMBER'$00CE
-    28     -1     29     +- 'NUMBER'$00A1
-    29     -1     -1     +- 'NUMBER'$00C0
----- End ----
----- -------- PUSH Perculatge LookaHead -------- ----
-	 NUMB  CHILD  NEXT  Line:15  Col:4
-    30     25     -1  +- 'CODE-BLOCK'
-    25     -1     26     +- 'NUMBER'$00AA
-    26     -1     27     +- 'NUMBER'$00BB
-    27     -1     28     +- 'NUMBER'$00CE
-    28     -1     29     +- 'NUMBER'$00A1
-    29     -1     -1     +- 'NUMBER'$00C0
----- End ----
----- -------- UNTIL Perculatge LookaHead -------- ----
-	 NUMB  CHILD  NEXT  Line:15  Col:4
-    30     25     -1  +- 'CODE-BLOCK'
-    25     -1     26     +- 'NUMBER'$00AA
-    26     -1     27     +- 'NUMBER'$00BB
-    27     -1     28     +- 'NUMBER'$00CE
-    28     -1     29     +- 'NUMBER'$00A1
-    29     -1     -1     +- 'NUMBER'$00C0
----- End ----
----- -------- ASM Perculatge LookaHead -------- ----
-	 NUMB  CHILD  NEXT  Line:15  Col:4
-    30     25     -1  +- 'CODE-BLOCK'
-    25     -1     26     +- 'NUMBER'$00AA
-    26     -1     27     +- 'NUMBER'$00BB
-    27     -1     28     +- 'NUMBER'$00CE
-    28     -1     29     +- 'NUMBER'$00A1
-    29     -1     -1     +- 'NUMBER'$00C0
----- End ----
----- -------- RETURN Perculatge LookaHead -------- ----
-	 NUMB  CHILD  NEXT  Line:15  Col:4
-    30     25     -1  +- 'CODE-BLOCK'
-    25     -1     26     +- 'NUMBER'$00AA
-    26     -1     27     +- 'NUMBER'$00BB
-    27     -1     28     +- 'NUMBER'$00CE
-    28     -1     29     +- 'NUMBER'$00A1
-    29     -1     -1     +- 'NUMBER'$00C0
----- End ----
----- -------- EXIT Perculatge LookaHead -------- ----
-	 NUMB  CHILD  NEXT  Line:15  Col:4
-    30     25     -1  +- 'CODE-BLOCK'
-    25     -1     26     +- 'NUMBER'$00AA
-    26     -1     27     +- 'NUMBER'$00BB
-    27     -1     28     +- 'NUMBER'$00CE
-    28     -1     29     +- 'NUMBER'$00A1
-    29     -1     -1     +- 'NUMBER'$00C0
----- End ----
----- -------- DOstmt Perculatge LookaHead -------- ----
-	 NUMB  CHILD  NEXT  Line:15  Col:4
-    30     25     -1  +- 'CODE-BLOCK'
-    25     -1     26     +- 'NUMBER'$00AA
-    26     -1     27     +- 'NUMBER'$00BB
-    27     -1     28     +- 'NUMBER'$00CE
-    28     -1     29     +- 'NUMBER'$00A1
-    29     -1     -1     +- 'NUMBER'$00C0
----- End ----
----- -------- WHILE Perculatge LookaHead -------- ----
-	 NUMB  CHILD  NEXT  Line:15  Col:4
-    30     25     -1  +- 'CODE-BLOCK'
-    25     -1     26     +- 'NUMBER'$00AA
-    26     -1     27     +- 'NUMBER'$00BB
-    27     -1     28     +- 'NUMBER'$00CE
-    28     -1     29     +- 'NUMBER'$00A1
-    29     -1     -1     +- 'NUMBER'$00C0
----- End ----
----- ------- Recursion : 1 - IFF Perculatge LHNext -------- ----
-	 NUMB  CHILD  NEXT  Line:15  Col:4
-    30     25     -1  +- 'CODE-BLOCK'
-    25     -1     26     +- 'NUMBER'$00AA
-    26     -1     27     +- 'NUMBER'$00BB
-    27     -1     28     +- 'NUMBER'$00CE
-    28     -1     29     +- 'NUMBER'$00A1
-    29     -1     -1     +- 'NUMBER'$00C0
----- End ----
-Decoded IFF 1
-MemContents Entry LookaHead <NODE is NULL>
----- End ----
-Factor Entry LookaHead <NODE is NULL>
----- End ----
-Factor Exit LookaHead <NODE is NULL>
----- End ----
-MemContents Perculatge LookaHead <NODE is NULL>
----- End ----
-MemContents Exit LHNext <NODE is NULL>
----- End ----
-Entry Statements LookaHead <NODE is NULL>
----- End ----
-Call Entry LookaHead <NODE is NULL>
----- End ----
-ForStmt Entry LookaHead <NODE is NULL>
----- End ----
-IFstmt Entry LookaHead <NODE is NULL>
----- End ----
-IFF entry LookaHead <NODE is NULL>
----- End ----
-WHILEstmt Entry LookaHead <NODE is NULL>
----- End ----
-DOstmt Entry LookaHead <NODE is NULL>
----- End ----
-EXIT Entry LookaHead <NODE is NULL>
----- End ----
-RETURN Entry LookaHead <NODE is NULL>
----- End ----
-ASM Entry LookaHead <NODE is NULL>
----- End ----
-CodeBlock Entry LookaHead <NODE is NULL>
----- End ----
-UNTIL Entry LookaHead <NODE is NULL>
----- End ----
-PUSH Entry LookaHead <NODE is NULL>
----- End ----
-POP Entry LookaHead <NODE is NULL>
----- End ----
-BREAK Entry LookaHead <NODE is NULL>
----- End ----
-RTI Entry LookaHead <NODE is NULL>
----- End ----
-Assign On Entry LookaHead <NODE is NULL>
----- End ----
-MemContents Entry LookaHead <NODE is NULL>
----- End ----
-Factor Entry LookaHead <NODE is NULL>
----- End ----
-Factor Exit LookaHead <NODE is NULL>
----- End ----
-MemContents Perculatge LookaHead <NODE is NULL>
----- End ----
-ArrayIndex Entry LHNext <NODE is NULL>
----- End ----
-MemContents Entry LookaHead <NODE is NULL>
----- End ----
-Factor Entry LookaHead <NODE is NULL>
----- End ----
-Factor Exit LookaHead <NODE is NULL>
----- End ----
-MemContents Perculatge LookaHead <NODE is NULL>
----- End ----
-MemContents Exit LHNext <NODE is NULL>
----- End ----
-ArrayIndex Perculate LHNext <NODE is NULL>
----- End ----
-ArrayIndex Entry LHNext <NODE is NULL>
----- End ----
----- -------- MemContents Exit LHNext -------- ----
-	 NUMB  CHILD  NEXT  Line:16  Col:8
-    35     -1     -1  +- 'IDENT': jj
----- End ----
----- ------- Recursions : 1 - IfStmt Perculatge LookaHead -------- ----
-	 NUMB  CHILD  NEXT  Line:16  Col:8
-    35     -1     -1  +- 'IDENT': jj
----- End ----
- ==+ Recursion 1
-MemContents Entry LookaHead <NODE is NULL>
----- End ----
-Factor Entry LookaHead <NODE is NULL>
----- End ----
-Factor Exit LookaHead <NODE is NULL>
----- End ----
-MemContents Perculatge LookaHead <NODE is NULL>
----- End ----
-MemContents Exit LHNext <NODE is NULL>
----- End ----
----- -------- MemContents Entry LookaHead -------- ----
-	 NUMB  CHILD  NEXT  Line:17  Col:4
-    36     37     -1  +- '=ADD'
-    37     -1     35     +- 'NUMBER'$0002
-    35     -1     -1     +- 'IDENT': jj
----- End ----
----- -------- Factor Entry LookaHead -------- ----
-	 NUMB  CHILD  NEXT  Line:17  Col:4
-    36     37     -1  +- '=ADD'
-    37     -1     35     +- 'NUMBER'$0002
-    35     -1     -1     +- 'IDENT': jj
----- End ----
----- -------- Factor Exit LookaHead -------- ----
-	 NUMB  CHILD  NEXT  Line:17  Col:4
-    36     37     -1  +- '=ADD'
-    37     -1     35     +- 'NUMBER'$0002
-    35     -1     -1     +- 'IDENT': jj
----- End ----
----- -------- MemContents Perculatge LookaHead -------- ----
-	 NUMB  CHILD  NEXT  Line:17  Col:4
-    36     37     -1  +- '=ADD'
-    37     -1     35     +- 'NUMBER'$0002
-    35     -1     -1     +- 'IDENT': jj
----- End ----
----- -------- MemContents Exit LHNext -------- ----
-	 NUMB  CHILD  NEXT  Line:17  Col:4
-    36     37     -1  +- '=ADD'
-    37     -1     35     +- 'NUMBER'$0002
-    35     -1     -1     +- 'IDENT': jj
----- End ----
----- ------- Recursions : 0 - Assign On Exit LHNext -------- ----
-	 NUMB  CHILD  NEXT  Line:17  Col:4
-    36     37     -1  +- '=ADD'
-    37     -1     35     +- 'NUMBER'$0002
-    35     -1     -1     +- 'IDENT': jj
----- End ----
----- -------- RTI Perculatge LookaHead -------- ----
-	 NUMB  CHILD  NEXT  Line:17  Col:4
-    36     37     -1  +- '=ADD'
-    37     -1     35     +- 'NUMBER'$0002
-    35     -1     -1     +- 'IDENT': jj
----- End ----
----- -------- BREAK Perculatge LookaHead -------- ----
-	 NUMB  CHILD  NEXT  Line:17  Col:4
-    36     37     -1  +- '=ADD'
-    37     -1     35     +- 'NUMBER'$0002
-    35     -1     -1     +- 'IDENT': jj
----- End ----
----- -------- POP Perculatge LookaHead -------- ----
-	 NUMB  CHILD  NEXT  Line:17  Col:4
-    36     37     -1  +- '=ADD'
-    37     -1     35     +- 'NUMBER'$0002
-    35     -1     -1     +- 'IDENT': jj
----- End ----
----- -------- PUSH Perculatge LookaHead -------- ----
-	 NUMB  CHILD  NEXT  Line:17  Col:4
-    36     37     -1  +- '=ADD'
-    37     -1     35     +- 'NUMBER'$0002
-    35     -1     -1     +- 'IDENT': jj
----- End ----
----- -------- UNTIL Perculatge LookaHead -------- ----
-	 NUMB  CHILD  NEXT  Line:17  Col:4
-    36     37     -1  +- '=ADD'
-    37     -1     35     +- 'NUMBER'$0002
-    35     -1     -1     +- 'IDENT': jj
----- End ----
----- -------- CodeBlock Perculatge LookaHead -------- ----
-	 NUMB  CHILD  NEXT  Line:17  Col:4
-    36     37     -1  +- '=ADD'
-    37     -1     35     +- 'NUMBER'$0002
-    35     -1     -1     +- 'IDENT': jj
----- End ----
----- -------- ASM Perculatge LookaHead -------- ----
-	 NUMB  CHILD  NEXT  Line:17  Col:4
-    36     37     -1  +- '=ADD'
-    37     -1     35     +- 'NUMBER'$0002
-    35     -1     -1     +- 'IDENT': jj
----- End ----
----- -------- RETURN Perculatge LookaHead -------- ----
-	 NUMB  CHILD  NEXT  Line:17  Col:4
-    36     37     -1  +- '=ADD'
-    37     -1     35     +- 'NUMBER'$0002
-    35     -1     -1     +- 'IDENT': jj
----- End ----
----- -------- EXIT Perculatge LookaHead -------- ----
-	 NUMB  CHILD  NEXT  Line:17  Col:4
-    36     37     -1  +- '=ADD'
-    37     -1     35     +- 'NUMBER'$0002
-    35     -1     -1     +- 'IDENT': jj
----- End ----
----- -------- DOstmt Perculatge LookaHead -------- ----
-	 NUMB  CHILD  NEXT  Line:17  Col:4
-    36     37     -1  +- '=ADD'
-    37     -1     35     +- 'NUMBER'$0002
-    35     -1     -1     +- 'IDENT': jj
----- End ----
----- -------- WHILE Perculatge LookaHead -------- ----
-	 NUMB  CHILD  NEXT  Line:17  Col:4
-    36     37     -1  +- '=ADD'
-    37     -1     35     +- 'NUMBER'$0002
-    35     -1     -1     +- 'IDENT': jj
----- End ----
----- ------- Recursion : 2 - IFF Perculatge LHNext -------- ----
-	 NUMB  CHILD  NEXT  Line:17  Col:4
-    36     37     -1  +- '=ADD'
-    37     -1     35     +- 'NUMBER'$0002
-    35     -1     -1     +- 'IDENT': jj
----- End ----
----- -------- IfStmt Perculatge LookaHead -------- ----
-	 NUMB  CHILD  NEXT  Line:17  Col:4
-    36     37     -1  +- '=ADD'
-    37     -1     35     +- 'NUMBER'$0002
-    35     -1     -1     +- 'IDENT': jj
----- End ----
----- -------- Call Perculatge LookaHead -------- ----
-	 NUMB  CHILD  NEXT  Line:17  Col:4
-    36     37     -1  +- '=ADD'
-    37     -1     35     +- 'NUMBER'$0002
-    35     -1     -1     +- 'IDENT': jj
----- End ----
----- -------- Call Perculatge LookaHead -------- ----
-	 NUMB  CHILD  NEXT  Line:17  Col:4
-    36     37     -1  +- '=ADD'
-    37     -1     35     +- 'NUMBER'$0002
-    35     -1     -1     +- 'IDENT': jj
----- End ----
----- -------- Exit Statements LHNext -------- ----
-	 NUMB  CHILD  NEXT  Line:17  Col:4
-    34     36     -1  +- 'STATEMENTS'
-    36     37     -1     +- '=ADD'
-    37     -1     35        +- 'NUMBER'$0002
-    35     -1     -1        +- 'IDENT': jj
----- End ----
----- -------- WHILEstmt Entry LookaHead -------- ----
-	 NUMB  CHILD  NEXT  Line:15  Col:4
-    30     25     40  +- 'CODE-BLOCK'
-    25     -1     26  |  +- 'NUMBER'$00AA
-    26     -1     27  |  +- 'NUMBER'$00BB
-    27     -1     28  |  +- 'NUMBER'$00CE
-    28     -1     29  |  +- 'NUMBER'$00A1
-    29     -1     -1  |  +- 'NUMBER'$00C0
-    40     33     -1  +- 'IFF'
-    33     32     38     +- 'EQU-TO'
-    32     -1     31     |  +- 'NUMBER'$0000
-    31     -1     -1     |  +- '.A'
-    38     34     39     +- 'THEN'
-    34     36     -1     |  +- 'STATEMENTS'
-    36     37     -1     |     +- '=ADD'
-    37     -1     35     |        +- 'NUMBER'$0002
-    35     -1     -1     |        +- 'IDENT': jj
-    39     -1     -1     +- 'FFI'
----- End ----
----- -------- DOstmt Entry LookaHead -------- ----
-	 NUMB  CHILD  NEXT  Line:15  Col:4
-    30     25     40  +- 'CODE-BLOCK'
-    25     -1     26  |  +- 'NUMBER'$00AA
-    26     -1     27  |  +- 'NUMBER'$00BB
-    27     -1     28  |  +- 'NUMBER'$00CE
-    28     -1     29  |  +- 'NUMBER'$00A1
-    29     -1     -1  |  +- 'NUMBER'$00C0
-    40     33     -1  +- 'IFF'
-    33     32     38     +- 'EQU-TO'
-    32     -1     31     |  +- 'NUMBER'$0000
-    31     -1     -1     |  +- '.A'
-    38     34     39     +- 'THEN'
-    34     36     -1     |  +- 'STATEMENTS'
-    36     37     -1     |     +- '=ADD'
-    37     -1     35     |        +- 'NUMBER'$0002
-    35     -1     -1     |        +- 'IDENT': jj
-    39     -1     -1     +- 'FFI'
----- End ----
----- -------- EXIT Entry LookaHead -------- ----
-	 NUMB  CHILD  NEXT  Line:15  Col:4
-    30     25     40  +- 'CODE-BLOCK'
-    25     -1     26  |  +- 'NUMBER'$00AA
-    26     -1     27  |  +- 'NUMBER'$00BB
-    27     -1     28  |  +- 'NUMBER'$00CE
-    28     -1     29  |  +- 'NUMBER'$00A1
-    29     -1     -1  |  +- 'NUMBER'$00C0
-    40     33     -1  +- 'IFF'
-    33     32     38     +- 'EQU-TO'
-    32     -1     31     |  +- 'NUMBER'$0000
-    31     -1     -1     |  +- '.A'
-    38     34     39     +- 'THEN'
-    34     36     -1     |  +- 'STATEMENTS'
-    36     37     -1     |     +- '=ADD'
-    37     -1     35     |        +- 'NUMBER'$0002
-    35     -1     -1     |        +- 'IDENT': jj
-    39     -1     -1     +- 'FFI'
----- End ----
----- -------- RETURN Entry LookaHead -------- ----
-	 NUMB  CHILD  NEXT  Line:15  Col:4
-    30     25     40  +- 'CODE-BLOCK'
-    25     -1     26  |  +- 'NUMBER'$00AA
-    26     -1     27  |  +- 'NUMBER'$00BB
-    27     -1     28  |  +- 'NUMBER'$00CE
-    28     -1     29  |  +- 'NUMBER'$00A1
-    29     -1     -1  |  +- 'NUMBER'$00C0
-    40     33     -1  +- 'IFF'
-    33     32     38     +- 'EQU-TO'
-    32     -1     31     |  +- 'NUMBER'$0000
-    31     -1     -1     |  +- '.A'
-    38     34     39     +- 'THEN'
-    34     36     -1     |  +- 'STATEMENTS'
-    36     37     -1     |     +- '=ADD'
-    37     -1     35     |        +- 'NUMBER'$0002
-    35     -1     -1     |        +- 'IDENT': jj
-    39     -1     -1     +- 'FFI'
----- End ----
----- -------- ASM Entry LookaHead -------- ----
-	 NUMB  CHILD  NEXT  Line:15  Col:4
-    30     25     40  +- 'CODE-BLOCK'
-    25     -1     26  |  +- 'NUMBER'$00AA
-    26     -1     27  |  +- 'NUMBER'$00BB
-    27     -1     28  |  +- 'NUMBER'$00CE
-    28     -1     29  |  +- 'NUMBER'$00A1
-    29     -1     -1  |  +- 'NUMBER'$00C0
-    40     33     -1  +- 'IFF'
-    33     32     38     +- 'EQU-TO'
-    32     -1     31     |  +- 'NUMBER'$0000
-    31     -1     -1     |  +- '.A'
-    38     34     39     +- 'THEN'
-    34     36     -1     |  +- 'STATEMENTS'
-    36     37     -1     |     +- '=ADD'
-    37     -1     35     |        +- 'NUMBER'$0002
-    35     -1     -1     |        +- 'IDENT': jj
-    39     -1     -1     +- 'FFI'
----- End ----
----- -------- CodeBlock Entry LookaHead -------- ----
-	 NUMB  CHILD  NEXT  Line:15  Col:4
-    30     25     40  +- 'CODE-BLOCK'
-    25     -1     26  |  +- 'NUMBER'$00AA
-    26     -1     27  |  +- 'NUMBER'$00BB
-    27     -1     28  |  +- 'NUMBER'$00CE
-    28     -1     29  |  +- 'NUMBER'$00A1
-    29     -1     -1  |  +- 'NUMBER'$00C0
-    40     33     -1  +- 'IFF'
-    33     32     38     +- 'EQU-TO'
-    32     -1     31     |  +- 'NUMBER'$0000
-    31     -1     -1     |  +- '.A'
-    38     34     39     +- 'THEN'
-    34     36     -1     |  +- 'STATEMENTS'
-    36     37     -1     |     +- '=ADD'
-    37     -1     35     |        +- 'NUMBER'$0002
-    35     -1     -1     |        +- 'IDENT': jj
-    39     -1     -1     +- 'FFI'
----- End ----
----- -------- UNTIL Entry LookaHead -------- ----
-	 NUMB  CHILD  NEXT  Line:15  Col:4
-    30     25     40  +- 'CODE-BLOCK'
-    25     -1     26  |  +- 'NUMBER'$00AA
-    26     -1     27  |  +- 'NUMBER'$00BB
-    27     -1     28  |  +- 'NUMBER'$00CE
-    28     -1     29  |  +- 'NUMBER'$00A1
-    29     -1     -1  |  +- 'NUMBER'$00C0
-    40     33     -1  +- 'IFF'
-    33     32     38     +- 'EQU-TO'
-    32     -1     31     |  +- 'NUMBER'$0000
-    31     -1     -1     |  +- '.A'
-    38     34     39     +- 'THEN'
-    34     36     -1     |  +- 'STATEMENTS'
-    36     37     -1     |     +- '=ADD'
-    37     -1     35     |        +- 'NUMBER'$0002
-    35     -1     -1     |        +- 'IDENT': jj
-    39     -1     -1     +- 'FFI'
----- End ----
----- -------- PUSH Entry LookaHead -------- ----
-	 NUMB  CHILD  NEXT  Line:15  Col:4
-    30     25     40  +- 'CODE-BLOCK'
-    25     -1     26  |  +- 'NUMBER'$00AA
-    26     -1     27  |  +- 'NUMBER'$00BB
-    27     -1     28  |  +- 'NUMBER'$00CE
-    28     -1     29  |  +- 'NUMBER'$00A1
-    29     -1     -1  |  +- 'NUMBER'$00C0
-    40     33     -1  +- 'IFF'
-    33     32     38     +- 'EQU-TO'
-    32     -1     31     |  +- 'NUMBER'$0000
-    31     -1     -1     |  +- '.A'
-    38     34     39     +- 'THEN'
-    34     36     -1     |  +- 'STATEMENTS'
-    36     37     -1     |     +- '=ADD'
-    37     -1     35     |        +- 'NUMBER'$0002
-    35     -1     -1     |        +- 'IDENT': jj
-    39     -1     -1     +- 'FFI'
----- End ----
----- -------- POP Entry LookaHead -------- ----
-	 NUMB  CHILD  NEXT  Line:15  Col:4
-    30     25     40  +- 'CODE-BLOCK'
-    25     -1     26  |  +- 'NUMBER'$00AA
-    26     -1     27  |  +- 'NUMBER'$00BB
-    27     -1     28  |  +- 'NUMBER'$00CE
-    28     -1     29  |  +- 'NUMBER'$00A1
-    29     -1     -1  |  +- 'NUMBER'$00C0
-    40     33     -1  +- 'IFF'
-    33     32     38     +- 'EQU-TO'
-    32     -1     31     |  +- 'NUMBER'$0000
-    31     -1     -1     |  +- '.A'
-    38     34     39     +- 'THEN'
-    34     36     -1     |  +- 'STATEMENTS'
-    36     37     -1     |     +- '=ADD'
-    37     -1     35     |        +- 'NUMBER'$0002
-    35     -1     -1     |        +- 'IDENT': jj
-    39     -1     -1     +- 'FFI'
----- End ----
----- -------- BREAK Entry LookaHead -------- ----
-	 NUMB  CHILD  NEXT  Line:15  Col:4
-    30     25     40  +- 'CODE-BLOCK'
-    25     -1     26  |  +- 'NUMBER'$00AA
-    26     -1     27  |  +- 'NUMBER'$00BB
-    27     -1     28  |  +- 'NUMBER'$00CE
-    28     -1     29  |  +- 'NUMBER'$00A1
-    29     -1     -1  |  +- 'NUMBER'$00C0
-    40     33     -1  +- 'IFF'
-    33     32     38     +- 'EQU-TO'
-    32     -1     31     |  +- 'NUMBER'$0000
-    31     -1     -1     |  +- '.A'
-    38     34     39     +- 'THEN'
-    34     36     -1     |  +- 'STATEMENTS'
-    36     37     -1     |     +- '=ADD'
-    37     -1     35     |        +- 'NUMBER'$0002
-    35     -1     -1     |        +- 'IDENT': jj
-    39     -1     -1     +- 'FFI'
----- End ----
----- -------- RTI Entry LookaHead -------- ----
-	 NUMB  CHILD  NEXT  Line:15  Col:4
-    30     25     40  +- 'CODE-BLOCK'
-    25     -1     26  |  +- 'NUMBER'$00AA
-    26     -1     27  |  +- 'NUMBER'$00BB
-    27     -1     28  |  +- 'NUMBER'$00CE
-    28     -1     29  |  +- 'NUMBER'$00A1
-    29     -1     -1  |  +- 'NUMBER'$00C0
-    40     33     -1  +- 'IFF'
-    33     32     38     +- 'EQU-TO'
-    32     -1     31     |  +- 'NUMBER'$0000
-    31     -1     -1     |  +- '.A'
-    38     34     39     +- 'THEN'
-    34     36     -1     |  +- 'STATEMENTS'
-    36     37     -1     |     +- '=ADD'
-    37     -1     35     |        +- 'NUMBER'$0002
-    35     -1     -1     |        +- 'IDENT': jj
-    39     -1     -1     +- 'FFI'
----- End ----
----- ------- Recursions : 0 - Assign On Entry LookaHead -------- ----
-	 NUMB  CHILD  NEXT  Line:15  Col:4
-    30     25     40  +- 'CODE-BLOCK'
-    25     -1     26  |  +- 'NUMBER'$00AA
-    26     -1     27  |  +- 'NUMBER'$00BB
-    27     -1     28  |  +- 'NUMBER'$00CE
-    28     -1     29  |  +- 'NUMBER'$00A1
-    29     -1     -1  |  +- 'NUMBER'$00C0
-    40     33     -1  +- 'IFF'
-    33     32     38     +- 'EQU-TO'
-    32     -1     31     |  +- 'NUMBER'$0000
-    31     -1     -1     |  +- '.A'
-    38     34     39     +- 'THEN'
-    34     36     -1     |  +- 'STATEMENTS'
-    36     37     -1     |     +- '=ADD'
-    37     -1     35     |        +- 'NUMBER'$0002
-    35     -1     -1     |        +- 'IDENT': jj
-    39     -1     -1     +- 'FFI'
----- End ----
----- -------- MemContents Entry LookaHead -------- ----
-	 NUMB  CHILD  NEXT  Line:15  Col:4
-    30     25     40  +- 'CODE-BLOCK'
-    25     -1     26  |  +- 'NUMBER'$00AA
-    26     -1     27  |  +- 'NUMBER'$00BB
-    27     -1     28  |  +- 'NUMBER'$00CE
-    28     -1     29  |  +- 'NUMBER'$00A1
-    29     -1     -1  |  +- 'NUMBER'$00C0
-    40     33     -1  +- 'IFF'
-    33     32     38     +- 'EQU-TO'
-    32     -1     31     |  +- 'NUMBER'$0000
-    31     -1     -1     |  +- '.A'
-    38     34     39     +- 'THEN'
-    34     36     -1     |  +- 'STATEMENTS'
-    36     37     -1     |     +- '=ADD'
-    37     -1     35     |        +- 'NUMBER'$0002
-    35     -1     -1     |        +- 'IDENT': jj
-    39     -1     -1     +- 'FFI'
----- End ----
----- -------- Factor Entry LookaHead -------- ----
-	 NUMB  CHILD  NEXT  Line:15  Col:4
-    30     25     40  +- 'CODE-BLOCK'
-    25     -1     26  |  +- 'NUMBER'$00AA
-    26     -1     27  |  +- 'NUMBER'$00BB
-    27     -1     28  |  +- 'NUMBER'$00CE
-    28     -1     29  |  +- 'NUMBER'$00A1
-    29     -1     -1  |  +- 'NUMBER'$00C0
-    40     33     -1  +- 'IFF'
-    33     32     38     +- 'EQU-TO'
-    32     -1     31     |  +- 'NUMBER'$0000
-    31     -1     -1     |  +- '.A'
-    38     34     39     +- 'THEN'
-    34     36     -1     |  +- 'STATEMENTS'
-    36     37     -1     |     +- '=ADD'
-    37     -1     35     |        +- 'NUMBER'$0002
-    35     -1     -1     |        +- 'IDENT': jj
-    39     -1     -1     +- 'FFI'
----- End ----
----- -------- Factor Exit LookaHead -------- ----
-	 NUMB  CHILD  NEXT  Line:15  Col:4
-    30     25     40  +- 'CODE-BLOCK'
-    25     -1     26  |  +- 'NUMBER'$00AA
-    26     -1     27  |  +- 'NUMBER'$00BB
-    27     -1     28  |  +- 'NUMBER'$00CE
-    28     -1     29  |  +- 'NUMBER'$00A1
-    29     -1     -1  |  +- 'NUMBER'$00C0
-    40     33     -1  +- 'IFF'
-    33     32     38     +- 'EQU-TO'
-    32     -1     31     |  +- 'NUMBER'$0000
-    31     -1     -1     |  +- '.A'
-    38     34     39     +- 'THEN'
-    34     36     -1     |  +- 'STATEMENTS'
-    36     37     -1     |     +- '=ADD'
-    37     -1     35     |        +- 'NUMBER'$0002
-    35     -1     -1     |        +- 'IDENT': jj
-    39     -1     -1     +- 'FFI'
----- End ----
----- -------- MemContents Perculatge LookaHead -------- ----
-	 NUMB  CHILD  NEXT  Line:15  Col:4
-    30     25     40  +- 'CODE-BLOCK'
-    25     -1     26  |  +- 'NUMBER'$00AA
-    26     -1     27  |  +- 'NUMBER'$00BB
-    27     -1     28  |  +- 'NUMBER'$00CE
-    28     -1     29  |  +- 'NUMBER'$00A1
-    29     -1     -1  |  +- 'NUMBER'$00C0
-    40     33     -1  +- 'IFF'
-    33     32     38     +- 'EQU-TO'
-    32     -1     31     |  +- 'NUMBER'$0000
-    31     -1     -1     |  +- '.A'
-    38     34     39     +- 'THEN'
-    34     36     -1     |  +- 'STATEMENTS'
-    36     37     -1     |     +- '=ADD'
-    37     -1     35     |        +- 'NUMBER'$0002
-    35     -1     -1     |        +- 'IDENT': jj
-    39     -1     -1     +- 'FFI'
----- End ----
----- -------- MemContents Exit LHNext -------- ----
-	 NUMB  CHILD  NEXT  Line:15  Col:4
-    30     25     40  +- 'CODE-BLOCK'
-    25     -1     26  |  +- 'NUMBER'$00AA
-    26     -1     27  |  +- 'NUMBER'$00BB
-    27     -1     28  |  +- 'NUMBER'$00CE
-    28     -1     29  |  +- 'NUMBER'$00A1
-    29     -1     -1  |  +- 'NUMBER'$00C0
-    40     33     -1  +- 'IFF'
-    33     32     38     +- 'EQU-TO'
-    32     -1     31     |  +- 'NUMBER'$0000
-    31     -1     -1     |  +- '.A'
-    38     34     39     +- 'THEN'
-    34     36     -1     |  +- 'STATEMENTS'
-    36     37     -1     |     +- '=ADD'
-    37     -1     35     |        +- 'NUMBER'$0002
-    35     -1     -1     |        +- 'IDENT': jj
-    39     -1     -1     +- 'FFI'
----- End ----
----- ------- Recursions : 1 - IfStmt Perculatge LookaHead -------- ----
-	 NUMB  CHILD  NEXT  Line:15  Col:4
-    30     25     40  +- 'CODE-BLOCK'
-    25     -1     26  |  +- 'NUMBER'$00AA
-    26     -1     27  |  +- 'NUMBER'$00BB
-    27     -1     28  |  +- 'NUMBER'$00CE
-    28     -1     29  |  +- 'NUMBER'$00A1
-    29     -1     -1  |  +- 'NUMBER'$00C0
-    40     33     -1  +- 'IFF'
-    33     32     38     +- 'EQU-TO'
-    32     -1     31     |  +- 'NUMBER'$0000
-    31     -1     -1     |  +- '.A'
-    38     34     39     +- 'THEN'
-    34     36     -1     |  +- 'STATEMENTS'
-    36     37     -1     |     +- '=ADD'
-    37     -1     35     |        +- 'NUMBER'$0002
-    35     -1     -1     |        +- 'IDENT': jj
-    39     -1     -1     +- 'FFI'
----- End ----
----- ------- Recursions : 0 - Assign On Exit LHNext -------- ----
-	 NUMB  CHILD  NEXT  Line:15  Col:4
-    30     25     40  +- 'CODE-BLOCK'
-    25     -1     26  |  +- 'NUMBER'$00AA
-    26     -1     27  |  +- 'NUMBER'$00BB
-    27     -1     28  |  +- 'NUMBER'$00CE
-    28     -1     29  |  +- 'NUMBER'$00A1
-    29     -1     -1  |  +- 'NUMBER'$00C0
-    40     33     -1  +- 'IFF'
-    33     32     38     +- 'EQU-TO'
-    32     -1     31     |  +- 'NUMBER'$0000
-    31     -1     -1     |  +- '.A'
-    38     34     39     +- 'THEN'
-    34     36     -1     |  +- 'STATEMENTS'
-    36     37     -1     |     +- '=ADD'
-    37     -1     35     |        +- 'NUMBER'$0002
-    35     -1     -1     |        +- 'IDENT': jj
-    39     -1     -1     +- 'FFI'
----- End ----
----- -------- RTI Perculatge LookaHead -------- ----
-	 NUMB  CHILD  NEXT  Line:15  Col:4
-    30     25     40  +- 'CODE-BLOCK'
-    25     -1     26  |  +- 'NUMBER'$00AA
-    26     -1     27  |  +- 'NUMBER'$00BB
-    27     -1     28  |  +- 'NUMBER'$00CE
-    28     -1     29  |  +- 'NUMBER'$00A1
-    29     -1     -1  |  +- 'NUMBER'$00C0
-    40     33     -1  +- 'IFF'
-    33     32     38     +- 'EQU-TO'
-    32     -1     31     |  +- 'NUMBER'$0000
-    31     -1     -1     |  +- '.A'
-    38     34     39     +- 'THEN'
-    34     36     -1     |  +- 'STATEMENTS'
-    36     37     -1     |     +- '=ADD'
-    37     -1     35     |        +- 'NUMBER'$0002
-    35     -1     -1     |        +- 'IDENT': jj
-    39     -1     -1     +- 'FFI'
----- End ----
----- -------- BREAK Perculatge LookaHead -------- ----
-	 NUMB  CHILD  NEXT  Line:15  Col:4
-    30     25     40  +- 'CODE-BLOCK'
-    25     -1     26  |  +- 'NUMBER'$00AA
-    26     -1     27  |  +- 'NUMBER'$00BB
-    27     -1     28  |  +- 'NUMBER'$00CE
-    28     -1     29  |  +- 'NUMBER'$00A1
-    29     -1     -1  |  +- 'NUMBER'$00C0
-    40     33     -1  +- 'IFF'
-    33     32     38     +- 'EQU-TO'
-    32     -1     31     |  +- 'NUMBER'$0000
-    31     -1     -1     |  +- '.A'
-    38     34     39     +- 'THEN'
-    34     36     -1     |  +- 'STATEMENTS'
-    36     37     -1     |     +- '=ADD'
-    37     -1     35     |        +- 'NUMBER'$0002
-    35     -1     -1     |        +- 'IDENT': jj
-    39     -1     -1     +- 'FFI'
----- End ----
----- -------- POP Perculatge LookaHead -------- ----
-	 NUMB  CHILD  NEXT  Line:15  Col:4
-    30     25     40  +- 'CODE-BLOCK'
-    25     -1     26  |  +- 'NUMBER'$00AA
-    26     -1     27  |  +- 'NUMBER'$00BB
-    27     -1     28  |  +- 'NUMBER'$00CE
-    28     -1     29  |  +- 'NUMBER'$00A1
-    29     -1     -1  |  +- 'NUMBER'$00C0
-    40     33     -1  +- 'IFF'
-    33     32     38     +- 'EQU-TO'
-    32     -1     31     |  +- 'NUMBER'$0000
-    31     -1     -1     |  +- '.A'
-    38     34     39     +- 'THEN'
-    34     36     -1     |  +- 'STATEMENTS'
-    36     37     -1     |     +- '=ADD'
-    37     -1     35     |        +- 'NUMBER'$0002
-    35     -1     -1     |        +- 'IDENT': jj
-    39     -1     -1     +- 'FFI'
----- End ----
----- -------- PUSH Perculatge LookaHead -------- ----
-	 NUMB  CHILD  NEXT  Line:15  Col:4
-    30     25     40  +- 'CODE-BLOCK'
-    25     -1     26  |  +- 'NUMBER'$00AA
-    26     -1     27  |  +- 'NUMBER'$00BB
-    27     -1     28  |  +- 'NUMBER'$00CE
-    28     -1     29  |  +- 'NUMBER'$00A1
-    29     -1     -1  |  +- 'NUMBER'$00C0
-    40     33     -1  +- 'IFF'
-    33     32     38     +- 'EQU-TO'
-    32     -1     31     |  +- 'NUMBER'$0000
-    31     -1     -1     |  +- '.A'
-    38     34     39     +- 'THEN'
-    34     36     -1     |  +- 'STATEMENTS'
-    36     37     -1     |     +- '=ADD'
-    37     -1     35     |        +- 'NUMBER'$0002
-    35     -1     -1     |        +- 'IDENT': jj
-    39     -1     -1     +- 'FFI'
----- End ----
----- -------- UNTIL Perculatge LookaHead -------- ----
-	 NUMB  CHILD  NEXT  Line:15  Col:4
-    30     25     40  +- 'CODE-BLOCK'
-    25     -1     26  |  +- 'NUMBER'$00AA
-    26     -1     27  |  +- 'NUMBER'$00BB
-    27     -1     28  |  +- 'NUMBER'$00CE
-    28     -1     29  |  +- 'NUMBER'$00A1
-    29     -1     -1  |  +- 'NUMBER'$00C0
-    40     33     -1  +- 'IFF'
-    33     32     38     +- 'EQU-TO'
-    32     -1     31     |  +- 'NUMBER'$0000
-    31     -1     -1     |  +- '.A'
-    38     34     39     +- 'THEN'
-    34     36     -1     |  +- 'STATEMENTS'
-    36     37     -1     |     +- '=ADD'
-    37     -1     35     |        +- 'NUMBER'$0002
-    35     -1     -1     |        +- 'IDENT': jj
-    39     -1     -1     +- 'FFI'
----- End ----
----- -------- CodeBlock Perculatge LookaHead -------- ----
-	 NUMB  CHILD  NEXT  Line:15  Col:4
-    30     25     40  +- 'CODE-BLOCK'
-    25     -1     26  |  +- 'NUMBER'$00AA
-    26     -1     27  |  +- 'NUMBER'$00BB
-    27     -1     28  |  +- 'NUMBER'$00CE
-    28     -1     29  |  +- 'NUMBER'$00A1
-    29     -1     -1  |  +- 'NUMBER'$00C0
-    40     33     -1  +- 'IFF'
-    33     32     38     +- 'EQU-TO'
-    32     -1     31     |  +- 'NUMBER'$0000
-    31     -1     -1     |  +- '.A'
-    38     34     39     +- 'THEN'
-    34     36     -1     |  +- 'STATEMENTS'
-    36     37     -1     |     +- '=ADD'
-    37     -1     35     |        +- 'NUMBER'$0002
-    35     -1     -1     |        +- 'IDENT': jj
-    39     -1     -1     +- 'FFI'
----- End ----
----- -------- ASM Perculatge LookaHead -------- ----
-	 NUMB  CHILD  NEXT  Line:15  Col:4
-    30     25     40  +- 'CODE-BLOCK'
-    25     -1     26  |  +- 'NUMBER'$00AA
-    26     -1     27  |  +- 'NUMBER'$00BB
-    27     -1     28  |  +- 'NUMBER'$00CE
-    28     -1     29  |  +- 'NUMBER'$00A1
-    29     -1     -1  |  +- 'NUMBER'$00C0
-    40     33     -1  +- 'IFF'
-    33     32     38     +- 'EQU-TO'
-    32     -1     31     |  +- 'NUMBER'$0000
-    31     -1     -1     |  +- '.A'
-    38     34     39     +- 'THEN'
-    34     36     -1     |  +- 'STATEMENTS'
-    36     37     -1     |     +- '=ADD'
-    37     -1     35     |        +- 'NUMBER'$0002
-    35     -1     -1     |        +- 'IDENT': jj
-    39     -1     -1     +- 'FFI'
----- End ----
----- -------- RETURN Perculatge LookaHead -------- ----
-	 NUMB  CHILD  NEXT  Line:15  Col:4
-    30     25     40  +- 'CODE-BLOCK'
-    25     -1     26  |  +- 'NUMBER'$00AA
-    26     -1     27  |  +- 'NUMBER'$00BB
-    27     -1     28  |  +- 'NUMBER'$00CE
-    28     -1     29  |  +- 'NUMBER'$00A1
-    29     -1     -1  |  +- 'NUMBER'$00C0
-    40     33     -1  +- 'IFF'
-    33     32     38     +- 'EQU-TO'
-    32     -1     31     |  +- 'NUMBER'$0000
-    31     -1     -1     |  +- '.A'
-    38     34     39     +- 'THEN'
-    34     36     -1     |  +- 'STATEMENTS'
-    36     37     -1     |     +- '=ADD'
-    37     -1     35     |        +- 'NUMBER'$0002
-    35     -1     -1     |        +- 'IDENT': jj
-    39     -1     -1     +- 'FFI'
----- End ----
----- -------- EXIT Perculatge LookaHead -------- ----
-	 NUMB  CHILD  NEXT  Line:15  Col:4
-    30     25     40  +- 'CODE-BLOCK'
-    25     -1     26  |  +- 'NUMBER'$00AA
-    26     -1     27  |  +- 'NUMBER'$00BB
-    27     -1     28  |  +- 'NUMBER'$00CE
-    28     -1     29  |  +- 'NUMBER'$00A1
-    29     -1     -1  |  +- 'NUMBER'$00C0
-    40     33     -1  +- 'IFF'
-    33     32     38     +- 'EQU-TO'
-    32     -1     31     |  +- 'NUMBER'$0000
-    31     -1     -1     |  +- '.A'
-    38     34     39     +- 'THEN'
-    34     36     -1     |  +- 'STATEMENTS'
-    36     37     -1     |     +- '=ADD'
-    37     -1     35     |        +- 'NUMBER'$0002
-    35     -1     -1     |        +- 'IDENT': jj
-    39     -1     -1     +- 'FFI'
----- End ----
----- -------- DOstmt Perculatge LookaHead -------- ----
-	 NUMB  CHILD  NEXT  Line:15  Col:4
-    30     25     40  +- 'CODE-BLOCK'
-    25     -1     26  |  +- 'NUMBER'$00AA
-    26     -1     27  |  +- 'NUMBER'$00BB
-    27     -1     28  |  +- 'NUMBER'$00CE
-    28     -1     29  |  +- 'NUMBER'$00A1
-    29     -1     -1  |  +- 'NUMBER'$00C0
-    40     33     -1  +- 'IFF'
-    33     32     38     +- 'EQU-TO'
-    32     -1     31     |  +- 'NUMBER'$0000
-    31     -1     -1     |  +- '.A'
-    38     34     39     +- 'THEN'
-    34     36     -1     |  +- 'STATEMENTS'
-    36     37     -1     |     +- '=ADD'
-    37     -1     35     |        +- 'NUMBER'$0002
-    35     -1     -1     |        +- 'IDENT': jj
-    39     -1     -1     +- 'FFI'
----- End ----
----- -------- WHILE Perculatge LookaHead -------- ----
-	 NUMB  CHILD  NEXT  Line:15  Col:4
-    30     25     40  +- 'CODE-BLOCK'
-    25     -1     26  |  +- 'NUMBER'$00AA
-    26     -1     27  |  +- 'NUMBER'$00BB
-    27     -1     28  |  +- 'NUMBER'$00CE
-    28     -1     29  |  +- 'NUMBER'$00A1
-    29     -1     -1  |  +- 'NUMBER'$00C0
-    40     33     -1  +- 'IFF'
-    33     32     38     +- 'EQU-TO'
-    32     -1     31     |  +- 'NUMBER'$0000
-    31     -1     -1     |  +- '.A'
-    38     34     39     +- 'THEN'
-    34     36     -1     |  +- 'STATEMENTS'
-    36     37     -1     |     +- '=ADD'
-    37     -1     35     |        +- 'NUMBER'$0002
-    35     -1     -1     |        +- 'IDENT': jj
-    39     -1     -1     +- 'FFI'
----- End ----
-Decoded IFF 1
-Entry Statements LookaHead <NODE is NULL>
----- End ----
-Call Entry LookaHead <NODE is NULL>
----- End ----
-ForStmt Entry LookaHead <NODE is NULL>
----- End ----
-IFstmt Entry LookaHead <NODE is NULL>
----- End ----
-IFF entry LookaHead <NODE is NULL>
----- End ----
-WHILEstmt Entry LookaHead <NODE is NULL>
----- End ----
-DOstmt Entry LookaHead <NODE is NULL>
----- End ----
-EXIT Entry LookaHead <NODE is NULL>
----- End ----
-RETURN Entry LookaHead <NODE is NULL>
----- End ----
-ASM Entry LookaHead <NODE is NULL>
----- End ----
-CodeBlock Entry LookaHead <NODE is NULL>
----- End ----
-UNTIL Entry LookaHead <NODE is NULL>
----- End ----
-PUSH Entry LookaHead <NODE is NULL>
----- End ----
-POP Entry LookaHead <NODE is NULL>
----- End ----
-BREAK Entry LookaHead <NODE is NULL>
----- End ----
-RTI Entry LookaHead <NODE is NULL>
----- End ----
-Assign On Entry LookaHead <NODE is NULL>
----- End ----
-MemContents Entry LookaHead <NODE is NULL>
----- End ----
-Factor Entry LookaHead <NODE is NULL>
----- End ----
-Factor Exit LookaHead <NODE is NULL>
----- End ----
-MemContents Perculatge LookaHead <NODE is NULL>
----- End ----
-ArrayIndex Entry LHNext <NODE is NULL>
----- End ----
-MemContents Entry LookaHead <NODE is NULL>
----- End ----
-Factor Entry LookaHead <NODE is NULL>
----- End ----
-Factor Exit LookaHead <NODE is NULL>
----- End ----
-MemContents Perculatge LookaHead <NODE is NULL>
----- End ----
-MemContents Exit LHNext <NODE is NULL>
----- End ----
-ArrayIndex Perculate LHNext <NODE is NULL>
----- End ----
-ArrayIndex Entry LHNext <NODE is NULL>
----- End ----
----- -------- MemContents Exit LHNext -------- ----
-	 NUMB  CHILD  NEXT  Line:19  Col:6
-    43     -1     -1  +- 'IDENT': kk
----- End ----
----- ------- Recursions : 1 - IfStmt Perculatge LookaHead -------- ----
-	 NUMB  CHILD  NEXT  Line:19  Col:6
-    43     -1     -1  +- 'IDENT': kk
+	 NUMB  CHILD  NEXT  Line:21  Col:2
+    45     40     -1  +- 'CODE-BLOCK'
+    40     -1     41     +- 'NUMBER'$00AA
+    41     -1     42     +- 'NUMBER'$00BB
+    42     -1     43     +- 'NUMBER'$00CE
+    43     -1     44     +- 'NUMBER'$00A1
+    44     -1     -1     +- 'NUMBER'$00C0
 ---- End ----
  = Recursion 1
-MemContents Entry LookaHead <NODE is NULL>
----- End ----
-Factor Entry LookaHead <NODE is NULL>
----- End ----
-Factor Exit LookaHead <NODE is NULL>
----- End ----
-MemContents Perculatge LookaHead <NODE is NULL>
----- End ----
-MemContents Exit LHNext <NODE is NULL>
----- End ----
----- -------- MemContents Entry LookaHead -------- ----
-	 NUMB  CHILD  NEXT  Line:20  Col:4
-    44     45     -1  +- 'Assign ='
-    45     -1     43     +- 'NUMBER'$0005
-    43     -1     -1     +- 'IDENT': kk
----- End ----
----- -------- Factor Entry LookaHead -------- ----
-	 NUMB  CHILD  NEXT  Line:20  Col:4
-    44     45     -1  +- 'Assign ='
-    45     -1     43     +- 'NUMBER'$0005
-    43     -1     -1     +- 'IDENT': kk
----- End ----
----- -------- Factor Exit LookaHead -------- ----
-	 NUMB  CHILD  NEXT  Line:20  Col:4
-    44     45     -1  +- 'Assign ='
-    45     -1     43     +- 'NUMBER'$0005
-    43     -1     -1     +- 'IDENT': kk
----- End ----
----- -------- MemContents Perculatge LookaHead -------- ----
-	 NUMB  CHILD  NEXT  Line:20  Col:4
-    44     45     -1  +- 'Assign ='
-    45     -1     43     +- 'NUMBER'$0005
-    43     -1     -1     +- 'IDENT': kk
----- End ----
----- -------- MemContents Exit LHNext -------- ----
-	 NUMB  CHILD  NEXT  Line:20  Col:4
-    44     45     -1  +- 'Assign ='
-    45     -1     43     +- 'NUMBER'$0005
-    43     -1     -1     +- 'IDENT': kk
----- End ----
----- ------- Recursions : 0 - Assign On Exit LHNext -------- ----
-	 NUMB  CHILD  NEXT  Line:20  Col:4
-    44     45     -1  +- 'Assign ='
-    45     -1     43     +- 'NUMBER'$0005
-    43     -1     -1     +- 'IDENT': kk
----- End ----
----- -------- RTI Perculatge LookaHead -------- ----
-	 NUMB  CHILD  NEXT  Line:20  Col:4
-    44     45     -1  +- 'Assign ='
-    45     -1     43     +- 'NUMBER'$0005
-    43     -1     -1     +- 'IDENT': kk
----- End ----
----- -------- BREAK Perculatge LookaHead -------- ----
-	 NUMB  CHILD  NEXT  Line:20  Col:4
-    44     45     -1  +- 'Assign ='
-    45     -1     43     +- 'NUMBER'$0005
-    43     -1     -1     +- 'IDENT': kk
----- End ----
----- -------- POP Perculatge LookaHead -------- ----
-	 NUMB  CHILD  NEXT  Line:20  Col:4
-    44     45     -1  +- 'Assign ='
-    45     -1     43     +- 'NUMBER'$0005
-    43     -1     -1     +- 'IDENT': kk
----- End ----
----- -------- PUSH Perculatge LookaHead -------- ----
-	 NUMB  CHILD  NEXT  Line:20  Col:4
-    44     45     -1  +- 'Assign ='
-    45     -1     43     +- 'NUMBER'$0005
-    43     -1     -1     +- 'IDENT': kk
----- End ----
----- -------- UNTIL Perculatge LookaHead -------- ----
-	 NUMB  CHILD  NEXT  Line:20  Col:4
-    44     45     -1  +- 'Assign ='
-    45     -1     43     +- 'NUMBER'$0005
-    43     -1     -1     +- 'IDENT': kk
----- End ----
----- -------- CodeBlock Perculatge LookaHead -------- ----
-	 NUMB  CHILD  NEXT  Line:20  Col:4
-    44     45     -1  +- 'Assign ='
-    45     -1     43     +- 'NUMBER'$0005
-    43     -1     -1     +- 'IDENT': kk
----- End ----
----- -------- ASM Perculatge LookaHead -------- ----
-	 NUMB  CHILD  NEXT  Line:20  Col:4
-    44     45     -1  +- 'Assign ='
-    45     -1     43     +- 'NUMBER'$0005
-    43     -1     -1     +- 'IDENT': kk
----- End ----
----- -------- RETURN Perculatge LookaHead -------- ----
-	 NUMB  CHILD  NEXT  Line:20  Col:4
-    44     45     -1  +- 'Assign ='
-    45     -1     43     +- 'NUMBER'$0005
-    43     -1     -1     +- 'IDENT': kk
----- End ----
----- -------- EXIT Perculatge LookaHead -------- ----
-	 NUMB  CHILD  NEXT  Line:20  Col:4
-    44     45     -1  +- 'Assign ='
-    45     -1     43     +- 'NUMBER'$0005
-    43     -1     -1     +- 'IDENT': kk
----- End ----
----- -------- DOstmt Perculatge LookaHead -------- ----
-	 NUMB  CHILD  NEXT  Line:20  Col:4
-    44     45     -1  +- 'Assign ='
-    45     -1     43     +- 'NUMBER'$0005
-    43     -1     -1     +- 'IDENT': kk
----- End ----
----- -------- WHILE Perculatge LookaHead -------- ----
-	 NUMB  CHILD  NEXT  Line:20  Col:4
-    44     45     -1  +- 'Assign ='
-    45     -1     43     +- 'NUMBER'$0005
-    43     -1     -1     +- 'IDENT': kk
----- End ----
----- ------- Recursion : 2 - IFF Perculatge LHNext -------- ----
-	 NUMB  CHILD  NEXT  Line:20  Col:4
-    44     45     -1  +- 'Assign ='
-    45     -1     43     +- 'NUMBER'$0005
-    43     -1     -1     +- 'IDENT': kk
----- End ----
----- -------- IfStmt Perculatge LookaHead -------- ----
-	 NUMB  CHILD  NEXT  Line:20  Col:4
-    44     45     -1  +- 'Assign ='
-    45     -1     43     +- 'NUMBER'$0005
-    43     -1     -1     +- 'IDENT': kk
----- End ----
----- -------- Call Perculatge LookaHead -------- ----
-	 NUMB  CHILD  NEXT  Line:20  Col:4
-    44     45     -1  +- 'Assign ='
-    45     -1     43     +- 'NUMBER'$0005
-    43     -1     -1     +- 'IDENT': kk
----- End ----
----- -------- Call Perculatge LookaHead -------- ----
-	 NUMB  CHILD  NEXT  Line:20  Col:4
-    44     45     -1  +- 'Assign ='
-    45     -1     43     +- 'NUMBER'$0005
-    43     -1     -1     +- 'IDENT': kk
----- End ----
----- -------- Exit Statements LHNext -------- ----
-	 NUMB  CHILD  NEXT  Line:20  Col:4
-    42     44     -1  +- 'STATEMENTS'
-    44     45     -1     +- 'Assign ='
-    45     -1     43        +- 'NUMBER'$0005
-    43     -1     -1        +- 'IDENT': kk
----- End ----
----- -------- WHILEstmt Entry LookaHead -------- ----
-	 NUMB  CHILD  NEXT  Line:15  Col:4
-    30     25     40  +- 'CODE-BLOCK'
-    25     -1     26  |  +- 'NUMBER'$00AA
-    26     -1     27  |  +- 'NUMBER'$00BB
-    27     -1     28  |  +- 'NUMBER'$00CE
-    28     -1     29  |  +- 'NUMBER'$00A1
-    29     -1     -1  |  +- 'NUMBER'$00C0
-    40     33     48  +- 'IFF'
-    33     32     38  |  +- 'EQU-TO'
-    32     -1     31  |  |  +- 'NUMBER'$0000
-    31     -1     -1  |  |  +- '.A'
-    38     34     39  |  +- 'THEN'
-    34     36     -1  |  |  +- 'STATEMENTS'
-    36     37     -1  |  |     +- '=ADD'
-    37     -1     35  |  |        +- 'NUMBER'$0002
-    35     -1     -1  |  |        +- 'IDENT': jj
-    39     -1     -1  |  +- 'FFI'
-    48     41     -1  +- 'IFF'
-    41     -1     46     +- '.N'
-    46     42     47     +- 'THEN'
-    42     44     -1     |  +- 'STATEMENTS'
-    44     45     -1     |     +- 'Assign ='
-    45     -1     43     |        +- 'NUMBER'$0005
-    43     -1     -1     |        +- 'IDENT': kk
-    47     -1     -1     +- 'FFI'
----- End ----
----- -------- DOstmt Entry LookaHead -------- ----
-	 NUMB  CHILD  NEXT  Line:15  Col:4
-    30     25     40  +- 'CODE-BLOCK'
-    25     -1     26  |  +- 'NUMBER'$00AA
-    26     -1     27  |  +- 'NUMBER'$00BB
-    27     -1     28  |  +- 'NUMBER'$00CE
-    28     -1     29  |  +- 'NUMBER'$00A1
-    29     -1     -1  |  +- 'NUMBER'$00C0
-    40     33     48  +- 'IFF'
-    33     32     38  |  +- 'EQU-TO'
-    32     -1     31  |  |  +- 'NUMBER'$0000
-    31     -1     -1  |  |  +- '.A'
-    38     34     39  |  +- 'THEN'
-    34     36     -1  |  |  +- 'STATEMENTS'
-    36     37     -1  |  |     +- '=ADD'
-    37     -1     35  |  |        +- 'NUMBER'$0002
-    35     -1     -1  |  |        +- 'IDENT': jj
-    39     -1     -1  |  +- 'FFI'
-    48     41     -1  +- 'IFF'
-    41     -1     46     +- '.N'
-    46     42     47     +- 'THEN'
-    42     44     -1     |  +- 'STATEMENTS'
-    44     45     -1     |     +- 'Assign ='
-    45     -1     43     |        +- 'NUMBER'$0005
-    43     -1     -1     |        +- 'IDENT': kk
-    47     -1     -1     +- 'FFI'
----- End ----
----- -------- EXIT Entry LookaHead -------- ----
-	 NUMB  CHILD  NEXT  Line:15  Col:4
-    30     25     40  +- 'CODE-BLOCK'
-    25     -1     26  |  +- 'NUMBER'$00AA
-    26     -1     27  |  +- 'NUMBER'$00BB
-    27     -1     28  |  +- 'NUMBER'$00CE
-    28     -1     29  |  +- 'NUMBER'$00A1
-    29     -1     -1  |  +- 'NUMBER'$00C0
-    40     33     48  +- 'IFF'
-    33     32     38  |  +- 'EQU-TO'
-    32     -1     31  |  |  +- 'NUMBER'$0000
-    31     -1     -1  |  |  +- '.A'
-    38     34     39  |  +- 'THEN'
-    34     36     -1  |  |  +- 'STATEMENTS'
-    36     37     -1  |  |     +- '=ADD'
-    37     -1     35  |  |        +- 'NUMBER'$0002
-    35     -1     -1  |  |        +- 'IDENT': jj
-    39     -1     -1  |  +- 'FFI'
-    48     41     -1  +- 'IFF'
-    41     -1     46     +- '.N'
-    46     42     47     +- 'THEN'
-    42     44     -1     |  +- 'STATEMENTS'
-    44     45     -1     |     +- 'Assign ='
-    45     -1     43     |        +- 'NUMBER'$0005
-    43     -1     -1     |        +- 'IDENT': kk
-    47     -1     -1     +- 'FFI'
----- End ----
----- -------- RETURN Entry LookaHead -------- ----
-	 NUMB  CHILD  NEXT  Line:15  Col:4
-    30     25     40  +- 'CODE-BLOCK'
-    25     -1     26  |  +- 'NUMBER'$00AA
-    26     -1     27  |  +- 'NUMBER'$00BB
-    27     -1     28  |  +- 'NUMBER'$00CE
-    28     -1     29  |  +- 'NUMBER'$00A1
-    29     -1     -1  |  +- 'NUMBER'$00C0
-    40     33     48  +- 'IFF'
-    33     32     38  |  +- 'EQU-TO'
-    32     -1     31  |  |  +- 'NUMBER'$0000
-    31     -1     -1  |  |  +- '.A'
-    38     34     39  |  +- 'THEN'
-    34     36     -1  |  |  +- 'STATEMENTS'
-    36     37     -1  |  |     +- '=ADD'
-    37     -1     35  |  |        +- 'NUMBER'$0002
-    35     -1     -1  |  |        +- 'IDENT': jj
-    39     -1     -1  |  +- 'FFI'
-    48     41     -1  +- 'IFF'
-    41     -1     46     +- '.N'
-    46     42     47     +- 'THEN'
-    42     44     -1     |  +- 'STATEMENTS'
-    44     45     -1     |     +- 'Assign ='
-    45     -1     43     |        +- 'NUMBER'$0005
-    43     -1     -1     |        +- 'IDENT': kk
-    47     -1     -1     +- 'FFI'
----- End ----
----- -------- ASM Entry LookaHead -------- ----
-	 NUMB  CHILD  NEXT  Line:15  Col:4
-    30     25     40  +- 'CODE-BLOCK'
-    25     -1     26  |  +- 'NUMBER'$00AA
-    26     -1     27  |  +- 'NUMBER'$00BB
-    27     -1     28  |  +- 'NUMBER'$00CE
-    28     -1     29  |  +- 'NUMBER'$00A1
-    29     -1     -1  |  +- 'NUMBER'$00C0
-    40     33     48  +- 'IFF'
-    33     32     38  |  +- 'EQU-TO'
-    32     -1     31  |  |  +- 'NUMBER'$0000
-    31     -1     -1  |  |  +- '.A'
-    38     34     39  |  +- 'THEN'
-    34     36     -1  |  |  +- 'STATEMENTS'
-    36     37     -1  |  |     +- '=ADD'
-    37     -1     35  |  |        +- 'NUMBER'$0002
-    35     -1     -1  |  |        +- 'IDENT': jj
-    39     -1     -1  |  +- 'FFI'
-    48     41     -1  +- 'IFF'
-    41     -1     46     +- '.N'
-    46     42     47     +- 'THEN'
-    42     44     -1     |  +- 'STATEMENTS'
-    44     45     -1     |     +- 'Assign ='
-    45     -1     43     |        +- 'NUMBER'$0005
-    43     -1     -1     |        +- 'IDENT': kk
-    47     -1     -1     +- 'FFI'
----- End ----
----- -------- CodeBlock Entry LookaHead -------- ----
-	 NUMB  CHILD  NEXT  Line:15  Col:4
-    30     25     40  +- 'CODE-BLOCK'
-    25     -1     26  |  +- 'NUMBER'$00AA
-    26     -1     27  |  +- 'NUMBER'$00BB
-    27     -1     28  |  +- 'NUMBER'$00CE
-    28     -1     29  |  +- 'NUMBER'$00A1
-    29     -1     -1  |  +- 'NUMBER'$00C0
-    40     33     48  +- 'IFF'
-    33     32     38  |  +- 'EQU-TO'
-    32     -1     31  |  |  +- 'NUMBER'$0000
-    31     -1     -1  |  |  +- '.A'
-    38     34     39  |  +- 'THEN'
-    34     36     -1  |  |  +- 'STATEMENTS'
-    36     37     -1  |  |     +- '=ADD'
-    37     -1     35  |  |        +- 'NUMBER'$0002
-    35     -1     -1  |  |        +- 'IDENT': jj
-    39     -1     -1  |  +- 'FFI'
-    48     41     -1  +- 'IFF'
-    41     -1     46     +- '.N'
-    46     42     47     +- 'THEN'
-    42     44     -1     |  +- 'STATEMENTS'
-    44     45     -1     |     +- 'Assign ='
-    45     -1     43     |        +- 'NUMBER'$0005
-    43     -1     -1     |        +- 'IDENT': kk
-    47     -1     -1     +- 'FFI'
----- End ----
----- -------- UNTIL Entry LookaHead -------- ----
-	 NUMB  CHILD  NEXT  Line:15  Col:4
-    30     25     40  +- 'CODE-BLOCK'
-    25     -1     26  |  +- 'NUMBER'$00AA
-    26     -1     27  |  +- 'NUMBER'$00BB
-    27     -1     28  |  +- 'NUMBER'$00CE
-    28     -1     29  |  +- 'NUMBER'$00A1
-    29     -1     -1  |  +- 'NUMBER'$00C0
-    40     33     48  +- 'IFF'
-    33     32     38  |  +- 'EQU-TO'
-    32     -1     31  |  |  +- 'NUMBER'$0000
-    31     -1     -1  |  |  +- '.A'
-    38     34     39  |  +- 'THEN'
-    34     36     -1  |  |  +- 'STATEMENTS'
-    36     37     -1  |  |     +- '=ADD'
-    37     -1     35  |  |        +- 'NUMBER'$0002
-    35     -1     -1  |  |        +- 'IDENT': jj
-    39     -1     -1  |  +- 'FFI'
-    48     41     -1  +- 'IFF'
-    41     -1     46     +- '.N'
-    46     42     47     +- 'THEN'
-    42     44     -1     |  +- 'STATEMENTS'
-    44     45     -1     |     +- 'Assign ='
-    45     -1     43     |        +- 'NUMBER'$0005
-    43     -1     -1     |        +- 'IDENT': kk
-    47     -1     -1     +- 'FFI'
----- End ----
----- -------- PUSH Entry LookaHead -------- ----
-	 NUMB  CHILD  NEXT  Line:15  Col:4
-    30     25     40  +- 'CODE-BLOCK'
-    25     -1     26  |  +- 'NUMBER'$00AA
-    26     -1     27  |  +- 'NUMBER'$00BB
-    27     -1     28  |  +- 'NUMBER'$00CE
-    28     -1     29  |  +- 'NUMBER'$00A1
-    29     -1     -1  |  +- 'NUMBER'$00C0
-    40     33     48  +- 'IFF'
-    33     32     38  |  +- 'EQU-TO'
-    32     -1     31  |  |  +- 'NUMBER'$0000
-    31     -1     -1  |  |  +- '.A'
-    38     34     39  |  +- 'THEN'
-    34     36     -1  |  |  +- 'STATEMENTS'
-    36     37     -1  |  |     +- '=ADD'
-    37     -1     35  |  |        +- 'NUMBER'$0002
-    35     -1     -1  |  |        +- 'IDENT': jj
-    39     -1     -1  |  +- 'FFI'
-    48     41     -1  +- 'IFF'
-    41     -1     46     +- '.N'
-    46     42     47     +- 'THEN'
-    42     44     -1     |  +- 'STATEMENTS'
-    44     45     -1     |     +- 'Assign ='
-    45     -1     43     |        +- 'NUMBER'$0005
-    43     -1     -1     |        +- 'IDENT': kk
-    47     -1     -1     +- 'FFI'
----- End ----
----- -------- POP Entry LookaHead -------- ----
-	 NUMB  CHILD  NEXT  Line:15  Col:4
-    30     25     40  +- 'CODE-BLOCK'
-    25     -1     26  |  +- 'NUMBER'$00AA
-    26     -1     27  |  +- 'NUMBER'$00BB
-    27     -1     28  |  +- 'NUMBER'$00CE
-    28     -1     29  |  +- 'NUMBER'$00A1
-    29     -1     -1  |  +- 'NUMBER'$00C0
-    40     33     48  +- 'IFF'
-    33     32     38  |  +- 'EQU-TO'
-    32     -1     31  |  |  +- 'NUMBER'$0000
-    31     -1     -1  |  |  +- '.A'
-    38     34     39  |  +- 'THEN'
-    34     36     -1  |  |  +- 'STATEMENTS'
-    36     37     -1  |  |     +- '=ADD'
-    37     -1     35  |  |        +- 'NUMBER'$0002
-    35     -1     -1  |  |        +- 'IDENT': jj
-    39     -1     -1  |  +- 'FFI'
-    48     41     -1  +- 'IFF'
-    41     -1     46     +- '.N'
-    46     42     47     +- 'THEN'
-    42     44     -1     |  +- 'STATEMENTS'
-    44     45     -1     |     +- 'Assign ='
-    45     -1     43     |        +- 'NUMBER'$0005
-    43     -1     -1     |        +- 'IDENT': kk
-    47     -1     -1     +- 'FFI'
----- End ----
----- -------- BREAK Entry LookaHead -------- ----
-	 NUMB  CHILD  NEXT  Line:15  Col:4
-    30     25     40  +- 'CODE-BLOCK'
-    25     -1     26  |  +- 'NUMBER'$00AA
-    26     -1     27  |  +- 'NUMBER'$00BB
-    27     -1     28  |  +- 'NUMBER'$00CE
-    28     -1     29  |  +- 'NUMBER'$00A1
-    29     -1     -1  |  +- 'NUMBER'$00C0
-    40     33     48  +- 'IFF'
-    33     32     38  |  +- 'EQU-TO'
-    32     -1     31  |  |  +- 'NUMBER'$0000
-    31     -1     -1  |  |  +- '.A'
-    38     34     39  |  +- 'THEN'
-    34     36     -1  |  |  +- 'STATEMENTS'
-    36     37     -1  |  |     +- '=ADD'
-    37     -1     35  |  |        +- 'NUMBER'$0002
-    35     -1     -1  |  |        +- 'IDENT': jj
-    39     -1     -1  |  +- 'FFI'
-    48     41     -1  +- 'IFF'
-    41     -1     46     +- '.N'
-    46     42     47     +- 'THEN'
-    42     44     -1     |  +- 'STATEMENTS'
-    44     45     -1     |     +- 'Assign ='
-    45     -1     43     |        +- 'NUMBER'$0005
-    43     -1     -1     |        +- 'IDENT': kk
-    47     -1     -1     +- 'FFI'
----- End ----
----- -------- RTI Entry LookaHead -------- ----
-	 NUMB  CHILD  NEXT  Line:15  Col:4
-    30     25     40  +- 'CODE-BLOCK'
-    25     -1     26  |  +- 'NUMBER'$00AA
-    26     -1     27  |  +- 'NUMBER'$00BB
-    27     -1     28  |  +- 'NUMBER'$00CE
-    28     -1     29  |  +- 'NUMBER'$00A1
-    29     -1     -1  |  +- 'NUMBER'$00C0
-    40     33     48  +- 'IFF'
-    33     32     38  |  +- 'EQU-TO'
-    32     -1     31  |  |  +- 'NUMBER'$0000
-    31     -1     -1  |  |  +- '.A'
-    38     34     39  |  +- 'THEN'
-    34     36     -1  |  |  +- 'STATEMENTS'
-    36     37     -1  |  |     +- '=ADD'
-    37     -1     35  |  |        +- 'NUMBER'$0002
-    35     -1     -1  |  |        +- 'IDENT': jj
-    39     -1     -1  |  +- 'FFI'
-    48     41     -1  +- 'IFF'
-    41     -1     46     +- '.N'
-    46     42     47     +- 'THEN'
-    42     44     -1     |  +- 'STATEMENTS'
-    44     45     -1     |     +- 'Assign ='
-    45     -1     43     |        +- 'NUMBER'$0005
-    43     -1     -1     |        +- 'IDENT': kk
-    47     -1     -1     +- 'FFI'
----- End ----
----- ------- Recursions : 0 - Assign On Entry LookaHead -------- ----
-	 NUMB  CHILD  NEXT  Line:15  Col:4
-    30     25     40  +- 'CODE-BLOCK'
-    25     -1     26  |  +- 'NUMBER'$00AA
-    26     -1     27  |  +- 'NUMBER'$00BB
-    27     -1     28  |  +- 'NUMBER'$00CE
-    28     -1     29  |  +- 'NUMBER'$00A1
-    29     -1     -1  |  +- 'NUMBER'$00C0
-    40     33     48  +- 'IFF'
-    33     32     38  |  +- 'EQU-TO'
-    32     -1     31  |  |  +- 'NUMBER'$0000
-    31     -1     -1  |  |  +- '.A'
-    38     34     39  |  +- 'THEN'
-    34     36     -1  |  |  +- 'STATEMENTS'
-    36     37     -1  |  |     +- '=ADD'
-    37     -1     35  |  |        +- 'NUMBER'$0002
-    35     -1     -1  |  |        +- 'IDENT': jj
-    39     -1     -1  |  +- 'FFI'
-    48     41     -1  +- 'IFF'
-    41     -1     46     +- '.N'
-    46     42     47     +- 'THEN'
-    42     44     -1     |  +- 'STATEMENTS'
-    44     45     -1     |     +- 'Assign ='
-    45     -1     43     |        +- 'NUMBER'$0005
-    43     -1     -1     |        +- 'IDENT': kk
-    47     -1     -1     +- 'FFI'
----- End ----
----- -------- MemContents Entry LookaHead -------- ----
-	 NUMB  CHILD  NEXT  Line:15  Col:4
-    30     25     40  +- 'CODE-BLOCK'
-    25     -1     26  |  +- 'NUMBER'$00AA
-    26     -1     27  |  +- 'NUMBER'$00BB
-    27     -1     28  |  +- 'NUMBER'$00CE
-    28     -1     29  |  +- 'NUMBER'$00A1
-    29     -1     -1  |  +- 'NUMBER'$00C0
-    40     33     48  +- 'IFF'
-    33     32     38  |  +- 'EQU-TO'
-    32     -1     31  |  |  +- 'NUMBER'$0000
-    31     -1     -1  |  |  +- '.A'
-    38     34     39  |  +- 'THEN'
-    34     36     -1  |  |  +- 'STATEMENTS'
-    36     37     -1  |  |     +- '=ADD'
-    37     -1     35  |  |        +- 'NUMBER'$0002
-    35     -1     -1  |  |        +- 'IDENT': jj
-    39     -1     -1  |  +- 'FFI'
-    48     41     -1  +- 'IFF'
-    41     -1     46     +- '.N'
-    46     42     47     +- 'THEN'
-    42     44     -1     |  +- 'STATEMENTS'
-    44     45     -1     |     +- 'Assign ='
-    45     -1     43     |        +- 'NUMBER'$0005
-    43     -1     -1     |        +- 'IDENT': kk
-    47     -1     -1     +- 'FFI'
----- End ----
----- -------- Factor Entry LookaHead -------- ----
-	 NUMB  CHILD  NEXT  Line:15  Col:4
-    30     25     40  +- 'CODE-BLOCK'
-    25     -1     26  |  +- 'NUMBER'$00AA
-    26     -1     27  |  +- 'NUMBER'$00BB
-    27     -1     28  |  +- 'NUMBER'$00CE
-    28     -1     29  |  +- 'NUMBER'$00A1
-    29     -1     -1  |  +- 'NUMBER'$00C0
-    40     33     48  +- 'IFF'
-    33     32     38  |  +- 'EQU-TO'
-    32     -1     31  |  |  +- 'NUMBER'$0000
-    31     -1     -1  |  |  +- '.A'
-    38     34     39  |  +- 'THEN'
-    34     36     -1  |  |  +- 'STATEMENTS'
-    36     37     -1  |  |     +- '=ADD'
-    37     -1     35  |  |        +- 'NUMBER'$0002
-    35     -1     -1  |  |        +- 'IDENT': jj
-    39     -1     -1  |  +- 'FFI'
-    48     41     -1  +- 'IFF'
-    41     -1     46     +- '.N'
-    46     42     47     +- 'THEN'
-    42     44     -1     |  +- 'STATEMENTS'
-    44     45     -1     |     +- 'Assign ='
-    45     -1     43     |        +- 'NUMBER'$0005
-    43     -1     -1     |        +- 'IDENT': kk
-    47     -1     -1     +- 'FFI'
----- End ----
----- -------- Factor Exit LookaHead -------- ----
-	 NUMB  CHILD  NEXT  Line:15  Col:4
-    30     25     40  +- 'CODE-BLOCK'
-    25     -1     26  |  +- 'NUMBER'$00AA
-    26     -1     27  |  +- 'NUMBER'$00BB
-    27     -1     28  |  +- 'NUMBER'$00CE
-    28     -1     29  |  +- 'NUMBER'$00A1
-    29     -1     -1  |  +- 'NUMBER'$00C0
-    40     33     48  +- 'IFF'
-    33     32     38  |  +- 'EQU-TO'
-    32     -1     31  |  |  +- 'NUMBER'$0000
-    31     -1     -1  |  |  +- '.A'
-    38     34     39  |  +- 'THEN'
-    34     36     -1  |  |  +- 'STATEMENTS'
-    36     37     -1  |  |     +- '=ADD'
-    37     -1     35  |  |        +- 'NUMBER'$0002
-    35     -1     -1  |  |        +- 'IDENT': jj
-    39     -1     -1  |  +- 'FFI'
-    48     41     -1  +- 'IFF'
-    41     -1     46     +- '.N'
-    46     42     47     +- 'THEN'
-    42     44     -1     |  +- 'STATEMENTS'
-    44     45     -1     |     +- 'Assign ='
-    45     -1     43     |        +- 'NUMBER'$0005
-    43     -1     -1     |        +- 'IDENT': kk
-    47     -1     -1     +- 'FFI'
----- End ----
----- -------- MemContents Perculatge LookaHead -------- ----
-	 NUMB  CHILD  NEXT  Line:15  Col:4
-    30     25     40  +- 'CODE-BLOCK'
-    25     -1     26  |  +- 'NUMBER'$00AA
-    26     -1     27  |  +- 'NUMBER'$00BB
-    27     -1     28  |  +- 'NUMBER'$00CE
-    28     -1     29  |  +- 'NUMBER'$00A1
-    29     -1     -1  |  +- 'NUMBER'$00C0
-    40     33     48  +- 'IFF'
-    33     32     38  |  +- 'EQU-TO'
-    32     -1     31  |  |  +- 'NUMBER'$0000
-    31     -1     -1  |  |  +- '.A'
-    38     34     39  |  +- 'THEN'
-    34     36     -1  |  |  +- 'STATEMENTS'
-    36     37     -1  |  |     +- '=ADD'
-    37     -1     35  |  |        +- 'NUMBER'$0002
-    35     -1     -1  |  |        +- 'IDENT': jj
-    39     -1     -1  |  +- 'FFI'
-    48     41     -1  +- 'IFF'
-    41     -1     46     +- '.N'
-    46     42     47     +- 'THEN'
-    42     44     -1     |  +- 'STATEMENTS'
-    44     45     -1     |     +- 'Assign ='
-    45     -1     43     |        +- 'NUMBER'$0005
-    43     -1     -1     |        +- 'IDENT': kk
-    47     -1     -1     +- 'FFI'
----- End ----
-ArrayIndex Entry LHNext <NODE is NULL>
----- End ----
-MemContents Entry LookaHead <NODE is NULL>
----- End ----
-Factor Entry LookaHead <NODE is NULL>
----- End ----
-Factor Exit LookaHead <NODE is NULL>
----- End ----
-MemContents Perculatge LookaHead <NODE is NULL>
----- End ----
-MemContents Exit LHNext <NODE is NULL>
----- End ----
-ArrayIndex Perculate LHNext <NODE is NULL>
----- End ----
-ArrayIndex Entry LHNext <NODE is NULL>
----- End ----
----- -------- MemContents Exit LHNext -------- ----
+---- -------- Assigng Aux LHNext on Entry -------- ----
 	 NUMB  CHILD  NEXT  Line:21  Col:4
-    49     -1     -1  +- 'IDENT': a
----- End ----
----- ------- Recursions : 1 - IfStmt Perculatge LookaHead -------- ----
-	 NUMB  CHILD  NEXT  Line:21  Col:4
-    49     -1     -1  +- 'IDENT': a
----- End ----
- = Recursion 1
-MemContents Entry LookaHead <NODE is NULL>
----- End ----
-Factor Entry LookaHead <NODE is NULL>
----- End ----
-Factor Exit LookaHead <NODE is NULL>
+    46     -1     -1  +- 'IDENT': a
 ---- End ----
 MemContents Perculatge LookaHead <NODE is NULL>
 ---- End ----
-ArrayIndex Entry LHNext <NODE is NULL>
----- End ----
-MemContents Entry LookaHead <NODE is NULL>
----- End ----
-Factor Entry LookaHead <NODE is NULL>
----- End ----
-Factor Exit LookaHead <NODE is NULL>
----- End ----
-MemContents Perculatge LookaHead <NODE is NULL>
----- End ----
-MemContents Exit LHNext <NODE is NULL>
----- End ----
-ArrayIndex Perculate LHNext <NODE is NULL>
----- End ----
-ArrayIndex Entry LHNext <NODE is NULL>
----- End ----
----- -------- MemContents Exit LHNext -------- ----
+---- -------- VALUE Entry After MemContents LHnext -------- ----
 	 NUMB  CHILD  NEXT  Line:21  Col:8
-    51     -1     -1  +- 'IDENT': c
+    48     -1     -1  +- 'IDENT': c
 ---- End ----
-MemContents Entry LookaHead <NODE is NULL>
+---- -------- ADD Entry After Shift LHnext -------- ----
+	 NUMB  CHILD  NEXT  Line:21  Col:8
+    48     -1     -1  +- 'IDENT': c
 ---- End ----
-Factor Entry LookaHead <NODE is NULL>
----- End ----
-Factor Exit LookaHead <NODE is NULL>
----- End ----
-MemContents Perculatge LookaHead <NODE is NULL>
----- End ----
-ArrayIndex Entry LHNext <NODE is NULL>
----- End ----
-MemContents Entry LookaHead <NODE is NULL>
----- End ----
-Factor Entry LookaHead <NODE is NULL>
----- End ----
-Factor Exit LookaHead <NODE is NULL>
+---- -------- ADD Entry Decode + LHnext -------- ----
+	 NUMB  CHILD  NEXT  Line:21  Col:8
+    48     -1     -1  +- 'IDENT': c
 ---- End ----
 MemContents Perculatge LookaHead <NODE is NULL>
 ---- End ----
-MemContents Exit LHNext <NODE is NULL>
+---- -------- VALUE Entry After MemContents LHnext -------- ----
+	 NUMB  CHILD  NEXT  Line:22  Col:2
+    49     -1     -1  +- 'IDENT': d
 ---- End ----
-ArrayIndex Perculate LHNext <NODE is NULL>
+---- -------- ADD Entry After Shift LHnext -------- ----
+	 NUMB  CHILD  NEXT  Line:21  Col:8
+    48     -1     -1  +- 'IDENT': c
 ---- End ----
-ArrayIndex Entry LHNext <NODE is NULL>
+---- -------- Assigng Aux LHChild ArithExpr -------- ----
+	 NUMB  CHILD  NEXT  Line:22  Col:2
+    50     49     -1  +- 'ADD'
+    49     -1     48     +- 'IDENT': d
+    48     -1     -1     +- 'IDENT': c
 ---- End ----
----- -------- MemContents Exit LHNext -------- ----
+---- -------- Assigng Aux  pN -------- ----
+	 NUMB  CHILD  NEXT  Line:22  Col:2
+    47     50     -1  +- 'Assign ='
+    50     49     46     +- 'ADD'
+    49     -1     48     |  +- 'IDENT': d
+    48     -1     -1     |  +- 'IDENT': c
+    46     -1     -1     +- 'IDENT': a
+---- End ----
+---- -------- Assigng Aux LHNext on Exit -------- ----
+	 NUMB  CHILD  NEXT  Line:22  Col:2
+    47     50     -1  +- 'Assign ='
+    50     49     46     +- 'ADD'
+    49     -1     48     |  +- 'IDENT': d
+    48     -1     -1     |  +- 'IDENT': c
+    46     -1     -1     +- 'IDENT': a
+---- End ----
+---- -------- MemContents Perculatge LookaHead -------- ----
+	 NUMB  CHILD  NEXT  Line:21  Col:2
+    45     40     47  +- 'CODE-BLOCK'
+    40     -1     41  |  +- 'NUMBER'$00AA
+    41     -1     42  |  +- 'NUMBER'$00BB
+    42     -1     43  |  +- 'NUMBER'$00CE
+    43     -1     44  |  +- 'NUMBER'$00A1
+    44     -1     -1  |  +- 'NUMBER'$00C0
+    47     50     -1  +- 'Assign ='
+    50     49     46     +- 'ADD'
+    49     -1     48     |  +- 'IDENT': d
+    48     -1     -1     |  +- 'IDENT': c
+    46     -1     -1     +- 'IDENT': a
+---- End ----
+ = Recursion 1
+---- -------- Assigng Aux LHNext on Entry -------- ----
 	 NUMB  CHILD  NEXT  Line:22  Col:4
-    52     -1     -1  +- 'IDENT': d
+    51     -1     -1  +- 'IDENT': e
 ---- End ----
----- -------- MemContents Entry LookaHead -------- ----
-	 NUMB  CHILD  NEXT  Line:15  Col:4
-    30     25     40  +- 'CODE-BLOCK'
-    25     -1     26  |  +- 'NUMBER'$00AA
-    26     -1     27  |  +- 'NUMBER'$00BB
-    27     -1     28  |  +- 'NUMBER'$00CE
-    28     -1     29  |  +- 'NUMBER'$00A1
-    29     -1     -1  |  +- 'NUMBER'$00C0
-    40     33     48  +- 'IFF'
-    33     32     38  |  +- 'EQU-TO'
-    32     -1     31  |  |  +- 'NUMBER'$0000
-    31     -1     -1  |  |  +- '.A'
-    38     34     39  |  +- 'THEN'
-    34     36     -1  |  |  +- 'STATEMENTS'
-    36     37     -1  |  |     +- '=ADD'
-    37     -1     35  |  |        +- 'NUMBER'$0002
-    35     -1     -1  |  |        +- 'IDENT': jj
-    39     -1     -1  |  +- 'FFI'
-    48     41     50  +- 'IFF'
-    41     -1     46  |  +- '.N'
-    46     42     47  |  +- 'THEN'
-    42     44     -1  |  |  +- 'STATEMENTS'
-    44     45     -1  |  |     +- 'Assign ='
-    45     -1     43  |  |        +- 'NUMBER'$0005
-    43     -1     -1  |  |        +- 'IDENT': kk
-    47     -1     -1  |  +- 'FFI'
-    50     53     -1  +- 'Assign ='
-    53     52     49     +- 'MUL'
-    52     -1     51     |  +- 'IDENT': d
-    51     -1     -1     |  +- 'IDENT': c
-    49     -1     -1     +- 'IDENT': a
+MemContents Perculatge LookaHead <NODE is NULL>
 ---- End ----
----- -------- Factor Entry LookaHead -------- ----
-	 NUMB  CHILD  NEXT  Line:15  Col:4
-    30     25     40  +- 'CODE-BLOCK'
-    25     -1     26  |  +- 'NUMBER'$00AA
-    26     -1     27  |  +- 'NUMBER'$00BB
-    27     -1     28  |  +- 'NUMBER'$00CE
-    28     -1     29  |  +- 'NUMBER'$00A1
-    29     -1     -1  |  +- 'NUMBER'$00C0
-    40     33     48  +- 'IFF'
-    33     32     38  |  +- 'EQU-TO'
-    32     -1     31  |  |  +- 'NUMBER'$0000
-    31     -1     -1  |  |  +- '.A'
-    38     34     39  |  +- 'THEN'
-    34     36     -1  |  |  +- 'STATEMENTS'
-    36     37     -1  |  |     +- '=ADD'
-    37     -1     35  |  |        +- 'NUMBER'$0002
-    35     -1     -1  |  |        +- 'IDENT': jj
-    39     -1     -1  |  +- 'FFI'
-    48     41     50  +- 'IFF'
-    41     -1     46  |  +- '.N'
-    46     42     47  |  +- 'THEN'
-    42     44     -1  |  |  +- 'STATEMENTS'
-    44     45     -1  |  |     +- 'Assign ='
-    45     -1     43  |  |        +- 'NUMBER'$0005
-    43     -1     -1  |  |        +- 'IDENT': kk
-    47     -1     -1  |  +- 'FFI'
-    50     53     -1  +- 'Assign ='
-    53     52     49     +- 'MUL'
-    52     -1     51     |  +- 'IDENT': d
-    51     -1     -1     |  +- 'IDENT': c
-    49     -1     -1     +- 'IDENT': a
+---- -------- VALUE Entry After MemContents LHnext -------- ----
+	 NUMB  CHILD  NEXT  Line:22  Col:8
+    53     -1     -1  +- 'IDENT': c
 ---- End ----
----- -------- Factor Exit LookaHead -------- ----
-	 NUMB  CHILD  NEXT  Line:15  Col:4
-    30     25     40  +- 'CODE-BLOCK'
-    25     -1     26  |  +- 'NUMBER'$00AA
-    26     -1     27  |  +- 'NUMBER'$00BB
-    27     -1     28  |  +- 'NUMBER'$00CE
-    28     -1     29  |  +- 'NUMBER'$00A1
-    29     -1     -1  |  +- 'NUMBER'$00C0
-    40     33     48  +- 'IFF'
-    33     32     38  |  +- 'EQU-TO'
-    32     -1     31  |  |  +- 'NUMBER'$0000
-    31     -1     -1  |  |  +- '.A'
-    38     34     39  |  +- 'THEN'
-    34     36     -1  |  |  +- 'STATEMENTS'
-    36     37     -1  |  |     +- '=ADD'
-    37     -1     35  |  |        +- 'NUMBER'$0002
-    35     -1     -1  |  |        +- 'IDENT': jj
-    39     -1     -1  |  +- 'FFI'
-    48     41     50  +- 'IFF'
-    41     -1     46  |  +- '.N'
-    46     42     47  |  +- 'THEN'
-    42     44     -1  |  |  +- 'STATEMENTS'
-    44     45     -1  |  |     +- 'Assign ='
-    45     -1     43  |  |        +- 'NUMBER'$0005
-    43     -1     -1  |  |        +- 'IDENT': kk
-    47     -1     -1  |  +- 'FFI'
-    50     53     -1  +- 'Assign ='
-    53     52     49     +- 'MUL'
-    52     -1     51     |  +- 'IDENT': d
-    51     -1     -1     |  +- 'IDENT': c
-    49     -1     -1     +- 'IDENT': a
+MemContents Perculatge LookaHead <NODE is NULL>
+---- End ----
+---- -------- VALUE Entry After MemContents LHnext -------- ----
+	 NUMB  CHILD  NEXT  Line:33  Col:3
+    54     -1     -1  +- 'IDENT': d
+---- End ----
+---- -------- ADD Entry After Shift LHnext -------- ----
+	 NUMB  CHILD  NEXT  Line:33  Col:3
+    55     54     -1  +- 'MUL'
+    54     -1     53     +- 'IDENT': d
+    53     -1     -1     +- 'IDENT': c
+---- End ----
+---- -------- Assigng Aux LHChild ArithExpr -------- ----
+	 NUMB  CHILD  NEXT  Line:33  Col:3
+    55     54     -1  +- 'MUL'
+    54     -1     53     +- 'IDENT': d
+    53     -1     -1     +- 'IDENT': c
+---- End ----
+---- -------- Assigng Aux  pN -------- ----
+	 NUMB  CHILD  NEXT  Line:33  Col:3
+    52     55     -1  +- 'Assign ='
+    55     54     51     +- 'MUL'
+    54     -1     53     |  +- 'IDENT': d
+    53     -1     -1     |  +- 'IDENT': c
+    51     -1     -1     +- 'IDENT': e
+---- End ----
+---- -------- Assigng Aux LHNext on Exit -------- ----
+	 NUMB  CHILD  NEXT  Line:33  Col:3
+    52     55     -1  +- 'Assign ='
+    55     54     51     +- 'MUL'
+    54     -1     53     |  +- 'IDENT': d
+    53     -1     -1     |  +- 'IDENT': c
+    51     -1     -1     +- 'IDENT': e
 ---- End ----
 ---- -------- MemContents Perculatge LookaHead -------- ----
-	 NUMB  CHILD  NEXT  Line:15  Col:4
-    30     25     40  +- 'CODE-BLOCK'
-    25     -1     26  |  +- 'NUMBER'$00AA
-    26     -1     27  |  +- 'NUMBER'$00BB
-    27     -1     28  |  +- 'NUMBER'$00CE
-    28     -1     29  |  +- 'NUMBER'$00A1
-    29     -1     -1  |  +- 'NUMBER'$00C0
-    40     33     48  +- 'IFF'
-    33     32     38  |  +- 'EQU-TO'
-    32     -1     31  |  |  +- 'NUMBER'$0000
-    31     -1     -1  |  |  +- '.A'
-    38     34     39  |  +- 'THEN'
-    34     36     -1  |  |  +- 'STATEMENTS'
-    36     37     -1  |  |     +- '=ADD'
-    37     -1     35  |  |        +- 'NUMBER'$0002
-    35     -1     -1  |  |        +- 'IDENT': jj
-    39     -1     -1  |  +- 'FFI'
-    48     41     50  +- 'IFF'
-    41     -1     46  |  +- '.N'
-    46     42     47  |  +- 'THEN'
-    42     44     -1  |  |  +- 'STATEMENTS'
-    44     45     -1  |  |     +- 'Assign ='
-    45     -1     43  |  |        +- 'NUMBER'$0005
-    43     -1     -1  |  |        +- 'IDENT': kk
-    47     -1     -1  |  +- 'FFI'
-    50     53     -1  +- 'Assign ='
-    53     52     49     +- 'MUL'
-    52     -1     51     |  +- 'IDENT': d
-    51     -1     -1     |  +- 'IDENT': c
-    49     -1     -1     +- 'IDENT': a
+	 NUMB  CHILD  NEXT  Line:21  Col:2
+    45     40     47  +- 'CODE-BLOCK'
+    40     -1     41  |  +- 'NUMBER'$00AA
+    41     -1     42  |  +- 'NUMBER'$00BB
+    42     -1     43  |  +- 'NUMBER'$00CE
+    43     -1     44  |  +- 'NUMBER'$00A1
+    44     -1     -1  |  +- 'NUMBER'$00C0
+    47     50     52  +- 'Assign ='
+    50     49     46  |  +- 'ADD'
+    49     -1     48  |  |  +- 'IDENT': d
+    48     -1     -1  |  |  +- 'IDENT': c
+    46     -1     -1  |  +- 'IDENT': a
+    52     55     -1  +- 'Assign ='
+    55     54     51     +- 'MUL'
+    54     -1     53     |  +- 'IDENT': d
+    53     -1     -1     |  +- 'IDENT': c
+    51     -1     -1     +- 'IDENT': e
 ---- End ----
----- -------- MemContents Exit LHNext -------- ----
-	 NUMB  CHILD  NEXT  Line:15  Col:4
-    30     25     40  +- 'CODE-BLOCK'
-    25     -1     26  |  +- 'NUMBER'$00AA
-    26     -1     27  |  +- 'NUMBER'$00BB
-    27     -1     28  |  +- 'NUMBER'$00CE
-    28     -1     29  |  +- 'NUMBER'$00A1
-    29     -1     -1  |  +- 'NUMBER'$00C0
-    40     33     48  +- 'IFF'
-    33     32     38  |  +- 'EQU-TO'
-    32     -1     31  |  |  +- 'NUMBER'$0000
-    31     -1     -1  |  |  +- '.A'
-    38     34     39  |  +- 'THEN'
-    34     36     -1  |  |  +- 'STATEMENTS'
-    36     37     -1  |  |     +- '=ADD'
-    37     -1     35  |  |        +- 'NUMBER'$0002
-    35     -1     -1  |  |        +- 'IDENT': jj
-    39     -1     -1  |  +- 'FFI'
-    48     41     50  +- 'IFF'
-    41     -1     46  |  +- '.N'
-    46     42     47  |  +- 'THEN'
-    42     44     -1  |  |  +- 'STATEMENTS'
-    44     45     -1  |  |     +- 'Assign ='
-    45     -1     43  |  |        +- 'NUMBER'$0005
-    43     -1     -1  |  |        +- 'IDENT': kk
-    47     -1     -1  |  +- 'FFI'
-    50     53     -1  +- 'Assign ='
-    53     52     49     +- 'MUL'
-    52     -1     51     |  +- 'IDENT': d
-    51     -1     -1     |  +- 'IDENT': c
-    49     -1     -1     +- 'IDENT': a
+MemContents Perculatge LookaHead <NODE is NULL>
 ---- End ----
----- ------- Recursions : 0 - Assign On Exit LHNext -------- ----
-	 NUMB  CHILD  NEXT  Line:15  Col:4
-    30     25     40  +- 'CODE-BLOCK'
-    25     -1     26  |  +- 'NUMBER'$00AA
-    26     -1     27  |  +- 'NUMBER'$00BB
-    27     -1     28  |  +- 'NUMBER'$00CE
-    28     -1     29  |  +- 'NUMBER'$00A1
-    29     -1     -1  |  +- 'NUMBER'$00C0
-    40     33     48  +- 'IFF'
-    33     32     38  |  +- 'EQU-TO'
-    32     -1     31  |  |  +- 'NUMBER'$0000
-    31     -1     -1  |  |  +- '.A'
-    38     34     39  |  +- 'THEN'
-    34     36     -1  |  |  +- 'STATEMENTS'
-    36     37     -1  |  |     +- '=ADD'
-    37     -1     35  |  |        +- 'NUMBER'$0002
-    35     -1     -1  |  |        +- 'IDENT': jj
-    39     -1     -1  |  +- 'FFI'
-    48     41     50  +- 'IFF'
-    41     -1     46  |  +- '.N'
-    46     42     47  |  +- 'THEN'
-    42     44     -1  |  |  +- 'STATEMENTS'
-    44     45     -1  |  |     +- 'Assign ='
-    45     -1     43  |  |        +- 'NUMBER'$0005
-    43     -1     -1  |  |        +- 'IDENT': kk
-    47     -1     -1  |  +- 'FFI'
-    50     53     -1  +- 'Assign ='
-    53     52     49     +- 'MUL'
-    52     -1     51     |  +- 'IDENT': d
-    51     -1     -1     |  +- 'IDENT': c
-    49     -1     -1     +- 'IDENT': a
+MemContents Perculatge LookaHead <NODE is NULL>
 ---- End ----
----- -------- RTI Perculatge LookaHead -------- ----
-	 NUMB  CHILD  NEXT  Line:15  Col:4
-    30     25     40  +- 'CODE-BLOCK'
-    25     -1     26  |  +- 'NUMBER'$00AA
-    26     -1     27  |  +- 'NUMBER'$00BB
-    27     -1     28  |  +- 'NUMBER'$00CE
-    28     -1     29  |  +- 'NUMBER'$00A1
-    29     -1     -1  |  +- 'NUMBER'$00C0
-    40     33     48  +- 'IFF'
-    33     32     38  |  +- 'EQU-TO'
-    32     -1     31  |  |  +- 'NUMBER'$0000
-    31     -1     -1  |  |  +- '.A'
-    38     34     39  |  +- 'THEN'
-    34     36     -1  |  |  +- 'STATEMENTS'
-    36     37     -1  |  |     +- '=ADD'
-    37     -1     35  |  |        +- 'NUMBER'$0002
-    35     -1     -1  |  |        +- 'IDENT': jj
-    39     -1     -1  |  +- 'FFI'
-    48     41     50  +- 'IFF'
-    41     -1     46  |  +- '.N'
-    46     42     47  |  +- 'THEN'
-    42     44     -1  |  |  +- 'STATEMENTS'
-    44     45     -1  |  |     +- 'Assign ='
-    45     -1     43  |  |        +- 'NUMBER'$0005
-    43     -1     -1  |  |        +- 'IDENT': kk
-    47     -1     -1  |  +- 'FFI'
-    50     53     -1  +- 'Assign ='
-    53     52     49     +- 'MUL'
-    52     -1     51     |  +- 'IDENT': d
-    51     -1     -1     |  +- 'IDENT': c
-    49     -1     -1     +- 'IDENT': a
+---- -------- VALUE Entry After MemContents LHnext -------- ----
+	 NUMB  CHILD  NEXT  Line:34  Col:8
+    57     -1     -1  +- 'IDENT': c
 ---- End ----
----- -------- RTI MakeChild  LHChild -------- ----
-	 NUMB  CHILD  NEXT  Line:24  Col:3
-    54     -1     -1  +- 'RTI'
+---- -------- ADD Entry After Shift LHnext -------- ----
+	 NUMB  CHILD  NEXT  Line:34  Col:8
+    57     -1     -1  +- 'IDENT': c
 ---- End ----
----- -------- RTI MakeList LHNext -------- ----
-	 NUMB  CHILD  NEXT  Line:15  Col:4
-    30     25     40  +- 'CODE-BLOCK'
-    25     -1     26  |  +- 'NUMBER'$00AA
-    26     -1     27  |  +- 'NUMBER'$00BB
-    27     -1     28  |  +- 'NUMBER'$00CE
-    28     -1     29  |  +- 'NUMBER'$00A1
-    29     -1     -1  |  +- 'NUMBER'$00C0
-    40     33     48  +- 'IFF'
-    33     32     38  |  +- 'EQU-TO'
-    32     -1     31  |  |  +- 'NUMBER'$0000
-    31     -1     -1  |  |  +- '.A'
-    38     34     39  |  +- 'THEN'
-    34     36     -1  |  |  +- 'STATEMENTS'
-    36     37     -1  |  |     +- '=ADD'
-    37     -1     35  |  |        +- 'NUMBER'$0002
-    35     -1     -1  |  |        +- 'IDENT': jj
-    39     -1     -1  |  +- 'FFI'
-    48     41     50  +- 'IFF'
-    41     -1     46  |  +- '.N'
-    46     42     47  |  +- 'THEN'
-    42     44     -1  |  |  +- 'STATEMENTS'
-    44     45     -1  |  |     +- 'Assign ='
-    45     -1     43  |  |        +- 'NUMBER'$0005
-    43     -1     -1  |  |        +- 'IDENT': kk
-    47     -1     -1  |  +- 'FFI'
-    50     53     54  +- 'Assign ='
-    53     52     49  |  +- 'MUL'
-    52     -1     51  |  |  +- 'IDENT': d
-    51     -1     -1  |  |  +- 'IDENT': c
-    49     -1     -1  |  +- 'IDENT': a
-    54     -1     -1  +- 'RTI'
+MemContents Perculatge LookaHead <NODE is NULL>
 ---- End ----
----- ------- Recursions : 0 - Assign On Entry LookaHead -------- ----
-	 NUMB  CHILD  NEXT  Line:15  Col:4
-    30     25     40  +- 'CODE-BLOCK'
-    25     -1     26  |  +- 'NUMBER'$00AA
-    26     -1     27  |  +- 'NUMBER'$00BB
-    27     -1     28  |  +- 'NUMBER'$00CE
-    28     -1     29  |  +- 'NUMBER'$00A1
-    29     -1     -1  |  +- 'NUMBER'$00C0
-    40     33     48  +- 'IFF'
-    33     32     38  |  +- 'EQU-TO'
-    32     -1     31  |  |  +- 'NUMBER'$0000
-    31     -1     -1  |  |  +- '.A'
-    38     34     39  |  +- 'THEN'
-    34     36     -1  |  |  +- 'STATEMENTS'
-    36     37     -1  |  |     +- '=ADD'
-    37     -1     35  |  |        +- 'NUMBER'$0002
-    35     -1     -1  |  |        +- 'IDENT': jj
-    39     -1     -1  |  +- 'FFI'
-    48     41     50  +- 'IFF'
-    41     -1     46  |  +- '.N'
-    46     42     47  |  +- 'THEN'
-    42     44     -1  |  |  +- 'STATEMENTS'
-    44     45     -1  |  |     +- 'Assign ='
-    45     -1     43  |  |        +- 'NUMBER'$0005
-    43     -1     -1  |  |        +- 'IDENT': kk
-    47     -1     -1  |  +- 'FFI'
-    50     53     54  +- 'Assign ='
-    53     52     49  |  +- 'MUL'
-    52     -1     51  |  |  +- 'IDENT': d
-    51     -1     -1  |  |  +- 'IDENT': c
-    49     -1     -1  |  +- 'IDENT': a
-    54     -1     -1  +- 'RTI'
+---- -------- VALUE Entry After MemContents LHnext -------- ----
+	 NUMB  CHILD  NEXT  Line:34  Col:16
+    58     -1     -1  +- 'IDENT': xx
 ---- End ----
----- -------- MemContents Entry LookaHead -------- ----
-	 NUMB  CHILD  NEXT  Line:15  Col:4
-    30     25     40  +- 'CODE-BLOCK'
-    25     -1     26  |  +- 'NUMBER'$00AA
-    26     -1     27  |  +- 'NUMBER'$00BB
-    27     -1     28  |  +- 'NUMBER'$00CE
-    28     -1     29  |  +- 'NUMBER'$00A1
-    29     -1     -1  |  +- 'NUMBER'$00C0
-    40     33     48  +- 'IFF'
-    33     32     38  |  +- 'EQU-TO'
-    32     -1     31  |  |  +- 'NUMBER'$0000
-    31     -1     -1  |  |  +- '.A'
-    38     34     39  |  +- 'THEN'
-    34     36     -1  |  |  +- 'STATEMENTS'
-    36     37     -1  |  |     +- '=ADD'
-    37     -1     35  |  |        +- 'NUMBER'$0002
-    35     -1     -1  |  |        +- 'IDENT': jj
-    39     -1     -1  |  +- 'FFI'
-    48     41     50  +- 'IFF'
-    41     -1     46  |  +- '.N'
-    46     42     47  |  +- 'THEN'
-    42     44     -1  |  |  +- 'STATEMENTS'
-    44     45     -1  |  |     +- 'Assign ='
-    45     -1     43  |  |        +- 'NUMBER'$0005
-    43     -1     -1  |  |        +- 'IDENT': kk
-    47     -1     -1  |  +- 'FFI'
-    50     53     54  +- 'Assign ='
-    53     52     49  |  +- 'MUL'
-    52     -1     51  |  |  +- 'IDENT': d
-    51     -1     -1  |  |  +- 'IDENT': c
-    49     -1     -1  |  +- 'IDENT': a
-    54     -1     -1  +- 'RTI'
+---- -------- ADD Entry After Shift LHnext -------- ----
+	 NUMB  CHILD  NEXT  Line:34  Col:16
+    58     -1     -1  +- 'IDENT': xx
 ---- End ----
----- -------- Factor Entry LookaHead -------- ----
-	 NUMB  CHILD  NEXT  Line:15  Col:4
-    30     25     40  +- 'CODE-BLOCK'
-    25     -1     26  |  +- 'NUMBER'$00AA
-    26     -1     27  |  +- 'NUMBER'$00BB
-    27     -1     28  |  +- 'NUMBER'$00CE
-    28     -1     29  |  +- 'NUMBER'$00A1
-    29     -1     -1  |  +- 'NUMBER'$00C0
-    40     33     48  +- 'IFF'
-    33     32     38  |  +- 'EQU-TO'
-    32     -1     31  |  |  +- 'NUMBER'$0000
-    31     -1     -1  |  |  +- '.A'
-    38     34     39  |  +- 'THEN'
-    34     36     -1  |  |  +- 'STATEMENTS'
-    36     37     -1  |  |     +- '=ADD'
-    37     -1     35  |  |        +- 'NUMBER'$0002
-    35     -1     -1  |  |        +- 'IDENT': jj
-    39     -1     -1  |  +- 'FFI'
-    48     41     50  +- 'IFF'
-    41     -1     46  |  +- '.N'
-    46     42     47  |  +- 'THEN'
-    42     44     -1  |  |  +- 'STATEMENTS'
-    44     45     -1  |  |     +- 'Assign ='
-    45     -1     43  |  |        +- 'NUMBER'$0005
-    43     -1     -1  |  |        +- 'IDENT': kk
-    47     -1     -1  |  +- 'FFI'
-    50     53     54  +- 'Assign ='
-    53     52     49  |  +- 'MUL'
-    52     -1     51  |  |  +- 'IDENT': d
-    51     -1     -1  |  |  +- 'IDENT': c
-    49     -1     -1  |  +- 'IDENT': a
-    54     -1     -1  +- 'RTI'
+MemContents Perculatge LookaHead <NODE is NULL>
 ---- End ----
----- -------- Factor Exit LookaHead -------- ----
-	 NUMB  CHILD  NEXT  Line:15  Col:4
-    30     25     40  +- 'CODE-BLOCK'
-    25     -1     26  |  +- 'NUMBER'$00AA
-    26     -1     27  |  +- 'NUMBER'$00BB
-    27     -1     28  |  +- 'NUMBER'$00CE
-    28     -1     29  |  +- 'NUMBER'$00A1
-    29     -1     -1  |  +- 'NUMBER'$00C0
-    40     33     48  +- 'IFF'
-    33     32     38  |  +- 'EQU-TO'
-    32     -1     31  |  |  +- 'NUMBER'$0000
-    31     -1     -1  |  |  +- '.A'
-    38     34     39  |  +- 'THEN'
-    34     36     -1  |  |  +- 'STATEMENTS'
-    36     37     -1  |  |     +- '=ADD'
-    37     -1     35  |  |        +- 'NUMBER'$0002
-    35     -1     -1  |  |        +- 'IDENT': jj
-    39     -1     -1  |  +- 'FFI'
-    48     41     50  +- 'IFF'
-    41     -1     46  |  +- '.N'
-    46     42     47  |  +- 'THEN'
-    42     44     -1  |  |  +- 'STATEMENTS'
-    44     45     -1  |  |     +- 'Assign ='
-    45     -1     43  |  |        +- 'NUMBER'$0005
-    43     -1     -1  |  |        +- 'IDENT': kk
-    47     -1     -1  |  +- 'FFI'
-    50     53     54  +- 'Assign ='
-    53     52     49  |  +- 'MUL'
-    52     -1     51  |  |  +- 'IDENT': d
-    51     -1     -1  |  |  +- 'IDENT': c
-    49     -1     -1  |  +- 'IDENT': a
-    54     -1     -1  +- 'RTI'
+MemContents Perculatge LookaHead <NODE is NULL>
+---- End ----
+VALUE Entry After MemContents LHnext <NODE is NULL>
+---- End ----
+ADD Entry After Shift LHnext <NODE is NULL>
 ---- End ----
 ---- -------- MemContents Perculatge LookaHead -------- ----
-	 NUMB  CHILD  NEXT  Line:15  Col:4
-    30     25     40  +- 'CODE-BLOCK'
-    25     -1     26  |  +- 'NUMBER'$00AA
-    26     -1     27  |  +- 'NUMBER'$00BB
-    27     -1     28  |  +- 'NUMBER'$00CE
-    28     -1     29  |  +- 'NUMBER'$00A1
-    29     -1     -1  |  +- 'NUMBER'$00C0
-    40     33     48  +- 'IFF'
-    33     32     38  |  +- 'EQU-TO'
-    32     -1     31  |  |  +- 'NUMBER'$0000
-    31     -1     -1  |  |  +- '.A'
-    38     34     39  |  +- 'THEN'
-    34     36     -1  |  |  +- 'STATEMENTS'
-    36     37     -1  |  |     +- '=ADD'
-    37     -1     35  |  |        +- 'NUMBER'$0002
-    35     -1     -1  |  |        +- 'IDENT': jj
-    39     -1     -1  |  +- 'FFI'
-    48     41     50  +- 'IFF'
-    41     -1     46  |  +- '.N'
-    46     42     47  |  +- 'THEN'
-    42     44     -1  |  |  +- 'STATEMENTS'
-    44     45     -1  |  |     +- 'Assign ='
-    45     -1     43  |  |        +- 'NUMBER'$0005
-    43     -1     -1  |  |        +- 'IDENT': kk
-    47     -1     -1  |  +- 'FFI'
-    50     53     54  +- 'Assign ='
-    53     52     49  |  +- 'MUL'
-    52     -1     51  |  |  +- 'IDENT': d
-    51     -1     -1  |  |  +- 'IDENT': c
-    49     -1     -1  |  +- 'IDENT': a
-    54     -1     -1  +- 'RTI'
+	 NUMB  CHILD  NEXT  Line:36  Col:6
+    62     61     -1  +- 'PUSH'
+    61     -1     -1     +- '.A'
 ---- End ----
----- -------- MemContents Exit LHNext -------- ----
-	 NUMB  CHILD  NEXT  Line:15  Col:4
-    30     25     40  +- 'CODE-BLOCK'
-    25     -1     26  |  +- 'NUMBER'$00AA
-    26     -1     27  |  +- 'NUMBER'$00BB
-    27     -1     28  |  +- 'NUMBER'$00CE
-    28     -1     29  |  +- 'NUMBER'$00A1
-    29     -1     -1  |  +- 'NUMBER'$00C0
-    40     33     48  +- 'IFF'
-    33     32     38  |  +- 'EQU-TO'
-    32     -1     31  |  |  +- 'NUMBER'$0000
-    31     -1     -1  |  |  +- '.A'
-    38     34     39  |  +- 'THEN'
-    34     36     -1  |  |  +- 'STATEMENTS'
-    36     37     -1  |  |     +- '=ADD'
-    37     -1     35  |  |        +- 'NUMBER'$0002
-    35     -1     -1  |  |        +- 'IDENT': jj
-    39     -1     -1  |  +- 'FFI'
-    48     41     50  +- 'IFF'
-    41     -1     46  |  +- '.N'
-    46     42     47  |  +- 'THEN'
-    42     44     -1  |  |  +- 'STATEMENTS'
-    44     45     -1  |  |     +- 'Assign ='
-    45     -1     43  |  |        +- 'NUMBER'$0005
-    43     -1     -1  |  |        +- 'IDENT': kk
-    47     -1     -1  |  +- 'FFI'
-    50     53     54  +- 'Assign ='
-    53     52     49  |  +- 'MUL'
-    52     -1     51  |  |  +- 'IDENT': d
-    51     -1     -1  |  |  +- 'IDENT': c
-    49     -1     -1  |  +- 'IDENT': a
-    54     -1     -1  +- 'RTI'
+MemContents Perculatge LookaHead <NODE is NULL>
 ---- End ----
----- ------- Recursions : 1 - IfStmt Perculatge LookaHead -------- ----
-	 NUMB  CHILD  NEXT  Line:15  Col:4
-    30     25     40  +- 'CODE-BLOCK'
-    25     -1     26  |  +- 'NUMBER'$00AA
-    26     -1     27  |  +- 'NUMBER'$00BB
-    27     -1     28  |  +- 'NUMBER'$00CE
-    28     -1     29  |  +- 'NUMBER'$00A1
-    29     -1     -1  |  +- 'NUMBER'$00C0
-    40     33     48  +- 'IFF'
-    33     32     38  |  +- 'EQU-TO'
-    32     -1     31  |  |  +- 'NUMBER'$0000
-    31     -1     -1  |  |  +- '.A'
-    38     34     39  |  +- 'THEN'
-    34     36     -1  |  |  +- 'STATEMENTS'
-    36     37     -1  |  |     +- '=ADD'
-    37     -1     35  |  |        +- 'NUMBER'$0002
-    35     -1     -1  |  |        +- 'IDENT': jj
-    39     -1     -1  |  +- 'FFI'
-    48     41     50  +- 'IFF'
-    41     -1     46  |  +- '.N'
-    46     42     47  |  +- 'THEN'
-    42     44     -1  |  |  +- 'STATEMENTS'
-    44     45     -1  |  |     +- 'Assign ='
-    45     -1     43  |  |        +- 'NUMBER'$0005
-    43     -1     -1  |  |        +- 'IDENT': kk
-    47     -1     -1  |  +- 'FFI'
-    50     53     54  +- 'Assign ='
-    53     52     49  |  +- 'MUL'
-    52     -1     51  |  |  +- 'IDENT': d
-    51     -1     -1  |  |  +- 'IDENT': c
-    49     -1     -1  |  +- 'IDENT': a
-    54     -1     -1  +- 'RTI'
+---- -------- MemContents Perculatge LookaHead -------- ----
+	 NUMB  CHILD  NEXT  Line:36  Col:6
+    62     61     64  +- 'PUSH'
+    61     -1     -1  |  +- '.A'
+    64     63     -1  +- 'POP'
+    63     -1     -1     +- '.Y'
 ---- End ----
----- ------- Recursions : 0 - Assign On Exit LHNext -------- ----
-	 NUMB  CHILD  NEXT  Line:15  Col:4
-    30     25     40  +- 'CODE-BLOCK'
-    25     -1     26  |  +- 'NUMBER'$00AA
-    26     -1     27  |  +- 'NUMBER'$00BB
-    27     -1     28  |  +- 'NUMBER'$00CE
-    28     -1     29  |  +- 'NUMBER'$00A1
-    29     -1     -1  |  +- 'NUMBER'$00C0
-    40     33     48  +- 'IFF'
-    33     32     38  |  +- 'EQU-TO'
-    32     -1     31  |  |  +- 'NUMBER'$0000
-    31     -1     -1  |  |  +- '.A'
-    38     34     39  |  +- 'THEN'
-    34     36     -1  |  |  +- 'STATEMENTS'
-    36     37     -1  |  |     +- '=ADD'
-    37     -1     35  |  |        +- 'NUMBER'$0002
-    35     -1     -1  |  |        +- 'IDENT': jj
-    39     -1     -1  |  +- 'FFI'
-    48     41     50  +- 'IFF'
-    41     -1     46  |  +- '.N'
-    46     42     47  |  +- 'THEN'
-    42     44     -1  |  |  +- 'STATEMENTS'
-    44     45     -1  |  |     +- 'Assign ='
-    45     -1     43  |  |        +- 'NUMBER'$0005
-    43     -1     -1  |  |        +- 'IDENT': kk
-    47     -1     -1  |  +- 'FFI'
-    50     53     54  +- 'Assign ='
-    53     52     49  |  +- 'MUL'
-    52     -1     51  |  |  +- 'IDENT': d
-    51     -1     -1  |  |  +- 'IDENT': c
-    49     -1     -1  |  +- 'IDENT': a
-    54     -1     -1  +- 'RTI'
+---- -------- MemContents Perculatge LookaHead -------- ----
+	 NUMB  CHILD  NEXT  Line:38  Col:7
+    67     59     -1  +- 'IF'
+    59     58     65     +- 'EQU-TO'
+    58     -1     57     |  +- 'IDENT': xx
+    57     -1     -1     |  +- 'IDENT': c
+    65     60     66     +- 'THEN'
+    60     62     -1     |  +- 'STATEMENTS'
+    62     61     64     |     +- 'PUSH'
+    61     -1     -1     |     |  +- '.A'
+    64     63     -1     |     +- 'POP'
+    63     -1     -1     |        +- '.Y'
+    66     -1     -1     +- 'FI'
 ---- End ----
----- -------- RTI Perculatge LookaHead -------- ----
-	 NUMB  CHILD  NEXT  Line:15  Col:4
-    30     25     40  +- 'CODE-BLOCK'
-    25     -1     26  |  +- 'NUMBER'$00AA
-    26     -1     27  |  +- 'NUMBER'$00BB
-    27     -1     28  |  +- 'NUMBER'$00CE
-    28     -1     29  |  +- 'NUMBER'$00A1
-    29     -1     -1  |  +- 'NUMBER'$00C0
-    40     33     48  +- 'IFF'
-    33     32     38  |  +- 'EQU-TO'
-    32     -1     31  |  |  +- 'NUMBER'$0000
-    31     -1     -1  |  |  +- '.A'
-    38     34     39  |  +- 'THEN'
-    34     36     -1  |  |  +- 'STATEMENTS'
-    36     37     -1  |  |     +- '=ADD'
-    37     -1     35  |  |        +- 'NUMBER'$0002
-    35     -1     -1  |  |        +- 'IDENT': jj
-    39     -1     -1  |  +- 'FFI'
-    48     41     50  +- 'IFF'
-    41     -1     46  |  +- '.N'
-    46     42     47  |  +- 'THEN'
-    42     44     -1  |  |  +- 'STATEMENTS'
-    44     45     -1  |  |     +- 'Assign ='
-    45     -1     43  |  |        +- 'NUMBER'$0005
-    43     -1     -1  |  |        +- 'IDENT': kk
-    47     -1     -1  |  +- 'FFI'
-    50     53     54  +- 'Assign ='
-    53     52     49  |  +- 'MUL'
-    52     -1     51  |  |  +- 'IDENT': d
-    51     -1     -1  |  |  +- 'IDENT': c
-    49     -1     -1  |  +- 'IDENT': a
-    54     -1     -1  +- 'RTI'
+MemContents Perculatge LookaHead <NODE is NULL>
 ---- End ----
----- -------- BREAK Perculatge LookaHead -------- ----
-	 NUMB  CHILD  NEXT  Line:15  Col:4
-    30     25     40  +- 'CODE-BLOCK'
-    25     -1     26  |  +- 'NUMBER'$00AA
-    26     -1     27  |  +- 'NUMBER'$00BB
-    27     -1     28  |  +- 'NUMBER'$00CE
-    28     -1     29  |  +- 'NUMBER'$00A1
-    29     -1     -1  |  +- 'NUMBER'$00C0
-    40     33     48  +- 'IFF'
-    33     32     38  |  +- 'EQU-TO'
-    32     -1     31  |  |  +- 'NUMBER'$0000
-    31     -1     -1  |  |  +- '.A'
-    38     34     39  |  +- 'THEN'
-    34     36     -1  |  |  +- 'STATEMENTS'
-    36     37     -1  |  |     +- '=ADD'
-    37     -1     35  |  |        +- 'NUMBER'$0002
-    35     -1     -1  |  |        +- 'IDENT': jj
-    39     -1     -1  |  +- 'FFI'
-    48     41     50  +- 'IFF'
-    41     -1     46  |  +- '.N'
-    46     42     47  |  +- 'THEN'
-    42     44     -1  |  |  +- 'STATEMENTS'
-    44     45     -1  |  |     +- 'Assign ='
-    45     -1     43  |  |        +- 'NUMBER'$0005
-    43     -1     -1  |  |        +- 'IDENT': kk
-    47     -1     -1  |  +- 'FFI'
-    50     53     54  +- 'Assign ='
-    53     52     49  |  +- 'MUL'
-    52     -1     51  |  |  +- 'IDENT': d
-    51     -1     -1  |  |  +- 'IDENT': c
-    49     -1     -1  |  +- 'IDENT': a
-    54     -1     -1  +- 'RTI'
+---- -------- VALUE Entry After MemContents LHnext -------- ----
+	 NUMB  CHILD  NEXT  Line:38  Col:12
+    68     -1     -1  +- 'IDENT': jj
 ---- End ----
----- -------- POP Perculatge LookaHead -------- ----
-	 NUMB  CHILD  NEXT  Line:15  Col:4
-    30     25     40  +- 'CODE-BLOCK'
-    25     -1     26  |  +- 'NUMBER'$00AA
-    26     -1     27  |  +- 'NUMBER'$00BB
-    27     -1     28  |  +- 'NUMBER'$00CE
-    28     -1     29  |  +- 'NUMBER'$00A1
-    29     -1     -1  |  +- 'NUMBER'$00C0
-    40     33     48  +- 'IFF'
-    33     32     38  |  +- 'EQU-TO'
-    32     -1     31  |  |  +- 'NUMBER'$0000
-    31     -1     -1  |  |  +- '.A'
-    38     34     39  |  +- 'THEN'
-    34     36     -1  |  |  +- 'STATEMENTS'
-    36     37     -1  |  |     +- '=ADD'
-    37     -1     35  |  |        +- 'NUMBER'$0002
-    35     -1     -1  |  |        +- 'IDENT': jj
-    39     -1     -1  |  +- 'FFI'
-    48     41     50  +- 'IFF'
-    41     -1     46  |  +- '.N'
-    46     42     47  |  +- 'THEN'
-    42     44     -1  |  |  +- 'STATEMENTS'
-    44     45     -1  |  |     +- 'Assign ='
-    45     -1     43  |  |        +- 'NUMBER'$0005
-    43     -1     -1  |  |        +- 'IDENT': kk
-    47     -1     -1  |  +- 'FFI'
-    50     53     54  +- 'Assign ='
-    53     52     49  |  +- 'MUL'
-    52     -1     51  |  |  +- 'IDENT': d
-    51     -1     -1  |  |  +- 'IDENT': c
-    49     -1     -1  |  +- 'IDENT': a
-    54     -1     -1  +- 'RTI'
+---- -------- ADD Entry After Shift LHnext -------- ----
+	 NUMB  CHILD  NEXT  Line:38  Col:12
+    68     -1     -1  +- 'IDENT': jj
 ---- End ----
----- -------- PUSH Perculatge LookaHead -------- ----
-	 NUMB  CHILD  NEXT  Line:15  Col:4
-    30     25     40  +- 'CODE-BLOCK'
-    25     -1     26  |  +- 'NUMBER'$00AA
-    26     -1     27  |  +- 'NUMBER'$00BB
-    27     -1     28  |  +- 'NUMBER'$00CE
-    28     -1     29  |  +- 'NUMBER'$00A1
-    29     -1     -1  |  +- 'NUMBER'$00C0
-    40     33     48  +- 'IFF'
-    33     32     38  |  +- 'EQU-TO'
-    32     -1     31  |  |  +- 'NUMBER'$0000
-    31     -1     -1  |  |  +- '.A'
-    38     34     39  |  +- 'THEN'
-    34     36     -1  |  |  +- 'STATEMENTS'
-    36     37     -1  |  |     +- '=ADD'
-    37     -1     35  |  |        +- 'NUMBER'$0002
-    35     -1     -1  |  |        +- 'IDENT': jj
-    39     -1     -1  |  +- 'FFI'
-    48     41     50  +- 'IFF'
-    41     -1     46  |  +- '.N'
-    46     42     47  |  +- 'THEN'
-    42     44     -1  |  |  +- 'STATEMENTS'
-    44     45     -1  |  |     +- 'Assign ='
-    45     -1     43  |  |        +- 'NUMBER'$0005
-    43     -1     -1  |  |        +- 'IDENT': kk
-    47     -1     -1  |  +- 'FFI'
-    50     53     54  +- 'Assign ='
-    53     52     49  |  +- 'MUL'
-    52     -1     51  |  |  +- 'IDENT': d
-    51     -1     -1  |  |  +- 'IDENT': c
-    49     -1     -1  |  +- 'IDENT': a
-    54     -1     -1  +- 'RTI'
+MemContents Perculatge LookaHead <NODE is NULL>
 ---- End ----
----- -------- UNTIL Perculatge LookaHead -------- ----
-	 NUMB  CHILD  NEXT  Line:15  Col:4
-    30     25     40  +- 'CODE-BLOCK'
-    25     -1     26  |  +- 'NUMBER'$00AA
-    26     -1     27  |  +- 'NUMBER'$00BB
-    27     -1     28  |  +- 'NUMBER'$00CE
-    28     -1     29  |  +- 'NUMBER'$00A1
-    29     -1     -1  |  +- 'NUMBER'$00C0
-    40     33     48  +- 'IFF'
-    33     32     38  |  +- 'EQU-TO'
-    32     -1     31  |  |  +- 'NUMBER'$0000
-    31     -1     -1  |  |  +- '.A'
-    38     34     39  |  +- 'THEN'
-    34     36     -1  |  |  +- 'STATEMENTS'
-    36     37     -1  |  |     +- '=ADD'
-    37     -1     35  |  |        +- 'NUMBER'$0002
-    35     -1     -1  |  |        +- 'IDENT': jj
-    39     -1     -1  |  +- 'FFI'
-    48     41     50  +- 'IFF'
-    41     -1     46  |  +- '.N'
-    46     42     47  |  +- 'THEN'
-    42     44     -1  |  |  +- 'STATEMENTS'
-    44     45     -1  |  |     +- 'Assign ='
-    45     -1     43  |  |        +- 'NUMBER'$0005
-    43     -1     -1  |  |        +- 'IDENT': kk
-    47     -1     -1  |  +- 'FFI'
-    50     53     54  +- 'Assign ='
-    53     52     49  |  +- 'MUL'
-    52     -1     51  |  |  +- 'IDENT': d
-    51     -1     -1  |  |  +- 'IDENT': c
-    49     -1     -1  |  +- 'IDENT': a
-    54     -1     -1  +- 'RTI'
+---- -------- VALUE Entry After MemContents LHnext -------- ----
+	 NUMB  CHILD  NEXT  Line:39  Col:6
+    69     -1     -1  +- 'IDENT': gg
 ---- End ----
----- -------- CodeBlock Perculatge LookaHead -------- ----
-	 NUMB  CHILD  NEXT  Line:15  Col:4
-    30     25     40  +- 'CODE-BLOCK'
-    25     -1     26  |  +- 'NUMBER'$00AA
-    26     -1     27  |  +- 'NUMBER'$00BB
-    27     -1     28  |  +- 'NUMBER'$00CE
-    28     -1     29  |  +- 'NUMBER'$00A1
-    29     -1     -1  |  +- 'NUMBER'$00C0
-    40     33     48  +- 'IFF'
-    33     32     38  |  +- 'EQU-TO'
-    32     -1     31  |  |  +- 'NUMBER'$0000
-    31     -1     -1  |  |  +- '.A'
-    38     34     39  |  +- 'THEN'
-    34     36     -1  |  |  +- 'STATEMENTS'
-    36     37     -1  |  |     +- '=ADD'
-    37     -1     35  |  |        +- 'NUMBER'$0002
-    35     -1     -1  |  |        +- 'IDENT': jj
-    39     -1     -1  |  +- 'FFI'
-    48     41     50  +- 'IFF'
-    41     -1     46  |  +- '.N'
-    46     42     47  |  +- 'THEN'
-    42     44     -1  |  |  +- 'STATEMENTS'
-    44     45     -1  |  |     +- 'Assign ='
-    45     -1     43  |  |        +- 'NUMBER'$0005
-    43     -1     -1  |  |        +- 'IDENT': kk
-    47     -1     -1  |  +- 'FFI'
-    50     53     54  +- 'Assign ='
-    53     52     49  |  +- 'MUL'
-    52     -1     51  |  |  +- 'IDENT': d
-    51     -1     -1  |  |  +- 'IDENT': c
-    49     -1     -1  |  +- 'IDENT': a
-    54     -1     -1  +- 'RTI'
+---- -------- ADD Entry After Shift LHnext -------- ----
+	 NUMB  CHILD  NEXT  Line:39  Col:6
+    69     -1     -1  +- 'IDENT': gg
 ---- End ----
----- -------- ASM Perculatge LookaHead -------- ----
-	 NUMB  CHILD  NEXT  Line:15  Col:4
-    30     25     40  +- 'CODE-BLOCK'
-    25     -1     26  |  +- 'NUMBER'$00AA
-    26     -1     27  |  +- 'NUMBER'$00BB
-    27     -1     28  |  +- 'NUMBER'$00CE
-    28     -1     29  |  +- 'NUMBER'$00A1
-    29     -1     -1  |  +- 'NUMBER'$00C0
-    40     33     48  +- 'IFF'
-    33     32     38  |  +- 'EQU-TO'
-    32     -1     31  |  |  +- 'NUMBER'$0000
-    31     -1     -1  |  |  +- '.A'
-    38     34     39  |  +- 'THEN'
-    34     36     -1  |  |  +- 'STATEMENTS'
-    36     37     -1  |  |     +- '=ADD'
-    37     -1     35  |  |        +- 'NUMBER'$0002
-    35     -1     -1  |  |        +- 'IDENT': jj
-    39     -1     -1  |  +- 'FFI'
-    48     41     50  +- 'IFF'
-    41     -1     46  |  +- '.N'
-    46     42     47  |  +- 'THEN'
-    42     44     -1  |  |  +- 'STATEMENTS'
-    44     45     -1  |  |     +- 'Assign ='
-    45     -1     43  |  |        +- 'NUMBER'$0005
-    43     -1     -1  |  |        +- 'IDENT': kk
-    47     -1     -1  |  +- 'FFI'
-    50     53     54  +- 'Assign ='
-    53     52     49  |  +- 'MUL'
-    52     -1     51  |  |  +- 'IDENT': d
-    51     -1     -1  |  |  +- 'IDENT': c
-    49     -1     -1  |  +- 'IDENT': a
-    54     -1     -1  +- 'RTI'
+---- -------- MemContents Perculatge LookaHead -------- ----
+	 NUMB  CHILD  NEXT  Line:38  Col:7
+    67     59     71  +- 'IF'
+    59     58     65  |  +- 'EQU-TO'
+    58     -1     57  |  |  +- 'IDENT': xx
+    57     -1     -1  |  |  +- 'IDENT': c
+    65     60     66  |  +- 'THEN'
+    60     62     -1  |  |  +- 'STATEMENTS'
+    62     61     64  |  |     +- 'PUSH'
+    61     -1     -1  |  |     |  +- '.A'
+    64     63     -1  |  |     +- 'POP'
+    63     -1     -1  |  |        +- '.Y'
+    66     -1     -1  |  +- 'FI'
+    71     70     -1  +- 'UNTILL'
+    70     69     -1     +- 'NEQ'
+    69     -1     68        +- 'IDENT': gg
+    68     -1     -1        +- 'IDENT': jj
 ---- End ----
----- -------- RETURN Perculatge LookaHead -------- ----
-	 NUMB  CHILD  NEXT  Line:15  Col:4
-    30     25     40  +- 'CODE-BLOCK'
-    25     -1     26  |  +- 'NUMBER'$00AA
-    26     -1     27  |  +- 'NUMBER'$00BB
-    27     -1     28  |  +- 'NUMBER'$00CE
-    28     -1     29  |  +- 'NUMBER'$00A1
-    29     -1     -1  |  +- 'NUMBER'$00C0
-    40     33     48  +- 'IFF'
-    33     32     38  |  +- 'EQU-TO'
-    32     -1     31  |  |  +- 'NUMBER'$0000
-    31     -1     -1  |  |  +- '.A'
-    38     34     39  |  +- 'THEN'
-    34     36     -1  |  |  +- 'STATEMENTS'
-    36     37     -1  |  |     +- '=ADD'
-    37     -1     35  |  |        +- 'NUMBER'$0002
-    35     -1     -1  |  |        +- 'IDENT': jj
-    39     -1     -1  |  +- 'FFI'
-    48     41     50  +- 'IFF'
-    41     -1     46  |  +- '.N'
-    46     42     47  |  +- 'THEN'
-    42     44     -1  |  |  +- 'STATEMENTS'
-    44     45     -1  |  |     +- 'Assign ='
-    45     -1     43  |  |        +- 'NUMBER'$0005
-    43     -1     -1  |  |        +- 'IDENT': kk
-    47     -1     -1  |  +- 'FFI'
-    50     53     54  +- 'Assign ='
-    53     52     49  |  +- 'MUL'
-    52     -1     51  |  |  +- 'IDENT': d
-    51     -1     -1  |  |  +- 'IDENT': c
-    49     -1     -1  |  +- 'IDENT': a
-    54     -1     -1  +- 'RTI'
+MemContents Perculatge LookaHead <NODE is NULL>
 ---- End ----
----- -------- EXIT Perculatge LookaHead -------- ----
-	 NUMB  CHILD  NEXT  Line:15  Col:4
-    30     25     40  +- 'CODE-BLOCK'
-    25     -1     26  |  +- 'NUMBER'$00AA
-    26     -1     27  |  +- 'NUMBER'$00BB
-    27     -1     28  |  +- 'NUMBER'$00CE
-    28     -1     29  |  +- 'NUMBER'$00A1
-    29     -1     -1  |  +- 'NUMBER'$00C0
-    40     33     48  +- 'IFF'
-    33     32     38  |  +- 'EQU-TO'
-    32     -1     31  |  |  +- 'NUMBER'$0000
-    31     -1     -1  |  |  +- '.A'
-    38     34     39  |  +- 'THEN'
-    34     36     -1  |  |  +- 'STATEMENTS'
-    36     37     -1  |  |     +- '=ADD'
-    37     -1     35  |  |        +- 'NUMBER'$0002
-    35     -1     -1  |  |        +- 'IDENT': jj
-    39     -1     -1  |  +- 'FFI'
-    48     41     50  +- 'IFF'
-    41     -1     46  |  +- '.N'
-    46     42     47  |  +- 'THEN'
-    42     44     -1  |  |  +- 'STATEMENTS'
-    44     45     -1  |  |     +- 'Assign ='
-    45     -1     43  |  |        +- 'NUMBER'$0005
-    43     -1     -1  |  |        +- 'IDENT': kk
-    47     -1     -1  |  +- 'FFI'
-    50     53     54  +- 'Assign ='
-    53     52     49  |  +- 'MUL'
-    52     -1     51  |  |  +- 'IDENT': d
-    51     -1     -1  |  |  +- 'IDENT': c
-    49     -1     -1  |  +- 'IDENT': a
-    54     -1     -1  +- 'RTI'
+VALUE Entry After MemContents LHnext <NODE is NULL>
 ---- End ----
----- -------- DOstmt Perculatge LookaHead -------- ----
-	 NUMB  CHILD  NEXT  Line:15  Col:4
-    30     25     40  +- 'CODE-BLOCK'
-    25     -1     26  |  +- 'NUMBER'$00AA
-    26     -1     27  |  +- 'NUMBER'$00BB
-    27     -1     28  |  +- 'NUMBER'$00CE
-    28     -1     29  |  +- 'NUMBER'$00A1
-    29     -1     -1  |  +- 'NUMBER'$00C0
-    40     33     48  +- 'IFF'
-    33     32     38  |  +- 'EQU-TO'
-    32     -1     31  |  |  +- 'NUMBER'$0000
-    31     -1     -1  |  |  +- '.A'
-    38     34     39  |  +- 'THEN'
-    34     36     -1  |  |  +- 'STATEMENTS'
-    36     37     -1  |  |     +- '=ADD'
-    37     -1     35  |  |        +- 'NUMBER'$0002
-    35     -1     -1  |  |        +- 'IDENT': jj
-    39     -1     -1  |  +- 'FFI'
-    48     41     50  +- 'IFF'
-    41     -1     46  |  +- '.N'
-    46     42     47  |  +- 'THEN'
-    42     44     -1  |  |  +- 'STATEMENTS'
-    44     45     -1  |  |     +- 'Assign ='
-    45     -1     43  |  |        +- 'NUMBER'$0005
-    43     -1     -1  |  |        +- 'IDENT': kk
-    47     -1     -1  |  +- 'FFI'
-    50     53     54  +- 'Assign ='
-    53     52     49  |  +- 'MUL'
-    52     -1     51  |  |  +- 'IDENT': d
-    51     -1     -1  |  |  +- 'IDENT': c
-    49     -1     -1  |  +- 'IDENT': a
-    54     -1     -1  +- 'RTI'
+ADD Entry After Shift LHnext <NODE is NULL>
 ---- End ----
----- -------- WHILE Perculatge LookaHead -------- ----
-	 NUMB  CHILD  NEXT  Line:15  Col:4
-    30     25     40  +- 'CODE-BLOCK'
-    25     -1     26  |  +- 'NUMBER'$00AA
-    26     -1     27  |  +- 'NUMBER'$00BB
-    27     -1     28  |  +- 'NUMBER'$00CE
-    28     -1     29  |  +- 'NUMBER'$00A1
-    29     -1     -1  |  +- 'NUMBER'$00C0
-    40     33     48  +- 'IFF'
-    33     32     38  |  +- 'EQU-TO'
-    32     -1     31  |  |  +- 'NUMBER'$0000
-    31     -1     -1  |  |  +- '.A'
-    38     34     39  |  +- 'THEN'
-    34     36     -1  |  |  +- 'STATEMENTS'
-    36     37     -1  |  |     +- '=ADD'
-    37     -1     35  |  |        +- 'NUMBER'$0002
-    35     -1     -1  |  |        +- 'IDENT': jj
-    39     -1     -1  |  +- 'FFI'
-    48     41     50  +- 'IFF'
-    41     -1     46  |  +- '.N'
-    46     42     47  |  +- 'THEN'
-    42     44     -1  |  |  +- 'STATEMENTS'
-    44     45     -1  |  |     +- 'Assign ='
-    45     -1     43  |  |        +- 'NUMBER'$0005
-    43     -1     -1  |  |        +- 'IDENT': kk
-    47     -1     -1  |  +- 'FFI'
-    50     53     54  +- 'Assign ='
-    53     52     49  |  +- 'MUL'
-    52     -1     51  |  |  +- 'IDENT': d
-    51     -1     -1  |  |  +- 'IDENT': c
-    49     -1     -1  |  +- 'IDENT': a
-    54     -1     -1  +- 'RTI'
+---- -------- MemContents Perculatge LookaHead -------- ----
+	 NUMB  CHILD  NEXT  Line:38  Col:7
+    67     59     71  +- 'IF'
+    59     58     65  |  +- 'EQU-TO'
+    58     -1     57  |  |  +- 'IDENT': xx
+    57     -1     -1  |  |  +- 'IDENT': c
+    65     60     66  |  +- 'THEN'
+    60     62     -1  |  |  +- 'STATEMENTS'
+    62     61     64  |  |     +- 'PUSH'
+    61     -1     -1  |  |     |  +- '.A'
+    64     63     -1  |  |     +- 'POP'
+    63     -1     -1  |  |        +- '.Y'
+    66     -1     -1  |  +- 'FI'
+    71     70     73  +- 'UNTILL'
+    70     69     -1  |  +- 'NEQ'
+    69     -1     68  |     +- 'IDENT': gg
+    68     -1     -1  |     +- 'IDENT': jj
+    73     72     -1  +- 'PUSH'
+    72     -1     -1     +- '.A'
 ---- End ----
----- -------- IfStmt Perculatge LookaHead -------- ----
-	 NUMB  CHILD  NEXT  Line:15  Col:4
-    30     25     40  +- 'CODE-BLOCK'
-    25     -1     26  |  +- 'NUMBER'$00AA
-    26     -1     27  |  +- 'NUMBER'$00BB
-    27     -1     28  |  +- 'NUMBER'$00CE
-    28     -1     29  |  +- 'NUMBER'$00A1
-    29     -1     -1  |  +- 'NUMBER'$00C0
-    40     33     48  +- 'IFF'
-    33     32     38  |  +- 'EQU-TO'
-    32     -1     31  |  |  +- 'NUMBER'$0000
-    31     -1     -1  |  |  +- '.A'
-    38     34     39  |  +- 'THEN'
-    34     36     -1  |  |  +- 'STATEMENTS'
-    36     37     -1  |  |     +- '=ADD'
-    37     -1     35  |  |        +- 'NUMBER'$0002
-    35     -1     -1  |  |        +- 'IDENT': jj
-    39     -1     -1  |  +- 'FFI'
-    48     41     50  +- 'IFF'
-    41     -1     46  |  +- '.N'
-    46     42     47  |  +- 'THEN'
-    42     44     -1  |  |  +- 'STATEMENTS'
-    44     45     -1  |  |     +- 'Assign ='
-    45     -1     43  |  |        +- 'NUMBER'$0005
-    43     -1     -1  |  |        +- 'IDENT': kk
-    47     -1     -1  |  +- 'FFI'
-    50     53     54  +- 'Assign ='
-    53     52     49  |  +- 'MUL'
-    52     -1     51  |  |  +- 'IDENT': d
-    51     -1     -1  |  |  +- 'IDENT': c
-    49     -1     -1  |  +- 'IDENT': a
-    54     -1     -1  +- 'RTI'
+---- -------- MemContents Perculatge LookaHead -------- ----
+	 NUMB  CHILD  NEXT  Line:21  Col:2
+    45     40     47  +- 'CODE-BLOCK'
+    40     -1     41  |  +- 'NUMBER'$00AA
+    41     -1     42  |  +- 'NUMBER'$00BB
+    42     -1     43  |  +- 'NUMBER'$00CE
+    43     -1     44  |  +- 'NUMBER'$00A1
+    44     -1     -1  |  +- 'NUMBER'$00C0
+    47     50     52  +- 'Assign ='
+    50     49     46  |  +- 'ADD'
+    49     -1     48  |  |  +- 'IDENT': d
+    48     -1     -1  |  |  +- 'IDENT': c
+    46     -1     -1  |  +- 'IDENT': a
+    52     55     75  +- 'Assign ='
+    55     54     51  |  +- 'MUL'
+    54     -1     53  |  |  +- 'IDENT': d
+    53     -1     -1  |  |  +- 'IDENT': c
+    51     -1     -1  |  +- 'IDENT': e
+    75     56     -1  +- 'DO'
+    56     67     74     +- 'STATEMENTS'
+    67     59     71     |  +- 'IF'
+    59     58     65     |  |  +- 'EQU-TO'
+    58     -1     57     |  |  |  +- 'IDENT': xx
+    57     -1     -1     |  |  |  +- 'IDENT': c
+    65     60     66     |  |  +- 'THEN'
+    60     62     -1     |  |  |  +- 'STATEMENTS'
+    62     61     64     |  |  |     +- 'PUSH'
+    61     -1     -1     |  |  |     |  +- '.A'
+    64     63     -1     |  |  |     +- 'POP'
+    63     -1     -1     |  |  |        +- '.Y'
+    66     -1     -1     |  |  +- 'FI'
+    71     70     73     |  +- 'UNTILL'
+    70     69     -1     |  |  +- 'NEQ'
+    69     -1     68     |  |     +- 'IDENT': gg
+    68     -1     -1     |  |     +- 'IDENT': jj
+    73     72     -1     |  +- 'PUSH'
+    72     -1     -1     |     +- '.A'
+    74     -1     -1     +- 'OD'
 ---- End ----
----- -------- Call Perculatge LookaHead -------- ----
-	 NUMB  CHILD  NEXT  Line:15  Col:4
-    30     25     40  +- 'CODE-BLOCK'
-    25     -1     26  |  +- 'NUMBER'$00AA
-    26     -1     27  |  +- 'NUMBER'$00BB
-    27     -1     28  |  +- 'NUMBER'$00CE
-    28     -1     29  |  +- 'NUMBER'$00A1
-    29     -1     -1  |  +- 'NUMBER'$00C0
-    40     33     48  +- 'IFF'
-    33     32     38  |  +- 'EQU-TO'
-    32     -1     31  |  |  +- 'NUMBER'$0000
-    31     -1     -1  |  |  +- '.A'
-    38     34     39  |  +- 'THEN'
-    34     36     -1  |  |  +- 'STATEMENTS'
-    36     37     -1  |  |     +- '=ADD'
-    37     -1     35  |  |        +- 'NUMBER'$0002
-    35     -1     -1  |  |        +- 'IDENT': jj
-    39     -1     -1  |  +- 'FFI'
-    48     41     50  +- 'IFF'
-    41     -1     46  |  +- '.N'
-    46     42     47  |  +- 'THEN'
-    42     44     -1  |  |  +- 'STATEMENTS'
-    44     45     -1  |  |     +- 'Assign ='
-    45     -1     43  |  |        +- 'NUMBER'$0005
-    43     -1     -1  |  |        +- 'IDENT': kk
-    47     -1     -1  |  +- 'FFI'
-    50     53     54  +- 'Assign ='
-    53     52     49  |  +- 'MUL'
-    52     -1     51  |  |  +- 'IDENT': d
-    51     -1     -1  |  |  +- 'IDENT': c
-    49     -1     -1  |  +- 'IDENT': a
-    54     -1     -1  +- 'RTI'
----- End ----
----- -------- Call Perculatge LookaHead -------- ----
-	 NUMB  CHILD  NEXT  Line:15  Col:4
-    30     25     40  +- 'CODE-BLOCK'
-    25     -1     26  |  +- 'NUMBER'$00AA
-    26     -1     27  |  +- 'NUMBER'$00BB
-    27     -1     28  |  +- 'NUMBER'$00CE
-    28     -1     29  |  +- 'NUMBER'$00A1
-    29     -1     -1  |  +- 'NUMBER'$00C0
-    40     33     48  +- 'IFF'
-    33     32     38  |  +- 'EQU-TO'
-    32     -1     31  |  |  +- 'NUMBER'$0000
-    31     -1     -1  |  |  +- '.A'
-    38     34     39  |  +- 'THEN'
-    34     36     -1  |  |  +- 'STATEMENTS'
-    36     37     -1  |  |     +- '=ADD'
-    37     -1     35  |  |        +- 'NUMBER'$0002
-    35     -1     -1  |  |        +- 'IDENT': jj
-    39     -1     -1  |  +- 'FFI'
-    48     41     50  +- 'IFF'
-    41     -1     46  |  +- '.N'
-    46     42     47  |  +- 'THEN'
-    42     44     -1  |  |  +- 'STATEMENTS'
-    44     45     -1  |  |     +- 'Assign ='
-    45     -1     43  |  |        +- 'NUMBER'$0005
-    43     -1     -1  |  |        +- 'IDENT': kk
-    47     -1     -1  |  +- 'FFI'
-    50     53     54  +- 'Assign ='
-    53     52     49  |  +- 'MUL'
-    52     -1     51  |  |  +- 'IDENT': d
-    51     -1     -1  |  |  +- 'IDENT': c
-    49     -1     -1  |  +- 'IDENT': a
-    54     -1     -1  +- 'RTI'
----- End ----
----- -------- Exit Statements LHNext -------- ----
-	 NUMB  CHILD  NEXT  Line:24  Col:3
-    24     30     -1  +- 'STATEMENTS'
-    30     25     40     +- 'CODE-BLOCK'
-    25     -1     26     |  +- 'NUMBER'$00AA
-    26     -1     27     |  +- 'NUMBER'$00BB
-    27     -1     28     |  +- 'NUMBER'$00CE
-    28     -1     29     |  +- 'NUMBER'$00A1
-    29     -1     -1     |  +- 'NUMBER'$00C0
-    40     33     48     +- 'IFF'
-    33     32     38     |  +- 'EQU-TO'
-    32     -1     31     |  |  +- 'NUMBER'$0000
-    31     -1     -1     |  |  +- '.A'
-    38     34     39     |  +- 'THEN'
-    34     36     -1     |  |  +- 'STATEMENTS'
-    36     37     -1     |  |     +- '=ADD'
-    37     -1     35     |  |        +- 'NUMBER'$0002
-    35     -1     -1     |  |        +- 'IDENT': jj
-    39     -1     -1     |  +- 'FFI'
-    48     41     50     +- 'IFF'
-    41     -1     46     |  +- '.N'
-    46     42     47     |  +- 'THEN'
-    42     44     -1     |  |  +- 'STATEMENTS'
-    44     45     -1     |  |     +- 'Assign ='
-    45     -1     43     |  |        +- 'NUMBER'$0005
-    43     -1     -1     |  |        +- 'IDENT': kk
-    47     -1     -1     |  +- 'FFI'
-    50     53     54     +- 'Assign ='
-    53     52     49     |  +- 'MUL'
-    52     -1     51     |  |  +- 'IDENT': d
-    51     -1     -1     |  |  +- 'IDENT': c
-    49     -1     -1     |  +- 'IDENT': a
-    54     -1     -1     +- 'RTI'
+---- -------- MemContents Perculatge LookaHead -------- ----
+	 NUMB  CHILD  NEXT  Line:21  Col:2
+    45     40     47  +- 'CODE-BLOCK'
+    40     -1     41  |  +- 'NUMBER'$00AA
+    41     -1     42  |  +- 'NUMBER'$00BB
+    42     -1     43  |  +- 'NUMBER'$00CE
+    43     -1     44  |  +- 'NUMBER'$00A1
+    44     -1     -1  |  +- 'NUMBER'$00C0
+    47     50     52  +- 'Assign ='
+    50     49     46  |  +- 'ADD'
+    49     -1     48  |  |  +- 'IDENT': d
+    48     -1     -1  |  |  +- 'IDENT': c
+    46     -1     -1  |  +- 'IDENT': a
+    52     55     75  +- 'Assign ='
+    55     54     51  |  +- 'MUL'
+    54     -1     53  |  |  +- 'IDENT': d
+    53     -1     -1  |  |  +- 'IDENT': c
+    51     -1     -1  |  +- 'IDENT': e
+    75     56     76  +- 'DO'
+    56     67     74  |  +- 'STATEMENTS'
+    67     59     71  |  |  +- 'IF'
+    59     58     65  |  |  |  +- 'EQU-TO'
+    58     -1     57  |  |  |  |  +- 'IDENT': xx
+    57     -1     -1  |  |  |  |  +- 'IDENT': c
+    65     60     66  |  |  |  +- 'THEN'
+    60     62     -1  |  |  |  |  +- 'STATEMENTS'
+    62     61     64  |  |  |  |     +- 'PUSH'
+    61     -1     -1  |  |  |  |     |  +- '.A'
+    64     63     -1  |  |  |  |     +- 'POP'
+    63     -1     -1  |  |  |  |        +- '.Y'
+    66     -1     -1  |  |  |  +- 'FI'
+    71     70     73  |  |  +- 'UNTILL'
+    70     69     -1  |  |  |  +- 'NEQ'
+    69     -1     68  |  |  |     +- 'IDENT': gg
+    68     -1     -1  |  |  |     +- 'IDENT': jj
+    73     72     -1  |  |  +- 'PUSH'
+    72     -1     -1  |  |     +- '.A'
+    74     -1     -1  |  +- 'OD'
+    76     -1     -1  +- 'RTI'
 ---- End ----
 	 NUMB  CHILD  NEXT
-    61      2     -1  +- 'ROOT'
-     2      1      8     +- 'CHAR'
-     1     -1     -1     |  +- 'IDENT': ff
-     8      3     60     +- 'BYTE'
-     3     -1      4     |  +- 'IDENT': gg
-     4     -1      5     |  +- 'IDENT': hh
-     5     -1      6     |  +- 'IDENT': ii
-     6     -1      7     |  +- 'IDENT': jj
-     7     -1     -1     |  +- 'IDENT': kk
-    60     56     -1     +- 'MODULE'
-    56      9     59        +- 'IRQ-PROC'
-     9     10     -1        |  +- 'IDENT': AnInteruption
-    10     -1     55        |     +- 'Param LIST'
-    55     23     -1        |     +- 'Body'
-    23     12     24        |        +- 'LOCAL Vars'
-    12     11     16        |        |  +- 'CHAR'
-    11     -1     -1        |        |  |  +- 'IDENT': a
-    16     13     18        |        |  +- 'INT'
-    13     -1     14        |        |  |  +- 'IDENT': x
-    14     -1     15        |        |  |  +- 'IDENT': xx
-    15     -1     -1        |        |  |  +- 'IDENT': xxx
-    18     17     20        |        |  +- 'INT'
-    17     -1     -1        |        |  |  +- 'IDENT': c
-    20     19     22        |        |  +- 'CHAR'
-    19     -1     -1        |        |  |  +- 'IDENT': d
-    22     21     -1        |        |  +- 'CHAR'
-    21     -1     -1        |        |     +- 'IDENT': e
-    24     30     -1        |        +- 'STATEMENTS'
-    30     25     40        |           +- 'CODE-BLOCK'
-    25     -1     26        |           |  +- 'NUMBER'$00AA
-    26     -1     27        |           |  +- 'NUMBER'$00BB
-    27     -1     28        |           |  +- 'NUMBER'$00CE
-    28     -1     29        |           |  +- 'NUMBER'$00A1
-    29     -1     -1        |           |  +- 'NUMBER'$00C0
-    40     33     48        |           +- 'IFF'
-    33     32     38        |           |  +- 'EQU-TO'
-    32     -1     31        |           |  |  +- 'NUMBER'$0000
-    31     -1     -1        |           |  |  +- '.A'
-    38     34     39        |           |  +- 'THEN'
-    34     36     -1        |           |  |  +- 'STATEMENTS'
-    36     37     -1        |           |  |     +- '=ADD'
-    37     -1     35        |           |  |        +- 'NUMBER'$0002
-    35     -1     -1        |           |  |        +- 'IDENT': jj
-    39     -1     -1        |           |  +- 'FFI'
-    48     41     50        |           +- 'IFF'
-    41     -1     46        |           |  +- '.N'
-    46     42     47        |           |  +- 'THEN'
-    42     44     -1        |           |  |  +- 'STATEMENTS'
-    44     45     -1        |           |  |     +- 'Assign ='
-    45     -1     43        |           |  |        +- 'NUMBER'$0005
-    43     -1     -1        |           |  |        +- 'IDENT': kk
-    47     -1     -1        |           |  +- 'FFI'
-    50     53     54        |           +- 'Assign ='
-    53     52     49        |           |  +- 'MUL'
-    52     -1     51        |           |  |  +- 'IDENT': d
-    51     -1     -1        |           |  |  +- 'IDENT': c
-    49     -1     -1        |           |  +- 'IDENT': a
-    54     -1     -1        |           +- 'RTI'
-    59     57     -1        +- 'INT'
-    57     -1     58           +- 'IDENT': qr
-    58     -1     -1           +- 'IDENT': st
-Lines Compiled:25
+    83      4     -1  +- 'ROOT'
+     4      1      7     +- 'INT'
+     1     -1      2     |  +- 'IDENT': aa
+     2     -1      3     |  +- 'IDENT': bb
+     3     -1     -1     |  +- 'IDENT': cc
+     7      5      9     +- 'CARD'
+     5     -1      6     |  +- 'IDENT': dd
+     6     -1     -1     |  +- 'IDENT': ee
+     9      8     15     +- 'CHAR'
+     8     -1     -1     |  +- 'IDENT': ff
+    15     10     82     +- 'BYTE'
+    10     -1     11     |  +- 'IDENT': gg
+    11     -1     12     |  +- 'IDENT': hh
+    12     -1     13     |  +- 'IDENT': ii
+    13     -1     14     |  +- 'IDENT': jj
+    14     -1     -1     |  +- 'IDENT': kk
+    82     23     -1     +- 'MODULE'
+    23     22     78        +- 'DEFINE'
+    22     21     -1        |  +- 'SECTION'
+    21     20     -1        |     +- 'SECTION Name'
+    20     17     -1        |        +- 'SECTION Attributes'
+    17     16     19        |           +- 'ATRB-START'
+    16     -1     -1        |           |  +- 'NUMBER'$0200
+    19     18     -1        |           +- 'SIZE'
+    18     -1     -1        |              +- 'NUMBER'$0400
+    78     24     81        +- 'IRQ-PROC'
+    24     25     -1        |  +- 'IDENT': AnInteruption
+    25     -1     77        |     +- 'Param LIST'
+    77     38     -1        |     +- 'Body'
+    38     27     39        |        +- 'LOCAL Vars'
+    27     26     31        |        |  +- 'CHAR'
+    26     -1     -1        |        |  |  +- 'IDENT': a
+    31     28     33        |        |  +- 'INT'
+    28     -1     29        |        |  |  +- 'IDENT': x
+    29     -1     30        |        |  |  +- 'IDENT': xx
+    30     -1     -1        |        |  |  +- 'IDENT': xxx
+    33     32     35        |        |  +- 'INT'
+    32     -1     -1        |        |  |  +- 'IDENT': c
+    35     34     37        |        |  +- 'CHAR'
+    34     -1     -1        |        |  |  +- 'IDENT': d
+    37     36     -1        |        |  +- 'CHAR'
+    36     -1     -1        |        |     +- 'IDENT': e
+    39     45     -1        |        +- 'STATEMENTS'
+    45     40     47        |           +- 'CODE-BLOCK'
+    40     -1     41        |           |  +- 'NUMBER'$00AA
+    41     -1     42        |           |  +- 'NUMBER'$00BB
+    42     -1     43        |           |  +- 'NUMBER'$00CE
+    43     -1     44        |           |  +- 'NUMBER'$00A1
+    44     -1     -1        |           |  +- 'NUMBER'$00C0
+    47     50     52        |           +- 'Assign ='
+    50     49     46        |           |  +- 'ADD'
+    49     -1     48        |           |  |  +- 'IDENT': d
+    48     -1     -1        |           |  |  +- 'IDENT': c
+    46     -1     -1        |           |  +- 'IDENT': a
+    52     55     75        |           +- 'Assign ='
+    55     54     51        |           |  +- 'MUL'
+    54     -1     53        |           |  |  +- 'IDENT': d
+    53     -1     -1        |           |  |  +- 'IDENT': c
+    51     -1     -1        |           |  +- 'IDENT': e
+    75     56     76        |           +- 'DO'
+    56     67     74        |           |  +- 'STATEMENTS'
+    67     59     71        |           |  |  +- 'IF'
+    59     58     65        |           |  |  |  +- 'EQU-TO'
+    58     -1     57        |           |  |  |  |  +- 'IDENT': xx
+    57     -1     -1        |           |  |  |  |  +- 'IDENT': c
+    65     60     66        |           |  |  |  +- 'THEN'
+    60     62     -1        |           |  |  |  |  +- 'STATEMENTS'
+    62     61     64        |           |  |  |  |     +- 'PUSH'
+    61     -1     -1        |           |  |  |  |     |  +- '.A'
+    64     63     -1        |           |  |  |  |     +- 'POP'
+    63     -1     -1        |           |  |  |  |        +- '.Y'
+    66     -1     -1        |           |  |  |  +- 'FI'
+    71     70     73        |           |  |  +- 'UNTILL'
+    70     69     -1        |           |  |  |  +- 'NEQ'
+    69     -1     68        |           |  |  |     +- 'IDENT': gg
+    68     -1     -1        |           |  |  |     +- 'IDENT': jj
+    73     72     -1        |           |  |  +- 'PUSH'
+    72     -1     -1        |           |  |     +- '.A'
+    74     -1     -1        |           |  +- 'OD'
+    76     -1     -1        |           +- 'RTI'
+    81     79     -1        +- 'INT'
+    79     -1     80           +- 'IDENT': qr
+    80     -1     -1           +- 'IDENT': st
+Lines Compiled:44
