@@ -19,17 +19,17 @@ INTERRUPT AnInteruption()
 
 	[$AA$BB$CE$A1$C0]
 	a = c + d
-	e = c * d
-//	a ==- c * d
-//	a ==* c * d
-//	a ==/ c * d
-//	a ==MOD c * d
-//	a ==! c * d
-//	a ==& c * d
-//	a ==% c * d
-//	a ==LSH c * d
-//	a ==RSH c * d
-//	a ==+ c * d
+	e =+ c * d
+	a ==- c * d
+	a ==* c * d
+	a ==/ c * d
+	a ==MOD c * d
+	a ==! c * d
+	a ==& c * d
+	a ==% c * d
+	a ==LSH c * d
+	a ==RSH c * d
+	a ==+ c * d
 	DO
 		IF c = xx THEN
 			PUSH .A

@@ -33,7 +33,7 @@ public:
 	);
 	static CLkHead MakeList(CLkHead Trunk, CLkHead Next);
 	static CLkHead MakeChild(CLkHead Child, CAstNode* pN);
-	CAstNode* GetNode() const {
+	CAstNode* GetNode() {
 		return m_pNode;
 	}
 	CSymbol* GetSymbol() { return (CSymbol*)m_pSymbol; }
