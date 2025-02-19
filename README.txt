@@ -16,12 +16,6 @@ completely wrong, or just not thought through.
 Getting there.
 
 
-Feb 15, 2025
-To a large extent, but still not complete, all of the major
-language features are now working...I think.  So I will
-continue to write ACTION screpts to cover the rest.
-Is this fun or what?  ;)
-
 	 NUMB  CHILD  NEXT
    388      4     -1  +- 'ROOT'
      4      1      7     +- 'INT'
@@ -413,6 +407,11 @@ Is this fun or what?  ;)
    385     -1     -1           +- 'IDENT': st
 Lines Compiled:147
 
+Feb 15, 2025
+To a large extent, but still not complete, all of the major
+language features are now working...I think.  So I will
+continue to write ACTION screpts to cover the rest.
+Is this fun or what?  ;)
 
 Feb 10, 2025
 

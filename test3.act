@@ -2,6 +2,10 @@ INT aa,bb,cc
 CARD dd,ee
 CHAR ff
 BYTE gg,hh,ii,jj,kk
+TYPE Junk  = [
+	INT one
+	CHAR two
+]
 
 MODULE
 

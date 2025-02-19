@@ -720,6 +720,7 @@ public:
 #include "Act65SECTIONattributes.h"
 #include "Act65BITS.h"
 #include "Act65AssignEQ.h"
+#include "Act65TypeFieldsEND.h"
 #include "AstTree.h"
 #include "ActionAstTree.h"
 

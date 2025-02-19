@@ -572,6 +572,9 @@
     <ClCompile Include="Act65AssignEQ.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Act65TypeFieldsEND.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -1109,6 +1112,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Act65AssignEQ.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Act65TypeFieldsEND.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

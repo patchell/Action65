@@ -2885,11 +2885,11 @@ CLkHead CParser::SysDecl(CLkHead LookaHead)
 		{
 		case Token::VECTOR:
 			LHChild = Expect(LHNext, Token::VECTOR);
+			LHChild.SetNode(0);
 			LHChild = VectorAddress(LHChild);
 			pN = new CAct65VECTOR;
-			pN->Create(LHChild.GetNode());
-			LHNext.AddNode(pN);
-			LHNext.SetToken(LHChild.GetToken());
+			LHChild = CLkHead::MakeChild(LHChild, pN);
+			LHNext = CLkHead::MakeList(LHNext, LHChild);
 			//--------------------------------------
 			LHNext = Define(LHNext);
 			break;
@@ -2987,9 +2987,8 @@ CLkHead CParser::Define(CLkHead LookaHead)
 			LHChild.SetNode(0);
 			LHChild = DefObject(LHChild);
 			pN = new CAct65DEFINE;
-			pN->Create(LHChild.GetNode());
-			LHNext.AddNode(pN);
-			LHNext.SetToken(LHChild.GetToken());
+			LHChild = CLkHead::MakeChild(LHChild, pN);
+			LHNext = CLkHead::MakeList(LHNext, LHChild);
 			//-------------------------------------------------
 			LHNext = TypeDefDecl(LHNext);
 			break;
@@ -3119,11 +3118,12 @@ CLkHead CParser::TypeDefDecl(CLkHead LookaHead)
 		{
 		case Token::TYPE :
 			LHChild = Expect(LHNext, Token::TYPE);
+			LHChild.SetNode(0);
 			LHChild = EndTypeDef(LHChild);
 			pN = new CAct65TYPE;
-			pN->Create(LHChild.GetNode());
-			LHNext.AddNode(pN);
-			LHNext.SetToken(LHChild.GetToken());
+			LHChild = CLkHead::MakeChild(LHChild, pN);
+			DebugTravers(LHChild.GetNode(),"TYPE after MakeChild LHChild", 25,100);
+			LHNext = CLkHead::MakeList(LHNext, LHChild);
 			//-------------------------------------------
 			LHNext = Declare(LHNext);
 			break;
@@ -3147,14 +3147,17 @@ CLkHead CParser::EndTypeDef(CLkHead LookaHead)
 	CLkHead LHNext, LHChild;
 
 	LHNext = RecDefField(LookaHead);
+	DebugTravers(LHNext.GetNode(), "TYPE after RecDefFields EndType LHNext", 25, 100);
 	switch (LHNext.GetToken())
 	{
 	case Token(']'):
-		LHChild = Expect(LookaHead, Token(']'));
-		pN = new CAct65TypeFIELDS;
-		pN->Create(LHNext.GetNode(), LookaHead.GetNode());
-		LHNext.AddNode(pN);
-		LHNext.SetToken(LHChild.GetToken());
+		LHChild = Expect(LHNext, Token(']'));
+		pN = new CAct65TypeFieldsEND;
+		LHChild.SetNode(0);
+		LHChild = CLkHead::MakeChild(LHChild,pN);
+		DebugTravers(LHChild.GetNode(), "TYPE after MakeChild EndType LHChild", 25, 100);
+		LHNext = CLkHead::MakeList(LHNext, LHChild);
+		DebugTravers(LHNext.GetNode(), "TYPE after RecDefFields EndType LHNext", 25, 100);
 		break;
 	default:
 		break;
@@ -3181,10 +3184,13 @@ CLkHead CParser::RecDefField(CLkHead LookaHead)
 		LHChild = Expect(LHNext, Token('='));
 		LHChild = Fields(LHChild);
 		pN = new CAct65TypeFIELDS;
-		pN->Create(LHChild.GetNode());
-		pN->SetSymbol(pSym);
-		LHNext.AddNode(pN);
-		LHNext.SetToken(LHChild.GetToken());
+
+		LHNext = CLkHead::MakeNode(LHChild, LHNext, pN);
+
+		//pN->Create(LHChild.GetNode());
+		//pN->SetSymbol(pSym);
+		//LHNext.AddNode(pN);
+		//LHNext.SetToken(LHChild.GetToken());
 		break;
 	default:
 		break;
@@ -3867,31 +3873,10 @@ CLkHead CParser::FundDecl(CLkHead LookaHead)
 	CLkHead LHNext, LHChild;
 	CObjTypeChain* pOTC = 0;
 	CTypeChain* pTC = 0;
-	static int Recursions = 0;
-	int RecurseLoop = 0;
 
 	LHNext = FundTypeSpec(LookaHead);
-	if (++Recursions > 100)
-	{
-		fprintf(Act()->LogFile(), "Infinate Loop in CParser::FundDecl  Line:%d Col:%d\n",
-			Act()->GetParser()->GetLexer()->GetLineNumber(),
-			Act()->GetParser()->GetLexer()->GetColunm()
-		);
-		Act()->CloseAll();
-		Act()->Exit(5);
-	}
-	LHNext = LookaHead;
 	while (Loop)
 	{
-		if (++RecurseLoop > 100)
-		{
-			fprintf(Act()->LogFile(), "Infinate Loop in CParser::FundDecl  Line:%d Col:%d\n",
-				Act()->GetParser()->GetLexer()->GetLineNumber(),
-				Act()->GetParser()->GetLexer()->GetColunm()
-			);
-			Act()->CloseAll();
-			Act()->Exit(6);
-		}
 		switch (LHNext.GetToken())
 		{
 		case Token::RECORDTYPE:
@@ -3945,10 +3930,8 @@ CLkHead CParser::FundDecl(CLkHead LookaHead)
 			LHChild = FundTypeSpec(LHChild);			//LHChild node -> IDENT
 			//------------- Abstract Syntax Tree Node --------------
 			pN = new CAct65CHAR;
-			pN->Create(LHChild.GetNode());				//Node CHAR.child = IDENT
-			//-------------- Wrap Up -----------------------
-			LHNext.AddNode(pN);
-			LHNext.SetToken(LHChild.GetToken());
+			LHChild = CLkHead::MakeChild(LHChild, pN);
+			LHNext = CLkHead::MakeList(LHNext, LHChild);
 			break;
 		case Token::BYTE:
 			//------------ Declaration - Create Type Chain ---------
@@ -3973,10 +3956,8 @@ CLkHead CParser::FundDecl(CLkHead LookaHead)
 			LHChild = FundTypeSpec(LHChild);			//LHChild node -> IDENT
 			//------------- Abstract Sumtax Tree Node --------------
 			pN = new CAct65BYTE;
-			pN->Create(LHChild.GetNode());				//Node CHAR.child = IDENT
-			//-------------- Wrap Up -----------------------
-			LHNext.AddNode(pN);
-			LHNext.SetToken(LHChild.GetToken());
+			LHChild = CLkHead::MakeChild(LHChild, pN);
+			LHNext = CLkHead::MakeList(LHNext, LHChild);
 			break;
 		case Token::CARD:
 			//------------ Declaration - Create Type Chain ---------
@@ -4001,10 +3982,8 @@ CLkHead CParser::FundDecl(CLkHead LookaHead)
 			LHChild = FundTypeSpec(LHChild);			//LHChild node -> IDENT
 			//---------- Abstract Syntax Tree Node -------------
 			pN = new CAct65CARD;
-			pN->Create(LHChild.GetNode());				//Node CHAR.child = IDENT
-			//-------------- Wrap Up -----------------------
-			LHNext.AddNode(pN);
-			LHNext.SetToken(LHChild.GetToken());
+			LHChild = CLkHead::MakeChild(LHChild, pN);
+			LHNext = CLkHead::MakeList(LHNext, LHChild);
 			break;
 		case Token::INT:
 			//------------ Declaration - Create Type Chain ---------
@@ -4029,10 +4008,8 @@ CLkHead CParser::FundDecl(CLkHead LookaHead)
 			LHChild = FundTypeSpec(LHChild);			//LHChild node -> IDENT
 			//------------ Abstract Syntax Tree Node --------------
 			pN = new CAct65INT;
-			pN->Create(LHChild.GetNode());				//Node CHAR.child = IDENT
-			//-------------- Wrap Up -----------------------
-			LHNext.AddNode(pN);
-			LHNext.SetToken(LHChild.GetToken());
+			LHChild = CLkHead::MakeChild(LHChild, pN);
+			LHNext = CLkHead::MakeList(LHNext, LHChild);
 			break;
 		case Token::BOOL:
 			//------------ Declaration - Create Type Chain ---------
@@ -4057,10 +4034,8 @@ CLkHead CParser::FundDecl(CLkHead LookaHead)
 			LHChild = FundTypeSpec(LHChild);			//LHChild node -> IDENT
 			//-------------- Abstract Syntax Tree Node ------------
 			pN = new CAct65BOOL;
-			pN->Create(LHChild.GetNode());				//Node CHAR.child = IDENT
-			//-------------- Wrap Up -----------------------
-			LHNext.AddNode(pN);
-			LHNext.SetToken(LHChild.GetToken());
+			LHChild = CLkHead::MakeChild(LHChild, pN);
+			LHNext = CLkHead::MakeList(LHNext, LHChild);
 			break;
 		case Token::PROC:
 			//--------------- Declaration ----------------------
@@ -4083,10 +4058,8 @@ CLkHead CParser::FundDecl(CLkHead LookaHead)
 			LHChild = ProcDecl(LHChild);
 			//------------Abstract syntax Tree Node -----------
 			pN = new CAct65PROC;
-			pN->Create(LHChild.GetNode());
-			//------------------ Wrap Up ------------------------
-			LHNext.AddNode(pN);
-			LHNext.SetToken(LHChild.GetToken());
+			LHChild = CLkHead::MakeChild(LHChild, pN);
+			LHNext = CLkHead::MakeList(LHNext, LHChild);
 			break;
 		case Token::INTERRUPT:
 			//-------------- Declaration ------------------
@@ -4106,17 +4079,14 @@ CLkHead CParser::FundDecl(CLkHead LookaHead)
 			LHChild = IrqDecl(LHChild);
 			//------------Abstract syntax Tree Node -----------
 			pN = new CAct65INTERRUPT;
-			pN->Create(LHChild.GetNode());				//Node CHAR.child = IDENT
-			//-------------- Wrap Up -----------------------
-			LHNext.AddNode(pN);
-			LHNext.SetToken(LHChild.GetToken());
+			LHChild = CLkHead::MakeChild(LHChild, pN);
+			LHNext = CLkHead::MakeList(LHNext, LHChild);
 			break;
 		default:
 			Loop = false;
 			break;
 		}
 	}
-	Recursions--;
 	return LHNext;
 }
 
@@ -7224,7 +7194,7 @@ CLkHead CParser::BaseAsmConstant(CLkHead LookaHead)
 		pSym = GetLexer()->GetLexSymbol();
 		pSymUsed = new CWhereSymbolIsUsed;
 		pSymUsed->Create();
-//		pSymUsed->SetAddress(GetCurrentSection()->GetLocationCounter());
+		pSymUsed->SetAddress(GetCurrentSection()->GetLocationCounter());
 		pSym->Add((CBin*)pSymUsed);
 		LHNext = Expect(LHNext, Token::VAR_GLOBAL);
 		//------------------
