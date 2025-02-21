@@ -1,6 +1,6 @@
 #include "pch.h"
 
-CAct65SECTION::CAct65SECTION() :CAstNode(NodeType::SECTION)
+CAct65SECTION::CAct65SECTION() :CAstNode(m_pNodeTyypeName, NodeType::SECTION)
 {
 }
 

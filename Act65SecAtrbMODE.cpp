@@ -1,6 +1,6 @@
 #include "pch.h"
 
-CAct65SecAtrbMODE::CAct65SecAtrbMODE() :CAstNode(NodeType::SECTION_ATTRIBUTE_MODE)
+CAct65SecAtrbMODE::CAct65SecAtrbMODE() :CAstNode(m_pNodeTyypeName, NodeType::SECTION_ATTRIBUTE_MODE)
 {
 }
 

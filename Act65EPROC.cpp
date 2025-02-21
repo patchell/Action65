@@ -1,6 +1,6 @@
 #include "pch.h"
 
-CAct65EPROC::CAct65EPROC() :CAstNode(NodeType::EPROC)
+CAct65EPROC::CAct65EPROC() :CAstNode(m_pNodeTyypeName, NodeType::EPROC)
 {
 }
 

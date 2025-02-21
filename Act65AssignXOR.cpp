@@ -1,6 +1,6 @@
 #include "pch.h"
 
-CAct65AssignXOR::CAct65AssignXOR() :CAstNode(NodeType::ASSIGN_XOR)
+CAct65AssignXOR::CAct65AssignXOR() :CAstNode(m_pNodeTyypeName, NodeType::ASSIGN_XOR)
 {
 }
 

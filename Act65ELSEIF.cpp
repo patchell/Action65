@@ -1,6 +1,6 @@
 #include "pch.h"
 
-CAct65ELSEIF::CAct65ELSEIF() :CAstNode(NodeType::ELSEIF)
+CAct65ELSEIF::CAct65ELSEIF() :CAstNode(m_pNodeTyypeName, NodeType::ELSEIF)
 {
 }
 

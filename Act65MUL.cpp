@@ -1,6 +1,6 @@
 #include "pch.h"
 
-CAct65MUL::CAct65MUL() :CAstNode(NodeType::MULTIPLY)
+CAct65MUL::CAct65MUL() :CAstNode(m_pNodeTyypeName, NodeType::MULTIPLY)
 {
 }
 

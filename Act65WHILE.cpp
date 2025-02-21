@@ -1,6 +1,6 @@
 #include "pch.h"
 
-CAct65WHILE::CAct65WHILE() :CAstNode(NodeType::WHILE)
+CAct65WHILE::CAct65WHILE() :CAstNode(m_pNodeTyypeName, NodeType::WHILE)
 {
 }
 

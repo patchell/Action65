@@ -1,6 +1,6 @@
 #include "pch.h"
 
-CAct65IF::CAct65IF() :CAstNode(NodeType::IF)
+CAct65IF::CAct65IF() :CAstNode(m_pNodeTyypeName, NodeType::IF)
 {
 }
 

@@ -1,6 +1,6 @@
 #include "pch.h"
 
-CAct65RETURN::CAct65RETURN() :CAstNode(NodeType::RETURN)
+CAct65RETURN::CAct65RETURN() :CAstNode(m_pNodeTyypeName, NodeType::RETURN)
 {
 }
 

@@ -1,6 +1,6 @@
 #include "pch.h"
 
-CAct65DCS::CAct65DCS() :CAstNode(NodeType::DEFINE_C_STRING)
+CAct65DCS::CAct65DCS() :CAstNode(m_pNodeTyypeName, NodeType::DEFINE_C_STRING)
 {
 }
 

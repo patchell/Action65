@@ -1,6 +1,6 @@
 #include "pch.h"
 
-CAct65TypeFIELDS::CAct65TypeFIELDS() :CAstNode(NodeType::TYPE_FIELDS)
+CAct65TypeFIELDS::CAct65TypeFIELDS() :CAstNode(m_pNodeTyypeName, NodeType::TYPE_FIELDS)
 {
 }
 

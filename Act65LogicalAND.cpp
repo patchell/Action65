@@ -1,6 +1,6 @@
 #include "pch.h"
 
-CAct65LogicalAND::CAct65LogicalAND() :CAstNode(NodeType::LOGICAL_AND)
+CAct65LogicalAND::CAct65LogicalAND() :CAstNode(m_pNodeTyypeName, NodeType::LOGICAL_AND)
 {
 }
 

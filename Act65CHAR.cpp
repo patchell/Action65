@@ -1,6 +1,6 @@
 #include "pch.h"
 
-CAct65CHAR::CAct65CHAR() :CAstNode(NodeType::CHAR)
+CAct65CHAR::CAct65CHAR() :CAstNode(m_pNodeTyypeName, NodeType::CHAR)
 {
 }
 

@@ -1,6 +1,6 @@
 #include "pch.h"
 
-CAct65SET::CAct65SET() :CAstNode(NodeType::SET)
+CAct65SET::CAct65SET() :CAstNode(m_pNodeTyypeName, NodeType::SET)
 {
 }
 

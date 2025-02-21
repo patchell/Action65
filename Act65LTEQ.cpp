@@ -1,6 +1,6 @@
 #include "pch.h"
 
-CAct65LTEQ::CAct65LTEQ() :CAstNode(NodeType::LESS_THAN_OR_EQUAL)
+CAct65LTEQ::CAct65LTEQ() :CAstNode(m_pNodeTyypeName, NodeType::LESS_THAN_OR_EQUAL)
 {
 }
 

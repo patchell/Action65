@@ -20,7 +20,7 @@ bool CTypeChain::Create()
 
 void CTypeChain::AddToTail(CObjTypeChain* pOTC)
 {
-	if (GetHead())
+	if (GetTail())
 	{
 		GetTail()->SetNext(pOTC);
 		pOTC->SetPrev(GetTail());

@@ -1,6 +1,6 @@
 #include "pch.h"
 
-CAct65POP::CAct65POP() :CAstNode(NodeType::POP)
+CAct65POP::CAct65POP() :CAstNode(m_pNodeTyypeName, NodeType::POP)
 {
 }
 

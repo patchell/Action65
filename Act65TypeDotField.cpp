@@ -1,6 +1,6 @@
 #include "pch.h"
 
-CAct65TypeDotField::CAct65TypeDotField() :CAstNode(NodeType::TYPED_DOT_FIELD)
+CAct65TypeDotField::CAct65TypeDotField() :CAstNode(m_pNodeTyypeName, NodeType::TYPED_DOT_FIELD)
 {
 }
 

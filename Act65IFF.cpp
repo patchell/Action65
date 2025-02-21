@@ -1,6 +1,6 @@
 #include "pch.h"
 
-CAct65IFF::CAct65IFF() :CAstNode(NodeType::IFF)
+CAct65IFF::CAct65IFF() :CAstNode(m_pNodeTyypeName, NodeType::IFF)
 {
 }
 

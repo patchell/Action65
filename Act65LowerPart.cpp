@@ -1,6 +1,6 @@
 #include "pch.h"
 
-CAct65LowerPart::CAct65LowerPart() :CAstNode(NodeType::LOWER_PART)
+CAct65LowerPart::CAct65LowerPart() :CAstNode(m_pNodeTyypeName, NodeType::LOWER_PART)
 {
 }
 

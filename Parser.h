@@ -253,6 +253,7 @@ private:
 	// Local Variableas
 	//-----------------------------------------------
 	CLkHead LocalDecls(CLkHead LookaHead);
+	CLkHead LocalVarDecls(CLkHead LookaHead);
 	CLkHead LocalTypeSpec(CLkHead LookaHead);
 	//-------------------------------
 	// Compiler Constants

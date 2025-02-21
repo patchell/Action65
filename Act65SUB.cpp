@@ -1,6 +1,6 @@
 #include "pch.h"
 
-CAct65SUB::CAct65SUB() :CAstNode(NodeType::SUBTRACT)
+CAct65SUB::CAct65SUB() :CAstNode(m_pNodeTyypeName, NodeType::SUBTRACT)
 {
 }
 

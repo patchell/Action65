@@ -1,6 +1,6 @@
 #include "pch.h"
 
-CAct65FlagCARRY::CAct65FlagCARRY() :CAstNode(NodeType::CARRY_FLAG)
+CAct65FlagCARRY::CAct65FlagCARRY() :CAstNode(m_pNodeTyypeName, NodeType::CARRY_FLAG)
 {
 }
 

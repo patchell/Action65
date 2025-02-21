@@ -1,6 +1,6 @@
 #include "pch.h"
 
-CAct65EXIT::CAct65EXIT() :CAstNode(NodeType::EXIT)
+CAct65EXIT::CAct65EXIT() :CAstNode(m_pNodeTyypeName, NodeType::EXIT)
 {
 }
 

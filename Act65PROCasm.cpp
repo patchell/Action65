@@ -1,6 +1,6 @@
 #include "pch.h"
 
-CAct65PROCasm::CAct65PROCasm() :CAstNode(NodeType::ASM_PROC)
+CAct65PROCasm::CAct65PROCasm() :CAstNode(m_pNodeTyypeName, NodeType::ASM_PROC)
 {
 }
 

@@ -1,6 +1,6 @@
 #include "pch.h"
 
-CAct65AssignEQ::CAct65AssignEQ() :CAstNode(NodeType::ASSIGN_EQ)
+CAct65AssignEQ::CAct65AssignEQ() :CAstNode(m_pNodeTyypeName, NodeType::ASSIGN_EQ)
 {
 }
 

@@ -1,6 +1,6 @@
 #include "pch.h"
 
-CAct65ACC::CAct65ACC() :CAstNode(NodeType::AREG)
+CAct65ACC::CAct65ACC() :CAstNode(m_pNodeTyypeName, NodeType::AREG)
 {
 }
 

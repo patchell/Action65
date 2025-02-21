@@ -1,6 +1,6 @@
 #include "pch.h"
 
-CAct65R6502::CAct65R6502() :CAstNode(NodeType::R6502)
+CAct65R6502::CAct65R6502() :CAstNode(m_pNodeTyypeName, NodeType::R6502)
 {
 }
 

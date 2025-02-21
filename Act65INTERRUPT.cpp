@@ -1,6 +1,6 @@
 #include "pch.h"
 
-CAct65INTERRUPT::CAct65INTERRUPT() :CAstNode(NodeType::INTERRUPT)
+CAct65INTERRUPT::CAct65INTERRUPT() :CAstNode(m_pNodeTyypeName, NodeType::INTERRUPT)
 {
 }
 

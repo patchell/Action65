@@ -1,6 +1,6 @@
 #include "pch.h"
 
-CAct65CurrentLocation::CAct65CurrentLocation() :CAstNode(NodeType::CURRENT_LOCATION)
+CAct65CurrentLocation::CAct65CurrentLocation() :CAstNode(m_pNodeTyypeName, NodeType::CURRENT_LOCATION)
 {
 }
 

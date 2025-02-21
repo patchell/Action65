@@ -1,6 +1,6 @@
 #include "pch.h"
 
-CAct65DW::CAct65DW() :CAstNode(NodeType::DEFINE_WORD)
+CAct65DW::CAct65DW() :CAstNode(m_pNodeTyypeName, NodeType::DEFINE_WORD)
 {
 }
 

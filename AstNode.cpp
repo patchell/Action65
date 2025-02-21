@@ -13,11 +13,11 @@ CAstNode::CAstNode()
 	m_pValue = 0;
 	m_pHead = 0;
 	m_pTail = 0;
-	m_Column = 0;
-	m_Line = 0;
+	m_Line = Act()->GetParser()->GetLexer()->GetLineNumber();
+	m_Column = Act()->GetParser()->GetLexer()->GetColunm();
 }
 
-CAstNode::CAstNode(NodeType NT)
+CAstNode::CAstNode(const char* pName, NodeType NT)
 {
 	m_NodeID = ++m_NodeCount;
 	m_NodeType = NT;
@@ -26,12 +26,12 @@ CAstNode::CAstNode(NodeType NT)
 	m_pPrev = 0;
 	m_pChild = 0;
 	m_pParent = 0;
-	m_pNodeName = 0;
+	m_pNodeName = pName;
 	m_pValue = 0;
 	m_pHead = 0;
 	m_pTail = 0;
-	m_Column = 0;
-	m_Line = 0;
+	m_Line = Act()->GetParser()->GetLexer()->GetLineNumber();
+	m_Column = Act()->GetParser()->GetLexer()->GetColunm();
 }
 
 CAstNode::~CAstNode()
@@ -50,8 +50,6 @@ bool CAstNode::Create(
 	int LoopCount = 300;
 	bool rV = true;
 
-	m_Line = Act()->GetParser()->GetLexer()->GetLineNumber();
-	m_Column = Act()->GetParser()->GetLexer()->GetColunm();
 	SetSymbol(pSym);
 	SetChild(pChild);
 	pNode = pChild;

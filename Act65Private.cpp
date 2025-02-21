@@ -1,6 +1,6 @@
 #include "pch.h"
 
-CAct65Private::CAct65Private() :CAstNode(NodeType::PRIVATE)
+CAct65Private::CAct65Private() :CAstNode(m_pNodeTyypeName, NodeType::PRIVATE)
 {
 }
 

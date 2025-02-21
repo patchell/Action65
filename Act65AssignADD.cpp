@@ -1,6 +1,6 @@
 #include "pch.h"
 
-CAct65AssignADD::CAct65AssignADD() :CAstNode(NodeType::ASSIGN_ADD)
+CAct65AssignADD::CAct65AssignADD() :CAstNode(m_pNodeTyypeName, NodeType::ASSIGN_ADD)
 {
 }
 

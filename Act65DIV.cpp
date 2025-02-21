@@ -1,6 +1,6 @@
 #include "pch.h"
 
-CAct65DIV::CAct65DIV() :CAstNode(NodeType::DIVIDE)
+CAct65DIV::CAct65DIV() :CAstNode(m_pNodeTyypeName, NodeType::DIVIDE)
 {
 }
 

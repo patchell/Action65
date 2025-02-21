@@ -1,6 +1,6 @@
 #include "pch.h"
 
-CAct65OptNOT::CAct65OptNOT() :CAstNode(NodeType::OPTIONAL_NOT)
+CAct65OptNOT::CAct65OptNOT() :CAstNode(m_pNodeTyypeName, NodeType::OPTIONAL_NOT)
 {
 }
 

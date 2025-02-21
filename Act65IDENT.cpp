@@ -1,6 +1,6 @@
 #include "pch.h"
 
-CAct65IDENT::CAct65IDENT() :CAstNode(NodeType::IDENT)
+CAct65IDENT::CAct65IDENT() :CAstNode(m_pNodeTyypeName, NodeType::IDENT)
 {
 }
 
@@ -22,7 +22,7 @@ int CAct65IDENT::Print(int Indent, char* s, int Strlen, bool* pbNextFlag)
 {
 	int l = 0;
 
-	l = CAstNode::Print(Indent, s, Strlen, pbNextFlag);
+	l = CAstNode::Print(Indent, s, Strlen, pbNextFlag); 
 	if (GetValue())
 	{
 		if (GetValue()->GetSymbol())

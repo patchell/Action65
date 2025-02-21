@@ -1,6 +1,6 @@
 #include "pch.h"
 
-CAct65POINTER::CAct65POINTER() :CAstNode(NodeType::POINTER)
+CAct65POINTER::CAct65POINTER() :CAstNode(m_pNodeTyypeName, NodeType::POINTER)
 {
 }
 

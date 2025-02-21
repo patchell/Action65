@@ -1,6 +1,6 @@
 #include "pch.h"
 
-CAct65SecAtrbREADONLY::CAct65SecAtrbREADONLY() :CAstNode(NodeType::SECTION_ATRRIBUTE_READ_ONLY)
+CAct65SecAtrbREADONLY::CAct65SecAtrbREADONLY() :CAstNode(m_pNodeTyypeName, NodeType::SECTION_ATRRIBUTE_READ_ONLY)
 {
 }
 

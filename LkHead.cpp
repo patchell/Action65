@@ -68,6 +68,8 @@ CLkHead CLkHead::MakeNode(
 	pN->Create(Child.GetNode(), Next.GetNode(), pSym);
 	retLH.SetToken(Child.GetToken());
 	retLH.SetNode(pN);
+	retLH.SetSection(Next.GetSection());
+	retLH.SetTypeChain(Next.GetTypeChain());
     return retLH;
 }
 
@@ -80,15 +82,34 @@ CLkHead CLkHead::MakeList(CLkHead Trunk, CLkHead Next)
 	return retLH;
 }
 
-CLkHead CLkHead::MakeChild(CLkHead Child, CAstNode* pN)
+CLkHead CLkHead::MakeChild(CLkHead Child, CAstNode* pN, CBin* pSym)
 {
 	CLkHead retLH;
 
-	pN->Create(0, 0, 0);
+	if(pSym)
+		pN->SetSymbol(pSym);
 	pN->SetChild(Child.GetNode());
 	retLH.SetNode(pN);
 	retLH.SetToken(Child.GetToken());
+	retLH.SetSection(Child.GetSection());
+	retLH.SetTypeChain(Child.GetTypeChain());
 	return retLH;
+}
+
+void CLkHead::AddChildNode(CLkHead NewChild)
+{
+	CAstNode* pN = 0;
+
+	pN = GetNode();
+	if (pN)
+	{
+		while (pN->GetChild())
+			pN = pN->GetChild();
+		pN->SetChild(NewChild.GetNode());
+	}
+	else
+		SetNode(NewChild.GetNode());
+	SetToken(NewChild.GetToken());
 }
 
 void CLkHead::operator=(const CLkHead& pLH)

@@ -1,6 +1,6 @@
 #include "pch.h"
 
-CAct65BEGIN::CAct65BEGIN() :CAstNode(NodeType::BEGIN)
+CAct65BEGIN::CAct65BEGIN() :CAstNode(m_pNodeTyypeName, NodeType::BEGIN)
 {
 }
 

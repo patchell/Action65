@@ -1,6 +1,6 @@
 #include "pch.h"
 
-CAct65AssignDIV::CAct65AssignDIV() :CAstNode(NodeType::ASSIGN_DIV)
+CAct65AssignDIV::CAct65AssignDIV() :CAstNode(m_pNodeTyypeName, NodeType::ASSIGN_DIV)
 {
 }
 

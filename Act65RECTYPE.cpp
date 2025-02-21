@@ -1,6 +1,6 @@
 #include "pch.h"
 
-CAct65RECTYPE::CAct65RECTYPE() :CAstNode(NodeType::RECORD_TYPE)
+CAct65RECTYPE::CAct65RECTYPE() :CAstNode(m_pNodeTyypeName, NodeType::RECORD_TYPE)
 {
 }
 

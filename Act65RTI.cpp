@@ -1,6 +1,6 @@
 #include "pch.h"
 
-CAct65RTI::CAct65RTI() :CAstNode(NodeType::RTI)
+CAct65RTI::CAct65RTI() :CAstNode(m_pNodeTyypeName, NodeType::RTI)
 {
 }
 

@@ -1,6 +1,6 @@
 #include "pch.h"
 
-CAct65DAS::CAct65DAS() :CAstNode(NodeType::DEFINE_ACTION_STRING)
+CAct65DAS::CAct65DAS() :CAstNode(m_pNodeTyypeName, NodeType::DEFINE_ACTION_STRING)
 {
 }
 

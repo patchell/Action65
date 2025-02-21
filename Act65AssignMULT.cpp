@@ -1,7 +1,7 @@
 #include "pch.h"
 
 
-CAct65AssignMULT::CAct65AssignMULT() :CAstNode(NodeType::ASSIGN_MULT)
+CAct65AssignMULT::CAct65AssignMULT() :CAstNode(m_pNodeTyypeName, NodeType::ASSIGN_MULT)
 {
 }
 

@@ -1,6 +1,6 @@
 #include "pch.h"
 
-CAct65ARRAY::CAct65ARRAY() :CAstNode(NodeType::ARRAY)
+CAct65ARRAY::CAct65ARRAY() :CAstNode(m_pNodeTyypeName, NodeType::ARRAY)
 {
 }
 

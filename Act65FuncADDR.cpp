@@ -1,6 +1,6 @@
 #include "pch.h"
 
-CAct65FuncADDR::CAct65FuncADDR() :CAstNode(NodeType::FUNCTION_ADDRESS)
+CAct65FuncADDR::CAct65FuncADDR() :CAstNode(m_pNodeTyypeName, NodeType::FUNCTION_ADDRESS)
 {
 }
 

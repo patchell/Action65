@@ -1,6 +1,6 @@
 #include "pch.h"
 
-CAct65W65C02::CAct65W65C02() :CAstNode(NodeType::W65C02)
+CAct65W65C02::CAct65W65C02() :CAstNode(m_pNodeTyypeName, NodeType::W65C02)
 {
 }
 

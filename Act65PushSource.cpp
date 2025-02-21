@@ -1,6 +1,6 @@
 #include "pch.h"
 
-CAct65PushSource::CAct65PushSource() :CAstNode(NodeType::PUSH_SOURCE)
+CAct65PushSource::CAct65PushSource() :CAstNode(m_pNodeTyypeName, NodeType::PUSH_SOURCE)
 {
 }
 

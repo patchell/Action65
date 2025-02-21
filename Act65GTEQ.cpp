@@ -1,6 +1,6 @@
 #include "pch.h"
 
-CAct65GTEQ::CAct65GTEQ():CAstNode(NodeType::GREATER_THAN_OR_EQUAL)
+CAct65GTEQ::CAct65GTEQ():CAstNode(m_pNodeTyypeName, NodeType::GREATER_THAN_OR_EQUAL)
 {
 }
 

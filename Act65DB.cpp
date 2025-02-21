@@ -1,6 +1,6 @@
 #include "pch.h"
 
-CAct65DB::CAct65DB() :CAstNode(NodeType::DEFINE_BYTE)
+CAct65DB::CAct65DB() :CAstNode(m_pNodeTyypeName, NodeType::DEFINE_BYTE)
 {
 }
 

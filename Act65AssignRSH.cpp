@@ -1,6 +1,6 @@
 #include "pch.h"
 
-CAct65AssignRSH::CAct65AssignRSH() :CAstNode(NodeType::ASSIGN_RSH)
+CAct65AssignRSH::CAct65AssignRSH() :CAstNode(m_pNodeTyypeName, NodeType::ASSIGN_RSH)
 {
 }
 

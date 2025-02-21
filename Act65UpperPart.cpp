@@ -1,6 +1,6 @@
 #include "pch.h"
 
-CAct65UpperPart::CAct65UpperPart() :CAstNode(NodeType::UPPER_PART)
+CAct65UpperPart::CAct65UpperPart() :CAstNode(m_pNodeTyypeName, NodeType::UPPER_PART)
 {
 }
 

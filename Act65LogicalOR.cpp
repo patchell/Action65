@@ -1,6 +1,6 @@
 #include "pch.h"
 
-CAct65LogicalOR::CAct65LogicalOR() :CAstNode(NodeType::LOGICAL_OR)
+CAct65LogicalOR::CAct65LogicalOR() :CAstNode(m_pNodeTyypeName, NodeType::LOGICAL_OR)
 {
 }
 

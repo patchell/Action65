@@ -1,6 +1,6 @@
 #include "pch.h"
 
-CAct65YREG::CAct65YREG() :CAstNode(NodeType::YREG)
+CAct65YREG::CAct65YREG() :CAstNode(m_pNodeTyypeName, NodeType::YREG)
 {
 	m_Reg = RegType::Y;
 }

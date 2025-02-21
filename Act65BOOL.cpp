@@ -1,6 +1,6 @@
 #include "pch.h"
 
-CAct65BOOL::CAct65BOOL() :CAstNode(NodeType::BOOL)
+CAct65BOOL::CAct65BOOL() :CAstNode(m_pNodeTyypeName, NodeType::BOOL)
 {
 }
 

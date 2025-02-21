@@ -1,6 +1,6 @@
 #include "pch.h"
 
-CAct65BitWiseAND::CAct65BitWiseAND() :CAstNode(NodeType::BITWISE_AND)
+CAct65BitWiseAND::CAct65BitWiseAND() :CAstNode(m_pNodeTyypeName, NodeType::BITWISE_AND)
 {
 }
 

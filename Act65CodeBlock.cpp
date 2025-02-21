@@ -1,6 +1,6 @@
 #include "pch.h"
 
-CAct65CodeBlock::CAct65CodeBlock() :CAstNode(NodeType::CODE_BLOCK)
+CAct65CodeBlock::CAct65CodeBlock() :CAstNode(m_pNodeTyypeName, NodeType::CODE_BLOCK)
 {
 }
 

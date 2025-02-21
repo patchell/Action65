@@ -1,6 +1,6 @@
 #include "pch.h"
 
-CAct65SecAtrbZEROPAGE::CAct65SecAtrbZEROPAGE() :CAstNode(NodeType::SECTION_ATTRIBUTE_PAGE_ZERO)
+CAct65SecAtrbZEROPAGE::CAct65SecAtrbZEROPAGE() :CAstNode(m_pNodeTyypeName, NodeType::SECTION_ATTRIBUTE_PAGE_ZERO)
 {
 
 }

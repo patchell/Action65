@@ -1,6 +1,6 @@
 #include "pch.h"
 
-CAct65ProcCall::CAct65ProcCall() :CAstNode(NodeType::PROC_CALL)
+CAct65ProcCall::CAct65ProcCall() :CAstNode(m_pNodeTyypeName, NodeType::PROC_CALL)
 {
 }
 

@@ -1780,28 +1780,29 @@ NONTERMINALS['Non Terminals'] { 'Action65','Modules','Modules_1','Set','Set_1','
 ,'ArrayIndex','Factor','SysDecl','Vector_1','VectorEnd','VectorEnd_1','AddressEnd'
 ,'AddressEnd_1','VectorAddress','Define','Define_1','DefObject','DefObject_1','DefList'
 ,'DefList_1','Def','TypeDefDecl','TypeDefDecl_1','EndTypeDef','EndTypeDef_1','RecDefField'
-,'RecDefField_1','Fields','Declare','Declare_1','DeclareEnd','DeclareEnd_1','DeclareParams'
-,'DeclareParams_1','DeclParamList','DeclParamList_1','DeclPramPointer','DeclPramPointer_1'
-,'DeclParamArray','DeclParamArray_1','DeclareParamIdentList','DeclareParamIdentList_1'
-,'DeclareParamIdent','DeclarFuncName','DeclarFuncName_1','DeclareType','DeclareType_1'
-,'DeclarePointer','DeclarePointer_1','DeclareArray','DeclareArray_1','DeclarFuncType'
-,'FundDecl','FundDecl_1','FundTypeSpec','FundTypeSpec_1','IdentList','IdentList_1'
-,'Ident','IdentInitType','InitData','InitData_1','IrqDecl','IrqDeclParams','IrqBody'
-,'ProcDecl','ProcDeclParams','ProcBody','FuncDecl','FuncDeclParams','FuncBody','OptInit'
-,'ParamList','Param_1','ParamTypeSpec','ParamTypeSpec_1','DefineParamIdentList','DefineParamIdentList_1'
-,'DefineParamIdent','LocalDecls','LocalDecls_1','LocalTypeSpec','LocalTypeSpec_1'
-,'ComstListEnd','ComstListEnd_1','CompConst','CompConst_1','BaseCompConst','AsmStmt'
-,'Processor_1','ProcessorType','AsmSet','AsmSet_1','AsmSetObjects','AsmSectionName'
-,'Section','Section_1','SectionName','SectionName_1','SectionDef','SectionAttributesList'
-,'SectionAttributesList_1','SectionAtribute','Modes','TrueFalse','Org','Org_1','DefineMemory'
-,'DefineMemory_1','DefineStorage','DefineStorage_1','Proceedure','Proceedure_1','AsmProcEnd'
-,'AsmProcEnd_1','AsmProcBody','AsmProcBody_1','AsmProcName','Instruction','Instruction_1'
-,'Labels','Label_1','AluAdrModes','Indirect','Indirect_1','StaAddressingModes','ShiftAddressingModes'
-,'RelAddressingMode','BitAddressModes','IncAddressingMOdes','JumpAddressingModes'
-,'JumpIndirect','JumpDirect','CallAddressingMode','LdxAddressingMode','CPX_CPY_AddressingMode'
-,'StxAddressingMode','LdyAddressingMode','StyAddressingMode','OptIndexReg','OptIndexReg_1'
-,'OptXReg','OptYReg','AsmConstList','AsmConstList_1','AsmConstList_2','AsmConstant'
-,'AsmConstUpLow_1','AsmConstAddSub','AsmConstAddSub_1','BaseAsmConstant' }
+,'Fields','Declare','Declare_1','DeclareEnd','DeclareEnd_1','DeclareParams','DeclareParams_1'
+,'DeclParamList','DeclParamList_1','DeclPramPointer','DeclPramPointer_1','DeclParamArray'
+,'DeclParamArray_1','DeclareParamIdentList','DeclareParamIdentList_1','DeclareParamIdent'
+,'DeclarFuncName','DeclarFuncName_1','DeclareType','DeclareType_1','DeclarePointer'
+,'DeclarePointer_1','DeclareArray','DeclareArray_1','DeclarFuncType','FundDecl','FundDecl_1'
+,'FundTypeSpec','FundTypeSpec_1','IdentList','IdentList_1','Ident','IdentInitType'
+,'InitData','InitData_1','IrqDecl','IrqDeclParams','IrqBody','ProcDecl','ProcDeclParams'
+,'ProcBody','FuncDecl','FuncDeclParams','FuncBody','OptInit','ParamList','Param_1'
+,'ParamTypeSpec','ParamTypeSpec_1','DefineParamIdentList','DefineParamIdentList_1'
+,'DefineParamIdent','LocalDecls','LocalTypeDef_1','LocalVarDecls','LocalVarDecls_1'
+,'LocalTypeSpec','LocalTypeSpec_1','ComstListEnd','ComstListEnd_1','CompConst','CompConst_1'
+,'BaseCompConst','AsmStmt','Processor_1','ProcessorType','AsmSet','AsmSet_1','AsmSetObjects'
+,'AsmSectionName','Section','Section_1','SectionName','SectionName_1','SectionDef'
+,'SectionAttributesList','SectionAttributesList_1','SectionAtribute','Modes','TrueFalse'
+,'Org','Org_1','DefineMemory','DefineMemory_1','DefineStorage','DefineStorage_1','Proceedure'
+,'Proceedure_1','AsmProcEnd','AsmProcEnd_1','AsmProcBody','AsmProcBody_1','AsmProcName'
+,'Instruction','Instruction_1','Labels','Label_1','AluAdrModes','Indirect','Indirect_1'
+,'StaAddressingModes','ShiftAddressingModes','RelAddressingMode','BitAddressModes'
+,'IncAddressingMOdes','JumpAddressingModes','JumpIndirect','JumpDirect','CallAddressingMode'
+,'LdxAddressingMode','CPX_CPY_AddressingMode','StxAddressingMode','LdyAddressingMode'
+,'StyAddressingMode','OptIndexReg','OptIndexReg_1','OptXReg','OptYReg','AsmConstList'
+,'AsmConstList_1','AsmConstList_2','AsmConstant','AsmConstUpLow_1','AsmConstAddSub'
+,'AsmConstAddSub_1','BaseAsmConstant' }
 *********** Build Nullable Set **********
 ****************Create NOT nullable set ************************
 ----- Calc First Sets------
@@ -1948,10 +1949,9 @@ FIRST['DefList_1'] { ',','e' }
 FIRST['Def'] { 'IDENT' }
 FIRST['TypeDefDecl'] { 'IDENT','FUNC' }
 FIRST['TypeDefDecl_1'] { 'TYPE','e' }
-FIRST['EndTypeDef'] { 'IDENT' }
+FIRST['EndTypeDef'] { '=' }
 FIRST['EndTypeDef_1'] { ']','e' }
-FIRST['RecDefField'] { 'IDENT' }
-FIRST['RecDefField_1'] { '=' }
+FIRST['RecDefField'] { '=' }
 FIRST['Fields'] { '[' }
 FIRST['Declare'] { 'IDENT','FUNC' }
 FIRST['Declare_1'] { 'DECLARE','e' }
@@ -2007,7 +2007,9 @@ FIRST['DefineParamIdentList'] { 'IDENT' }
 FIRST['DefineParamIdentList_1'] { ',','e' }
 FIRST['DefineParamIdent'] { 'IDENT' }
 FIRST['LocalDecls'] { 'IDENT','FUNC' }
-FIRST['LocalDecls_1'] { 'CHAR','BYTE','INT','CARD','BOOL','RECORDTYPE','e' }
+FIRST['LocalTypeDef_1'] { 'TYPE','e' }
+FIRST['LocalVarDecls'] { 'IDENT','FUNC' }
+FIRST['LocalVarDecls_1'] { 'CHAR','BYTE','INT','CARD','BOOL','RECORDTYPE','e' }
 FIRST['LocalTypeSpec'] { 'IDENT','FUNC' }
 FIRST['LocalTypeSpec_1'] { 'POINTER','ARRAY','e' }
 FIRST['ComstListEnd'] { 'NUMBER','CUR_LOC','@','DEFINED_IDENT','INTERRUPT_IDENT','FUNC_IDENT'
@@ -2353,7 +2355,6 @@ FOLLOW['TypeDefDecl_1'] { 'DEFINE','VECTOR','SET','MODULE','$','IDENT','FUNC' }
 FOLLOW['EndTypeDef'] { }
 FOLLOW['EndTypeDef_1'] { }
 FOLLOW['RecDefField'] { ']' }
-FOLLOW['RecDefField_1'] { }
 FOLLOW['Fields'] { }
 FOLLOW['Declare'] { 'TYPE','DEFINE','VECTOR','SET','MODULE','$','IDENT','FUNC' }
 FOLLOW['Declare_1'] { 'TYPE','DEFINE','VECTOR','SET','MODULE','$','IDENT','FUNC' }
@@ -2433,9 +2434,13 @@ FOLLOW['DefineParamIdentList_1'] { 'POINTER','ARRAY','RECORDTYPE','CHAR','BYTE',
 FOLLOW['DefineParamIdent'] { ',','POINTER','ARRAY','RECORDTYPE','CHAR','BYTE','INT'
 ,'CARD','BOOL' }
 FOLLOW['LocalDecls'] { '(' }
-FOLLOW['LocalDecls_1'] { '(' }
-FOLLOW['LocalTypeSpec'] { 'CHAR','BYTE','INT','CARD','BOOL','RECORDTYPE','(' }
-FOLLOW['LocalTypeSpec_1'] { 'CHAR','BYTE','INT','CARD','BOOL','RECORDTYPE','(' }
+FOLLOW['LocalTypeDef_1'] { '(' }
+FOLLOW['LocalVarDecls'] { 'TYPE','(' }
+FOLLOW['LocalVarDecls_1'] { 'TYPE','(' }
+FOLLOW['LocalTypeSpec'] { 'CHAR','BYTE','INT','CARD','BOOL','RECORDTYPE','TYPE','('
+ }
+FOLLOW['LocalTypeSpec_1'] { 'CHAR','BYTE','INT','CARD','BOOL','RECORDTYPE','TYPE','('
+ }
 FOLLOW['ComstListEnd'] { }
 FOLLOW['ComstListEnd_1'] { }
 FOLLOW['CompConst'] { ')','STRING','[',']',',','NUMBER','CUR_LOC','@','DEFINED_IDENT'
@@ -2519,5 +2524,5 @@ FOLLOW['AsmConstAddSub'] { '>','<',',',')','(' }
 FOLLOW['AsmConstAddSub_1'] { '>','<',',',')','(' }
 FOLLOW['BaseAsmConstant'] { '+','-','>','<',',',')','(' }
 ---------------- Create Parse Table --------------
-Table Entries = 1820
+Table Entries = 1826
 ------------ Check For Conflicts-------------

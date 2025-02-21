@@ -1,6 +1,6 @@
 #include "pch.h"
 
-CAct65ORG::CAct65ORG() :CAstNode(NodeType::ORG)
+CAct65ORG::CAct65ORG() :CAstNode(m_pNodeTyypeName, NodeType::ORG)
 {
 	m_Address = 0;}
 

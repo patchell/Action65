@@ -1,6 +1,6 @@
 #include "pch.h"
 
-CAct65FlagNEG::CAct65FlagNEG() :CAstNode(NodeType::NEG_FLAG)
+CAct65FlagNEG::CAct65FlagNEG() :CAstNode(m_pNodeTyypeName, NodeType::NEG_FLAG)
 {
 }
 

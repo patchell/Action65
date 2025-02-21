@@ -1,6 +1,6 @@
 #include "pch.h"
 
-CAct65SecAtrbFALSE::CAct65SecAtrbFALSE() :CAstNode(NodeType::SECTION_ATTRIBUTE_FALSE)
+CAct65SecAtrbFALSE::CAct65SecAtrbFALSE() :CAstNode(m_pNodeTyypeName, NodeType::SECTION_ATTRIBUTE_FALSE)
 {
 }
 

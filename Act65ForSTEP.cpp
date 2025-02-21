@@ -1,6 +1,6 @@
 #include "pch.h"
 
-CAct65ForSTEP::CAct65ForSTEP() :CAstNode(NodeType::FOR_STEP)
+CAct65ForSTEP::CAct65ForSTEP() :CAstNode(m_pNodeTyypeName, NodeType::FOR_STEP)
 {
 }
 

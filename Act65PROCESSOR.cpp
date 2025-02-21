@@ -1,6 +1,6 @@
 #include "pch.h"
 
-CAct65PROCESSOR::CAct65PROCESSOR() :CAstNode(NodeType::PROCESSOR)
+CAct65PROCESSOR::CAct65PROCESSOR() :CAstNode(m_pNodeTyypeName, NodeType::PROCESSOR)
 {
 }
 

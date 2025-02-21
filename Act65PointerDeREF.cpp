@@ -1,6 +1,6 @@
 #include "pch.h"
 
-CAct65PointerDeREF::CAct65PointerDeREF() :CAstNode(NodeType::POINTER_DEREFERENCE)
+CAct65PointerDeREF::CAct65PointerDeREF() :CAstNode(m_pNodeTyypeName, NodeType::POINTER_DEREFERENCE)
 {
 }
 

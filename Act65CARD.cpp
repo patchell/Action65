@@ -1,6 +1,6 @@
 #include "pch.h"
 
-CAct65CARD::CAct65CARD() :CAstNode(NodeType::CARD)
+CAct65CARD::CAct65CARD() :CAstNode(m_pNodeTyypeName, NodeType::CARD)
 {
 	
 }

@@ -1,6 +1,6 @@
 #include "pch.h"
 
-CAct65STRING::CAct65STRING() :CAstNode(NodeType::STRING)
+CAct65STRING::CAct65STRING() :CAstNode(m_pNodeTyypeName, NodeType::STRING)
 {
 	m_pString = 0;
 	m_StringType = StringType::ACTION_STRING;

@@ -1,6 +1,6 @@
 #include "pch.h"
 
-CAct65LessTHAN::CAct65LessTHAN() :CAstNode(NodeType::LESS_THAN)
+CAct65LessTHAN::CAct65LessTHAN() :CAstNode(m_pNodeTyypeName, NodeType::LESS_THAN)
 {
 }
 

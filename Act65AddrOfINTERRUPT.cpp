@@ -1,6 +1,6 @@
 #include "pch.h"
 
-CAct65AddrOfINTERRUPT::CAct65AddrOfINTERRUPT() :CAstNode(NodeType::ADDRESS_OF_INTERRUPT)
+CAct65AddrOfINTERRUPT::CAct65AddrOfINTERRUPT() :CAstNode(m_pNodeTyypeName, NodeType::ADDRESS_OF_INTERRUPT)
 {
 }
 

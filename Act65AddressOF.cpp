@@ -1,6 +1,6 @@
 #include "pch.h"
 
-CAct65AddressOF::CAct65AddressOF() :CAstNode(NodeType::ADDRESS_OF)
+CAct65AddressOF::CAct65AddressOF() :CAstNode(m_pNodeTyypeName, NodeType::ADDRESS_OF)
 {
 }
 

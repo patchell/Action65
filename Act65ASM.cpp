@@ -1,6 +1,6 @@
 #include "pch.h"
 
-CAct65ASM::CAct65ASM() :CAstNode(NodeType::ASM)
+CAct65ASM::CAct65ASM() :CAstNode(m_pNodeTyypeName, NodeType::ASM)
 {
 }
 

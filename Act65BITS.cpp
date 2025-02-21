@@ -1,6 +1,6 @@
 #include "pch.h"
 
-CAct65BITS::CAct65BITS() :CAstNode(NodeType::BITS)
+CAct65BITS::CAct65BITS() :CAstNode(m_pNodeTyypeName, NodeType::BITS)
 {
 }
 

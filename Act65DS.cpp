@@ -1,6 +1,6 @@
 #include "pch.h"
 
-CAct65DS::CAct65DS() :CAstNode(NodeType::DEFINE_STORAGE)
+CAct65DS::CAct65DS() :CAstNode(m_pNodeTyypeName, NodeType::DEFINE_STORAGE)
 {
 	m_pSection = 0;
 	m_SizeInBytes = 0;

@@ -1,6 +1,6 @@
 #include "pch.h"
 
-CAct65Opcode::CAct65Opcode():CAstNode(NodeType::OPCODE)
+CAct65Opcode::CAct65Opcode():CAstNode(m_pNodeTyypeName, NodeType::OPCODE)
 {
 	m_OpcodeToken = Token(-1);
 	m_LineNumber = 0;

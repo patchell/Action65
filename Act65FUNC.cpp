@@ -1,6 +1,6 @@
 #include "pch.h"
 
-CAct65FUNC::CAct65FUNC() :CAstNode(NodeType::FUNCTION)
+CAct65FUNC::CAct65FUNC() :CAstNode(m_pNodeTyypeName, NodeType::FUNCTION)
 {
 }
 

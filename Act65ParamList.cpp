@@ -1,6 +1,6 @@
 #include "pch.h"
 
-CAct65ParamList::CAct65ParamList() :CAstNode(NodeType::PARAMETER_LIST)
+CAct65ParamList::CAct65ParamList() :CAstNode(m_pNodeTyypeName, NodeType::PARAMETER_LIST)
 {
 }
 

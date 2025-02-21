@@ -1,6 +1,6 @@
 #include "pch.h"
 
-CAct65AdrOfCONST::CAct65AdrOfCONST() :CAstNode(NodeType::ADDRESS_OF_CONSTANT)
+CAct65AdrOfCONST::CAct65AdrOfCONST() :CAstNode(m_pNodeTyypeName, NodeType::ADDRESS_OF_CONSTANT)
 {
 }
 

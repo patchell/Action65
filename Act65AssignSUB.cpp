@@ -1,6 +1,6 @@
 #include "pch.h"
 
-CAct65AssignSUB::CAct65AssignSUB() :CAstNode(NodeType::ASSIGN_SUB)
+CAct65AssignSUB::CAct65AssignSUB() :CAstNode(m_pNodeTyypeName, NodeType::ASSIGN_SUB)
 {
 }
 

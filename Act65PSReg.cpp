@@ -1,6 +1,6 @@
 #include "pch.h"
 
-CAct65PSReg::CAct65PSReg() :CAstNode(NodeType::PROCESSOR_STATUS_REGISTER)
+CAct65PSReg::CAct65PSReg() :CAstNode(m_pNodeTyypeName, NodeType::PROCESSOR_STATUS_REGISTER)
 {
 }
 

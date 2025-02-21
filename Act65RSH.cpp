@@ -1,6 +1,6 @@
 #include "pch.h"
 
-CAct65RSH::CAct65RSH() :CAstNode(NodeType::RSH)
+CAct65RSH::CAct65RSH() :CAstNode(m_pNodeTyypeName, NodeType::RSH)
 {
 }
 

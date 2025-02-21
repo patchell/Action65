@@ -1,6 +1,6 @@
 #include "pch.h"
 
-CAct65FFI::CAct65FFI() :CAstNode(NodeType::FFI)
+CAct65FFI::CAct65FFI() :CAstNode(m_pNodeTyypeName, NodeType::FFI)
 {
 }
 

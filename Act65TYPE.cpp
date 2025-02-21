@@ -1,6 +1,6 @@
 #include "pch.h"
 
-CAct65TYPE::CAct65TYPE() :CAstNode(NodeType::TYPE)
+CAct65TYPE::CAct65TYPE() :CAstNode(m_pNodeTyypeName, NodeType::TYPE)
 {
 }
 
@@ -21,8 +21,12 @@ CValue* CAct65TYPE::Process()
 int CAct65TYPE::Print(int Indent, char* s, int Strlen, bool* pbNextFlag)
 {
 	int l = 0;
+	int size = 0;
 
 	l = CAstNode::Print(Indent, s, Strlen, pbNextFlag);
+	size = Strlen - l;
+	if(GetSymbol())
+		l += sprintf_s(&s[l], size, " %s", GetSymbol()->GetName());
 	return l;
 }
 

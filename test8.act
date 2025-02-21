@@ -1,0 +1,14 @@
+INT ARRAY junk
+CHAR POINTER pC, pD
+
+INTERRUPT irq()
+	CARD POINTER ARRAY four, one, two , three
+
+	FOR pC = one + two TO 45 STEP two + three
+	DO
+		POP .A
+		PUSH .A
+	OD
+	RTI
+
+INT end

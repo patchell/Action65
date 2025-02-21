@@ -1,6 +1,6 @@
 #include "pch.h"
 
-CAct65EqualTO::CAct65EqualTO() :CAstNode(NodeType::EQUAL_TO)
+CAct65EqualTO::CAct65EqualTO() :CAstNode(m_pNodeTyypeName, NodeType::EQUAL_TO)
 {
 }
 

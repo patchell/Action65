@@ -1,6 +1,6 @@
 #include "pch.h"
 
-CAct65NotEquelTO::CAct65NotEquelTO() :CAstNode(NodeType::EQUAL_TO)
+CAct65NotEquelTO::CAct65NotEquelTO() :CAstNode(m_pNodeTyypeName, NodeType::EQUAL_TO)
 {
 }
 

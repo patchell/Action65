@@ -1,6 +1,6 @@
 #include "pch.h"
 
-CAct65SecAtrbREADWRITE::CAct65SecAtrbREADWRITE() :CAstNode(NodeType::SECTION_ATTRIBUTE_READ_WRITE)
+CAct65SecAtrbREADWRITE::CAct65SecAtrbREADWRITE() :CAstNode(m_pNodeTyypeName, NodeType::SECTION_ATTRIBUTE_READ_WRITE)
 {
 }
 

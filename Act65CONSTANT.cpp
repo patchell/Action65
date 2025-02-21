@@ -1,6 +1,6 @@
 #include "pch.h"
 
-CAct65CONSTANT::CAct65CONSTANT() :CAstNode(NodeType::CONSTANT)
+CAct65CONSTANT::CAct65CONSTANT() :CAstNode(m_pNodeTyypeName, NodeType::CONSTANT)
 {
 }
 

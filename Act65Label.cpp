@@ -1,6 +1,6 @@
 #include "pch.h"
 
-CAct65Label::CAct65Label() :CAstNode(NodeType::LABEL)
+CAct65Label::CAct65Label() :CAstNode(m_pNodeTyypeName, NodeType::LABEL)
 {
 }
 

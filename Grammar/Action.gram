@@ -51,6 +51,9 @@
 // so that commas are no longer required between
 // values.
 //
+// VERSION 0.0.9 Feb 19, 2025
+//	Added Local TYPE declarations
+//
 //----------------------------------
 
 TERMINALS
@@ -687,7 +690,7 @@ Def		-> IDENT '=' CompConst;
 // object.
 //----------------------------------------------
 TypeDefDecl		-> Declare TypeDefDecl_1;
-TypeDefDecl_1	-> 'TYPE' EndTypeDef Declare TypeDefDecl_1
+TypeDefDecl_1	-> 'TYPE' 'IDENT' EndTypeDef Declare TypeDefDecl_1
 				-> .
 				;
 
@@ -695,8 +698,7 @@ EndTypeDef		-> RecDefField EndTypeDef_1;
 EndTypeDef_1	-> ']'
 				-> .
 				;
-RecDefField		-> 'IDENT' RecDefField_1;
-RecDefField_1	-> '=' Fields;
+RecDefField		-> '=' Fields;
 
 Fields			-> '[' LocalDecls;
 
@@ -885,13 +887,18 @@ DefineParamIdent		-> 'IDENT';
 // Local Variableas
 //-----------------------------------------------
 
-LocalDecls		-> LocalTypeSpec LocalDecls_1;
-LocalDecls_1	-> 'CHAR' LocalTypeSpec  LocalDecls_1
-				-> 'BYTE' LocalTypeSpec  LocalDecls_1
-				-> 'INT' LocalTypeSpec  LocalDecls_1
-				-> 'CARD' LocalTypeSpec  LocalDecls_1
-				-> 'BOOL' LocalTypeSpec LocalDecls_1
-				-> 'RECORDTYPE' LocalTypeSpec LocalDecls_1
+LocalDecls		-> LocalVarDecls LocalTypeDef_1;
+LocalTypeDef_1	-> 'TYPE' 'IDENT' EndTypeDef LocalVarDecls LocalTypeDef_1
+				-> .
+				;
+
+LocalVarDecls	-> LocalTypeSpec LocalVarDecls_1;
+LocalVarDecls_1	-> 'CHAR' LocalTypeSpec  LocalVarDecls_1
+				-> 'BYTE' LocalTypeSpec  LocalVarDecls_1
+				-> 'INT' LocalTypeSpec  LocalVarDecls_1
+				-> 'CARD' LocalTypeSpec  LocalVarDecls_1
+				-> 'BOOL' LocalTypeSpec LocalVarDecls_1
+				-> 'RECORDTYPE' LocalTypeSpec LocalVarDecls_1
 				-> .
 				;
 

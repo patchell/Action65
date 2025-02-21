@@ -1,6 +1,6 @@
 #include "pch.h"
 
-CAct65tTYPEDEF::CAct65tTYPEDEF() :CAstNode(NodeType::TYPEDEF)
+CAct65tTYPEDEF::CAct65tTYPEDEF() :CAstNode(m_pNodeTyypeName, NodeType::TYPEDEF)
 {
 }
 

@@ -1,6 +1,6 @@
 #include "pch.h"
 
-CAct65ForTO::CAct65ForTO() :CAstNode(NodeType::FOR_TO)
+CAct65ForTO::CAct65ForTO() :CAstNode(m_pNodeTyypeName, NodeType::FOR_TO)
 {
 }
 

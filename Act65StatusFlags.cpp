@@ -1,6 +1,6 @@
 #include "pch.h"
 
-CAct65StatusFLAGS::CAct65StatusFLAGS() :CAstNode(NodeType::STATUS_FLAGS)
+CAct65StatusFLAGS::CAct65StatusFLAGS() :CAstNode(m_pNodeTyypeName, NodeType::STATUS_FLAGS)
 {
 }
 

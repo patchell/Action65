@@ -1,6 +1,6 @@
 #include "pch.h"
 
-CAct65BREAK::CAct65BREAK() :CAstNode(NodeType::BREAK)
+CAct65BREAK::CAct65BREAK() :CAstNode(m_pNodeTyypeName, NodeType::BREAK)
 {
 }
 

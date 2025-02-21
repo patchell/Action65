@@ -176,7 +176,7 @@ private:
 	int m_Column;
 public:
 	CAstNode();
-	CAstNode(NodeType NT);
+	CAstNode(const char* pName, NodeType NT);
 	virtual ~CAstNode();
 	virtual bool Create(
 		CAstNode* pChild = 0,

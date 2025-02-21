@@ -1,6 +1,6 @@
 #include "pch.h"
 
-CAct65PopDest::CAct65PopDest() :CAstNode(NodeType::POP_DESTINATION)
+CAct65PopDest::CAct65PopDest() :CAstNode(m_pNodeTyypeName, NodeType::POP_DESTINATION)
 {
 }
 

@@ -1,6 +1,6 @@
 #include "pch.h"
 
-CAct65UNTILL::CAct65UNTILL() :CAstNode(NodeType::UNTIL)
+CAct65UNTILL::CAct65UNTILL() :CAstNode(m_pNodeTyypeName, NodeType::UNTIL)
 {
 }
 

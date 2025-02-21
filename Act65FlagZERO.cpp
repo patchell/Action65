@@ -1,6 +1,6 @@
 #include "pch.h"
 
-CAct65FlagZERO::CAct65FlagZERO() :CAstNode(NodeType::ZERO_FLAG)
+CAct65FlagZERO::CAct65FlagZERO() :CAstNode(m_pNodeTyypeName, NodeType::ZERO_FLAG)
 {
 }
 

@@ -1,6 +1,6 @@
 #include "pch.h"
 
-CAct65ForItterator::CAct65ForItterator() :CAstNode(NodeType::FOR_ITTERATOR)
+CAct65ForItterator::CAct65ForItterator() :CAstNode(m_pNodeTyypeName, NodeType::FOR_ITTERATOR)
 {
 }
 

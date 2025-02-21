@@ -1,6 +1,6 @@
 #include "pch.h"
 
-CAct65END::CAct65END() :CAstNode(NodeType::END)
+CAct65END::CAct65END() :CAstNode(m_pNodeTyypeName, NodeType::END)
 {
 }
 

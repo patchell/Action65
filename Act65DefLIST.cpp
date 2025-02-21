@@ -1,6 +1,6 @@
 #include "pch.h"
 
-CAct65DefLIST::CAct65DefLIST() :CAstNode(NodeType::DEFINE_LIST)
+CAct65DefLIST::CAct65DefLIST() :CAstNode(m_pNodeTyypeName, NodeType::DEFINE_LIST)
 {
 }
 

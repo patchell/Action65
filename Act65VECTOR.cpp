@@ -1,6 +1,6 @@
 #include "pch.h"
 
-CAct65VECTOR::CAct65VECTOR() :CAstNode(NodeType::VECTOR)
+CAct65VECTOR::CAct65VECTOR() :CAstNode(m_pNodeTyypeName, NodeType::VECTOR)
 {
 }
 
