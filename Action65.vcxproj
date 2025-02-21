@@ -136,6 +136,7 @@
   <ItemGroup>
     <ClCompile Include="Act65AssignEQ.cpp" />
     <ClCompile Include="Act65BITS.cpp" />
+    <ClCompile Include="Act65CONDITIONAL.cpp" />
     <ClCompile Include="Act65ProcADDR.cpp" />
     <ClCompile Include="Act65BODY.cpp" />
     <ClCompile Include="Act65DeclareParams.cpp" />
@@ -318,6 +319,7 @@
   <ItemGroup>
     <ClInclude Include="Act65AssignEQ.h" />
     <ClInclude Include="Act65BITS.h" />
+    <ClInclude Include="Act65CONDITIONAL.h" />
     <ClInclude Include="Act65ProcADDR.h" />
     <ClInclude Include="Act65BODY.h" />
     <ClInclude Include="Act65DeclareParams.h" />

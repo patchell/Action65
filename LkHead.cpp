@@ -1,6 +1,6 @@
 #include "pch.h"
 
-CLkHead::CLkHead()
+CLookaHead::CLookaHead()
 {
 	m_Token = Token(0);
 	m_pNode = 0;
@@ -8,11 +8,11 @@ CLkHead::CLkHead()
 	m_pTypeChain = 0;
 }
 
-CLkHead::~CLkHead()
+CLookaHead::~CLookaHead()
 {
 }
 
-bool CLkHead::Create()
+bool CLookaHead::Create()
 {
 	m_Token = Token(0);
 	m_pNode = 0;
@@ -21,7 +21,7 @@ bool CLkHead::Create()
 	return true;
 }
 
-void CLkHead::AddNode(CAstNode* pN) 
+void CLookaHead::AddNode(CAstNode* pN) 
 {
 	CAstNode* pNode = 0;
 	int MaxLoops = 2000;
@@ -56,14 +56,14 @@ void CLkHead::AddNode(CAstNode* pN)
 		SetNode(pN);
 }
 
-CLkHead CLkHead::MakeNode(
-	CLkHead Child, 
-	CLkHead Next, 
+CLookaHead CLookaHead::MakeNode(
+	CLookaHead Child, 
+	CLookaHead Next, 
 	CAstNode* pN, 
 	CBin* pSym
 )
 {
-	CLkHead retLH;
+	CLookaHead retLH;
 
 	pN->Create(Child.GetNode(), Next.GetNode(), pSym);
 	retLH.SetToken(Child.GetToken());
@@ -73,18 +73,18 @@ CLkHead CLkHead::MakeNode(
     return retLH;
 }
 
-CLkHead CLkHead::MakeList(CLkHead Trunk, CLkHead Next)
+CLookaHead CLookaHead::MakeList(CLookaHead Trunk, CLookaHead Next)
 {
-	CLkHead retLH = Trunk;
+	CLookaHead retLH = Trunk;
 
 	retLH.AddNode(Next.GetNode());
 	retLH.SetToken(Next.GetToken());
 	return retLH;
 }
 
-CLkHead CLkHead::MakeChild(CLkHead Child, CAstNode* pN, CBin* pSym)
+CLookaHead CLookaHead::MakeChild(CLookaHead Child, CAstNode* pN, CBin* pSym)
 {
-	CLkHead retLH;
+	CLookaHead retLH;
 
 	if(pSym)
 		pN->SetSymbol(pSym);
@@ -96,7 +96,7 @@ CLkHead CLkHead::MakeChild(CLkHead Child, CAstNode* pN, CBin* pSym)
 	return retLH;
 }
 
-void CLkHead::AddChildNode(CLkHead NewChild)
+void CLookaHead::AddChildNode(CLookaHead NewChild)
 {
 	CAstNode* pN = 0;
 
@@ -112,7 +112,7 @@ void CLkHead::AddChildNode(CLkHead NewChild)
 	SetToken(NewChild.GetToken());
 }
 
-void CLkHead::operator=(const CLkHead& pLH)
+void CLookaHead::operator=(const CLookaHead& pLH)
 {
 	m_Token = pLH.m_Token;
 	m_pNode = pLH.m_pNode;

@@ -4,11 +4,32 @@ CHAR POINTER pC, pD
 INTERRUPT irq()
 	CARD POINTER ARRAY four, one, two , three
 
-	FOR pC = one + two TO 45 STEP two + three
-	DO
-		POP .A
-		PUSH .A
-	OD
-	RTI
+IF four < one THEN
+	four ==+ one
+ELSEIF four > two THEN
+	two = three + 4
+ELSE
+	four ==- one
+FI
+IFF .A = 0 THEN
+	four = one + three
+ELSE
+	one = four - three
+FFI
+WHILE pC = 0
+DO
+	pC = pC - 1
+OD
+DO
+	pD ==+ one
+	UNTIL pD = 5
+OD
+FOR one = 9 TO three + four STEP 3
+DO
+	IF three = 6 THEN
+		EXIT
+	FI
+OD
+RTI
 
-INT end
+INT Xone

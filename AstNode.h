@@ -54,6 +54,7 @@ public:
 		DO,
 		DEFINE_STORAGE,
 		DEFINE_WORD,
+		CONDITIONAL,
 		ELSE,
 		ELSEIF,
 		END,

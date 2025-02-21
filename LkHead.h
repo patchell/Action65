@@ -1,20 +1,20 @@
 #pragma once
 
-class CLkHead
+class CLookaHead
 {
 	CTypeChain* m_pTypeChain;
 	Token m_Token;
 	CAstNode* m_pNode;
 	CBin* m_pSymbol;
 public:
-	CLkHead();
-	CLkHead(Token T, CAstNode* pN) {
+	CLookaHead();
+	CLookaHead(Token T, CAstNode* pN) {
 		m_Token = T;
 		m_pNode = pN;
 		m_pSymbol = 0;
 		m_pTypeChain = 0;
 	}
-	virtual ~CLkHead();
+	virtual ~CLookaHead();
 	bool Create();
 	void AddNode(CAstNode* pN);
 	void Set(Token Tk, CAstNode* pN)
@@ -25,15 +25,15 @@ public:
 	void SetToken(Token T) { m_Token = T; }
 	Token GetToken() const { return m_Token; }
 	void SetNode(CAstNode* pN) { m_pNode = pN; }
-	static CLkHead MakeNode(
-		CLkHead Child, 
-		CLkHead Next, 
+	static CLookaHead MakeNode(
+		CLookaHead Child, 
+		CLookaHead Next, 
 		CAstNode* pN, 
 		CBin* pSym = 0
 	);
-	static CLkHead MakeList(CLkHead Trunk, CLkHead Next);
-	static CLkHead MakeChild(CLkHead Child, CAstNode* pN, CBin* pBin = 0);
-	void AddChildNode(CLkHead NewChild);
+	static CLookaHead MakeList(CLookaHead Trunk, CLookaHead Next);
+	static CLookaHead MakeChild(CLookaHead Child, CAstNode* pN, CBin* pBin = 0);
+	void AddChildNode(CLookaHead NewChild);
 	CAstNode* GetNode() {
 		return m_pNode;
 	}
@@ -50,6 +50,6 @@ public:
 			m_pTypeChain = 0;
 		}
 	}
-	void operator=(const CLkHead & pLH);
+	void operator=(const CLookaHead & pLH);
 };
 
