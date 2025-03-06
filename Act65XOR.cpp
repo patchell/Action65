@@ -10,7 +10,7 @@ CAct65XOR::~CAct65XOR()
 
 bool CAct65XOR::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
-	return CAstNode::Create(pChild, pNext, pSym);
+	return true;
 }
 
 CValue* CAct65XOR::Process()

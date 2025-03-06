@@ -10,7 +10,7 @@ CAct65TYPE::~CAct65TYPE()
 
 bool CAct65TYPE::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
-	return CAstNode::Create(pChild, pNext, pSym);
+	return true;
 }
 
 CValue* CAct65TYPE::Process()

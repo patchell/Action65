@@ -10,7 +10,7 @@ CAct65AssignMOD::~CAct65AssignMOD()
 
 bool CAct65AssignMOD::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
-	return CAstNode::Create(pChild, pNext, pSym);
+	return true;
 }
 
 CValue* CAct65AssignMOD::Process()

@@ -10,7 +10,7 @@ CAct65POINTER::~CAct65POINTER()
 
 bool CAct65POINTER::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
-	return CAstNode::Create(pChild, pNext, pSym);
+	return true;
 }
 
 CValue* CAct65POINTER::Process()

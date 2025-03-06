@@ -20,7 +20,7 @@ CAct65Opcode::~CAct65Opcode()
 
 bool CAct65Opcode::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
-	return CAstNode::Create(pChild, pNext, pSym);
+	return true;
 }
 
 CValue* CAct65Opcode::Process()
@@ -72,6 +72,40 @@ int CAct65Opcode::Print(int Indent, char* s, int Strlen, bool* pbNextFlag)
 		AdrModeToTxtTabel.LookupAddressingMode(GetAdrModeType())
 	);
 	return l;
+}
+
+void CAct65Opcode::PrepareInstruction(
+	Token Tk, 
+	AdrModeType AddressMode, 
+	int Address
+)
+{
+	//specifically for Relative Addressing
+	CLexer* pLex = Act()->GetParser()->GetLexer();
+
+	m_pKeyWord = pLex->FindKeyword(Tk);
+	if (m_pKeyWord->m_pAddresModeLUT->ValidAddressingMode(AddressMode))
+	{
+		m_AdressMode = AddressMode;
+		SetToken(Tk);
+		SetLineNumber(pLex->GetLineNumber());
+		SetColumnNumber(pLex->GetColunm());
+		SetOpCode(pLex->MakeOpcode(Tk, AddressMode));
+		SetByteCount(OperandByteCount::GetOperandByteCount(AddressMode) + 1);
+		SetChild(NULL);
+		SetOperand(Address);
+	}
+	else   // :(
+	{
+		ThrownException.SetXCeptType(Exception::ExceptionType::ILLEGAL_ADDRESSING_MODE);
+		sprintf_s(
+			ThrownException.GetErrorString(),
+			ThrownException.GetMaxStringLen(),
+			"Line %d: Illegal Addressing Mode\n",
+			Act()->GetParser()->GetLexer()->GetLineNumber()
+		);
+		throw(ThrownException);
+	}
 }
 
 void CAct65Opcode::PrepareInstruction(

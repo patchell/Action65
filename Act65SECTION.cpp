@@ -10,7 +10,7 @@ CAct65SECTION::~CAct65SECTION()
 
 bool CAct65SECTION::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
-	return CAstNode::Create(pChild, pNext, pSym);
+	return true;
 }
 
 CValue* CAct65SECTION::Process()

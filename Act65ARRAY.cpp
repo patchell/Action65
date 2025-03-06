@@ -10,7 +10,7 @@ CAct65ARRAY::~CAct65ARRAY()
 
 bool CAct65ARRAY::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
-	return CAstNode::Create(pChild, pNext, pSym);
+	return true;
 }
 
 CValue* CAct65ARRAY::Process()

@@ -10,7 +10,7 @@ CAct65FlagCARRY::~CAct65FlagCARRY()
 
 bool CAct65FlagCARRY::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
-	return CAstNode::Create(pChild, pNext, pSym);
+	return true;
 }
 
 CValue* CAct65FlagCARRY::Process()

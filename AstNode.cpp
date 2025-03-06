@@ -40,38 +40,60 @@ CAstNode::~CAstNode()
 		delete m_pValue;
 }
 
-bool CAstNode::Create(
+CAstNode* CAstNode::MakeNode(
 	CAstNode* pChild,
-	CAstNode* pNext,
-	CBin* pSym
+	CAstNode* pNext
 )
 {
-	CAstNode* pNode = 0;
-	int LoopCount = 300;
-	bool rV = true;
+	//------------------------------------------------
+	//
+	// MakeNode
+	//
+	// Paramerters:
+	//	pChild.......Child node
+	//	pNext........Next Node
+	//	pSym.........Symbol associated with this node
+	// Returns:
+	//	"this"
+	//
+	// When done, you should have this:
+	// 
+	//		+THIS_NODE-pSym
+	//		|	+ CHILD
+	//		|	+ NEXT
+	//------------------------------------------------
 
-	SetSymbol(pSym);
+	CAstNode* pNode = 0;
+
 	SetChild(pChild);
 	pNode = pChild;
-	if (pNode && pNext)
+	if (pNode)
 	{
-		pNode->AddThatToThisNext(pNext);
+		while (pNode->GetNext())
+			pNode = pNode->GetNext();
+		pNode->SetNext(pNext);
 	}
-	return rV;
+	return this;
 }
-
-bool CAstNode::Branch(CAstNode* pBranch)
-{
-	AddThatToThisNext(pBranch);
-	return true;
-}
-
-
 
 void CAstNode::CreateValue(CBin* pSym)
 {
 	m_pValue = new CValue;
 	m_pValue->Create(pSym);
+}
+
+void CAstNode::CreateValue(const char* s)
+{
+	m_pValue = new CValue;
+	m_pValue->Create(s);
+
+}
+
+CAstNode* CAstNode::CreateValue(int V)
+{
+	m_pValue = new CValue;
+	m_pValue->Create(V);
+	return this;
 }
 
 void CAstNode::PrintNode(FILE* pOut, int Indent, bool* pbNextFlag)
@@ -109,77 +131,43 @@ int CAstNode::Print(int Indent, char* s, int strLen, bool* pbNextFlag)
 	return l;
 }
 
-void CAstNode::AddToHeadNextChain(CAstNode* pN)
-{
-	if (GetHead())
-	{
-		GetHead()->SetPrev(pN);
-		pN->SetNext(GetHead());
-		SetHead(pN);
-	}
-	else
-	{
-		SetTail(pN);
-		SetHead(pN);
-	}
-}
-
-
-void CAstNode::AddToTailNextChain(CAstNode* pNode)
-{
-	if (GetHead())
-	{
-		GetTail()->SetNext(pNode);
-		pNode->SetPrev(GetTail());
-		SetTail(pNode);
-	}
-	else
-	{
-		SetTail(pNode);
-		SetHead(pNode);
-	}
-}
-
-void CAstNode::InsertThatIntoThisNext(CAstNode* pN)
-{
-	CAstNode* pTemp;
-
-	pTemp = GetNext();
-	SetNext(pN);
-	pN->SetNext(pTemp);
-}
-
-void CAstNode::AddThatToThisNext(CAstNode* pN)
-{
-	CAstNode* pNode = this;
-	int LoopCount = 1000;
-	const char* pSthis = 0, * pSthat = 0;
-	CSymbol* pSym = 0;
-
-	if (pN)
-	{
-		while (pNode->GetNext())
-		{
-			if (!LoopCount--)
-			{
-				fprintf(Act()->LogFile(), "Infinate Loop in CAstNode::AddThatToThisNext  Line:%d Col:%d\n",
-					Act()->GetParser()->GetLexer()->GetLineNumber(),
-					Act()->GetParser()->GetLexer()->GetColunm()
-				);
-				Act()->Exit(20);
-			}
-			pNode = pNode->GetNext();
-		}
-		pN->SetPrev(pNode);
-		pNode->SetNext(pN);
-	}
-}
-
-void CAstNode::SetChild(CAstNode* pAN)
+CAstNode* CAstNode::SetChild(CAstNode* pAN)
 {
 	m_pChild = pAN;
 	if(pAN)
 		pAN->SetParent(this);
+	return this;
+}
+
+
+CAstNode* CAstNode::MakeNextList(CAstNode* pList, CAstNode* pListMember)
+{
+	CAstNode* pNode;
+
+	if (pList)
+	{
+		pNode = pList->GetNext();
+		if (pNode)
+		{
+			while (pNode->GetNext())
+			{
+				pNode = pNode->GetNext();
+			}
+			pNode->SetNext(pListMember);
+		}
+		else
+		{
+			pList->SetNext(pListMember);
+		}
+	}
+	else
+		pList = pListMember;
+	return pList;
+}
+
+CAstNode* CAstNode::CombineNodes(CAstNode* pList, CAstNode* pNext, CAstNode* pChild)
+{
+    return nullptr;
 }
 
 int CAstNode::MakeIndentString(char* s, int size, int Indent, bool* pbNextFlag)

@@ -11,10 +11,19 @@ public:
 		UNRESOLVED
 	};
 private:
+	//-------------------------------
+	// Chain Links
+	//-------------------------------
 	CBin* m_pNext;
 	CBin* m_pPrev;
+	//-------------------------------
+	// Sub List Chain
+	//-------------------------------
 	CBin* m_pHead;
 	CBin* m_pTail;
+	//-------------------------------
+	// Symbol Properties
+	//-------------------------------
 	char* m_pName;
 	BinType m_Type;
 	Token m_Token;
@@ -76,9 +85,9 @@ public:
 	 CBin* Find(const char* pName, CBin::BinType Type);
 	 void Delete(CBin* pSym);
 	 void Unlink(CBin* pSym);
-	 inline void SetHead(CBin* pH) { m_pHead = pH; }
-	 inline CBin* GetHead() { return m_pHead; }
-	 inline void SetTail(CBin* pT) { m_pTail = pT; }
-	 inline CBin* GetTail() { return m_pTail; }
+	 void SetHead(CBin* pH) { m_pHead = pH; }
+	 CBin* GetHead() { return m_pHead; }
+	 void SetTail(CBin* pT) { m_pTail = pT; }
+	 CBin* GetTail() { return m_pTail; }
 };
 

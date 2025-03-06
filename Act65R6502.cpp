@@ -10,7 +10,7 @@ CAct65R6502::~CAct65R6502()
 
 bool CAct65R6502::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
-	return CAstNode::Create(pChild, pNext, pSym);
+	return true;
 }
 
 CValue* CAct65R6502::Process()

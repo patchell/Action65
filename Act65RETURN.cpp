@@ -10,7 +10,7 @@ CAct65RETURN::~CAct65RETURN()
 
 bool CAct65RETURN::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
-	return CAstNode::Create(pChild, pNext, pSym);
+	return true;
 }
 
 CValue* CAct65RETURN::Process()

@@ -10,7 +10,7 @@ CAct65AdrOfCONST::~CAct65AdrOfCONST()
 
 bool CAct65AdrOfCONST::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
-	return CAstNode::Create(pChild, pNext, pSym);
+	return true;
 }
 
 CValue* CAct65AdrOfCONST::Process()

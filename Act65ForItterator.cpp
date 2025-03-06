@@ -10,7 +10,7 @@ CAct65ForItterator::~CAct65ForItterator()
 
 bool CAct65ForItterator::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
-	return CAstNode::Create(pChild, pNext, pSym);
+	return true;
 }
 
 CValue* CAct65ForItterator::Process()

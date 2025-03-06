@@ -10,7 +10,7 @@ CAct65ArrayINDEX::~CAct65ArrayINDEX()
 
 bool CAct65ArrayINDEX::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
-	return CAstNode::Create(pChild, pNext, pSym);
+	return true;
 }
 
 CValue* CAct65ArrayINDEX::Process()

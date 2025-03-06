@@ -10,7 +10,7 @@ CAct65ParamList::~CAct65ParamList()
 
 bool CAct65ParamList::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
-	return CAstNode::Create(pChild,pNext);
+	return true;
 }
 
 CValue* CAct65ParamList::Process()

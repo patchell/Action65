@@ -10,7 +10,7 @@ CAct65EqualTO::~CAct65EqualTO()
 
 bool CAct65EqualTO::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
-	return CAstNode::Create(pChild, pNext, pSym);
+	return true;
 }
 
 CValue* CAct65EqualTO::Process()

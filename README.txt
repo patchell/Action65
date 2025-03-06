@@ -9,6 +9,24 @@ Compatibility Issues with the real ACTION!
 	Hopefully, in the future I will find a way to fix
 	this conflict.
 
+March 6, 2025
+Well, it seems I ran into a bit of a problem.
+When I was testing the declarations of TYPE, I
+started getting random crashes, i.e. , sometimes
+a crash, sometimes not.  about 1 crash for every
+4 runs or so.  Not a good sign.  I was lucky in that
+when it did creash, it crashed in the same two places,
+and the two together pointed to the fact that I was
+probably doing a "delete" two time on the same object.
+However, I was unable to come up with a method of
+actually finding where it was happening and how.
+In my efforts to find this problem I came to the sad
+realization that what I thought was a real cool way to
+implement a Recursive Desent Parcser turned out to be
+a bad idea instead.  So the last couple of weeks I have
+been doing heavy modifications to the parser.  Fixed
+the crash, I hope, and I am starting over verifying the
+parser and AST generation.
 
 Feb 18, 2025
 Fixing all sorts of things that were typed in just

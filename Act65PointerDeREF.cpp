@@ -10,7 +10,7 @@ CAct65PointerDeREF::~CAct65PointerDeREF()
 
 bool CAct65PointerDeREF::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
-	return CAstNode::Create(pChild, pNext, pSym);
+	return true;
 }
 
 CValue* CAct65PointerDeREF::Process()

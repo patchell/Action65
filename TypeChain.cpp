@@ -115,7 +115,7 @@ bool CTypeChain::IsGlobal()
 	pOT = GetHead();
 	while (pOT && !rV)
 	{
-		if (pOT->IsGlobal())
+		if (pOT->GetSpec() == CObjTypeChain::Spec::GLOBAL)
 			rV = true;
 		else
 			pOT = pOT->GetNext();
@@ -131,7 +131,55 @@ bool CTypeChain::IsLocal()
 	pOT = GetHead();
 	while (pOT && !rV)
 	{
-		if (pOT->IsLocal())
+		if (pOT->GetSpec() == CObjTypeChain::Spec::LOCAL)
+			rV = true;
+		else
+			pOT = pOT->GetNext();
+	}
+	return rV;
+}
+
+bool CTypeChain::IsInterrupt()
+{
+	bool rV = false;
+	CObjTypeChain* pOT;
+
+	pOT = GetHead();
+	while (pOT && !rV)
+	{
+		if (pOT->GetSpec() == CObjTypeChain::Spec::INTERRUPT)
+			rV = true;
+		else
+			pOT = pOT->GetNext();
+	}
+	return rV;
+}
+
+bool CTypeChain::IsProc()
+{
+	bool rV = false;
+	CObjTypeChain* pOT;
+
+	pOT = GetHead();
+	while (pOT && !rV)
+	{
+		if (pOT->GetSpec() == CObjTypeChain::Spec::PROC)
+			rV = true;
+		else
+			pOT = pOT->GetNext();
+	}
+	return rV;
+}
+
+bool CTypeChain::IsFunc()
+{
+	bool rV = false;
+	CObjTypeChain* pOT;
+
+	pOT = GetHead();
+	while (pOT && !rV)
+	{
+		if (pOT->GetSpec() == CObjTypeChain::Spec::FUNC)
 			rV = true;
 		else
 			pOT = pOT->GetNext();

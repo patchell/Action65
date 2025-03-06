@@ -76,6 +76,21 @@ void CSymbol::BackFillUnresolved()
 	SetResolved();
 }
 
+void CSymbol::CreateTypeChain(CTypeChain* pTC)
+{
+	//---------------------------------------
+	// Create a type chan for this symbol
+	// Make a copy of the passed pointer
+	// to a Type Chain
+	//---------------------------------------
+	m_pTypeChain = new CTypeChain;
+	GetTypeChain()->Create();
+	if (pTC)
+	{
+		GetTypeChain()->CopyTypeChain(pTC);
+	}
+}
+
 void CSymbol::Print(FILE* pOut, const char* s)
 {
 	char* pSO = new char[2048];
@@ -102,14 +117,13 @@ int CSymbol::Print(char* pSO, int l, const char* s)
 		size = l - ls;
 		ls += sprintf_s(&pSO[ls], size, "%s: ", GetName());
 	}
-	if (GetTypeChain())	//fucks up here
+	if (GetTypeChain())	
 	{
 		ls += GetTypeChain()->Print(&pSO[ls], l - ls);
 	}
 	size = l - ls;
-	ls += sprintf_s(&pSO[ls],size, ":Address=%08lx  Value=%04x\n",
-		GetAddress(),
-		GetValue()
+	ls += sprintf_s(&pSO[ls],size, ":Address=%08lx\n",
+		GetAddress()
 	);
 	if (GetParamChain())
 	{

@@ -8,11 +8,10 @@ class CSection;
 
 class CSymbol: public CBin
 {
-	unsigned m_Address;
-	int m_Value;
+	unsigned m_Address;		//physical address the symbol represents
 	int m_Scope;
-	CSection* m_pSection;
-	bool m_UnResolved;
+	CSection* m_pSection;	//Memory Section where symbol is defined
+	bool m_UnResolved;	//Unresolved/Not Defined
 	class CIdentType {
 		IdentType m_Type;
 		const char* m_pName;
@@ -40,14 +39,21 @@ class CSymbol: public CBin
 	//---------------------------
 	// Type Chain
 	//---------------------------
-	CTypeChain* m_pTypeChain;
+	CTypeChain* m_pTypeChain;	//Defines the Type of the Symbol
+	//---------------------------
+	// Parameter chain for a
+	// function/proceedure
+	// Symbol
+	// Or:
+	// Chain of data members for
+	// a user defined TYPE
+	//---------------------------
 	CParameterChain* m_pParamChain;
 public:
 	CSymbol() {
 		m_Address = 0;
-		m_Value = 0;
 		m_Scope = SYMBOL_SCOPE_ANY;
-		m_pSection = 0;
+		m_pSection = 0;	
 		m_UnResolved = true;
 		m_pTypeChain = 0;
 		m_pParamChain = 0;
@@ -70,8 +76,6 @@ public:
 	}
 	unsigned GetAddress() const { return m_Address; }
 	void SetAddress(unsigned A) { m_Address = A; }
-	int GetValue() const { return m_Value; }
-	void SetValue(int v) { m_Value = v; }
 	int GetScope() const { return m_Scope; }
 	void SetScope(int S) { m_Scope = S; }
 	CSection* GetSection() { return m_pSection; }
@@ -92,6 +96,7 @@ public:
 	// Type chain methods
 	//-----------------------------------
 	CTypeChain* GetTypeChain() { return m_pTypeChain; }
-	void SetTypeChain(CTypeChain* pTC) { m_pTypeChain = pTC; }
+//	void SetTypeChain(CTypeChain* pTC) { m_pTypeChain = pTC; }
+	virtual	void CreateTypeChain(CTypeChain* pTC = 0);
 };
 

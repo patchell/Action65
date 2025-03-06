@@ -10,7 +10,7 @@ CAct65LSH::~CAct65LSH()
 
 bool CAct65LSH::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
-	return CAstNode::Create(pChild, pNext, pSym);
+	return true;
 }
 
 CValue* CAct65LSH::Process()

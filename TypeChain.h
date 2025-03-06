@@ -4,12 +4,10 @@ class CTypeChain
 {
 	CObjTypeChain* m_pHead;
 	CObjTypeChain* m_pTail;
-	int m_nObjects;
 public:
 	CTypeChain() {
 		m_pHead = 0;
 		m_pTail = 0;
-		m_nObjects = 0;
 	}
 	virtual ~CTypeChain();
 	bool Create();
@@ -27,5 +25,8 @@ public:
 	int Print(char* pSO, int l);
 	bool IsGlobal();
 	bool IsLocal();
+	bool IsInterrupt();
+	bool IsProc();
+	bool IsFunc();
 };
 

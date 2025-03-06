@@ -10,7 +10,7 @@ CAct65OptNOT::~CAct65OptNOT()
 
 bool CAct65OptNOT::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
-	return CAstNode::Create(pChild, pNext, pSym);
+	return true;
 }
 
 CValue* CAct65OptNOT::Process()

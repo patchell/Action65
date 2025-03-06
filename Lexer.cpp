@@ -337,13 +337,13 @@ Token CLexer::Lex()
 					m_pLexSymbol->SetName(m_aLexBuff);
 					if (c == ':')
 					{
-						m_pLexSymbol->SetIdentType(IdentType::LABEL_PRIVATE);
+						m_pLexSymbol->SetIdentType(IdentType::NEW_SYMBOL);
 						m_pLexSymbol->SetToken(Token::LOCAL_LABEL);
 					}
 					else
 					{
 						LexUnGet(c);
-						m_pLexSymbol->SetIdentType(IdentType::LABEL_GLOBAL);
+						m_pLexSymbol->SetIdentType(IdentType::NEW_SYMBOL);
 						m_pLexSymbol->SetToken(Token::GLOBAL_LABEL);
 					}
 				}

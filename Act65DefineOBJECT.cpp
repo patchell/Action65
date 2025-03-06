@@ -10,7 +10,7 @@ CAct65DefineOBJECT::~CAct65DefineOBJECT()
 
 bool CAct65DefineOBJECT::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
-	return CAstNode::Create(pChild, pNext, pSym);
+	return true;
 }
 
 CValue* CAct65DefineOBJECT::Process()

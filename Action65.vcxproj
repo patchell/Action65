@@ -134,9 +134,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Act65ARRAYdim.cpp" />
     <ClCompile Include="Act65AssignEQ.cpp" />
     <ClCompile Include="Act65BITS.cpp" />
     <ClCompile Include="Act65CONDITIONAL.cpp" />
+    <ClCompile Include="Act65IDENTaddress.cpp" />
     <ClCompile Include="Act65ProcADDR.cpp" />
     <ClCompile Include="Act65BODY.cpp" />
     <ClCompile Include="Act65DeclareParams.cpp" />
@@ -262,6 +264,7 @@
     <ClCompile Include="Act65TYPE.cpp" />
     <ClCompile Include="Act65TypeFIELDS.cpp" />
     <ClCompile Include="Act65TypeFieldsEND.cpp" />
+    <ClCompile Include="Act65TYPEname.cpp" />
     <ClCompile Include="Act65UNTILL.cpp" />
     <ClCompile Include="Act65VECTOR.cpp" />
     <ClCompile Include="Act65W65C02.cpp" />
@@ -295,7 +298,6 @@
     <ClCompile Include="Bucket.cpp" />
     <ClCompile Include="CodeGeneration.cpp" />
     <ClCompile Include="Lexer.cpp" />
-    <ClCompile Include="LkHead.cpp" />
     <ClCompile Include="ObjFormatCode.cpp" />
     <ClCompile Include="ObjFormatData.cpp" />
     <ClCompile Include="ObjFormatFile.cpp" />
@@ -317,9 +319,11 @@
     <ClCompile Include="WhereSymbolIsUsed.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Act65ARRAYdim.h" />
     <ClInclude Include="Act65AssignEQ.h" />
     <ClInclude Include="Act65BITS.h" />
     <ClInclude Include="Act65CONDITIONAL.h" />
+    <ClInclude Include="Act65IDENTaddress.h" />
     <ClInclude Include="Act65ProcADDR.h" />
     <ClInclude Include="Act65BODY.h" />
     <ClInclude Include="Act65DeclareParams.h" />
@@ -445,6 +449,7 @@
     <ClInclude Include="Act65TYPE.h" />
     <ClInclude Include="Act65TypeFIELDS.h" />
     <ClInclude Include="Act65TypeFieldsEND.h" />
+    <ClInclude Include="Act65TYPEname.h" />
     <ClInclude Include="Act65UNTILL.h" />
     <ClInclude Include="Act65VECTOR.h" />
     <ClInclude Include="Act65W65C02.h" />
@@ -475,7 +480,6 @@
     <ClInclude Include="Act65TypeDotField.h" />
     <ClInclude Include="Act65UnaryNEG.h" />
     <ClInclude Include="CodeGeneration.h" />
-    <ClInclude Include="LkHead.h" />
     <ClInclude Include="ObjFormatCode.h" />
     <ClInclude Include="ObjFormatData.h" />
     <ClInclude Include="ObjFormatFile.h" />
@@ -500,9 +504,9 @@
     <ClInclude Include="WhereSymbolIsUsed.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="ActionTestFiles\Test1.act" />
     <None Include="Bin\action.exe" />
     <None Include="Grammar\Action.gram" />
+    <None Include="Test1.act" />
     <None Include="test2.act" />
     <None Include="test3.act" />
     <None Include="test4.act" />

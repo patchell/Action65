@@ -10,7 +10,7 @@ CAct65AssignDIV::~CAct65AssignDIV()
 
 bool CAct65AssignDIV::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
-	return CAstNode::Create(pChild, pNext, pSym);
+	return true;
 }
 
 CValue* CAct65AssignDIV::Process()

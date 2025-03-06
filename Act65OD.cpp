@@ -10,7 +10,7 @@ CAct65OD::~CAct65OD()
 
 bool CAct65OD::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
-	return CAstNode::Create(pChild, pNext, pSym);
+	return true;
 }
 
 CValue* CAct65OD::Process()

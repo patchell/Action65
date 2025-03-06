@@ -10,7 +10,7 @@ CAct65DeclareParams::~CAct65DeclareParams()
 
 bool CAct65DeclareParams::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
-	return CAstNode::Create(pChild, pNext, pSym);
+	return true;
 }
 
 CValue* CAct65DeclareParams::Process()

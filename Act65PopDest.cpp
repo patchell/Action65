@@ -10,7 +10,7 @@ CAct65PopDest::~CAct65PopDest()
 
 bool CAct65PopDest::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
-	return CAstNode::Create(pChild, pNext, pSym);
+	return true;
 }
 
 CValue* CAct65PopDest::Process()

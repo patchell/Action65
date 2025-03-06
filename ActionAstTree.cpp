@@ -10,7 +10,7 @@ CActionAstTree::~CActionAstTree()
 
 bool CActionAstTree::Create()
 {
-	return false;
+	return CAstTree::Create();
 }
 
 CAstNode* CActionAstTree::MakeNewNode(

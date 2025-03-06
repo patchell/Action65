@@ -1,6 +1,6 @@
 #pragma once
 
-constexpr auto VALUE_LUT_DIM = 3;
+constexpr auto VALUE_LUT_DIM = 4;
 
 class CValue
 {
@@ -8,7 +8,8 @@ public:
 	enum class ValueType {
 		NONE,
 		CONSTANT,
-		SYMBOL
+		SYMBOL,
+		STRING
 	};
 	struct CValueTypeItem {
 		ValueType m_Type;
@@ -22,17 +23,20 @@ private:
 	inline static CValueTypeItem ValTypeLUT[VALUE_LUT_DIM] = {
 		{ValueType::NONE,"NONE"},
 		{ValueType::CONSTANT,"CONSTANT"},
-		{ValueType::SYMBOL,"SYMBOL"}
+		{ValueType::SYMBOL,"SYMBOL"},
+		{ ValueType::STRING,"STRING" }
 	};
-public:
 private:
 	CBin* m_pSym;
 	int m_ConstantValue;
+	char* m_pString;
 	ValueType m_ValType;
 public:
 	CValue();
 	virtual ~CValue();
+	bool Create(const char* s);
 	bool Create(CBin* pSym = 0);
+	bool Create(int V);
 	void SetSymbol(CBin* pSym);
 	CBin* GetSymbol() { return m_pSym; }
 	int GetConstVal();
@@ -40,6 +44,8 @@ public:
 		m_ConstantValue = v;
 		m_ValType = ValueType::CONSTANT;
 	}
-	ValueType GetValueType() { return m_ValType; }
+	ValueType GetValueType() const { return m_ValType; }
+	void SetString(const char* s);
+	char* GetString() { return m_pString; }
 };
 

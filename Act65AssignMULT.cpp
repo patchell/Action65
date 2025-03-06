@@ -11,7 +11,7 @@ CAct65AssignMULT::~CAct65AssignMULT()
 
 bool CAct65AssignMULT::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
-	return CAstNode::Create(pChild, pNext, pSym);
+	return true;
 }
 
 CValue* CAct65AssignMULT::Process()

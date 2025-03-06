@@ -10,7 +10,7 @@ CAct65VECTOR::~CAct65VECTOR()
 
 bool CAct65VECTOR::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
-	return CAstNode::Create(pChild, pNext, pSym);
+	return true;
 }
 
 CValue* CAct65VECTOR::Process()

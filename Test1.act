@@ -1,30 +1,41 @@
 MODULE
 
-INT Avar
+INT Avar,x,y,z
 CARD Cvar
-CHAR Stuff
+CHAR Stuff,Yep
+TYPE  Junk = [
+	CHAR q,e,d
+	INT POINTER pX
+]
+INTERRUPT Hey()
+	TYPE Crud = [
+		INT CrudOne
+		CHAR CrudTwo
+	]
+	INT POINTER ARRAY POINTER cc
+	CHAR la,lb
+	CARD lc,ld,le
+	BYTE lf
 
-PROC Procone()
-	Avar = Cvar
-	IF Avar = Cvar THEN
-		Avar = 1
-	ELSE
-		Stuff = Avar + CVar
-	FI
-RETURN
+	BREAK
+	RTI
+	EXIT
+	RETURN
+	RETURN la - lb
 
-PROC Another(CHAR aCat, bBat)
-	INT Lone, Ltwo
+	PUSH .A
+	POP .A
+	Avar = x + y
+	Avar ==* x + y
+	Avar ==& x + y
+	Avar ==% x + y
+	Avar ==LSH x + y
+	Avar ==XOR x + y
+	Avar ==MOD x + y
+	RETURN
 
-	WHILE Avar # Ltwo
-	DO
-		Ltwo = aCat * bBat
-		Lone = bBat / Ltwo
-	OD
-RETURN
+MODULE
+CHAR xyx, yxy
+CARD one,two, three
 
-INT FUNC Fuction()
-	INT value
 
-	value = 8
-RETURN value

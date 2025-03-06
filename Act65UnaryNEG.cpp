@@ -10,7 +10,7 @@ CAct65UnaryNEG::~CAct65UnaryNEG()
 
 bool CAct65UnaryNEG::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
-	return CAstNode::Create(pChild, pNext, pSym);
+	return true;
 }
 
 CValue* CAct65UnaryNEG::Process()

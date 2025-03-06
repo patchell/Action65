@@ -10,7 +10,7 @@ CAct65LogicalAND::~CAct65LogicalAND()
 
 bool CAct65LogicalAND::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
-	return CAstNode::Create(pChild, pNext, pSym);
+	return true;
 }
 
 CValue* CAct65LogicalAND::Process()

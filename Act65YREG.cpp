@@ -11,7 +11,7 @@ CAct65YREG::~CAct65YREG()
 
 bool CAct65YREG::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
-	return CAstNode::Create(pChild, pNext, pSym);
+	return true;
 }
 
 CValue* CAct65YREG::Process()

@@ -10,7 +10,7 @@ CAct65NotEquelTO::~CAct65NotEquelTO()
 
 bool CAct65NotEquelTO::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
-	return CAstNode::Create(pChild, pNext, pSym);
+	return true;
 }
 
 CValue* CAct65NotEquelTO::Process()

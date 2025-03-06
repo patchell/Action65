@@ -10,7 +10,7 @@ CAct65Label::~CAct65Label()
 
 bool CAct65Label::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
-	return CAstNode::Create(pChild, pNext, pSym);
+	return true;
 }
 
 CValue* CAct65Label::Process()

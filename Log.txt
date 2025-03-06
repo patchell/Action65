@@ -1,114 +1,109 @@
-File:test8.act has 405 Bytes
+File:test1.act has 451 Bytes
 Parser Created
 	 NUMB  CHILD  NEXT
-   111      3     -1  +- 'ROOT'
-     3      2      7     +- 'INT'
-     2      1     -1     |  +- 'ARRAY'
-     1     -1     -1     |     +- 'IDENT': junk
-     7      6    108     +- 'CHAR'
-     6      4     -1     |  +- 'POINTER'
-     4     -1      5     |     +- 'IDENT': pC
-     5     -1     -1     |     +- 'IDENT': pD
-   108      8    110     +- 'IRQ-PROC'
-     8      9     -1     |  +- 'IDENT': irq
-     9     -1    107     |     +- 'Param LIST'
-   107     17     -1     |     +- 'Body'
-    17     16     18     |        +- 'LOCAL Vars'
-    16     10     -1     |        |  +- 'CARD'
-    10     15     -1     |        |     +- 'POINTER'
-    15     11     -1     |        |        +- 'ARRAY'
-    11     -1     12     |        |           +- 'IDENT': four
-    12     -1     13     |        |           +- 'IDENT': one
-    13     -1     14     |        |           +- 'IDENT': two
-    14     -1     -1     |        |           +- 'IDENT': three
-    18     43     -1     |        +- 'STATEMENTS'
-    43     22     62     |           +- 'CONDITIONAL'
-    22     21     23     |           |  +- 'IF'
-    21     20     -1     |           |  |  +- '<'
-    20     -1     19     |           |  |     +- 'IDENT': one
-    19     -1     -1     |           |  |     +- 'IDENT': four
-    23     25     30     |           |  +- 'STATEMENTS'
-    25     26     -1     |           |  |  +- '=ADD'
-    26     -1     24     |           |  |     +- 'IDENT': one
-    24     -1     -1     |           |  |     +- 'IDENT': four
-    30     29     31     |           |  +- 'ELSEIF'
-    29     28     -1     |           |  |  +- '>'
-    28     -1     27     |           |  |     +- 'IDENT': two
-    27     -1     -1     |           |  |     +- 'IDENT': four
-    31     33     41     |           |  +- 'STATEMENTS'
-    33     36     -1     |           |  |  +- 'Assign ='
-    36     35     32     |           |  |     +- 'ADD'
-    35     -1     34     |           |  |     |  +- 'NUMBER'$0004
-    34     -1     -1     |           |  |     |  +- 'IDENT': three
-    32     -1     -1     |           |  |     +- 'IDENT': two
-    41     37     42     |           |  +- 'ELSE'
-    37     39     -1     |           |  |  +- 'STATEMENTS'
-    39     40     -1     |           |  |     +- '=SUB'
-    40     -1     38     |           |  |        +- 'IDENT': one
-    38     -1     -1     |           |  |        +- 'IDENT': four
-    42     -1     -1     |           |  +- 'FI'
-    62     47     74     |           +- 'CONDITIONAL'
-    47     46     48     |           |  +- 'IFF'
-    46     45     -1     |           |  |  +- 'EQU-TO'
-    45     -1     44     |           |  |     +- 'NUMBER'$0000
-    44     -1     -1     |           |  |     +- '.A'
-    48     50     60     |           |  +- 'STATEMENTS'
-    50     53     -1     |           |  |  +- 'Assign ='
-    53     52     49     |           |  |     +- 'ADD'
-    52     -1     51     |           |  |     |  +- 'IDENT': three
-    51     -1     -1     |           |  |     |  +- 'IDENT': one
-    49     -1     -1     |           |  |     +- 'IDENT': four
-    60     54     61     |           |  +- 'ELSE'
-    54     56     -1     |           |  |  +- 'STATEMENTS'
-    56     59     -1     |           |  |     +- 'Assign ='
-    59     58     55     |           |  |        +- 'SUB'
-    58     -1     57     |           |  |        |  +- 'IDENT': three
-    57     -1     -1     |           |  |        |  +- 'IDENT': four
-    55     -1     -1     |           |  |        +- 'IDENT': one
-    61     -1     -1     |           |  +- 'FFI'
-    74     65     84     |           +- 'WHILE'
-    65     64     72     |           |  +- 'EQU-TO'
-    64     -1     63     |           |  |  +- 'NUMBER'$0000
-    63     -1     -1     |           |  |  +- 'IDENT': pC
-    72     66     73     |           |  +- 'DO'
-    66     68     -1     |           |  |  +- 'STATEMENTS'
-    68     71     -1     |           |  |     +- 'Assign ='
-    71     70     67     |           |  |        +- 'SUB'
-    70     -1     69     |           |  |        |  +- 'IDENT': pC
-    69     -1     -1     |           |  |        |  +- 'IDENT': pC
-    67     -1     -1     |           |  |        +- 'IDENT': pC
-    73     -1     -1     |           |  +- 'OD'
-    84     75    105     |           +- 'DO'
-    75     77     83     |           |  +- 'STATEMENTS'
-    77     78     82     |           |  |  +- '=ADD'
-    78     -1     76     |           |  |  |  +- 'IDENT': one
-    76     -1     -1     |           |  |  |  +- 'IDENT': pD
-    82     81     -1     |           |  |  +- 'UNTILL'
-    81     80     -1     |           |  |     +- 'EQU-TO'
-    80     -1     79     |           |  |        +- 'NUMBER'$0005
-    79     -1     -1     |           |  |        +- 'IDENT': pD
-    83     -1     -1     |           |  +- 'OD'
-   105     85    106     |           +- 'FOR'
-    85     86     91     |           |  +- 'IDENT': one
-    86     87     -1     |           |  |  +- 'Assign ='
-    87     -1     -1     |           |  |     +- 'NUMBER'$0009
-    91     90     93     |           |  +- 'TO'
-    90     89     -1     |           |  |  +- 'ADD'
-    89     -1     88     |           |  |     +- 'IDENT': four
-    88     -1     -1     |           |  |     +- 'IDENT': three
-    93     92    103     |           |  +- 'STEP'
-    92     -1     -1     |           |  |  +- 'NUMBER'$0003
-   103     94    104     |           |  +- 'DO'
-    94    102     -1     |           |  |  +- 'STATEMENTS'
-   102     98     -1     |           |  |     +- 'CONDITIONAL'
-    98     97     99     |           |  |        +- 'IF'
-    97     96     -1     |           |  |        |  +- 'EQU-TO'
-    96     -1     95     |           |  |        |     +- 'NUMBER'$0006
-    95     -1     -1     |           |  |        |     +- 'IDENT': three
-    99    100    101     |           |  |        +- 'STATEMENTS'
-   100     -1     -1     |           |  |        |  +- 'EXIT'
-   101     -1     -1     |           |  |        +- 'FI'
-   104     -1     -1     |           |  +- 'OD'
-   106     -1     -1     |           +- 'RTI'
-   110    109     -1     +- 'INT'
-   109     -1     -1        +- 'IDENT': Xone
+     2      3     -1  +- 'ROOT'
+     3      4    101     +- 'MODULE'
+     4      5      9     |  +- 'INT'
+     5     -1      6     |  |  +- 'IDENT': Avar
+     6     -1      7     |  |  +- 'IDENT': x
+     7     -1      8     |  |  +- 'IDENT': y
+     8     -1     -1     |  |  +- 'IDENT': z
+     9     10     11     |  +- 'CARD'
+    10     -1     -1     |  |  +- 'IDENT': Cvar
+    11     12     24     |  +- 'CHAR'
+    12     -1     13     |  |  +- 'IDENT': Stuff
+    13     -1     -1     |  |  +- 'IDENT': Yep
+    24     14     25     |  +- 'TYPE'
+    14     22     -1     |  |  +- 'TYPE Name': Junk
+    22     18     23     |  |     +- 'FIELDS'
+    18     15     21     |  |     |  +- 'CHAR'
+    15     -1     16     |  |     |  |  +- 'IDENT': q
+    16     -1     17     |  |     |  |  +- 'IDENT': e
+    17     -1     -1     |  |     |  |  +- 'IDENT': d
+    21     19     -1     |  |     |  +- 'INT'
+    19     20     -1     |  |     |     +- 'POINTER'
+    20     -1     -1     |  |     |        +- 'IDENT': pX
+    23     -1     -1     |  |     +- 'TYPE Fields End'
+    25     26     -1     |  +- 'IRQ-PROC'
+    26     -1     29     |     +- 'IDENT': Hey
+    29     28     -1     |     +- 'Body'
+    28     42     52     |        +- 'LOCAL Vars'
+    42     38     45     |        |  +- 'INT'
+    38     -1     39     |        |  |  +- 'POINTER'
+    39     -1     40     |        |  |  +- 'ARRAY'
+    40     41     -1     |        |  |  +- 'POINTER'
+    41     -1     -1     |        |  |     +- 'IDENT': cc
+    45     43     49     |        |  +- 'CHAR'
+    43     -1     44     |        |  |  +- 'IDENT': la
+    44     -1     -1     |        |  |  +- 'IDENT': lb
+    49     46     51     |        |  +- 'CARD'
+    46     -1     47     |        |  |  +- 'IDENT': lc
+    47     -1     48     |        |  |  +- 'IDENT': ld
+    48     -1     -1     |        |  |  +- 'IDENT': le
+    51     50     37     |        |  +- 'BYTE'
+    50     -1     -1     |        |  |  +- 'IDENT': lf
+    37     30     -1     |        |  +- 'TYPE'
+    30     35     -1     |        |     +- 'TYPE Name': Crud
+    35     32     36     |        |        +- 'FIELDS'
+    32     31     34     |        |        |  +- 'INT'
+    31     -1     -1     |        |        |  |  +- 'IDENT': CrudOne
+    34     33     -1     |        |        |  +- 'CHAR'
+    33     -1     -1     |        |        |     +- 'IDENT': CrudTwo
+    36     -1     -1     |        |        +- 'TYPE Fields End'
+    52     53     -1     |        +- 'STATEMENTS'
+    53     -1     54     |           +- 'BREAK'
+    54     -1     55     |           +- 'RTI'
+    55     -1     56     |           +- 'EXIT'
+    56     -1     57     |           +- 'RETURN'
+    57     59     61     |           +- 'RETURN'
+    59     60     -1     |           |  +- 'SUB'
+    60     -1     58     |           |     +- 'IDENT': lb
+    58     -1     -1     |           |     +- 'IDENT': la
+    61     62     63     |           +- 'PUSH'
+    62     -1     -1     |           |  +- '.A'
+    63     64     66     |           +- 'POP'
+    64     -1     -1     |           |  +- '.A'
+    66     68     71     |           +- 'Assign ='
+    68     69     65     |           |  +- 'ADD'
+    69     -1     67     |           |  |  +- 'IDENT': y
+    67     -1     -1     |           |  |  +- 'IDENT': x
+    65     -1     -1     |           |  +- 'IDENT': Avar
+    71     73     76     |           +- '=SUB'
+    73     74     70     |           |  +- 'ADD'
+    74     -1     72     |           |  |  +- 'IDENT': y
+    72     -1     -1     |           |  |  +- 'IDENT': x
+    70     -1     -1     |           |  +- 'IDENT': Avar
+    76     78     81     |           +- '=AND'
+    78     79     75     |           |  +- 'ADD'
+    79     -1     77     |           |  |  +- 'IDENT': y
+    77     -1     -1     |           |  |  +- 'IDENT': x
+    75     -1     -1     |           |  +- 'IDENT': Avar
+    81     83     86     |           +- '=OR'
+    83     84     80     |           |  +- 'ADD'
+    84     -1     82     |           |  |  +- 'IDENT': y
+    82     -1     -1     |           |  |  +- 'IDENT': x
+    80     -1     -1     |           |  +- 'IDENT': Avar
+    86     88     91     |           +- '=LSH'
+    88     89     85     |           |  +- 'ADD'
+    89     -1     87     |           |  |  +- 'IDENT': y
+    87     -1     -1     |           |  |  +- 'IDENT': x
+    85     -1     -1     |           |  +- 'IDENT': Avar
+    91     93     96     |           +- '=XOR'
+    93     94     90     |           |  +- 'ADD'
+    94     -1     92     |           |  |  +- 'IDENT': y
+    92     -1     -1     |           |  |  +- 'IDENT': x
+    90     -1     -1     |           |  +- 'IDENT': Avar
+    96     98    100     |           +- '=MOD'
+    98     99     95     |           |  +- 'ADD'
+    99     -1     97     |           |  |  +- 'IDENT': y
+    97     -1     -1     |           |  |  +- 'IDENT': x
+    95     -1     -1     |           |  +- 'IDENT': Avar
+   100     -1     -1     |           +- 'RETURN'
+   101    102     -1     +- 'MODULE'
+   102    103    105        +- 'CHAR'
+   103     -1    104        |  +- 'IDENT': xyx
+   104     -1     -1        |  +- 'IDENT': yxy
+   105    106     -1        +- 'CARD'
+   106     -1    107           +- 'IDENT': one
+   107     -1    108           +- 'IDENT': two
+   108     -1     -1           +- 'IDENT': three

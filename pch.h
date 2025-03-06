@@ -48,12 +48,12 @@ enum  class Token {
 	OR,		//logical OR
 	XOR,	//bitwise Exclusive OR
 	//-------- Functions --------
-	PROC,
-	FUNC,
-	INTERRUPT,
-	INTERRUPT_IDENT,
-	FUNC_IDENT,
-	PROC_IDENT,
+	PROC,				//Proc Keyword Token
+	FUNC,				//Func Keyword Token
+	INTERRUPT,			//Interrupt Keyword Token
+	INTERRUPT_IDENT,	//Interrupt Symbol Token
+	FUNC_IDENT,			//Function Symbol Token
+	PROC_IDENT,			//Proc Symbol Keyword
 	DECLARE,
 	//------ Data Types -----------------
 	BOOL,
@@ -227,7 +227,8 @@ enum class IdentType {
 	GLOBAL,
 	LOCAL,
 	PARAMETER,
-	SECTION
+	SECTION,
+	TYPE_DEF
 };
 
 enum class AdrModeType {
@@ -300,7 +301,7 @@ struct AdrModeToTextLUT {
 		}
 		return pN;
 	}
-
+	static int Print(char* s, int l, int Address, AdrModeType T);
 };
 
 extern AdrModeToTextLUT AdrModeToTxtTabel;
@@ -424,7 +425,8 @@ public:
 		EXPECTED_CONSTANT,
 		EXPECTED_DATABLOCK,
 		EXPECTED_INDEX_REG,
-		EXPECTED_STRING
+		EXPECTED_STRING,
+		EXPECTED_PROC_FUNC_INTERRUPT
 	};
 	enum class ExceptionSubType {
 		WHOKNOWS,
@@ -722,10 +724,11 @@ public:
 #include "Act65AssignEQ.h"
 #include "Act65TypeFieldsEND.h"
 #include "Act65CONDITIONAL.h"
+#include "Act65TYPEname.h"
+#include "Act65ARRAYdim.h"
+#include "Act65IDENTaddress.h"
 #include "AstTree.h"
 #include "ActionAstTree.h"
-
-#include "LkHead.h"
 
 #include "CodeGeneration.h"
 

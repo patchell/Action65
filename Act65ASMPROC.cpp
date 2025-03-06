@@ -10,7 +10,7 @@ CAct65ASMPROC::~CAct65ASMPROC()
 
 bool CAct65ASMPROC::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
-	return CAstNode::Create(pChild, pNext, pSym);
+	return true;
 }
 
 CValue* CAct65ASMPROC::Process()

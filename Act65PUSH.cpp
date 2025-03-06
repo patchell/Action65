@@ -10,7 +10,7 @@ CAct65PUSH::~CAct65PUSH()
 
 bool CAct65PUSH::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
-	return CAstNode::Create(pChild, pNext, pSym);
+	return true;
 }
 
 CValue* CAct65PUSH::Process()

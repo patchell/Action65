@@ -10,7 +10,7 @@ CAct65AssignLSh::~CAct65AssignLSh()
 
 bool CAct65AssignLSh::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
-	return CAstNode::Create(pChild, pNext, pSym);
+	return true;
 }
 
 CValue* CAct65AssignLSh::Process()

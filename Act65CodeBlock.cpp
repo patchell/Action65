@@ -10,7 +10,7 @@ CAct65CodeBlock::~CAct65CodeBlock()
 
 bool CAct65CodeBlock::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
-	return CAstNode::Create(pChild, pNext, pSym);
+	return true;
 }
 
 CValue* CAct65CodeBlock::Process()
@@ -62,7 +62,7 @@ CAct65CODEBLOCKend::~CAct65CODEBLOCKend()
 
 bool CAct65CODEBLOCKend::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
-	return CAstNode::Create(pChild, pNext, pSym);
+	return true;
 }
 
 CValue* CAct65CODEBLOCKend::Process()

@@ -48,6 +48,7 @@ private:
 	int m_Recursion;
 	int m_Bump;
 	CActionAstTree m_AstTree;
+	Token LookaHeadToken;
 public:
 	CParser();
 	virtual ~CParser();
@@ -61,200 +62,188 @@ public:
 	CLexer* GetLexer() { return m_pLex; }
 	CActionAstTree* GetAstTree() { return &m_AstTree; }
 	FILE* LogFile();
-	CLookaHead Run();
+	CAstNode* Run();
 	//---------------------------------
-	CLookaHead Expect(CLookaHead LookaheadToken, Token Expected);
-	bool Accept(Token LookaheadToken, Token Expected);
+	void Expect(Token Expected);
+	bool Accept(Token Expected);
 private:
 	//---------------------------------
 	// Parsing Methods
 	//---------------------------------
 	// Program Structure
 	//---------------------------------
-	CLookaHead Action65(CLookaHead LookaHead);
-	CLookaHead Modules(CLookaHead LookaHead);
+	CAstNode*  Action65();
+	CAstNode*  Modules();
 	//---------------------------------
 	// SET
 	//---------------------------------
-	CLookaHead Set(CLookaHead LookaHead);
-	CLookaHead SetObjects(CLookaHead LookaHead);
-	CLookaHead SetSectionName(CLookaHead LookaHead);
+	CAstNode*  Set();
+	CAstNode*  SetObjects();
+	CAstNode*  SetSectionName();
 	//------------------------------------------
 	// Statements
 	//------------------------------------------
-	CLookaHead Statements(CLookaHead LookaHead);
+	CAstNode*  Statements();
 	//------------------------------------------
 	// Statements
 	//------------------------------------------
-	CLookaHead Call(CLookaHead LookaHead);	//ProcCal
-	CLookaHead ProcParams(CLookaHead LookaHead);
-	CLookaHead ProcParamsEnd(CLookaHead LookaHead);
+	CAstNode*  Call();	//ProcCal
+	CAstNode*  ProcParams();
+	CAstNode*  ProcParamsEnd();
 	//----FOR
-	CLookaHead ForStmt(CLookaHead LookaHead);
-	CLookaHead ForDO(CLookaHead LookaHead);
-	CLookaHead STEPoption(CLookaHead LookaHead);
-	CLookaHead ForTO(CLookaHead LookaHead);
-	CLookaHead Iterator(CLookaHead LookaHead);
+	CAstNode*  ForStmt();
+	CAstNode*  For();
 	//--- IF
-	CLookaHead IfStmt(CLookaHead LookaHead);
-	CLookaHead IfPart(CLookaHead LookaHead);
+	CAstNode*  IfStmt();
+	CAstNode*  IfPart();
 	//----IFF
-	CLookaHead IffStmt(CLookaHead LookaHead);
-	CLookaHead IffPart(CLookaHead LookaHead);;
-	CLookaHead IffRelOper(CLookaHead LookaHead);;
-	CLookaHead IffRegister(CLookaHead LookaHead);;
-	CLookaHead Bits(CLookaHead LookaHead);;
-	CLookaHead BitValue(CLookaHead LookaHead);;
-	CLookaHead StatusFlags(CLookaHead LookaHead);;
-	CLookaHead OptNot(CLookaHead LookaHead);;
+	CAstNode*  IffStmt();
+	CAstNode*  IffPart();;
+	CAstNode*  IffRelOper();;
+	CAstNode*  IffRegister();;
+	CAstNode*  Bits();;
+	CAstNode*  BitValue();;
+	CAstNode*  StatusFlags();;
+	CAstNode*  OptNot();;
 	//----WHILE
-	CLookaHead WhileStmt(CLookaHead LookaHead);
-	CLookaHead WhileDO(CLookaHead LookaHead);
+	CAstNode*  WhileStmt();
+	CAstNode*  WhileDO();
 	//----DO
-	CLookaHead DoStmt(CLookaHead LookaHead);
-	CLookaHead DoEND(CLookaHead LookaHead);
+	CAstNode*  DoStmt();
+	CAstNode*  DoEND();
 	//----EXIT
-	CLookaHead EXITstmt(CLookaHead LookaHead);
+	CAstNode*  EXITstmt();
 	//----RETURN
-	CLookaHead RetStmt(CLookaHead LookaHead);
-	CLookaHead OptReturnValue(CLookaHead LookaHead);
+	CAstNode*  RetStmt();
 	//----ASM
-	CLookaHead InlineAssembly(CLookaHead LookaHead);
-	CLookaHead EndAsmBlock(CLookaHead LookaHead);
-	CLookaHead InlineAssBlock(CLookaHead LookaHead);
+	CAstNode*  InlineAssembly();
+	CAstNode*  InlineAssBlock();
 	//----CODE BLOCK
-	CLookaHead CodeBlock(CLookaHead LookaHead);
+	CAstNode*  CodeBlock();
 	//---- UNTIL
-	CLookaHead UntillStmt(CLookaHead LookaHead);
+	CAstNode*  UntillStmt();
 	//---- PUSH
-	CLookaHead Push(CLookaHead LookaHead);
-	CLookaHead PushSourceList(CLookaHead LookaHead);
-	CLookaHead PushSource(CLookaHead LookaHead);
+	CAstNode*  Push();
+	CAstNode*  PushSourceList();
+	CAstNode*  PushSource();
 	//---- POP
-	CLookaHead Pop(CLookaHead LookaHead);
-	CLookaHead PopDestList(CLookaHead LookaHead);
-	CLookaHead PopDest(CLookaHead LookaHead);
+	CAstNode*  Pop();
+	CAstNode*  PopDestList();
+	CAstNode*  PopDest();
 	//---- BREAK
-	CLookaHead Break(CLookaHead LookaHead);
+	CAstNode*  Break();
 	//---- RTI
-	CLookaHead Rti(CLookaHead LookaHead);
+	CAstNode*  Rti();
 	//---- Assigmemt
-	CLookaHead Assignment(CLookaHead LookaHead);
-	CLookaHead AssignmentAUX(CLookaHead LHNext, CAstNode* pN);
+	CAstNode*  Assignment();
 	//--------------------------------------
 	// Logical Expressions
 	//--------------------------------------
-	CLookaHead RelOperation(CLookaHead LookaHead);
-	CLookaHead LogicalOR(CLookaHead LookaHead);
-	CLookaHead LogicalAND(CLookaHead LookaHead);
+	CAstNode*  RelOperation();
+	CAstNode*  LogicalOR();
+	CAstNode*  LogicalAND();
 	//--------------------------------------
 	// Arithmetic Expressions
 	//--------------------------------------
-	CLookaHead ArithExpr(CLookaHead LookaHead);	//bitwise OR
-	CLookaHead BitwiseAND(CLookaHead LookaHead);
-	CLookaHead BitwiseXOR(CLookaHead LookaHead);
-	CLookaHead AddExpr(CLookaHead LookaHead);
-	CLookaHead ShifExpr(CLookaHead LookaHead);
-	CLookaHead MultExpr(CLookaHead LookaHead);
-	CLookaHead Unary(CLookaHead LookaHead);
+	CAstNode*  ArithExpr();	//bitwise OR
+	CAstNode*  BitwiseAND();
+	CAstNode*  BitwiseXOR();
+	CAstNode*  AddExpr();
+	CAstNode*  ShifExpr();
+	CAstNode*  MultExpr();
+	CAstNode*  Unary();
 	//----------------------------------
 	//Variable References
 	//Memory References
 	//----------------------------------
-	CLookaHead ValueList(CLookaHead LookaHead);
-	CLookaHead Value(CLookaHead LookaHead);
-	CLookaHead AddressOf(CLookaHead LookaHead);
-	CLookaHead MemContentsType(CLookaHead LookaHead);
-	CLookaHead MemContents(CLookaHead LookaHead);
-	CLookaHead ArrayIndex(CLookaHead LookaHead);
-	CLookaHead Factor(CLookaHead LookaHead);
+	CAstNode*  ValueList();
+	CAstNode*  Value();
+	CAstNode*  AddressOf();
+	CAstNode*  MemContentsType();
+	CAstNode*  MemContents();
+	CAstNode*  ArrayIndex();
+	CAstNode*  Factor();
 
 	//-------------------------------------------
 	// Declarations
 	//-------------------------------------------
 	// VECTOR
 	//-------------------------------------------
-	CLookaHead SysDecl(CLookaHead LookaHead);	//Vectpr
-	CLookaHead VectorEnd(CLookaHead LookaHead);
-	CLookaHead AddressEnd(CLookaHead LookaHead);
-	CLookaHead VectorAddress(CLookaHead LookaHead);
+	CAstNode*  SysDecl();	//Vectpr
+	CAstNode*  VectorEnd();
+	CAstNode*  AddressEnd();
+	CAstNode*  VectorAddress();
 	//------------------------------------------
 	// DEFINE
 	//------------------------------------------
-	CLookaHead Define(CLookaHead LookaHead);
-	CLookaHead DefObject(CLookaHead LookaHead);
-	CLookaHead DefList(CLookaHead LookaHead);
-	CLookaHead Def(CLookaHead LookaHead);
+	CAstNode*  Define();
+	CAstNode*  DefObject();
+	CAstNode*  DefList();
+	CAstNode*  Def();
 	//--------------------------------------
 	// TYPEdef Definition
 	//--------------------------------------
-	CLookaHead TypeDefDecl(CLookaHead LookaHead);
-	CLookaHead EndTypeDef(CLookaHead LookaHead);
-	CLookaHead RecDefField(CLookaHead LookaHead);
-	CLookaHead Fields(CLookaHead LookaHead);
+	CAstNode*  TypeDefDecl();
+	CAstNode*  TypeDef();
 	//----------------------------------------
-	// Function/Procedure/Interrupt
+	// FUNCtion/PROCedure/INTERRUPT
 	// Declarations/Function Prototypes
-	CLookaHead Declare(CLookaHead LookaHead);
-	CLookaHead DeclareEnd(CLookaHead LookaHead);
-	CLookaHead DeclareParams(CLookaHead LookaHead);
-	CLookaHead DeclParamList(CLookaHead LookaHead);
-	CLookaHead DeclPramPointer(CLookaHead LookaHead);
-	CLookaHead DeclParamArray(CLookaHead LookaHead);
-	CLookaHead DeclareParamIdentList(CLookaHead LookaHead);
-	CLookaHead DeclareParamIdent(CLookaHead LookaHead);
+	CAstNode*  Declare();
+	void DECLAREnd();
+	void DECLAREParamList();
+	void DECLAREParamTypeSpec(CTypeChain* pTypeChain);
+	void DECLAREParamIdentList(CTypeChain* pTypeChain);
+	void DECLAREParamIdent(CTypeChain* pTypeChain);
 	//-------------------
-	CLookaHead DeclarFuncName(CLookaHead LookaHead);
-	CLookaHead DeclareType(CLookaHead LookaHead);
-	CLookaHead DeclarePointer(CLookaHead LookaHead);
-	CLookaHead DeclareArray(CLookaHead LookaHead);
-	CLookaHead DeclarFuncType(CLookaHead LookaHead);
+	void DECLAREFuncType(void);
+	void DECLAREFuncTypeSpec(CTypeChain* pTypeChain);
+	void  DECLAREfunction(CTypeChain* pTypeChain);
+	void DECLAREFuncName(CTypeChain* pTypeChain);
 	// ---------------------------------------
 	// Fundamental Declarations
 	//----------------------------------------
-	CLookaHead FundDecl(CLookaHead LookaHead);
-	CLookaHead FundTypeSpec(CLookaHead LookaHead);
+	CAstNode*  FundDecl();
+	CAstNode*  FundTypeSpec(CTypeChain* pTC);
 	//----------------------------------
 	// Identifiers
 	//----------------------------------
-	CLookaHead IdentList(CLookaHead LookaHead);
-	CLookaHead Ident(CLookaHead LookaHead);
-	CLookaHead IdentInitType(CLookaHead LookaHead);
-	CLookaHead InitData(CLookaHead LookaHead);
+	CAstNode*  IdentList(CTypeChain* pTC);
+	CAstNode*  Ident( CTypeChain* pTC);
+	CAstNode*  IdentInitType();
+	CAstNode*  InitData();
 	//------------------
-	CLookaHead IrqDecl(CLookaHead LookaHead);
-	CLookaHead IrqDeclParams(CLookaHead LookaHead);
-	CLookaHead IrqBody(CLookaHead LookaHead);
+	CAstNode*  IrqDecl(CTypeChain* pTypeChain);
+	CAstNode*  IrqDeclParams();
+	CAstNode*  IrqBody();
 	//------------------
-	CLookaHead ProcDecl(CLookaHead LookaHead);
-	CLookaHead ProcDeclParams(CLookaHead LookaHead);
-	CLookaHead ProcBody(CLookaHead LookaHead);
+	CAstNode*  ProcDecl(CTypeChain* pTypeChain);
+	CAstNode*  ProcDeclParams();
+	CAstNode*  ProcBody();
 	//------------------
-	CLookaHead FuncDecl(CLookaHead LookaHead);
-	CLookaHead FuncDeclParams(CLookaHead LookaHead);
-	CLookaHead FuncBody(CLookaHead LookaHead);
+	CAstNode*  FuncDecl();
+	CAstNode*  FuncDeclParams();
+	CAstNode*  FuncBody();
 	//------------------
-	CLookaHead OptInit(CLookaHead LookaHead);
+	CAstNode*  OptInit();
 	//-------------------------------------------
 	// Parameter Declarations
 	//-------------------------------------------
-	CLookaHead ParamList(CLookaHead LookaHead);
-	CLookaHead ParamTypeSpec(CLookaHead LookaHead);
-	CLookaHead DefineParamIdentList(CLookaHead LookaHead);
-	CLookaHead DefineParamIdent(CLookaHead LookaHead);
+	CAstNode*  ParamList();
+	CAstNode*  ParamTypeSpec(CTypeChain* pTypeChain);
+	CAstNode*  DefineParamIdentList(CTypeChain* pTypeChain);
+	CAstNode*  DefineParamIdent(CTypeChain* pTypeChain);
 	//-----------------------------------------------
 	// Local Variableas
 	//-----------------------------------------------
-	CLookaHead LocalDecls(CLookaHead LookaHead);
-	CLookaHead LocalVarDecls(CLookaHead LookaHead);
-	CLookaHead LocalTypeSpec(CLookaHead LookaHead);
+	CAstNode*  LocalDecls();
+	CAstNode*  LocalVarDecls();
+	CAstNode*  LocalTypeSpec(CTypeChain* pTypeChain);
 	//-------------------------------
 	// Compiler Constants
 	//-------------------------------
-	CLookaHead ConstList(CLookaHead LookaHead);
-	CLookaHead ConstListEnd(CLookaHead LookaHead);
-	CLookaHead CompConst(CLookaHead LookaHead);
-	CLookaHead BaseCompConst(CLookaHead LookaHead);
+	CAstNode*  ConstListEnd();
+	CAstNode*  CompConst();
+	CAstNode*  BaseCompConst();
 	//****************************************
 	//----------------------------------------
 	//  Inline assembly code
@@ -262,8 +251,8 @@ private:
 	//	Statements
 	//----------------------------------------
 	//****************************************
-	CLookaHead AsmStmt(CLookaHead LookaHead);
-	CLookaHead ProcessorType(CLookaHead LookaHead);
+	CAstNode*  AsmStmt();
+	CAstNode*  ProcessorType();
 	//-----------------------------------------
 	// Code
 	//		These statements are what actually
@@ -274,126 +263,121 @@ private:
 	//-----------------------------------------
 	// SET
 	//-----------------------------------------
-	CLookaHead AsmSet(CLookaHead LookaHead);
-	CLookaHead AsmSetObjects(CLookaHead LookaHead);
-	CLookaHead AsmSectionName(CLookaHead LookaHead);
+	CAstNode*  AsmSet();
+	CAstNode*  AsmSetObjects();
+	CAstNode*  AsmSectionName();
 	//-----------------------------------------
 	// SECITON
 	//-----------------------------------------
-	CLookaHead Section(CLookaHead LookaHead);
-	CLookaHead SectionName(CLookaHead LookaHead);
-	CLookaHead SectionDef(CLookaHead LookaHead);
-	CLookaHead SectionAttributesList(CLookaHead LookaHead);
-	CLookaHead SectionAtribute(CLookaHead LookaHead);
-	CLookaHead Modes(CLookaHead LookaHead);
-	CLookaHead TrueFalse(CLookaHead LookaHead);
+	CAstNode*  Section();
+	CAstNode*  SectionName();
+	CAstNode*  SectionDef();
+	CAstNode*  SectionAttributesList();
+	CAstNode*  SectionAtribute();
+	CAstNode*  Modes();
+	int  TrueFalse();
 	//-------------------------------------
 	// Org  Sets the location counter
 	// for the current section
 	//-------------------------------------
-	CLookaHead Org(CLookaHead LookaHead);
+	CAstNode*  Org();
 	//-------------------------------------
 	// Define Memeory
 	//-------------------------------------
-	CLookaHead DefineMemory(CLookaHead LookaHead);
+	CAstNode*  DefineMemory();
 	//-------------------------------------
 	// DefineStorage
 	//-------------------------------------
-	CLookaHead DefineStorage(CLookaHead LookaHead);
+	CAstNode*  DefineStorage();
 	//-------------------------------------
 	// Proceedure
 	//-------------------------------------
-	CLookaHead Proceedure(CLookaHead LookaHead);
-	CLookaHead AsmProcEnd(CLookaHead LookaHead);
-	CLookaHead AsmProcBody(CLookaHead LookaHead);
-	CLookaHead AsmProcName(CLookaHead LookaHead);
+	CAstNode*  Proceedure();
+	CAstNode*  AsmProcEnd();
+	CAstNode*  AsmProcBody();
+	CAstNode*  AsmProcName();
 	//--------------------------------------
 	// Opcodes
 	//--------------------------------------
-	CLookaHead Instruction(CLookaHead LookaHead);
+	CAstNode*  Instruction();
 	//---------------------------------------------
 	// Lables
 	//---------------------------------------------
-	CLookaHead Labels(CLookaHead LookaHead);
-	CLookaHead LocalGlobal(CLookaHead LookaHead, bool& IsLocal);	
+	CAstNode*  Labels();
 	//-----------------------------------
 	//ALU Addressing Mode
 	//-----------------------------------
-	CLookaHead AluAdrModes(CLookaHead LookaHead, Token OpCodeToken);
+	CAstNode*  AluAdrModes(Token OpCodeToken);
 	//---------------------------------------------
 	// STA addressing mode
 	//---------------------------------------------
-	CLookaHead StaAddressingModes(CLookaHead LookaHead, Token OpCodeToken);
+	CAstNode*  StaAddressingModes(Token  OpCodeToken);
 	//-----------------------------------------
 	// ASL LSR ROR and ROL addressing modes
 	//-----------------------------------------
-	CLookaHead ShiftAddressingModes(CLookaHead LookaHead, Token OpCodeToken);
+	CAstNode*  ShiftAddressingModes(Token  OpCodeToken);
 	//------------------------------------------
 	// Branch Instructions Addressing Mode
 	//------------------------------------------
-	CLookaHead RelAddressingMode(CLookaHead LookaHead, Token OpCodeToken);
+	CAstNode*  RelAddressingMode(Token  OpCodeToken);
 	//------------------------------------------
 	// BIT Instructions Addressing Mode
 	//------------------------------------------
-	CLookaHead BitAddressModes(CLookaHead LookaHead, Token OpCodeToken);
+	CAstNode*  BitAddressModes(Token  OpCodeToken);
 	//------------------------------------------
 	// INC DEC Instructions Addressing Mode
 	//------------------------------------------
-	CLookaHead IncAddressingMOdes(CLookaHead LookaHead, Token OpCodeToken);
+	CAstNode*  IncAddressingMOdes(Token  OpCodeToken);
 	//------------------------------------------
 	// JMP Instructions Addressing Mode
 	//------------------------------------------
-	CLookaHead JumpAddressingModes(CLookaHead LookaHead, Token OpCodeToken);
+	CAstNode*  JumpAddressingModes(Token OpCodeToken);
 	//------------------------------------------
 	// JSR Instructions Addressing Mode
 	//------------------------------------------
-	CLookaHead CallAddressingMode(CLookaHead LookaHead, Token OpCodeToken);
+	CAstNode*  JSRAddressingMode(Token  OpCodeToken);
 	//------------------------------------------
 	// LDX Instructions Addressing Mode
 	//------------------------------------------
-	CLookaHead LdxAddressingMode(CLookaHead LookaHead, Token OpCodeToken);
+	CAstNode*  LdxAddressingMode(Token OpCodeToken);
 	//------------------------------------------
 	// CPX & CPY Instructions Addressing Mode
 	//------------------------------------------
-	CLookaHead CPX_CPY_AddressingMode(CLookaHead LookaHead, Token OpCodeToken);
+	CAstNode*  CPX_CPY_AddressingMode(Token OpCodeToken);
 	//------------------------------------------
 	// STX Instructions Addressing Mode
 	//------------------------------------------
-	CLookaHead StxAddressingMode(CLookaHead LookaHead, Token OpCodeToken);
+	CAstNode*  StxAddressingMode(Token OpCodeToken);
 	//------------------------------------------
 	// LDY Instructions Addressing Mode
 	//------------------------------------------
-	CLookaHead LdyAddressingMode(CLookaHead LookaHead, Token OpCodeToken);
+	CAstNode*  LdyAddressingMode(Token OpCodeToken);
 	//------------------------------------------
 	// STY Instructions Addressing Mode
 	//------------------------------------------
-	CLookaHead StyAddressingMode(CLookaHead LookaHead, Token OpCodeToken);
+	CAstNode*  StyAddressingMode(Token OpCodeToken);
 	//---------------------------------------------
 	//	Optional Index Registers
 	//---------------------------------------------
-	CLookaHead OptIndexReg(CLookaHead LookaHead, RegType& Reg);
-	CLookaHead OptIndexReg_1(CLookaHead LookaHead, RegType& Reg);
-	CLookaHead OptXReg(CLookaHead LookaHead, RegType& Reg);
-	CLookaHead OptYReg(CLookaHead LookaHead, RegType& Reg);
+	RegType  IndexRegister();
+	RegType XReg();
+	RegType  YReg();
 	//---------------------------------------
 	// Assembler Constants
 	//---------------------------------------
-	CLookaHead AsmConstList(CLookaHead LookaHead);
-	CLookaHead AsmConstList_1(CLookaHead LookaHead);
-	CLookaHead AsmConstant(CLookaHead LookaHead);
-	CLookaHead AsmConstAddSub(CLookaHead LookaHead);
-	CLookaHead BaseAsmConstant(CLookaHead LookaHead);
+	CAstNode*  AsmConstList();
+	CAstNode*  AsmConstList_1();
+	int  AsmConstant(void);
+	int  AsmConstAddSub();
+	int  BaseAsmConstant();
 	//------------------------------------------------
-	CLookaHead Indirect(CLookaHead LookaHead, Token OpCodeToken);
-	CLookaHead Immediate(CLookaHead LookaHead, Token OpCodeToken);
-	CLookaHead Absolute(CLookaHead LookaHead, Token OpCodeToken);
+	CAstNode*  Indirect(Token  OpCodeToken);
+	CAstNode*  Immediate(Token OpCodeToken);
+	CAstNode*  Absolute(Token  OpCodeToken);
 	bool CheckZeroPageAddress(int A);
 	//---------------- Debug Utillity ----------------------
 public:
-	void LookaheadDebug(const char* s, CLookaHead* pChild, CLookaHead* pNext);
-	void PrintNode(const char* s, int TabIndent, CAstNode* pNode);
-	void LHPrint(CLookaHead* pLH, const char* s);
-	void DebugTravers(
+	void DebugTraverse(
 		CAstNode* pN, 
 		const char* pTitle, 
 		int MaxRecursions, 

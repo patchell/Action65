@@ -10,7 +10,7 @@ CAct65ASMstatement::~CAct65ASMstatement()
 
 bool CAct65ASMstatement::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
-	return CAstNode::Create(pChild, pNext, pSym);
+	return true;
 }
 
 CValue* CAct65ASMstatement::Process()

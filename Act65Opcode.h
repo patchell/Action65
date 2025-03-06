@@ -59,6 +59,11 @@ public:
 	virtual int Print(int Indent, char* s, int l, bool* pbNextFlag);
 	virtual const char* GetNodeName() { return m_pNodeTyypeName; }
 	virtual void PrepareInstruction(
+		Token Tk,
+		AdrModeType AddressMode,
+		int Address
+	);
+	virtual void PrepareInstruction(
 		Token Tk, 
 		AdrModeType AddressMode,
 		CAstNode* pOperandValue_Node

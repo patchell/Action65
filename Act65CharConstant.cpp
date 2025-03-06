@@ -11,7 +11,7 @@ CAct65CharConstant::~CAct65CharConstant()
 
 bool CAct65CharConstant::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
-	return CAstNode::Create(pChild, pNext, pSym);
+	return true;
 }
 
 CValue* CAct65CharConstant::Process()

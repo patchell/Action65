@@ -10,7 +10,7 @@ CAct65SecAtrbSIZE::~CAct65SecAtrbSIZE()
 
 bool CAct65SecAtrbSIZE::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
-	return CAstNode::Create(pChild, pNext, pSym);
+	return true;
 }
 
 CValue* CAct65SecAtrbSIZE::Process()

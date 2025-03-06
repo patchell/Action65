@@ -10,7 +10,7 @@ CAct65BitWiseOR::~CAct65BitWiseOR()
 
 bool CAct65BitWiseOR::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
-	return CAstNode::Create(pChild, pNext, pSym);
+	return true;
 }
 
 CValue* CAct65BitWiseOR::Process()

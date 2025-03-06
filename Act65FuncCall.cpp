@@ -10,7 +10,7 @@ CAct65FuncCall::~CAct65FuncCall()
 
 bool CAct65FuncCall::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
-	return CAstNode::Create(pChild, pNext, pSym);
+	return true;
 }
 
 CValue* CAct65FuncCall::Process()

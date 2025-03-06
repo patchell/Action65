@@ -113,3 +113,53 @@ bool AdressModeLUT::ValidAddressingMode(AdrModeType AMT) const
 	}
 	return rV;
 }
+
+int AdrModeToTextLUT::Print(char* s, int StrLen, int Address, AdrModeType T)
+{
+	int l = 0;
+
+	switch (T)
+	{
+	case AdrModeType::ABSOLUTE_ADR:
+		l = sprintf_s(s, StrLen, " $%04X", Address & 0x0ffff);
+		break;
+	case AdrModeType::ABSOLUTE_X_ADR:
+		l = sprintf_s(s, StrLen, " $%04X, X", Address & 0x0ffff);
+		break;
+	case AdrModeType::ABSOLUTE_Y_ADR:
+		l = sprintf_s(s, StrLen, " $%04X, Y", Address & 0x0ffff);
+		break;
+	case AdrModeType::ACCUMULATOR:
+		l = sprintf_s(s, StrLen, " A");
+		break;
+	case AdrModeType::IMMEDIATE_ADR:
+		l = sprintf_s(s, StrLen, " #$%02X", Address & 0x0ff);
+		break;
+	case AdrModeType::IMPLIED:
+		break;
+	case AdrModeType::INDEXED_INDIRECT_X_ADR:
+		l = sprintf_s(s, StrLen, " ($%02X, X)", Address & 0x0ff);
+		break;
+	case AdrModeType::INDIRECT_ADR:
+		l = sprintf_s(s, StrLen, " ($%04X)", Address & 0x0ffff);
+		break;
+	case AdrModeType::INDIRECT_INDEXED_Y_ADR:
+		l = sprintf_s(s, StrLen, " ($%02X),Y", Address & 0x0ff);
+		break;
+	case AdrModeType::RELATIVE:
+		l = sprintf_s(s, StrLen, " $%02X", Address & 0x0ff);
+		break;
+	case AdrModeType::ZERO_PAGE_ADR:
+		l = sprintf_s(s, StrLen, " $%02X", Address & 0x0ff);
+		break;
+	case AdrModeType::ZERO_PAGE_X_ADR:
+		l = sprintf_s(s, StrLen, " $%02X, X", Address & 0x0ff);
+		break;
+	case AdrModeType::ZERO_PAGE_Y_ADR:
+		l = sprintf_s(s, StrLen, " $%02X, Y", Address & 0x0ff);
+		break;
+	default:
+		break;
+	}
+    return l;
+}

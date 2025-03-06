@@ -10,7 +10,7 @@ CAct65TypeFIELDS::~CAct65TypeFIELDS()
 
 bool CAct65TypeFIELDS::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
-	return CAstNode::Create(pChild, pNext, pSym);
+	return true;
 }
 
 CValue* CAct65TypeFIELDS::Process()

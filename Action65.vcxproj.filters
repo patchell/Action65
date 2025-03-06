@@ -413,9 +413,6 @@
     <ClCompile Include="Value.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="LkHead.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Act65PROCname.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -576,6 +573,15 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Act65CONDITIONAL.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Act65TYPEname.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Act65ARRAYdim.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Act65IDENTaddress.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -958,9 +964,6 @@
     <ClInclude Include="Value.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="LkHead.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Act65PROCname.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -1123,11 +1126,17 @@
     <ClInclude Include="Act65CONDITIONAL.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Act65TYPEname.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Act65ARRAYdim.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Act65IDENTaddress.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="ActionTestFiles\Test1.act">
-      <Filter>Action</Filter>
-    </None>
     <None Include="Grammar\Action.gram">
       <Filter>Grammar</Filter>
     </None>
@@ -1153,6 +1162,9 @@
       <Filter>Action</Filter>
     </None>
     <None Include="test8.act">
+      <Filter>Action</Filter>
+    </None>
+    <None Include="Test1.act">
       <Filter>Action</Filter>
     </None>
   </ItemGroup>

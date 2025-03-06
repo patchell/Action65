@@ -2,6 +2,13 @@
 
 class CAct65Label : public CAstNode
 {
+public:
+	enum class LabelType {
+		PRIVATE,
+		GLOBAL
+	};
+private:
+	LabelType m_LabelType;
 	inline static const char* m_pNodeTyypeName = "LABEL";
 public:
 	CAct65Label();
@@ -11,5 +18,7 @@ public:
 	virtual int Print(int Indent, char* s, int l, bool* pbNextFlag);
 	virtual void PrintNode(FILE* pOut, int Indent, bool* pbNextFlag);
 	virtual const char* GetNodeName() { return m_pNodeTyypeName; }
+	LabelType GetLabelType() { return m_LabelType; }
+	void SetLabelType(LabelType LT) { m_LabelType = LT; }
 };
 

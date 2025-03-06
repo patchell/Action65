@@ -11,7 +11,7 @@ CAct65CARD::~CAct65CARD()
 
 bool CAct65CARD::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
-	return CAstNode::Create(pChild, pNext, pSym);
+	return true;
 }
 
 CValue* CAct65CARD::Process()

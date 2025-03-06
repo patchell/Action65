@@ -12,6 +12,7 @@ public:
 		ADDRESS_OF_CONSTANT,
 		ARRAY,
 		ARRAY_INDEX,
+		ARRAY_DIM,
 		ASM,
 		ASM_PROC,
 		ASM_STATEMENT,
@@ -79,6 +80,7 @@ public:
 		IDENT,
 		IDENTIFIER,
 		IDENT_LIST,
+		IDENT_ADDRESS,
 		IF,
 		IFF,
 		INIT_DATA,
@@ -145,6 +147,7 @@ public:
 		TYPED_DOT_FIELD,
 		TYPE_FIELDS,
 		TYPE_FIELDS_END,
+		TYPE_NAME,
 		UNARY_NEG,
 		UNTIL,
 		UPPER_PART,
@@ -179,20 +182,16 @@ public:
 	CAstNode();
 	CAstNode(const char* pName, NodeType NT);
 	virtual ~CAstNode();
-	virtual bool Create(
+	virtual CAstNode* MakeNode(
 		CAstNode* pChild = 0,
-		CAstNode* pNext = 0,
-		CBin* pSym = 0
+		CAstNode* pNext = 0
 	);
-	virtual bool Branch(CAstNode* pBranch);
 	virtual void CreateValue(CBin* pSym);
+	virtual void CreateValue(const char* s);
+	virtual CAstNode* CreateValue(int V);
 	virtual CValue* Process() = 0;
 	virtual void PrintNode(FILE* pOut, int Indent, bool* pbNextFlag);
 	virtual int Print(int Indent, char* s, int strLen, bool* pbNextFlag);
-	void AddToHeadNextChain(CAstNode* pN);
-	void AddToTailNextChain(CAstNode* pN);
-	void InsertThatIntoThisNext(CAstNode* pN);
-	void AddThatToThisNext(CAstNode* pN);
 	// Getter/Setter Methods
 	CAstNode* GetHead() { return m_pHead; }
 	CAstNode* GetTail() { return m_pTail; }
@@ -206,7 +205,7 @@ public:
 	void SetStart(CAstNode* pAN) { m_pStart = pAN; }
 	void SetNext(CAstNode* pAN) { m_pNext = pAN; }
 	void SetPrev(CAstNode* pAN) { m_pPrev = pAN; }
-	void SetChild(CAstNode* pAN);
+	CAstNode* SetChild(CAstNode* pAN);
 	//	void SetChild(CAstNode* pAN) { m_pChild = pAN; }
 	void SetParent(CAstNode* pAN) { m_pParent = pAN; }
 	//---------------------------------------------------
@@ -236,6 +235,12 @@ public:
 	CValue* GetValue() {
 		return m_pValue;
 	}
+	static CAstNode* MakeNextList(CAstNode* pList, CAstNode* pListMember);
+	static CAstNode* CombineNodes(
+		CAstNode* pList, 
+		CAstNode* pNext,
+		CAstNode* pChild
+	);
 	int MakeIndentString(char* s, int size, int Indent, bool* pbNextFlag);
 	int GetLine() const { return m_Line; }
 	int GetColumn() const { return m_Column; }

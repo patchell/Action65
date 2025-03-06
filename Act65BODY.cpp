@@ -10,7 +10,7 @@ CAct65BODY::~CAct65BODY()
 
 bool CAct65BODY::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
-	return CAstNode::Create(pChild, pNext, pSym);
+	return true;
 }
 
 CValue* CAct65BODY::Process()

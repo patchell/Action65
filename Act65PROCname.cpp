@@ -10,7 +10,7 @@ CAct65PROCname::~CAct65PROCname()
 
 bool CAct65PROCname::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
-	return CAstNode::Create(pChild, pNext, pSym);
+	return true;
 }
 
 CValue* CAct65PROCname::Process()

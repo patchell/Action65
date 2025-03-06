@@ -44,6 +44,33 @@ bool CObjTypeChain::IsLocal() const
 	return rV;
 }
 
+bool CObjTypeChain::IsFunction() const
+{
+	bool rV = false;
+
+	if (m_SpecType == Spec::FUNC)
+		rV = true;
+	return rV;
+}
+
+bool CObjTypeChain::IsProc() const
+{
+	bool rV = false;
+
+	if (m_SpecType == Spec::PROC)
+		rV = true;
+	return rV;
+}
+
+bool CObjTypeChain::IsInterrupt() const
+{
+	bool rV = false;
+
+	if (m_SpecType == Spec::INTERRUPT)
+		rV = true;
+	return rV;
+}
+
 const char* CObjTypeChain::Types::FindName(Spec T)
 {
 	return TypesLUT[int(T)].m_pName;

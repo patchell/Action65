@@ -1,5 +1,10 @@
 INT ARRAY junk
 CHAR POINTER pC, pD
+TYPE Stuff = [
+	INT x1
+	CHAR x2
+	CARD POINTER x3,x4,x5
+]
 
 INTERRUPT irq()
 	CARD POINTER ARRAY four, one, two , three

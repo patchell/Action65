@@ -10,7 +10,7 @@ CAct65tTYPEDEF::~CAct65tTYPEDEF()
 
 bool CAct65tTYPEDEF::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
-	return CAstNode::Create(pChild, pNext, pSym);
+	return true;
 }
 
 CValue* CAct65tTYPEDEF::Process()

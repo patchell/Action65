@@ -54,10 +54,18 @@
 // VERSION 0.0.9 Feb 19, 2025
 //	Added Local TYPE declarations
 //
+//	VERSION 0.0.10 Feb 25, 2025
+//	Added LOCAL_LABEL and GLOBAL_LABEL Tokens
+//	Revamped the 'DECLARE' Grammar
 //----------------------------------
 
 TERMINALS
 	"IDENT" = 256,
+	"VAR_LOCAL",
+	"VAR_GLOBAL",
+	"VAR_PARAM",
+	"LOCAL_LABEL",
+	"GLOBAL_LABEL",
 	"NUMBER",
 	"STRING",
 	"SET",
@@ -103,9 +111,6 @@ TERMINALS
 	"INT",
 	"POINTER",
 	"ARRAY",
-	"VAR_LOCAL",
-	"VAR_GLOBAL",
-	"VAR_PARAM",
 	"PUSH",
 	"POP",
 	"BREAK",
@@ -289,26 +294,22 @@ ProcParamsEnd_1	-> ')'
 // FOR statement
 //------------------------------------------------
 ForStmt			-> IfStmt ForStmt_1;
-ForStmt_1		-> 'FOR' ForDOend IfStmt ForStmt_1
+ForStmt_1		-> 'FOR' For IfStmt ForStmt_1
 				-> .
 				;
 
-ForDOend		-> ForDO ForDOend_1;
-ForDOend_1		-> 'OD';
+For				-> 'VAR_LOCAL' For_1
+				-> 'VAR_GLOBAL' For_1
+				-> 'VAR_PARAM' For_1
+				;
+For_1			-> '=' ArithExpr For_2;
+For_2			-> 'TO' ArithExpr For_3;
+For_3			-> 'STEP' ArithExpr For_4
+				-> For_4
+				;
+For_4			-> 'DO' Statements For_5;
+For_5			-> 'OD';
 
-ForDO			-> STEPoption ForDO_1;
-ForDO_1			-> 'DO' Statements;
-
-STEPoption		-> ForTO STEPoption_1;
-STEPoption_1	-> 'STEP' ArithExpr
-				-> .
-				;
-ForTO			-> Itterrator ForTO_1;
-ForTO_1			-> 'TO' ArithExpr
-				;
-Itterrator		-> Value Itterrator_1;
-Itterrator_1	-> '=' ArithExpr
-				;
 
 //------------------------------------------------
 // IF statement
@@ -410,25 +411,19 @@ EXITstmt_1		-> 'EXIT' RetStmt EXITstmt_1
 // RETURN Statement
 //-------------------------------------------------
 RetStmt		-> InlineAssembly RetStmt_1;
-RetStmt_1	-> 'RETURN' OptReturnValue  InlineAssembly RetStmt_1
-				-> .
-				;
-OptReturnValue	-> '(' ArithExpr ')'
+RetStmt_1	-> 'RETURN' ArithExpr  InlineAssembly RetStmt_1
 				-> .
 				;
 //---------------------------------------------
 // Inline Assembly Code
 //---------------------------------------------
 InlineAssembly		-> CodeBlock InlineAssembly_1;
-InlineAssembly_1	-> 'ASM' EndAsmBlock CodeBlock InlineAssembly_1
+InlineAssembly_1	-> 'ASM' InlineAssBlock CodeBlock InlineAssembly_1
 					-> .
 					;
 
-EndAsmBlock			-> InlineAssBlock EndAsmBlock_1;
-EndAsmBlock_1		-> '}'
-					;
-
-InlineAssBlock		-> '{' AsmStmt
+InlineAssBlock		-> '{' AsmStmt InlineAssBlock
+					-> '}'
 					;
 //-----------------------------------------------
 // CODE (Kluge) BLOCK statement
@@ -671,93 +666,75 @@ Def		-> IDENT '=' CompConst;
 // object.
 //----------------------------------------------
 TypeDefDecl		-> Declare TypeDefDecl_1;
-TypeDefDecl_1	-> 'TYPE' 'IDENT' EndTypeDef Declare TypeDefDecl_1
+TypeDefDecl_1	-> 'TYPE' TypeDef Declare TypeDefDecl_1
 				-> .
 				;
 
-EndTypeDef		-> RecDefField EndTypeDef_1;
-EndTypeDef_1	-> ']'
-				-> .
-				;
-RecDefField		-> '=' Fields;
-
-Fields			-> '[' LocalDecls;
+TypeDef			-> IDENT TypeDef_1;
+TypeDef_1		-> '=' '[' LocalDecls TypeDef_2;
+TypeDef_2		-> ']';
 
 //--------------------------------------------
 // FUNC, PROC, INTERRUPT prototype declarations
 //--------------------------------------------
 
 Declare		-> FundDecl Declare_1;
-Declare_1	-> 'DECLARE' DeclareEnd FundDecl Declare_1
+Declare_1	-> 'DECLARE' DECLAREnd FundDecl Declare_1
 			-> .
 			;
 
-DeclareEnd		-> DeclareParams DeclareEnd_1;
-DeclareEnd_1	-> ')'
-				;
+DECLAREnd	-> DECLAREFuncType DECLAREnd_1;
+DECLAREnd_1 -> '(' DECLAREParamList DECLAREnd_1
+			-> ')' ;
 
-DeclareParams	-> DeclarFuncName DeclareParams_1;
-DeclareParams_1	-> '(' DeclParamList
-				;
-
-DeclParamList	-> DeclPramPointer DeclParamList_1;
-DeclParamList_1	-> 'RECORDTYPE' DeclPramPointer DeclParamList_1
-				-> 'CHAR' DeclPramPointer DeclParamList_1 
-				-> 'BYTE' DeclPramPointer DeclParamList_1 
-				-> 'INT' DeclPramPointer DeclParamList_1 
-				-> 'CARD' DeclPramPointer DeclParamList_1 
-				-> 'BOOL' DeclPramPointer DeclParamList_1 
-				-> .
-				;
-
-DeclPramPointer		-> DeclParamArray DeclPramPointer_1;
-DeclPramPointer_1	-> 'POINTER'  DeclParamArray
+DECLAREParamList	-> DECLAREParamTypeSpec DECLAREParamList_1;
+DECLAREParamList_1	-> 'RECORDTYPE' DECLAREParamTypeSpec DECLAREParamList_1
+					-> 'CHAR' DECLAREParamTypeSpec DECLAREParamList_1 
+					-> 'BYTE' DECLAREParamTypeSpec DECLAREParamList_1 
+					-> 'INT' DECLAREParamTypeSpec DECLAREParamList_1 
+					-> 'CARD' DECLAREParamTypeSpec DECLAREParamList_1 
+					-> 'BOOL' DECLAREParamTypeSpec DECLAREParamList_1 
 					-> .
 					;
 
-DeclParamArray		-> DeclareParamIdentList DeclParamArray_1;
-DeclParamArray_1	-> 'ARRAY' DeclareParamIdentList
-					-> .
-					;
-
-DeclareParamIdentList	-> DeclareParamIdent DeclareParamIdentList_1;
-DeclareParamIdentList_1	-> ',' DeclareParamIdent DeclareParamIdentList_1
+DECLAREParamTypeSpec	-> DECLAREParamIdentList DECLAREParamTypeSpec_1;
+DECLAREParamTypeSpec_1	-> 'POINTER'  DECLAREParamIdentList DECLAREParamTypeSpec_1
+						-> 'ARRAY' DECLAREParamIdentList DECLAREParamTypeSpec_1
 						-> .
 						;
 
-DeclareParamIdent		-> 'IDENT';
+DECLAREParamIdentList	-> DECLAREParamIdent DECLAREParamIdentList_1;
+DECLAREParamIdentList_1	-> ',' DECLAREParamIdent DECLAREParamIdentList_1
+						-> .
+						;
+
+DECLAREParamIdent		-> 'IDENT';
 
 //------------------
 
-DeclarFuncName	-> DeclareType DeclarFuncName_1;
-DeclarFuncName_1-> 'IDENT' 
-				;
-
-DeclareType		-> DeclarePointer DeclareType_1;
-DeclareType_1	-> 'BYTE' DeclarePointer
-				-> 'CHAR' DeclarePointer
-				-> 'INT' DeclarePointer
-				-> 'CARD' DeclarePointer
-				-> 'BOOL' DeclarePointer
-				-> 'RECORDTYPE' DeclarePointer
-				-> .
-				;
-
-DeclarePointer		-> DeclareArray DeclarePointer_1;
-DeclarePointer_1	-> 'POINTER' DeclareArray
+DECLAREFuncType		-> DECLARETypeSpec DECLAREFuncType_1;
+DECLAREFuncType_1	-> 'BYTE' DECLARETypeSpec DECLAREFuncType_1
+					-> 'CHAR' DECLARETypeSpec DECLAREFuncType_1
+					-> 'INT' DECLARETypeSpec DECLAREFuncType_1
+					-> 'CARD' DECLARETypeSpec DECLAREFuncType_1
+					-> 'BOOL' DECLARETypeSpec DECLAREFuncType_1
+					-> 'RECORDTYPE' DECLARETypeSpec DECLAREFuncType_1
 					-> .
 					;
 
-DeclareArray	-> DeclarFuncType DeclareArray_1;
-DeclareArray_1	-> 'ARRAY'
+DECLARETypeSpec		-> DECLAREfunction DECLARETypeSpec_1;
+DECLARETypeSpec_1	-> 'POINTER' DECLAREfunction DECLARETypeSpec_1
+					-> 'ARRAY' DECLAREfunction DECLARETypeSpec_1
+					-> .
+					;
+
+DECLAREfunction	-> 'FUNC' DECLAREFuncName
+				-> 'PROC' DECLAREFuncName
+				-> 'INTERRUPT' DECLAREFuncName
 				-> .
 				;
 
-DeclarFuncType	-> 'FUNC' 
-				-> 'PROC' 
-				-> 'INTERRUPT'
-				-> .
-				;
+DECLAREFuncName	-> 'IDENT';
 
 //--------------------------------------------
 // Fundemental Declarations.  These are the
@@ -801,7 +778,6 @@ InitData		-> CompConst InitData_1;
 InitData_1		-> 'STRING'
 				-> '[' ComstListEnd
 				-> .
-				;
 				;
 
 
@@ -869,7 +845,7 @@ DefineParamIdent		-> 'IDENT';
 //-----------------------------------------------
 
 LocalDecls		-> LocalVarDecls LocalTypeDef_1;
-LocalTypeDef_1	-> 'TYPE' 'IDENT' EndTypeDef LocalVarDecls LocalTypeDef_1
+LocalTypeDef_1	-> 'TYPE' TypeDef LocalVarDecls LocalTypeDef_1
 				-> .
 				;
 
@@ -892,10 +868,7 @@ LocalTypeSpec_1	-> 'POINTER' IdentList LocalTypeSpec_1
 //-------------------------------
 // Compiler Constants, from Compile time
 //-------------------------------
-//ConstList	-> '[' ComstListEnd
-//			-> .
-//			;
-//
+
 ComstListEnd	-> CompConst ComstListEnd_1;
 ComstListEnd_1	-> ']'
 				-> ',' CompConst ComstListEnd_1
@@ -1107,10 +1080,8 @@ Instruction_1	-> 'ADC'  AluAdrModes	Labels Instruction_1 //ALU Opcodes
 //---------------------------------------------
 // Lables
 //---------------------------------------------
-Labels	-> 'IDENT' Label_1	//Global
-		-> .
-		;
-Label_1	-> ':'		//private lable
+Labels	-> 'GLOBAL_LABEL'	//Global
+		-> 'LOCAL_LABEL'	// Local
 		-> .
 		;
 

@@ -73,5 +73,8 @@ public:
 	void SetSpec(Spec s) { m_SpecType = s; }
 	bool IsGlobal() const;
 	bool IsLocal() const;
+	bool IsFunction() const;
+	bool IsProc() const;
+	bool IsInterrupt() const;
 };
 

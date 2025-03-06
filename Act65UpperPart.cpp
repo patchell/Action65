@@ -10,7 +10,7 @@ CAct65UpperPart::~CAct65UpperPart()
 
 bool CAct65UpperPart::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
-	return CAstNode::Create(pChild, pNext, pSym);
+	return true;
 }
 
 CValue* CAct65UpperPart::Process()
