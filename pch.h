@@ -727,6 +727,7 @@ public:
 #include "Act65TYPEname.h"
 #include "Act65ARRAYdim.h"
 #include "Act65IDENTaddress.h"
+#include "Act65TypeFIELD.h"
 #include "AstTree.h"
 #include "ActionAstTree.h"
 

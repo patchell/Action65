@@ -262,6 +262,7 @@
     <ClCompile Include="Act65THEN.cpp" />
     <ClCompile Include="Act65TRUE.cpp" />
     <ClCompile Include="Act65TYPE.cpp" />
+    <ClCompile Include="Act65TypeFIELD.cpp" />
     <ClCompile Include="Act65TypeFIELDS.cpp" />
     <ClCompile Include="Act65TypeFieldsEND.cpp" />
     <ClCompile Include="Act65TYPEname.cpp" />
@@ -447,6 +448,7 @@
     <ClInclude Include="Act65THEN.h" />
     <ClInclude Include="Act65TRUE.h" />
     <ClInclude Include="Act65TYPE.h" />
+    <ClInclude Include="Act65TypeFIELD.h" />
     <ClInclude Include="Act65TypeFIELDS.h" />
     <ClInclude Include="Act65TypeFieldsEND.h" />
     <ClInclude Include="Act65TYPEname.h" />
@@ -506,6 +508,7 @@
   <ItemGroup>
     <None Include="Bin\action.exe" />
     <None Include="Grammar\Action.gram" />
+    <None Include="Grammar\Action1.gram" />
     <None Include="Test1.act" />
     <None Include="test2.act" />
     <None Include="test3.act" />

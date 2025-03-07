@@ -294,37 +294,52 @@ ProcParamsEnd_1	-> ')'
 // FOR statement
 //------------------------------------------------
 ForStmt			-> IfStmt ForStmt_1;
-ForStmt_1		-> 'FOR' For IfStmt ForStmt_1
+ForStmt_1		-> 'FOR' ForDOend IfStmt ForStmt_1
 				-> .
 				;
 
-For				-> 'VAR_LOCAL' For_1
-				-> 'VAR_GLOBAL' For_1
-				-> 'VAR_PARAM' For_1
+ForDOend		-> STEPoption ForDOend_1;
+ForDOend_1		-> 'DO' Statements 
+				-> 'OD';
+
+
+STEPoption		-> ForTO STEPoption_1;
+STEPoption_1	-> 'STEP' ArithExpr
+				-> .
 				;
-For_1			-> '=' ArithExpr For_2;
-For_2			-> 'TO' ArithExpr For_3;
-For_3			-> 'STEP' ArithExpr For_4
-				-> For_4
+ForTO			-> Itterrator ForTO_1;
+ForTO_1			-> 'TO' ArithExpr
 				;
-For_4			-> 'DO' Statements For_5;
-For_5			-> 'OD';
+Itterrator		-> MemoryValue Itterrator_1;
+Itterrator_1	-> '=' ArithExpr
+				;
 
 
 //------------------------------------------------
 // IF statement
 //------------------------------------------------
 IfStmt			-> Iff IfStmt_1;
-IfStmt_1		-> 'IF' IfPart Iff IfStmt_1
+IfStmt_1		-> 'IF' EndIF Iff IfStmt_1
 				-> .
 				;
 
-IfPart			-> RelOperation IfPart_1;
-IfPart_1		-> 'THEN' Statements IfPart_2;
-IfPart_2		-> 'ELSEIF' RelOperation IfPart_1
-				-> 'ELSE' Statements IfPart_3
-				-> IfPart_3;
-IfPart_3		-> 'FI';
+EndIF		-> ElsePart EndIF_1;
+EndIF_1		-> 'FI';
+
+ElsePart	-> ElseIfPart ElsePart_1;
+ElsePart_1	-> 'ELSE' Statements
+			-> .
+			;
+
+ElseIfPart		-> ThenPart ElseIfPart_1;
+ElseIfPart_1	-> 'ELSEIF' ThenPart ElseIfPart_1
+				-> .
+				;
+
+ThenPart	-> RelOperation ThenPart_1;
+ThenPart_1	-> 'THEN' Statements
+			-> .
+			;
 
 
 //-------------------------------------------------
@@ -332,15 +347,22 @@ IfPart_3		-> 'FI';
 //-------------------------------------------------
 
 Iff		-> WhileStmt Iff_1;
-Iff_1	-> 'IFF' IffPart WhileStmt Iff_1
+Iff_1	-> 'IFF' IFFend WhileStmt Iff_1
 		-> .
 		;
 
-IffPart		-> IffRelOper IffPart_1;
-IffPart_1	-> 'THEN' Statements IffPart_2;
-IffPart_2	-> 'ELSE' Statements IffPart3;
-IffPart3	-> 'FI'
+IFFend		-> IFFelse IFFend_1;
+IFFend_1	-> 'FFI';
+
+IFFelse		-> IFFthenpart IFFelse_1;
+IFFelse_1	-> 'ELSE' Statements
+			-> .
 			;
+IFFthenpart		-> IffRelOper IFFthenpart_1;
+IFFthenpart_1	-> 'THEN' Statements
+				-> .
+				;
+
 
 IffRelOper		-> IffRegister IffRelOper_1;
 IffRelOper_1	-> '<' Value
@@ -386,8 +408,7 @@ WhileStmt_1		-> 'WHILE'  WhileDO DoStmt WhileStmt_1
 				;
 
 WhileDO		-> RelOperation WhileDO_1;
-WhileDO_1	-> 'DO' Statements WhileDO_2;
-WhileDO_2	-> 'OD';
+WhileDO_1	-> 'DO' Statements OD;
 
 
 //------------------------------------------------
@@ -622,7 +643,18 @@ ArrayIndex			-> '(' ArithExpr ')'
 Factor				-> '(' RelOperation ')'
 					-> .
 					;
-		 
+
+MemoryValue			-> MemValLocation MemoryValue_1;
+MemoryValue_1		-> '^'
+					-> '.' MemValLocation MemoryValue_1
+					-> .
+					;
+
+MemValLocation		-> 'VAR_GLOBAL' ArrayIndex
+					-> 'VAR_LOCAL' ArrayIndex
+					-> 'VAR_PARAM' ArrayIndex
+					-> .
+					;
 //-------------------------------------------
 // Declarations Grammars
 //-------------------------------------------
@@ -671,8 +703,8 @@ TypeDefDecl_1	-> 'TYPE' TypeDef Declare TypeDefDecl_1
 				;
 
 TypeDef			-> IDENT TypeDef_1;
-TypeDef_1		-> '=' '[' LocalDecls TypeDef_2;
-TypeDef_2		-> ']';
+TypeDef_1		-> '=' '[' LocalDecls
+				-> ']';
 
 //--------------------------------------------
 // FUNC, PROC, INTERRUPT prototype declarations

@@ -236,9 +236,8 @@ public:
 		return m_pValue;
 	}
 	static CAstNode* MakeNextList(CAstNode* pList, CAstNode* pListMember);
-	static CAstNode* CombineNodes(
+	static CAstNode* MakeChildList(
 		CAstNode* pList, 
-		CAstNode* pNext,
 		CAstNode* pChild
 	);
 	int MakeIndentString(char* s, int size, int Indent, bool* pbNextFlag);

@@ -92,10 +92,16 @@ private:
 	CAstNode*  ProcParamsEnd();
 	//----FOR
 	CAstNode*  ForStmt();
-	CAstNode*  For();
+	CAstNode* ForDOendOD();
+	CAstNode* STEPoption();
+	CAstNode* ForTO();
+	CAstNode* Itterrator();
 	//--- IF
 	CAstNode*  IfStmt();
-	CAstNode*  IfPart();
+	CAstNode* EndIF();
+	CAstNode* ElsePart();
+	CAstNode* ElseIfPart();
+	CAstNode* ThenPart();
 	//----IFF
 	CAstNode*  IffStmt();
 	CAstNode*  IffPart();;
@@ -163,7 +169,8 @@ private:
 	CAstNode*  MemContents();
 	CAstNode*  ArrayIndex();
 	CAstNode*  Factor();
-
+	CAstNode* MemoryValue();
+	CAstNode* MemValLocation();
 	//-------------------------------------------
 	// Declarations
 	//-------------------------------------------

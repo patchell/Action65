@@ -550,7 +550,7 @@ CAstNode* CParser::ForStmt()
 {
 	//--------------------------------------------
 	//	ForStmt		-> IfStmt ForStmt_1;
-	//	ForStmt_1	-> 'FOR' For IfStmt ForStmt_1
+	//	ForStmt_1	-> 'FOR' ForDOend IfStmt ForStmt_1
 	//				-> .
 	//				;
 	//--------------------------------------------
@@ -566,7 +566,7 @@ CAstNode* CParser::ForStmt()
 		case Token::FOR:
 			Expect(Token::FOR);
 			pN = new CAct65FOR;;
-			pChild = For();
+			pChild = ForDOendOD();
 			pN->SetChild(pChild);
 			pNext = CAstNode::MakeNextList(pNext, pN);
 			//-------------------------------------------------
@@ -581,97 +581,114 @@ CAstNode* CParser::ForStmt()
 	return pNext;
 }
 
-CAstNode* CParser::For()
+CAstNode* CParser::ForDOendOD()
 {
 	//--------------------------------------------
-	//	For		-> 'VAR_LOCAL' For_1
-	//			-> 'VAR_GLOBAL' For_1
-	//			-> 'VAR_PARAM' For_1
-	//			;
-	//	For_1	-> '=' ArithExpr For_2;
-	//	For_2	-> 'TO' ArithExpr For_3;
-	//	For_3	-> 'STEP' ArithExpr For_4
-	//			->For_4
-	//			;
-	//	For_4	-> 'DO' Statements For_5;
-	//	For_5	-> 'OD';
+	//	ForDOend->STEPoption ForDOend_1;
+	//	ForDOend_1		-> 'DO' Statements
+	//	-> 'OD';
 	//--------------------------------------------
-	CAstNode* pN = 0;
-	CAstNode* pNext = 0, *pChild = 0;
-	CAstNode* pAss = 0;
-	CSymbol* pSym = 0;
+	CAstNode* pNOD = 0;
+	CAstNode* pNDO = 0;
+	CAstNode* pStatements = 0;
+	CAstNode* pNext = 0;
 
-	//--------------------------------------------
-	//	For		-> 'VAR_LOCAL' For_1
-	//			-> 'VAR_GLOBAL' For_1
-	//			-> 'VAR_PARAM' For_1
-	//			;
-	//--------------------------------------------
-	switch (LookaHeadToken)
-	{
-	case Token::VAR_GLOBAL:
-		pSym = GetLexer()->GetLexSymbol();
-		Expect(Token::VAR_GLOBAL);
-		break;
-	case Token::VAR_LOCAL:
-		pSym = GetLexer()->GetLexSymbol();
-		Expect(Token::VAR_GLOBAL);
-		break;
-	case Token::VAR_PARAM:
-		pSym = GetLexer()->GetLexSymbol();
-		Expect(Token::VAR_GLOBAL);
-		break;
-	case Token::IDENT:
-		break;
-	default:
-		break;
-	}
-	pN = new CAct65IDENT;
-	pN->SetSymbol(pSym);
-	//	For_1	-> '=' ArithExpr For_2;
-	switch (LookaHeadToken)
-	{
-	case Token('='):
-		Expect(Token('='));
-		pAss = new CAct65AssignEQ;
-		pChild = ArithExpr();
-		pAss->SetChild(pChild);
-		pNext = CAstNode::MakeNextList(pNext, pAss);
-		break;
-	default:
-		break;
-	}
-	//	For_2	-> 'TO' ArithExpr For_3;
-
-	//	For_3	-> 'STEP' ArithExpr For_4
-	//			->For_4
-	//			;
-
-	//	For_4	-> 'DO' Statements For_5;
+	pNext = STEPoption();
 	switch (LookaHeadToken)
 	{
 	case Token::DO:
 		Expect(Token::DO);
-		pChild = Statements();
-		pN = new CAct65DO;
-		pN->SetChild(pChild);
-		pNext = CAstNode::MakeNextList(pNext, pN);
+		pNDO = new CAct65DO;
+		pNOD = new CAct65OD;
+		pStatements = Statements();
+		pNDO = CAstNode::MakeChildList(pNDO, pStatements);
+		pNDO = CAstNode::MakeChildList(pNDO, pNOD);
+		pNext = CAstNode::MakeNextList(pNext, pNDO);
+		Expect(Token::OD);
 		break;
 	default:
 		break;
 	}
-	//	For_5	-> 'OD';
+	return pNext;;
+}
+
+CAstNode* CParser::STEPoption()
+{
+	//--------------------------------------------
+	//	STEPoption	->ForTO STEPoption_1;
+	//	STEPoption_1-> 'STEP' ArithExpr
+	//				-> .
+	//				;
+	//--------------------------------------------
+	CAstNode* pNTO = 0;
+	CAstNode* pNStep = 0;
+	CAstNode* pNArithExpr = 0;
+
+	pNTO = ForTO();
 	switch (LookaHeadToken)
 	{
-	case Token::OD:
-		Expect(Token::OD);
-		pN = new CAct65OD;
-		pNext = CAstNode::MakeNextList(pNext, pN);
+	case Token::STEP:
+		Expect(Token::STEP);
+		pNArithExpr = ArithExpr();
+		pNStep = new CAct65ForSTEP;
+		pNStep->SetChild(pNArithExpr);
+		pNTO = CAstNode::MakeNextList(pNTO, pNStep);
 		break;
 	default:
 		break;
 	}
-	return pNext;
+	return pNTO;
+}
+
+CAstNode* CParser::ForTO()
+{
+	//--------------------------------------------
+	//	ForTO	->Itterrator ForTO_1;
+	//	ForTO_1	-> 'TO' ArithExpr
+	//			;
+	//--------------------------------------------
+	CAstNode* pItterator = 0;
+	CAstNode* pNTO = 0;
+	CAstNode* pArithExpr = 0;
+
+	pItterator = Itterrator();
+	switch (LookaHeadToken)
+	{
+	case Token::TO:
+		Expect(Token::TO);
+		pNTO = new CAct65ForTO;
+		pArithExpr = ArithExpr();
+		pNTO->SetChild(pArithExpr);
+		pItterator = CAstNode::MakeNextList(pItterator, pNTO);
+		break;
+	default:
+		break;
+	}
+	return pItterator;
+}
+
+CAstNode* CParser::Itterrator()
+{
+	//--------------------------------------------
+	//	Itterrator		->MemoryValue Itterrator_1;
+	//	Itterrator_1	-> '=' ArithExpr
+	//					;
+	//--------------------------------------------
+	CAstNode* pMemoryValue = 0;
+	CAstNode* pArithExpr = 0;
+
+	pMemoryValue = MemoryValue();
+	switch (LookaHeadToken)
+	{
+	case Token('='):
+		Expect(Token('='));
+		pArithExpr = ArithExpr();
+		pMemoryValue->SetChild(pArithExpr);
+		break;
+	default:
+		break;
+	}
+	return pMemoryValue;
 }
 
 //-----------------------------------------------
@@ -703,7 +720,7 @@ CAstNode* CParser::IfStmt()
 		case Token::IF:
 			Expect(Token::IF);
 			pN = new CAct65IF;
-			pChild = IfPart();
+			pChild = EndIF();
 			pN->SetChild(pChild);
 			pNext = CAstNode::MakeNextList(pNext, pN);
 			//-------------------------------------------
@@ -718,82 +735,118 @@ CAstNode* CParser::IfStmt()
 	return pNext;
 }
 
-CAstNode* CParser::IfPart()
+CAstNode* CParser::EndIF()
 {
 	//--------------------------------------------
-	//	IfPart		-> 'IF' RelOperation IfPart_1;
-	//	IfPart_1	-> 'THEN' Statements IfPart_2;
-	//	IfPart_2	-> 'ELSEIF' RelOperation IfPart_1
-	//				-> 'ELSE' Statements IffPart_3
-	//				-> IffPart_3;
-	//	IfPart_3	-> 'FI'
-	//				;
+	//	EndIF	->ElsePart EndIF_1;
+	//	EndIF_1	-> 'FI';
 	//--------------------------------------------
-	CAstNode* pN= 0;
-	CAstNode* pNext = 0, *pChild = 0;
-	bool Loop = true;
+	CAstNode* pElsePart = 0;
+	CAstNode* pNFI = 0;
 
-	//	IfPart		-> RelOperation IfPart_1;
-	switch (LookaHeadToken)
-	{
-	case Token::IF:
-		Expect(Token::IF);
-		pChild = RelOperation();
-		pN = new CAct65IF;
-		pChild = pN->SetChild(pChild);
-		pNext = pNext->MakeNode(pChild, pNext);
-		break;
-	}
-	while (Loop)
-	{
-		switch (LookaHeadToken)
-		{
-		case Token::THEN:
-			Expect(Token::THEN);
-			pChild = Statements();
-			pNext = pNext->MakeNode(pChild, pNext);
-			break;
-		default:
-			break;
-		}
-		//	IfPart_2	-> 'ELSEIF' RelOperation IfPart_1;
-		//				-> 'ELSE' Statements IffPart_3
-		//				-> IffPart_3;
-		switch (LookaHeadToken)
-		{
-		case Token::ELSEIF:
-			Expect(Token::ELSEIF);
-			pChild = RelOperation();
-			pN = new CAct65ELSEIF;
-			pChild = pN->SetChild(pChild);
-			pNext = pNext->MakeNode(pChild, pNext);
-			break;
-		case Token::ELSE:
-			Expect(Token::ELSE);
-			pChild = Statements();
-			pN = new CAct65ELSE;
-			pChild = pN->SetChild(pChild);
-			pNext = pNext->MakeNode(pChild, pNext);
-			Loop = false;
-			break;
-		default:
-			Loop = false;
-			break;
-		}
-	}
-	//	IfPart_3	-> 'FI'
+	pElsePart = ElsePart();
 	switch (LookaHeadToken)
 	{
 	case Token::FI:
 		Expect(Token::FI);
-		pN = new CAct65FI;
-		pNext = CAstNode::MakeNextList(pNext, pN);
+		pNFI = new CAct65FI;
+		pElsePart = CAstNode::MakeNextList(pElsePart, pNFI);
 		break;
 	default:
 		break;
 	}
-	return pNext;
+	return pElsePart;
 }
+
+CAstNode* CParser::ElsePart()
+{
+	//--------------------------------------------
+	//	ElsePart	->ElseIfPart ElsePart_1;
+	//	ElsePart_1	-> 'ELSE' Statements
+	//				-> .
+	//				;
+	//--------------------------------------------
+	CAstNode* pElseIfPart = 0;
+	CAstNode* pNElse = 0;
+	CAstNode* pStatements = 0;
+
+	pElseIfPart = ElseIfPart();
+	switch (LookaHeadToken)
+	{
+	case Token::ELSE:
+		Expect(Token::ELSE);
+		pStatements = Statements();
+		pNElse = new CAct65ELSE;
+		pNElse->SetChild(pStatements);
+		pElseIfPart = CAstNode::MakeNextList(pElseIfPart, pNElse);
+		break;
+	default:
+		break;
+	}
+	return pElseIfPart;
+}
+
+CAstNode* CParser::ElseIfPart()
+{
+	//--------------------------------------------
+	//	ElseIfPart		->ThenPart ElseIfPart_1;
+	//	ElseIfPart_1	-> 'ELSEIF' ThenPart ElseIfPart_1
+	//					-> .
+	//					;
+	//--------------------------------------------
+	CAstNode* pNThenPart = 0;
+	CAstNode* pNELSEIF = 0;
+	CAstNode* pN;
+	bool Loop = true;
+
+	pNThenPart = ThenPart();
+	while (Loop)
+	{
+		switch (LookaHeadToken)
+		{
+		case Token::ELSEIF:
+			Expect(Token::ELSEIF);
+			pNELSEIF = new CAct65ELSEIF;
+			pNELSEIF->SetChild(pNThenPart);
+			pN = ThenPart();
+			pNThenPart = CAstNode::MakeNextList(pNThenPart, pN);
+			break;
+		default:
+			Loop = false;
+			break;
+		}
+	}
+	return pNThenPart;
+}
+
+CAstNode* CParser::ThenPart()
+{
+	//--------------------------------------------
+	//	ThenPart	->RelOperation ThenPart_1;
+	//	ThenPart_1	-> 'THEN' Statements
+	//				-> .
+	//				;
+	//--------------------------------------------
+	CAstNode* pNThen = 0;
+	CAstNode* pNRelOp = 0;
+	CAstNode* pStatements = 0;
+
+	pNRelOp = RelOperation();
+	switch (LookaHeadToken)
+	{
+	case Token::THEN:
+		Expect(Token::THEN);
+		pStatements = Statements();
+		pNThen = new CAct65THEN;
+		pNThen->SetChild(pStatements);
+		pNRelOp->SetChild(pNThen);
+		break;
+	default:
+		break;
+	}
+	return pNRelOp;
+}
+
 
 
 //------------------------------------------------
@@ -1125,8 +1178,14 @@ CAstNode* CParser::WhileStmt()
 			Expect(Token::WHILE);
 			pN = new CAct65WHILE;
 			pChild = WhileDO();
-			pN->SetChild(pChild);
-			pNext = CAstNode::MakeNextList(pNext, pN);
+			DebugTraverse(
+				pChild,
+				"While 1",
+				25,
+				100
+			);
+			pChild = pN->SetChild(pChild);
+			pNext = CAstNode::MakeNextList(pNext, pChild);
 			//----------------------------------
 			pChild = DoStmt();
 			pNext = CAstNode::MakeNextList(pNext, pChild);;
@@ -1148,17 +1207,25 @@ CAstNode* CParser::WhileDO()
 	//------------------------------------------------
 	CAct65DO* pN = 0;
 	CAct65OD* pNOD = 0;
+	CAstNode* pStatements = 0;
 	CAstNode* pNext = 0, *pChild = 0;
+	CAstNode* pNrel = 0;
 
-	pNext = RelOperation();
+	pNrel = RelOperation();
+	DebugTraverse(
+		pNrel,
+		"RelOperation 1",
+		25,
+		100
+	);
 	switch (LookaHeadToken)
 	{
 	case Token::DO:
 		Expect(Token::DO);
-		pChild = Statements();
+		pStatements = Statements();
 		pN = new CAct65DO;
-		pChild = pN->SetChild(pChild);
-		pNext = pNext->MakeNode(pChild, pNext);
+		pChild = pN->SetChild(pStatements);
+		pNrel = CAstNode::MakeNextList(pNrel, pChild);
 		break;
 	default:
 		break;
@@ -1168,12 +1235,12 @@ CAstNode* CParser::WhileDO()
 	case Token::OD:
 		Expect(Token::OD);
 		pNOD = new CAct65OD;
-		pNext = CAstNode::MakeNextList(pNext, pNOD);;
+		CAstNode::MakeNextList(pStatements, pNOD);;
 		break;
 	default:
 		break;
 	}
-	return pNext;
+	return pNrel;
 }
 
 //------------------------------------------------
@@ -1221,21 +1288,22 @@ CAstNode* CParser::DoEND()
 	//	DoEnd		->Statements DoEnd_1;
 	//	DoEnd_1		-> 'OD';
 	//--------------------------------------------
-	CAct65OD* pN= 0;
+	CAct65OD* pNOD= 0;
 	CAstNode* pNext = 0, *pChild = 0;
+	CAstNode* pStatements = 0;
 
-	pNext = Statements();
+	pStatements = Statements();
 	switch (LookaHeadToken)
 	{
 	case Token::OD:
 		Expect(Token::OD);
-		pN = new CAct65OD;
-		pNext = CAstNode::MakeNextList(pNext, pN);
+		pNOD = new CAct65OD;
+		pStatements = CAstNode::MakeNextList(pStatements, pNOD);
 		break;
 	default:
 		break;
 	}
-	return pNext;
+	return pStatements;
 
 }
 
@@ -2574,6 +2642,97 @@ CAstNode* CParser::Factor()
 		pChild = RelOperation();
 		Expect(Token(')'));
 		pNext = pNext->SetChild(pChild);
+		break;
+	default:
+		break;
+	}
+	return pNext;
+}
+
+CAstNode* CParser::MemoryValue()
+{
+	//--------------------------------------------
+	//	MemoryValue		->MemValLocation MemoryValue_1;
+	//	MemoryValue_1	-> '^'
+	//					-> '.' MemValLocation MemoryValue_1
+	//					-> .
+	//					;
+	//--------------------------------------------
+	CAstNode* pNMemValLocation = 0;
+	CAstNode* pNPointerDeReference = 0;
+	CAstNode* pNFeildMember = 0;
+	bool Loop = true;
+
+	pNMemValLocation = MemValLocation();
+	while (Loop)
+	{
+		switch (LookaHeadToken)
+		{
+		case Token('^'):
+			Expect(Token('^'));
+			pNPointerDeReference = new CAct65PointerDeREF;
+			pNMemValLocation->SetChild(pNPointerDeReference);
+			Loop = false;
+			break;
+		case Token('.'):
+			Expect(Token('.'));
+			pNFeildMember = new CAct65TypeFIELD;
+			pNMemValLocation->SetChild(pNFeildMember);			break;
+		default:
+			Loop = false;
+			break;
+		}
+	}
+	return pNMemValLocation;
+}
+
+CAstNode* CParser::MemValLocation()
+{
+	//--------------------------------------------
+	//	MemValLocation	-> 'VAR_GLOBAL' ArrayIndex
+	//					-> 'VAR_LOCAL' ArrayIndex
+	//					-> 'VAR_PARAM' ArrayIndex
+	//					-> .
+	//					;
+	//--------------------------------------------
+	CAstNode* pN = 0;
+	CAstNode* pNext = 0, * pChild = 0;
+	CSymbol* pSym;
+
+	pNext = Factor();
+	switch (LookaHeadToken)
+	{
+	case Token::VAR_GLOBAL:
+		pSym = GetLexer()->GetLexSymbol();
+		Expect(Token::VAR_GLOBAL);
+		pChild = ArrayIndex();
+		pN = new CAct65IDENT;
+		pChild = pN->SetChild(pChild);
+		pN->SetSymbol(pSym);
+		pNext = CAstNode::MakeNextList(pNext, pChild);
+		break;
+	case Token::VAR_LOCAL:
+		pSym = GetLexer()->GetLexSymbol();
+		Expect(Token::VAR_LOCAL);
+		pChild = ArrayIndex();
+		pN = new CAct65IDENT;
+		pChild = pN->SetChild(pChild);
+		pN->SetSymbol(pSym);
+		pNext = CAstNode::MakeNextList(pNext, pChild);
+		break;
+	case Token::VAR_PARAM:
+		pSym = GetLexer()->GetLexSymbol();
+		Expect(Token::VAR_PARAM);
+		pChild = ArrayIndex();
+		pN = new CAct65IDENT;
+		pChild = pN->SetChild(pChild);
+		pN->SetSymbol(pSym);
+		pNext = CAstNode::MakeNextList(pNext, pChild);
+		break;
+	case Token::IDENT:
+		pSym = GetLexer()->GetLexSymbol();
+		fprintf(LogFile(), "%s is Undefined\n", pSym->GetName());
+		Act()->Exit(26);
 		break;
 	default:
 		break;

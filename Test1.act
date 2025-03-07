@@ -17,6 +17,21 @@ INTERRUPT Hey()
 	CARD lc,ld,le
 	BYTE lf
 
+	IF la = lb THEN
+		la ==+ lb - le
+	FI
+	FOR lf = 0 TO 14 STEP 2
+	DO
+		la = lf RSH ld
+	OD
+	WHILE lc < ld
+	DO
+		la = lf LSH ld
+	OD
+	DO
+		la = lb * lc - lf
+		EXIT
+	OD
 	BREAK
 	RTI
 	EXIT

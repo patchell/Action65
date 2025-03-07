@@ -584,6 +584,9 @@
     <ClCompile Include="Act65IDENTaddress.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Act65TypeFIELD.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -1135,6 +1138,9 @@
     <ClInclude Include="Act65IDENTaddress.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Act65TypeFIELD.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Grammar\Action.gram">
@@ -1166,6 +1172,9 @@
     </None>
     <None Include="Test1.act">
       <Filter>Action</Filter>
+    </None>
+    <None Include="Grammar\Action1.gram">
+      <Filter>Grammar</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

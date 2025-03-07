@@ -165,9 +165,32 @@ CAstNode* CAstNode::MakeNextList(CAstNode* pList, CAstNode* pListMember)
 	return pList;
 }
 
-CAstNode* CAstNode::CombineNodes(CAstNode* pList, CAstNode* pNext, CAstNode* pChild)
+CAstNode* CAstNode::MakeChildList(CAstNode* pList, CAstNode* pChild)
 {
-    return nullptr;
+	CAstNode* pNode = 0;
+
+	if (pList)
+	{
+		pNode = pList->GetChild();
+		if (pNode)
+		{
+			while (pNode->GetNext())
+			{
+				pNode = pNode->GetNext();
+			}
+			pNode->SetNext(pChild);
+		}
+		else
+		{
+			pList->SetChild(pChild);
+		}
+	}
+	else
+	{
+		fprintf(stderr, "Internal Error 101\n");
+		Act()->Exit(101);
+	}
+    return pList;
 }
 
 int CAstNode::MakeIndentString(char* s, int size, int Indent, bool* pbNextFlag)
