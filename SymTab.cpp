@@ -94,8 +94,6 @@ void CSymTab::AddSymbol(CBin* pSym)
 {
 	int Index = Hash(pSym->GetName());	//generate index
 	
-	if (Index == 5)
-		fprintf(Act()->LogFile(),"----- Index = 5 %s -----\n", pSym->GetName());
 	if (m_ppTab[Index] == NULL)	//there is NO bucket here
 	{
 		m_ppTab[Index] = new CBucket;

@@ -18,6 +18,11 @@ INTERRUPT Hey()
 	BYTE lf
 
 	ASM {
+		SECTION "Page2" [
+			START = $0200
+			SIZE = $100
+			MODE = READ_WRITE
+		]
 		SECTION "PageZero" [
 			START = $0000
 			SIZE = $100
@@ -25,12 +30,104 @@ INTERRUPT Hey()
 			ZEROPAGE = TRUE
 		]
 		:First	DB	0
+		SET SECTION "Page2"
 		:Second	DB	1
 
+		STY	First
+		STY First,.X
+		STY Second
+
+		STX	First
+		STX First, .Y
+		STX	Second
+
+		JSR First
+		JSR Second
+
+		JMP	First
+		JMP Second
+		JMP (First)
+		JMP (Second)
+
+		DEC	First
+		DEC First,.X
+		DEC Second
+		DEC Second, .X
+
+		INC	First
+		INC First,.X
+		INC Second
+		INC Second, .X
+
+		CPY	#$4a
+		CPY First
+		CPY Second
+
+		CPX	#$6b
+		CPX	First
+		CPX	Second
+
+		BIT	First
+		BIT Second
+
+		ASL .A
+		LSR	.A
+		ROR .A
+		ROL	.A
+		ASL	First
+		ASL	First, .X
+		ASL	Second
+		ASL	Second, .X
+
+		BRK	//implicit addressing
+		CLC
+		CLD
+		CLI
+		CLV
+		DEX
+		DEY
+		INX
+		INY
+		NOP
+		PHA
+		PLA
+		PHP
+		PLP
+		RTI
+		RTS
+		SEC
+		SED
+		SEI
+		TAX
+		TAY
+		TXA
+		TYA
+		TXS
+		TSX
+
 		LDA #$4A
+		LDA (First),.Y
 		LDA #>$ABCD
 		LDA #<$ABCD
 		LDA First
+		LDA First,.X
+		LDA Second
+		LDA Second, .X
+		LDA Second, .Y
+		LDA (First,.X)
+		LDA First + 2
+
+		LDX #$45
+		LDX First
+		LDX First,.Y
+		LDX Second
+		LDX Second, .Y
+
+		LDY #$61
+		LDY First
+		LDY First, .X
+		LDY Second
+		LDY Second,.X
 	}
 	IF la = lb THEN
 		la ==+ lb - le

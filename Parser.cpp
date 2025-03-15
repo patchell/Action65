@@ -60,6 +60,7 @@ CAstNode* CParser::Run()
 		GetAstTree()->Print(LogFile());
 //		GetLexer()->GetSymTab()->PrintTable(LogFile());
 		fprintf(stderr, "Lines Compiled:%d\n", GetLexer()->GetLineNumber());
+		fprintf(LogFile(), "Lines Compiled:%d\n", GetLexer()->GetLineNumber());
 	}
 	catch (Exception& BooBoo)
 	{
@@ -4658,8 +4659,9 @@ CSection* CParser::AsmSectionName()
 
 	switch (LookaHeadToken)
 	{
-	case Token::SECTION_NAME:
-		pSym = GetLexer()->GetLexSection();
+	case Token::STRING:
+		pSym = (CSection*)GetLexer()->GetSymTab()->FindSymbol(GetLexer()->GetLexBuffer(), 0);
+		Expect(Token::STRING);
 		break;
 	default:
 		break;
@@ -5470,12 +5472,10 @@ CAstNode* CParser::DefineMemory()
 			pNDB->SetChild(pChild);
 			if (Label)
 			{
-				fprintf(LogFile(), "DB One\n");
 				pLast->SetChild(pNDB);
 			}
 			else
 			{
-				fprintf(LogFile(), "DB Two\n");
 				pLast->SetChild(pNDB);
 //				pNext = CAstNode::MakeNextList(pNext, pNDB);
 			}
@@ -5927,7 +5927,6 @@ CAstNode* CParser::DefineLabel()
 	bool IsLocal = false;
 	int Address = 0;
 
-	fprintf(LogFile(), "Enter Define Label\n");
 	switch (LookaHeadToken)
 	{
 	case Token::LOCAL_LABEL:
@@ -5966,7 +5965,6 @@ CAstNode* CParser::DefineLabel()
 			pSym->SetResolved();
 			pSym->SetSection(GetCurrentSection());
 			pSym->BackFillUnresolved();
-			fprintf(LogFile(), "*************** Add Symbol %s\n", pSym->GetName());
 			GetLexer()->GetSymTab()->AddSymbol(pSym);
 		}
 		else
@@ -5983,7 +5981,6 @@ CAstNode* CParser::DefineLabel()
 	default:
 		break;
 	}
-	fprintf(LogFile(), "Exit Define Label\n");
 	return pNext;
 }
 
@@ -6236,8 +6233,9 @@ CValue* CParser::BaseAsmConstant( )
 	//						-> 'IDENT'
 	//						;
 	//--------------------------------------------------
-	CWhereSymbolIsUsed* pSymUsed;
+	CWhereSymbolIsUsed* pSymUsed = 0;
 	CValue* pValue = 0;
+	CSymbol* pSym = 0;
 
 	switch (LookaHeadToken)
 	{
@@ -6260,15 +6258,19 @@ CValue* CParser::BaseAsmConstant( )
 		Expect(Token('*'));
 		break;
 	case Token::LABEL:
+		pSym = GetLexer()->GetLexSymbol();
 		pValue = new CValue;
-		pValue->Create(CValue::ValueType::CONSTANT);
+		pValue->Create(CValue::ValueType::SYMBOL);
 		pValue->SetConstVal(0);
+		pValue->SetSymbol(pSym);
 		Expect(Token::LABEL);
 		break;
 	case Token::IDENT:
+		pSym = GetLexer()->GetLexSymbol();
 		pValue = new CValue;
-		pValue->Create(CValue::ValueType::CONSTANT);
+		pValue->Create(CValue::ValueType::SYMBOL);
 		pValue->SetConstVal(0);
+		pValue->SetSymbol(pSym);
 		Expect(Token::IDENT);
 		break;
 	default:
@@ -6299,7 +6301,7 @@ CAstNode* CParser::Indirect(Token OpCodeToken)
 	switch (LookaHeadToken)
 	{
 	case Token(')'):	//indirect indexed,Y
-//		CheckZeroPageAddress(pAddress);
+		pOpCode = new CAct65Opcode;
 		pOpCode->PrepareInstruction(
 			OpCodeToken, 
 			AdrModeType::INDIRECT_INDEXED_Y_ADR, 
@@ -6310,6 +6312,7 @@ CAstNode* CParser::Indirect(Token OpCodeToken)
 		Expect(Token::YREG);
 		break;
 	case Token(','):	// indexed indirect X 
+		pOpCode = new CAct65Opcode;
 		pOpCode->PrepareInstruction(
 			OpCodeToken,
 			AdrModeType::INDEXED_INDIRECT_X_ADR,

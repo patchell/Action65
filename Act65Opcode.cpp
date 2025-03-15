@@ -79,18 +79,18 @@ int CAct65Opcode::Print(int Indent, char* s, int Strlen, bool* pbNextFlag)
 		{
 		case CValue::ValueType::SYMBOL:
 			if (GetValue()->GetConstVal() > 0)
-				l += sprintf_s(&s[l], size, "%s + %d",
+				l += sprintf_s(&s[l], size, " %s +$%04X",
 					GetSymbol()->GetName(),
 					GetValue()->GetConstVal()
 				);
 			else
-				l += sprintf_s(&s[l], size, "%s",
+				l += sprintf_s(&s[l], size, " %s",
 					GetSymbol()->GetName()
 				);
 			break;
 		case CValue::ValueType::CONSTANT:
 			if (GetValue()->GetConstVal() > 0)
-				l += sprintf_s(&s[l], size, "%d",
+				l += sprintf_s(&s[l], size, " $%04X",
 					GetValue()->GetConstVal()
 				);
 			break;
@@ -104,18 +104,18 @@ int CAct65Opcode::Print(int Indent, char* s, int Strlen, bool* pbNextFlag)
 		{
 		case CValue::ValueType::SYMBOL:
 			if (GetValue()->GetConstVal() > 0)
-				l += sprintf_s(&s[l], size, "%s + %d,X",
+				l += sprintf_s(&s[l], size, " %s + $%04X,X",
 					GetSymbol()->GetName(),
 					GetValue()->GetConstVal()
 				);
 			else
-				l += sprintf_s(&s[l], size, "%s,X",
+				l += sprintf_s(&s[l], size, " %s,X",
 					GetSymbol()->GetName()
 				);
 			break;
 		case CValue::ValueType::CONSTANT:
 			if (GetValue()->GetConstVal() > 0)
-				l += sprintf_s(&s[l], size, "%d,X",
+				l += sprintf_s(&s[l], size, " $%04X,X",
 					GetValue()->GetConstVal()
 				);
 			break;
@@ -129,18 +129,18 @@ int CAct65Opcode::Print(int Indent, char* s, int Strlen, bool* pbNextFlag)
 		{
 		case CValue::ValueType::SYMBOL:
 			if (GetValue()->GetConstVal() > 0)
-				l += sprintf_s(&s[l], size, "%s + %d,Y",
+				l += sprintf_s(&s[l], size, " %s + $%04X,Y",
 					GetSymbol()->GetName(),
 					GetValue()->GetConstVal()
 				);
 			else
-				l += sprintf_s(&s[l], size, "%s,Y",
+				l += sprintf_s(&s[l], size, " %s,Y",
 					GetSymbol()->GetName()
 				);
 			break;
 		case CValue::ValueType::CONSTANT:
 			if (GetValue()->GetConstVal() > 0)
-				l += sprintf_s(&s[l], size, "%d,Y",
+				l += sprintf_s(&s[l], size, "$%04X,Y",
 					GetValue()->GetConstVal()
 				);
 			break;
@@ -179,8 +179,8 @@ int CAct65Opcode::Print(int Indent, char* s, int Strlen, bool* pbNextFlag)
 			break;
 		case CValue::ValueType::CONSTANT:
 			if (GetValue()->GetConstVal() > 0)
-				l += sprintf_s(&s[l], size, "(%d,.X)",
-					GetValue()->GetConstVal()
+				l += sprintf_s(&s[l], size, "($%02X,.X)",
+					GetValue()->GetConstVal() & 0x0ff
 				);
 			break;
 		default:
@@ -193,7 +193,7 @@ int CAct65Opcode::Print(int Indent, char* s, int Strlen, bool* pbNextFlag)
 		{
 		case CValue::ValueType::SYMBOL:
 			if (GetValue()->GetConstVal() > 0)
-				l += sprintf_s(&s[l], size, "(%s+%d)",
+				l += sprintf_s(&s[l], size, "( %s+%d)",
 					GetSymbol()->GetName(),
 					GetValue()->GetConstVal()
 				);
@@ -204,7 +204,7 @@ int CAct65Opcode::Print(int Indent, char* s, int Strlen, bool* pbNextFlag)
 			break;
 		case CValue::ValueType::CONSTANT:
 			if (GetValue()->GetConstVal() > 0)
-				l += sprintf_s(&s[l], size, "(%04X)",
+				l += sprintf_s(&s[l], size, "($%04X)",
 					GetValue()->GetConstVal()
 				);
 			break;
@@ -229,8 +229,8 @@ int CAct65Opcode::Print(int Indent, char* s, int Strlen, bool* pbNextFlag)
 			break;
 		case CValue::ValueType::CONSTANT:
 			if (GetValue()->GetConstVal() > 0)
-				l += sprintf_s(&s[l], size, "(%d),.Y",
-					GetValue()->GetConstVal()
+				l += sprintf_s(&s[l], size, "($%02X),.Y",
+					GetValue()->GetConstVal() & 0x0ff
 				);
 			break;
 		default:
@@ -242,13 +242,13 @@ int CAct65Opcode::Print(int Indent, char* s, int Strlen, bool* pbNextFlag)
 		switch (GetValue()->GetValueType())
 		{
 		case CValue::ValueType::SYMBOL:
-			l += sprintf_s(&s[l], size, "%s",
+			l += sprintf_s(&s[l], size, " %s",
 				GetSymbol()->GetName()
 			);
 			break;
 		case CValue::ValueType::CONSTANT:
 			if (GetValue()->GetConstVal() > 0)
-				l += sprintf_s(&s[l], size, "%02X,.Y",
+				l += sprintf_s(&s[l], size, " $%02X,.Y",
 					GetValue()->GetConstVal() - 1
 				);
 			break;
@@ -262,18 +262,18 @@ int CAct65Opcode::Print(int Indent, char* s, int Strlen, bool* pbNextFlag)
 		{
 		case CValue::ValueType::SYMBOL:
 			if (GetValue()->GetConstVal() > 0)
-				l += sprintf_s(&s[l], size, "%s + %d",
+				l += sprintf_s(&s[l], size, " %s + %d",
 					GetSymbol()->GetName(),
 					GetValue()->GetConstVal()
 				);
 			else
-				l += sprintf_s(&s[l], size, "%s",
+				l += sprintf_s(&s[l], size, " %s",
 					GetSymbol()->GetName()
 				);
 			break;
 		case CValue::ValueType::CONSTANT:
 			if (GetValue()->GetConstVal() > 0)
-				l += sprintf_s(&s[l], size, "%02X",
+				l += sprintf_s(&s[l], size, "$%02X",
 					GetValue()->GetConstVal() & 0xff
 				);
 			break;
@@ -287,18 +287,18 @@ int CAct65Opcode::Print(int Indent, char* s, int Strlen, bool* pbNextFlag)
 		{
 		case CValue::ValueType::SYMBOL:
 			if (GetValue()->GetConstVal() > 0)
-				l += sprintf_s(&s[l], size, "%s + %d,.X",
+				l += sprintf_s(&s[l], size, " %s + %d,.X",
 					GetSymbol()->GetName(),
 					GetValue()->GetConstVal()
 				);
 			else
-				l += sprintf_s(&s[l], size, "%s,.X",
+				l += sprintf_s(&s[l], size, " %s,.X",
 					GetSymbol()->GetName()
 				);
 			break;
 		case CValue::ValueType::CONSTANT:
 			if (GetValue()->GetConstVal() > 0)
-				l += sprintf_s(&s[l], size, "%02X,.X",
+				l += sprintf_s(&s[l], size, " $%02X,.X",
 					GetValue()->GetConstVal() & 0xff
 				);
 			break;
@@ -312,19 +312,19 @@ int CAct65Opcode::Print(int Indent, char* s, int Strlen, bool* pbNextFlag)
 		{
 		case CValue::ValueType::SYMBOL:
 			if (GetValue()->GetConstVal() > 0)
-				l += sprintf_s(&s[l], size, "%s + %d,.Y",
+				l += sprintf_s(&s[l], size, " %s + %d,.Y",
 					GetSymbol()->GetName(),
 					GetValue()->GetConstVal()
 				);
 			else
-				l += sprintf_s(&s[l], size, "%s,.Y",
+				l += sprintf_s(&s[l], size, " %s,.Y",
 					GetSymbol()->GetName()
 				);
 			break;
 		case CValue::ValueType::CONSTANT:
 			if (GetValue()->GetConstVal() > 0)
-				l += sprintf_s(&s[l], size, "%02X,.Y",
-					GetValue()->GetConstVal()
+				l += sprintf_s(&s[l], size, " $%02X,.Y",
+					GetValue()->GetConstVal() & 0x0ff
 				);
 			break;
 		default:
@@ -388,10 +388,17 @@ void CAct65Opcode::PrepareInstruction(
 		case AdrModeType::ZERO_PAGE_ADR:
 		case AdrModeType::ZERO_PAGE_X_ADR:
 		case AdrModeType::ZERO_PAGE_Y_ADR:
-			if(pOperandValue->IsPageZero())
-			fprintf(Act()->LogFile(), "Value Type:%s", 
-				CValue::ValueTypeStr(pOperandValue->GetValueType())
-			);
+			if (!pOperandValue->IsPageZero())
+			{
+				ThrownException.SetXCeptType(Exception::ExceptionType::ILLEGAL_ADDRESSING_MODE);
+				sprintf_s(
+					ThrownException.GetErrorString(),
+					ThrownException.GetMaxStringLen(),
+					"Line %d: Address is NOT page Zero\n",
+					Act()->GetParser()->GetLexer()->GetLineNumber()
+				);
+				throw(ThrownException);
+			}
 			break;
 		}
 		SetToken(OpToken);
@@ -399,6 +406,27 @@ void CAct65Opcode::PrepareInstruction(
 		SetColumnNumber(pLex->GetColunm());
 		SetOpCode(pLex->MakeOpcode(OpToken, AddressMode));
 		SetByteCount(OperandByteCount::GetOperandByteCount(AddressMode) + 1);
+		SetValue(pOperandValue);
+	}
+	else if (OpToken == Token::JMP)
+	{
+		if (AddressMode == AdrModeType::ABSOLUTE_ADR || AddressMode == AdrModeType::ZERO_PAGE_ADR)
+		{
+			SetToken(OpToken);
+			SetLineNumber(pLex->GetLineNumber());
+			SetColumnNumber(pLex->GetColunm());
+			SetOpCode(pLex->MakeOpcode(OpToken, AdrModeType::ABSOLUTE_ADR));
+			SetByteCount(OperandByteCount::GetOperandByteCount(AdrModeType::ABSOLUTE_ADR) + 1);
+			SetValue(pOperandValue);
+		}
+	}
+	else if (OpToken == Token::JSR)
+	{
+		SetToken(OpToken);
+		SetLineNumber(pLex->GetLineNumber());
+		SetColumnNumber(pLex->GetColunm());
+		SetOpCode(pLex->MakeOpcode(OpToken, AdrModeType::ABSOLUTE_ADR));
+		SetByteCount(OperandByteCount::GetOperandByteCount(AdrModeType::ABSOLUTE_ADR) + 1);
 		SetValue(pOperandValue);
 	}
 	else   // :(
@@ -443,5 +471,5 @@ int CAct65Opcode::OperandByteCount::GetOperandByteCount(AdrModeType AdrMode)
 			rV = OperByteCntLUT[i].m_OperandByteCount;
 		}
 	}
-	return 0;
+	return rV;
 }

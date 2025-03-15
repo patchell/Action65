@@ -103,7 +103,7 @@ bool AdressModeLUT::ValidAddressingMode(AdrModeType AMT) const
 	int i;
 	bool Loop = true;
 
-	for (i = 0; Loop && i < m_nElements; ++i)
+		for (i = 0; Loop && i < m_nElements; ++i)
 	{
 		if (m_pModeInc[i].Mode == AMT)
 		{

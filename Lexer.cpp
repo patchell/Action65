@@ -593,11 +593,7 @@ Token CLexer::Lex()
 			break;	// end of default:
 		}
 	}
-	if (m_LexBuffIndex > 0)
-	{
-		fprintf(LogFile(), "LexBuff:%s\n", m_aLexBuff);
-	}
-	return TokenValue;
+		return TokenValue;
 }
 
 CBin* CLexer::LookupSymbol(const char* pName)

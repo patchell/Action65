@@ -238,5 +238,5 @@ bool CValue::IsPageZero()
 		}
 		break;
 	}
-    return false;
+    return rV;
 }

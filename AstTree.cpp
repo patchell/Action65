@@ -29,8 +29,8 @@ void CAstTree::Print(FILE* pOut)
 		pbNextFlags[i] = false;
 	if (GetRootNode() && pOut)
 	{
-		s = new char[4096];
-		memset(s, 0, 4096);
+		s = new char[8192];
+		memset(s, 0, 8192);
 		fprintf(
 			pOut,
 			"\t NUMB  CHILD  NEXT\n"
