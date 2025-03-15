@@ -4,11 +4,12 @@ class CBin
 {
 public:
 	enum BinType {
+		UNRESOLVED,
 		ALL,
+		LABEL,
 		SYMBOL,
 		SECTION,
 		WHERE_USED,
-		UNRESOLVED
 	};
 private:
 	//-------------------------------
@@ -36,8 +37,8 @@ public:
 		m_pNext = 0;
 		m_pPrev = 0;
 		m_pName = 0;
-		m_Type = BinType(0);
-		m_Token = Token(0);
+		m_Type = BinType::UNRESOLVED;
+		m_Token = Token::NONE;
 		m_IdentType = IdentType::NEW_SYMBOL;
 	}
 	CBin(BinType type) {
@@ -46,7 +47,7 @@ public:
 		m_pPrev = 0;
 		m_pHead = 0;
 		m_pTail = 0;
-		m_Token = Token::ENDOFTOKENS;
+		m_Token = Token::NONE;
 		m_Type = type;
 		m_IdentType = IdentType::NEW_SYMBOL;
 	}

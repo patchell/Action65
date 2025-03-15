@@ -27,9 +27,11 @@ class CSymbol: public CBin
 		const char* LookupIdentType(IdentType IT);
 	};
 	inline static CSymbol::CIdentType IdentTypeLUT[] = {
+		{IdentType::NONE , "NONE"},
 		{IdentType::NEW_SYMBOL , "NEW SYMBOL"},
 		{IdentType::LABEL_GLOBAL , "Global LABEL"},
 		{IdentType::LABEL_PRIVATE , "Private LABEL"},
+		{IdentType::LABEL , "LABEL"},
 		{IdentType::PROC , "PROC"},
 		{IdentType::FUNC , "FUNC"},
 		{IdentType::GLOBAL , "GLOBAL"},

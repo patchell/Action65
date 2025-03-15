@@ -42,8 +42,13 @@ CSymTab::~CSymTab()
 
 	for (i = 0; i < m_tSize; ++i)
 	{
-		pBucket = m_ppTab[i];
-		delete pBucket;
+		//if(i == 5)
+		//	printf("i=%d\n", i);
+		//else
+		{
+			pBucket = m_ppTab[i];
+			delete pBucket;
+		}
 	}
 	
 	if (m_ppTab) delete[] m_ppTab;
@@ -89,6 +94,8 @@ void CSymTab::AddSymbol(CBin* pSym)
 {
 	int Index = Hash(pSym->GetName());	//generate index
 	
+	if (Index == 5)
+		fprintf(Act()->LogFile(),"----- Index = 5 %s -----\n", pSym->GetName());
 	if (m_ppTab[Index] == NULL)	//there is NO bucket here
 	{
 		m_ppTab[Index] = new CBucket;

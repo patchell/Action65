@@ -54,7 +54,7 @@ public:
 	virtual ~CParser();
 	bool Create();
 	void SetCurrentSection(CSection* pSection) {
-		m_pCurrentSection = m_pCurrentSection;
+		m_pCurrentSection = pSection;
 	}
 	CSection* GetCurrentSection() {
 		return m_pCurrentSection;
@@ -78,8 +78,8 @@ private:
 	// SET
 	//---------------------------------
 	CAstNode*  Set();
-	CAstNode*  SetObjects();
-	CAstNode*  SetSectionName();
+	void SetObjects();
+	void SetSectionName();
 	//------------------------------------------
 	// Statements
 	//------------------------------------------
@@ -102,15 +102,6 @@ private:
 	CAstNode* ElsePart();
 	CAstNode* ElseIfPart();
 	CAstNode* ThenPart();
-	//----IFF
-	CAstNode*  IffStmt();
-	CAstNode*  IffPart();;
-	CAstNode*  IffRelOper();;
-	CAstNode*  IffRegister();;
-	CAstNode*  Bits();;
-	CAstNode*  BitValue();;
-	CAstNode*  StatusFlags();;
-	CAstNode*  OptNot();;
 	//----WHILE
 	CAstNode*  WhileStmt();
 	CAstNode*  WhileDO();
@@ -128,14 +119,6 @@ private:
 	CAstNode*  CodeBlock();
 	//---- UNTIL
 	CAstNode*  UntillStmt();
-	//---- PUSH
-	CAstNode*  Push();
-	CAstNode*  PushSourceList();
-	CAstNode*  PushSource();
-	//---- POP
-	CAstNode*  Pop();
-	CAstNode*  PopDestList();
-	CAstNode*  PopDest();
 	//---- BREAK
 	CAstNode*  Break();
 	//---- RTI
@@ -272,17 +255,34 @@ private:
 	//-----------------------------------------
 	CAstNode*  AsmSet();
 	CAstNode*  AsmSetObjects();
-	CAstNode*  AsmSectionName();
+	CSection*  AsmSectionName();
 	//-----------------------------------------
 	// SECITON
 	//-----------------------------------------
 	CAstNode*  Section();
-	CAstNode*  SectionName();
-	CAstNode*  SectionDef();
-	CAstNode*  SectionAttributesList();
-	CAstNode*  SectionAtribute();
-	CAstNode*  Modes();
-	int  TrueFalse();
+	void  SectionName(CSection* pSection);
+	void  SectionDef(CSection* pSection);
+	void SectionAtributes(CSection* pSection);
+	CSection::Mode Modes();
+	CSection::AddressSize  SectionAddressSize();
+	//----IFF-------------
+	CAstNode* IffStmt();
+	CAstNode* IFFend();
+	CAstNode* IFFthenpart();;
+	CAstNode* IffRelOper();;
+	CAstNode* IffRegister();;
+	CAstNode* Bits();;
+	CAstNode* BitValue();;
+	CAstNode* StatusFlags();;
+	CAstNode* OptNot();;
+	//---- POP
+	CAstNode* Pop();
+	CAstNode* PopDestList();
+	CAstNode* PopDest();
+	//---- PUSH
+	CAstNode* Push();
+	CAstNode* PushSourceList();
+	CAstNode* PushSource();
 	//-------------------------------------
 	// Org  Sets the location counter
 	// for the current section
@@ -310,78 +310,33 @@ private:
 	//---------------------------------------------
 	// Lables
 	//---------------------------------------------
-	CAstNode*  Labels();
-	//-----------------------------------
-	//ALU Addressing Mode
-	//-----------------------------------
-	CAstNode*  AluAdrModes(Token OpCodeToken);
-	//---------------------------------------------
-	// STA addressing mode
-	//---------------------------------------------
-	CAstNode*  StaAddressingModes(Token  OpCodeToken);
-	//-----------------------------------------
-	// ASL LSR ROR and ROL addressing modes
-	//-----------------------------------------
-	CAstNode*  ShiftAddressingModes(Token  OpCodeToken);
+	CAstNode* DefineLabel();
+	CAstNode* Operand(Token OpCodeToken);
 	//------------------------------------------
 	// Branch Instructions Addressing Mode
 	//------------------------------------------
 	CAstNode*  RelAddressingMode(Token  OpCodeToken);
 	//------------------------------------------
-	// BIT Instructions Addressing Mode
-	//------------------------------------------
-	CAstNode*  BitAddressModes(Token  OpCodeToken);
-	//------------------------------------------
-	// INC DEC Instructions Addressing Mode
-	//------------------------------------------
-	CAstNode*  IncAddressingMOdes(Token  OpCodeToken);
-	//------------------------------------------
 	// JMP Instructions Addressing Mode
 	//------------------------------------------
 	CAstNode*  JumpAddressingModes(Token OpCodeToken);
-	//------------------------------------------
-	// JSR Instructions Addressing Mode
-	//------------------------------------------
-	CAstNode*  JSRAddressingMode(Token  OpCodeToken);
-	//------------------------------------------
-	// LDX Instructions Addressing Mode
-	//------------------------------------------
-	CAstNode*  LdxAddressingMode(Token OpCodeToken);
-	//------------------------------------------
-	// CPX & CPY Instructions Addressing Mode
-	//------------------------------------------
-	CAstNode*  CPX_CPY_AddressingMode(Token OpCodeToken);
-	//------------------------------------------
-	// STX Instructions Addressing Mode
-	//------------------------------------------
-	CAstNode*  StxAddressingMode(Token OpCodeToken);
-	//------------------------------------------
-	// LDY Instructions Addressing Mode
-	//------------------------------------------
-	CAstNode*  LdyAddressingMode(Token OpCodeToken);
-	//------------------------------------------
-	// STY Instructions Addressing Mode
-	//------------------------------------------
-	CAstNode*  StyAddressingMode(Token OpCodeToken);
 	//---------------------------------------------
 	//	Optional Index Registers
 	//---------------------------------------------
-	RegType  IndexRegister();
-	RegType XReg();
-	RegType  YReg();
+	RegType  OptIndexReg();
 	//---------------------------------------
 	// Assembler Constants
 	//---------------------------------------
-	CAstNode*  AsmConstList();
-	CAstNode*  AsmConstList_1();
-	int  AsmConstant(void);
-	int  AsmConstAddSub();
-	int  BaseAsmConstant();
+	CAstNode* AsmConstList();
+	CAstNode* AsmConstList_1();
+	CValue* AsmConstant();
+	CValue* AsmConstUpLow();
+	CValue* BaseAsmConstant();
 	//------------------------------------------------
 	CAstNode*  Indirect(Token  OpCodeToken);
 	CAstNode*  Immediate(Token OpCodeToken);
 	CAstNode*  Absolute(Token  OpCodeToken);
-	bool CheckZeroPageAddress(int A);
+	CAstNode* Accumulator(Token OpCodeToken);
 	//---------------- Debug Utillity ----------------------
 public:
 	void DebugTraverse(

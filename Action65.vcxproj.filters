@@ -326,28 +326,7 @@
     <ClCompile Include="Act65SECTION.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Act65SecAtrbSTART.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Act65SecAtrbSIZE.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Act65SecAtrbMODE.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Act65SecAtrbZEROPAGE.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Act65SecAtrbREADONLY.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Act65SecAtrbREADWRITE.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Act65TRUE.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Act65SecAtrbFALSE.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Act65ORG.cpp">
@@ -554,13 +533,7 @@
     <ClCompile Include="Act65PROCasm.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Act65SECTIONname.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Act65SET.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Act65SECTIONattributes.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Act65BITS.cpp">
@@ -880,28 +853,7 @@
     <ClInclude Include="Act65SECTION.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Act65SecAtrbSTART.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Act65SecAtrbSIZE.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Act65SecAtrbMODE.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Act65SecAtrbZEROPAGE.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Act65SecAtrbREADONLY.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Act65SecAtrbREADWRITE.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Act65TRUE.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Act65SecAtrbFALSE.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Act65ORG.h">
@@ -1108,13 +1060,7 @@
     <ClInclude Include="Act65PROCasm.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Act65SECTIONname.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Act65SET.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Act65SECTIONattributes.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Act65BITS.h">
@@ -1174,6 +1120,9 @@
       <Filter>Action</Filter>
     </None>
     <None Include="Grammar\Action1.gram">
+      <Filter>Grammar</Filter>
+    </None>
+    <None Include="Grammar\action2.gram">
       <Filter>Grammar</Filter>
     </None>
   </ItemGroup>

@@ -42,10 +42,8 @@ class CAct65Opcode : public CAstNode
 	KeyWord* m_pKeyWord;
 	AdrModeType m_AdressMode;
 	int m_OpCode;
-	int m_Operand;
 	int m_ByteCount;
 	//-----------------------
-	CSymbol* m_pSym;	// Symbol for argument
 	CSymbol* m_pLabel;	// Symbol for instruction location
 public:
 	CAct65Opcode();
@@ -57,16 +55,16 @@ public:
 	virtual CValue* Process();
 	virtual void PrintNode(FILE* pOut, int Indent, bool* pbNextFlag);
 	virtual int Print(int Indent, char* s, int l, bool* pbNextFlag);
+	int PrintAbsolute(char* s, int StrLen);
+	int PrintZeroPage(char* s, int StrLen);
+	int PrintRelative(char* s, int StrLen);
+	int PrintIndirect(char* s, int StrLen);
 	virtual const char* GetNodeName() { return m_pNodeTyypeName; }
-	virtual void PrepareInstruction(
-		Token Tk,
-		AdrModeType AddressMode,
-		int Address
-	);
 	virtual void PrepareInstruction(
 		Token Tk, 
 		AdrModeType AddressMode,
-		CAstNode* pOperandValue_Node
+		CValue* pOperandValue_Node,
+		CSymbol* pLabelSym = 0
 	);
 	int SaveInstruction(char* pM);
 	//-----------------------------
@@ -81,11 +79,17 @@ public:
 	void SetColumnNumber(int c) { m_ColumnNumber = c; }
 	int GetOpCode() const { return m_OpCode; }
 	void SetOpCode(int Op) { m_OpCode = Op; }
-	int GetOperand() const { return m_Operand; }
-	void SetOperand(int Oprnd) { m_Operand = Oprnd; }
+	CValue* GetOperand() { 
+		return CAstNode::GetValue(); 
+	}
+	void SetOperand(CValue* pOprnd) { 
+		CAstNode::SetValue(pOprnd);
+	}
 	AdrModeType GetAdrModeType() const { return m_AdressMode; }
 	void SetAdrModeType(AdrModeType AMT) { m_AdressMode = AMT; }
 	int GetByteCount() const { return m_ByteCount; }
 	void SetByteCount(int BC) { m_ByteCount = BC; }
 	KeyWord* GetKeyWord() { return m_pKeyWord; }
+	CSymbol* GetLabelSymbol() { return m_pLabel; }
+	void SetLabelSymbol(CSymbol* pSym) { m_pLabel = pSym; }
 };

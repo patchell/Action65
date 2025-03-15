@@ -2,7 +2,6 @@
 
 class CAct65CONSTANT : public CAstNode
 {
-	int Value;
 	inline static const char* m_pNodeTyypeName = "CONSTANT";
 public:
 	CAct65CONSTANT();

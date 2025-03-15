@@ -385,7 +385,6 @@ Token CLexer::Lex()
 				else
 				{
 					m_aLexBuff[m_LexBuffIndex++] = c;
-					m_aLexBuff[m_LexBuffIndex++] = c;
 				}
 			}
 			m_aLexBuff[m_LexBuffIndex++] = 0;
@@ -593,6 +592,10 @@ Token CLexer::Lex()
 			}
 			break;	// end of default:
 		}
+	}
+	if (m_LexBuffIndex > 0)
+	{
+		fprintf(LogFile(), "LexBuff:%s\n", m_aLexBuff);
 	}
 	return TokenValue;
 }

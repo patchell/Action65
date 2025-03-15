@@ -2,6 +2,7 @@
 
 CAct65SECTION::CAct65SECTION() :CAstNode(m_pNodeTyypeName, NodeType::SECTION)
 {
+	m_pSection = 0;
 }
 
 CAct65SECTION::~CAct65SECTION()

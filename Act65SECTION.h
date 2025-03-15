@@ -2,6 +2,7 @@
 
 class CAct65SECTION : public CAstNode
 {
+	CSection* m_pSection;
 	inline static const char* m_pNodeTyypeName = "SECTION";
 public:
 	CAct65SECTION();
@@ -11,5 +12,9 @@ public:
 	virtual int Print(int Indent, char* s, int l, bool* pbNextFlag);
 	virtual void PrintNode(FILE* pOut, int Indent, bool* pbNextFlag);
 	virtual const char* GetNodeName() { return m_pNodeTyypeName; }
+	void SetSection(CSection* pSection) {
+		m_pSection = pSection;
+	}
+	CSection* GetSection() { return m_pSection; }
 };
 

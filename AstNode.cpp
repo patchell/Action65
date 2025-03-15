@@ -65,10 +65,12 @@ CAstNode* CAstNode::MakeNode(
 
 	CAstNode* pNode = 0;
 
-	SetChild(pChild);
-	pNode = pChild;
-	if (pNode)
+	if (pChild)
 	{
+		SetChild(pChild);
+		pChild->SetParent(this);
+		pNext->SetParent(this);
+		pNode = pChild;
 		while (pNode->GetNext())
 			pNode = pNode->GetNext();
 		pNode->SetNext(pNext);
@@ -146,18 +148,22 @@ CAstNode* CAstNode::MakeNextList(CAstNode* pList, CAstNode* pListMember)
 
 	if (pList)
 	{
-		pNode = pList->GetNext();
-		if (pNode)
+		if (pListMember)
 		{
-			while (pNode->GetNext())
+			pListMember->SetParent(pList->GetParent());
+			pNode = pList->GetNext();
+			if (pNode)
 			{
-				pNode = pNode->GetNext();
+				while (pNode->GetNext())
+				{
+					pNode = pNode->GetNext();
+				}
+				pNode->SetNext(pListMember);
 			}
-			pNode->SetNext(pListMember);
-		}
-		else
-		{
-			pList->SetNext(pListMember);
+			else
+			{
+				pList->SetNext(pListMember);
+			}
 		}
 	}
 	else
@@ -171,6 +177,7 @@ CAstNode* CAstNode::MakeChildList(CAstNode* pList, CAstNode* pChild)
 
 	if (pList)
 	{
+		pChild->SetParent(pList);
 		pNode = pList->GetChild();
 		if (pNode)
 		{
@@ -191,6 +198,15 @@ CAstNode* CAstNode::MakeChildList(CAstNode* pList, CAstNode* pChild)
 		Act()->Exit(101);
 	}
     return pList;
+}
+
+CAstNode* CAstNode::GetLastNext()
+{
+	CAstNode* pN = this;
+
+	while (pN->GetNext())
+		pN = pN->GetNext();
+	return pN;
 }
 
 int CAstNode::MakeIndentString(char* s, int size, int Indent, bool* pbNextFlag)

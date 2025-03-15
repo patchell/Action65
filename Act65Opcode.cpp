@@ -5,13 +5,11 @@ CAct65Opcode::CAct65Opcode():CAstNode(m_pNodeTyypeName, NodeType::OPCODE)
 	m_OpcodeToken = Token(-1);
 	m_LineNumber = 0;
 	m_ColumnNumber = 0;
-	m_pSym = 0;
 	m_pLabel = 0;
 	m_AdressMode = AdrModeType::NA;
 	m_pKeyWord = 0;
 	m_ByteCount = 0;
 	m_OpCode = 0;
-	m_Operand = 0;
 }
 
 CAct65Opcode::~CAct65Opcode()
@@ -63,55 +61,316 @@ void CAct65Opcode::PrintNode(FILE* pOut, int Indent, bool* pbNextFlag)
 int CAct65Opcode::Print(int Indent, char* s, int Strlen, bool* pbNextFlag)
 {
 	int l = 0;
+	int c = 0;
+	char* pS = 0;
 
 	l = CAstNode::Print(Indent, s, Strlen, pbNextFlag);
 	int size = Strlen - l;
-	l += sprintf_s(&s[l],size, " %s ($%02X) %s", 
-		GetKeyWord()->m_Name, 
-		GetOpCode() &0x0ff,
+	l += sprintf_s(&s[l], size, " %s ($%02X) %s",
+		GetKeyWord()->m_Name,
+		GetOpCode() & 0x0ff,
 		AdrModeToTxtTabel.LookupAddressingMode(GetAdrModeType())
 	);
+	switch (GetAdrModeType())
+	{
+	case AdrModeType::ABSOLUTE_ADR:
+		size = Strlen - l;
+		switch (GetValue()->GetValueType())
+		{
+		case CValue::ValueType::SYMBOL:
+			if (GetValue()->GetConstVal() > 0)
+				l += sprintf_s(&s[l], size, "%s + %d",
+					GetSymbol()->GetName(),
+					GetValue()->GetConstVal()
+				);
+			else
+				l += sprintf_s(&s[l], size, "%s",
+					GetSymbol()->GetName()
+				);
+			break;
+		case CValue::ValueType::CONSTANT:
+			if (GetValue()->GetConstVal() > 0)
+				l += sprintf_s(&s[l], size, "%d",
+					GetValue()->GetConstVal()
+				);
+			break;
+		default:
+			break;
+		}
+		break;
+	case AdrModeType::ABSOLUTE_X_ADR:
+		size = Strlen - l;
+		switch (GetValue()->GetValueType())
+		{
+		case CValue::ValueType::SYMBOL:
+			if (GetValue()->GetConstVal() > 0)
+				l += sprintf_s(&s[l], size, "%s + %d,X",
+					GetSymbol()->GetName(),
+					GetValue()->GetConstVal()
+				);
+			else
+				l += sprintf_s(&s[l], size, "%s,X",
+					GetSymbol()->GetName()
+				);
+			break;
+		case CValue::ValueType::CONSTANT:
+			if (GetValue()->GetConstVal() > 0)
+				l += sprintf_s(&s[l], size, "%d,X",
+					GetValue()->GetConstVal()
+				);
+			break;
+		default:
+			break;
+		}
+		break;
+	case AdrModeType::ABSOLUTE_Y_ADR:
+		size = Strlen - l;
+		switch (GetValue()->GetValueType())
+		{
+		case CValue::ValueType::SYMBOL:
+			if (GetValue()->GetConstVal() > 0)
+				l += sprintf_s(&s[l], size, "%s + %d,Y",
+					GetSymbol()->GetName(),
+					GetValue()->GetConstVal()
+				);
+			else
+				l += sprintf_s(&s[l], size, "%s,Y",
+					GetSymbol()->GetName()
+				);
+			break;
+		case CValue::ValueType::CONSTANT:
+			if (GetValue()->GetConstVal() > 0)
+				l += sprintf_s(&s[l], size, "%d,Y",
+					GetValue()->GetConstVal()
+				);
+			break;
+		default:
+			break;
+		}
+		break;
+	case AdrModeType::ACCUMULATOR:
+		size = Strlen - l;
+		sprintf_s(&s[l], size, " .A");
+		break;
+	case AdrModeType::IMMEDIATE_ADR:
+		size = Strlen - l;
+		c = GetOperand()->GetConstVal();
+		if (isalnum(c))
+			l += sprintf_s(&s[l], size, " #\'%c\'  #$%02X", c, c & 0xff);
+		else
+			l += sprintf_s(&s[l], size, " #$%02X", c & 0xff);
+		break;
+	case AdrModeType::IMPLIED:
+		break;
+	case AdrModeType::INDEXED_INDIRECT_X_ADR:
+		size = Strlen - l;
+		switch (GetValue()->GetValueType())
+		{
+		case CValue::ValueType::SYMBOL:
+			if (GetValue()->GetConstVal() > 0)
+				l += sprintf_s(&s[l], size, "(%s+%d,.X)",
+					GetSymbol()->GetName(),
+					GetValue()->GetConstVal()
+				);
+			else
+				l += sprintf_s(&s[l], size, "(%s,.X)",
+					GetSymbol()->GetName()
+				);
+			break;
+		case CValue::ValueType::CONSTANT:
+			if (GetValue()->GetConstVal() > 0)
+				l += sprintf_s(&s[l], size, "(%d,.X)",
+					GetValue()->GetConstVal()
+				);
+			break;
+		default:
+			break;
+		}
+		break;
+	case AdrModeType::INDIRECT_ADR:
+		size = Strlen - l;
+		switch (GetValue()->GetValueType())
+		{
+		case CValue::ValueType::SYMBOL:
+			if (GetValue()->GetConstVal() > 0)
+				l += sprintf_s(&s[l], size, "(%s+%d)",
+					GetSymbol()->GetName(),
+					GetValue()->GetConstVal()
+				);
+			else
+				l += sprintf_s(&s[l], size, "(%s)",
+					GetSymbol()->GetName()
+				);
+			break;
+		case CValue::ValueType::CONSTANT:
+			if (GetValue()->GetConstVal() > 0)
+				l += sprintf_s(&s[l], size, "(%04X)",
+					GetValue()->GetConstVal()
+				);
+			break;
+		default:
+			break;
+		}
+		break;
+	case AdrModeType::INDIRECT_INDEXED_Y_ADR:
+		size = Strlen - l;
+		switch (GetValue()->GetValueType())
+		{
+		case CValue::ValueType::SYMBOL:
+			if (GetValue()->GetConstVal() > 0)
+				l += sprintf_s(&s[l], size, "(%s+%d),.Y",
+					GetSymbol()->GetName(),
+					GetValue()->GetConstVal()
+				);
+			else
+				l += sprintf_s(&s[l], size, "(%s),.Y",
+					GetSymbol()->GetName()
+				);
+			break;
+		case CValue::ValueType::CONSTANT:
+			if (GetValue()->GetConstVal() > 0)
+				l += sprintf_s(&s[l], size, "(%d),.Y",
+					GetValue()->GetConstVal()
+				);
+			break;
+		default:
+			break;
+		}
+		break;
+	case AdrModeType::RELATIVE:
+		size = Strlen - l;
+		switch (GetValue()->GetValueType())
+		{
+		case CValue::ValueType::SYMBOL:
+			l += sprintf_s(&s[l], size, "%s",
+				GetSymbol()->GetName()
+			);
+			break;
+		case CValue::ValueType::CONSTANT:
+			if (GetValue()->GetConstVal() > 0)
+				l += sprintf_s(&s[l], size, "%02X,.Y",
+					GetValue()->GetConstVal() - 1
+				);
+			break;
+		default:
+			break;
+		}
+		break;
+	case AdrModeType::ZERO_PAGE_ADR:
+		size = Strlen - l;
+		switch (GetValue()->GetValueType())
+		{
+		case CValue::ValueType::SYMBOL:
+			if (GetValue()->GetConstVal() > 0)
+				l += sprintf_s(&s[l], size, "%s + %d",
+					GetSymbol()->GetName(),
+					GetValue()->GetConstVal()
+				);
+			else
+				l += sprintf_s(&s[l], size, "%s",
+					GetSymbol()->GetName()
+				);
+			break;
+		case CValue::ValueType::CONSTANT:
+			if (GetValue()->GetConstVal() > 0)
+				l += sprintf_s(&s[l], size, "%02X",
+					GetValue()->GetConstVal() & 0xff
+				);
+			break;
+		default:
+			break;
+		}
+		break;
+	case AdrModeType::ZERO_PAGE_X_ADR:
+		size = Strlen - l;
+		switch (GetValue()->GetValueType())
+		{
+		case CValue::ValueType::SYMBOL:
+			if (GetValue()->GetConstVal() > 0)
+				l += sprintf_s(&s[l], size, "%s + %d,.X",
+					GetSymbol()->GetName(),
+					GetValue()->GetConstVal()
+				);
+			else
+				l += sprintf_s(&s[l], size, "%s,.X",
+					GetSymbol()->GetName()
+				);
+			break;
+		case CValue::ValueType::CONSTANT:
+			if (GetValue()->GetConstVal() > 0)
+				l += sprintf_s(&s[l], size, "%02X,.X",
+					GetValue()->GetConstVal() & 0xff
+				);
+			break;
+		default:
+			break;
+		}
+		break;
+	case AdrModeType::ZERO_PAGE_Y_ADR:
+		size = Strlen - l;
+		switch (GetValue()->GetValueType())
+		{
+		case CValue::ValueType::SYMBOL:
+			if (GetValue()->GetConstVal() > 0)
+				l += sprintf_s(&s[l], size, "%s + %d,.Y",
+					GetSymbol()->GetName(),
+					GetValue()->GetConstVal()
+				);
+			else
+				l += sprintf_s(&s[l], size, "%s,.Y",
+					GetSymbol()->GetName()
+				);
+			break;
+		case CValue::ValueType::CONSTANT:
+			if (GetValue()->GetConstVal() > 0)
+				l += sprintf_s(&s[l], size, "%02X,.Y",
+					GetValue()->GetConstVal()
+				);
+			break;
+		default:
+			break;
+		}
+		break;
+	default:
+		l += sprintf_s(&s[l], size, "Value Type:%s",
+			GetValue()->ValueTypeStr(GetValue()->GetValueType())
+		);
+		break;
+	}
+	if (GetParent())
+	{
+		size = Strlen - l;
+		l += sprintf_s(&s[l], size, " (Parent:%s", GetParent()->GetNodeName());
+	}
 	return l;
 }
 
-void CAct65Opcode::PrepareInstruction(
-	Token Tk, 
-	AdrModeType AddressMode, 
-	int Address
-)
+int CAct65Opcode::PrintAbsolute(char* s, int StrLen)
 {
-	//specifically for Relative Addressing
-	CLexer* pLex = Act()->GetParser()->GetLexer();
+	return 0;
+}
 
-	m_pKeyWord = pLex->FindKeyword(Tk);
-	if (m_pKeyWord->m_pAddresModeLUT->ValidAddressingMode(AddressMode))
-	{
-		m_AdressMode = AddressMode;
-		SetToken(Tk);
-		SetLineNumber(pLex->GetLineNumber());
-		SetColumnNumber(pLex->GetColunm());
-		SetOpCode(pLex->MakeOpcode(Tk, AddressMode));
-		SetByteCount(OperandByteCount::GetOperandByteCount(AddressMode) + 1);
-		SetChild(NULL);
-		SetOperand(Address);
-	}
-	else   // :(
-	{
-		ThrownException.SetXCeptType(Exception::ExceptionType::ILLEGAL_ADDRESSING_MODE);
-		sprintf_s(
-			ThrownException.GetErrorString(),
-			ThrownException.GetMaxStringLen(),
-			"Line %d: Illegal Addressing Mode\n",
-			Act()->GetParser()->GetLexer()->GetLineNumber()
-		);
-		throw(ThrownException);
-	}
+int CAct65Opcode::PrintZeroPage(char* s, int StrLen)
+{
+	return 0;
+}
+
+int CAct65Opcode::PrintRelative(char* s, int StrLen)
+{
+	return 0;
+}
+
+int CAct65Opcode::PrintIndirect(char* s, int StrLen)
+{
+	return 0;
 }
 
 void CAct65Opcode::PrepareInstruction(
 	Token OpToken, 
 	AdrModeType AddressMode,
-	CAstNode* pOperandValue_Node
+	CValue* pOperandValue,
+	CSymbol* pLabelSym
+
 )
 {
 	CLexer* pLex = Act()->GetParser()->GetLexer();
@@ -119,13 +378,28 @@ void CAct65Opcode::PrepareInstruction(
 	m_pKeyWord = pLex->FindKeyword(OpToken);
 	if (m_pKeyWord->m_pAddresModeLUT->ValidAddressingMode(AddressMode))
 	{
+		if (pLabelSym)
+			SetLabelSymbol(pLabelSym);
 		m_AdressMode = AddressMode;
+		switch (AddressMode)
+		{
+		case AdrModeType::INDEXED_INDIRECT_X_ADR:
+		case AdrModeType::INDIRECT_INDEXED_Y_ADR:
+		case AdrModeType::ZERO_PAGE_ADR:
+		case AdrModeType::ZERO_PAGE_X_ADR:
+		case AdrModeType::ZERO_PAGE_Y_ADR:
+			if(pOperandValue->IsPageZero())
+			fprintf(Act()->LogFile(), "Value Type:%s", 
+				CValue::ValueTypeStr(pOperandValue->GetValueType())
+			);
+			break;
+		}
 		SetToken(OpToken);
 		SetLineNumber(pLex->GetLineNumber());
 		SetColumnNumber(pLex->GetColunm());
 		SetOpCode(pLex->MakeOpcode(OpToken, AddressMode));
 		SetByteCount(OperandByteCount::GetOperandByteCount(AddressMode) + 1);
-		SetChild(pOperandValue_Node);
+		SetValue(pOperandValue);
 	}
 	else   // :(
 	{
@@ -144,9 +418,9 @@ int CAct65Opcode::SaveInstruction(char* pM)
 {
 	*pM++ = (char)GetOpCode();
 	if (GetByteCount() > 1)
-		*pM++ = (char)GetOperand() & 0xff;
+		*pM++ = (char)GetOperand()->GetConstVal() & 0xff;
 	if(GetByteCount() > 2)
-		*pM++ = (char)((GetOperand() & 0xff00) >> 8);
+		*pM++ = (char)((GetOperand()->GetConstVal() & 0xff00) >> 8);
 	return GetByteCount();
 }
 

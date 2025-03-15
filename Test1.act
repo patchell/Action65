@@ -17,8 +17,29 @@ INTERRUPT Hey()
 	CARD lc,ld,le
 	BYTE lf
 
+	ASM {
+		SECTION "PageZero" [
+			START = $0000
+			SIZE = $100
+			MODE = READ_WRITE
+			ZEROPAGE = TRUE
+		]
+		:First	DB	0
+		:Second	DB	1
+
+		LDA #$4A
+		LDA #>$ABCD
+		LDA #<$ABCD
+		LDA First
+	}
 	IF la = lb THEN
 		la ==+ lb - le
+	ELSEIF ld < lf THEN
+		la = lb * le
+	ELSEIF ld > lf THEN
+		la = lb / le
+	ELSE
+		EXIT
 	FI
 	FOR lf = 0 TO 14 STEP 2
 	DO
@@ -38,8 +59,6 @@ INTERRUPT Hey()
 	RETURN
 	RETURN la - lb
 
-	PUSH .A
-	POP .A
 	Avar = x + y
 	Avar ==* x + y
 	Avar ==& x + y

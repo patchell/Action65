@@ -7,12 +7,12 @@ CBucket::~CBucket()
 
 	pBin = m_pHead;
 
-	while (pBin)
-	{
-		m_pHead = pBin->GetNext();
-		delete pBin;
-		pBin = m_pHead;
-	}
+	//while (pBin)
+	//{
+	//	m_pHead = pBin->GetNext();
+	//	delete pBin;
+	//	pBin = m_pHead;
+	//}
 }
 
 void CBucket::Add(CBin* pSym)

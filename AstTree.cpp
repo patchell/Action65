@@ -153,6 +153,7 @@ void CAstTree::TraverseTree(
 			MaxLoops
 		);
 	}
+//	printf("Recursions:%5d  Loops:%5d\n", Recursions, Loops);
 	pbNextFlags[Indent] = false;
 	Recursions++;
 }

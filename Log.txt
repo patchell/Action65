@@ -1,0 +1,370 @@
+File:test1.act has 872 Bytes
+Parser Created
+LexBuff:MODULE
+LexBuff:INT
+LexBuff:Avar
+LexBuff:x
+LexBuff:y
+LexBuff:z
+LexBuff:CARD
+LexBuff:Cvar
+LexBuff:CHAR
+LexBuff:Stuff
+LexBuff:Yep
+LexBuff:TYPE
+LexBuff:Junk
+LexBuff:CHAR
+LexBuff:q
+LexBuff:e
+LexBuff:d
+LexBuff:INT
+LexBuff:POINTER
+LexBuff:pX
+LexBuff:INTERRUPT
+LexBuff:Hey
+LexBuff:TYPE
+LexBuff:Crud
+LexBuff:INT
+LexBuff:CrudOne
+LexBuff:CHAR
+LexBuff:CrudTwo
+LexBuff:INT
+LexBuff:POINTER
+LexBuff:ARRAY
+LexBuff:POINTER
+LexBuff:cc
+LexBuff:CHAR
+LexBuff:la
+LexBuff:lb
+LexBuff:CARD
+LexBuff:lc
+LexBuff:ld
+LexBuff:le
+LexBuff:BYTE
+LexBuff:lf
+LexBuff:ASM
+LexBuff:SECTION
+Enter Define Label
+Exit Define Label
+LexBuff:PageZero
+LexBuff:START
+LexBuff:0000
+LexBuff:SIZE
+LexBuff:100
+LexBuff:MODE
+LexBuff:READ_WRITE
+LexBuff:ZEROPAGE
+LexBuff:TRUE
+LexBuff:First
+Enter Define Label
+*************** Add Symbol First
+----- Index = 5 First -----
+LexBuff:DB
+Exit Define Label
+LexBuff:0
+LexBuff:Second
+DB One
+Enter Define Label
+*************** Add Symbol Second
+LexBuff:DB
+Exit Define Label
+LexBuff:1
+LexBuff:LDA
+DB One
+Enter Define Label
+Exit Define Label
+LexBuff:4A
+LexBuff:LDA
+Enter Define Label
+Exit Define Label
+LexBuff:ABCD
+LexBuff:LDA
+Enter Define Label
+Exit Define Label
+LexBuff:ABCD
+LexBuff:LDA
+Enter Define Label
+Exit Define Label
+LexBuff:First
+Enter Define Label
+Exit Define Label
+LexBuff:IF
+LexBuff:la
+LexBuff:lb
+LexBuff:THEN
+LexBuff:la
+LexBuff:lb
+LexBuff:le
+LexBuff:ELSEIF
+LexBuff:ld
+LexBuff:lf
+LexBuff:THEN
+LexBuff:la
+LexBuff:lb
+LexBuff:le
+LexBuff:ELSEIF
+LexBuff:ld
+LexBuff:lf
+LexBuff:THEN
+LexBuff:la
+LexBuff:lb
+LexBuff:le
+LexBuff:ELSE
+LexBuff:EXIT
+LexBuff:FI
+LexBuff:FOR
+LexBuff:lf
+LexBuff:0
+LexBuff:TO
+LexBuff:14
+LexBuff:STEP
+LexBuff:2
+LexBuff:DO
+LexBuff:la
+LexBuff:lf
+LexBuff:RSH
+LexBuff:ld
+LexBuff:OD
+LexBuff:WHILE
+LexBuff:lc
+LexBuff:ld
+LexBuff:DO
+LexBuff:la
+LexBuff:lf
+LexBuff:LSH
+LexBuff:ld
+LexBuff:OD
+LexBuff:DO
+LexBuff:la
+LexBuff:lb
+LexBuff:lc
+LexBuff:lf
+LexBuff:EXIT
+LexBuff:OD
+LexBuff:BREAK
+LexBuff:RTI
+LexBuff:EXIT
+LexBuff:RETURN
+LexBuff:RETURN
+LexBuff:la
+LexBuff:lb
+LexBuff:Avar
+LexBuff:x
+LexBuff:y
+LexBuff:Avar
+LexBuff:x
+LexBuff:y
+LexBuff:Avar
+LexBuff:x
+LexBuff:y
+LexBuff:Avar
+LexBuff:x
+LexBuff:y
+LexBuff:Avar
+LexBuff:x
+LexBuff:y
+LexBuff:Avar
+LexBuff:x
+LexBuff:y
+LexBuff:Avar
+LexBuff:x
+LexBuff:y
+LexBuff:RETURN
+LexBuff:MODULE
+LexBuff:CHAR
+LexBuff:xyx
+LexBuff:yxy
+LexBuff:CARD
+LexBuff:one
+LexBuff:two
+LexBuff:three
+	 NUMB  CHILD  NEXT
+     2      3     -1  +- 'ROOT'
+     3      4    184     +- 'MODULE'
+     4      5      9     |  +- 'INT'
+     5     -1      6     |  |  +- 'IDENT': Avar
+     6     -1      7     |  |  +- 'IDENT': x
+     7     -1      8     |  |  +- 'IDENT': y
+     8     -1     -1     |  |  +- 'IDENT': z
+     9     10     11     |  +- 'CARD'
+    10     -1     -1     |  |  +- 'IDENT': Cvar
+    11     12     24     |  +- 'CHAR'
+    12     -1     13     |  |  +- 'IDENT': Stuff
+    13     -1     -1     |  |  +- 'IDENT': Yep
+    24     14     25     |  +- 'TYPE'
+    14     22     -1     |  |  +- 'TYPE Name': Junk
+    22     18     23     |  |     +- 'FIELDS'
+    18     15     21     |  |     |  +- 'CHAR'
+    15     -1     16     |  |     |  |  +- 'IDENT': q
+    16     -1     17     |  |     |  |  +- 'IDENT': e
+    17     -1     -1     |  |     |  |  +- 'IDENT': d
+    21     19     -1     |  |     |  +- 'INT'
+    19     20     -1     |  |     |     +- 'POINTER'
+    20     -1     -1     |  |     |        +- 'IDENT': pX
+    23     -1     -1     |  |     +- 'TYPE Fields End'
+    25     26     -1     |  +- 'IRQ-PROC'
+    26     -1     29     |     +- 'IDENT': Hey
+    29     28     -1     |     +- 'Body'
+    28     42     52     |        +- 'LOCAL Vars'
+    42     38     45     |        |  +- 'INT'
+    38     -1     39     |        |  |  +- 'POINTER'
+    39     -1     40     |        |  |  +- 'ARRAY'
+    40     41     -1     |        |  |  +- 'POINTER'
+    41     -1     -1     |        |  |     +- 'IDENT': cc
+    45     43     49     |        |  +- 'CHAR'
+    43     -1     44     |        |  |  +- 'IDENT': la
+    44     -1     -1     |        |  |  +- 'IDENT': lb
+    49     46     51     |        |  +- 'CARD'
+    46     -1     47     |        |  |  +- 'IDENT': lc
+    47     -1     48     |        |  |  +- 'IDENT': ld
+    48     -1     -1     |        |  |  +- 'IDENT': le
+    51     50     37     |        |  +- 'BYTE'
+    50     -1     -1     |        |  |  +- 'IDENT': lf
+    37     30     -1     |        |  +- 'TYPE'
+    30     35     -1     |        |     +- 'TYPE Name': Crud
+    35     32     36     |        |        +- 'FIELDS'
+    32     31     34     |        |        |  +- 'INT'
+    31     -1     -1     |        |        |  |  +- 'IDENT': CrudOne
+    34     33     -1     |        |        |  +- 'CHAR'
+    33     -1     -1     |        |        |     +- 'IDENT': CrudTwo
+    36     -1     -1     |        |        +- 'TYPE Fields End'
+    52     53     -1     |        +- 'STATEMENTS'
+    53     54     65     |           +- 'ASM'
+    54     -1     55     |           |  +- 'SECTION'
+    55     57     58     |           |  +- 'LABEL'55: 'First'
+    57     56     -1     |           |  |  +- 'DB'
+    56     -1     -1     |           |  |     +- 'CONSTANT'     0  $0000
+    58     60     61     |           |  +- 'LABEL'58: 'Second'
+    60     59     -1     |           |  |  +- 'DB'
+    59     -1     -1     |           |  |     +- 'CONSTANT'     1  $0001
+    61     -1     62     |           |  +- 'OPCODE' LDA ($A9) IMMEDIATE #'J'  #$4A
+    62     -1     63     |           |  +- 'OPCODE' LDA ($A9) IMMEDIATE #$CD
+    63     -1     64     |           |  +- 'OPCODE' LDA ($A9) IMMEDIATE #$AB
+    64     -1     -1     |           |  +- 'OPCODE' LDA ($AD) ABSOLUTE
+    65     67    102     |           +- 'IF'
+    67     68     76     |           |  +- 'EQU-TO'
+    68     -1     66     |           |  |  +- 'IDENT': lb
+    66     -1     75     |           |  |  +- 'IDENT': la
+    75     69     -1     |           |  |  +- 'THEN'
+    69     71     -1     |           |  |     +- 'STATEMENTS'
+    71     73     -1     |           |  |        +- '=ADD'
+    73     74     70     |           |  |           +- 'SUB'
+    74     -1     72     |           |  |           |  +- 'IDENT': le
+    72     -1     -1     |           |  |           |  +- 'IDENT': lb
+    70     -1     -1     |           |  |           +- 'IDENT': la
+    76     78     87     |           |  +- 'ELSEIF'
+    78     79     -1     |           |  |  +- '<'
+    79     -1     77     |           |  |     +- 'IDENT': lf
+    77     -1     86     |           |  |     +- 'IDENT': ld
+    86     80     -1     |           |  |     +- 'THEN'
+    80     82     -1     |           |  |        +- 'STATEMENTS'
+    82     84     -1     |           |  |           +- 'Assign ='
+    84     85     81     |           |  |              +- 'MUL'
+    85     -1     83     |           |  |              |  +- 'IDENT': le
+    83     -1     -1     |           |  |              |  +- 'IDENT': lb
+    81     -1     -1     |           |  |              +- 'IDENT': la
+    87     89    100     |           |  +- 'ELSEIF'
+    89     90     -1     |           |  |  +- '>'
+    90     -1     88     |           |  |     +- 'IDENT': lf
+    88     -1     97     |           |  |     +- 'IDENT': ld
+    97     91     -1     |           |  |     +- 'THEN'
+    91     93     -1     |           |  |        +- 'STATEMENTS'
+    93     95     -1     |           |  |           +- 'Assign ='
+    95     96     92     |           |  |              +- 'DIV'
+    96     -1     94     |           |  |              |  +- 'IDENT': le
+    94     -1     -1     |           |  |              |  +- 'IDENT': lb
+    92     -1     -1     |           |  |              +- 'IDENT': la
+   100     98    101     |           |  +- 'ELSE'
+    98     99     -1     |           |  |  +- 'STATEMENTS'
+    99     -1     -1     |           |  |     +- 'EXIT'
+   101     -1     -1     |           |  +- 'FI'
+   102    103    117     |           +- 'FOR'
+   103    104    105     |           |  +- 'IDENT': lf
+   104     -1     -1     |           |  |  +- 'NUMBER'$0000
+   105    106    108     |           |  +- 'TO'
+   106     -1     -1     |           |  |  +- 'NUMBER'$000E
+   108    107    109     |           |  +- 'STEP'
+   107     -1     -1     |           |  |  +- 'NUMBER'$0002
+   109    111     -1     |           |  +- 'DO'
+   111    113    110     |           |     +- 'STATEMENTS'
+   113    115     -1     |           |     |  +- 'Assign ='
+   115    116    112     |           |     |     +- 'RSH'
+   116     -1    114     |           |     |     |  +- 'IDENT': ld
+   114     -1     -1     |           |     |     |  +- 'IDENT': lf
+   112     -1     -1     |           |     |     +- 'IDENT': la
+   110     -1     -1     |           |     +- 'OD'
+   117    119    129     |           +- 'WHILE'
+   119    120    127     |           |  +- '<'
+   120     -1    118     |           |  |  +- 'IDENT': ld
+   118     -1     -1     |           |  |  +- 'IDENT': lc
+   127    121     -1     |           |  +- 'DO'
+   121    123    128     |           |     +- 'STATEMENTS'
+   123    125     -1     |           |     |  +- 'Assign ='
+   125    126    122     |           |     |     +- 'LSH'
+   126     -1    124     |           |     |     |  +- 'IDENT': ld
+   124     -1     -1     |           |     |     |  +- 'IDENT': lf
+   122     -1     -1     |           |     |     +- 'IDENT': la
+   128     -1     -1     |           |     +- 'OD'
+   129    130    140     |           +- 'DO'
+   130    132    139     |           |  +- 'STATEMENTS'
+   132    136    138     |           |  |  +- 'Assign ='
+   136    137    131     |           |  |  |  +- 'SUB'
+   137     -1    134     |           |  |  |  |  +- 'IDENT': lf
+   134    135     -1     |           |  |  |  |  +- 'MUL'
+   135     -1    133     |           |  |  |  |     +- 'IDENT': lc
+   133     -1     -1     |           |  |  |  |     +- 'IDENT': lb
+   131     -1     -1     |           |  |  |  +- 'IDENT': la
+   138     -1     -1     |           |  |  +- 'EXIT'
+   139     -1     -1     |           |  +- 'OD'
+   140     -1    141     |           +- 'BREAK'
+   141     -1    142     |           +- 'RTI'
+   142     -1    143     |           +- 'EXIT'
+   143     -1    144     |           +- 'RETURN'
+   144    146    149     |           +- 'RETURN'
+   146    147     -1     |           |  +- 'SUB'
+   147     -1    145     |           |     +- 'IDENT': lb
+   145     -1     -1     |           |     +- 'IDENT': la
+   149    151    154     |           +- 'Assign ='
+   151    152    148     |           |  +- 'ADD'
+   152     -1    150     |           |  |  +- 'IDENT': y
+   150     -1     -1     |           |  |  +- 'IDENT': x
+   148     -1     -1     |           |  +- 'IDENT': Avar
+   154    156    159     |           +- '=SUB'
+   156    157    153     |           |  +- 'ADD'
+   157     -1    155     |           |  |  +- 'IDENT': y
+   155     -1     -1     |           |  |  +- 'IDENT': x
+   153     -1     -1     |           |  +- 'IDENT': Avar
+   159    161    164     |           +- '=AND'
+   161    162    158     |           |  +- 'ADD'
+   162     -1    160     |           |  |  +- 'IDENT': y
+   160     -1     -1     |           |  |  +- 'IDENT': x
+   158     -1     -1     |           |  +- 'IDENT': Avar
+   164    166    169     |           +- '=OR'
+   166    167    163     |           |  +- 'ADD'
+   167     -1    165     |           |  |  +- 'IDENT': y
+   165     -1     -1     |           |  |  +- 'IDENT': x
+   163     -1     -1     |           |  +- 'IDENT': Avar
+   169    171    174     |           +- '=LSH'
+   171    172    168     |           |  +- 'ADD'
+   172     -1    170     |           |  |  +- 'IDENT': y
+   170     -1     -1     |           |  |  +- 'IDENT': x
+   168     -1     -1     |           |  +- 'IDENT': Avar
+   174    176    179     |           +- '=XOR'
+   176    177    173     |           |  +- 'ADD'
+   177     -1    175     |           |  |  +- 'IDENT': y
+   175     -1     -1     |           |  |  +- 'IDENT': x
+   173     -1     -1     |           |  +- 'IDENT': Avar
+   179    181    183     |           +- '=MOD'
+   181    182    178     |           |  +- 'ADD'
+   182     -1    180     |           |  |  +- 'IDENT': y
+   180     -1     -1     |           |  |  +- 'IDENT': x
+   178     -1     -1     |           |  +- 'IDENT': Avar
+   183     -1     -1     |           +- 'RETURN'
+   184    185     -1     +- 'MODULE'
+   185    186    188        +- 'CHAR'
+   186     -1    187        |  +- 'IDENT': xyx
+   187     -1     -1        |  +- 'IDENT': yxy
+   188    189     -1        +- 'CARD'
+   189     -1    190           +- 'IDENT': one
+   190     -1    191           +- 'IDENT': two
+   191     -1     -1           +- 'IDENT': three

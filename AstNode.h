@@ -192,6 +192,7 @@ public:
 	virtual CValue* Process() = 0;
 	virtual void PrintNode(FILE* pOut, int Indent, bool* pbNextFlag);
 	virtual int Print(int Indent, char* s, int strLen, bool* pbNextFlag);
+	virtual bool IsLabel() { return false; }
 	// Getter/Setter Methods
 	CAstNode* GetHead() { return m_pHead; }
 	CAstNode* GetTail() { return m_pTail; }
@@ -231,7 +232,9 @@ public:
 			pSym = m_pValue->GetSymbol();
 		return pSym; 
 	}
-	void SetValue(CValue* pV) { m_pValue = pV; }
+	void SetValue(CValue* pV) { 
+		m_pValue = pV; 
+	}
 	CValue* GetValue() {
 		return m_pValue;
 	}
@@ -240,6 +243,7 @@ public:
 		CAstNode* pList, 
 		CAstNode* pChild
 	);
+	CAstNode* GetLastNext();
 	int MakeIndentString(char* s, int size, int Indent, bool* pbNextFlag);
 	int GetLine() const { return m_Line; }
 	int GetColumn() const { return m_Column; }

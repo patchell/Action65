@@ -54,10 +54,28 @@
 // VERSION 0.0.9 Feb 19, 2025
 //	Added Local TYPE declarations
 //
+//	VERSION 0.0.10 Feb 25, 2025
+//	Added LOCAL_LABEL and GLOBAL_LABEL Tokens
+//	Revamped the 'DECLARE' Grammar
+//
+//	Version 0.0.11 March 10, 2025
+//	Moved the PL/65 Statements into the
+//	inline assembly section...they fit
+//	in a lot better down there.  PL/65
+//	was really just a souped up assembler
+//	anyway.  I will eventually add the rest
+//	of the PL/65 statements, well, maybe
+//	most of them.
 //----------------------------------
 
 TERMINALS
 	"IDENT" = 256,
+	"VAR_LOCAL",
+	"VAR_GLOBAL",
+	"VAR_PARAM",
+	"LOCAL_LABEL",
+	"GLOBAL_LABEL",
+	"LABEL",
 	"NUMBER",
 	"STRING",
 	"SET",
@@ -103,9 +121,6 @@ TERMINALS
 	"INT",
 	"POINTER",
 	"ARRAY",
-	"VAR_LOCAL",
-	"VAR_GLOBAL",
-	"VAR_PARAM",
 	"PUSH",
 	"POP",
 	"BREAK",
@@ -123,8 +138,8 @@ TERMINALS
 	"ZEROPAGE",
 	"READ_ONLY",
 	"READ_WRITE",
-	"true",
-	"false",
+	"TRUE",
+	"FALSE",
 	"ORG",
 	"DB",
 	"DW",
@@ -293,11 +308,10 @@ ForStmt_1		-> 'FOR' ForDOend IfStmt ForStmt_1
 				-> .
 				;
 
-ForDOend		-> ForDO ForDOend_1;
-ForDOend_1		-> 'OD';
+ForDOend		-> STEPoption ForDOend_1;
+ForDOend_1		-> 'DO' Statements 
+				-> 'OD';
 
-ForDO			-> STEPoption ForDO_1;
-ForDO_1			-> 'DO' Statements;
 
 STEPoption		-> ForTO STEPoption_1;
 STEPoption_1	-> 'STEP' ArithExpr
@@ -306,15 +320,16 @@ STEPoption_1	-> 'STEP' ArithExpr
 ForTO			-> Itterrator ForTO_1;
 ForTO_1			-> 'TO' ArithExpr
 				;
-Itterrator		-> Value Itterrator_1;
+Itterrator		-> MemoryValue Itterrator_1;
 Itterrator_1	-> '=' ArithExpr
 				;
+
 
 //------------------------------------------------
 // IF statement
 //------------------------------------------------
-IfStmt			-> Iff IfStmt_1;
-IfStmt_1		-> 'IF' EndIF Iff IfStmt_1
+IfStmt			-> WhileStmt IfStmt_1;
+IfStmt_1		-> 'IF' EndIF WhileStmt IfStmt_1
 				-> .
 				;
 
@@ -336,76 +351,17 @@ ThenPart_1	-> 'THEN' Statements
 			-> .
 			;
 
-//-------------------------------------------------
-// IFF Statement
-//-------------------------------------------------
-
-Iff		-> WhileStmt Iff_1;
-Iff_1	-> 'IFF' IFFend WhileStmt Iff_1
-		-> .
-		;
-
-IFFend		-> IFFelse IFFend_1;
-IFFend_1	-> 'FFI';
-
-IFFelse		-> IFFthenpart IFFelse_1;
-IFFelse_1	-> 'ELSE' Statements
-			-> .
-			;
-IFFthenpart		-> IffRelOper IFFthenpart_1;
-IFFthenpart_1	-> 'THEN' Statements
-				-> .
-				;
-
-IffRelOper		-> IffRegister IffRelOper_1;
-IffRelOper_1	-> '<' Value
-				-> 'GTEQ' Value
-				-> '=' Value
-				-> '^' '=' Value	//not equal
-				-> .
-				;
-
-IffRegister		-> Bits IffRegister_1;
-IffRegister_1	-> 'AREG'  
-				-> 'XREG'  
-				-> 'YREG'  
-				-> .
-				;
-
-Bits			->StatusFlags Bits_1;
-Bits_1			-> 'BITS' BitValue
-				-> BIT BitValue
-				-> .
-				;
-BitValue		-> '[' ArithExpr 
-				-> ']';
-
-StatusFlags		-> OptNot StatusFlags_1;
-StatusFlags_1	-> 'NEG'		//negative flag
-				-> 'CARRY'		//Carry flag
-				-> 'ZERO'		//Zero
-				-> 'OVERFLOW'		//Overflow
-				;
-
-OptNot			-> '^'
-				-> .
-				;
-
 
 //-------------------------------------------------
 // WHILE Statement
 //-------------------------------------------------
 WhileStmt		-> DoStmt WhileStmt_1;
-WhileStmt_1		-> 'WHILE'  WhileDOend DoStmt WhileStmt_1
+WhileStmt_1		-> 'WHILE'  WhileDO DoStmt WhileStmt_1
 				-> .
 				;
 
-WhileDOend		-> WhileDO WhileDOend_1;
-WhileDOend_1	-> 'OD';
-
 WhileDO		-> RelOperation WhileDO_1;
-WhileDO_1	-> 'DO' Statements;
-
+WhileDO_1	-> 'DO' Statements OD;
 
 
 //------------------------------------------------
@@ -429,25 +385,19 @@ EXITstmt_1		-> 'EXIT' RetStmt EXITstmt_1
 // RETURN Statement
 //-------------------------------------------------
 RetStmt		-> InlineAssembly RetStmt_1;
-RetStmt_1	-> 'RETURN' OptReturnValue  InlineAssembly RetStmt_1
-				-> .
-				;
-OptReturnValue	-> '(' ArithExpr ')'
+RetStmt_1	-> 'RETURN' ArithExpr  InlineAssembly RetStmt_1
 				-> .
 				;
 //---------------------------------------------
 // Inline Assembly Code
 //---------------------------------------------
 InlineAssembly		-> CodeBlock InlineAssembly_1;
-InlineAssembly_1	-> 'ASM' EndAsmBlock CodeBlock InlineAssembly_1
+InlineAssembly_1	-> 'ASM' InlineAssBlock CodeBlock InlineAssembly_1
 					-> .
 					;
 
-EndAsmBlock			-> InlineAssBlock EndAsmBlock_1;
-EndAsmBlock_1		-> '}'
-					;
-
-InlineAssBlock		-> '{' AsmStmt
+InlineAssBlock		-> '{' AsmStmt InlineAssBlock
+					-> '}'
 					;
 //-----------------------------------------------
 // CODE (Kluge) BLOCK statement
@@ -461,47 +411,10 @@ CodeBlock_1		-> '[' ComstListEnd UntillStmt CodeBlock_1
 //---------------------------------------------------
 // UNTILE Statement
 //---------------------------------------------------
-UntillStmt		-> Push UntillStmt_1;
-UntillStmt_1	-> 'UNTILL' RelOperation Push UntillStmt_1
+UntillStmt		-> Break UntillStmt_1;
+UntillStmt_1	-> 'UNTILL' RelOperation Break UntillStmt_1
 				-> .
 				;
-//---------------------------------------------------
-// PUSH Statement
-//---------------------------------------------------
-
-Push		-> Pop Push_1;
-Push_1		-> 'PUSH' PushSourceList Pop Push_1
-			-> .
-			;
-PushSourceList	-> PushSource PushSourceList_1;
-PushSourceList_1-> ',' PushSource PushSourceList_1
-				-> .
-				;
-PushSource	-> ArithExpr PushSource_1;
-PushSource_1-> 'AREG'
-			-> 'XREG'
-			-> 'YREG'
-			-> 'SR'
-			-> .
-			;
-//---------------------------------------------------
-// POP Statment
-//---------------------------------------------------
-Pop			-> Break Pop_1;
-Pop_1		-> 'POP' PopDestList Break Pop_1
-			-> .
-			;
-PopDestList		-> PopDest PopDestList_1;
-PopDestList_1	-> ',' PopDest PopDestList_1
-				-> .
-				;
-PopDest		-> MemContentsType PopDest_1;
-PopDest_1	-> 'AREG'
-			-> 'XREG'
-			-> 'YREG'
-			-> 'SR'
-			-> .
-			;
 //--------------------------------------------------
 // BREAK Statement (Assembler BRK) Software Interrupt
 //--------------------------------------------------
@@ -646,7 +559,18 @@ ArrayIndex			-> '(' ArithExpr ')'
 Factor				-> '(' RelOperation ')'
 					-> .
 					;
-		 
+
+MemoryValue			-> MemValLocation MemoryValue_1;
+MemoryValue_1		-> '^'
+					-> '.' MemValLocation MemoryValue_1
+					-> .
+					;
+
+MemValLocation		-> 'VAR_GLOBAL' ArrayIndex
+					-> 'VAR_LOCAL' ArrayIndex
+					-> 'VAR_PARAM' ArrayIndex
+					-> .
+					;
 //-------------------------------------------
 // Declarations Grammars
 //-------------------------------------------
@@ -690,93 +614,75 @@ Def		-> IDENT '=' CompConst;
 // object.
 //----------------------------------------------
 TypeDefDecl		-> Declare TypeDefDecl_1;
-TypeDefDecl_1	-> 'TYPE' 'IDENT' EndTypeDef Declare TypeDefDecl_1
+TypeDefDecl_1	-> 'TYPE' TypeDef Declare TypeDefDecl_1
 				-> .
 				;
 
-EndTypeDef		-> RecDefField EndTypeDef_1;
-EndTypeDef_1	-> ']'
-				-> .
-				;
-RecDefField		-> '=' Fields;
-
-Fields			-> '[' LocalDecls;
+TypeDef			-> IDENT TypeDef_1;
+TypeDef_1		-> '=' '[' LocalDecls
+				-> ']';
 
 //--------------------------------------------
 // FUNC, PROC, INTERRUPT prototype declarations
 //--------------------------------------------
 
 Declare		-> FundDecl Declare_1;
-Declare_1	-> 'DECLARE' DeclareEnd FundDecl Declare_1
+Declare_1	-> 'DECLARE' DECLAREnd FundDecl Declare_1
 			-> .
 			;
 
-DeclareEnd		-> DeclareParams DeclareEnd_1;
-DeclareEnd_1	-> ')'
-				;
+DECLAREnd	-> DECLAREFuncType DECLAREnd_1;
+DECLAREnd_1 -> '(' DECLAREParamList DECLAREnd_1
+			-> ')' ;
 
-DeclareParams	-> DeclarFuncName DeclareParams_1;
-DeclareParams_1	-> '(' DeclParamList
-				;
-
-DeclParamList	-> DeclPramPointer DeclParamList_1;
-DeclParamList_1	-> 'RECORDTYPE' DeclPramPointer DeclParamList_1
-				-> 'CHAR' DeclPramPointer DeclParamList_1 
-				-> 'BYTE' DeclPramPointer DeclParamList_1 
-				-> 'INT' DeclPramPointer DeclParamList_1 
-				-> 'CARD' DeclPramPointer DeclParamList_1 
-				-> 'BOOL' DeclPramPointer DeclParamList_1 
-				-> .
-				;
-
-DeclPramPointer		-> DeclParamArray DeclPramPointer_1;
-DeclPramPointer_1	-> 'POINTER'  DeclParamArray
+DECLAREParamList	-> DECLAREParamTypeSpec DECLAREParamList_1;
+DECLAREParamList_1	-> 'RECORDTYPE' DECLAREParamTypeSpec DECLAREParamList_1
+					-> 'CHAR' DECLAREParamTypeSpec DECLAREParamList_1 
+					-> 'BYTE' DECLAREParamTypeSpec DECLAREParamList_1 
+					-> 'INT' DECLAREParamTypeSpec DECLAREParamList_1 
+					-> 'CARD' DECLAREParamTypeSpec DECLAREParamList_1 
+					-> 'BOOL' DECLAREParamTypeSpec DECLAREParamList_1 
 					-> .
 					;
 
-DeclParamArray		-> DeclareParamIdentList DeclParamArray_1;
-DeclParamArray_1	-> 'ARRAY' DeclareParamIdentList
-					-> .
-					;
-
-DeclareParamIdentList	-> DeclareParamIdent DeclareParamIdentList_1;
-DeclareParamIdentList_1	-> ',' DeclareParamIdent DeclareParamIdentList_1
+DECLAREParamTypeSpec	-> DECLAREParamIdentList DECLAREParamTypeSpec_1;
+DECLAREParamTypeSpec_1	-> 'POINTER'  DECLAREParamIdentList DECLAREParamTypeSpec_1
+						-> 'ARRAY' DECLAREParamIdentList DECLAREParamTypeSpec_1
 						-> .
 						;
 
-DeclareParamIdent		-> 'IDENT';
+DECLAREParamIdentList	-> DECLAREParamIdent DECLAREParamIdentList_1;
+DECLAREParamIdentList_1	-> ',' DECLAREParamIdent DECLAREParamIdentList_1
+						-> .
+						;
+
+DECLAREParamIdent		-> 'IDENT';
 
 //------------------
 
-DeclarFuncName	-> DeclareType DeclarFuncName_1;
-DeclarFuncName_1-> 'IDENT' 
-				;
-
-DeclareType		-> DeclarePointer DeclareType_1;
-DeclareType_1	-> 'BYTE' DeclarePointer
-				-> 'CHAR' DeclarePointer
-				-> 'INT' DeclarePointer
-				-> 'CARD' DeclarePointer
-				-> 'BOOL' DeclarePointer
-				-> 'RECORDTYPE' DeclarePointer
-				-> .
-				;
-
-DeclarePointer		-> DeclareArray DeclarePointer_1;
-DeclarePointer_1	-> 'POINTER' DeclareArray
+DECLAREFuncType		-> DECLARETypeSpec DECLAREFuncType_1;
+DECLAREFuncType_1	-> 'BYTE' DECLARETypeSpec DECLAREFuncType_1
+					-> 'CHAR' DECLARETypeSpec DECLAREFuncType_1
+					-> 'INT' DECLARETypeSpec DECLAREFuncType_1
+					-> 'CARD' DECLARETypeSpec DECLAREFuncType_1
+					-> 'BOOL' DECLARETypeSpec DECLAREFuncType_1
+					-> 'RECORDTYPE' DECLARETypeSpec DECLAREFuncType_1
 					-> .
 					;
 
-DeclareArray	-> DeclarFuncType DeclareArray_1;
-DeclareArray_1	-> 'ARRAY'
+DECLARETypeSpec		-> DECLAREfunction DECLARETypeSpec_1;
+DECLARETypeSpec_1	-> 'POINTER' DECLAREfunction DECLARETypeSpec_1
+					-> 'ARRAY' DECLAREfunction DECLARETypeSpec_1
+					-> .
+					;
+
+DECLAREfunction	-> 'FUNC' DECLAREFuncName
+				-> 'PROC' DECLAREFuncName
+				-> 'INTERRUPT' DECLAREFuncName
 				-> .
 				;
 
-DeclarFuncType	-> 'FUNC' 
-				-> 'PROC' 
-				-> 'INTERRUPT'
-				-> .
-				;
+DECLAREFuncName	-> 'IDENT';
 
 //--------------------------------------------
 // Fundemental Declarations.  These are the
@@ -820,7 +726,6 @@ InitData		-> CompConst InitData_1;
 InitData_1		-> 'STRING'
 				-> '[' ComstListEnd
 				-> .
-				;
 				;
 
 
@@ -888,7 +793,7 @@ DefineParamIdent		-> 'IDENT';
 //-----------------------------------------------
 
 LocalDecls		-> LocalVarDecls LocalTypeDef_1;
-LocalTypeDef_1	-> 'TYPE' 'IDENT' EndTypeDef LocalVarDecls LocalTypeDef_1
+LocalTypeDef_1	-> 'TYPE' TypeDef LocalVarDecls LocalTypeDef_1
 				-> .
 				;
 
@@ -911,10 +816,7 @@ LocalTypeSpec_1	-> 'POINTER' IdentList LocalTypeSpec_1
 //-------------------------------
 // Compiler Constants, from Compile time
 //-------------------------------
-//ConstList	-> '[' ComstListEnd
-//			-> .
-//			;
-//
+
 ComstListEnd	-> CompConst ComstListEnd_1;
 ComstListEnd_1	-> ']'
 				-> ',' CompConst ComstListEnd_1
@@ -978,38 +880,130 @@ AsmSectionName	-> SECTION_NAME;
 // SECITON
 //-----------------------------------------
 
-Section		-> Org Section_1;
-Section_1	-> 'SECTION' SectionName Org Section_1
+Section		-> Iff Section_1;
+Section_1	-> 'SECTION' SectionName Iff Section_1
 				-> .
 				;
 SectionName		-> SectionDef SectionName_1;
-SectionName_1	-> 'IDENT' SectionDef
+SectionName_1	-> 'STRING' SectionDef
 				-> .
 				;
 			
-SectionDef		-> '[' SectionAttributesList ']'
+SectionDef		-> '[' SectionAtributes
+				-> ']'
 				-> .
 				;
 
-SectionAttributesList	-> SectionAtribute SectionAttributesList_1;
-SectionAttributesList_1	-> ',' SectionAtribute SectionAttributesList_1
-						-> .
-						;
-
-SectionAtribute	-> 'START' '=' AsmConstant
-				-> 'SIZE' '=' AsmConstant
-				-> 'MODE' '=' Modes
-				-> 'ZEROPAGE' '=' TrueFalse
-				-> .
+SectionAtributes-> 'START' '=' AsmConstant SectionAtributes
+				-> 'SIZE' '=' AsmConstant SectionAtributes
+				-> 'MODE' '=' Modes SectionAtributes
+				-> 'ZEROPAGE' '=' AddressSize SectionAtributes
+				-> ']'
+				-> ',' SectionAtributes
 				;
 
 Modes			-> 'READ_ONLY'
 				-> 'READ_WRITE'
 				;
 
-TrueFalse		-> 'true'
-				-> 'false'
+AddressSize		-> 'TRUE'
+				-> 'FALSE'
 				;
+
+//-------------------------------------
+// PL/65 Statements
+//-------------------------------------
+
+//-------------------------------------------------
+// IFF Statement
+//-------------------------------------------------
+
+Iff		-> Pop Iff_1;
+Iff_1	-> 'IFF' IFFend Pop Iff_1
+		-> .
+		;
+
+IFFend		-> IFFthenpart IFFend_1;
+IFFend_1	-> 'FFI';
+
+IFFthenpart		-> IffRelOper IFFthenpart_1;
+IFFthenpart_1	-> 'THEN' AsmConstant
+				-> .
+				;
+
+
+IffRelOper		-> IffRegister IffRelOper_1;
+IffRelOper_1	-> '<' Value
+				-> 'GTEQ' Value
+				-> '=' Value
+				-> '^' '=' Value	//not equal
+				-> .
+				;
+
+IffRegister		-> Bits IffRegister_1;
+IffRegister_1	-> 'AREG'  
+				-> 'XREG'  
+				-> 'YREG'  
+				-> .
+				;
+
+Bits			->StatusFlags Bits_1;
+Bits_1			-> 'BITS' BitValue
+				-> BIT BitValue
+				-> .
+				;
+BitValue		-> '[' ArithExpr 
+				-> ']';
+
+StatusFlags		-> OptNot StatusFlags_1;
+StatusFlags_1	-> 'NEG'		//negative flag
+				-> 'CARRY'		//Carry flag
+				-> 'ZERO'		//Zero
+				-> 'OVERFLOW'		//Overflow
+				;
+
+OptNot			-> '^'
+				-> .
+				;
+
+//---------------------------------------------------
+// POP Statment
+//---------------------------------------------------
+Pop			-> Push Pop_1;
+Pop_1		-> 'POP' PopDestList Push Pop_1
+			-> .
+			;
+PopDestList		-> PopDest PopDestList_1;
+PopDestList_1	-> ',' PopDest PopDestList_1
+				-> .
+				;
+PopDest		-> MemContentsType PopDest_1;
+PopDest_1	-> 'AREG'
+			-> 'XREG'
+			-> 'YREG'
+			-> 'SR'
+			-> .
+			;
+
+//---------------------------------------------------
+// PUSH Statement
+//---------------------------------------------------
+
+Push		-> Org Push_1;
+Push_1		-> 'PUSH' PushSourceList Org Push_1
+			-> .
+			;
+PushSourceList	-> PushSource PushSourceList_1;
+PushSourceList_1-> ',' PushSource PushSourceList_1
+				-> .
+				;
+PushSource	-> ArithExpr PushSource_1;
+PushSource_1-> 'AREG'
+			-> 'XREG'
+			-> 'YREG'
+			-> 'SR'
+			-> .
+			;
 
 //-------------------------------------
 // Org  Sets the location counter
@@ -1024,12 +1018,12 @@ Org_1			-> 'ORG' AsmConstant DefineMemory Org_1
 // DefineMemeory
 //-------------------------------------
 				
-DefineMemory	-> DefineStorage DefineMemory_1;
-DefineMemory_1	-> 'DB' AsmConstList DefineStorage DefineMemory_1 
-				-> 'DW' AsmConstList DefineStorage DefineMemory_1
-				-> 'DL' AsmConstList DefineStorage DefineMemory_1
-				-> 'DAS' 'STRING' DefineStorage DefineMemory_1
-				-> 'DCS' 'STRING' DefineStorage DefineMemory_1
+DefineMemory	-> DefineStorage DefineMemory_2;
+DefineMemory_2	-> 'DB' AsmConstList DefineStorage DefineMemory_2 
+				-> 'DW' AsmConstList DefineStorage DefineMemory_2
+				-> 'DL' AsmConstList DefineStorage DefineMemory_2
+				-> 'DAS' 'STRING' DefineStorage DefineMemory_2
+				-> 'DCS' 'STRING' DefineStorage DefineMemory_2
 				-> .
 				;
 
@@ -1061,191 +1055,98 @@ AsmProcName		-> IDENT;
 
 //--------------------------------------
 // Opcodes
-//	<Label>	<OP> <addressing mode>
+//	[<DefineLabel>]	<OP> <addressing mode>
 //--------------------------------------
-Instruction		-> Labels Instruction_1;	
-Instruction_1	-> 'ADC'  AluAdrModes	Labels Instruction_1 //ALU Opcodes		
-				-> 'AND'  AluAdrModes	Labels Instruction_1
-				-> 'EOR'  AluAdrModes	Labels Instruction_1	
-				-> 'ORA'  AluAdrModes	Labels Instruction_1	
-				-> 'CMP'  AluAdrModes	Labels Instruction_1
-				-> 'SBC'  AluAdrModes	Labels Instruction_1	
-				-> 'LDA'  AluAdrModes	Labels Instruction_1	
-				-> 'STA'  StaAddressingModes Labels Instruction_1	
-				-> 'ASL' ShiftAddressingModes	Labels Instruction_1			//shift addressing modes
-				-> 'ROL' ShiftAddressingModes	Labels Instruction_1	
-				-> 'LSR' ShiftAddressingModes	Labels Instruction_1 
-				-> 'ROR' ShiftAddressingModes	Labels Instruction_1	 
-				-> 'BCC' RelAddressingMode Labels Instruction_1				// Branch Op Codes
-				-> 'BCS' RelAddressingMode Labels Instruction_1	 
-				-> 'BEQ' RelAddressingMode Labels Instruction_1
-				-> 'BMI' RelAddressingMode Labels Instruction_1
-				-> 'BNE' RelAddressingMode Labels Instruction_1
-				-> 'BPL' RelAddressingMode Labels Instruction_1
-				-> 'BVC' RelAddressingMode Labels Instruction_1
-				-> 'BVS' RelAddressingMode Labels Instruction_1
-				-> 'BIT' BitAddressModes	Labels Instruction_1			//BIT opcode
-				-> 'BRK'	Labels Instruction_1				//Implied Addressing Mode 
-				-> 'CLC'	Labels Instruction_1	 
-				-> 'CLD'	Labels Instruction_1	
-				-> 'CLI'	Labels Instruction_1	
-				-> 'CLV'	Labels Instruction_1	
-				-> 'DEX'	Labels Instruction_1	
-				-> 'DEY'	Labels Instruction_1	
-				-> 'INX'	Labels Instruction_1	
-				-> 'INY'	Labels Instruction_1	
-				-> 'NOP'	Labels Instruction_1	
-				-> 'PHA'	Labels Instruction_1	
-				-> 'PLA'	Labels Instruction_1	
-				-> 'PHP'	Labels Instruction_1	
-				-> 'PLP'	Labels Instruction_1	
-				-> 'RTI'	Labels Instruction_1	
-				-> 'RTS'	Labels Instruction_1	
-				-> 'SEC'	Labels Instruction_1	
-				-> 'SED'	Labels Instruction_1	
-				-> 'SEI'	Labels Instruction_1	
-				-> 'TAX'	Labels Instruction_1	
-				-> 'TAY'	Labels Instruction_1	
-				-> 'TXA'	Labels Instruction_1	
-				-> 'TYA'	Labels Instruction_1	
-				-> 'TXS'	Labels Instruction_1	
-				-> 'TSX'	Labels Instruction_1	
-				-> 'INC' IncAddressingMOdes	Labels Instruction_1			//Inc/Dec Addressing Modes
-				-> 'DEC' IncAddressingMOdes	Labels Instruction_1	
-				-> 'JMP' JumpAddressingModes	Labels Instruction_1		// Jump
-				-> 'JSR' CallAddressingMode	Labels Instruction_1			// Jump To Subroutine
-				-> 'CPX'  CPX_CPY_AddressingMode	Labels Instruction_1	
-				-> 'CPY'  CPX_CPY_AddressingMode		Labels Instruction_1
-				-> 'LDX' LdxAddressingMode	Labels Instruction_1	
-				-> 'LDY' LdyAddressingMode	Labels Instruction_1	
-				-> 'STX' StxAddressingMode	Labels Instruction_1	
-				-> 'STY' StyAddressingMode	Labels Instruction_1	
+Instruction		-> DefineLabel Instruction_1;	
+Instruction_1	-> 'ADC'  Operand	DefineLabel Instruction_1 //ALU Opcodes		
+				-> 'AND'  Operand	DefineLabel Instruction_1
+				-> 'EOR'  Operand	DefineLabel Instruction_1	
+				-> 'ORA'  Operand	DefineLabel Instruction_1	
+				-> 'CMP'  Operand	DefineLabel Instruction_1
+				-> 'SBC'  Operand	DefineLabel Instruction_1	
+				-> 'LDA'  Operand	DefineLabel Instruction_1	
+				-> 'STA'  Operand DefineLabel Instruction_1	
+				-> 'ASL' Operand	DefineLabel Instruction_1			//shift addressing modes
+				-> 'ROL' Operand	DefineLabel Instruction_1	
+				-> 'LSR' Operand	DefineLabel Instruction_1 
+				-> 'ROR' Operand	DefineLabel Instruction_1	 
+				-> 'BCC' RelAddressingMode DefineLabel Instruction_1				// Branch Op Codes
+				-> 'BCS' RelAddressingMode DefineLabel Instruction_1	 
+				-> 'BEQ' RelAddressingMode DefineLabel Instruction_1
+				-> 'BMI' RelAddressingMode DefineLabel Instruction_1
+				-> 'BNE' RelAddressingMode DefineLabel Instruction_1
+				-> 'BPL' RelAddressingMode DefineLabel Instruction_1
+				-> 'BVC' RelAddressingMode DefineLabel Instruction_1
+				-> 'BVS' RelAddressingMode DefineLabel Instruction_1
+				-> 'BIT' Operand	DefineLabel Instruction_1			//BIT opcode
+				-> 'BRK'	DefineLabel Instruction_1				//Implied Addressing Mode 
+				-> 'CLC'	DefineLabel Instruction_1	 
+				-> 'CLD'	DefineLabel Instruction_1	
+				-> 'CLI'	DefineLabel Instruction_1	
+				-> 'CLV'	DefineLabel Instruction_1	
+				-> 'DEX'	DefineLabel Instruction_1	
+				-> 'DEY'	DefineLabel Instruction_1	
+				-> 'INX'	DefineLabel Instruction_1	
+				-> 'INY'	DefineLabel Instruction_1	
+				-> 'NOP'	DefineLabel Instruction_1	
+				-> 'PHA'	DefineLabel Instruction_1	
+				-> 'PLA'	DefineLabel Instruction_1	
+				-> 'PHP'	DefineLabel Instruction_1	
+				-> 'PLP'	DefineLabel Instruction_1	
+				-> 'RTI'	DefineLabel Instruction_1	
+				-> 'RTS'	DefineLabel Instruction_1	
+				-> 'SEC'	DefineLabel Instruction_1	
+				-> 'SED'	DefineLabel Instruction_1	
+				-> 'SEI'	DefineLabel Instruction_1	
+				-> 'TAX'	DefineLabel Instruction_1	
+				-> 'TAY'	DefineLabel Instruction_1	
+				-> 'TXA'	DefineLabel Instruction_1	
+				-> 'TYA'	DefineLabel Instruction_1	
+				-> 'TXS'	DefineLabel Instruction_1	
+				-> 'TSX'	DefineLabel Instruction_1	
+				-> 'INC' Operand	DefineLabel Instruction_1			//Inc/Dec Addressing Modes
+				-> 'DEC' Operand	DefineLabel Instruction_1	
+				-> 'JMP' Operand	DefineLabel Instruction_1		// Jump
+				-> 'JSR' Operand	DefineLabel Instruction_1			// Jump To Subroutine
+				-> 'CPX'  Operand	DefineLabel Instruction_1	
+				-> 'CPY'  Operand		DefineLabel Instruction_1
+				-> 'LDX' Operand	DefineLabel Instruction_1	
+				-> 'LDY' Operand	DefineLabel Instruction_1	
+				-> 'STX' Operand	DefineLabel Instruction_1	
+				-> 'STY' Operand	DefineLabel Instruction_1	
 				-> .
 				;
 
 //---------------------------------------------
 // Lables
 //---------------------------------------------
-Labels	-> 'IDENT' Label_1	//Global
-		-> .
-		;
-Label_1	-> ':'		//private lable
-		-> .
-		;
-
-//-----------------------------------
-//ALU Addressing Mode
-//-----------------------------------
-
-AluAdrModes		-> '#' AsmConstant
-				-> '(' Indirect
-				-> AsmConstant OptIndexReg
-				;
-Indirect	-> AsmConstant  Indirect_1;
-Indirect_1	-> ')' ',' 'YREG'
-			-> ',' 'XREG' ')'
+DefineLabel	-> 'GLOBAL_LABEL'	//Global
+			-> 'LOCAL_LABEL'	// Local
+			-> .
 			;
 
-//---------------------------------------------
-// STA addressing mode
-//---------------------------------------------
-StaAddressingModes	-> AsmConstant OptIndexReg
-					-> '(' Indirect
-					;
-
-//-----------------------------------------
-// ASL LSR ROR and ROL addressing modes
-//-----------------------------------------
-
-ShiftAddressingModes	-> 'AREG'
-						-> AsmConstant OptXReg
-						;
-
+//------------------------------------------
+// Operand (addressing modes)
+//------------------------------------------
+Operand		-> Absolute Operand_1;
+Operand_1	-> '#' Immediate
+			-> '(' Indirect
+			-> 'AREG'
+			-> .
+			;
 //------------------------------------------
 // Branch Instructions Addressing Mode
 //------------------------------------------
 RelAddressingMode	-> AsmConstant;
 
-//------------------------------------------
-// BIT Instructions Addressing Mode
-//------------------------------------------
-
-BitAddressModes	-> AsmConstant;
-
-//------------------------------------------
-// INC DEC Instructions Addressing Mode
-//------------------------------------------
-
-IncAddressingMOdes	-> AsmConstant OptXReg;
-
-//------------------------------------------
-// JMP Instructions Addressing Mode
-//------------------------------------------
-
-JumpAddressingModes	-> JumpDirect JumpIndirect;
-JumpIndirect		-> '(' AsmConstant ')'
-					-> .
-					;
-JumpDirect			-> AsmConstant;
-//------------------------------------------
-// JSR Instructions Addressing Mode
-//------------------------------------------
-
-CallAddressingMode	-> AsmConstant;
-
-//------------------------------------------
-// LDX Instructions Addressing Mode
-//------------------------------------------
-
-LdxAddressingMode	-> '#' AsmConstant
-					-> AsmConstant OptYReg
-					;
-//------------------------------------------
-// CPX & CPY Instructions Addressing Mode
-//------------------------------------------
-
-CPX_CPY_AddressingMode	-> '#' AsmConstant
-						-> AsmConstant
-						;
-
-//------------------------------------------
-// STX Instructions Addressing Mode
-//------------------------------------------
-
-StxAddressingMode	-> AsmConstant OptYReg;
-
-//------------------------------------------
-// LDY Instructions Addressing Mode
-//------------------------------------------
-
-LdyAddressingMode	-> '#' AsmConstant
-					-> AsmConstant OptXReg
-					;
-
-//------------------------------------------
-// STY Instructions Addressing Mode
-//------------------------------------------
-
-StyAddressingMode	-> AsmConstant OptXReg;
-
 //---------------------------------------------
 //	Optional Index Registers
 //---------------------------------------------
 
-OptIndexReg		-> ',' OptIndexReg_1
-				-> .
-				;
-OptIndexReg_1	-> 'XREG'
+OptIndexReg		-> 'XREG'
 				-> 'YREG'
 				;
 
-OptXReg			-> ',' 'XREG'
-				-> .
-				;
-
-OptYReg			-> ',' 'YREG'
-				-> .
-				;
 
 //---------------------------------------
 // Assembler Constants
@@ -1258,22 +1159,37 @@ AsmConstList_2	-> ',' AsmConstant AsmConstList_2
 				-> .
 				;
 
-AsmConstant		-> AsmConstAddSub AsmConstUpLow_1;
-AsmConstUpLow_1	-> '>' AsmConstAddSub 	//Lower Part
-				-> '<' AsmConstAddSub 	//Upper Part
-				-> .
-				;
-
-AsmConstAddSub		-> BaseAsmConstant AsmConstAddSub_1;
-AsmConstAddSub_1	-> '+' BaseAsmConstant AsmConstAddSub_1
-					-> '-' BaseAsmConstant AsmConstAddSub_1
+AsmConstant			-> AsmConstUpLow AsmConstAddSub_1;
+AsmConstAddSub_1	-> '+' AsmConstUpLow AsmConstAddSub_1
+					-> '-' AsmConstUpLow AsmConstAddSub_1
 					-> .
 					;
 
-BaseAsmConstant	-> 'LABEL_LOCAL'	//from a CSymbol
-				-> 'LABEL_GLOBAL'	//from a CSymbol
-				-> 'IDENT'			//from a CSymbol
-				-> 'NUMBER'
-				-> 'CHAR_CONSTANT'
-				-> '*'				//current location counter
+AsmConstUpLow	-> '>' AsmConstUpLow //Lower Part
+				-> '<' AsmConstUpLow //Upper Part
+				-> BaseAsmConstant
 				;
+
+BaseAsmConstant		-> 'NUMBER'
+					-> 'CHAR_CONSTANT'
+					-> '*'				//current location counter
+					-> 'LABEL'
+					-> 'IDENT'
+					;
+
+//--------------------------------------
+// Addressing Modes
+//--------------------------------------
+Indirect	-> AsmConstant  Indirect_1;
+Indirect_1	-> ')' ',' 'YREG'
+			-> ',' 'XREG' ')'
+			-> .
+			;
+					
+Immediate		-> AsmConstant;
+
+Absolute		-> AsmConstant Absolute_1;
+Absolute_1		-> ',' OptIndexReg
+				-> .
+				;
+

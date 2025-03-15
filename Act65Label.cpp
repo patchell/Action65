@@ -2,6 +2,7 @@
 
 CAct65Label::CAct65Label() :CAstNode(m_pNodeTyypeName, NodeType::LABEL)
 {
+	m_LabelType = LabelType::GLOBAL;
 }
 
 CAct65Label::~CAct65Label()
@@ -44,7 +45,10 @@ int CAct65Label::Print(int Indent, char* s, int Strlen, bool* pbNextFlag)
 
 	l = CAstNode::Print(Indent, s, Strlen, pbNextFlag);
 	Size = Strlen - l;
-	l += sprintf_s(&s[l], Size, " - \'%s\'", GetSymbol()->GetName());
+	l += sprintf_s(&s[l], Size, "%d: \'%s\'", 
+		GetID(),
+		GetSymbol()->GetName()
+	);
 	return l;
 }
 

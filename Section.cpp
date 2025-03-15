@@ -198,3 +198,22 @@ void CSection::Info()
 //		GetName(),
 //	);
 }
+
+bool CSection::Compare(const char* name, int scope)
+{
+	bool rV = false;
+
+	if (strcmp(GetName(), name) == 0)
+	{
+		rV = true;
+		//if (scope > 0)
+		//{
+		//	if (scope == GetScope())
+		//		rV = true;
+		//}
+		//else
+		//	rV = true;
+	}
+	return rV;
+}
+

@@ -20,5 +20,6 @@ public:
 	virtual const char* GetNodeName() { return m_pNodeTyypeName; }
 	LabelType GetLabelType() { return m_LabelType; }
 	void SetLabelType(LabelType LT) { m_LabelType = LT; }
+	virtual bool IsLabel() { return true; }
 };
 

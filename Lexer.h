@@ -204,8 +204,8 @@ private:
 		{Token::READ_WRTE,"READ_WRITE", 0,0,Processor::ALL,NULL,0},
 		{Token::READ_ONLY,"READ_ONLY", 0,0,Processor::ALL,NULL,0},
 		{Token::ZEROPAGE,"ZEROPAGE", 0},
-		{Token::True,"true", 0},
-		{Token::False,"false", 0},
+		{Token::TRUE,"TRUE", 0},
+		{Token::FALSE,"FALSE", 0},
 		//----- Assembler Declarations
 		{Token::ORG,"ORG", 0,0, Processor::ALL,NULL,0},
 		{Token::DB,"DB", 0,0, Processor::ALL,NULL,0},
@@ -361,6 +361,7 @@ private:
 		{ Token::PSREG,".P", 0,0, Processor::R6502, NULL,0 },	// Processor Status Register
 		{ Token::LOCAL_LABEL,"Local Lable", 0,0,Processor::ALL,NULL,0 },
 		{ Token::GLOBAL_LABEL,"Global Lable", 0,0,Processor::ALL,NULL,0 },
+		{ Token::LABEL,"LABEL", 0,0,Processor::ALL,NULL,0 },
 		//-------- Processor Selection -------
 		{ Token::PROCESSOR,"PROCESSOR", 0,0,Processor::ALL,NULL,0 },
 		{ Token::R6502,"R6502", 0,0, Processor::ALL,NULL,0 },

@@ -21,8 +21,14 @@ CValue* CAct65CONSTANT::Process()
 int CAct65CONSTANT::Print(int Indent, char* s, int Strlen, bool* pbNextFlag)
 {
 	int l = 0;
+	int size;
 
 	l = CAstNode::Print(Indent, s, Strlen, pbNextFlag);
+	size = Strlen - l;
+	l += sprintf_s(&s[l], size, " %5d  $%04X", 
+		GetValue()->GetConstVal(),
+		GetValue()->GetConstVal()
+	);
 	return l;
 }
 

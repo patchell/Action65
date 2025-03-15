@@ -11,6 +11,14 @@ public:
 		ADDRESSSIZE_WORD,
 		ADDRESSSIZE_ZEROPAGE
 	};
+	inline static const char* ModeLUT[2] = {
+		"MODE_READ_ONLY",
+		"MODE_READ_WRITE"
+	};
+	inline static const char* AddressSizeLUT[2] = {
+		"ADDRESSSIZE_WORD",
+		"ADDRESSSIZE_ZEROPAGE"
+	};
 private:
 	unsigned m_StartAddress;	//where section starts in memory
 	unsigned m_Size;		//max size of the memory block
@@ -41,5 +49,13 @@ public:
 	CSection::AddressSize GetZeroPageFlag() { return m_ZeroPageAddressSize; }
 	virtual void Print(FILE* pOut, const char* s = 0);
 	void Info();
+	bool Compare(const char* name, int scope);
+	bool IsPageZero() const {
+		bool rV = false;
+
+		if (m_ZeroPageAddressSize == AddressSize::ADDRESSSIZE_ZEROPAGE)
+			rV = true;
+		return rV;
+	}
 };
 

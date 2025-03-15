@@ -109,8 +109,8 @@ enum  class Token {
 	READ_WRTE,
 	READ_ONLY,
 	ZEROPAGE,
-	True,
-	False,
+	TRUE,
+	FALSE,
 	//----- Assembler declarators
 	ORG,
 	DB,
@@ -197,6 +197,7 @@ enum  class Token {
 	//---------- Lables 
 	LOCAL_LABEL,
 	GLOBAL_LABEL,
+	LABEL,
 	//-------- Status Register bits
 	NEG,
 	ZERO,
@@ -218,9 +219,11 @@ enum  class Token {
 };
 
 enum class IdentType {
+	NONE,
 	NEW_SYMBOL,
 	LABEL_GLOBAL,
 	LABEL_PRIVATE,
+	LABEL,
 	PROC,
 	FUNC,
 	IRQPROC,
@@ -654,14 +657,7 @@ public:
 #include "Act65W65C816.h"
 #include "Act65R6502.h"
 #include "Act65SECTION.h"
-#include "Act65SecAtrbSTART.h"
-#include "Act65SecAtrbSIZE.h"
-#include "Act65SecAtrbMODE.h"
-#include "Act65SecAtrbZEROPAGE.h"
-#include "Act65SecAtrbREADONLY.h"
-#include "Act65SecAtrbREADWRITE.h"
 #include "Act65TRUE.h"
-#include "Act65SecAtrbFALSE.h"
 #include "Act65ORG.h"
 #include "Act65DB.h"
 #include "Act65DW.h"
@@ -717,9 +713,7 @@ public:
 #include "Act65Statements.h"
 #include "Act65PSReg.h"
 #include "Act65PROCasm.h"
-#include "Act65SECTIONname.h"
 #include "Act65SET.h"
-#include "Act65SECTIONattributes.h"
 #include "Act65BITS.h"
 #include "Act65AssignEQ.h"
 #include "Act65TypeFieldsEND.h"

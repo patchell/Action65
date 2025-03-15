@@ -9,6 +9,14 @@ Compatibility Issues with the real ACTION!
 	Hopefully, in the future I will find a way to fix
 	this conflict.
 
+March 14, 2025
+A bit of a battle, but I am back where I was 3 weeks ago
+after I ran into the "Major Boo-boo".  Fixed the Boo-Boo
+and a few other problems I ran into, but about 1/4 of the
+parser is heavily modified (well, re-written).  And the
+grammar has been revised a bit (that is probably never going
+to end).  So, time to get back to testing AST generation.
+
 March 6, 2025
 Well, it seems I ran into a bit of a problem.
 When I was testing the declarations of TYPE, I
