@@ -16,8 +16,8 @@ public:
 		"MODE_READ_WRITE"
 	};
 	inline static const char* AddressSizeLUT[2] = {
-		"ADDRESSSIZE_WORD",
-		"ADDRESSSIZE_ZEROPAGE"
+		"FALSE",
+		"TRUE"
 	};
 private:
 	unsigned m_StartAddress;	//where section starts in memory

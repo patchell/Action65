@@ -18,6 +18,11 @@ INTERRUPT Hey()
 	BYTE lf
 
 	ASM {
+		SECTION "Code" [
+			START = $8000
+			SIZE  = $1000
+			MODE  = READ_ONLY
+		]
 		SECTION "Page2" [
 			START = $0200
 			SIZE = $100
@@ -32,7 +37,7 @@ INTERRUPT Hey()
 		:First	DB	0
 		SET SECTION "Page2"
 		:Second	DB	1
-
+		SET SECTION "Code"
 		STY	First
 		STY First,.X
 		STY Second

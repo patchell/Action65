@@ -5476,8 +5476,7 @@ CAstNode* CParser::DefineMemory()
 			}
 			else
 			{
-				pLast->SetChild(pNDB);
-//				pNext = CAstNode::MakeNextList(pNext, pNDB);
+				pNext = CAstNode::MakeNextList(pNext, pNDB);
 			}
 			//---------------------------------------
 			pChild = DefineStorage();
@@ -5488,7 +5487,14 @@ CAstNode* CParser::DefineMemory()
 			pChild = AsmConstList();
 			pNDW = new CAct65DW;
 			pNDW->SetChild(pChild);
-			pNext = CAstNode::MakeNextList(pNext, pNDW);
+			if (Label)
+			{
+				pLast->SetChild(pNDW);
+			}
+			else
+			{
+				pNext = CAstNode::MakeNextList(pNext, pNDW);
+			}
 			//---------------------------------------
 			pChild = DefineStorage();
 			pNext = CAstNode::MakeNextList(pNext, pChild);
@@ -5498,7 +5504,14 @@ CAstNode* CParser::DefineMemory()
 			pChild = AsmConstList();
 			pNDL = new CAct65DL;
 			pNDL->SetChild(pChild);
-			pNext = CAstNode::MakeNextList(pNext, pNDL);
+			if (Label)
+			{
+				pLast->SetChild(pNDL);
+			}
+			else
+			{
+				pNext = CAstNode::MakeNextList(pNext, pNDL);
+			}
 			//---------------------------------------
 			pChild = DefineStorage();
 			pNext = CAstNode::MakeNextList(pNext, pChild);
@@ -5508,7 +5521,14 @@ CAstNode* CParser::DefineMemory()
 			pChild = AsmConstList();
 			pNDAS = new CAct65DAS;
 			pNDAS->SetChild(pChild);
-			pNext = CAstNode::MakeNextList(pNext, pNDAS);
+			if (Label)
+			{
+				pLast->SetChild(pNDAS);
+			}
+			else
+			{
+				pNext = CAstNode::MakeNextList(pNext, pNDAS);
+			}
 			//---------------------------------------
 			pChild = DefineStorage();
 			pNext = CAstNode::MakeNextList(pNext, pChild);
@@ -5518,6 +5538,14 @@ CAstNode* CParser::DefineMemory()
 			pChild = AsmConstList();
 			pNDCS = new CAct65DCS;
 			pNDCS->SetChild(pChild);
+			if (Label)
+			{
+				pLast->SetChild(pNDCS);
+			}
+			else
+			{
+				pNext = CAstNode::MakeNextList(pNext, pNDCS);
+			}
 			//---------------------------------------
 			pChild = DefineStorage();
 			pNext = CAstNode::MakeNextList(pNext, pChild);

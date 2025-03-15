@@ -41,8 +41,19 @@ CValue* CAct65SECTION::Process()
 int CAct65SECTION::Print(int Indent, char* s, int Strlen, bool* pbNextFlag)
 {
 	int l = 0;
+	int size = 0;
+	CSection* pSec = 0;
 
+	pSec = GetSection();
 	l = CAstNode::Print(Indent, s, Strlen, pbNextFlag);
+	size = Strlen - l;
+	l += sprintf_s(&s[l], size, " %s Start:$%04X SIZE:$%04X MODE:%s PAGE0:%s",
+		pSec->GetName(),
+		pSec->GetStartAddress(),
+		pSec->GetSectionSize(),
+		pSec->ModeLUT[int(pSec->GetAccessMode())],
+		pSec->AddressSizeLUT[int(pSec->GetZeroPageFlag())]
+	);
 	return l;
 }
 
