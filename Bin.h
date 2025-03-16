@@ -65,7 +65,8 @@ public:
 	virtual char* GetName(void) { return m_pName; }
 	 virtual void SetName(const char* pName) {
 		int l = (int)strlen(pName) + 1;
-		if (m_pName) delete m_pName;
+		if (m_pName) 
+			delete[] m_pName;
 		m_pName = new char[l];
 		strcpy_s(m_pName, l, pName);
 	}

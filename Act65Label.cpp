@@ -45,8 +45,7 @@ int CAct65Label::Print(int Indent, char* s, int Strlen, bool* pbNextFlag)
 
 	l = CAstNode::Print(Indent, s, Strlen, pbNextFlag);
 	Size = Strlen - l;
-	l += sprintf_s(&s[l], Size, "%d: \'%s\'", 
-		GetID(),
+	l += sprintf_s(&s[l], Size, " \'%s\'", 
 		GetSymbol()->GetName()
 	);
 	return l;

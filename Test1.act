@@ -37,7 +37,11 @@ INTERRUPT Hey()
 		:First	DB	0
 		SET SECTION "Page2"
 		:Second	DB	1
+		:ThirdW DW 77
+		:ForthL DL $1234FEBA
+
 		SET SECTION "Code"
+		:Astring DAS "This is an ACTION! string"
 		STY	First
 		STY First,.X
 		STY Second

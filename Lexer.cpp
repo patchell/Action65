@@ -209,6 +209,7 @@ Token CLexer::Lex()
 		case '\n':	//white space
 			m_Col = 0;
 			m_Line++;
+//			printf("Line = %d\n", m_Line);
 			break;
 		case '\r':	//more white space
 		case '\t':

@@ -19,11 +19,12 @@ const char* CAct65STRING::GetStringTypeName() const
 
 void CAct65STRING::SetString(const char* s)
 {
-	int l;
+	rsize_t l = 0;
+	int i = 0;
 
-	l = int(strlen(s) + 1);
-	m_pString = new char[l];
-	strcpy_s(m_pString, l, s);
+	l = strlen(s) + 1;
+	m_pString = new char[l+1];
+	strncpy_s(m_pString, l, s,l);
 }
 
 bool CAct65STRING::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)

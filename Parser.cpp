@@ -5520,7 +5520,12 @@ CAstNode* CParser::DefineMemory()
 			Expect(Token::DAS);
 			pChild = AsmConstList();
 			pNDAS = new CAct65DAS;
-			pNDAS->SetChild(pChild);
+			if (CAstNode::NodeType::STRING == pChild->GetNodeType())
+			{
+				CAct65STRING* pSN = (CAct65STRING*)pChild;
+				pNDAS->SetString(pSN->GetString());
+//				delete pChild;
+			}
 			if (Label)
 			{
 				pLast->SetChild(pNDAS);
