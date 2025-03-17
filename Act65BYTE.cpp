@@ -36,5 +36,6 @@ void CAct65BYTE::PrintNode(FILE* pOut, int Indent, bool* pbNextFlag)
 
 CValue* CAct65BYTE::Emit(CValue* pVc, CValue* pVn)
 {
-    return nullptr;
+	fprintf(LogFile(), "EMIT:BYTE:ID=%d\n", GetID());
+	return nullptr;
 }

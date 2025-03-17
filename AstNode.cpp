@@ -13,7 +13,7 @@ CAstNode::CAstNode()
 	m_pValue = 0;
 	m_pHead = 0;
 	m_pTail = 0;
-	m_pSection = 0;
+	m_pSection = GetParser()->GetCurrentSection();
 	m_Line = Act()->GetParser()->GetLexer()->GetLineNumber();
 	m_Column = Act()->GetParser()->GetLexer()->GetColunm();
 }
@@ -31,9 +31,9 @@ CAstNode::CAstNode(const char* pName, NodeType NT)
 	m_pValue = 0;
 	m_pHead = 0;
 	m_pTail = 0;
-	m_pSection = 0;
-	m_Line = Act()->GetParser()->GetLexer()->GetLineNumber();
-	m_Column = Act()->GetParser()->GetLexer()->GetColunm();
+	m_pSection = GetParser()->GetCurrentSection();
+	m_Line = GetParser()->GetLexer()->GetLineNumber();
+	m_Column = GetParser()->GetLexer()->GetColunm();
 }
 
 CAstNode::~CAstNode()
@@ -103,8 +103,8 @@ CAstNode* CAstNode::CreateValue(int V)
 CValue* CAstNode::Process()
 {
 	CAstNode* pChild = 0, * pNext = 0;
-	CValue* pValueChild = 0, * pValueNext = 0
-		;
+	CValue* pValueChild = 0, * pValueNext = 0;
+
 	pChild = GetChild();
 	if (pChild)
 	{
@@ -113,12 +113,20 @@ CValue* CAstNode::Process()
 	if (pChild)
 	{
 		pValueChild = pChild->Process();
+		pValueChild = pChild->Emit(pValueChild, 0);
 	}
-	if (pNext)
+	while (pNext)
 	{
 		pValueNext = pNext->Process();
+		pValueNext = pNext->Emit(pValueChild, pValueNext);
+		pNext = pNext->GetNext();
 	}
-	return Emit(pValueChild, pValueNext);
+	return pValueNext;
+}
+
+CValue* CAstNode::Emit(CValue* pVc, CValue* pVn)
+{
+	return nullptr;
 }
 
 void CAstNode::PrintNode(FILE* pOut, int Indent, bool* pbNextFlag)
@@ -247,4 +255,14 @@ int CAstNode::MakeIndentString(char* s, int size, int Indent, bool* pbNextFlag)
 		sz = size - l;
 	}
 	return l;
+}
+
+CParser* CAstNode::GetParser()
+{
+	return Act()->GetParser();
+}
+
+FILE* CAstNode::LogFile()
+{
+	return GetParser()->LogFile();
 }

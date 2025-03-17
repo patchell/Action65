@@ -231,12 +231,12 @@ void CSection::Print(FILE* pOut, const char* s)
 
 void CSection::Info()
 {
-	fprintf(
-		Act()->LogFile(),
-		"%s Loc Cntr:%04x\n",
-		GetName(),
-		GetLocationCounter()
-	);
+	//fprintf(
+	//	Act()->LogFile(),
+	//	"%s Loc Cntr:%04x\n",
+	//	GetName(),
+	//	GetLocationCounter()
+	//);
 }
 
 bool CSection::Compare(const char* name, int scope)

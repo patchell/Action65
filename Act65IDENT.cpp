@@ -48,5 +48,6 @@ void CAct65IDENT::PrintNode(FILE* pOut, int Indent, bool* pbNextFlag)
 
 CValue* CAct65IDENT::Emit(CValue* pVc, CValue* pVn)
 {
+	fprintf(LogFile(), "EMIT:IDENT:ID=%d:%s\n", GetID(), GetSymbol()->GetName());
     return nullptr;
 }

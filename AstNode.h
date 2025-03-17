@@ -1,5 +1,7 @@
 #pragma once
 
+class CParser;
+
 class CAstNode
 {
 public:
@@ -191,7 +193,7 @@ public:
 	virtual void CreateValue(const char* s);
 	virtual CAstNode* CreateValue(int V);
 	virtual CValue* Process();
-	virtual CValue* Emit(CValue* pVc, CValue* pVn) { return nullptr; }
+	virtual CValue* Emit(CValue* pVc, CValue* pVn);
 	virtual void PrintNode(FILE* pOut, int Indent, bool* pbNextFlag);
 	virtual int Print(int Indent, char* s, int strLen, bool* pbNextFlag);
 	virtual bool IsLabel() { return false; }
@@ -251,4 +253,6 @@ public:
 	int MakeIndentString(char* s, int size, int Indent, bool* pbNextFlag);
 	int GetLine() const { return m_Line; }
 	int GetColumn() const { return m_Column; }
+	CParser* GetParser();
+	FILE* LogFile();
 };

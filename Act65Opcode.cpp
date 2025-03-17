@@ -45,6 +45,7 @@ void CAct65Opcode::PrintNode(FILE* pOut, int Indent, bool* pbNextFlag)
 
 CValue* CAct65Opcode::Emit(CValue* pVc, CValue* pVn)
 {
+	GetParser()->GetCurrentSection()->AddInstruction(this);
 	return nullptr;
 }
 
@@ -326,6 +327,15 @@ int CAct65Opcode::Print(int Indent, char* s, int Strlen, bool* pbNextFlag)
 			GetValue()->ValueTypeStr(GetValue()->GetValueType())
 		);
 		break;
+	}
+	size = Strlen - l;
+	if (GetSection())
+	{
+		l += sprintf_s(&s[l], size, " SECTION:%s", GetSection()->GetName());
+	}
+	else
+	{
+		l += sprintf_s(&s[l], size, "ERROR:No Section");
 	}
 	if (GetParent())
 	{

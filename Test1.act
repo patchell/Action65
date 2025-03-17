@@ -3,10 +3,10 @@ MODULE
 INT Avar,x,y,z
 CARD Cvar
 CHAR Stuff,Yep
-TYPE  Junk = [
-	CHAR q,e,d
-	INT POINTER pX
-]
+//TYPE  Junk = [
+//	CHAR q,e,d
+//	INT POINTER pX
+// ]
 INTERRUPT Hey()
 	TYPE Crud = [
 		INT CrudOne

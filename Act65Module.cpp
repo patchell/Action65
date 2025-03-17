@@ -36,5 +36,6 @@ void CAct65Module::PrintNode(FILE* pOut, int Indent, bool* pbNextFlag)
 
 CValue* CAct65Module::Emit(CValue* pVc, CValue* pVn)
 {
-    return nullptr;
+	fprintf(LogFile(), "EMIT:MODULE ID=%d\n", GetID());
+	return nullptr;
 }
