@@ -176,6 +176,7 @@ private:
 	CAstNode* m_pParent;
 	//---------- Value ---------------
 	CValue* m_pValue;
+	CSection* m_pSection;
 	int m_Line;
 	int m_Column;
 public:
@@ -189,7 +190,8 @@ public:
 	virtual void CreateValue(CBin* pSym);
 	virtual void CreateValue(const char* s);
 	virtual CAstNode* CreateValue(int V);
-	virtual CValue* Process() = 0;
+	virtual CValue* Process();
+	virtual CValue* Emit(CValue* pVc, CValue* pVn) { return nullptr; }
 	virtual void PrintNode(FILE* pOut, int Indent, bool* pbNextFlag);
 	virtual int Print(int Indent, char* s, int strLen, bool* pbNextFlag);
 	virtual bool IsLabel() { return false; }
@@ -201,12 +203,14 @@ public:
 	CAstNode* GetPrev() { return m_pPrev; }
 	CAstNode* GetChild() { return m_pChild; } 
 	CAstNode* GetParent() { return m_pParent; }
+	CSection* GetSection() { return m_pSection; }
 	void SetHead(CAstNode* pAN) { m_pHead = pAN; }
 	void SetTail(CAstNode* pAN) { m_pTail = pAN; }
 	void SetStart(CAstNode* pAN) { m_pStart = pAN; }
 	void SetNext(CAstNode* pAN) { m_pNext = pAN; }
 	void SetPrev(CAstNode* pAN) { m_pPrev = pAN; }
 	CAstNode* SetChild(CAstNode* pAN);
+	void SetSection(CSection* pSec) { m_pSection = pSec; }
 	//	void SetChild(CAstNode* pAN) { m_pChild = pAN; }
 	void SetParent(CAstNode* pAN) { m_pParent = pAN; }
 	//---------------------------------------------------

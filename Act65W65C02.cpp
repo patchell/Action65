@@ -15,7 +15,10 @@ bool CAct65W65C02::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 
 CValue* CAct65W65C02::Process()
 {
-	return nullptr;
+	CValue* pV = 0;
+
+	pV = CAstNode::Process();
+	return pV;
 }
 
 int CAct65W65C02::Print(int Indent, char* s, int Strlen, bool* pbNextFlag)
@@ -29,4 +32,9 @@ int CAct65W65C02::Print(int Indent, char* s, int Strlen, bool* pbNextFlag)
 void CAct65W65C02::PrintNode(FILE* pOut, int Indent, bool* pbNextFlag)
 {
 	CAstNode::PrintNode(pOut, Indent, pbNextFlag);
+}
+
+CValue* CAct65W65C02::Emit(CValue* pVc, CValue* pVn)
+{
+    return nullptr;
 }

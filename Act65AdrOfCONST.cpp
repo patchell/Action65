@@ -15,7 +15,10 @@ bool CAct65AdrOfCONST::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 
 CValue* CAct65AdrOfCONST::Process()
 {
-	return nullptr;
+	CValue* pV = 0;
+
+	pV = CAstNode::Process();
+	return pV;
 }
 
 int CAct65AdrOfCONST::Print(int Indent, char* s, int Strlen, bool* pbNextFlag)
@@ -40,4 +43,9 @@ int CAct65AdrOfCONST::Print(int Indent, char* s, int Strlen, bool* pbNextFlag)
 void CAct65AdrOfCONST::PrintNode(FILE* pOut, int Indent, bool* pbNextFlag)
 {
 	CAstNode::PrintNode(pOut, Indent, pbNextFlag);
+}
+
+CValue* CAct65AdrOfCONST::Emit(CValue* pVc, CValue* pVn)
+{
+    return nullptr;
 }

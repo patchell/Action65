@@ -113,6 +113,34 @@ void CSection::SetLocationCounter(unsigned short NewAddress)
 	}
 }
 
+unsigned short CSection::AddInstruction(CAct65Opcode* pINS)
+{
+	switch (pINS->GetAdrModeType())
+	{
+	case AdrModeType::IMPLIED:
+		AddData(1, pINS->GetOpCode());
+		break;
+	case AdrModeType::IMMEDIATE_ADR:
+	case AdrModeType::RELATIVE:
+	case AdrModeType::ZERO_PAGE_ADR:
+	case AdrModeType::ZERO_PAGE_X_ADR:
+	case AdrModeType::ZERO_PAGE_Y_ADR:
+	case AdrModeType::INDEXED_INDIRECT_X_ADR:
+	case AdrModeType::INDIRECT_INDEXED_Y_ADR:
+		AddData(1, pINS->GetOpCode());
+		AddData(1, pINS->GetOperand()->GetTotalValue());
+		break;
+	case AdrModeType::ABSOLUTE_ADR:
+	case AdrModeType::ABSOLUTE_X_ADR:
+	case AdrModeType::ABSOLUTE_Y_ADR:
+	case AdrModeType::INDIRECT_ADR:
+		AddData(1, pINS->GetOpCode());
+		AddData(2, pINS->GetOperand()->GetTotalValue());
+		break;
+	}
+    return m_LocationCounter;
+}
+
 unsigned short CSection::AddData(unsigned ObjectSize, int Value)
 {
 	char* b;
@@ -139,6 +167,17 @@ unsigned short CSection::AddData(unsigned ObjectSize, int Value)
 		break;
 	}
     return m_LocationCounter;
+}
+
+unsigned short CSection::AddData(unsigned ObjSize, const char* pData)
+{
+	int i = 0;
+
+	for (i = 0; i < ObjSize; ++i)
+	{
+		AddData(1, pData[i]);
+	}
+	return m_LocationCounter;
 }
 
 void CSection::AddDataAt(
@@ -192,11 +231,12 @@ void CSection::Print(FILE* pOut, const char* s)
 
 void CSection::Info()
 {
-//	fprintf(
-//		Act()->LogFile(),
-//		"%s Loc Cntr:%04x\n",
-//		GetName(),
-//	);
+	fprintf(
+		Act()->LogFile(),
+		"%s Loc Cntr:%04x\n",
+		GetName(),
+		GetLocationCounter()
+	);
 }
 
 bool CSection::Compare(const char* name, int scope)

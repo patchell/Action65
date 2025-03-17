@@ -14,5 +14,6 @@ public:
 	int GetAddress() const { return m_Address; }
 	void SetAddress(int A) { m_Address = A; }
 	virtual const char* GetNodeName() { return m_pNodeTyypeName; }
+	virtual CValue* Emit(CValue* pVc, CValue* pVn);
 };
 

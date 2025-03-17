@@ -76,7 +76,7 @@ public:
 		m_pParamChain = new CParameterChain;
 		m_pParamChain->Create();
 	}
-	unsigned GetAddress() const { return m_Address; }
+	virtual unsigned GetAddress() const { return m_Address; }
 	void SetAddress(unsigned A) { m_Address = A; }
 	int GetScope() const { return m_Scope; }
 	void SetScope(int S) { m_Scope = S; }

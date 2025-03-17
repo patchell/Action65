@@ -15,7 +15,10 @@ bool CAct65DeclareParams::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 
 CValue* CAct65DeclareParams::Process()
 {
-	return nullptr;
+	CValue* pV = 0;
+
+	pV = CAstNode::Process();
+	return pV;
 }
 
 int CAct65DeclareParams::Print(int Indent, char* s, int Strlen, bool* pbNextFlag)
@@ -29,4 +32,9 @@ int CAct65DeclareParams::Print(int Indent, char* s, int Strlen, bool* pbNextFlag
 void CAct65DeclareParams::PrintNode(FILE* pOut, int Indent, bool* pbNextFlag)
 {
 	CAstNode::PrintNode(pOut, Indent, pbNextFlag);
+}
+
+CValue* CAct65DeclareParams::Emit(CValue* pVc, CValue* pVn)
+{
+    return nullptr;
 }

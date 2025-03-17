@@ -54,6 +54,7 @@ public:
 	//-----------------------------
 	virtual CValue* Process();
 	virtual void PrintNode(FILE* pOut, int Indent, bool* pbNextFlag);
+	virtual CValue* Emit(CValue* pVc, CValue* pVn);
 	virtual int Print(int Indent, char* s, int l, bool* pbNextFlag);
 	int PrintAbsolute(char* s, int StrLen);
 	int PrintZeroPage(char* s, int StrLen);

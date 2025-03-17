@@ -48,7 +48,6 @@ private:
 		{UpperLower::UPPER,"UPPER"},
 		{UpperLower::LOWER,"LOWER"},
 	};
-
 	CBin* m_pSym;
 	int m_ConstantValue;
 	char* m_pString;
@@ -68,6 +67,7 @@ public:
 		m_ConstantValue = v;
 		m_ValType = ValueType::CONSTANT;
 	}
+	int GetTotalValue();
 	ValueType GetValueType() const { return m_ValType; }
 	void SetString(const char* s);
 	char* GetString() { return m_pString; }

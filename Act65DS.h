@@ -17,5 +17,6 @@ public:
 	void SetSize(int S) { m_SizeInBytes = S; }
 	CSection* GetSection() { return m_pSection; }
 	void SetSection(CSection* pS) { m_pSection = pS; }
+	virtual CValue* Emit(CValue* pVc, CValue* pVn);
 };
 

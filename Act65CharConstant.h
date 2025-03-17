@@ -14,5 +14,6 @@ public:
 	virtual int Print(int Indent, char* s, int l, bool* pbNextFlag);
 	void SetValue(int V) { m_Value = V; }
 	virtual const char* GetNodeName() { return m_pNodeTyypeName; }
+	virtual CValue* Emit(CValue* pVc, CValue* pVn);
 };
 

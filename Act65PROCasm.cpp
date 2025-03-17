@@ -15,7 +15,10 @@ bool CAct65PROCasm::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 
 CValue* CAct65PROCasm::Process()
 {
-	return nullptr;
+	CValue* pV = 0;
+
+	pV = CAstNode::Process();
+	return pV;
 }
 
 int CAct65PROCasm::Print(int Indent, char* s, int Strlen, bool* pbNextFlag)
@@ -38,4 +41,9 @@ void CAct65PROCasm::PrintNode(FILE* pOut, int Indent, bool* pbNextFlag)
 		fprintf(pOut, "%s\n", pS);
 		delete[]pS;
 	}
+}
+
+CValue* CAct65PROCasm::Emit(CValue* pVc, CValue* pVn)
+{
+	return nullptr;
 }

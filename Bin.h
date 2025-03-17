@@ -72,6 +72,8 @@ public:
 	}
 	 virtual bool Compare(const char *name, int aux = 0) = 0;
 	 BinType GetType() const { return m_Type; }
+	 virtual unsigned GetAddress() const { return 0; }
+
 	 //	virtual bool Compare(const char* name) {
 //		bool rV = false;
 //		if (strcmp(m_pName, name) == 0) rV = true;

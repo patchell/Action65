@@ -158,3 +158,9 @@ void CAstTree::TraverseTree(
 	Recursions++;
 }
 
+CValue* CAstTree::Process()
+{
+	fprintf(stderr, "Generating Code\n");
+    return GetRootNode()->Process();
+}
+

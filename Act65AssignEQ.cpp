@@ -15,7 +15,10 @@ bool CAct65AssignEQ::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 
 CValue* CAct65AssignEQ::Process()
 {
-	return nullptr;
+	CValue* pV = 0;
+
+	pV = CAstNode::Process();
+	return pV;
 }
 
 int CAct65AssignEQ::Print(int Indent, char* s, int Strlen, bool* pbNextFlag)
@@ -29,4 +32,9 @@ int CAct65AssignEQ::Print(int Indent, char* s, int Strlen, bool* pbNextFlag)
 void CAct65AssignEQ::PrintNode(FILE* pOut, int Indent, bool* pbNextFlag)
 {
 	CAstNode::PrintNode(pOut, Indent, pbNextFlag);
+}
+
+CValue* CAct65AssignEQ::Emit(CValue* pVc, CValue* pVn)
+{
+    return nullptr;
 }

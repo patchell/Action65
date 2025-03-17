@@ -50,6 +50,11 @@ void CAct65CodeBlock::PrintNode(FILE* pOut, int Indent, bool* pbNextFlag)
 	CAstNode::PrintNode(pOut, Indent, pbNextFlag);
 }
 
+CValue* CAct65CodeBlock::Emit(CValue* pVc, CValue* pVn)
+{
+    return nullptr;
+}
+
 //--------------------------------------------------------
 
 CAct65CODEBLOCKend::CAct65CODEBLOCKend()
@@ -67,7 +72,10 @@ bool CAct65CODEBLOCKend::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 
 CValue* CAct65CODEBLOCKend::Process()
 {
-	return nullptr;
+	CValue* pV = 0;
+
+	pV = CAstNode::Process();
+	return pV;
 }
 
 int CAct65CODEBLOCKend::Print(int Indent, char* s, int Strlen, bool* pbNextFlag)
@@ -81,4 +89,9 @@ int CAct65CODEBLOCKend::Print(int Indent, char* s, int Strlen, bool* pbNextFlag)
 void CAct65CODEBLOCKend::PrintNode(FILE* pOut, int Indent, bool* pbNextFlag)
 {
 	CAstNode::PrintNode(pOut, Indent, pbNextFlag);
+}
+
+CValue* CAct65CODEBLOCKend::Emit(CValue* pVc, CValue* pVn)
+{
+	return nullptr;
 }

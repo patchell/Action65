@@ -17,7 +17,10 @@ bool CAct65DS::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 
 CValue* CAct65DS::Process()
 {
-	return 0;
+	CValue* pV = 0;
+
+	pV = CAstNode::Process();
+	return pV;
 }
 
 int CAct65DS::Print(int Indent, char* s, int Strlen, bool* pbNextFlag)
@@ -42,4 +45,9 @@ void CAct65DS::PrintNode(FILE* pOut, int Indent, bool* pbNextFlag)
 		fprintf(pOut, "%s\n", s);
 		delete[] s;
 	}
+}
+
+CValue* CAct65DS::Emit(CValue* pVc, CValue* pVn)
+{
+    return nullptr;
 }

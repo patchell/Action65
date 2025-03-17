@@ -15,7 +15,10 @@ bool CAct65NUMBER::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 
 CValue* CAct65NUMBER::Process()
 {
-	return nullptr;
+	CValue* pV = 0;
+
+	pV = CAstNode::Process();
+	return pV;
 }
 
 void CAct65NUMBER::PrintNode(FILE* pOut, int Indent, bool* pbNextFlag)
@@ -42,4 +45,9 @@ int CAct65NUMBER::Print(int Indent, char* s, int Strlen, bool* pbNextFlag)
 	int size = Strlen - l;
 	l += sprintf_s(&s[l], size, "$%04X", GetValue()->GetConstVal());
 	return l;
+}
+
+CValue* CAct65NUMBER::Emit(CValue* pVc, CValue* pVn)
+{
+    return nullptr;
 }

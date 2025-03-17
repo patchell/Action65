@@ -6,10 +6,5 @@ public:
 	CActionAstTree();
 	virtual ~CActionAstTree();
 	bool Create();
-	virtual CAstNode* MakeNewNode(
-		int Type,
-		CAstNode* Child,
-		CAstNode* Next
-	);
 };
 

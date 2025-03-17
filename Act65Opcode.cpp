@@ -23,25 +23,10 @@ bool CAct65Opcode::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 
 CValue* CAct65Opcode::Process()
 {
-	CAstNode* pChild = 0, * pNext = 0;
-	CValue* pValueChild = 0, * pValueNext = 0;
-	pChild = GetChild();
-	if (pChild)
-	{
-		pNext = pChild->GetNext();
-	}
-	if (pChild)
-	{
-		pValueChild = pChild->Process();
-	}
-	if (pNext)
-	{
-		pValueNext = pNext->Process();
-	}
-	//-----------------------
-	// Code Generation
-	//-----------------------
-	return pValueChild;
+	CValue* pV = 0;
+
+	pV = CAstNode::Process();
+	return pV;
 }
 
 void CAct65Opcode::PrintNode(FILE* pOut, int Indent, bool* pbNextFlag)
@@ -56,6 +41,11 @@ void CAct65Opcode::PrintNode(FILE* pOut, int Indent, bool* pbNextFlag)
 		fprintf(pOut, "%s\n", s);
 		delete[]s;
 	}
+}
+
+CValue* CAct65Opcode::Emit(CValue* pVc, CValue* pVn)
+{
+	return nullptr;
 }
 
 int CAct65Opcode::Print(int Indent, char* s, int Strlen, bool* pbNextFlag)

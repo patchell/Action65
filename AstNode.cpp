@@ -13,6 +13,7 @@ CAstNode::CAstNode()
 	m_pValue = 0;
 	m_pHead = 0;
 	m_pTail = 0;
+	m_pSection = 0;
 	m_Line = Act()->GetParser()->GetLexer()->GetLineNumber();
 	m_Column = Act()->GetParser()->GetLexer()->GetColunm();
 }
@@ -30,6 +31,7 @@ CAstNode::CAstNode(const char* pName, NodeType NT)
 	m_pValue = 0;
 	m_pHead = 0;
 	m_pTail = 0;
+	m_pSection = 0;
 	m_Line = Act()->GetParser()->GetLexer()->GetLineNumber();
 	m_Column = Act()->GetParser()->GetLexer()->GetColunm();
 }
@@ -96,6 +98,11 @@ CAstNode* CAstNode::CreateValue(int V)
 	m_pValue = new CValue;
 	m_pValue->Create(V);
 	return this;
+}
+
+CValue* CAstNode::Process()
+{
+	return nullptr;
 }
 
 void CAstNode::PrintNode(FILE* pOut, int Indent, bool* pbNextFlag)

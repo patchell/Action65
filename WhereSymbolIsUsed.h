@@ -33,7 +33,7 @@ public:
 	bool Create();
 	virtual bool Compare(const char* name, int scope);
 	void SetAddress(int a);
-	int GetAddress() const { return m_Address; }
+	virtual unsigned GetAddress() const { return m_Address; }
 	void SetSection(CSection* pS) { 
 		m_pSection = pS; 
 	}

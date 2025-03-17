@@ -42,6 +42,7 @@ INTERRUPT Hey()
 
 		SET SECTION "Code"
 		:Astring DAS "This is an ACTION! string"
+		:CString DCS "This is a C String"
 		STY	First
 		STY First,.X
 		STY Second

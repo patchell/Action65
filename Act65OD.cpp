@@ -15,26 +15,10 @@ bool CAct65OD::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 
 CValue* CAct65OD::Process()
 {
-	CAstNode* pChild = 0, * pNext = 0;
-	CValue* pValueChild = 0, * pValueNext = 0
-		;
-	pChild = GetChild();
-	if (pChild)
-	{
-		pNext = pChild->GetNext();
-	}
-	if (pChild)
-	{
-		pValueChild = pChild->Process();
-	}
-	if (pNext)
-	{
-		pValueNext = pNext->Process();
-	}
-	//-----------------------
-	// Code Generation
-	//-----------------------
-	return pValueChild;
+	CValue* pV = 0;
+
+	pV = CAstNode::Process();
+	return pV;
 }
 
 int CAct65OD::Print(int Indent, char* s, int Strlen, bool* pbNextFlag)
@@ -48,4 +32,9 @@ int CAct65OD::Print(int Indent, char* s, int Strlen, bool* pbNextFlag)
 void CAct65OD::PrintNode(FILE* pOut, int Indent, bool* pbNextFlag)
 {
 	CAstNode::PrintNode(pOut, Indent, pbNextFlag);
+}
+
+CValue* CAct65OD::Emit(CValue* pVc, CValue* pVn)
+{
+	return nullptr;
 }

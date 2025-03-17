@@ -15,7 +15,10 @@ bool CAct65TypeFIELD::Create(CAstNode* pChild, CAstNode* pNex, CBin* pSym)
 
 CValue* CAct65TypeFIELD::Process()
 {
-	return nullptr;
+	CValue* pV = 0;
+
+	pV = CAstNode::Process();
+	return pV;
 }
 
 int CAct65TypeFIELD::Print(int Indent, char* s, int Strlen, bool* pbNextFlag)
@@ -41,4 +44,9 @@ void CAct65TypeFIELD::PrintNode(FILE* pOut, int Indent, bool* pbNextFlag)
 {
 	int x = 0;
 	CAstNode::PrintNode(pOut, Indent, pbNextFlag);
+}
+
+CValue* CAct65TypeFIELD::Emit(CValue* pVc, CValue* pVn)
+{
+    return nullptr;
 }

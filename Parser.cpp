@@ -58,6 +58,8 @@ CAstNode* CParser::Run()
 		pN = Action65();
 		pRoot->SetChild(pN);
 		GetAstTree()->Print(LogFile());
+		GetAstTree()->Process();	//gemerate cpde
+		GetCurrentSection()->Print(LogFile());
 //		GetLexer()->GetSymTab()->PrintTable(LogFile());
 		fprintf(stderr, "Lines Compiled:%d\n", GetLexer()->GetLineNumber());
 		fprintf(LogFile(), "Lines Compiled:%d\n", GetLexer()->GetLineNumber());
@@ -5535,6 +5537,11 @@ CAstNode* CParser::DefineMemory()
 				pNext = CAstNode::MakeNextList(pNext, pNDAS);
 			}
 			//---------------------------------------
+			GetCurrentSection()->AddData(1, pNDAS->GetStrLen());
+			GetCurrentSection()->AddData(
+				pNDAS->GetStrLen(),
+				pNDAS->GetString()
+			);
 			pChild = DefineStorage();
 			pNext = CAstNode::MakeNextList(pNext, pChild);
 			break;
@@ -5542,6 +5549,12 @@ CAstNode* CParser::DefineMemory()
 			Expect(Token::DCS);
 			pChild = AsmConstList();
 			pNDCS = new CAct65DCS;
+			if (CAstNode::NodeType::STRING == pChild->GetNodeType())
+			{
+				CAct65STRING* pSN = (CAct65STRING*)pChild;
+				pNDCS->SetString(pSN->GetString());
+				//				delete pChild;
+			}
 			pNDCS->SetChild(pChild);
 			if (Label)
 			{
@@ -5551,6 +5564,10 @@ CAstNode* CParser::DefineMemory()
 			{
 				pNext = CAstNode::MakeNextList(pNext, pNDCS);
 			}
+			GetCurrentSection()->AddData(
+				pNDCS->GetStrLen(),
+				pNDCS->GetString()
+			);
 			//---------------------------------------
 			pChild = DefineStorage();
 			pNext = CAstNode::MakeNextList(pNext, pChild);
@@ -5789,6 +5806,7 @@ CAstNode* CParser::Instruction()
 		case Token::SBC:
 			Expect(OpCodeToken);
 			pChild = Operand(OpCodeToken);
+			GetCurrentSection()->AddInstruction((CAct65Opcode*)pChild);
 			pNext = CAstNode::MakeNextList(pNext, pChild);
 			//---------------------------------------
 			pChild = DefineLabel();
@@ -5797,6 +5815,7 @@ CAstNode* CParser::Instruction()
 		case Token::STA:	//store accumalator 
 			Expect(OpCodeToken);
 			pChild = Operand(OpCodeToken);
+			GetCurrentSection()->AddInstruction((CAct65Opcode*)pChild);
 			pNext = CAstNode::MakeNextList(pNext, pChild);
 			//-----------------------------------
 			pChild = DefineLabel();
@@ -5808,6 +5827,7 @@ CAstNode* CParser::Instruction()
 		case Token::ROR:
 			Expect(OpCodeToken);
 			pChild = Operand(OpCodeToken);
+			GetCurrentSection()->AddInstruction((CAct65Opcode*)pChild);
 			pNext = CAstNode::MakeNextList(pNext, pChild);
 			//-----------------------------------
 			pChild = DefineLabel();
@@ -5823,6 +5843,7 @@ CAstNode* CParser::Instruction()
 		case Token::BVS:
 			Expect(OpCodeToken);
 			pChild = RelAddressingMode(OpCodeToken);
+			GetCurrentSection()->AddInstruction((CAct65Opcode*)pChild);
 			pNext = CAstNode::MakeNextList(pNext, pChild);
 			//-----------------------------------
 			pChild = DefineLabel();
@@ -5831,6 +5852,7 @@ CAstNode* CParser::Instruction()
 		case Token::BIT:
 			Expect(OpCodeToken);
 			pChild = Operand(OpCodeToken);
+			GetCurrentSection()->AddInstruction((CAct65Opcode*)pChild);
 			pNext = CAstNode::MakeNextList(pNext, pChild);
 			//-----------------------------------
 			pChild = DefineLabel();
@@ -5866,6 +5888,7 @@ CAstNode* CParser::Instruction()
 				CAct65Opcode* pOpCode = 0;
 				pOpCode = new CAct65Opcode;
 				pOpCode->PrepareInstruction(OpCodeToken, AdrModeType::IMPLIED, 0);
+				GetCurrentSection()->AddInstruction(pOpCode);
 				pNext = CAstNode::MakeNextList(pNext, pOpCode);
 			}
 			//-----------------------------------
@@ -5876,6 +5899,7 @@ CAstNode* CParser::Instruction()
 		case Token::CPY:
 			Expect(OpCodeToken);
 			pChild = Operand(OpCodeToken);
+			GetCurrentSection()->AddInstruction((CAct65Opcode*)pChild);
 			pNext = CAstNode::MakeNextList(pNext, pChild);
 			//-----------------------------------
 			pChild = DefineLabel();
@@ -5885,6 +5909,7 @@ CAstNode* CParser::Instruction()
 		case Token::INC:
 			Expect(OpCodeToken);
 			pChild = Operand(OpCodeToken);
+			GetCurrentSection()->AddInstruction((CAct65Opcode*)pChild);
 			pNext = CAstNode::MakeNextList(pNext, pChild);
 			//-----------------------------------
 			pChild = DefineLabel();
@@ -5893,6 +5918,7 @@ CAstNode* CParser::Instruction()
 		case Token::JMP:	//jump addressing modes
 			Expect(OpCodeToken);
 			pChild = JumpAddressingModes(OpCodeToken);
+			GetCurrentSection()->AddInstruction((CAct65Opcode*)pChild);
 			pNext = CAstNode::MakeNextList(pNext, pChild);
 			//-----------------------------------
 			pChild = DefineLabel();
@@ -5901,6 +5927,7 @@ CAstNode* CParser::Instruction()
 		case Token::JSR:	//jsr addressing modes
 			Expect(OpCodeToken);
 			pChild = Operand(OpCodeToken);
+			GetCurrentSection()->AddInstruction((CAct65Opcode*)pChild);
 			pNext = CAstNode::MakeNextList(pNext, pChild);
 			//-----------------------------------
 			pChild = DefineLabel();
@@ -5909,6 +5936,7 @@ CAstNode* CParser::Instruction()
 		case Token::LDX:	//load index register
 			Expect(OpCodeToken);
 			pChild = Operand(OpCodeToken);
+			GetCurrentSection()->AddInstruction((CAct65Opcode*)pChild);
 			pNext = CAstNode::MakeNextList(pNext, pChild);
 			//-----------------------------------
 			pChild = DefineLabel();
@@ -5917,6 +5945,7 @@ CAstNode* CParser::Instruction()
 		case Token::LDY:
 			Expect(OpCodeToken);
 			pChild = Operand(OpCodeToken);
+			GetCurrentSection()->AddInstruction((CAct65Opcode*)pChild);
 			pNext = CAstNode::MakeNextList(pNext, pChild);
 			//-----------------------------------
 			pChild = DefineLabel();
@@ -5925,6 +5954,7 @@ CAstNode* CParser::Instruction()
 		case Token::STX:	//store index registers
 			Expect(OpCodeToken);
 			pChild = Operand(OpCodeToken);
+			GetCurrentSection()->AddInstruction((CAct65Opcode*)pChild);
 			pNext = CAstNode::MakeNextList(pNext, pChild);
 			//-----------------------------------
 			pChild = DefineLabel();
@@ -5933,6 +5963,7 @@ CAstNode* CParser::Instruction()
 		case Token::STY:
 			Expect(OpCodeToken);
 			pChild = Operand(OpCodeToken);
+			GetCurrentSection()->AddInstruction((CAct65Opcode*)pChild);
 			pNext = CAstNode::MakeNextList(pNext, pChild);
 			//-----------------------------------
 			pChild = DefineLabel();

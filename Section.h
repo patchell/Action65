@@ -1,5 +1,7 @@
 #pragma once
 
+class CAct65Opcode;
+
 class CSection : public CBin
 {
 public:
@@ -40,7 +42,9 @@ public:
 		return m_LocationCounter;
 	}
 	void SetLocationCounter(unsigned short NewAddress);
+	unsigned short AddInstruction(CAct65Opcode* pINS);
 	unsigned short AddData(unsigned ObjectSize, int Value);
+	unsigned short AddData(unsigned ObjSize, const char* pData);
 	void AddDataAt(unsigned Adr, unsigned ObjectSize, int valu);
 	unsigned short AllocateDataBlock(unsigned short size);	//define Storage
 	void SetAccessMode(Mode Am) { m_AccessMode = Am; }

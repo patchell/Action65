@@ -84,6 +84,22 @@ int CValue::GetConstVal()
 	return rV;
 }
 
+int CValue::GetTotalValue()
+{
+	int rV = 0;
+
+	switch (GetValueType())
+	{
+	case ValueType::CONSTANT:
+		rV = GetConstVal();
+		break;
+	case ValueType::SYMBOL:
+		rV = GetSymbol()->GetAddress() + GetConstVal();
+		break;
+	}
+	return rV;
+}
+
 void CValue::SetString(const char* s)
 {
 	int l = int(strlen(s)) + 1;

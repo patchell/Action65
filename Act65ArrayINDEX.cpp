@@ -15,7 +15,10 @@ bool CAct65ArrayINDEX::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 
 CValue* CAct65ArrayINDEX::Process()
 {
-	return nullptr;
+	CValue* pV = 0;
+
+	pV = CAstNode::Process();
+	return pV;
 }
 
 int CAct65ArrayINDEX::Print(int Indent, char* s, int Strlen, bool* pbNextFlag)
@@ -40,4 +43,9 @@ int CAct65ArrayINDEX::Print(int Indent, char* s, int Strlen, bool* pbNextFlag)
 void CAct65ArrayINDEX::PrintNode(FILE* pOut, int Indent, bool* pbNextFlag)
 {
 	CAstNode::PrintNode(pOut, Indent, pbNextFlag);
+}
+
+CValue* CAct65ArrayINDEX::Emit(CValue* pVc, CValue* pVn)
+{
+    return nullptr;
 }
