@@ -102,7 +102,23 @@ CAstNode* CAstNode::CreateValue(int V)
 
 CValue* CAstNode::Process()
 {
-	return nullptr;
+	CAstNode* pChild = 0, * pNext = 0;
+	CValue* pValueChild = 0, * pValueNext = 0
+		;
+	pChild = GetChild();
+	if (pChild)
+	{
+		pNext = pChild->GetNext();
+	}
+	if (pChild)
+	{
+		pValueChild = pChild->Process();
+	}
+	if (pNext)
+	{
+		pValueNext = pNext->Process();
+	}
+	return Emit(pValueChild, pValueNext);
 }
 
 void CAstNode::PrintNode(FILE* pOut, int Indent, bool* pbNextFlag)

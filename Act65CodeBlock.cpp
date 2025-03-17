@@ -15,26 +15,10 @@ bool CAct65CodeBlock::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 
 CValue* CAct65CodeBlock::Process()
 {
-	CAstNode* pChild = 0, * pNext = 0;
-	CValue* pValueChild = 0, * pValueNext = 0
-		;
-	pChild = GetChild();
-	if (pChild)
-	{
-		pNext = pChild->GetNext();
-	}
-	if (pChild)
-	{
-		pValueChild = pChild->Process();
-	}
-	if (pNext)
-	{
-		pValueNext = pNext->Process();
-	}
-	//-----------------------
-	// Code Generation
-	//-----------------------
-	return pValueChild;
+	CValue* pV = 0;
+
+	pV = CAstNode::Process();
+	return pV;
 }
 
 int CAct65CodeBlock::Print(int Indent, char* s, int Strlen, bool* pbNextFlag)
