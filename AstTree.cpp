@@ -67,6 +67,7 @@ void CAstTree::TraverseTree(
 		0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 	};
 	int i = 0;
+	int l = 0;
 
 	--Recursions;
 	if (Recursions <= 0)
@@ -86,7 +87,7 @@ void CAstTree::TraverseTree(
 			pbNextFlags[Indent] = true;
 		else
 			pbNextFlags[Indent] = false;
-		pAN->Print(Indent, s, StringSize, pbNextFlags);
+		l = pAN->Print(Indent, s, StringSize, pbNextFlags);
 		fprintf(pOut, "%s\n", s);
 		if (pAN->GetChild())
 		{
@@ -134,7 +135,7 @@ void CAstTree::TraverseTree(
 		}
 		pAN = pAN->GetNext();
 	}
-	pAN->Print(Indent, s, StringSize, pbNextFlags);
+	l = pAN->Print(Indent, s, StringSize, pbNextFlags);
 	fprintf(pOut, "%s\n", s);
 	if (pAN->GetChild())
 	{

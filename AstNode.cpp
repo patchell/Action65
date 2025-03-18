@@ -71,7 +71,8 @@ CAstNode* CAstNode::MakeNode(
 	{
 		SetChild(pChild);
 		pChild->SetParent(this);
-		pNext->SetParent(this);
+		if(pNext)
+			pNext->SetParent(this);
 		pNode = pChild;
 		while (pNode->GetNext())
 			pNode = pNode->GetNext();

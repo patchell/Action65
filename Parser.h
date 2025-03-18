@@ -265,6 +265,10 @@ private:
 	void SectionAtributes(CSection* pSection);
 	CSection::Mode Modes();
 	CSection::AddressSize  SectionAddressSize();
+	//----------------------------
+	// Code Statements
+	//----------------------------
+//	CAstNode* AsmStatements();
 	//----IFF-------------
 	CAstNode* IffStmt();
 	CAstNode* IFFend();
@@ -306,12 +310,9 @@ private:
 	//--------------------------------------
 	// Opcodes
 	//--------------------------------------
-	CAstNode*  Instruction();
-	//---------------------------------------------
-	// Lables
-	//---------------------------------------------
+	CAstNode* Instruction();
 	CAstNode* DefineLabel();
-	CAstNode* Operand(Token OpCodeToken);
+	CAstNode* Operand(Token OpCodeToken, CAstNode* pLabel);
 	//------------------------------------------
 	// Branch Instructions Addressing Mode
 	//------------------------------------------
@@ -319,7 +320,7 @@ private:
 	//------------------------------------------
 	// JMP Instructions Addressing Mode
 	//------------------------------------------
-	CAstNode*  JumpAddressingModes(Token OpCodeToken);
+	CAstNode*  JumpAddressingModes(Token OpCodeToken, CAstNode* pLabel);
 	//---------------------------------------------
 	//	Optional Index Registers
 	//---------------------------------------------
@@ -333,10 +334,11 @@ private:
 	CValue* AsmConstUpLow();
 	CValue* BaseAsmConstant();
 	//------------------------------------------------
-	CAstNode*  Indirect(Token  OpCodeToken);
-	CAstNode*  Immediate(Token OpCodeToken);
-	CAstNode*  Absolute(Token  OpCodeToken);
-	CAstNode* Accumulator(Token OpCodeToken);
+	CAstNode*  Indirect(Token  OpCodeToken, CAstNode* pLabel);
+	CAstNode*  Immediate(Token OpCodeToken, CAstNode* pLabel);
+	CAstNode*  Absolute(Token  OpCodeToken, CAstNode* pLabel);
+	CAstNode* Accumulator(Token OpCodeToken, CAstNode* pLabel);
+	CAstNode* UnHookTopNode(CAstNode* pNodeList);
 	//---------------- Debug Utillity ----------------------
 public:
 	void DebugTraverse(

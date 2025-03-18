@@ -45,23 +45,23 @@ INTERRUPT Hey()
 		:CString DCS "This is a C String"
 		STY	First
 		STY First,.X
-		STY Second
+:Here	STY Second
 
 		STX	First
 		STX First, .Y
-		STX	Second
+:We		STX	Second
 
 		JSR First
-		JSR Second
+:Are		JSR Second
 
 		JMP	First
 		JMP Second
 		JMP (First)
 		JMP (Second)
 
-		DEC	First
+:Go		DEC	First
 		DEC First,.X
-		DEC Second
+:Again		DEC Second
 		DEC Second, .X
 
 		INC	First

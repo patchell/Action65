@@ -329,6 +329,8 @@ int CAct65Opcode::Print(int Indent, char* s, int Strlen, bool* pbNextFlag)
 		break;
 	}
 	size = Strlen - l;
+	l += ToString(&s[l], size);
+	size = Strlen - l;
 	if (GetSection())
 	{
 		l += sprintf_s(&s[l], size, " SECTION:%s", GetSection()->GetName());
@@ -343,26 +345,6 @@ int CAct65Opcode::Print(int Indent, char* s, int Strlen, bool* pbNextFlag)
 		l += sprintf_s(&s[l], size, " (Parent:%s", GetParent()->GetNodeName());
 	}
 	return l;
-}
-
-int CAct65Opcode::PrintAbsolute(char* s, int StrLen)
-{
-	return 0;
-}
-
-int CAct65Opcode::PrintZeroPage(char* s, int StrLen)
-{
-	return 0;
-}
-
-int CAct65Opcode::PrintRelative(char* s, int StrLen)
-{
-	return 0;
-}
-
-int CAct65Opcode::PrintIndirect(char* s, int StrLen)
-{
-	return 0;
 }
 
 void CAct65Opcode::PrepareInstruction(
@@ -455,6 +437,283 @@ int CAct65Opcode::SaveInstruction(char* pM)
 const char* CAct65Opcode::GetOpcodeName()
 {
 	return m_pKeyWord->m_Name;
+}
+
+int CAct65Opcode::ToString(char* s, int Size)
+{
+	int l = 0;
+	int SZ = 0;
+
+	l += sprintf_s(s, Size, " <");
+	if (m_pLabel)
+	{
+		SZ = Size - l;
+		l += sprintf_s(&s[l], SZ, ":%s%c ",
+			GetLabelSymbol()->GetName(),
+			(GetLabelSymbol()->GetIdentType() == IdentType::LOCAL) ? ':' : ' '
+		);
+	}
+	SZ = Size - l;
+	l += sprintf_s(&s[l], SZ, "%s ", KeyWord::LookupToString(GetToken()));
+	switch (GetAdrModeType())
+	{
+	case AdrModeType::ABSOLUTE_ADR:
+		if (GetValue())
+		{
+			switch (GetValue()->GetValueType())
+			{
+			case CValue::ValueType::CONSTANT:
+				SZ = Size - l;
+				l += sprintf_s(&s[l], SZ, " $%X", GetValue()->GetConstVal());
+				break;
+			case CValue::ValueType::SYMBOL:
+				SZ = Size - l;
+				if (GetValue()->GetConstVal())
+				{
+					l += sprintf_s(&s[l], SZ, " %s+%d",
+						GetValue()->GetSymbol()->GetName(),
+						GetValue()->GetConstVal()
+					);
+				}
+				else
+				{
+					l += sprintf_s(&s[l], SZ, " %s",
+						GetValue()->GetSymbol()->GetName()
+					);
+				}
+				break;
+			}
+		}
+		break;
+	case AdrModeType::ABSOLUTE_X_ADR:
+		switch (GetValue()->GetValueType())
+		{
+		case CValue::ValueType::CONSTANT:
+			SZ = Size - l;
+			l += sprintf_s(&s[l], SZ, " $%04X,.X", GetValue()->GetConstVal());
+			break;
+		case CValue::ValueType::SYMBOL:
+			SZ = Size - l;
+			if (GetValue()->GetConstVal())
+			{
+				l += sprintf_s(&s[l], SZ, " %s+%d,.X",
+					GetValue()->GetSymbol()->GetName(),
+					GetValue()->GetConstVal()
+				);
+			}
+			else
+			{
+				l += sprintf_s(&s[l], SZ, " %s,.X",
+					GetValue()->GetSymbol()->GetName()
+				);
+			}
+			break;
+		}
+		break;
+	case AdrModeType::ABSOLUTE_Y_ADR:
+		switch (GetValue()->GetValueType())
+		{
+		case CValue::ValueType::CONSTANT:
+			SZ = Size - l;
+			l += sprintf_s(&s[l], SZ, " $%04X,.Y", GetValue()->GetConstVal());
+			break;
+		case CValue::ValueType::SYMBOL:
+			SZ = Size - l;
+			if (GetValue()->GetConstVal())
+			{
+				l += sprintf_s(&s[l], SZ, " %s+%d,.Y",
+					GetValue()->GetSymbol()->GetName(),
+					GetValue()->GetConstVal()
+				);
+			}
+			else
+			{
+				l += sprintf_s(&s[l], SZ, " %s",
+					GetValue()->GetSymbol()->GetName()
+				);
+			}
+			break;
+		}
+		break;
+	case AdrModeType::ACCUMULATOR:
+		SZ = Size - l;
+		l += sprintf_s(&s[l], SZ, " .A");
+		break;
+	case AdrModeType::IMMEDIATE_ADR:
+		SZ = Size - l;
+		l += sprintf_s(&s[l], SZ, "#$%02X", GetValue()->GetTotalValue());
+		break;
+	case AdrModeType::INDEXED_INDIRECT_X_ADR:
+		switch (GetValue()->GetValueType())
+		{
+		case CValue::ValueType::CONSTANT:
+			SZ = Size - l;
+			l += sprintf_s(&s[l], SZ, " ($%02X,.X),.Y", GetValue()->GetConstVal());
+			break;
+		case CValue::ValueType::SYMBOL:
+			SZ = Size - l;
+			if (GetValue()->GetConstVal())
+			{
+				l += sprintf_s(&s[l], SZ, " (%s+%d,.X),.Y",
+					GetValue()->GetSymbol()->GetName(),
+					GetValue()->GetConstVal()
+				);
+			}
+			else
+			{
+				l += sprintf_s(&s[l], SZ, " (%s,.X)",
+					GetValue()->GetSymbol()->GetName()
+				);
+			}
+			break;
+		}
+		break;
+	case AdrModeType::INDIRECT_INDEXED_Y_ADR:
+		switch (GetValue()->GetValueType())
+		{
+		case CValue::ValueType::CONSTANT:
+			SZ = Size - l;
+			l += sprintf_s(&s[l], SZ, " ($%02X),.Y", GetValue()->GetConstVal());
+			break;
+		case CValue::ValueType::SYMBOL:
+			SZ = Size - l;
+			if (GetValue()->GetConstVal())
+			{
+				l += sprintf_s(&s[l], SZ, " (%s+%d),.Y",
+					GetValue()->GetSymbol()->GetName(),
+					GetValue()->GetConstVal()
+				);
+			}
+			else
+			{
+				l += sprintf_s(&s[l], SZ, " (%s),.Y",
+					GetValue()->GetSymbol()->GetName()
+				);
+			}
+			break;
+		}
+		break;
+	case AdrModeType::INDIRECT_ADR:
+		switch (GetValue()->GetValueType())
+		{
+		case CValue::ValueType::CONSTANT:
+			SZ = Size - l;
+			l += sprintf_s(&s[l], SZ, " (%04X)", GetValue()->GetConstVal());
+			break;
+		case CValue::ValueType::SYMBOL:
+			SZ = Size - l;
+			l += sprintf_s(&s[l], SZ, " (%s)", GetValue()->GetSymbol()->GetName());
+			break;
+		}
+		break;
+	case AdrModeType::RELATIVE:
+		switch (GetValue()->GetValueType())
+		{
+		case CValue::ValueType::CONSTANT:
+			SZ = Size - l;
+			l += sprintf_s(&s[l], SZ, " $%02X", GetValue()->GetConstVal());
+			break;
+		case CValue::ValueType::SYMBOL:
+			if (GetValue()->GetConstVal())
+			{
+				SZ = Size - l;
+				l += sprintf_s(&s[l], SZ, " %s + $%02X", 
+					GetValue()->GetSymbol()->GetName(),
+					GetValue()->GetConstVal()
+				);
+			}
+			else
+			{
+				SZ = Size - l;
+				l += sprintf_s(&s[l], SZ, " %s",
+					GetValue()->GetSymbol()->GetName()
+				);
+			}
+			break;
+		}
+		break;
+	case AdrModeType::ZERO_PAGE_ADR:
+		switch (GetValue()->GetValueType())
+		{
+		case CValue::ValueType::CONSTANT:
+			SZ = Size - l;
+			l += sprintf_s(&s[l], SZ, " $%02X", GetValue()->GetConstVal());
+			break;
+		case CValue::ValueType::SYMBOL:
+			if (GetValue()->GetConstVal())
+			{
+				SZ = Size - l;
+				l += sprintf_s(&s[l], SZ, " %s + $%02X",
+					GetValue()->GetSymbol()->GetName(),
+					GetValue()->GetConstVal()
+				);
+			}
+			else
+			{
+				SZ = Size - l;
+				l += sprintf_s(&s[l], SZ, " %s",
+					GetValue()->GetSymbol()->GetName()
+				);
+			}
+			break;
+		}
+		break;
+	case AdrModeType::ZERO_PAGE_X_ADR:
+		switch (GetValue()->GetValueType())
+		{
+		case CValue::ValueType::CONSTANT:
+			SZ = Size - l;
+			l += sprintf_s(&s[l], SZ, " $%02X", GetValue()->GetConstVal());
+			break;
+		case CValue::ValueType::SYMBOL:
+			if (GetValue()->GetConstVal())
+			{
+				SZ = Size - l;
+				l += sprintf_s(&s[l], SZ, " %s + $%02X",
+					GetValue()->GetSymbol()->GetName(),
+					GetValue()->GetConstVal()
+				);
+			}
+			else
+			{
+				SZ = Size - l;
+				l += sprintf_s(&s[l], SZ, " %s,.X",
+					GetValue()->GetSymbol()->GetName()
+				);
+			}
+			break;
+		}
+		break;
+	case AdrModeType::ZERO_PAGE_Y_ADR:
+		switch (GetValue()->GetValueType())
+		{
+		case CValue::ValueType::CONSTANT:
+			SZ = Size - l;
+			l += sprintf_s(&s[l], SZ, " $%02X,.Y", GetValue()->GetConstVal());
+			break;
+		case CValue::ValueType::SYMBOL:
+			if (GetValue()->GetConstVal())
+			{
+				SZ = Size - l;
+				l += sprintf_s(&s[l], SZ, " %s + $%02X,.Y",
+					GetValue()->GetSymbol()->GetName(),
+					GetValue()->GetConstVal()
+				);
+			}
+			else
+			{
+				SZ = Size - l;
+				l += sprintf_s(&s[l], SZ, " %s,.Y",
+					GetValue()->GetSymbol()->GetName()
+				);
+			}
+			break;
+		}
+		break;
+	}
+	SZ = Size - l;
+	l += sprintf_s(&s[l], SZ, ">  ");
+	return l;
 }
 
 int CAct65Opcode::OperandByteCount::GetOperandByteCount(AdrModeType AdrMode)

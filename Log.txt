@@ -1,8 +1,8 @@
-File:test1.act has 2095 Bytes
+File:test1.act has 2115 Bytes
 Parser Created
 	 NUMB  CHILD  NEXT
      2      3     -1  +- 'ROOT'
-     3      4    269     +- 'MODULE'
+     3      4    274     +- 'MODULE'
      4      5      9     |  +- 'INT'
      5     -1      6     |  |  +- 'IDENT': Avar
      6     -1      7     |  |  +- 'IDENT': x
@@ -40,7 +40,7 @@ Parser Created
     22     -1     -1     |        |        |     +- 'IDENT': CrudTwo
     25     -1     -1     |        |        +- 'TYPE Fields End'
     41     42     -1     |        +- 'STATEMENTS'
-    42     43    150     |           +- 'ASM'
+    42     43    155     |           +- 'ASM'
     43     -1     44     |           |  +- 'SECTION' Code Start:$8000 SIZE:$1000 MODE:MODE_READ_ONLY PAGE0:FALSE
     44     -1     45     |           |  +- 'SECTION' Page2 Start:$0200 SIZE:$0100 MODE:MODE_READ_WRITE PAGE0:FALSE
     45     -1     46     |           |  +- 'SECTION' PageZero Start:$0000 SIZE:$0100 MODE:MODE_READ_WRITE PAGE0:TRUE
@@ -65,215 +65,220 @@ Parser Created
     65     67     68     |           |  +- 'LABEL' 'CString'
     67     66     -1     |           |  |  +- 'DCS' This is a C String
     66     -1     -1     |           |  |     +- 'STRING'
-    68     -1     69     |           |  +- 'OPCODE' STY ($84) ZERO PAGE First SECTION:Code
-    69     -1     70     |           |  +- 'OPCODE' STY ($94) PAGE ZERO,X First,.X SECTION:Code
-    70     -1     71     |           |  +- 'OPCODE' STY ($8C) ABSOLUTE Second SECTION:Code
-    71     -1     72     |           |  +- 'OPCODE' STX ($86) ZERO PAGE First SECTION:Code
-    72     -1     73     |           |  +- 'OPCODE' STX ($96) PAGE ZERO,Y First,.Y SECTION:Code
-    73     -1     74     |           |  +- 'OPCODE' STX ($8E) ABSOLUTE Second SECTION:Code
-    74     -1     75     |           |  +- 'OPCODE' JSR ($20) Value Type:SYMBOL SECTION:Code
-    75     -1     76     |           |  +- 'OPCODE' JSR ($20) ABSOLUTE Second SECTION:Code
-    76     -1     77     |           |  +- 'OPCODE' JMP ($4C) Value Type:SYMBOL SECTION:Code
-    77     -1     78     |           |  +- 'OPCODE' JMP ($4C) ABSOLUTE Second SECTION:Code
-    78     -1     79     |           |  +- 'OPCODE' JMP ($6C) INDIRECT(First) SECTION:Code
-    79     -1     80     |           |  +- 'OPCODE' JMP ($6C) INDIRECT(Second) SECTION:Code
-    80     -1     81     |           |  +- 'OPCODE' DEC ($C6) ZERO PAGE First SECTION:Code
-    81     -1     82     |           |  +- 'OPCODE' DEC ($D6) PAGE ZERO,X First,.X SECTION:Code
-    82     -1     83     |           |  +- 'OPCODE' DEC ($CE) ABSOLUTE Second SECTION:Code
-    83     -1     84     |           |  +- 'OPCODE' DEC ($DE) ABSOLUTE,X Second,X SECTION:Code
-    84     -1     85     |           |  +- 'OPCODE' INC ($E6) ZERO PAGE First SECTION:Code
-    85     -1     86     |           |  +- 'OPCODE' INC ($F6) PAGE ZERO,X First,.X SECTION:Code
-    86     -1     87     |           |  +- 'OPCODE' INC ($EE) ABSOLUTE Second SECTION:Code
-    87     -1     88     |           |  +- 'OPCODE' INC ($FE) ABSOLUTE,X Second,X SECTION:Code
-    88     -1     89     |           |  +- 'OPCODE' CPY ($C0) IMMEDIATE #'J'  #$4A SECTION:Code
-    89     -1     90     |           |  +- 'OPCODE' CPY ($C4) ZERO PAGE First SECTION:Code
-    90     -1     91     |           |  +- 'OPCODE' CPY ($CC) ABSOLUTE Second SECTION:Code
-    91     -1     92     |           |  +- 'OPCODE' CPX ($E0) IMMEDIATE #'k'  #$6B SECTION:Code
-    92     -1     93     |           |  +- 'OPCODE' CPX ($E4) ZERO PAGE First SECTION:Code
-    93     -1     94     |           |  +- 'OPCODE' CPX ($EC) ABSOLUTE Second SECTION:Code
-    94     -1     95     |           |  +- 'OPCODE' BIT ($24) ZERO PAGE First SECTION:Code
-    95     -1     96     |           |  +- 'OPCODE' BIT ($2C) ABSOLUTE Second SECTION:Code
-    96     -1     97     |           |  +- 'OPCODE' ASL ($0A) ACCUMULATOR SECTION:Code
-    97     -1     98     |           |  +- 'OPCODE' LSR ($4A) ACCUMULATOR SECTION:Code
-    98     -1     99     |           |  +- 'OPCODE' ROR ($6A) ACCUMULATOR SECTION:Code
-    99     -1    100     |           |  +- 'OPCODE' ROL ($2A) ACCUMULATOR SECTION:Code
-   100     -1    101     |           |  +- 'OPCODE' ASL ($06) ZERO PAGE First SECTION:Code
-   101     -1    102     |           |  +- 'OPCODE' ASL ($16) PAGE ZERO,X First,.X SECTION:Code
-   102     -1    103     |           |  +- 'OPCODE' ASL ($0E) ABSOLUTE Second SECTION:Code
-   103     -1    104     |           |  +- 'OPCODE' ASL ($1E) ABSOLUTE,X Second,X SECTION:Code
-   104     -1    105     |           |  +- 'OPCODE' BRK ($00) IMPLIED SECTION:Code
-   105     -1    106     |           |  +- 'OPCODE' CLC ($18) IMPLIED SECTION:Code
-   106     -1    107     |           |  +- 'OPCODE' CLD ($D8) IMPLIED SECTION:Code
-   107     -1    108     |           |  +- 'OPCODE' CLI ($58) IMPLIED SECTION:Code
-   108     -1    109     |           |  +- 'OPCODE' CLV ($B8) IMPLIED SECTION:Code
-   109     -1    110     |           |  +- 'OPCODE' DEX ($CA) IMPLIED SECTION:Code
-   110     -1    111     |           |  +- 'OPCODE' DEY ($88) IMPLIED SECTION:Code
-   111     -1    112     |           |  +- 'OPCODE' INX ($E8) IMPLIED SECTION:Code
-   112     -1    113     |           |  +- 'OPCODE' INY ($C8) IMPLIED SECTION:Code
-   113     -1    114     |           |  +- 'OPCODE' NOP ($EA) IMPLIED SECTION:Code
-   114     -1    115     |           |  +- 'OPCODE' PHA ($48) IMPLIED SECTION:Code
-   115     -1    116     |           |  +- 'OPCODE' PLA ($68) IMPLIED SECTION:Code
-   116     -1    117     |           |  +- 'OPCODE' PHP ($08) IMPLIED SECTION:Code
-   117     -1    118     |           |  +- 'OPCODE' PLP ($28) IMPLIED SECTION:Code
-   118     -1    119     |           |  +- 'OPCODE' RTI ($40) IMPLIED SECTION:Code
-   119     -1    120     |           |  +- 'OPCODE' RTS ($60) IMPLIED SECTION:Code
-   120     -1    121     |           |  +- 'OPCODE' SEC ($38) IMPLIED SECTION:Code
-   121     -1    122     |           |  +- 'OPCODE' SED ($F8) IMPLIED SECTION:Code
-   122     -1    123     |           |  +- 'OPCODE' SEI ($78) IMPLIED SECTION:Code
-   123     -1    124     |           |  +- 'OPCODE' TAX ($AA) IMPLIED SECTION:Code
-   124     -1    125     |           |  +- 'OPCODE' TAY ($A8) IMPLIED SECTION:Code
-   125     -1    126     |           |  +- 'OPCODE' TXA ($8A) IMPLIED SECTION:Code
-   126     -1    127     |           |  +- 'OPCODE' TYA ($98) IMPLIED SECTION:Code
-   127     -1    128     |           |  +- 'OPCODE' TXS ($9A) IMPLIED SECTION:Code
-   128     -1    129     |           |  +- 'OPCODE' TSX ($BA) IMPLIED SECTION:Code
-   129     -1    130     |           |  +- 'OPCODE' LDA ($A9) IMMEDIATE #'J'  #$4A SECTION:Code
-   130     -1    131     |           |  +- 'OPCODE' LDA ($B1) INDIRECT INDEXED(First),.Y SECTION:Code
-   131     -1    132     |           |  +- 'OPCODE' LDA ($A9) IMMEDIATE #$CD SECTION:Code
-   132     -1    133     |           |  +- 'OPCODE' LDA ($A9) IMMEDIATE #$AB SECTION:Code
-   133     -1    134     |           |  +- 'OPCODE' LDA ($A5) ZERO PAGE First SECTION:Code
-   134     -1    135     |           |  +- 'OPCODE' LDA ($B5) PAGE ZERO,X First,.X SECTION:Code
-   135     -1    136     |           |  +- 'OPCODE' LDA ($AD) ABSOLUTE Second SECTION:Code
-   136     -1    137     |           |  +- 'OPCODE' LDA ($BD) ABSOLUTE,X Second,X SECTION:Code
-   137     -1    138     |           |  +- 'OPCODE' LDA ($B9) ABSOLUTE,Y Second,Y SECTION:Code
-   138     -1    139     |           |  +- 'OPCODE' LDA ($A1) INDEXED INDIRECT(First,.X) SECTION:Code
-   139     -1    140     |           |  +- 'OPCODE' LDA ($A5) ZERO PAGE First + 2 SECTION:Code
-   140     -1    141     |           |  +- 'OPCODE' LDX ($A2) IMMEDIATE #'E'  #$45 SECTION:Code
-   141     -1    142     |           |  +- 'OPCODE' LDX ($A6) ZERO PAGE First SECTION:Code
-   142     -1    143     |           |  +- 'OPCODE' LDX ($B6) PAGE ZERO,Y First,.Y SECTION:Code
-   143     -1    144     |           |  +- 'OPCODE' LDX ($AE) ABSOLUTE Second SECTION:Code
-   144     -1    145     |           |  +- 'OPCODE' LDX ($BE) ABSOLUTE,Y Second,Y SECTION:Code
-   145     -1    146     |           |  +- 'OPCODE' LDY ($A0) IMMEDIATE #'a'  #$61 SECTION:Code
-   146     -1    147     |           |  +- 'OPCODE' LDY ($A4) ZERO PAGE First SECTION:Code
-   147     -1    148     |           |  +- 'OPCODE' LDY ($B4) PAGE ZERO,X First,.X SECTION:Code
-   148     -1    149     |           |  +- 'OPCODE' LDY ($AC) ABSOLUTE Second SECTION:Code
-   149     -1     -1     |           |  +- 'OPCODE' LDY ($BC) ABSOLUTE,X Second,X SECTION:Code
-   150    152    187     |           +- 'IF'
-   152    153    161     |           |  +- 'EQU-TO'
-   153     -1    151     |           |  |  +- 'IDENT': lb
-   151     -1    160     |           |  |  +- 'IDENT': la
-   160    154     -1     |           |  |  +- 'THEN'
-   154    156     -1     |           |  |     +- 'STATEMENTS'
-   156    158     -1     |           |  |        +- '=ADD'
-   158    159    155     |           |  |           +- 'SUB'
-   159     -1    157     |           |  |           |  +- 'IDENT': le
-   157     -1     -1     |           |  |           |  +- 'IDENT': lb
-   155     -1     -1     |           |  |           +- 'IDENT': la
-   161    163    172     |           |  +- 'ELSEIF'
-   163    164     -1     |           |  |  +- '<'
-   164     -1    162     |           |  |     +- 'IDENT': lf
-   162     -1    171     |           |  |     +- 'IDENT': ld
-   171    165     -1     |           |  |     +- 'THEN'
-   165    167     -1     |           |  |        +- 'STATEMENTS'
-   167    169     -1     |           |  |           +- 'Assign ='
-   169    170    166     |           |  |              +- 'MUL'
-   170     -1    168     |           |  |              |  +- 'IDENT': le
-   168     -1     -1     |           |  |              |  +- 'IDENT': lb
-   166     -1     -1     |           |  |              +- 'IDENT': la
-   172    174    185     |           |  +- 'ELSEIF'
-   174    175     -1     |           |  |  +- '>'
-   175     -1    173     |           |  |     +- 'IDENT': lf
-   173     -1    182     |           |  |     +- 'IDENT': ld
-   182    176     -1     |           |  |     +- 'THEN'
-   176    178     -1     |           |  |        +- 'STATEMENTS'
-   178    180     -1     |           |  |           +- 'Assign ='
-   180    181    177     |           |  |              +- 'DIV'
-   181     -1    179     |           |  |              |  +- 'IDENT': le
-   179     -1     -1     |           |  |              |  +- 'IDENT': lb
-   177     -1     -1     |           |  |              +- 'IDENT': la
-   185    183    186     |           |  +- 'ELSE'
-   183    184     -1     |           |  |  +- 'STATEMENTS'
-   184     -1     -1     |           |  |     +- 'EXIT'
-   186     -1     -1     |           |  +- 'FI'
-   187    188    202     |           +- 'FOR'
-   188    189    190     |           |  +- 'IDENT': lf
-   189     -1     -1     |           |  |  +- 'NUMBER'$0000
-   190    191    193     |           |  +- 'TO'
-   191     -1     -1     |           |  |  +- 'NUMBER'$000E
-   193    192    194     |           |  +- 'STEP'
-   192     -1     -1     |           |  |  +- 'NUMBER'$0002
-   194    196     -1     |           |  +- 'DO'
-   196    198    195     |           |     +- 'STATEMENTS'
-   198    200     -1     |           |     |  +- 'Assign ='
-   200    201    197     |           |     |     +- 'RSH'
-   201     -1    199     |           |     |     |  +- 'IDENT': ld
-   199     -1     -1     |           |     |     |  +- 'IDENT': lf
-   197     -1     -1     |           |     |     +- 'IDENT': la
-   195     -1     -1     |           |     +- 'OD'
-   202    204    214     |           +- 'WHILE'
-   204    205    212     |           |  +- '<'
-   205     -1    203     |           |  |  +- 'IDENT': ld
-   203     -1     -1     |           |  |  +- 'IDENT': lc
-   212    206     -1     |           |  +- 'DO'
-   206    208    213     |           |     +- 'STATEMENTS'
-   208    210     -1     |           |     |  +- 'Assign ='
-   210    211    207     |           |     |     +- 'LSH'
-   211     -1    209     |           |     |     |  +- 'IDENT': ld
-   209     -1     -1     |           |     |     |  +- 'IDENT': lf
-   207     -1     -1     |           |     |     +- 'IDENT': la
-   213     -1     -1     |           |     +- 'OD'
-   214    215    225     |           +- 'DO'
-   215    217    224     |           |  +- 'STATEMENTS'
-   217    221    223     |           |  |  +- 'Assign ='
-   221    222    216     |           |  |  |  +- 'SUB'
-   222     -1    219     |           |  |  |  |  +- 'IDENT': lf
-   219    220     -1     |           |  |  |  |  +- 'MUL'
-   220     -1    218     |           |  |  |  |     +- 'IDENT': lc
-   218     -1     -1     |           |  |  |  |     +- 'IDENT': lb
-   216     -1     -1     |           |  |  |  +- 'IDENT': la
-   223     -1     -1     |           |  |  +- 'EXIT'
-   224     -1     -1     |           |  +- 'OD'
-   225     -1    226     |           +- 'BREAK'
-   226     -1    227     |           +- 'RTI'
-   227     -1    228     |           +- 'EXIT'
-   228     -1    229     |           +- 'RETURN'
-   229    231    234     |           +- 'RETURN'
-   231    232     -1     |           |  +- 'SUB'
-   232     -1    230     |           |     +- 'IDENT': lb
-   230     -1     -1     |           |     +- 'IDENT': la
-   234    236    239     |           +- 'Assign ='
-   236    237    233     |           |  +- 'ADD'
-   237     -1    235     |           |  |  +- 'IDENT': y
-   235     -1     -1     |           |  |  +- 'IDENT': x
-   233     -1     -1     |           |  +- 'IDENT': Avar
-   239    241    244     |           +- '=SUB'
+    68     -1     69     |           |  +- 'OPCODE' STY ($84) ZERO PAGE First <STY  First>   SECTION:Code
+    69     -1     70     |           |  +- 'OPCODE' STY ($94) PAGE ZERO,X First,.X <STY  First,.X>   SECTION:Code
+    70     71     72     |           |  +- 'LABEL' 'Here'
+    71     -1     -1     |           |  |  +- 'OPCODE' STY ($8C) ABSOLUTE Second +$0200 <:Here  STY  Second+512>   SECTION:Code (Parent:LABEL
+    72     -1     73     |           |  +- 'OPCODE' STX ($86) ZERO PAGE First <STX  First>   SECTION:Code
+    73     -1     74     |           |  +- 'OPCODE' STX ($96) PAGE ZERO,Y First,.Y <STX  First,.Y>   SECTION:Code
+    74     75     76     |           |  +- 'LABEL' 'We'
+    75     -1     -1     |           |  |  +- 'OPCODE' STX ($8E) ABSOLUTE Second +$0200 <:We  STX  Second+512>   SECTION:Code (Parent:LABEL
+    76     -1     77     |           |  +- 'OPCODE' JSR ($20) Value Type:SYMBOL <JSR >   SECTION:Code
+    77     78     79     |           |  +- 'LABEL' 'Are'
+    78     -1     -1     |           |  |  +- 'OPCODE' JSR ($20) ABSOLUTE Second +$0200 <:Are  JSR  Second+512>   SECTION:Code (Parent:LABEL
+    79     -1     80     |           |  +- 'OPCODE' JMP ($4C) Value Type:SYMBOL <JMP >   SECTION:Code
+    80     -1     81     |           |  +- 'OPCODE' JMP ($4C) ABSOLUTE Second +$0200 <JMP  Second+512>   SECTION:Code
+    81     -1     82     |           |  +- 'OPCODE' JMP ($6C) INDIRECT(First) <JMP  (First)>   SECTION:Code
+    82     -1     83     |           |  +- 'OPCODE' JMP ($6C) INDIRECT( Second+512) <JMP  (Second)>   SECTION:Code
+    83     84     85     |           |  +- 'LABEL' 'Go'
+    84     -1     -1     |           |  |  +- 'OPCODE' DEC ($C6) ZERO PAGE First <:Go  DEC  First>   SECTION:Code (Parent:LABEL
+    85     -1     86     |           |  +- 'OPCODE' DEC ($D6) PAGE ZERO,X First,.X <DEC  First,.X>   SECTION:Code
+    86     87     88     |           |  +- 'LABEL' 'Again'
+    87     -1     -1     |           |  |  +- 'OPCODE' DEC ($CE) ABSOLUTE Second +$0200 <:Again  DEC  Second+512>   SECTION:Code (Parent:LABEL
+    88     -1     89     |           |  +- 'OPCODE' DEC ($DE) ABSOLUTE,X Second + $0200,X <DEC  Second+512,.X>   SECTION:Code
+    89     -1     90     |           |  +- 'OPCODE' INC ($E6) ZERO PAGE First <INC  First>   SECTION:Code
+    90     -1     91     |           |  +- 'OPCODE' INC ($F6) PAGE ZERO,X First,.X <INC  First,.X>   SECTION:Code
+    91     -1     92     |           |  +- 'OPCODE' INC ($EE) ABSOLUTE Second +$0200 <INC  Second+512>   SECTION:Code
+    92     -1     93     |           |  +- 'OPCODE' INC ($FE) ABSOLUTE,X Second + $0200,X <INC  Second+512,.X>   SECTION:Code
+    93     -1     94     |           |  +- 'OPCODE' CPY ($C0) IMMEDIATE #'J'  #$4A <CPY #$4A>   SECTION:Code
+    94     -1     95     |           |  +- 'OPCODE' CPY ($C4) ZERO PAGE First <CPY  First>   SECTION:Code
+    95     -1     96     |           |  +- 'OPCODE' CPY ($CC) ABSOLUTE Second +$0200 <CPY  Second+512>   SECTION:Code
+    96     -1     97     |           |  +- 'OPCODE' CPX ($E0) IMMEDIATE #'k'  #$6B <CPX #$6B>   SECTION:Code
+    97     -1     98     |           |  +- 'OPCODE' CPX ($E4) ZERO PAGE First <CPX  First>   SECTION:Code
+    98     -1     99     |           |  +- 'OPCODE' CPX ($EC) ABSOLUTE Second +$0200 <CPX  Second+512>   SECTION:Code
+    99     -1    100     |           |  +- 'OPCODE' BIT ($24) ZERO PAGE First <BIT  First>   SECTION:Code
+   100     -1    101     |           |  +- 'OPCODE' BIT ($2C) ABSOLUTE Second +$0200 <BIT  Second+512>   SECTION:Code
+   101     -1    102     |           |  +- 'OPCODE' ASL ($0A) ACCUMULATOR <ASL  .A>   SECTION:Code
+   102     -1    103     |           |  +- 'OPCODE' LSR ($4A) ACCUMULATOR <LSR  .A>   SECTION:Code
+   103     -1    104     |           |  +- 'OPCODE' ROR ($6A) ACCUMULATOR <ROR  .A>   SECTION:Code
+   104     -1    105     |           |  +- 'OPCODE' ROL ($2A) ACCUMULATOR <ROL  .A>   SECTION:Code
+   105     -1    106     |           |  +- 'OPCODE' ASL ($06) ZERO PAGE First <ASL  First>   SECTION:Code
+   106     -1    107     |           |  +- 'OPCODE' ASL ($16) PAGE ZERO,X First,.X <ASL  First,.X>   SECTION:Code
+   107     -1    108     |           |  +- 'OPCODE' ASL ($0E) ABSOLUTE Second +$0200 <ASL  Second+512>   SECTION:Code
+   108     -1    109     |           |  +- 'OPCODE' ASL ($1E) ABSOLUTE,X Second + $0200,X <ASL  Second+512,.X>   SECTION:Code
+   109     -1    110     |           |  +- 'OPCODE' BRK ($00) IMPLIED <BRK >   SECTION:Code
+   110     -1    111     |           |  +- 'OPCODE' CLC ($18) IMPLIED <CLC >   SECTION:Code
+   111     -1    112     |           |  +- 'OPCODE' CLD ($D8) IMPLIED <CLD >   SECTION:Code
+   112     -1    113     |           |  +- 'OPCODE' CLI ($58) IMPLIED <CLI >   SECTION:Code
+   113     -1    114     |           |  +- 'OPCODE' CLV ($B8) IMPLIED <CLV >   SECTION:Code
+   114     -1    115     |           |  +- 'OPCODE' DEX ($CA) IMPLIED <DEX >   SECTION:Code
+   115     -1    116     |           |  +- 'OPCODE' DEY ($88) IMPLIED <DEY >   SECTION:Code
+   116     -1    117     |           |  +- 'OPCODE' INX ($E8) IMPLIED <INX >   SECTION:Code
+   117     -1    118     |           |  +- 'OPCODE' INY ($C8) IMPLIED <INY >   SECTION:Code
+   118     -1    119     |           |  +- 'OPCODE' NOP ($EA) IMPLIED <NOP >   SECTION:Code
+   119     -1    120     |           |  +- 'OPCODE' PHA ($48) IMPLIED <PHA >   SECTION:Code
+   120     -1    121     |           |  +- 'OPCODE' PLA ($68) IMPLIED <PLA >   SECTION:Code
+   121     -1    122     |           |  +- 'OPCODE' PHP ($08) IMPLIED <PHP >   SECTION:Code
+   122     -1    123     |           |  +- 'OPCODE' PLP ($28) IMPLIED <PLP >   SECTION:Code
+   123     -1    124     |           |  +- 'OPCODE' RTI ($40) IMPLIED <RTI >   SECTION:Code
+   124     -1    125     |           |  +- 'OPCODE' RTS ($60) IMPLIED <RTS >   SECTION:Code
+   125     -1    126     |           |  +- 'OPCODE' SEC ($38) IMPLIED <SEC >   SECTION:Code
+   126     -1    127     |           |  +- 'OPCODE' SED ($F8) IMPLIED <SED >   SECTION:Code
+   127     -1    128     |           |  +- 'OPCODE' SEI ($78) IMPLIED <SEI >   SECTION:Code
+   128     -1    129     |           |  +- 'OPCODE' TAX ($AA) IMPLIED <TAX >   SECTION:Code
+   129     -1    130     |           |  +- 'OPCODE' TAY ($A8) IMPLIED <TAY >   SECTION:Code
+   130     -1    131     |           |  +- 'OPCODE' TXA ($8A) IMPLIED <TXA >   SECTION:Code
+   131     -1    132     |           |  +- 'OPCODE' TYA ($98) IMPLIED <TYA >   SECTION:Code
+   132     -1    133     |           |  +- 'OPCODE' TXS ($9A) IMPLIED <TXS >   SECTION:Code
+   133     -1    134     |           |  +- 'OPCODE' TSX ($BA) IMPLIED <TSX >   SECTION:Code
+   134     -1    135     |           |  +- 'OPCODE' LDA ($A9) IMMEDIATE #'J'  #$4A <LDA #$4A>   SECTION:Code
+   135     -1    136     |           |  +- 'OPCODE' LDA ($B1) INDIRECT INDEXED(First),.Y <LDA  (First),.Y>   SECTION:Code
+   136     -1    137     |           |  +- 'OPCODE' LDA ($A9) IMMEDIATE #$CD <LDA #$CD>   SECTION:Code
+   137     -1    138     |           |  +- 'OPCODE' LDA ($A9) IMMEDIATE #$AB <LDA #$AB>   SECTION:Code
+   138     -1    139     |           |  +- 'OPCODE' LDA ($A5) ZERO PAGE First <LDA  First>   SECTION:Code
+   139     -1    140     |           |  +- 'OPCODE' LDA ($B5) PAGE ZERO,X First,.X <LDA  First,.X>   SECTION:Code
+   140     -1    141     |           |  +- 'OPCODE' LDA ($AD) ABSOLUTE Second +$0200 <LDA  Second+512>   SECTION:Code
+   141     -1    142     |           |  +- 'OPCODE' LDA ($BD) ABSOLUTE,X Second + $0200,X <LDA  Second+512,.X>   SECTION:Code
+   142     -1    143     |           |  +- 'OPCODE' LDA ($B9) ABSOLUTE,Y Second + $0200,Y <LDA  Second+512,.Y>   SECTION:Code
+   143     -1    144     |           |  +- 'OPCODE' LDA ($A1) INDEXED INDIRECT(First,.X) <LDA  (First,.X)>   SECTION:Code
+   144     -1    145     |           |  +- 'OPCODE' LDA ($A5) ZERO PAGE First + 2 <LDA  First + $02>   SECTION:Code
+   145     -1    146     |           |  +- 'OPCODE' LDX ($A2) IMMEDIATE #'E'  #$45 <LDX #$45>   SECTION:Code
+   146     -1    147     |           |  +- 'OPCODE' LDX ($A6) ZERO PAGE First <LDX  First>   SECTION:Code
+   147     -1    148     |           |  +- 'OPCODE' LDX ($B6) PAGE ZERO,Y First,.Y <LDX  First,.Y>   SECTION:Code
+   148     -1    149     |           |  +- 'OPCODE' LDX ($AE) ABSOLUTE Second +$0200 <LDX  Second+512>   SECTION:Code
+   149     -1    150     |           |  +- 'OPCODE' LDX ($BE) ABSOLUTE,Y Second + $0200,Y <LDX  Second+512,.Y>   SECTION:Code
+   150     -1    151     |           |  +- 'OPCODE' LDY ($A0) IMMEDIATE #'a'  #$61 <LDY #$61>   SECTION:Code
+   151     -1    152     |           |  +- 'OPCODE' LDY ($A4) ZERO PAGE First <LDY  First>   SECTION:Code
+   152     -1    153     |           |  +- 'OPCODE' LDY ($B4) PAGE ZERO,X First,.X <LDY  First,.X>   SECTION:Code
+   153     -1    154     |           |  +- 'OPCODE' LDY ($AC) ABSOLUTE Second +$0200 <LDY  Second+512>   SECTION:Code
+   154     -1     -1     |           |  +- 'OPCODE' LDY ($BC) ABSOLUTE,X Second + $0200,X <LDY  Second+512,.X>   SECTION:Code
+   155    157    192     |           +- 'IF'
+   157    158    166     |           |  +- 'EQU-TO'
+   158     -1    156     |           |  |  +- 'IDENT': lb
+   156     -1    165     |           |  |  +- 'IDENT': la
+   165    159     -1     |           |  |  +- 'THEN'
+   159    161     -1     |           |  |     +- 'STATEMENTS'
+   161    163     -1     |           |  |        +- '=ADD'
+   163    164    160     |           |  |           +- 'SUB'
+   164     -1    162     |           |  |           |  +- 'IDENT': le
+   162     -1     -1     |           |  |           |  +- 'IDENT': lb
+   160     -1     -1     |           |  |           +- 'IDENT': la
+   166    168    177     |           |  +- 'ELSEIF'
+   168    169     -1     |           |  |  +- '<'
+   169     -1    167     |           |  |     +- 'IDENT': lf
+   167     -1    176     |           |  |     +- 'IDENT': ld
+   176    170     -1     |           |  |     +- 'THEN'
+   170    172     -1     |           |  |        +- 'STATEMENTS'
+   172    174     -1     |           |  |           +- 'Assign ='
+   174    175    171     |           |  |              +- 'MUL'
+   175     -1    173     |           |  |              |  +- 'IDENT': le
+   173     -1     -1     |           |  |              |  +- 'IDENT': lb
+   171     -1     -1     |           |  |              +- 'IDENT': la
+   177    179    190     |           |  +- 'ELSEIF'
+   179    180     -1     |           |  |  +- '>'
+   180     -1    178     |           |  |     +- 'IDENT': lf
+   178     -1    187     |           |  |     +- 'IDENT': ld
+   187    181     -1     |           |  |     +- 'THEN'
+   181    183     -1     |           |  |        +- 'STATEMENTS'
+   183    185     -1     |           |  |           +- 'Assign ='
+   185    186    182     |           |  |              +- 'DIV'
+   186     -1    184     |           |  |              |  +- 'IDENT': le
+   184     -1     -1     |           |  |              |  +- 'IDENT': lb
+   182     -1     -1     |           |  |              +- 'IDENT': la
+   190    188    191     |           |  +- 'ELSE'
+   188    189     -1     |           |  |  +- 'STATEMENTS'
+   189     -1     -1     |           |  |     +- 'EXIT'
+   191     -1     -1     |           |  +- 'FI'
+   192    193    207     |           +- 'FOR'
+   193    194    195     |           |  +- 'IDENT': lf
+   194     -1     -1     |           |  |  +- 'NUMBER'$0000
+   195    196    198     |           |  +- 'TO'
+   196     -1     -1     |           |  |  +- 'NUMBER'$000E
+   198    197    199     |           |  +- 'STEP'
+   197     -1     -1     |           |  |  +- 'NUMBER'$0002
+   199    201     -1     |           |  +- 'DO'
+   201    203    200     |           |     +- 'STATEMENTS'
+   203    205     -1     |           |     |  +- 'Assign ='
+   205    206    202     |           |     |     +- 'RSH'
+   206     -1    204     |           |     |     |  +- 'IDENT': ld
+   204     -1     -1     |           |     |     |  +- 'IDENT': lf
+   202     -1     -1     |           |     |     +- 'IDENT': la
+   200     -1     -1     |           |     +- 'OD'
+   207    209    219     |           +- 'WHILE'
+   209    210    217     |           |  +- '<'
+   210     -1    208     |           |  |  +- 'IDENT': ld
+   208     -1     -1     |           |  |  +- 'IDENT': lc
+   217    211     -1     |           |  +- 'DO'
+   211    213    218     |           |     +- 'STATEMENTS'
+   213    215     -1     |           |     |  +- 'Assign ='
+   215    216    212     |           |     |     +- 'LSH'
+   216     -1    214     |           |     |     |  +- 'IDENT': ld
+   214     -1     -1     |           |     |     |  +- 'IDENT': lf
+   212     -1     -1     |           |     |     +- 'IDENT': la
+   218     -1     -1     |           |     +- 'OD'
+   219    220    230     |           +- 'DO'
+   220    222    229     |           |  +- 'STATEMENTS'
+   222    226    228     |           |  |  +- 'Assign ='
+   226    227    221     |           |  |  |  +- 'SUB'
+   227     -1    224     |           |  |  |  |  +- 'IDENT': lf
+   224    225     -1     |           |  |  |  |  +- 'MUL'
+   225     -1    223     |           |  |  |  |     +- 'IDENT': lc
+   223     -1     -1     |           |  |  |  |     +- 'IDENT': lb
+   221     -1     -1     |           |  |  |  +- 'IDENT': la
+   228     -1     -1     |           |  |  +- 'EXIT'
+   229     -1     -1     |           |  +- 'OD'
+   230     -1    231     |           +- 'BREAK'
+   231     -1    232     |           +- 'RTI'
+   232     -1    233     |           +- 'EXIT'
+   233     -1    234     |           +- 'RETURN'
+   234    236    239     |           +- 'RETURN'
+   236    237     -1     |           |  +- 'SUB'
+   237     -1    235     |           |     +- 'IDENT': lb
+   235     -1     -1     |           |     +- 'IDENT': la
+   239    241    244     |           +- 'Assign ='
    241    242    238     |           |  +- 'ADD'
    242     -1    240     |           |  |  +- 'IDENT': y
    240     -1     -1     |           |  |  +- 'IDENT': x
    238     -1     -1     |           |  +- 'IDENT': Avar
-   244    246    249     |           +- '=AND'
+   244    246    249     |           +- '=SUB'
    246    247    243     |           |  +- 'ADD'
    247     -1    245     |           |  |  +- 'IDENT': y
    245     -1     -1     |           |  |  +- 'IDENT': x
    243     -1     -1     |           |  +- 'IDENT': Avar
-   249    251    254     |           +- '=OR'
+   249    251    254     |           +- '=AND'
    251    252    248     |           |  +- 'ADD'
    252     -1    250     |           |  |  +- 'IDENT': y
    250     -1     -1     |           |  |  +- 'IDENT': x
    248     -1     -1     |           |  +- 'IDENT': Avar
-   254    256    259     |           +- '=LSH'
+   254    256    259     |           +- '=OR'
    256    257    253     |           |  +- 'ADD'
    257     -1    255     |           |  |  +- 'IDENT': y
    255     -1     -1     |           |  |  +- 'IDENT': x
    253     -1     -1     |           |  +- 'IDENT': Avar
-   259    261    264     |           +- '=XOR'
+   259    261    264     |           +- '=LSH'
    261    262    258     |           |  +- 'ADD'
    262     -1    260     |           |  |  +- 'IDENT': y
    260     -1     -1     |           |  |  +- 'IDENT': x
    258     -1     -1     |           |  +- 'IDENT': Avar
-   264    266    268     |           +- '=MOD'
+   264    266    269     |           +- '=XOR'
    266    267    263     |           |  +- 'ADD'
    267     -1    265     |           |  |  +- 'IDENT': y
    265     -1     -1     |           |  |  +- 'IDENT': x
    263     -1     -1     |           |  +- 'IDENT': Avar
-   268     -1     -1     |           +- 'RETURN'
-   269    270     -1     +- 'MODULE'
-   270    271    273        +- 'CHAR'
-   271     -1    272        |  +- 'IDENT': xyx
-   272     -1     -1        |  +- 'IDENT': yxy
-   273    274     -1        +- 'CARD'
-   274     -1    275           +- 'IDENT': one
-   275     -1    276           +- 'IDENT': two
-   276     -1     -1           +- 'IDENT': three
+   269    271    273     |           +- '=MOD'
+   271    272    268     |           |  +- 'ADD'
+   272     -1    270     |           |  |  +- 'IDENT': y
+   270     -1     -1     |           |  |  +- 'IDENT': x
+   268     -1     -1     |           |  +- 'IDENT': Avar
+   273     -1     -1     |           +- 'RETURN'
+   274    275     -1     +- 'MODULE'
+   275    276    278        +- 'CHAR'
+   276     -1    277        |  +- 'IDENT': xyx
+   277     -1     -1        |  +- 'IDENT': yxy
+   278    279     -1        +- 'CARD'
+   279     -1    280           +- 'IDENT': one
+   280     -1    281           +- 'IDENT': two
+   281     -1     -1           +- 'IDENT': three
 EMIT:IDENT:ID=5:Avar
 EMIT:IDENT:ID=6:x
 EMIT:IDENT:ID=7:y
@@ -300,39 +305,36 @@ EMIT:IDENT:ID=20:CrudOne
 EMIT:INT:ID=21
 EMIT:IDENT:ID=22:CrudTwo
 EMIT:CHAR:ID=23
-EMIT:IDENT:ID=153:lb
-EMIT:IDENT:ID=151:la
-EMIT:IDENT:ID=159:le
-EMIT:IDENT:ID=157:lb
-EMIT:IDENT:ID=155:la
-EMIT:IDENT:ID=164:lf
-EMIT:IDENT:ID=162:ld
-EMIT:IDENT:ID=170:le
-EMIT:IDENT:ID=168:lb
-EMIT:IDENT:ID=166:la
-EMIT:IDENT:ID=175:lf
-EMIT:IDENT:ID=173:ld
-EMIT:IDENT:ID=181:le
-EMIT:IDENT:ID=179:lb
-EMIT:IDENT:ID=177:la
-EMIT:IDENT:ID=188:lf
-EMIT:IDENT:ID=201:ld
-EMIT:IDENT:ID=199:lf
-EMIT:IDENT:ID=197:la
-EMIT:IDENT:ID=205:ld
-EMIT:IDENT:ID=203:lc
-EMIT:IDENT:ID=211:ld
-EMIT:IDENT:ID=209:lf
-EMIT:IDENT:ID=207:la
-EMIT:IDENT:ID=222:lf
-EMIT:IDENT:ID=220:lc
-EMIT:IDENT:ID=218:lb
-EMIT:IDENT:ID=216:la
-EMIT:IDENT:ID=232:lb
-EMIT:IDENT:ID=230:la
-EMIT:IDENT:ID=237:y
-EMIT:IDENT:ID=235:x
-EMIT:IDENT:ID=233:Avar
+EMIT:IDENT:ID=158:lb
+EMIT:IDENT:ID=156:la
+EMIT:IDENT:ID=164:le
+EMIT:IDENT:ID=162:lb
+EMIT:IDENT:ID=160:la
+EMIT:IDENT:ID=169:lf
+EMIT:IDENT:ID=167:ld
+EMIT:IDENT:ID=175:le
+EMIT:IDENT:ID=173:lb
+EMIT:IDENT:ID=171:la
+EMIT:IDENT:ID=180:lf
+EMIT:IDENT:ID=178:ld
+EMIT:IDENT:ID=186:le
+EMIT:IDENT:ID=184:lb
+EMIT:IDENT:ID=182:la
+EMIT:IDENT:ID=193:lf
+EMIT:IDENT:ID=206:ld
+EMIT:IDENT:ID=204:lf
+EMIT:IDENT:ID=202:la
+EMIT:IDENT:ID=210:ld
+EMIT:IDENT:ID=208:lc
+EMIT:IDENT:ID=216:ld
+EMIT:IDENT:ID=214:lf
+EMIT:IDENT:ID=212:la
+EMIT:IDENT:ID=227:lf
+EMIT:IDENT:ID=225:lc
+EMIT:IDENT:ID=223:lb
+EMIT:IDENT:ID=221:la
+EMIT:IDENT:ID=237:lb
+EMIT:IDENT:ID=235:la
 EMIT:IDENT:ID=242:y
 EMIT:IDENT:ID=240:x
 EMIT:IDENT:ID=238:Avar
@@ -351,13 +353,16 @@ EMIT:IDENT:ID=258:Avar
 EMIT:IDENT:ID=267:y
 EMIT:IDENT:ID=265:x
 EMIT:IDENT:ID=263:Avar
+EMIT:IDENT:ID=272:y
+EMIT:IDENT:ID=270:x
+EMIT:IDENT:ID=268:Avar
 EMIT:MODULE ID=3
-EMIT:IDENT:ID=271:xyx
-EMIT:IDENT:ID=272:yxy
-EMIT:CHAR:ID=270
-EMIT:IDENT:ID=274:one
-EMIT:IDENT:ID=275:two
-EMIT:IDENT:ID=276:three
-EMIT:CARD:ID=273
-EMIT:MODULE ID=269
+EMIT:IDENT:ID=276:xyx
+EMIT:IDENT:ID=277:yxy
+EMIT:CHAR:ID=275
+EMIT:IDENT:ID=279:one
+EMIT:IDENT:ID=280:two
+EMIT:IDENT:ID=281:three
+EMIT:CARD:ID=278
+EMIT:MODULE ID=274
 Lines Compiled:183

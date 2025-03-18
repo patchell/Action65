@@ -97,6 +97,26 @@ Token KeyWord::LookupToToken(const char* pName)
 	return pKW[i].m_TokenID;
 }
 
+const char* KeyWord::LookupToString(Token T)
+{
+	int i = 0;
+	bool Loop = true;
+	const char* s = 0;
+
+	KeyWord* pKW = Act()->GetParser()->GetLexer()->GetKeyWords();
+	while (Loop)
+	{
+		if (T == pKW[i].m_TokenID)
+		{
+			s = pKW[i].m_Name;
+			Loop = false;
+		}
+		if (Token::ENDOFTOKENS == pKW[++i].m_TokenID)
+			Loop = false;
+	}
+	return s;
+}
+
 bool AdressModeLUT::ValidAddressingMode(AdrModeType AMT) const
 {
 	bool rV = false;

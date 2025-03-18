@@ -4526,8 +4526,8 @@ CAstNode* CParser::BaseCompConst()
 CAstNode* CParser::AsmStmt()
 {
 	//--------------------------------------------------
-	//	AsmStmt		-> Section Processor_1;
-	//	Processor	->PROCESSOR ProcessorType Section Processor
+	//	AsmStmt		-> AsmSet Processor_1;
+	//	Processor	-> 'PROCESSOR' ProcessorType AsmSet Processor
 	//				-> .
 	//				;
 	//--------------------------------------------------
@@ -4678,8 +4678,8 @@ CSection* CParser::AsmSectionName()
 CAstNode* CParser::Section()
 {
 	//--------------------------------------------------
-	//	Section		-> Iff Section_1;
-	//	Section_1	-> 'SECTION' SectionName Iff Section_1
+	//	Section		-> IffStmt Section_1;
+	//	Section_1	-> 'SECTION' SectionName IffStmt Section_1
 	//				-> .
 	//				;
 	//--------------------------------------------------
@@ -4860,6 +4860,100 @@ CSection::AddressSize CParser::SectionAddressSize()
 	}
 	return SectionAddressSize;
 }
+
+
+//------------------------------------------------
+// Assembler Statement
+//------------------------------------------------
+
+/*
+CAstNode* CParser::AsmStatements()
+{
+	//--------------------------------------------
+	//	AsmStatements	->IffStmt AsmStatements_1;
+	//	AsmStatements_1	-> 'LOCAL_LABEL' IffStmt AsmStatements_1
+	//					-> 'GLOBAL_LABEL' IffStmt AsmStatements_1
+	//					-> .
+	//					;
+	//--------------------------------------------
+	bool Loop = true;
+	CAstNode* pNext = 0;
+	CAstNode* pChild = 0;
+	CAstNode* pLabel = 0;
+	CAstNode* pNewTopNode = 0;
+	CSymbol* pSym = 0;
+
+	pNext = IffStmt();
+	DebugTraverse(pNext, "pNext Enter", 25, 1000);
+	while (Loop)
+	{
+		switch (LookaHeadToken)
+		{
+		case Token::GLOBAL_LABEL:
+			pSym = GetLexer()->GetLexSymbol();
+			Expect(Token::GLOBAL_LABEL);
+			if (pSym->GetIdentType() == IdentType::NEW_SYMBOL)
+			{
+				pSym->SetToken(Token::LABEL);
+				pSym->SetIdentType(IdentType::GLOBAL);
+				pSym->SetAddress(GetCurrentSection()->GetLocationCounter());
+				pSym->SetResolved();
+				pSym->SetSection(GetCurrentSection());
+				pSym->BackFillUnresolved();
+				GetLexer()->GetSymTab()->AddSymbol(pSym);
+			}
+			else
+			{
+				//redefinition error
+			}
+			pChild = IffStmt();
+			pNewTopNode = UnHookTopNode(pChild);
+			pLabel = new CAct65Label;
+			pLabel->SetSymbol(pSym);
+			pLabel->SetSection(GetCurrentSection());
+			if (pNewTopNode != pChild)
+			{
+				pLabel->SetChild(pNext);
+				pNext = pLabel;
+				pNext = CAstNode::MakeNextList(pNext, pNewTopNode);
+			}
+			else
+			{
+				pChild = pLabel->SetChild(pChild);
+				pNext = CAstNode::MakeNextList(pNext, pChild);
+			}
+			break;
+		case Token::LOCAL_LABEL:
+			pSym = GetLexer()->GetLexSymbol();
+			Expect(Token::LOCAL_LABEL);
+			if (pSym->GetIdentType() == IdentType::NEW_SYMBOL)
+			{
+				pSym->SetToken(Token::LABEL);
+				pSym->SetIdentType(IdentType::LOCAL);
+				pSym->SetAddress(GetCurrentSection()->GetLocationCounter());
+				pSym->SetResolved();
+				pSym->SetSection(GetCurrentSection());
+				pSym->BackFillUnresolved();
+				GetLexer()->GetSymTab()->AddSymbol(pSym);
+			}
+			else
+			{
+			}
+			pChild = IffStmt();
+			pLabel = new CAct65Label;
+			pLabel->SetSymbol(pSym);
+			pLabel->SetSection(GetCurrentSection());
+			pChild = pLabel->SetChild(pChild);
+			pNext = CAstNode::MakeNextList(pNext, pChild);
+			break;
+		default:
+			Loop = false;
+			break;
+		}
+	}
+	return pNext;
+}
+*/
 
 //------------------------------------------------
 // IFF Statement
@@ -5727,72 +5821,76 @@ CAstNode* CParser::AsmProcName()
 CAstNode* CParser::Instruction()
 {
 	//--------------------------------------------------
-	//	Instruction->DefineLabel Instruction_1;
-	//	Instruction_1	-> 'ADC'  Operand	DefineLabel Instruction_1 //ALU Opcodes		
-	//					-> 'AND'  Operand	DefineLabel Instruction_1
-	//					-> 'EOR'  Operand	DefineLabel Instruction_1
-	//					-> 'ORA'  Operand	DefineLabel Instruction_1
-	//					-> 'CMP'  Operand	DefineLabel Instruction_1
-	//					-> 'SBC'  Operand	DefineLabel Instruction_1
-	//					-> 'LDA'  Operand	DefineLabel Instruction_1
-	//					-> 'STA'  Operand DefineLabel Instruction_1
-	//					-> 'ASL' Operand	DefineLabel Instruction_1			//shift addressing modes
-	//					-> 'ROL' Operand	DefineLabel Instruction_1
-	//					-> 'LSR' Operand	DefineLabel Instruction_1
-	//					-> 'ROR' Operand	DefineLabel Instruction_1
-	//					-> 'BCC' RelAddressingMode DefineLabel Instruction_1				// Branch Op Codes
-	//					-> 'BCS' RelAddressingMode DefineLabel Instruction_1
-	//					-> 'BEQ' RelAddressingMode DefineLabel Instruction_1
-	//					-> 'BMI' RelAddressingMode DefineLabel Instruction_1
-	//					-> 'BNE' RelAddressingMode DefineLabel Instruction_1
-	//					-> 'BPL' RelAddressingMode DefineLabel Instruction_1
-	//					-> 'BVC' RelAddressingMode DefineLabel Instruction_1
-	//					-> 'BVS' RelAddressingMode DefineLabel Instruction_1
-	//					-> 'BIT' Operand	DefineLabel Instruction_1			//BIT opcode
-	//					-> 'BRK'	DefineLabel Instruction_1				//Implied Addressing Mode 
-	//					-> 'CLC'	DefineLabel Instruction_1
-	//					-> 'CLD'	DefineLabel Instruction_1
-	//					-> 'CLI'	DefineLabel Instruction_1
-	//					-> 'CLV'	DefineLabel Instruction_1
-	//					-> 'DEX'	DefineLabel Instruction_1
-	//					-> 'DEY'	DefineLabel Instruction_1
-	//					-> 'INX'	DefineLabel Instruction_1
-	//					-> 'INY'	DefineLabel Instruction_1
-	//					-> 'NOP'	DefineLabel Instruction_1
-	//					-> 'PHA'	DefineLabel Instruction_1
-	//					-> 'PLA'	DefineLabel Instruction_1
-	//					-> 'PHP'	DefineLabel Instruction_1
-	//					-> 'PLP'	DefineLabel Instruction_1
-	//					-> 'RTI'	DefineLabel Instruction_1
-	//					-> 'RTS'	DefineLabel Instruction_1
-	//					-> 'SEC'	DefineLabel Instruction_1
-	//					-> 'SED'	DefineLabel Instruction_1
-	//					-> 'SEI'	DefineLabel Instruction_1
-	//					-> 'TAX'	DefineLabel Instruction_1
-	//					-> 'TAY'	DefineLabel Instruction_1
-	//					-> 'TXA'	DefineLabel Instruction_1
-	//					-> 'TYA'	DefineLabel Instruction_1
-	//					-> 'TXS'	DefineLabel Instruction_1
-	//					-> 'TSX'	DefineLabel Instruction_1
-	//					-> 'INC' Operand	DefineLabel Instruction_1			//Inc/Dec Addressing Modes
-	//					-> 'DEC' Operand	DefineLabel Instruction_1
-	//					-> 'JMP' Operand	DefineLabel Instruction_1		// Jump
-	//					-> 'JSR' Operand	DefineLabel Instruction_1			// Jump To Subroutine
-	//					-> 'CPX'  Operand	DefineLabel Instruction_1
-	//					-> 'CPY'  Operand		DefineLabel Instruction_1
-	//					-> 'LDX' Operand	DefineLabel Instruction_1
-	//					-> 'LDY' Operand	DefineLabel Instruction_1
-	//					-> 'STX' Operand	DefineLabel Instruction_1
-	//					-> 'STY' Operand	DefineLabel Instruction_1
+	//	Instruction	-> 'ADC'  Operand	Instruction //ALU Opcodes		
+	//					-> 'AND'  Operand	Instruction
+	//					-> 'EOR'  Operand	Instruction
+	//					-> 'ORA'  Operand	Instruction
+	//					-> 'CMP'  Operand	Instruction
+	//					-> 'SBC'  Operand	Instruction
+	//					-> 'LDA'  Operand	Instruction
+	//					-> 'STA'  Operand	Instruction
+	//					-> 'ASL' Operand	Instruction			//shift addressing modes
+	//					-> 'ROL' Operand	Instruction
+	//					-> 'LSR' Operand	Instruction
+	//					-> 'ROR' Operand	Instruction
+	//					-> 'BCC' RelAddressingMode Instruction				// Branch Op Codes
+	//					-> 'BCS' RelAddressingMode Instruction
+	//					-> 'BEQ' RelAddressingMode Instruction
+	//					-> 'BMI' RelAddressingMode Instruction
+	//					-> 'BNE' RelAddressingMode Instruction
+	//					-> 'BPL' RelAddressingMode Instruction
+	//					-> 'BVC' RelAddressingMode Instruction
+	//					-> 'BVS' RelAddressingMode Instruction
+	//					-> 'BIT' Operand	 Instruction			//BIT opcode
+	//					-> 'BRK'	Instruction				//Implied Addressing Mode 
+	//					-> 'CLC'	Instruction
+	//					-> 'CLD'	Instruction
+	//					-> 'CLI'	Instruction
+	//					-> 'CLV'	Instruction
+	//					-> 'DEX'	Instruction
+	//					-> 'DEY'	Instruction
+	//					-> 'INX'	Instruction
+	//					-> 'INY'	Instruction
+	//					-> 'NOP'	Instruction
+	//					-> 'PHA'	Instruction
+	//					-> 'PLA'	Instruction
+	//					-> 'PHP'	Instruction
+	//					-> 'PLP'	Instruction
+	//					-> 'RTI'	Instruction
+	//					-> 'RTS'	Instruction
+	//					-> 'SEC'	Instruction
+	//					-> 'SED'	Instruction
+	//					-> 'SEI'	Instruction
+	//					-> 'TAX'	Instruction
+	//					-> 'TAY'	Instruction
+	//					-> 'TXA'	Instruction
+	//					-> 'TYA'	Instruction
+	//					-> 'TXS'	Instruction
+	//					-> 'TSX'	Instruction
+	//					-> 'INC' Operand	Instruction			//Inc/Dec Addressing Modes
+	//					-> 'DEC' Operand	Instruction
+	//					-> 'JMP' Operand	Instruction		// Jump
+	//					-> 'JSR' Operand	Instruction			// Jump To Subroutine
+	//					-> 'CPX'  Operand	Instruction
+	//					-> 'CPY'  Operand	Instruction
+	//					-> 'LDX' Operand	Instruction
+	//					-> 'LDY' Operand	Instruction
+	//					-> 'STX' Operand	Instruction
+	//					-> 'STY' Operand	Instruction
 	//					-> .
 	//					;
 	//--------------------------------------------------
 	bool Loop = true;
 	CAstNode* pNext = 0, *pChild = 0;
 	Token OpCodeToken = Token::NONE;
+	bool Label = false;
+	CAstNode* pList = 0;
+	CAstNode* pLabel = 0;
+	CAct65Opcode* pOpCode = 0;
 
-	pNext = DefineLabel();
-	while (Loop)
+	pList = DefineLabel();
+	pNext = pList;
+	while(Loop)
 	{
 		OpCodeToken = LookaHeadToken;
 		switch(OpCodeToken)
@@ -5804,31 +5902,29 @@ CAstNode* CParser::Instruction()
 		case Token::LDA:
 		case Token::ORA:
 		case Token::SBC:
-			Expect(OpCodeToken);
-			pChild = Operand(OpCodeToken);
-			pNext = CAstNode::MakeNextList(pNext, pChild);
-			//---------------------------------------
-			pChild = DefineLabel();
-			pNext = CAstNode::MakeNextList(pNext, pChild);
-			break;
 		case Token::STA:	//store accumalator 
-			Expect(OpCodeToken);
-			pChild = Operand(OpCodeToken);
-			pNext = CAstNode::MakeNextList(pNext, pChild);
-			//-----------------------------------
-			pChild = DefineLabel();
-			pNext = CAstNode::MakeNextList(pNext, pChild);
-			break;
 		case Token::ASL:	//shift addressing modes
 		case Token::LSR:
 		case Token::ROL:
 		case Token::ROR:
+		case Token::BIT:
+		case Token::CPX:	//compare index registers
+		case Token::CPY:
+		case Token::DEC:	//inc/dec
+		case Token::INC:
+		case Token::JSR:	//jsr addressing modes
+		case Token::LDX:	//load index register
+		case Token::LDY:
+		case Token::STX:	//store index registers
+		case Token::STY:
 			Expect(OpCodeToken);
-			pChild = Operand(OpCodeToken);
-			pNext = CAstNode::MakeNextList(pNext, pChild);
-			//-----------------------------------
-			pChild = DefineLabel();
-			pNext = CAstNode::MakeNextList(pNext, pChild);
+			pLabel = pNext;
+			pChild = Operand(OpCodeToken, pLabel);
+			if (pLabel)
+				pChild = pLabel->SetChild(pChild);
+			pList = CAstNode::MakeNextList(pList, pChild);
+			//-----------------------------------------
+			pNext = DefineLabel();
 			break;
 		case Token::BCC:	//relative addressing
 		case Token::BCS:
@@ -5841,15 +5937,7 @@ CAstNode* CParser::Instruction()
 			Expect(OpCodeToken);
 			pChild = RelAddressingMode(OpCodeToken);
 			pNext = CAstNode::MakeNextList(pNext, pChild);
-			//-----------------------------------
-			pChild = DefineLabel();
-			pNext = CAstNode::MakeNextList(pNext, pChild);
-			break;
-		case Token::BIT:
-			Expect(OpCodeToken);
-			pChild = Operand(OpCodeToken);
-			pNext = CAstNode::MakeNextList(pNext, pChild);
-			//-----------------------------------
+			//-----------------------------------------
 			pChild = DefineLabel();
 			pNext = CAstNode::MakeNextList(pNext, pChild);
 			break;
@@ -5879,81 +5967,106 @@ CAstNode* CParser::Instruction()
 		case Token::TXS:
 		case Token::TSX:
 			Expect(OpCodeToken);
-			{
-				CAct65Opcode* pOpCode = 0;
-				pOpCode = new CAct65Opcode;
-				pOpCode->PrepareInstruction(OpCodeToken, AdrModeType::IMPLIED, 0);
-				pNext = CAstNode::MakeNextList(pNext, pOpCode);
-			}
-			//-----------------------------------
-			pChild = DefineLabel();
-			pNext = CAstNode::MakeNextList(pNext, pChild);
-			break;
-		case Token::CPX:	//compare index registers
-		case Token::CPY:
-			Expect(OpCodeToken);
-			pChild = Operand(OpCodeToken);
-			pNext = CAstNode::MakeNextList(pNext, pChild);
-			//-----------------------------------
-			pChild = DefineLabel();
-			pNext = CAstNode::MakeNextList(pNext, pChild);
-			break;
-		case Token::DEC:	//inc/dec
-		case Token::INC:
-			Expect(OpCodeToken);
-			pChild = Operand(OpCodeToken);
-			pNext = CAstNode::MakeNextList(pNext, pChild);
-			//-----------------------------------
-			pChild = DefineLabel();
-			pNext = CAstNode::MakeNextList(pNext, pChild);
+			pLabel = pNext;
+			pOpCode = new CAct65Opcode;
+			pOpCode->PrepareInstruction(
+				OpCodeToken,
+				AdrModeType::IMPLIED,
+				0,
+				pLabel?(CSymbol*)pLabel->GetSymbol():0
+			);
+			pChild = pOpCode;
+			if (pLabel)
+				pChild = pLabel->SetChild(pChild);
+			pList = CAstNode::MakeNextList(pList, pChild);
+			//-----------------------------------------
+			pNext = DefineLabel();
 			break;
 		case Token::JMP:	//jump addressing modes
 			Expect(OpCodeToken);
-			pChild = JumpAddressingModes(OpCodeToken);
-			pNext = CAstNode::MakeNextList(pNext, pChild);
-			//-----------------------------------
-			pChild = DefineLabel();
-			pNext = CAstNode::MakeNextList(pNext, pChild);
+			pLabel = pNext;
+			pChild = JumpAddressingModes(OpCodeToken, pLabel);
+			if (pLabel)
+				pChild = pLabel->SetChild(pChild);
+			pList = CAstNode::MakeNextList(pList, pChild);
+			//-----------------------------------------
+			pNext = DefineLabel();
 			break;
-		case Token::JSR:	//jsr addressing modes
-			Expect(OpCodeToken);
-			pChild = Operand(OpCodeToken);
-			GetCurrentSection()->AddInstruction((CAct65Opcode*)pChild);
-			pNext = CAstNode::MakeNextList(pNext, pChild);
-			//-----------------------------------
-			pChild = DefineLabel();
-			pNext = CAstNode::MakeNextList(pNext, pChild);
+		default:
+			Loop = false;
 			break;
-		case Token::LDX:	//load index register
-			Expect(OpCodeToken);
-			pChild = Operand(OpCodeToken);
+		}
+	}
+	return pList;
+}
+
+
+CAstNode* CParser::DefineLabel()
+{
+	//--------------------------------------------
+	//	DefineLabel	-> 'LOCAL_LABEL' DefineLabel
+	//					-> 'GLOBAL_LABEL' DefineLabel
+	//					-> .
+	//					;
+	//--------------------------------------------
+	bool Loop = true;
+	CAstNode* pNext = 0;
+	CAstNode* pChild = 0;
+	CAstNode* pLabel = 0;
+	CAstNode* pNewTopNode = 0;
+	CSymbol* pSym = 0;
+
+	while (Loop)
+	{
+		switch (LookaHeadToken)
+		{
+		case Token::GLOBAL_LABEL:
+			pSym = GetLexer()->GetLexSymbol();
+			Expect(Token::GLOBAL_LABEL);
+			if (pSym->GetIdentType() == IdentType::NEW_SYMBOL)
+			{
+				pSym->SetToken(Token::LABEL);
+				pSym->SetIdentType(IdentType::GLOBAL);
+				pSym->SetAddress(GetCurrentSection()->GetLocationCounter());
+				pSym->SetResolved();
+				pSym->SetSection(GetCurrentSection());
+				pSym->BackFillUnresolved();
+				GetLexer()->GetSymTab()->AddSymbol(pSym);
+			}
+			else
+			{
+				//redefinition error
+			}
+			//			DebugTraverse(pChild, "pChild Unhooked", 25, 1000);
+			pLabel = new CAct65Label;
+			pLabel->SetSymbol(pSym);
+			pLabel->SetSection(GetCurrentSection());
+			pChild = pLabel->SetChild(pChild);
 			pNext = CAstNode::MakeNextList(pNext, pChild);
-			//-----------------------------------
-			pChild = DefineLabel();
-			pNext = CAstNode::MakeNextList(pNext, pChild);
+//				DebugTraverse(pChild, "Not Unhooked", 25, 100);
 			break;
-		case Token::LDY:
-			Expect(OpCodeToken);
-			pChild = Operand(OpCodeToken);
-			pNext = CAstNode::MakeNextList(pNext, pChild);
-			//-----------------------------------
-			pChild = DefineLabel();
-			pNext = CAstNode::MakeNextList(pNext, pChild);
-			break;
-		case Token::STX:	//store index registers
-			Expect(OpCodeToken);
-			pChild = Operand(OpCodeToken);
-			pNext = CAstNode::MakeNextList(pNext, pChild);
-			//-----------------------------------
-			pChild = DefineLabel();
-			pNext = CAstNode::MakeNextList(pNext, pChild);
-			break;
-		case Token::STY:
-			Expect(OpCodeToken);
-			pChild = Operand(OpCodeToken);
-			pNext = CAstNode::MakeNextList(pNext, pChild);
-			//-----------------------------------
-			pChild = DefineLabel();
+		case Token::LOCAL_LABEL:
+			pSym = GetLexer()->GetLexSymbol();
+			Expect(Token::LOCAL_LABEL);
+			if (pSym->GetIdentType() == IdentType::NEW_SYMBOL)
+			{
+				pSym->SetToken(Token::LABEL);
+				pSym->SetIdentType(IdentType::LOCAL);
+				pSym->SetAddress(GetCurrentSection()->GetLocationCounter());
+				pSym->SetResolved();
+				pSym->SetSection(GetCurrentSection());
+				pSym->BackFillUnresolved();
+				GetLexer()->GetSymTab()->AddSymbol(pSym);
+			}
+			else
+			{
+				//redefinition error
+			}
+			pChild = IffStmt();
+			pLabel = new CAct65Label;
+			pLabel->SetSymbol(pSym);
+			pLabel->SetSection(GetCurrentSection());
+			pChild = pLabel->SetChild(pChild);
 			pNext = CAstNode::MakeNextList(pNext, pChild);
 			break;
 		default:
@@ -5964,78 +6077,8 @@ CAstNode* CParser::Instruction()
 	return pNext;
 }
 
-CAstNode* CParser::DefineLabel()
-{
-	//--------------------------------------------------
-	//	DefineLabel	-> LOCAL_LABEL 
-	//				-> GLOBAL_LABEL
-	//				-> .
-	//				;
-	//--------------------------------------------------
-	CSymbol* pSym;
-	CAstNode* pNext = 0;
-	CAct65Label* pLabel = 0;;
-	bool IsLocal = false;
-	int Address = 0;
 
-	switch (LookaHeadToken)
-	{
-	case Token::LOCAL_LABEL:
-		pSym = GetLexer()->GetLexSymbol();
-//		Address = GetCurrentSection()->GetLocationCounter();
-		if (pSym->GetIdentType() == IdentType::NEW_SYMBOL)
-		{
-			pSym->SetToken(Token::LABEL);
-			pSym->SetIdentType(IdentType::LOCAL);
-			pSym->SetAddress(Address);
-			pSym->SetResolved();
-			pSym->SetSection(GetCurrentSection());
-			pSym->BackFillUnresolved();
-			GetLexer()->GetSymTab()->AddSymbol(pSym);
-		}
-		else
-		{
-			fprintf(LogFile(),"Symbol Redefinition\n");
-			Act()->Exit(111);
-		}
-		Expect(Token::LOCAL_LABEL);
-		pLabel = new CAct65Label;
-		pLabel->CreateValue(pSym);
-		pLabel->SetLabelType(CAct65Label::LabelType::PRIVATE);
-//		pNext->SetL
-		pNext = CAstNode::MakeNextList(pNext,pLabel);
-		break;
-	case Token::GLOBAL_LABEL:
-		pSym = GetLexer()->GetLexSymbol();
-		//		Address = GetCurrentSection()->GetLocationCounter();
-		if (pSym->GetIdentType() == IdentType::NEW_SYMBOL)
-		{
-			pSym->SetToken(Token::LABEL);
-			pSym->SetIdentType(IdentType::GLOBAL);
-			pSym->SetAddress(Address);
-			pSym->SetResolved();
-			pSym->SetSection(GetCurrentSection());
-			pSym->BackFillUnresolved();
-			GetLexer()->GetSymTab()->AddSymbol(pSym);
-		}
-		else
-		{
-			fprintf(LogFile(),"Symbol Redefinition\n");
-			Act()->Exit(111);
-		}
-		Expect(Token::GLOBAL_LABEL);
-		pLabel = new CAct65Label;
-		pLabel->CreateValue(pSym);
-		pLabel->SetLabelType(CAct65Label::LabelType::GLOBAL);
-		pNext = CAstNode::MakeNextList(pNext, pLabel);
-		break;
-	default:
-		break;
-	}
-	return pNext;
-}
-
-CAstNode* CParser::Operand(Token OpCodeToken)
+CAstNode* CParser::Operand(Token OpCodeToken, CAstNode* pLabel)
 {
 	//--------------------------------------------------
 	//	Operand		->	Absolute Operand_1;
@@ -6052,18 +6095,18 @@ CAstNode* CParser::Operand(Token OpCodeToken)
 	{
 	case Token('#'):
 		Expect(Token('#'));
-		pChild = Immediate(OpCodeToken);
+		pChild = Immediate(OpCodeToken, pLabel);
 		break;
 	case Token('('):
 		Expect(Token('('));
-		pChild = Indirect(OpCodeToken);
+		pChild = Indirect(OpCodeToken, pLabel);
 		break;
 	case Token::AREG:
 		Expect(Token::AREG);
-		pChild = Accumulator(OpCodeToken);
+		pChild = Accumulator(OpCodeToken, pLabel);
 		break;
 	default:
-		pChild = Absolute(OpCodeToken);
+		pChild = Absolute(OpCodeToken, pLabel);
 		break;
 	}
 	return pChild;
@@ -6088,7 +6131,7 @@ CAstNode* CParser::RelAddressingMode(Token OpCodeToken)
 	return pN;
 }
 
-CAstNode* CParser::JumpAddressingModes(Token OpCodeToken)
+CAstNode* CParser::JumpAddressingModes(Token OpCodeToken, CAstNode* pLabel)
 {
 	//--------------------------------------------------
 	//	JumpAddressingModes	-> AsmConstant
@@ -6105,6 +6148,8 @@ CAstNode* CParser::JumpAddressingModes(Token OpCodeToken)
 		pAddress = AsmConstant();
 		Expect(Token(')'));
 		pNext = new CAct65Opcode;
+		if (pLabel)
+			pNext->SetLabelSymbol((CSymbol*)pLabel->GetSymbol());
 		pNext->PrepareInstruction(
 			OpCodeToken, 
 			AdrModeType::INDIRECT_ADR, 
@@ -6112,7 +6157,7 @@ CAstNode* CParser::JumpAddressingModes(Token OpCodeToken)
 		);
 		break;
 	default:
-		pNext = ((CAct65Opcode*)Absolute(OpCodeToken));
+		pNext = ((CAct65Opcode*)Absolute(OpCodeToken, pLabel));
 		break;
 	}
 	return pNext;
@@ -6334,7 +6379,7 @@ CValue* CParser::BaseAsmConstant( )
 // Addressing Modes
 //--------------------------------------------------
 
-CAstNode* CParser::Indirect(Token OpCodeToken)
+CAstNode* CParser::Indirect(Token OpCodeToken, CAstNode* pLabel)
 {
 	//--------------------------------------------------
 	//	Indirect	-> AsmConstant  Indirect_1;
@@ -6356,7 +6401,8 @@ CAstNode* CParser::Indirect(Token OpCodeToken)
 		pOpCode->PrepareInstruction(
 			OpCodeToken, 
 			AdrModeType::INDIRECT_INDEXED_Y_ADR, 
-			pAddress
+			pAddress,
+			pLabel ? (CSymbol*)pLabel->GetSymbol() : 0
 		);
 		Expect(Token(')'));
 		Expect(Token(','));
@@ -6367,7 +6413,8 @@ CAstNode* CParser::Indirect(Token OpCodeToken)
 		pOpCode->PrepareInstruction(
 			OpCodeToken,
 			AdrModeType::INDEXED_INDIRECT_X_ADR,
-			pAddress
+			pAddress,
+			pLabel ? (CSymbol*)pLabel->GetSymbol() : 0
 		);
 		Expect(Token(','));
 		Expect(Token::XREG);
@@ -6380,7 +6427,7 @@ CAstNode* CParser::Indirect(Token OpCodeToken)
 }
 
 
-CAstNode* CParser::Immediate(Token OpCodeToken)
+CAstNode* CParser::Immediate(Token OpCodeToken, CAstNode* pLabel)
 {
 	//---------------------------------------
 	//	Immediate	->AsmConstant;
@@ -6393,12 +6440,13 @@ CAstNode* CParser::Immediate(Token OpCodeToken)
 	pOpCode->PrepareInstruction(
 		OpCodeToken, 
 		AdrModeType::IMMEDIATE_ADR, 
-		pValue
+		pValue,
+		pLabel ? (CSymbol*)pLabel->GetSymbol() : 0
 	);
 	return pOpCode;
 }
 
-CAstNode* CParser::Absolute(Token OpCodeToken)
+CAstNode* CParser::Absolute(Token OpCodeToken, CAstNode* pLabel)
 {
 	//---------------------------------------
 	// Absolute:
@@ -6434,13 +6482,15 @@ CAstNode* CParser::Absolute(Token OpCodeToken)
 				pOpCode->PrepareInstruction(
 					OpCodeToken, 
 					AdrModeType::ZERO_PAGE_X_ADR, 
-					pOperandValue
+					pOperandValue,
+					pLabel ? (CSymbol*)pLabel->GetSymbol() : 0
 				);
 			else
 				pOpCode->PrepareInstruction(
 					OpCodeToken, 
 					AdrModeType::ABSOLUTE_X_ADR, 
-					pOperandValue
+					pOperandValue,
+					pLabel ? (CSymbol*)pLabel->GetSymbol() : 0
 				);
 			break;
 		case RegType::Y:
@@ -6448,12 +6498,15 @@ CAstNode* CParser::Absolute(Token OpCodeToken)
 				pOpCode->PrepareInstruction(
 					OpCodeToken, 
 					AdrModeType::ZERO_PAGE_Y_ADR, 
-					pOperandValue);
+					pOperandValue,
+					pLabel ? (CSymbol*)pLabel->GetSymbol() : 0
+				);
 			else
 				pOpCode->PrepareInstruction(
 					OpCodeToken, 
 					AdrModeType::ABSOLUTE_Y_ADR, 
-					pOperandValue
+					pOperandValue,
+					pLabel ? (CSymbol*)pLabel->GetSymbol() : 0
 				);
 			break;
 		default:
@@ -6474,16 +6527,26 @@ CAstNode* CParser::Absolute(Token OpCodeToken)
 			// Is it Absolute addressing
 			//------------------------------------
 			if (pOperandValue->IsPageZero())
-				pOpCode->PrepareInstruction(OpCodeToken, AdrModeType::ZERO_PAGE_ADR, pOperandValue);
+				pOpCode->PrepareInstruction(
+					OpCodeToken, 
+					AdrModeType::ZERO_PAGE_ADR, 
+					pOperandValue,
+					pLabel?(CSymbol*)pLabel->GetSymbol():0
+				);
 			else
-				pOpCode->PrepareInstruction(OpCodeToken, AdrModeType::ABSOLUTE_ADR, pOperandValue);
+				pOpCode->PrepareInstruction(
+					OpCodeToken, 
+					AdrModeType::ABSOLUTE_ADR, 
+					pOperandValue,
+					pLabel ? (CSymbol*)pLabel->GetSymbol() : 0
+				);
 		}
 		break;
 	}
 	return pOpCode;
 }
 
-CAstNode* CParser::Accumulator(Token OpCodeToken)
+CAstNode* CParser::Accumulator(Token OpCodeToken, CAstNode* pLabel)
 {
 	CAct65Opcode* pOpCode = 0;
 
@@ -6491,10 +6554,26 @@ CAstNode* CParser::Accumulator(Token OpCodeToken)
 	pOpCode->PrepareInstruction(
 		OpCodeToken,
 		AdrModeType::ACCUMULATOR,
-		nullptr
+		nullptr,
+		pLabel ? (CSymbol*)pLabel->GetSymbol() : 0
 	);
-
 	return pOpCode;
+}
+
+CAstNode* CParser::UnHookTopNode(CAstNode* pNodeList)
+{
+	CAstNode* pNewChainHead = 0;
+
+	if (pNodeList->GetNext())
+	{
+		pNewChainHead = pNodeList->GetNext();
+		pNodeList->SetNext(0);
+	}
+	else
+	{
+		pNewChainHead = pNodeList;
+	}
+	return pNewChainHead;
 }
 
 //-------------------------------------------
@@ -6512,16 +6591,16 @@ void CParser::DebugTraverse(
 {
 	FILE* pOut = LogFile();
 	bool* pbNextFlags = new bool[256];
-	char* s = new char[4096];
+	char* s = new char[8192];
 	int Indent = 0;
 	int Line = 0, Col = 0;
-	char* psTitle = new char[128];
+	char* psTitle = new char[256];
 
 	if (pN)
 	{
 		if (pSmiscLabel)
 		{
-			sprintf_s(psTitle, 128, "------- %s : %d - %s --------",
+			sprintf_s(psTitle, 256, "------- %s : %d - %s --------",
 				pSmiscLabel,
 				Misc,
 				pTitle
@@ -6529,7 +6608,7 @@ void CParser::DebugTraverse(
 		}
 		else
 		{
-			sprintf_s(psTitle, 128, "-------- %s --------",
+			sprintf_s(psTitle, 256, "-------- %s --------",
 				pTitle
 			);
 		}
@@ -6548,7 +6627,7 @@ void CParser::DebugTraverse(
 		);
 		if (pN->GetNext())
 			pbNextFlags[Indent] = true;
-		CAstTree::TraverseTree(pOut, pN, s, 4096, Indent, pbNextFlags, MaxRecursions, MaxLoops);
+		CAstTree::TraverseTree(pOut, pN, s, 8192, Indent, pbNextFlags, MaxRecursions, MaxLoops);
 	}
 	else
 	{
@@ -6556,6 +6635,7 @@ void CParser::DebugTraverse(
 	}
 	if (pTitle)
 		fprintf(pOut, "---- End ----\n");
+	fflush(pOut);
 	delete[]psTitle;
 	delete[]s;
 	delete[]pbNextFlags;

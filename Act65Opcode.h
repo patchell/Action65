@@ -56,10 +56,6 @@ public:
 	virtual void PrintNode(FILE* pOut, int Indent, bool* pbNextFlag);
 	virtual CValue* Emit(CValue* pVc, CValue* pVn);
 	virtual int Print(int Indent, char* s, int l, bool* pbNextFlag);
-	int PrintAbsolute(char* s, int StrLen);
-	int PrintZeroPage(char* s, int StrLen);
-	int PrintRelative(char* s, int StrLen);
-	int PrintIndirect(char* s, int StrLen);
 	virtual const char* GetNodeName() { return m_pNodeTyypeName; }
 	virtual void PrepareInstruction(
 		Token Tk, 
@@ -93,4 +89,5 @@ public:
 	KeyWord* GetKeyWord() { return m_pKeyWord; }
 	CSymbol* GetLabelSymbol() { return m_pLabel; }
 	void SetLabelSymbol(CSymbol* pSym) { m_pLabel = pSym; }
+	int ToString(char* s, int Size);
 };

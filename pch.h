@@ -396,6 +396,7 @@ struct KeyWord {
 	//------ Methods ------
 	int FindInc(AdrModeType AdrMode);
 	static Token LookupToToken(const char* pName);
+	static const char* LookupToString(Token T);
 };
 
 

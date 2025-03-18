@@ -66,6 +66,11 @@
 //	anyway.  I will eventually add the rest
 //	of the PL/65 statements, well, maybe
 //	most of them.
+//
+//	March 17. 2025
+//	Om tje assembler, changed the way
+//	LABELs are parsed, to fix a really
+//	to work with AST tree/
 //----------------------------------
 
 TERMINALS
@@ -843,7 +848,7 @@ BaseCompConst	-> 'NUMBER'
 //  Inline assembly code
 //----------------------------------------
 //----------------------------------------
-//	Statements
+//	Assembler Directives
 //----------------------------------------
 
 AsmStmt			-> AsmSet Processor_1;
@@ -855,12 +860,6 @@ ProcessorType	-> 'R6502'
 				-> 'WD65C816'
 				;
 
-//-----------------------------------------
-// Code
-//		These statements are what actually
-// do something that concerns the machine
-// code that is executed
-//-----------------------------------------
 
 //-----------------------------------------
 // SET
@@ -880,8 +879,8 @@ AsmSectionName	-> SECTION_NAME;
 // SECITON
 //-----------------------------------------
 
-Section		-> Iff Section_1;
-Section_1	-> 'SECTION' SectionName Iff Section_1
+Section		-> AsmStatements Section_1;
+Section_1	-> 'SECTION' SectionName AsmStatements Section_1
 				-> .
 				;
 SectionName		-> SectionDef SectionName_1;
@@ -889,14 +888,15 @@ SectionName_1	-> 'STRING' SectionDef
 				-> .
 				;
 			
-SectionDef		-> '[' SectionAtributes 
+SectionDef		-> '[' SectionAtributes
+				-> ']'
 				-> .
 				;
 
 SectionAtributes-> 'START' '=' AsmConstant SectionAtributes
 				-> 'SIZE' '=' AsmConstant SectionAtributes
 				-> 'MODE' '=' Modes SectionAtributes
-				-> 'ZEROPAGE' '=' TrueFalse SectionAtributes
+				-> 'ZEROPAGE' '=' AddressSize SectionAtributes
 				-> ']'
 				-> ',' SectionAtributes
 				;
@@ -905,10 +905,19 @@ Modes			-> 'READ_ONLY'
 				-> 'READ_WRITE'
 				;
 
-TrueFalse		-> 'TRUE'
+AddressSize		-> 'TRUE'
 				-> 'FALSE'
 				;
 
+//----------------------------------------
+// Code Statements
+//---------------------------------------
+
+AsmStatements	-> Iff AsmStatements_1;
+AsmStatements_1	-> 'LOCAL_LABEL' Iff AsmStatements_1
+				-> 'GLOBAL_LABEL' Iff AsmStatements_1
+				-> .
+				;
 //-------------------------------------
 // PL/65 Statements
 //-------------------------------------
@@ -926,7 +935,7 @@ IFFend		-> IFFthenpart IFFend_1;
 IFFend_1	-> 'FFI';
 
 IFFthenpart		-> IffRelOper IFFthenpart_1;
-IFFthenpart_1	-> 'THEN' DefineLabel
+IFFthenpart_1	-> 'THEN' AsmConstant
 				-> .
 				;
 
@@ -1054,176 +1063,86 @@ AsmProcName		-> IDENT;
 
 //--------------------------------------
 // Opcodes
-//	[<DefineLabel>]	<OP> <addressing mode>
 //--------------------------------------
-Instruction		-> DefineLabel Instruction_1;	
-Instruction_1	-> 'ADC'  AluAdrModes	DefineLabel Instruction_1 //ALU Opcodes		
-				-> 'AND'  AluAdrModes	DefineLabel Instruction_1
-				-> 'EOR'  AluAdrModes	DefineLabel Instruction_1	
-				-> 'ORA'  AluAdrModes	DefineLabel Instruction_1	
-				-> 'CMP'  AluAdrModes	DefineLabel Instruction_1
-				-> 'SBC'  AluAdrModes	DefineLabel Instruction_1	
-				-> 'LDA'  AluAdrModes	DefineLabel Instruction_1	
-				-> 'STA'  StaAddressingModes DefineLabel Instruction_1	
-				-> 'ASL' ShiftAddressingModes	DefineLabel Instruction_1			//shift addressing modes
-				-> 'ROL' ShiftAddressingModes	DefineLabel Instruction_1	
-				-> 'LSR' ShiftAddressingModes	DefineLabel Instruction_1 
-				-> 'ROR' ShiftAddressingModes	DefineLabel Instruction_1	 
-				-> 'BCC' RelAddressingMode DefineLabel Instruction_1				// Branch Op Codes
-				-> 'BCS' RelAddressingMode DefineLabel Instruction_1	 
-				-> 'BEQ' RelAddressingMode DefineLabel Instruction_1
-				-> 'BMI' RelAddressingMode DefineLabel Instruction_1
-				-> 'BNE' RelAddressingMode DefineLabel Instruction_1
-				-> 'BPL' RelAddressingMode DefineLabel Instruction_1
-				-> 'BVC' RelAddressingMode DefineLabel Instruction_1
-				-> 'BVS' RelAddressingMode DefineLabel Instruction_1
-				-> 'BIT' BitAddressModes	DefineLabel Instruction_1			//BIT opcode
-				-> 'BRK'	DefineLabel Instruction_1				//Implied Addressing Mode 
-				-> 'CLC'	DefineLabel Instruction_1	 
-				-> 'CLD'	DefineLabel Instruction_1	
-				-> 'CLI'	DefineLabel Instruction_1	
-				-> 'CLV'	DefineLabel Instruction_1	
-				-> 'DEX'	DefineLabel Instruction_1	
-				-> 'DEY'	DefineLabel Instruction_1	
-				-> 'INX'	DefineLabel Instruction_1	
-				-> 'INY'	DefineLabel Instruction_1	
-				-> 'NOP'	DefineLabel Instruction_1	
-				-> 'PHA'	DefineLabel Instruction_1	
-				-> 'PLA'	DefineLabel Instruction_1	
-				-> 'PHP'	DefineLabel Instruction_1	
-				-> 'PLP'	DefineLabel Instruction_1	
-				-> 'RTI'	DefineLabel Instruction_1	
-				-> 'RTS'	DefineLabel Instruction_1	
-				-> 'SEC'	DefineLabel Instruction_1	
-				-> 'SED'	DefineLabel Instruction_1	
-				-> 'SEI'	DefineLabel Instruction_1	
-				-> 'TAX'	DefineLabel Instruction_1	
-				-> 'TAY'	DefineLabel Instruction_1	
-				-> 'TXA'	DefineLabel Instruction_1	
-				-> 'TYA'	DefineLabel Instruction_1	
-				-> 'TXS'	DefineLabel Instruction_1	
-				-> 'TSX'	DefineLabel Instruction_1	
-				-> 'INC' IncAddressingMOdes	DefineLabel Instruction_1			//Inc/Dec Addressing Modes
-				-> 'DEC' IncAddressingMOdes	DefineLabel Instruction_1	
-				-> 'JMP' JumpAddressingModes	DefineLabel Instruction_1		// Jump
-				-> 'JSR' CallAddressingMode	DefineLabel Instruction_1			// Jump To Subroutine
-				-> 'CPX'  CPX_CPY_AddressingMode	DefineLabel Instruction_1	
-				-> 'CPY'  CPX_CPY_AddressingMode		DefineLabel Instruction_1
-				-> 'LDX' LdxAddressingMode	DefineLabel Instruction_1	
-				-> 'LDY' LdyAddressingMode	DefineLabel Instruction_1	
-				-> 'STX' StxAddressingMode	DefineLabel Instruction_1	
-				-> 'STY' StyAddressingMode	DefineLabel Instruction_1	
+Instruction		-> 'ADC'  Operand  //ALU Opcodes		
+				-> 'AND'  Operand 
+				-> 'EOR'  Operand 	
+				-> 'ORA'  Operand 	
+				-> 'CMP'  Operand 
+				-> 'SBC'  Operand 	
+				-> 'LDA'  Operand 	
+				-> 'STA'  Operand 	
+				-> 'ASL' Operand 			//shift addressing modes
+				-> 'ROL' Operand 	
+				-> 'LSR' Operand  
+				-> 'ROR' Operand 	 
+				-> 'BCC' RelAddressingMode 				// Branch Op Codes
+				-> 'BCS' RelAddressingMode 	 
+				-> 'BEQ' RelAddressingMode 
+				-> 'BMI' RelAddressingMode 
+				-> 'BNE' RelAddressingMode 
+				-> 'BPL' RelAddressingMode 
+				-> 'BVC' RelAddressingMode 
+				-> 'BVS' RelAddressingMode 
+				-> 'BIT' Operand 			//BIT opcode
+				-> 'BRK' 				//Implied Addressing Mode 
+				-> 'CLC' 	 
+				-> 'CLD' 	
+				-> 'CLI' 	
+				-> 'CLV' 	
+				-> 'DEX' 	
+				-> 'DEY' 	
+				-> 'INX' 	
+				-> 'INY' 	
+				-> 'NOP' 	
+				-> 'PHA' 	
+				-> 'PLA' 	
+				-> 'PHP' 	
+				-> 'PLP' 	
+				-> 'RTI' 	
+				-> 'RTS' 	
+				-> 'SEC' 	
+				-> 'SED' 	
+				-> 'SEI' 	
+				-> 'TAX' 	
+				-> 'TAY' 	
+				-> 'TXA' 	
+				-> 'TYA' 	
+				-> 'TXS' 	
+				-> 'TSX' 	
+				-> 'INC' Operand 			//Inc/Dec Addressing Modes
+				-> 'DEC' Operand 	
+				-> 'JMP' Operand 		// Jump
+				-> 'JSR' Operand 			// Jump To Subroutine
+				-> 'CPX'  Operand 	
+				-> 'CPY'  Operand	 
+				-> 'LDX' Operand 	
+				-> 'LDY' Operand 	
+				-> 'STX' Operand 	
+				-> 'STY' Operand 	
 				-> .
 				;
 
-//---------------------------------------------
-// Lables
-//---------------------------------------------
-DefineLabel	-> 'GLOBAL_LABEL'	//Global
-		-> 'LOCAL_LABEL'	// Local
-		-> .
-		;
 
-//-----------------------------------
-//ALU Addressing Mode
-//-----------------------------------
-
-AluAdrModes		-> Absolute AluAdrModes_1;		
-AluAdrModes_1	-> '#' Immediate
-				-> '(' Indirect
-				-> .
-				;
-
-//---------------------------------------------
-// STA addressing mode
-//---------------------------------------------
-StaAddressingModes		-> Absolute  StaAddressingModes_1;
-StaAddressingModes_1	-> '(' Indirect
-						-> .
-						;
-
-//-----------------------------------------
-// ASL LSR ROR and ROL addressing modes
-//-----------------------------------------
-
-ShiftAddressingModes	-> Absolute ShiftAddressingModes_1;
-ShiftAddressingModes_1	-> AREG
-						-> .
-						;
-
+//------------------------------------------
+// Operand (addressing modes)
+//------------------------------------------
+Operand		-> Absolute Operand_1;
+Operand_1	-> '#' Immediate
+			-> '(' Indirect
+			-> 'AREG'
+			-> .
+			;
 //------------------------------------------
 // Branch Instructions Addressing Mode
 //------------------------------------------
 RelAddressingMode	-> AsmConstant;
 
-//------------------------------------------
-// BIT Instructions Addressing Mode
-//------------------------------------------
-
-BitAddressModes	-> Absolute;
-
-//------------------------------------------
-// INC DEC Instructions Addressing Mode
-//------------------------------------------
-
-IncAddressingMOdes	-> Absolute;
-
-//------------------------------------------
-// JMP Instructions Addressing Mode
-//------------------------------------------
-
-JumpAddressingModes	-> AsmConstant JumpIndirect;
-JumpIndirect		-> '(' AsmConstant ')'
-					-> .
-					;
-//------------------------------------------
-// JSR Instructions Addressing Mode
-//------------------------------------------
-
-CallAddressingMode	-> Absolute;
-
-//------------------------------------------
-// LDX Instructions Addressing Mode
-//------------------------------------------
-
-LdxAddressingMode	-> Absolute LdxAddressingMode_1;
-LdxAddressingMode_1	-> '#' AsmConstant 
-					-> .
-					;
-//------------------------------------------
-// CPX & CPY Instructions Addressing Mode
-//------------------------------------------
-
-CPX_CPY_AddressingMode	-> Absolute CPX_CPY_AddressingMode_1;
-CPX_CPY_AddressingMode_1-> '#' AsmConstant
-						->	.
-						;
-
-//------------------------------------------
-// STX Instructions Addressing Mode
-//------------------------------------------
-
-StxAddressingMode	-> Absolute;
-
-//------------------------------------------
-// LDY Instructions Addressing Mode
-//------------------------------------------
-
-LdyAddressingMode	-> Absolute LdyAddressingMode_1;
-LdyAddressingMode_1	-> '#' AsmConstant
-					;
-
-//------------------------------------------
-// STY Instructions Addressing Mode
-//------------------------------------------
-
-StyAddressingMode	-> Absolute;
-
 //---------------------------------------------
 //	Optional Index Registers
 //---------------------------------------------
 
-OptIndexReg	-> 'XREG'
+OptIndexReg		-> 'XREG'
 				-> 'YREG'
 				;
 
@@ -1239,7 +1158,7 @@ AsmConstList_2	-> ',' AsmConstant AsmConstList_2
 				-> .
 				;
 
-AsmConstant		-> AsmConstUpLow AsmConstAddSub_1;
+AsmConstant			-> AsmConstUpLow AsmConstAddSub_1;
 AsmConstAddSub_1	-> '+' AsmConstUpLow AsmConstAddSub_1
 					-> '-' AsmConstUpLow AsmConstAddSub_1
 					-> .
@@ -1250,20 +1169,16 @@ AsmConstUpLow	-> '>' AsmConstUpLow //Lower Part
 				-> BaseAsmConstant
 				;
 
-BaseAsmConstant		-> LabelAddress BaseAsmConstant_1;
-BaseAsmConstant_1	-> 'NUMBER'
+BaseAsmConstant		-> 'NUMBER'
 					-> 'CHAR_CONSTANT'
 					-> '*'				//current location counter
-				;
+					-> 'LABEL'
+					-> 'IDENT'
+					;
 
-LabelAddress	-> AsmLabel LabelAddress_1;
-LabelAddress_1	-> '@' AsmLabel
-				->	.
-				;
-
-AsmLabel		-> 'LABEL'
-				-> 'IDENT'
-				;
+//--------------------------------------
+// Addressing Modes
+//--------------------------------------
 Indirect	-> AsmConstant  Indirect_1;
 Indirect_1	-> ')' ',' 'YREG'
 			-> ',' 'XREG' ')'
