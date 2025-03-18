@@ -74,11 +74,7 @@ int CValue::GetConstVal()
 		rV = m_ConstantValue;
 		break;
 	case ValueType::SYMBOL:
-		pSym = (CSymbol*)GetSymbol();
-		if (pSym)
-			rV = pSym->GetAddress() + m_ConstantValue;
-		else
-			rV = 0;
+		rV = m_ConstantValue;
 		break;
 	}
 	return rV;

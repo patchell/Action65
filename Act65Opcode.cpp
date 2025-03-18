@@ -70,7 +70,7 @@ int CAct65Opcode::Print(int Indent, char* s, int Strlen, bool* pbNextFlag)
 		{
 		case CValue::ValueType::SYMBOL:
 			if (GetValue()->GetConstVal() > 0)
-				l += sprintf_s(&s[l], size, " %s +$%04X",
+				l += sprintf_s(&s[l], size, " %s + $%04X",
 					GetSymbol()->GetName(),
 					GetValue()->GetConstVal()
 				);
@@ -388,27 +388,6 @@ void CAct65Opcode::PrepareInstruction(
 		SetColumnNumber(pLex->GetColunm());
 		SetOpCode(pLex->MakeOpcode(OpToken, AddressMode));
 		SetByteCount(OperandByteCount::GetOperandByteCount(AddressMode) + 1);
-		SetValue(pOperandValue);
-	}
-	else if (OpToken == Token::JMP)
-	{
-		if (AddressMode == AdrModeType::ABSOLUTE_ADR || AddressMode == AdrModeType::ZERO_PAGE_ADR)
-		{
-			SetToken(OpToken);
-			SetLineNumber(pLex->GetLineNumber());
-			SetColumnNumber(pLex->GetColunm());
-			SetOpCode(pLex->MakeOpcode(OpToken, AdrModeType::ABSOLUTE_ADR));
-			SetByteCount(OperandByteCount::GetOperandByteCount(AdrModeType::ABSOLUTE_ADR) + 1);
-			SetValue(pOperandValue);
-		}
-	}
-	else if (OpToken == Token::JSR)
-	{
-		SetToken(OpToken);
-		SetLineNumber(pLex->GetLineNumber());
-		SetColumnNumber(pLex->GetColunm());
-		SetOpCode(pLex->MakeOpcode(OpToken, AdrModeType::ABSOLUTE_ADR));
-		SetByteCount(OperandByteCount::GetOperandByteCount(AdrModeType::ABSOLUTE_ADR) + 1);
 		SetValue(pOperandValue);
 	}
 	else   // :(

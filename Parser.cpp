@@ -6148,12 +6148,11 @@ CAstNode* CParser::JumpAddressingModes(Token OpCodeToken, CAstNode* pLabel)
 		pAddress = AsmConstant();
 		Expect(Token(')'));
 		pNext = new CAct65Opcode;
-		if (pLabel)
-			pNext->SetLabelSymbol((CSymbol*)pLabel->GetSymbol());
 		pNext->PrepareInstruction(
 			OpCodeToken, 
 			AdrModeType::INDIRECT_ADR, 
-			pAddress
+			pAddress,
+			pLabel?(CSymbol*)pLabel->GetSymbol():0
 		);
 		break;
 	default:
@@ -6527,12 +6526,28 @@ CAstNode* CParser::Absolute(Token OpCodeToken, CAstNode* pLabel)
 			// Is it Absolute addressing
 			//------------------------------------
 			if (pOperandValue->IsPageZero())
-				pOpCode->PrepareInstruction(
-					OpCodeToken, 
-					AdrModeType::ZERO_PAGE_ADR, 
-					pOperandValue,
-					pLabel?(CSymbol*)pLabel->GetSymbol():0
-				);
+			{
+				switch (OpCodeToken)
+				{
+				case Token::JMP:
+				case Token::JSR:
+					pOpCode->PrepareInstruction(
+						OpCodeToken,
+						AdrModeType::ABSOLUTE_ADR,
+						pOperandValue,
+						pLabel ? (CSymbol*)pLabel->GetSymbol() : 0
+					);
+					break;
+				default:
+					pOpCode->PrepareInstruction(
+						OpCodeToken,
+						AdrModeType::ZERO_PAGE_ADR,
+						pOperandValue,
+						pLabel ? (CSymbol*)pLabel->GetSymbol() : 0
+					);
+					break;
+				}
+			}
 			else
 				pOpCode->PrepareInstruction(
 					OpCodeToken, 
