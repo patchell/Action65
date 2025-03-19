@@ -59,6 +59,13 @@ INTERRUPT Hey()
 		JMP (First)
 		JMP (Second)
 
+		BEQ Are
+		BNE Are
+		BVS Are
+		BVC Are
+		BMI Are
+		BPL Are
+
 :Go		DEC	First
 		DEC First,.X
 :Again		DEC Second

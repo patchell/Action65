@@ -121,7 +121,6 @@ unsigned short CSection::AddInstruction(CAct65Opcode* pINS)
 		AddData(1, pINS->GetOpCode());
 		break;
 	case AdrModeType::IMMEDIATE_ADR:
-	case AdrModeType::RELATIVE:
 	case AdrModeType::ZERO_PAGE_ADR:
 	case AdrModeType::ZERO_PAGE_X_ADR:
 	case AdrModeType::ZERO_PAGE_Y_ADR:
@@ -136,6 +135,10 @@ unsigned short CSection::AddInstruction(CAct65Opcode* pINS)
 	case AdrModeType::INDIRECT_ADR:
 		AddData(1, pINS->GetOpCode());
 		AddData(2, pINS->GetOperand()->GetTotalValue());
+		break;
+	case AdrModeType::RELATIVE:
+		AddData(1, pINS->GetOpCode());
+		AddData(1, pINS->GetOperand()->GetTotalValue() - 1);
 		break;
 	}
     return m_LocationCounter;

@@ -316,7 +316,7 @@ private:
 	//------------------------------------------
 	// Branch Instructions Addressing Mode
 	//------------------------------------------
-	CAstNode*  RelAddressingMode(Token  OpCodeToken);
+	CAstNode*  RelAddressingMode(Token  OpCodeToken, CAstNode* pLabel);
 	//------------------------------------------
 	// JMP Instructions Addressing Mode
 	//------------------------------------------

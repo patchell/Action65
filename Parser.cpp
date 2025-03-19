@@ -59,7 +59,7 @@ CAstNode* CParser::Run()
 		pRoot->SetChild(pN);
 		GetAstTree()->Print(LogFile());
 		GetAstTree()->Process();	//gemerate cpde
-//		GetCurrentSection()->Print(LogFile());
+		GetCurrentSection()->Print(LogFile());
 //		GetLexer()->GetSymTab()->PrintTable(LogFile());
 		fprintf(stderr, "Lines Compiled:%d\n", GetLexer()->GetLineNumber());
 		fprintf(LogFile(), "Lines Compiled:%d\n", GetLexer()->GetLineNumber());
@@ -5935,11 +5935,13 @@ CAstNode* CParser::Instruction()
 		case Token::BVC:
 		case Token::BVS:
 			Expect(OpCodeToken);
-			pChild = RelAddressingMode(OpCodeToken);
-			pNext = CAstNode::MakeNextList(pNext, pChild);
+			pLabel = pNext;
+			pChild = RelAddressingMode(OpCodeToken, pLabel);
+			if (pLabel)
+				pChild = pLabel->SetChild(pChild);
+			pList = CAstNode::MakeNextList(pList, pChild);
 			//-----------------------------------------
-			pChild = DefineLabel();
-			pNext = CAstNode::MakeNextList(pNext, pChild);
+			pNext = DefineLabel();
 			break;
 		case Token::BRK:	//implicit addressing
 		case Token::CLC:
@@ -6113,7 +6115,7 @@ CAstNode* CParser::Operand(Token OpCodeToken, CAstNode* pLabel)
 }
 
 
-CAstNode* CParser::RelAddressingMode(Token OpCodeToken)
+CAstNode* CParser::RelAddressingMode(Token OpCodeToken, CAstNode* pLabel)
 {
 	//--------------------------------------------------
 	//	RelAddressingMode	-> AsmConstant;
@@ -6126,7 +6128,8 @@ CAstNode* CParser::RelAddressingMode(Token OpCodeToken)
 	pN->PrepareInstruction(
 		OpCodeToken, 
 		AdrModeType::RELATIVE, 
-		pValue
+		pValue,
+		pLabel ? (CSymbol*)pLabel->GetSymbol() : 0
 	);
 	return pN;
 }
