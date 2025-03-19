@@ -270,7 +270,6 @@ private:
 	//----------------------------
 //	CAstNode* AsmStatements();
 	//----IFF-------------
-	CAstNode* IffStmt();
 	CAstNode* IFFend();
 	CAstNode* IFFthenpart();;
 	CAstNode* IffRelOper();;
@@ -280,38 +279,22 @@ private:
 	CAstNode* StatusFlags();;
 	CAstNode* OptNot();;
 	//---- POP
-	CAstNode* Pop();
 	CAstNode* PopDestList();
 	CAstNode* PopDest();
 	//---- PUSH
-	CAstNode* Push();
 	CAstNode* PushSourceList();
 	CAstNode* PushSource();
 	//-------------------------------------
-	// Org  Sets the location counter
-	// for the current section
+	// Assembly Proceedure
 	//-------------------------------------
-	CAstNode*  Org();
-	//-------------------------------------
-	// Define Memeory
-	//-------------------------------------
-	CAstNode*  DefineMemory();
-	//-------------------------------------
-	// DefineStorage
-	//-------------------------------------
-	CAstNode*  DefineStorage();
-	//-------------------------------------
-	// Proceedure
-	//-------------------------------------
-	CAstNode*  Proceedure();
 	CAstNode*  AsmProcEnd();
 	CAstNode*  AsmProcBody();
 	CAstNode*  AsmProcName();
 	//--------------------------------------
-	// Opcodes
+	// AsmStatements
 	//--------------------------------------
-	CAstNode* Instruction();
-	CAstNode* DefineLabel();
+	CAstNode* AsmStatements();
+	CAstNode* OptLabel();
 	CAstNode* Operand(Token OpCodeToken, CAstNode* pLabel);
 	//------------------------------------------
 	// Branch Instructions Addressing Mode
@@ -339,6 +322,12 @@ private:
 	CAstNode*  Absolute(Token  OpCodeToken, CAstNode* pLabel);
 	CAstNode* Accumulator(Token OpCodeToken, CAstNode* pLabel);
 	CAstNode* UnHookTopNode(CAstNode* pNodeList);
+	CAstNode* CheckForLabel(
+		CAstNode* pList,
+		CAstNode* pNext,
+		CAstNode* pChild,
+		const char* pSdebug = 0
+	);
 	//---------------- Debug Utillity ----------------------
 public:
 	void DebugTraverse(

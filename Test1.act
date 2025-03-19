@@ -34,6 +34,8 @@ INTERRUPT Hey()
 			MODE = READ_WRITE
 			ZEROPAGE = TRUE
 		]
+		:StirageA	DS	64
+		:StorageB	DS	$10
 		:First	DB	0
 		SET SECTION "Page2"
 		:Second	DB	1
@@ -43,7 +45,7 @@ INTERRUPT Hey()
 		SET SECTION "Code"
 		:Astring DAS "This is an ACTION! string"
 		:CString DCS "This is a C String"
-		STY	First
+:Start	STY	First
 		STY First,.X
 :Here	STY Second
 

@@ -4678,7 +4678,7 @@ CSection* CParser::AsmSectionName()
 CAstNode* CParser::Section()
 {
 	//--------------------------------------------------
-	//	Section		-> IffStmt Section_1;
+	//	Section		-> AsmStmts Section_1;
 	//	Section_1	-> 'SECTION' SectionName IffStmt Section_1
 	//				-> .
 	//				;
@@ -4688,7 +4688,7 @@ CAstNode* CParser::Section()
 	CAstNode* pNext = 0, *pChild = 0;
 	CSection* pSection = 0;
 
-	pNext = IffStmt();
+	pNext = AsmStatements();
 	while (Loop)
 	{
 		switch (LookaHeadToken)
@@ -4703,7 +4703,7 @@ CAstNode* CParser::Section()
 			pN->SetSection(pSection);
 			pNext = CAstNode::MakeNextList(pNext, pN);
 			//------------------------------------
-			pChild = IffStmt();
+			pChild = AsmStatements();
 			pNext = CAstNode::MakeNextList(pNext, pChild);
 			break;
 		default:
@@ -4866,134 +4866,11 @@ CSection::AddressSize CParser::SectionAddressSize()
 // Assembler Statement
 //------------------------------------------------
 
-/*
-CAstNode* CParser::AsmStatements()
-{
-	//--------------------------------------------
-	//	AsmStatements	->IffStmt AsmStatements_1;
-	//	AsmStatements_1	-> 'LOCAL_LABEL' IffStmt AsmStatements_1
-	//					-> 'GLOBAL_LABEL' IffStmt AsmStatements_1
-	//					-> .
-	//					;
-	//--------------------------------------------
-	bool Loop = true;
-	CAstNode* pNext = 0;
-	CAstNode* pChild = 0;
-	CAstNode* pLabel = 0;
-	CAstNode* pNewTopNode = 0;
-	CSymbol* pSym = 0;
-
-	pNext = IffStmt();
-	DebugTraverse(pNext, "pNext Enter", 25, 1000);
-	while (Loop)
-	{
-		switch (LookaHeadToken)
-		{
-		case Token::GLOBAL_LABEL:
-			pSym = GetLexer()->GetLexSymbol();
-			Expect(Token::GLOBAL_LABEL);
-			if (pSym->GetIdentType() == IdentType::NEW_SYMBOL)
-			{
-				pSym->SetToken(Token::LABEL);
-				pSym->SetIdentType(IdentType::GLOBAL);
-				pSym->SetAddress(GetCurrentSection()->GetLocationCounter());
-				pSym->SetResolved();
-				pSym->SetSection(GetCurrentSection());
-				pSym->BackFillUnresolved();
-				GetLexer()->GetSymTab()->AddSymbol(pSym);
-			}
-			else
-			{
-				//redefinition error
-			}
-			pChild = IffStmt();
-			pNewTopNode = UnHookTopNode(pChild);
-			pLabel = new CAct65Label;
-			pLabel->SetSymbol(pSym);
-			pLabel->SetSection(GetCurrentSection());
-			if (pNewTopNode != pChild)
-			{
-				pLabel->SetChild(pNext);
-				pNext = pLabel;
-				pNext = CAstNode::MakeNextList(pNext, pNewTopNode);
-			}
-			else
-			{
-				pChild = pLabel->SetChild(pChild);
-				pNext = CAstNode::MakeNextList(pNext, pChild);
-			}
-			break;
-		case Token::LOCAL_LABEL:
-			pSym = GetLexer()->GetLexSymbol();
-			Expect(Token::LOCAL_LABEL);
-			if (pSym->GetIdentType() == IdentType::NEW_SYMBOL)
-			{
-				pSym->SetToken(Token::LABEL);
-				pSym->SetIdentType(IdentType::LOCAL);
-				pSym->SetAddress(GetCurrentSection()->GetLocationCounter());
-				pSym->SetResolved();
-				pSym->SetSection(GetCurrentSection());
-				pSym->BackFillUnresolved();
-				GetLexer()->GetSymTab()->AddSymbol(pSym);
-			}
-			else
-			{
-			}
-			pChild = IffStmt();
-			pLabel = new CAct65Label;
-			pLabel->SetSymbol(pSym);
-			pLabel->SetSection(GetCurrentSection());
-			pChild = pLabel->SetChild(pChild);
-			pNext = CAstNode::MakeNextList(pNext, pChild);
-			break;
-		default:
-			Loop = false;
-			break;
-		}
-	}
-	return pNext;
-}
-*/
 
 //------------------------------------------------
 // IFF Statement
 //------------------------------------------------
 
-CAstNode* CParser::IffStmt()
-{
-	//--------------------------------------------
-	//	Iff		->Pop Iff_1;
-	//	Iff_1	-> 'IFF' IFFend Pop Iff_1
-	//			-> .
-	//			;
-	// LookaHead is the trunk
-	//--------------------------------------------
-	bool Loop = true;
-	CAstNode* pN = 0;
-	CAstNode* pNext = 0, * pChild = 0;
-
-	pNext = Pop();
-	while (Loop)
-	{
-		switch (LookaHeadToken)
-		{
-		case Token::IFF:
-			Expect(Token::IFF);
-			pN = new CAct65IFF;
-			pChild = IFFend();
-			pN->SetChild(pChild);
-			pNext = CAstNode::MakeNextList(pNext, pN);
-			//-------------------------------------------
-			pChild = Pop();
-			pNext = CAstNode::MakeNextList(pNext, pChild);
-			break;
-		default:
-			Loop = false;
-			break;
-		}
-	}
-	return pNext;
-}
 
 CAstNode* CParser::IFFend()
 {
@@ -5254,46 +5131,6 @@ CAstNode* CParser::OptNot()
 // POP Statement
 //--------------------------------------------------
 
-CAstNode* CParser::Pop()
-{
-	//--------------------------------------------
-	//	Pop		->Push Pop_1;
-	//	Pop_1	-> 'POP' PopDestList Push Pop_1
-	//			-> .
-	//			;
-	// LookaHead really has nothing of interest in it
-	// The Node from LookaHead will be added to the
-	// child node of POP
-	//--------------------------------------------
-	bool Loop = true;
-	CAstNode* pN = 0;
-	CAstNode* pNext = 0, * pChild = 0;
-	int LoopCount = 0;
-
-	pNext = Push();
-	while (Loop)
-	{
-		switch (LookaHeadToken)
-		{
-		case Token::POP:
-			Expect(Token::POP);
-			pN = new CAct65POP;
-			pChild = PopDestList();
-			pN->SetChild(pChild);
-			pNext = CAstNode::MakeNextList(pNext, pN);
-			//------------------------------------
-			pChild = Push();
-			pNext = CAstNode::MakeNextList(pNext, pChild);
-			break;
-		default:
-			Loop = false;
-			break;
-		}
-	}
-	return pNext;
-
-}
-
 CAstNode* CParser::PopDestList()
 {
 	//--------------------------------------------
@@ -5373,41 +5210,6 @@ CAstNode* CParser::PopDest()
 //-------------------------------------------------
 // PUSH statment
 //-------------------------------------------------
-CAstNode* CParser::Push()
-{
-	//--------------------------------------------
-	//	Push	->Org Push_1;
-	//	Push_1	-> 'PUSH' PushSourceList Org Push_1
-	//			-> .
-	//			;
-	//--------------------------------------------
-	bool Loop = true;
-	CAstNode* pN = 0;
-	CAstNode* pNext = 0, * pChild = 0;
-
-
-	pNext = Org();
-	while (Loop)
-	{
-		switch (LookaHeadToken)
-		{
-		case Token::PUSH:
-			Expect(Token::PUSH);
-			pN = new CAct65PUSH;
-			pChild = PushSourceList();
-			pN->SetChild(pChild);
-			pNext = CAstNode::MakeNextList(pNext, pN);
-			//------------------------------------------
-			pChild = Org();
-			pNext = CAstNode::MakeNextList(pNext, pChild);
-			break;
-		default:
-			Loop = false;
-			break;
-		}
-	}
-	return pNext;
-}
 
 CAstNode* CParser::PushSourceList()
 {
@@ -5486,267 +5288,6 @@ CAstNode* CParser::PushSource()
 
 }
 
-//------------------------------------------------------
-// ORG statenebt
-//------------------------------------------------------
-
-CAstNode* CParser::Org()
-{
-	//-----------------------------------------
-	//	Org		->DefineMemory Org1;
-	//	Org1	-> 'ORG' CompConst DefineMemory Org1
-	//			-> .
-	//			;
-	//-----------------------------------------
-	bool Loop = true;
-	CAct65ORG* pN= 0;
-	CAstNode* pNext = 0, *pChild = 0;
-	int OrgValue = 0;
-
-	pNext = DefineMemory();
-	while (Loop)
-	{
-		switch (LookaHeadToken)
-		{
-		case Token::ORG:
-			Expect(Token::ORG);
-			OrgValue = AsmConstant()->GetConstVal();
-			pN = new CAct65ORG;
-			pN->CreateValue(OrgValue);
-			pNext = CAstNode::MakeNextList(pNext, pN);
-			//-------------------------------------------
-			pChild = DefineMemory();
-			pNext = CAstNode::MakeNextList(pNext, pChild);
-			break;
-		default:
-			Loop = false;
-			break;
-		}
-	}
-	return pNext;
-}
-
-CAstNode* CParser::DefineMemory()
-{
-	//--------------------------------------------------
-	//	DefineMemory	-> DefineStorage DefineMemory1;
-	//	DefineMemory1	-> DB AsmConstList DefineStorage DefineMemory1
-	//					-> DW AsmConstList DefineStorage DefineMemory1
-	//					-> DL AsmConstList DefineStorage DefineMemory1
-	//					-> DAS STRING DefineStorage DefineMemory1
-	//					-> DCS STRING DefineStorage DefineMemory1
-	//					-> .
-	//					;
-	//--------------------------------------------------
-	bool Loop = true;
-	CAct65DAS* pNDAS= 0;	// Actopm Stromg
-	CAct65DB* pNDB = 0;		// Byte
-	CAct65DW* pNDW = 0;		// WORD (16 bits)
-	CAct65DL* pNDL = 0;		// LONG (32 bits)
-	CAct65DCS* pNDCS = 0;	// 'C' String
-	CAstNode* pNext = 0, *pChild = 0;
-	CAstNode* pLast = 0;
-	bool Label = false;
-	static int count = 1;
-
-	pNext = DefineStorage();
-	while (Loop)
-	{
-		Label = false;
-		if (pNext)
-		{
-			pLast = pNext->GetLastNext();
-			if (pLast->IsLabel())
-				Label = true;
-		}
-		switch (LookaHeadToken)
-		{
-		case Token::DB:
-			Expect(Token::DB);
-			pChild = AsmConstList();
-			pNDB = new CAct65DB;
-			pNDB->SetChild(pChild);
-			if (Label)
-			{
-				pLast->SetChild(pNDB);
-			}
-			else
-			{
-				pNext = CAstNode::MakeNextList(pNext, pNDB);
-			}
-			//---------------------------------------
-			pChild = DefineStorage();
-			pNext = CAstNode::MakeNextList(pNext, pChild);
-			break;
-		case Token::DW:
-			Expect(Token::DW);
-			pChild = AsmConstList();
-			pNDW = new CAct65DW;
-			pNDW->SetChild(pChild);
-			if (Label)
-			{
-				pLast->SetChild(pNDW);
-			}
-			else
-			{
-				pNext = CAstNode::MakeNextList(pNext, pNDW);
-			}
-			//---------------------------------------
-			pChild = DefineStorage();
-			pNext = CAstNode::MakeNextList(pNext, pChild);
-			break;
-		case Token::DL:
-			Expect(Token::DL);
-			pChild = AsmConstList();
-			pNDL = new CAct65DL;
-			pNDL->SetChild(pChild);
-			if (Label)
-			{
-				pLast->SetChild(pNDL);
-			}
-			else
-			{
-				pNext = CAstNode::MakeNextList(pNext, pNDL);
-			}
-			//---------------------------------------
-			pChild = DefineStorage();
-			pNext = CAstNode::MakeNextList(pNext, pChild);
-			break;
-		case Token::DAS:	//define action string
-			Expect(Token::DAS);
-			pChild = AsmConstList();
-			pNDAS = new CAct65DAS;
-			if (CAstNode::NodeType::STRING == pChild->GetNodeType())
-			{
-				CAct65STRING* pSN = (CAct65STRING*)pChild;
-				pNDAS->SetString(pSN->GetString());
-//				delete pChild;
-			}
-			if (Label)
-			{
-				pLast->SetChild(pNDAS);
-			}
-			else
-			{
-				pNext = CAstNode::MakeNextList(pNext, pNDAS);
-			}
-			//---------------------------------------
-			GetCurrentSection()->AddData(1, pNDAS->GetStrLen());
-			GetCurrentSection()->AddData(
-				pNDAS->GetStrLen(),
-				pNDAS->GetString()
-			);
-			pChild = DefineStorage();
-			pNext = CAstNode::MakeNextList(pNext, pChild);
-			break;
-		case Token::DCS:	//define 'C' string
-			Expect(Token::DCS);
-			pChild = AsmConstList();
-			pNDCS = new CAct65DCS;
-			if (CAstNode::NodeType::STRING == pChild->GetNodeType())
-			{
-				CAct65STRING* pSN = (CAct65STRING*)pChild;
-				pNDCS->SetString(pSN->GetString());
-				//				delete pChild;
-			}
-			pNDCS->SetChild(pChild);
-			if (Label)
-			{
-				pLast->SetChild(pNDCS);
-			}
-			else
-			{
-				pNext = CAstNode::MakeNextList(pNext, pNDCS);
-			}
-			GetCurrentSection()->AddData(
-				pNDCS->GetStrLen(),
-				pNDCS->GetString()
-			);
-			//---------------------------------------
-			pChild = DefineStorage();
-			pNext = CAstNode::MakeNextList(pNext, pChild);
-			break;
-		default:
-			Loop = false;
-			break;
-		}
-	}
-	return pNext;
-}
-
-CAstNode* CParser::DefineStorage()
-{
-	//--------------------------------------------------
-	//	DefineStorage	-> Proceedure DefineStorage_1;
-	//	DefineStorage_1	-> DS AsmConstant Proceedure DefineStorage_1
-	//					-> .
-	//					;
-	//--------------------------------------------------
-	bool Loop = true;
-	CAct65DS* pN= 0;
-	CAstNode* pNext = 0, *pChild = 0;
-	int Value = 0;
-
-	pNext = Proceedure();
-	while (Loop)
-	{
-		switch (LookaHeadToken)
-		{
-		case Token::DS:
-			Expect(Token::DS);
-			Value = AsmConstant()->GetConstVal();
-			pN = new CAct65DS;
-			pN->CreateValue(Value);
-			pN->SetSection(GetCurrentSection());
-			pNext = CAstNode::MakeNextList(pNext, pN);
-			//-------------------------------------
-			pChild = Proceedure();
-			pNext = CAstNode::MakeNextList(pNext, pChild);
-			break;
-		default:
-			Loop = false;
-			break;
-		}
-	}
-	return pNext;
-}
-
-CAstNode* CParser::Proceedure()
-{
-	//--------------------------------------------------
-	//	Proceedure		->Instruction Proceedure_1;
-	//	Proceedure_1	-> 'PROC' AsmProcEnd Instruction Proceedure_1
-	//					-> .
-	//					;
-	//--------------------------------------------------
-	bool Loop = true;
-	CAct65PROCasm* pN= 0;
-	CAct65EPROC* pNEproc = 0;
-	CAstNode* pNext = 0, *pChild = 0;
-
-	pNext = Instruction();
-	while (Loop)
-	{
-		switch (LookaHeadToken)
-		{
-		case Token::PROC:
-			Expect(Token::PROC);
-			pChild = AsmProcEnd();
-			pN = new CAct65PROCasm;
-			pN->SetChild(pChild);
-			pNext = CAstNode::MakeNextList(pNext, pN);
-			//-----------------------------------
-			pChild = Instruction();
-			pNext = CAstNode::MakeNextList(pNext, pChild);
-			break;
-		default:
-			Loop = false;
-			break;
-		}
-	}
-	return pNext;
-}
-
 CAstNode* CParser::AsmProcEnd()
 {
 	//--------------------------------------------------
@@ -5818,78 +5359,90 @@ CAstNode* CParser::AsmProcName()
 // Instruction Parsing
 //--------------------------------------------------
 
-CAstNode* CParser::Instruction()
+CAstNode* CParser::AsmStatements()
 {
 	//--------------------------------------------------
-	//	Instruction	-> 'ADC'  Operand	Instruction //ALU Opcodes		
-	//					-> 'AND'  Operand	Instruction
-	//					-> 'EOR'  Operand	Instruction
-	//					-> 'ORA'  Operand	Instruction
-	//					-> 'CMP'  Operand	Instruction
-	//					-> 'SBC'  Operand	Instruction
-	//					-> 'LDA'  Operand	Instruction
-	//					-> 'STA'  Operand	Instruction
-	//					-> 'ASL' Operand	Instruction			//shift addressing modes
-	//					-> 'ROL' Operand	Instruction
-	//					-> 'LSR' Operand	Instruction
-	//					-> 'ROR' Operand	Instruction
-	//					-> 'BCC' RelAddressingMode Instruction				// Branch Op Codes
-	//					-> 'BCS' RelAddressingMode Instruction
-	//					-> 'BEQ' RelAddressingMode Instruction
-	//					-> 'BMI' RelAddressingMode Instruction
-	//					-> 'BNE' RelAddressingMode Instruction
-	//					-> 'BPL' RelAddressingMode Instruction
-	//					-> 'BVC' RelAddressingMode Instruction
-	//					-> 'BVS' RelAddressingMode Instruction
-	//					-> 'BIT' Operand	 Instruction			//BIT opcode
-	//					-> 'BRK'	Instruction				//Implied Addressing Mode 
-	//					-> 'CLC'	Instruction
-	//					-> 'CLD'	Instruction
-	//					-> 'CLI'	Instruction
-	//					-> 'CLV'	Instruction
-	//					-> 'DEX'	Instruction
-	//					-> 'DEY'	Instruction
-	//					-> 'INX'	Instruction
-	//					-> 'INY'	Instruction
-	//					-> 'NOP'	Instruction
-	//					-> 'PHA'	Instruction
-	//					-> 'PLA'	Instruction
-	//					-> 'PHP'	Instruction
-	//					-> 'PLP'	Instruction
-	//					-> 'RTI'	Instruction
-	//					-> 'RTS'	Instruction
-	//					-> 'SEC'	Instruction
-	//					-> 'SED'	Instruction
-	//					-> 'SEI'	Instruction
-	//					-> 'TAX'	Instruction
-	//					-> 'TAY'	Instruction
-	//					-> 'TXA'	Instruction
-	//					-> 'TYA'	Instruction
-	//					-> 'TXS'	Instruction
-	//					-> 'TSX'	Instruction
-	//					-> 'INC' Operand	Instruction			//Inc/Dec Addressing Modes
-	//					-> 'DEC' Operand	Instruction
-	//					-> 'JMP' Operand	Instruction		// Jump
-	//					-> 'JSR' Operand	Instruction			// Jump To Subroutine
-	//					-> 'CPX'  Operand	Instruction
-	//					-> 'CPY'  Operand	Instruction
-	//					-> 'LDX' Operand	Instruction
-	//					-> 'LDY' Operand	Instruction
-	//					-> 'STX' Operand	Instruction
-	//					-> 'STY' Operand	Instruction
+	//	AsmStmts	->OptLabel AsmStmts_1;
+	//	AsmStmts_1	-> 'ADC'  Operand  OptLabel AsmStmts_1 //ALU Opcodes		
+	//				-> 'AND'  Operand OptLabel AsmStmts_1
+	//				-> 'EOR'  Operand OptLabel AsmStmts_1
+	//					-> 'ORA'  Operand 	OptLabel AsmStmts_1
+	//					-> 'CMP'  Operand OptLabel AsmStmts_1
+	//					-> 'SBC'  Operand OptLabel AsmStmts_1
+	//					-> 'LDA'  Operand OptLabel AsmStmts_1
+	//					-> 'STA'  Operand OptLabel AsmStmts_1
+	//					-> 'ASL' Operand OptLabel AsmStmts_1			//shift addressing modes
+	//					-> 'ROL' Operand OptLabel AsmStmts_1
+	//					-> 'LSR' Operand OptLabel AsmStmts_1
+	//					-> 'ROR' Operand OptLabel AsmStmts_1
+	//					-> 'BCC' RelAddressingMode OptLabel AsmStmts_1				// Branch Op Codes
+	//					-> 'BCS' RelAddressingMode OptLabel AsmStmts_1
+	//					-> 'BEQ' RelAddressingMode OptLabel AsmStmts_1
+	//					-> 'BMI' RelAddressingMode OptLabel AsmStmts_1
+	//					-> 'BNE' RelAddressingMode OptLabel AsmStmts_1
+	//					-> 'BPL' RelAddressingMode OptLabel AsmStmts_1
+	//					-> 'BVC' RelAddressingMode OptLabel AsmStmts_1
+	//					-> 'BVS' RelAddressingMode OptLabel AsmStmts_1
+	//					-> 'BIT' Operand OptLabel AsmStmts_1			//BIT opcode
+	//					-> 'BRK' OptLabel AsmStmts_1				//Implied Addressing Mode 
+	//					-> 'CLC' OptLabel AsmStmts_1
+	//					-> 'CLD' OptLabel AsmStmts_1
+	//					-> 'CLI' OptLabel AsmStmts_1
+	//					-> 'CLV' OptLabel AsmStmts_1
+	//					-> 'DEX' OptLabel AsmStmts_1
+	//					-> 'DEY' OptLabel AsmStmts_1
+	//					-> 'INX' OptLabel AsmStmts_1
+	//					-> 'INY' OptLabel AsmStmts_1
+	//					-> 'NOP' OptLabel AsmStmts_1
+	//					-> 'PHA' OptLabel AsmStmts_1
+	//					-> 'PLA' OptLabel AsmStmts_1
+	//					-> 'PHP' OptLabel AsmStmts_1
+	//					-> 'PLP' OptLabel AsmStmts_1
+	//					-> 'RTI' OptLabel AsmStmts_1
+	//					-> 'RTS' OptLabel AsmStmts_1
+	//					-> 'SEC' OptLabel AsmStmts_1
+	//					-> 'SED' OptLabel AsmStmts_1
+	//					-> 'SEI' OptLabel AsmStmts_1
+	//					-> 'TAX' OptLabel AsmStmts_1
+	//					-> 'TAY' OptLabel AsmStmts_1
+	//					-> 'TXA' OptLabel AsmStmts_1
+	//					-> 'TYA' OptLabel AsmStmts_1
+	//					-> 'TXS' OptLabel AsmStmts_1
+	//					-> 'TSX' OptLabel AsmStmts_1
+	//					-> 'INC' Operand OptLabel AsmStmts_1			//Inc/Dec Addressing Modes
+	//					-> 'DEC' Operand OptLabel AsmStmts_1
+	//					-> 'JMP' Operand OptLabel AsmStmts_1		// Jump
+	//					-> 'JSR' Operand OptLabel AsmStmts_1			// Jump To Subroutine
+	//					-> 'CPX'  Operand OptLabel AsmStmts_1
+	//					-> 'CPY'  Operand OptLabel AsmStmts_1
+	//					-> 'LDX' Operand OptLabel AsmStmts_1
+	//					-> 'LDY' Operand OptLabel AsmStmts_1
+	//					-> 'STX' Operand OptLabel AsmStmts_1
+	//					-> 'STY' Operand OptLabel AsmStmts_1
+	//					-> 'PROC' AsmProcEnd OptLabel AsmStmts_1
+	//					-> 'DS' AsmConstant OptLabel AsmStmts_1
+	//					-> 'DB' AsmConstList OptLabel AsmStmts_1
+	//					-> 'DW' AsmConstList OptLabel AsmStmts_1
+	//					-> 'DL' AsmConstList OptLabel AsmStmts_1
+	//					-> 'DAS' 'STRING' OptLabel AsmStmts_1
+	//					-> 'DCS' 'STRING' OptLabel AsmStmts_1
+	//					-> 'ORG' AsmConstant  OptLabel AsmStmts_1
+	//					-> 'PUSH' PushSourceList  OptLabel AsmStmts_1
+	//					-> 'POP' PopDestList  OptLabel AsmStmts_1
+	//					-> 'IFF' IFFend  OptLabel AsmStmts_1
 	//					-> .
 	//					;
 	//--------------------------------------------------
 	bool Loop = true;
-	CAstNode* pNext = 0, *pChild = 0;
+	CAstNode* pChild = 0;
 	Token OpCodeToken = Token::NONE;
-	bool Label = false;
 	CAstNode* pList = 0;
-	CAstNode* pLabel = 0;
+	CAstNode* pLabel;
+	CAstNode* pN = 0;
 	CAct65Opcode* pOpCode = 0;
+	CValue* pValue = 0;
 
-	pList = DefineLabel();
-	pNext = pList;
+	pLabel = OptLabel();
 	while(Loop)
 	{
 		OpCodeToken = LookaHeadToken;
@@ -5918,13 +5471,12 @@ CAstNode* CParser::Instruction()
 		case Token::STX:	//store index registers
 		case Token::STY:
 			Expect(OpCodeToken);
-			pLabel = pNext;
 			pChild = Operand(OpCodeToken, pLabel);
 			if (pLabel)
 				pChild = pLabel->SetChild(pChild);
 			pList = CAstNode::MakeNextList(pList, pChild);
 			//-----------------------------------------
-			pNext = DefineLabel();
+			pLabel = OptLabel();
 			break;
 		case Token::BCC:	//relative addressing
 		case Token::BCS:
@@ -5935,13 +5487,12 @@ CAstNode* CParser::Instruction()
 		case Token::BVC:
 		case Token::BVS:
 			Expect(OpCodeToken);
-			pLabel = pNext;
 			pChild = RelAddressingMode(OpCodeToken, pLabel);
 			if (pLabel)
 				pChild = pLabel->SetChild(pChild);
 			pList = CAstNode::MakeNextList(pList, pChild);
 			//-----------------------------------------
-			pNext = DefineLabel();
+			pLabel = OptLabel();
 			break;
 		case Token::BRK:	//implicit addressing
 		case Token::CLC:
@@ -5969,7 +5520,6 @@ CAstNode* CParser::Instruction()
 		case Token::TXS:
 		case Token::TSX:
 			Expect(OpCodeToken);
-			pLabel = pNext;
 			pOpCode = new CAct65Opcode;
 			pOpCode->PrepareInstruction(
 				OpCodeToken,
@@ -5977,22 +5527,161 @@ CAstNode* CParser::Instruction()
 				0,
 				pLabel?(CSymbol*)pLabel->GetSymbol():0
 			);
-			pChild = pOpCode;
 			if (pLabel)
-				pChild = pLabel->SetChild(pChild);
+				pChild = pLabel->SetChild(pOpCode);
+			else
+				pChild = pOpCode;
 			pList = CAstNode::MakeNextList(pList, pChild);
 			//-----------------------------------------
-			pNext = DefineLabel();
+			pLabel = OptLabel();
 			break;
 		case Token::JMP:	//jump addressing modes
 			Expect(OpCodeToken);
-			pLabel = pNext;
-			pChild = JumpAddressingModes(OpCodeToken, pLabel);
+			pChild = JumpAddressingModes(
+				OpCodeToken, 
+				pLabel 
+			);
 			if (pLabel)
 				pChild = pLabel->SetChild(pChild);
 			pList = CAstNode::MakeNextList(pList, pChild);
 			//-----------------------------------------
-			pNext = DefineLabel();
+			pLabel = OptLabel();
+			break;
+		case Token::PROC:
+			Expect(Token::PROC);
+			pChild = AsmProcEnd();
+			pN = new CAct65PROCasm;
+			pChild = pN->SetChild(pChild);
+			if (pLabel)
+				pChild = pLabel->SetChild(pChild);
+			pList = CAstNode::MakeNextList(pList, pChild);
+			//-----------------------------------
+			pLabel = OptLabel();
+			break;
+		case Token::DS:
+			Expect(Token::DS);
+			pValue = AsmConstant();
+			pN = new CAct65CONSTANT;
+			pN->SetValue(pValue);
+			pChild = new CAct65DS;
+			pChild->SetSection(GetCurrentSection());
+			pChild->SetChild(pN);
+			if (pLabel)
+				pChild = pLabel->SetChild(pChild);
+			pList = CAstNode::MakeNextList(pList, pChild);
+			//-----------------------------------------
+			pLabel = OptLabel();
+			break;
+		case Token::DB:
+			Expect(Token::DB);
+			pChild = AsmConstList();
+			pN = new CAct65DB;
+			pChild = pN->SetChild(pChild);
+			if (pLabel)
+				pChild = pLabel->SetChild(pChild);
+			pList = CAstNode::MakeNextList(pList, pChild);
+			//---------------------------------------
+			pLabel = OptLabel();
+			break;
+		case Token::DW:
+			Expect(Token::DW);
+			pChild = AsmConstList();
+			pN = new CAct65DW;
+			pChild = pN->SetChild(pChild);
+			if (pLabel)
+				pChild = pLabel->SetChild(pChild);
+			pList = CAstNode::MakeNextList(pList, pChild);
+			//---------------------------------------
+			pLabel = OptLabel();
+			break;
+		case Token::DL:
+			Expect(Token::DL);
+			pChild = AsmConstList();
+			pN = new CAct65DL;
+			pChild = pN->SetChild(pChild);
+			if (pLabel)
+				pChild = pLabel->SetChild(pChild);
+			pList = CAstNode::MakeNextList(pList, pChild);
+			//---------------------------------------
+			pLabel = OptLabel();
+			break;
+		case Token::DAS:	//define action string
+			Expect(Token::DAS);
+			pChild = AsmConstList();
+			pN = new CAct65DAS;
+			if (CAstNode::NodeType::STRING == pChild->GetNodeType())
+			{
+				CAct65STRING* pSN = (CAct65STRING*)pChild;
+				((CAct65DAS*)pN)->SetString(pSN->GetString());
+				//				delete pChild;
+			}
+			pChild = pN->SetChild(pChild);
+			if (pLabel)
+				pChild = pLabel->SetChild(pChild);
+			pList = CAstNode::MakeNextList(pList, pChild);
+			//---------------------------------------
+			pLabel = OptLabel();
+			break;
+		case Token::DCS:	//define 'C' string
+			Expect(Token::DCS);
+			pChild = AsmConstList();
+			pN = new CAct65DCS;
+			if (CAstNode::NodeType::STRING == pChild->GetNodeType())
+			{
+				CAct65STRING* pSN = (CAct65STRING*)pChild;
+				((CAct65DCS*)pN)->SetString(pSN->GetString());
+				//				delete pChild;
+			}
+			pChild = pN->SetChild(pChild);
+			if (pLabel)
+				pChild = pLabel->SetChild(pChild);
+			pList = CAstNode::MakeNextList(pList, pChild);
+			//---------------------------------------
+			pLabel = OptLabel();
+			break;
+		case Token::ORG:
+			Expect(Token::ORG);
+			pValue = AsmConstant();
+			pN = new CAct65ORG;
+			pChild = pN->SetValue(pValue);
+			if (pLabel)
+				pChild = pLabel->SetChild(pChild);
+			pList = CAstNode::MakeNextList(pList, pN);
+			//-------------------------------------------
+			pLabel = OptLabel();
+			break;
+		case Token::PUSH:
+			Expect(Token::PUSH);
+			pN = new CAct65PUSH;
+			pChild = PushSourceList();
+			pChild = pN->SetChild(pChild);
+			if (pLabel)
+				pChild = pLabel->SetChild(pChild);
+			pList = CAstNode::MakeNextList(pList, pN);
+			//------------------------------------------
+			pLabel = OptLabel();
+			break;
+		case Token::POP:
+			Expect(Token::POP);
+			pN = new CAct65POP;
+			pChild = PopDestList();
+			pChild = pN->SetChild(pChild);
+			if (pLabel)
+				pChild = pLabel->SetChild(pChild);
+			pList = CAstNode::MakeNextList(pList, pN);
+			//------------------------------------
+			pLabel = OptLabel();
+			break;
+		case Token::IFF:
+			Expect(Token::IFF);
+			pN = new CAct65IFF;
+			pChild = IFFend();
+			pChild = pN->SetChild(pChild);
+			if (pLabel)
+				pChild = pLabel->SetChild(pChild);
+			pList = CAstNode::MakeNextList(pList, pN);
+			//-------------------------------------------
+			pLabel = OptLabel();
 			break;
 		default:
 			Loop = false;
@@ -6003,23 +5692,20 @@ CAstNode* CParser::Instruction()
 }
 
 
-CAstNode* CParser::DefineLabel()
+CAstNode* CParser::OptLabel()
 {
 	//--------------------------------------------
-	//	DefineLabel	-> 'LOCAL_LABEL' DefineLabel
-	//					-> 'GLOBAL_LABEL' DefineLabel
+	//	OptLabel		-> 'LOCAL_LABEL'
+	//					-> 'GLOBAL_LABEL'
 	//					-> .
 	//					;
 	//--------------------------------------------
 	bool Loop = true;
-	CAstNode* pNext = 0;
-	CAstNode* pChild = 0;
 	CAstNode* pLabel = 0;
-	CAstNode* pNewTopNode = 0;
 	CSymbol* pSym = 0;
 
-	while (Loop)
-	{
+//	while (Loop)
+//	{
 		switch (LookaHeadToken)
 		{
 		case Token::GLOBAL_LABEL:
@@ -6043,9 +5729,6 @@ CAstNode* CParser::DefineLabel()
 			pLabel = new CAct65Label;
 			pLabel->SetSymbol(pSym);
 			pLabel->SetSection(GetCurrentSection());
-			pChild = pLabel->SetChild(pChild);
-			pNext = CAstNode::MakeNextList(pNext, pChild);
-//				DebugTraverse(pChild, "Not Unhooked", 25, 100);
 			break;
 		case Token::LOCAL_LABEL:
 			pSym = GetLexer()->GetLexSymbol();
@@ -6064,19 +5747,16 @@ CAstNode* CParser::DefineLabel()
 			{
 				//redefinition error
 			}
-			pChild = IffStmt();
 			pLabel = new CAct65Label;
 			pLabel->SetSymbol(pSym);
 			pLabel->SetSection(GetCurrentSection());
-			pChild = pLabel->SetChild(pChild);
-			pNext = CAstNode::MakeNextList(pNext, pChild);
 			break;
 		default:
 			Loop = false;
 			break;
 		}
-	}
-	return pNext;
+//	}
+	return pLabel;
 }
 
 
@@ -6592,6 +6272,36 @@ CAstNode* CParser::UnHookTopNode(CAstNode* pNodeList)
 		pNewChainHead = pNodeList;
 	}
 	return pNewChainHead;
+}
+
+CAstNode* CParser::CheckForLabel(
+	CAstNode* pList, 
+	CAstNode* pNext, 
+	CAstNode* pChild,
+	const char* pSdebug
+)
+{
+	if (pNext == NULL)
+	{
+		pList = CAstNode::MakeNextList(pList, pChild);
+	}
+	else if (pNext->IsLabel())
+	{
+		if (pNext == pList)
+			pNext->SetChild(pChild);
+		else
+		{
+			pNext->SetChild(pChild);
+			pList = CAstNode::MakeNextList(pList, pNext);
+		}
+	}
+	else
+	{
+		pList = CAstNode::MakeNextList(pList, pChild);
+	}
+	if(pSdebug)
+		DebugTraverse(pList, pSdebug, 25, 100);
+	return pList;
 }
 
 //-------------------------------------------

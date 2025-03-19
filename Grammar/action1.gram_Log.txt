@@ -1890,17 +1890,14 @@ NONTERMINALS['Non Terminals'] { 'Action65','Modules','Modules_1','Set','Set_1','
 ,'LocalVarDecls_1','LocalTypeSpec','LocalTypeSpec_1','ComstListEnd','ComstListEnd_1'
 ,'CompConst','CompConst_1','BaseCompConst','AsmStmt','Processor_1','ProcessorType'
 ,'AsmSet','AsmSet_1','AsmSetObjects','AsmSectionName','Section','Section_1','SectionName'
-,'SectionName_1','SectionDef','SectionAtributes','Modes','AddressSize','AsmStatements'
-,'AsmStatements_1','Iff','Iff_1','IFFend','IFFend_1','IFFthenpart','IFFthenpart_1'
-,'IffRelOper','IffRelOper_1','IffRegister','IffRegister_1','Bits','Bits_1','BitValue'
-,'StatusFlags','StatusFlags_1','OptNot','Pop','Pop_1','PopDestList','PopDestList_1'
-,'PopDest','PopDest_1','Push','Push_1','PushSourceList','PushSourceList_1','PushSource'
-,'PushSource_1','Org','Org_1','DefineMemory','DefineMemory_2','DefineStorage','DefineStorage_1'
-,'Proceedure','Proceedure_1','AsmProcEnd','AsmProcEnd_1','AsmProcBody','AsmProcBody_1'
-,'AsmProcName','Instruction','Operand','Operand_1','RelAddressingMode','OptIndexReg'
-,'AsmConstList','AsmConstList_1','AsmConstList_2','AsmConstant','AsmConstAddSub_1'
-,'AsmConstUpLow','BaseAsmConstant','Indirect','Indirect_1','Immediate','Absolute'
-,'Absolute_1' }
+,'SectionName_1','SectionDef','SectionAtributes','Modes','AddressSize','IFFend','IFFend_1'
+,'IFFthenpart','IFFthenpart_1','IffRelOper','IffRelOper_1','IffRegister','IffRegister_1'
+,'Bits','Bits_1','BitValue','StatusFlags','StatusFlags_1','OptNot','PopDestList','PopDestList_1'
+,'PopDest','PopDest_1','PushSourceList','PushSourceList_1','PushSource','PushSource_1'
+,'AsmProcEnd','AsmProcEnd_1','AsmProcBody','AsmProcBody_1','AsmProcName','AsmStmts'
+,'AsmStmts_1','OptLabel','Operand','Operand_1','RelAddressingMode','OptIndexReg','AsmConstList'
+,'AsmConstList_1','AsmConstList_2','AsmConstant','AsmConstAddSub_1','AsmConstUpLow'
+,'BaseAsmConstant','Indirect','Indirect_1','Immediate','Absolute','Absolute_1' }
 *********** Build Nullable Set **********
 ****************Create NOT nullable set ************************
 ----- Calc First Sets------
@@ -2076,26 +2073,14 @@ FIRST['CompConst'] { 'NUMBER','CUR_LOC','@','DEFINED_IDENT','INTERRUPT_IDENT','F
 FIRST['CompConst_1'] { '+','-','e' }
 FIRST['BaseCompConst'] { 'NUMBER','CUR_LOC','@','DEFINED_IDENT','INTERRUPT_IDENT','FUNC_IDENT'
 ,'PROC_IDENT' }
-FIRST['AsmStmt'] { 'ADC','AND','EOR','ORA','CMP','SBC','LDA','STA','ASL','ROL','LSR'
-,'ROR','BCC','BCS','BEQ','BMI','BNE','BPL','BVC','BVS','BIT','BRK','CLC','CLD','CLI'
-,'CLV','DEX','DEY','INX','INY','NOP','PHA','PLA','PHP','PLP','RTI','RTS','SEC','SED'
-,'SEI','TAX','TAY','TXA','TYA','TXS','TSX','INC','DEC','JMP','JSR','CPX','CPY','LDX'
-,'LDY','STX','STY' }
+FIRST['AsmStmt'] { 'LOCAL_LABEL','GLOBAL_LABEL' }
 FIRST['Processor_1'] { 'PROCESSOR','e' }
 FIRST['ProcessorType'] { 'R6502','WD65C02','WD65C816' }
-FIRST['AsmSet'] { 'ADC','AND','EOR','ORA','CMP','SBC','LDA','STA','ASL','ROL','LSR'
-,'ROR','BCC','BCS','BEQ','BMI','BNE','BPL','BVC','BVS','BIT','BRK','CLC','CLD','CLI'
-,'CLV','DEX','DEY','INX','INY','NOP','PHA','PLA','PHP','PLP','RTI','RTS','SEC','SED'
-,'SEI','TAX','TAY','TXA','TYA','TXS','TSX','INC','DEC','JMP','JSR','CPX','CPY','LDX'
-,'LDY','STX','STY' }
+FIRST['AsmSet'] { 'LOCAL_LABEL','GLOBAL_LABEL' }
 FIRST['AsmSet_1'] { 'SET','e' }
 FIRST['AsmSetObjects'] { 'SECTION','e' }
 FIRST['AsmSectionName'] { 'SECTION_NAME' }
-FIRST['Section'] { 'ADC','AND','EOR','ORA','CMP','SBC','LDA','STA','ASL','ROL','LSR'
-,'ROR','BCC','BCS','BEQ','BMI','BNE','BPL','BVC','BVS','BIT','BRK','CLC','CLD','CLI'
-,'CLV','DEX','DEY','INX','INY','NOP','PHA','PLA','PHP','PLP','RTI','RTS','SEC','SED'
-,'SEI','TAX','TAY','TXA','TYA','TXS','TSX','INC','DEC','JMP','JSR','CPX','CPY','LDX'
-,'LDY','STX','STY' }
+FIRST['Section'] { 'LOCAL_LABEL','GLOBAL_LABEL' }
 FIRST['Section_1'] { 'SECTION','e' }
 FIRST['SectionName'] { 'e','[',']' }
 FIRST['SectionName_1'] { 'STRING','e' }
@@ -2103,18 +2088,6 @@ FIRST['SectionDef'] { '[',']','e' }
 FIRST['SectionAtributes'] { 'START','SIZE','MODE','ZEROPAGE',']',',' }
 FIRST['Modes'] { 'READ_ONLY','READ_WRITE' }
 FIRST['AddressSize'] { 'TRUE','FALSE' }
-FIRST['AsmStatements'] { 'ADC','AND','EOR','ORA','CMP','SBC','LDA','STA','ASL','ROL'
-,'LSR','ROR','BCC','BCS','BEQ','BMI','BNE','BPL','BVC','BVS','BIT','BRK','CLC','CLD'
-,'CLI','CLV','DEX','DEY','INX','INY','NOP','PHA','PLA','PHP','PLP','RTI','RTS','SEC'
-,'SED','SEI','TAX','TAY','TXA','TYA','TXS','TSX','INC','DEC','JMP','JSR','CPX','CPY'
-,'LDX','LDY','STX','STY' }
-FIRST['AsmStatements_1'] { 'LOCAL_LABEL','GLOBAL_LABEL','e' }
-FIRST['Iff'] { 'ADC','AND','EOR','ORA','CMP','SBC','LDA','STA','ASL','ROL','LSR','ROR'
-,'BCC','BCS','BEQ','BMI','BNE','BPL','BVC','BVS','BIT','BRK','CLC','CLD','CLI','CLV'
-,'DEX','DEY','INX','INY','NOP','PHA','PLA','PHP','PLP','RTI','RTS','SEC','SED','SEI'
-,'TAX','TAY','TXA','TYA','TXS','TSX','INC','DEC','JMP','JSR','CPX','CPY','LDX','LDY'
-,'STX','STY' }
-FIRST['Iff_1'] { 'IFF','e' }
 FIRST['IFFend'] { '^' }
 FIRST['IFFend_1'] { 'FFI' }
 FIRST['IFFthenpart'] { '^' }
@@ -2129,60 +2102,27 @@ FIRST['BitValue'] { '[',']' }
 FIRST['StatusFlags'] { '^' }
 FIRST['StatusFlags_1'] { 'NEG','CARRY','ZERO','OVERFLOW' }
 FIRST['OptNot'] { '^','e' }
-FIRST['Pop'] { 'ADC','AND','EOR','ORA','CMP','SBC','LDA','STA','ASL','ROL','LSR','ROR'
-,'BCC','BCS','BEQ','BMI','BNE','BPL','BVC','BVS','BIT','BRK','CLC','CLD','CLI','CLV'
-,'DEX','DEY','INX','INY','NOP','PHA','PLA','PHP','PLP','RTI','RTS','SEC','SED','SEI'
-,'TAX','TAY','TXA','TYA','TXS','TSX','INC','DEC','JMP','JSR','CPX','CPY','LDX','LDY'
-,'STX','STY' }
-FIRST['Pop_1'] { 'POP','e' }
 FIRST['PopDestList'] { '(' }
 FIRST['PopDestList_1'] { ',','e' }
 FIRST['PopDest'] { '(' }
 FIRST['PopDest_1'] { 'AREG','XREG','YREG','SR','e' }
-FIRST['Push'] { 'ADC','AND','EOR','ORA','CMP','SBC','LDA','STA','ASL','ROL','LSR','ROR'
-,'BCC','BCS','BEQ','BMI','BNE','BPL','BVC','BVS','BIT','BRK','CLC','CLD','CLI','CLV'
-,'DEX','DEY','INX','INY','NOP','PHA','PLA','PHP','PLP','RTI','RTS','SEC','SED','SEI'
-,'TAX','TAY','TXA','TYA','TXS','TSX','INC','DEC','JMP','JSR','CPX','CPY','LDX','LDY'
-,'STX','STY' }
-FIRST['Push_1'] { 'PUSH','e' }
 FIRST['PushSourceList'] { '-','(' }
 FIRST['PushSourceList_1'] { ',','e' }
 FIRST['PushSource'] { '-','(' }
 FIRST['PushSource_1'] { 'AREG','XREG','YREG','SR','e' }
-FIRST['Org'] { 'ADC','AND','EOR','ORA','CMP','SBC','LDA','STA','ASL','ROL','LSR','ROR'
-,'BCC','BCS','BEQ','BMI','BNE','BPL','BVC','BVS','BIT','BRK','CLC','CLD','CLI','CLV'
-,'DEX','DEY','INX','INY','NOP','PHA','PLA','PHP','PLP','RTI','RTS','SEC','SED','SEI'
-,'TAX','TAY','TXA','TYA','TXS','TSX','INC','DEC','JMP','JSR','CPX','CPY','LDX','LDY'
-,'STX','STY' }
-FIRST['Org_1'] { 'ORG','e' }
-FIRST['DefineMemory'] { 'ADC','AND','EOR','ORA','CMP','SBC','LDA','STA','ASL','ROL'
-,'LSR','ROR','BCC','BCS','BEQ','BMI','BNE','BPL','BVC','BVS','BIT','BRK','CLC','CLD'
-,'CLI','CLV','DEX','DEY','INX','INY','NOP','PHA','PLA','PHP','PLP','RTI','RTS','SEC'
-,'SED','SEI','TAX','TAY','TXA','TYA','TXS','TSX','INC','DEC','JMP','JSR','CPX','CPY'
-,'LDX','LDY','STX','STY' }
-FIRST['DefineMemory_2'] { 'DB','DW','DL','DAS','DCS','e' }
-FIRST['DefineStorage'] { 'ADC','AND','EOR','ORA','CMP','SBC','LDA','STA','ASL','ROL'
-,'LSR','ROR','BCC','BCS','BEQ','BMI','BNE','BPL','BVC','BVS','BIT','BRK','CLC','CLD'
-,'CLI','CLV','DEX','DEY','INX','INY','NOP','PHA','PLA','PHP','PLP','RTI','RTS','SEC'
-,'SED','SEI','TAX','TAY','TXA','TYA','TXS','TSX','INC','DEC','JMP','JSR','CPX','CPY'
-,'LDX','LDY','STX','STY' }
-FIRST['DefineStorage_1'] { 'DS','e' }
-FIRST['Proceedure'] { 'e','ADC','AND','EOR','ORA','CMP','SBC','LDA','STA','ASL','ROL'
-,'LSR','ROR','BCC','BCS','BEQ','BMI','BNE','BPL','BVC','BVS','BIT','BRK','CLC','CLD'
-,'CLI','CLV','DEX','DEY','INX','INY','NOP','PHA','PLA','PHP','PLP','RTI','RTS','SEC'
-,'SED','SEI','TAX','TAY','TXA','TYA','TXS','TSX','INC','DEC','JMP','JSR','CPX','CPY'
-,'LDX','LDY','STX','STY' }
-FIRST['Proceedure_1'] { 'PROC','e' }
 FIRST['AsmProcEnd'] { 'IDENT' }
 FIRST['AsmProcEnd_1'] { 'EPROC' }
 FIRST['AsmProcBody'] { 'IDENT' }
 FIRST['AsmProcBody_1'] { 'BEFIN' }
 FIRST['AsmProcName'] { 'IDENT' }
-FIRST['Instruction'] { 'ADC','AND','EOR','ORA','CMP','SBC','LDA','STA','ASL','ROL','LSR'
+FIRST['AsmStmts'] { 'e','LOCAL_LABEL','GLOBAL_LABEL' }
+FIRST['AsmStmts_1'] { 'ADC','AND','EOR','ORA','CMP','SBC','LDA','STA','ASL','ROL','LSR'
 ,'ROR','BCC','BCS','BEQ','BMI','BNE','BPL','BVC','BVS','BIT','BRK','CLC','CLD','CLI'
 ,'CLV','DEX','DEY','INX','INY','NOP','PHA','PLA','PHP','PLP','RTI','RTS','SEC','SED'
 ,'SEI','TAX','TAY','TXA','TYA','TXS','TSX','INC','DEC','JMP','JSR','CPX','CPY','LDX'
-,'LDY','STX','STY','e' }
+,'LDY','STX','STY','PROC','DS','DB','DW','DL','DAS','DCS','ORG','PUSH','POP','IFF'
+,'e' }
+FIRST['OptLabel'] { 'LOCAL_LABEL','GLOBAL_LABEL','e' }
 FIRST['Operand'] { '>','<','NUMBER','CHAR_CONSTANT','*','LABEL','IDENT' }
 FIRST['Operand_1'] { '#','(','AREG','e' }
 FIRST['RelAddressingMode'] { '>','<','NUMBER','CHAR_CONSTANT','*','LABEL','IDENT' }
@@ -2497,10 +2437,6 @@ FOLLOW['SectionDef'] { 'STRING' }
 FOLLOW['SectionAtributes'] { }
 FOLLOW['Modes'] { 'START','SIZE','MODE','ZEROPAGE',']',',' }
 FOLLOW['AddressSize'] { 'START','SIZE','MODE','ZEROPAGE',']',',' }
-FOLLOW['AsmStatements'] { 'SECTION','SET','PROCESSOR','{','}' }
-FOLLOW['AsmStatements_1'] { 'SECTION','SET','PROCESSOR','{','}' }
-FOLLOW['Iff'] { 'LOCAL_LABEL','GLOBAL_LABEL','SECTION','SET','PROCESSOR','{','}' }
-FOLLOW['Iff_1'] { 'LOCAL_LABEL','GLOBAL_LABEL','SECTION','SET','PROCESSOR','{','}' }
 FOLLOW['IFFend'] { }
 FOLLOW['IFFend_1'] { }
 FOLLOW['IFFthenpart'] { 'FFI' }
@@ -2517,45 +2453,27 @@ FOLLOW['StatusFlags'] { 'BITS','BIT','AREG','XREG','YREG','<','GTEQ','=','^','TH
 FOLLOW['StatusFlags_1'] { 'BITS','BIT','AREG','XREG','YREG','<','GTEQ','=','^','THEN'
 ,'FFI' }
 FOLLOW['OptNot'] { 'NEG','CARRY','ZERO','OVERFLOW' }
-FOLLOW['Pop'] { 'IFF','LOCAL_LABEL','GLOBAL_LABEL','SECTION','SET','PROCESSOR','{','}'
- }
-FOLLOW['Pop_1'] { 'IFF','LOCAL_LABEL','GLOBAL_LABEL','SECTION','SET','PROCESSOR','{'
-,'}' }
 FOLLOW['PopDestList'] { }
 FOLLOW['PopDestList_1'] { }
 FOLLOW['PopDest'] { ',' }
 FOLLOW['PopDest_1'] { ',' }
-FOLLOW['Push'] { 'POP','IFF','LOCAL_LABEL','GLOBAL_LABEL','SECTION','SET','PROCESSOR'
-,'{','}' }
-FOLLOW['Push_1'] { 'POP','IFF','LOCAL_LABEL','GLOBAL_LABEL','SECTION','SET','PROCESSOR'
-,'{','}' }
 FOLLOW['PushSourceList'] { }
 FOLLOW['PushSourceList_1'] { }
 FOLLOW['PushSource'] { ',' }
 FOLLOW['PushSource_1'] { ',' }
-FOLLOW['Org'] { 'PUSH','POP','IFF','LOCAL_LABEL','GLOBAL_LABEL','SECTION','SET','PROCESSOR'
-,'{','}' }
-FOLLOW['Org_1'] { 'PUSH','POP','IFF','LOCAL_LABEL','GLOBAL_LABEL','SECTION','SET','PROCESSOR'
-,'{','}' }
-FOLLOW['DefineMemory'] { 'ORG','PUSH','POP','IFF','LOCAL_LABEL','GLOBAL_LABEL','SECTION'
-,'SET','PROCESSOR','{','}' }
-FOLLOW['DefineMemory_2'] { 'ORG','PUSH','POP','IFF','LOCAL_LABEL','GLOBAL_LABEL','SECTION'
-,'SET','PROCESSOR','{','}' }
-FOLLOW['DefineStorage'] { 'DB','DW','DL','DAS','DCS','ORG','PUSH','POP','IFF','LOCAL_LABEL'
-,'GLOBAL_LABEL','SECTION','SET','PROCESSOR','{','}' }
-FOLLOW['DefineStorage_1'] { 'DB','DW','DL','DAS','DCS','ORG','PUSH','POP','IFF','LOCAL_LABEL'
-,'GLOBAL_LABEL','SECTION','SET','PROCESSOR','{','}' }
-FOLLOW['Proceedure'] { 'DS','DB','DW','DL','DAS','DCS','ORG','PUSH','POP','IFF','LOCAL_LABEL'
-,'GLOBAL_LABEL','SECTION','SET','PROCESSOR','{','}' }
-FOLLOW['Proceedure_1'] { 'DS','DB','DW','DL','DAS','DCS','ORG','PUSH','POP','IFF','LOCAL_LABEL'
-,'GLOBAL_LABEL','SECTION','SET','PROCESSOR','{','}' }
 FOLLOW['AsmProcEnd'] { }
 FOLLOW['AsmProcEnd_1'] { }
 FOLLOW['AsmProcBody'] { 'EPROC' }
 FOLLOW['AsmProcBody_1'] { 'EPROC' }
 FOLLOW['AsmProcName'] { 'BEFIN' }
-FOLLOW['Instruction'] { 'PROC','DS','DB','DW','DL','DAS','DCS','ORG','PUSH','POP','IFF'
-,'LOCAL_LABEL','GLOBAL_LABEL','SECTION','SET','PROCESSOR','{','}' }
+FOLLOW['AsmStmts'] { 'SECTION','SET','PROCESSOR','{','}' }
+FOLLOW['AsmStmts_1'] { 'SECTION','SET','PROCESSOR','{','}' }
+FOLLOW['OptLabel'] { 'ADC','AND','EOR','ORA','CMP','SBC','LDA','STA','ASL','ROL','LSR'
+,'ROR','BCC','BCS','BEQ','BMI','BNE','BPL','BVC','BVS','BIT','BRK','CLC','CLD','CLI'
+,'CLV','DEX','DEY','INX','INY','NOP','PHA','PLA','PHP','PLP','RTI','RTS','SEC','SED'
+,'SEI','TAX','TAY','TXA','TYA','TXS','TSX','INC','DEC','JMP','JSR','CPX','CPY','LDX'
+,'LDY','STX','STY','PROC','DS','DB','DW','DL','DAS','DCS','ORG','PUSH','POP','IFF'
+,'SECTION','SET','PROCESSOR','{','}' }
 FOLLOW['Operand'] { }
 FOLLOW['Operand_1'] { }
 FOLLOW['RelAddressingMode'] { }
@@ -2577,5 +2495,5 @@ FOLLOW['Immediate'] { }
 FOLLOW['Absolute'] { '#','(','AREG' }
 FOLLOW['Absolute_1'] { '#','(','AREG' }
 ---------------- Create Parse Table --------------
-Table Entries = 2282
+Table Entries = 1631
 ------------ Check For Conflicts-------------

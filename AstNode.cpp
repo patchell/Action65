@@ -174,6 +174,16 @@ CAstNode* CAstNode::SetChild(CAstNode* pAN)
 }
 
 
+CAstNode* CAstNode::AddToNext(CAstNode* pNode)
+{
+	CAstNode* pN = this;
+
+	while (pN->GetNext())
+		pN = pN->GetNext();
+	pN->SetNext(pNode);
+	return this;
+}
+
 CAstNode* CAstNode::MakeNextList(CAstNode* pList, CAstNode* pListMember)
 {
 	CAstNode* pNode;

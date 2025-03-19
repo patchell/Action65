@@ -9,6 +9,17 @@ Compatibility Issues with the real ACTION!
 	Hopefully, in the future I will find a way to fix
 	this conflict.
 
+March 19, 2025
+Ego bruised again.  I thought I had a really cleaver and
+elegant grammar for an assembler, but alas, it was not
+to be so.  I finally realized it would take at least two
+lookaheads ll(2),  to accomplish my goal.  So I simplified
+the grammar a bit, which I find ugly, but it only requires
+one lookahead.  I had burned up too many hours trying to do
+something as simples as having a label on a line of code,
+but the way I was doing it I could never get around the
+ambiguities.
+
 March 14, 2025
 A bit of a battle, but I am back where I was 3 weeks ago
 after I ran into the "Major Boo-boo".  Fixed the Boo-Boo

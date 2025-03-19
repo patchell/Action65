@@ -238,12 +238,14 @@ public:
 			pSym = m_pValue->GetSymbol();
 		return pSym; 
 	}
-	void SetValue(CValue* pV) { 
+	CAstNode* SetValue(CValue* pV) { 
 		m_pValue = pV; 
+		return this;
 	}
 	CValue* GetValue() {
 		return m_pValue;
 	}
+	CAstNode* AddToNext(CAstNode* pNode);
 	static CAstNode* MakeNextList(CAstNode* pList, CAstNode* pListMember);
 	static CAstNode* MakeChildList(
 		CAstNode* pList, 
