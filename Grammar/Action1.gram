@@ -70,7 +70,12 @@
 //	March 17. 2025
 //	Om tje assembler, changed the way
 //	LABELs are parsed, to fix a really
-//	to work with AST tree/
+//	to work with AST tree
+//
+// Version 0.0.12 March 19, 2025
+// Gave up on the fancy assembler grammar
+// and went with something simple that I knew
+// would work.
 //----------------------------------
 
 TERMINALS

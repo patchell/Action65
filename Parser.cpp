@@ -59,7 +59,7 @@ CAstNode* CParser::Run()
 		pRoot->SetChild(pN);
 		GetAstTree()->Print(LogFile());
 		GetAstTree()->Process();	//gemerate cpde
-		GetCurrentSection()->Print(LogFile());
+//		GetCurrentSection()->Print(LogFile());
 //		GetLexer()->GetSymTab()->PrintTable(LogFile());
 		fprintf(stderr, "Lines Compiled:%d\n", GetLexer()->GetLineNumber());
 		fprintf(LogFile(), "Lines Compiled:%d\n", GetLexer()->GetLineNumber());
@@ -2026,8 +2026,17 @@ CAstNode* CParser::MemContents()
 		break;
 	case Token::IDENT:
 		pSym = GetLexer()->GetLexSymbol();
+		Expect(Token::IDENT);
 		fprintf(LogFile(), "%s is Undefined\n", pSym->GetName());
 		Act()->Exit(26);
+		break;
+	case Token::LABEL:
+		pSym = GetLexer()->GetLexSymbol();
+		Expect(Token::LABEL);
+		pN = new CAct65IDENT;
+		pChild = pN->SetChild(pChild);
+		pN->SetSymbol(pSym);
+		pNext = CAstNode::MakeNextList(pNext, pChild);
 		break;
 	default:
 		break;
@@ -3412,25 +3421,18 @@ CAstNode* CParser::Ident(CTypeChain* pTypeChain)
 		break;
 	case Token::FUNC:
 		//-------------- Declaration -------------------
-		//if (LookaHead.GetTypeChain() == 0)
-		//{
-		//	LookaHead.SetTypeChain(new CTypeChain);
-		//	LookaHead.GetTypeChain()->Create();
-		//}
-		//LookaHead.GetTypeChain()->Create();
-		//pOTC = new CObjTypeChain;
-		//pOTC->Create();
-		//pOTC->SetSpec(CObjTypeChain::Spec::FUNC);
-		//LookaHead.GetTypeChain()->AddToTail(pOTC);
+		pOTC = new CObjTypeChain;
+		pOTC->Create();
+		pOTC->SetSpec(CObjTypeChain::Spec::FUNC);
+		pTypeChain->AddToTail(pOTC);
 		//----------------- Parsing --------------------
-		//Expect(Token::FUNC);
-		//LookaHead = FuncDecl(LookaHead);
+		Expect(Token::FUNC);
+		pChild = FuncDecl();
 		//---------------------------------------------
-	//	pN = new CAct65FUNC;
-	//	pNext = pN->MakeNode(pChild, pNext);
-	//	LookaHead.AddNode();
-	//	LookaHead.SetToken(LookaHead.GetToken());
-	//	break;
+		pN = new CAct65FUNC;
+		pChild = pN->SetChild(pChild);
+		pNext = CAstNode::MakeNextList(pNext, pChild);
+		break;
 	//default:
 		//ThrownException.SetXCeptType(Exception::ExceptionType::EXPECTED_IDENT);
 		//sprintf_s(
@@ -3633,7 +3635,8 @@ CAstNode* CParser::ProcDecl(CTypeChain* pTypeChain)
 		GetLexer()->GetSymTab()->AddSymbol(pSym);
 		//-------------- Parse ------------------------
 		Expect(Token::IDENT);
-		pN = new CAct65Ident;
+		pN = new CAct65IDENT;
+		pN->SetSymbol(pSym);
 		if (Accept(Token('=')))
 		{
 			pInit = OptInit();
@@ -3642,18 +3645,19 @@ CAstNode* CParser::ProcDecl(CTypeChain* pTypeChain)
 		if (pInit)
 		{
 			pInit->SetChild(pChild);
-			pNext->SetChild(pInit);
+			pN->SetChild(pInit);
 		}
 		else
 		{
-			pNext->SetChild(pChild);
+			pN->SetChild(pChild);
 		}
 		//-------- Abstract Syntax Tree Node --------
 		break;
 	default:
 		break;
 	}
-	return pNext;
+	DebugTraverse(pN, "Proc Ident", 25, 1000);
+	return pN;
 
 }
 
@@ -3688,10 +3692,23 @@ CAstNode* CParser::ProcBody()
 	//--------------------------------------------
 	// ProcBody	-> LocalDecls Statements;
 	//--------------------------------------------
-	CAstNode* pNext, *pChild;
-	pNext = LocalDecls();
-	pChild = Statements();
-	pNext = CAstNode::MakeNextList(pNext, pChild);
+	CAstNode* pN = 0;
+	CAstNode* pChild = 0;
+	CAstNode* pStatements = 0;
+	CAstNode* pNext = 0;
+	CAstNode* pLocal = 0;
+
+
+	pLocal = new CAct65LocalVar;
+	pN = new CAct65BODY;
+	pChild = LocalDecls();
+	pLocal->SetChild(pChild);
+	pNext = CAstNode::MakeNextList(pNext, pLocal);
+	//--------------------------------------------
+	pStatements = Statements();
+	pChild = CAstNode::MakeNextList(pNext, pStatements);
+	pNext = pN->SetChild(pChild);
+	DebugTraverse(pNext, "Exit", 25, 1000);
 	return pNext;
 }
 
@@ -3715,7 +3732,7 @@ CAstNode* CParser::FuncDecl()
 	pSym->SetToken(Token::FUNC_IDENT);
 	Expect(Token::IDENT);
 	pInit = OptInit();
-	pN = new CAct65Ident;
+	pN = new CAct65IDENT;
 	pN->SetSymbol(pSym);
 	pN->SetChild(pInit);
 	pChild = FuncDeclParams();
@@ -3738,7 +3755,10 @@ CAstNode* CParser::FuncDeclParams()
 	CAstNode* pNext = 0, *pChild = 0;
 
 	Expect(Token('('));
-	pNext = ParamList();
+	//----------- Parse --------------------------
+	pChild = ParamList();
+	pNext = new CAct65ParamList;
+	pNext->SetChild(pChild);
 	Expect(Token(')'));
 	pChild = FuncBody();
 	pNext = CAstNode::MakeNextList(pNext, pChild);
@@ -3750,12 +3770,23 @@ CAstNode* CParser::FuncBody()
 	//--------------------------------------------
 	// FuncBody	-> LocalDecls Statements;
 	//--------------------------------------------
-	CAstNode* pNext = 0;
+	CAstNode* pN = 0;
 	CAstNode* pChild = 0;
+	CAstNode* pStatements = 0;
+	CAstNode* pNext = 0;
+	CAstNode* pLocal = 0;
 
-	pNext = LocalDecls();
-	pChild = Statements();
-	pNext = CAstNode::MakeNextList(pNext, pChild);
+
+	pLocal = new CAct65LocalVar;
+	pN = new CAct65BODY;
+	pChild = LocalDecls();
+	pLocal->SetChild(pChild);
+	pNext = CAstNode::MakeNextList(pNext, pLocal);
+	//--------------------------------------------
+	pStatements = Statements();
+	pChild = CAstNode::MakeNextList(pNext, pStatements);
+	pNext = pN->SetChild(pChild);
+	DebugTraverse(pNext, "Exit", 25, 1000);
 	return pNext;
 }
 
@@ -4079,6 +4110,7 @@ CAstNode* CParser::DefineParamIdent(CTypeChain* pTypeChain)
 		Expect(Token::IDENT);
 		//--------------- Abstract Syntax  --------------------
 		pN = new CAct65IDENT;
+		pN->SetSymbol(pSym);
 		break;
 	default:
 		// error - Expected an Identifier
@@ -4918,10 +4950,11 @@ CAstNode* CParser::IFFthenpart()
 	case Token::THEN:
 		Expect(Token::THEN);
 		pTHEN = new CAct65THEN;
+//		pLabelSym = GetLexer()->GetLexSymbol();
 		pLabel = new CAct65Label;
 		pLabel->SetValue(AsmConstant());
 		pTHEN->SetChild(pLabel);
-		pIffRelOper->SetChild(pTHEN);
+		pIffRelOper = CAstNode::MakeNextList(pIffRelOper, pTHEN);
 		break;
 	default:
 		break;
@@ -5704,58 +5737,54 @@ CAstNode* CParser::OptLabel()
 	CAstNode* pLabel = 0;
 	CSymbol* pSym = 0;
 
-//	while (Loop)
-//	{
-		switch (LookaHeadToken)
+	switch (LookaHeadToken)
+	{
+	case Token::GLOBAL_LABEL:
+		pSym = GetLexer()->GetLexSymbol();
+		Expect(Token::GLOBAL_LABEL);
+		if (pSym->GetIdentType() == IdentType::NEW_SYMBOL)
 		{
-		case Token::GLOBAL_LABEL:
-			pSym = GetLexer()->GetLexSymbol();
-			Expect(Token::GLOBAL_LABEL);
-			if (pSym->GetIdentType() == IdentType::NEW_SYMBOL)
-			{
-				pSym->SetToken(Token::LABEL);
-				pSym->SetIdentType(IdentType::GLOBAL);
-				pSym->SetAddress(GetCurrentSection()->GetLocationCounter());
-				pSym->SetResolved();
-				pSym->SetSection(GetCurrentSection());
-				pSym->BackFillUnresolved();
-				GetLexer()->GetSymTab()->AddSymbol(pSym);
-			}
-			else
-			{
-				//redefinition error
-			}
-			//			DebugTraverse(pChild, "pChild Unhooked", 25, 1000);
-			pLabel = new CAct65Label;
-			pLabel->SetSymbol(pSym);
-			pLabel->SetSection(GetCurrentSection());
-			break;
-		case Token::LOCAL_LABEL:
-			pSym = GetLexer()->GetLexSymbol();
-			Expect(Token::LOCAL_LABEL);
-			if (pSym->GetIdentType() == IdentType::NEW_SYMBOL)
-			{
-				pSym->SetToken(Token::LABEL);
-				pSym->SetIdentType(IdentType::LOCAL);
-				pSym->SetAddress(GetCurrentSection()->GetLocationCounter());
-				pSym->SetResolved();
-				pSym->SetSection(GetCurrentSection());
-				pSym->BackFillUnresolved();
-				GetLexer()->GetSymTab()->AddSymbol(pSym);
-			}
-			else
-			{
-				//redefinition error
-			}
-			pLabel = new CAct65Label;
-			pLabel->SetSymbol(pSym);
-			pLabel->SetSection(GetCurrentSection());
-			break;
-		default:
-			Loop = false;
-			break;
+			pSym->SetToken(Token::LABEL);
+			pSym->SetIdentType(IdentType::GLOBAL);
+			pSym->SetAddress(GetCurrentSection()->GetLocationCounter());
+			pSym->SetResolved();
+			pSym->SetSection(GetCurrentSection());
+			pSym->BackFillUnresolved();
+			GetLexer()->GetSymTab()->AddSymbol(pSym);
 		}
-//	}
+		else
+		{
+			//redefinition error
+		}
+		pLabel = new CAct65Label;
+		pLabel->SetSymbol(pSym);
+		pLabel->SetSection(GetCurrentSection());
+		break;
+	case Token::LOCAL_LABEL:
+		pSym = GetLexer()->GetLexSymbol();
+		Expect(Token::LOCAL_LABEL);
+		if (pSym->GetIdentType() == IdentType::NEW_SYMBOL)
+		{
+			pSym->SetToken(Token::LABEL);
+			pSym->SetIdentType(IdentType::LOCAL);
+			pSym->SetAddress(GetCurrentSection()->GetLocationCounter());
+			pSym->SetResolved();
+			pSym->SetSection(GetCurrentSection());
+			pSym->BackFillUnresolved();
+			GetLexer()->GetSymTab()->AddSymbol(pSym);
+		}
+		else
+		{
+			//redefinition error
+		}
+		pLabel = new CAct65Label;
+		pLabel->SetSymbol(pSym);
+		pLabel->SetSection(GetCurrentSection());
+		break;
+	default:
+		Loop = false;
+		break;
+	}
 	return pLabel;
 }
 
@@ -5793,7 +5822,6 @@ CAstNode* CParser::Operand(Token OpCodeToken, CAstNode* pLabel)
 	}
 	return pChild;
 }
-
 
 CAstNode* CParser::RelAddressingMode(Token OpCodeToken, CAstNode* pLabel)
 {
@@ -6299,8 +6327,6 @@ CAstNode* CParser::CheckForLabel(
 	{
 		pList = CAstNode::MakeNextList(pList, pChild);
 	}
-	if(pSdebug)
-		DebugTraverse(pList, pSdebug, 25, 100);
 	return pList;
 }
 

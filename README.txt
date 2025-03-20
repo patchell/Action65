@@ -9,7 +9,19 @@ Compatibility Issues with the real ACTION!
 	Hopefully, in the future I will find a way to fix
 	this conflict.
 
+March 29, 2025
+
+Be sure to look at log.txt, this contains all of the
+data that is printed out to help with the debugging.  It
+shows all of the AST nodes that have been checked.
+
+It is getting there.  As I have gone along, it is getting
+much easier to get parts of the program checked out.
+Hopefully, I will soon start working on code generation
+while finishing up AST generation.
+
 March 19, 2025
+
 Ego bruised again.  I thought I had a really cleaver and
 elegant grammar for an assembler, but alas, it was not
 to be so.  I finally realized it would take at least two

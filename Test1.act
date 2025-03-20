@@ -3,10 +3,21 @@ MODULE
 INT Avar,x,y,z
 CARD Cvar
 CHAR Stuff,Yep
-//TYPE  Junk = [
-//	CHAR q,e,d
-//	INT POINTER pX
-// ]
+TYPE  Junk = [
+	CHAR q,e,d
+	INT POINTER pX
+]
+
+INT FUNC FuncName2(CARD c100, c101 CHAR h190)
+	CARD cx100
+
+	RETURN cx100 - Stuff
+
+PROC ProcNum1(BYTE a100, a101 INT i100)
+	BYTE x100
+
+	RETURN
+
 INTERRUPT Hey()
 	TYPE Crud = [
 		INT CrudOne
@@ -53,6 +64,11 @@ INTERRUPT Hey()
 		STX First, .Y
 :We		STX	Second
 
+		POP .A
+		POP .Y
+		PUSH .X
+
+		IFF .A = First THEN We FFI
 		JSR First
 :Are		JSR Second
 

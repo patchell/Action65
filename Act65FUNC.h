@@ -2,7 +2,7 @@
 
 class CAct65FUNC : public CAstNode
 {
-	inline static const char* m_pNodeTyypeName = "EPROC";
+	inline static const char* m_pNodeTyypeName = "FUNC";
 public:
 	CAct65FUNC();
 	virtual ~CAct65FUNC();

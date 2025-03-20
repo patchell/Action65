@@ -45,6 +45,7 @@ void CAct65Opcode::PrintNode(FILE* pOut, int Indent, bool* pbNextFlag)
 
 CValue* CAct65Opcode::Emit(CValue* pVc, CValue* pVn)
 {
+	fprintf(Act()->LogFile(), "EMIT:OPCODE\n");
 	GetParser()->GetCurrentSection()->AddInstruction(this);
 	return nullptr;
 }

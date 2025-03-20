@@ -50,11 +50,19 @@ void CAct65DAS::SetString(const char* pS)
 
 	m_StringLen = int(strlen(pS));
 	size = m_StringLen + 1;
-	m_pString = new char[size ];
+	m_pString = new char[size];
 	strncpy_s(m_pString, size , pS, m_StringLen + 1);
 }
 
 CValue* CAct65DAS::Emit(CValue* pVc, CValue* pVn)
 {
-    return nullptr;
+	CSection* pSection = GetSection();
+
+	pSection->AddData(1, GetStrLen());
+	pSection->AddData(GetStrLen()+1, GetString());
+	fprintf(Act()->LogFile(), "EMIT:%s:%s\n",
+		GetString(),
+		pSection->GetName()
+	);
+	return nullptr;
 }

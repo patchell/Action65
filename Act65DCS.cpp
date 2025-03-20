@@ -51,5 +51,13 @@ void CAct65DCS::SetString(const char* pS)
 
 CValue* CAct65DCS::Emit(CValue* pVc, CValue* pVn)
 {
+	CSection* pSection = GetSection();
+
+	pSection->AddData(GetStrLen()+1, GetString());
+	fprintf(Act()->LogFile(), "EMIT:%s:%s\n",
+		GetString(),
+		pSection->GetName()
+	);
+
     return nullptr;
 }
