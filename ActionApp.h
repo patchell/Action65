@@ -7,10 +7,12 @@ class CActionApp
 	char* m_pObjectFile;
 	char* m_pBinaryFile;
 	char* m_pAsmSrcOut;
+	char* m_pSettingsFile;
 	FILE* m_pfSrc;
 	FILE* m_pfLog;
 	FILE* m_pfBin;
 	FILE* m_pfObj;
+	FILE* m_pfSettings;
 	CParser m_ActParse;
 public:
 	CActionApp();
@@ -21,11 +23,13 @@ public:
 	bool OpenLog();
 	bool OpenObj();
 	bool OpenBin();
+	bool OpenSettings();
 
 	void CloseSource();
 	void CloseLog();
 	void CloseObj();
 	void CloseBin();
+	void CloseSettings();
 	void CloseAll();
 	char* GetSourceFileName() {
 		return m_pSourceFile;

@@ -52,5 +52,5 @@ CValue* CAct65IDENT::Emit(CValue* pVc, CValue* pVn)
 		GetID(), 
 		GetSymbol()->GetName()
 	);
-    return nullptr;
+    return GetValue();
 }

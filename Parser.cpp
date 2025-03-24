@@ -9,6 +9,14 @@ CParser::CParser()
 	m_Recursion = 0;
 	m_Bump = 0;
 	LookaHeadToken = Token(0);
+
+	m_pCODEsection = 0;
+	m_pGLOBALsection = 0;
+	m_pZEROpageSection = 0;
+	m_pSTACKsection = 0;
+	m_pLOCALvarSection = 0;
+	m_pVECTORsection = 0;
+	m_pVIRTUALregistersSection = 0;
 }
 
 CParser::~CParser()
@@ -20,13 +28,71 @@ CParser::~CParser()
 bool CParser::Create()
 {
 	bool rV = true;
+
 	m_pLex = new CLexer;
 	m_pLex->Create();
 	GetAstTree()->Create();
 
 	if (LogFile())
 		fprintf(LogFile(), "Parser Created\n");
-	
+	//-----------------------------------
+	// Initialize Default Sections
+	//-----------------------------------
+	m_pCODEsection = new CSection;
+	m_pCODEsection->Create();
+	m_pCODEsection->SetName("CODE");
+	m_pCODEsection->SetAccessMode(CSection::Mode::MODE_READ_ONLY);
+	m_pCODEsection->SetSectionSize(0x2000 - 6);	//six bytes for IRQ vectors
+	m_pCODEsection->SetStartAddress(0xe000);
+	m_pCODEsection->SetZeroPageFlag(CSection::AddressSize::ADDRESSSIZE_WORD);
+	//---------------------------------
+	m_pGLOBALsection = new CSection;
+	m_pGLOBALsection->Create();
+	m_pGLOBALsection->SetName("GLOBAL");
+	m_pGLOBALsection->SetAccessMode(CSection::Mode::MODE_READ_WRITE);
+	m_pGLOBALsection->SetSectionSize(0x200);	//six bytes for IRQ vectors
+	m_pGLOBALsection->SetStartAddress(0);
+	m_pGLOBALsection->SetZeroPageFlag(CSection::AddressSize::ADDRESSSIZE_WORD);
+	//---------------------------------
+	m_pZEROpageSection = new CSection;
+	m_pZEROpageSection->Create();
+	m_pZEROpageSection->SetName("ZERO");
+	m_pZEROpageSection->SetAccessMode(CSection::Mode::MODE_READ_WRITE);
+	m_pZEROpageSection->SetSectionSize(0x100);	//six bytes for IRQ vectors
+	m_pZEROpageSection->SetStartAddress(0);
+	m_pZEROpageSection->SetZeroPageFlag(CSection::AddressSize::ADDRESSSIZE_ZEROPAGE);
+	//---------------------------------
+	m_pSTACKsection = new CSection;
+	m_pSTACKsection->Create();
+	m_pSTACKsection->SetName("STACK");
+	m_pSTACKsection->SetAccessMode(CSection::Mode::MODE_READ_WRITE);
+	m_pSTACKsection->SetSectionSize(0x100);	//six bytes for IRQ vectors
+	m_pSTACKsection->SetStartAddress(0x100);
+	m_pSTACKsection->SetZeroPageFlag(CSection::AddressSize::ADDRESSSIZE_WORD);
+	//---------------------------------
+	m_pLOCALvarSection = new CSection;
+	m_pLOCALvarSection->Create();
+	m_pLOCALvarSection->SetName("LOCAL");
+	m_pLOCALvarSection->SetAccessMode(CSection::Mode::MODE_READ_WRITE);
+	m_pLOCALvarSection->SetSectionSize(0x200);	//six bytes for IRQ vectors
+	m_pLOCALvarSection->SetStartAddress(0);
+	m_pLOCALvarSection->SetZeroPageFlag(CSection::AddressSize::ADDRESSSIZE_WORD);
+	//---------------------------------
+	m_pLOCALvarSection->Create();
+	m_pLOCALvarSection->SetName("VECTOR");
+	m_pLOCALvarSection->SetAccessMode(CSection::Mode::MODE_READ_WRITE);
+	m_pLOCALvarSection->SetSectionSize(6);	//six bytes for IRQ vectors
+	m_pLOCALvarSection->SetStartAddress(0xfffa);
+	m_pLOCALvarSection->SetZeroPageFlag(CSection::AddressSize::ADDRESSSIZE_WORD);
+	m_pVECTORsection = new CSection;
+	//---------------------------------
+	m_pVIRTUALregistersSection = new CSection;
+	m_pVIRTUALregistersSection->SetName("VIRTUAL");
+	m_pVIRTUALregistersSection->SetAccessMode(CSection::Mode::MODE_READ_WRITE);
+	m_pVIRTUALregistersSection->SetSectionSize(6);	//six bytes for IRQ vectors
+	m_pVIRTUALregistersSection->SetStartAddress(0xfffa);
+	m_pVIRTUALregistersSection->SetZeroPageFlag(CSection::AddressSize::ADDRESSSIZE_WORD);
+	m_pVIRTUALregistersSection = new CSection;
 	return true;
 }
 
@@ -3314,7 +3380,7 @@ CAstNode* CParser::FundTypeSpec(CTypeChain* pTypeChain)
 			pChild = IdentList(pTypeChain);
 			//--------- Abstract Syntax Tree Node ----------------------------
 			pN->SetChild(pChild);
-			pNext = CAstNode::MakeNextList(pNext,pChild);
+			pNext = CAstNode::AddToChildChain(pNext, pN);
 			break;
 		case Token::ARRAY:
 			//----------- Declaration -----------------------
@@ -3328,7 +3394,8 @@ CAstNode* CParser::FundTypeSpec(CTypeChain* pTypeChain)
 			pChild = IdentList(pTypeChain);
 			//------- Abstract Syntax Tree Node --------------
 			pN->SetChild(pChild);
-			pNext = CAstNode::MakeNextList(pNext, pChild);
+			pNext = CAstNode::AddToChildChain(pNext, pN);
+			//			pNext = CAstNode::MakeNextList(pNext, pChild);
 			break;
 		default:
 			Loop = false;
@@ -3656,7 +3723,6 @@ CAstNode* CParser::ProcDecl(CTypeChain* pTypeChain)
 	default:
 		break;
 	}
-	DebugTraverse(pN, "Proc Ident", 25, 1000);
 	return pN;
 
 }
@@ -3708,7 +3774,6 @@ CAstNode* CParser::ProcBody()
 	pStatements = Statements();
 	pChild = CAstNode::MakeNextList(pNext, pStatements);
 	pNext = pN->SetChild(pChild);
-	DebugTraverse(pNext, "Exit", 25, 1000);
 	return pNext;
 }
 
@@ -3786,7 +3851,6 @@ CAstNode* CParser::FuncBody()
 	pStatements = Statements();
 	pChild = CAstNode::MakeNextList(pNext, pStatements);
 	pNext = pN->SetChild(pChild);
-	DebugTraverse(pNext, "Exit", 25, 1000);
 	return pNext;
 }
 
@@ -4022,7 +4086,8 @@ CAstNode* CParser::ParamTypeSpec(CTypeChain* pTypeChain)
 			pChild = DefineParamIdentList(pTypeChain);
 			//--------- Abstract Syntax Tree Node ----------------------------
 			pN = new CAct65POINTER;
-			pNext = pN->MakeNode(pChild, pNext);
+			pN->SetChild(pChild);
+			pNext = CAstNode::AddToChildChain(pNext, pN);
 			break;
 		case Token::ARRAY:
 			//----------- Declaration -----------------------
@@ -4035,7 +4100,8 @@ CAstNode* CParser::ParamTypeSpec(CTypeChain* pTypeChain)
 			pChild = DefineParamIdentList(pTypeChain);
 			//------- Abstract Syntax Tree Node --------------
 			pN = new CAct65ARRAY;
-			pNext = pN->MakeNode(pChild, pNext);
+			pN->SetChild(pChild);
+			pNext = CAstNode::AddToChildChain(pNext, pN);
 			break;
 		default:
 			Loop = false;
@@ -4365,7 +4431,7 @@ CAstNode* CParser::LocalTypeSpec(CTypeChain* pTypeChain)
 			pChild = IdentList(pTypeChain);
 			//--------- Abstract Syntax Tree Node ----------------------------
 			pN->SetChild(pChild);
-			pNext = CAstNode::MakeNextList(pNext, pN);
+			pNext = CAstNode::AddToChildChain(pNext, pN);
 			break;
 		case Token::ARRAY:
 			//----------- Declaration -----------------------
@@ -4379,7 +4445,7 @@ CAstNode* CParser::LocalTypeSpec(CTypeChain* pTypeChain)
 			pChild = IdentList(pTypeChain);
 			//------- Abstract Syntax Tree Node --------------
 			pN->SetChild(pChild);
-			pNext = CAstNode::MakeNextList(pNext, pN);
+			pNext = CAstNode::AddToChildChain(pNext, pN);
 			break;
 		default:
 			Loop = false;
@@ -6284,50 +6350,6 @@ CAstNode* CParser::Accumulator(Token OpCodeToken, CAstNode* pLabel)
 		pLabel ? (CSymbol*)pLabel->GetSymbol() : 0
 	);
 	return pOpCode;
-}
-
-CAstNode* CParser::UnHookTopNode(CAstNode* pNodeList)
-{
-	CAstNode* pNewChainHead = 0;
-
-	if (pNodeList->GetNext())
-	{
-		pNewChainHead = pNodeList->GetNext();
-		pNodeList->SetNext(0);
-	}
-	else
-	{
-		pNewChainHead = pNodeList;
-	}
-	return pNewChainHead;
-}
-
-CAstNode* CParser::CheckForLabel(
-	CAstNode* pList, 
-	CAstNode* pNext, 
-	CAstNode* pChild,
-	const char* pSdebug
-)
-{
-	if (pNext == NULL)
-	{
-		pList = CAstNode::MakeNextList(pList, pChild);
-	}
-	else if (pNext->IsLabel())
-	{
-		if (pNext == pList)
-			pNext->SetChild(pChild);
-		else
-		{
-			pNext->SetChild(pChild);
-			pList = CAstNode::MakeNextList(pList, pNext);
-		}
-	}
-	else
-	{
-		pList = CAstNode::MakeNextList(pList, pChild);
-	}
-	return pList;
 }
 
 //-------------------------------------------

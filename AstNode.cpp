@@ -184,6 +184,24 @@ CAstNode* CAstNode::AddToNext(CAstNode* pNode)
 	return this;
 }
 
+CAstNode* CAstNode::AddToChildChain(CAstNode* pHead, CAstNode* pNode)
+{
+	CAstNode* pN = 0;
+
+	if (pHead)
+	{
+		pN = pHead;
+		while (pN->GetChild())
+			pN = pN->GetChild();
+		pN->SetChild(pNode);
+	}
+	else
+	{
+		pHead = pNode;
+	}
+	return pHead;
+}
+
 CAstNode* CAstNode::MakeNextList(CAstNode* pList, CAstNode* pListMember)
 {
 	CAstNode* pNode;

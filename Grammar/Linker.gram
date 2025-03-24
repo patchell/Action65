@@ -1,0 +1,115 @@
+//------------------------------------
+// Linker Script Parser
+//------------------------------------
+
+TERMINALS
+	"NUMBER" = 256,
+	"IDENT",
+	"STRING",
+	"PARTITION",
+	"REGION",
+	"RELADDR",
+	"ABSADDR",
+	"SIZE",
+	"LSH",
+	"RSH"
+
+GRAMMAR
+
+Link		-> Statements Link_1;
+Link_1		-> ';' Statements Link_1
+			-> .
+			;
+
+Statements	-> Assign Statements_1;
+Statements_1-> 'PARTITION' ParticianDef Name Assign Statements_1
+			-> '}' Name
+			;
+
+ParticianDef	-> '{' RegionList '}';
+
+RegionList		-> Region RegionList_1;
+RegionList_1	-> ';' Region RegionList_1
+				-> .
+				;
+
+Region		-> Region_1;
+Region_1	-> 'REGION' Region_2
+			-> .
+			;
+Region_2	-> '{' '}' NameList Region_2
+			;
+
+NameList	-> Name NameList_1;
+NameList_1	-> ',' Name NameList_1
+			-> .
+			;
+
+Name		-> Options Name_1;
+Name_1		-> 'STRING' Options
+			-> .
+			;
+
+Options		-> '[' Options_1 
+			-> ']' Options
+			-> .
+			;
+
+Options_1	-> 'RELADDR' '=' Expr Options_1
+			-> 'ABSADDR' '=' Expr Options_1
+			-> 'SIZE' '=' Expr Options_1
+			-> ',' Options_1
+			-> .
+			;
+
+Assign		-> Ident Assign_1;
+Assign_1	-> '=' Expr
+			-> .
+			;
+
+Ident		-> 'IDENT'
+			-> .
+			;
+
+Expr		-> Xor Or_1;
+Or_1		-> '|' Xor Or_1
+			-> .
+			;
+
+Xor			-> And Xor_1;
+Xor_1		-> '^' And Xor_1
+			-> .
+			;
+
+And			-> Shift And_1;
+And_1		-> '&' Shift And_1
+			-> .
+			;
+
+Shift		-> Add Shift_1;
+Shift_1		-> 'RSH' Add Shift_1
+			-> 'LSH' Add Shift_1
+			-> .
+			;
+
+Add			-> Mult Add_1;
+Add_1		-> '+' Mult Add_1
+			-> '-' Mult Add_1
+			-> .
+			;
+
+Mult		-> Unary Mult_1;
+Mult_1		-> '*' Unary Mult_1
+			-> '/' Unary Mult_1
+			-> '%' Unary Mult_1
+			-> .
+			;
+
+Unary		-> '-' Unary
+			-> Factor
+			;
+
+Factor		-> '(' Expr ')'
+			-> 'NUMBER'
+			-> 'IDENT'
+			;

@@ -213,7 +213,6 @@ public:
 	void SetPrev(CAstNode* pAN) { m_pPrev = pAN; }
 	CAstNode* SetChild(CAstNode* pAN);
 	void SetSection(CSection* pSec) { m_pSection = pSec; }
-	//	void SetChild(CAstNode* pAN) { m_pChild = pAN; }
 	void SetParent(CAstNode* pAN) { m_pParent = pAN; }
 	//---------------------------------------------------
 	int GetID() const { return m_NodeID; }
@@ -246,6 +245,7 @@ public:
 		return m_pValue;
 	}
 	CAstNode* AddToNext(CAstNode* pNode);
+	static CAstNode* AddToChildChain(CAstNode* pHead, CAstNode* pNode);
 	static CAstNode* MakeNextList(CAstNode* pList, CAstNode* pListMember);
 	static CAstNode* MakeChildList(
 		CAstNode* pList, 

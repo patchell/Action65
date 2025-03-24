@@ -203,7 +203,6 @@
     <ClCompile Include="Act65GreaterTHAN.cpp" />
     <ClCompile Include="Act65GTEQ.cpp" />
     <ClCompile Include="Act65IDENT.cpp" />
-    <ClCompile Include="Act65Identifier.cpp" />
     <ClCompile Include="Act65IdentList.cpp" />
     <ClCompile Include="Act65IF.cpp" />
     <ClCompile Include="Act65IFF.cpp" />
@@ -290,6 +289,7 @@
     <ClCompile Include="Bucket.cpp" />
     <ClCompile Include="CodeGeneration.cpp" />
     <ClCompile Include="Lexer.cpp" />
+    <ClCompile Include="Linker.cpp" />
     <ClCompile Include="ObjFormatCode.cpp" />
     <ClCompile Include="ObjFormatData.cpp" />
     <ClCompile Include="ObjFormatFile.cpp" />
@@ -303,11 +303,13 @@
     <ClCompile Include="Parser.cpp" />
     <ClCompile Include="pch.cpp" />
     <ClCompile Include="Section.cpp" />
+    <ClCompile Include="Settings.cpp" />
     <ClCompile Include="Symbol.cpp" />
     <ClCompile Include="SymTab.cpp" />
     <ClCompile Include="TypeChain.cpp" />
     <ClCompile Include="UnResolvedSymbol.cpp" />
     <ClCompile Include="Value.cpp" />
+    <ClCompile Include="VirtualReg.cpp" />
     <ClCompile Include="WhereSymbolIsUsed.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -380,7 +382,6 @@
     <ClInclude Include="Act65GreaterTHAN.h" />
     <ClInclude Include="Act65GTEQ.h" />
     <ClInclude Include="Act65IDENT.h" />
-    <ClInclude Include="Act65Identifier.h" />
     <ClInclude Include="Act65IdentList.h" />
     <ClInclude Include="Act65IF.h" />
     <ClInclude Include="Act65IFF.h" />
@@ -464,6 +465,7 @@
     <ClInclude Include="Act65TypeDotField.h" />
     <ClInclude Include="Act65UnaryNEG.h" />
     <ClInclude Include="CodeGeneration.h" />
+    <ClInclude Include="Linker.h" />
     <ClInclude Include="ObjFormatCode.h" />
     <ClInclude Include="ObjFormatData.h" />
     <ClInclude Include="ObjFormatFile.h" />
@@ -480,11 +482,13 @@
     <ClInclude Include="Lexer.h" />
     <ClInclude Include="Parser.h" />
     <ClInclude Include="Section.h" />
+    <ClInclude Include="Settings.h" />
     <ClInclude Include="Symbol.h" />
     <ClInclude Include="SymTab.h" />
     <ClInclude Include="TypeChain.h" />
     <ClInclude Include="UnResolvedSymbol.h" />
     <ClInclude Include="Value.h" />
+    <ClInclude Include="VirtualReg.h" />
     <ClInclude Include="WhereSymbolIsUsed.h" />
   </ItemGroup>
   <ItemGroup>
@@ -492,6 +496,8 @@
     <None Include="Grammar\Action.gram" />
     <None Include="Grammar\Action1.gram" />
     <None Include="Grammar\action2.gram" />
+    <None Include="Grammar\Linker.gram" />
+    <None Include="Grammar\Settings.gram" />
     <None Include="Test1.act" />
     <None Include="test2.act" />
     <None Include="test3.act" />

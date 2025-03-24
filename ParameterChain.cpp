@@ -8,6 +8,16 @@ CParameterChain::CParameterChain()
 
 CParameterChain::~CParameterChain()
 {
+	CBin* pSym = 0;
+	CBin* pNxtBin;
+
+	pSym = GetTail();
+	while (pSym)
+	{
+		pNxtBin = pSym->GetPrev();
+		delete pSym;
+		pSym = pNxtBin;
+	}
 }
 
 bool CParameterChain::Create()
@@ -43,6 +53,22 @@ void CParameterChain::AddToHead(CBin* pB)
 		SetTail(pB);
 		SetHead(pB);
 	}
+}
+
+CBin* CParameterChain::Find(const char* pName)
+{
+	CBin* pSym = 0;
+	bool Loop = true;
+
+	pSym = GetHead();
+	while (pSym && Loop)
+	{
+		if (strcmp(pName, pSym->GetName()))
+			Loop = false;
+		else
+			pSym = pSym->GetNext();
+	}
+    return pSym;
 }
 
 int CParameterChain::Print(char* pS, int l)

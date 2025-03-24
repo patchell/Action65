@@ -22,7 +22,7 @@ bool CSection::Create()
 	return rV;
 }
 
-void CSection::SetStartAddress(unsigned Start)
+void CSection::SetStartAddress(int Start)
 {
 	if ((Start + m_Size) <= 0x010000u)
 	{
@@ -30,7 +30,7 @@ void CSection::SetStartAddress(unsigned Start)
 		m_StartAddress = Start;
 		if (m_Size > 0)
 		{
-			unsigned i;
+			int i;
 
 			m_pSectionData = new char[m_Size];
 			for (i = 0; i < m_Size; ++i)
@@ -55,14 +55,14 @@ void CSection::SetStartAddress(unsigned Start)
 	}
 }
 
-void CSection::SetSectionSize(unsigned Size)
+void CSection::SetSectionSize(int Size)
 {
 	if (m_StartAddress + Size <= 0x10000)
 	{
 		m_Size = Size;
 		if (m_Size > 0)
 		{
-			unsigned i;
+			int i;
 
 			m_pSectionData = new char[m_Size];
 			for (i = 0; i < m_Size; ++i)
@@ -87,7 +87,7 @@ void CSection::SetSectionSize(unsigned Size)
 	}
 }
 
-void CSection::SetLocationCounter(unsigned short NewAddress)
+void CSection::SetLocationCounter(int NewAddress)
 {
 	if ((NewAddress < (m_StartAddress + m_Size)) &&
 		(NewAddress >= m_StartAddress)
@@ -113,7 +113,7 @@ void CSection::SetLocationCounter(unsigned short NewAddress)
 	}
 }
 
-unsigned short CSection::AddInstruction(CAct65Opcode* pINS)
+int CSection::AddInstruction(CAct65Opcode* pINS)
 {
 	switch (pINS->GetAdrModeType())
 	{
@@ -144,7 +144,7 @@ unsigned short CSection::AddInstruction(CAct65Opcode* pINS)
     return m_LocationCounter;
 }
 
-unsigned short CSection::AddData(unsigned ObjectSize, int Value)
+int CSection::AddData(int ObjectSize, int Value)
 {
 	char* b;
 	short* s;
@@ -172,7 +172,7 @@ unsigned short CSection::AddData(unsigned ObjectSize, int Value)
     return m_LocationCounter;
 }
 
-unsigned short CSection::AddData(unsigned ObjSize, const char* pData)
+int CSection::AddData(int ObjSize, const char* pData)
 {
 	int i = 0;
 
@@ -211,7 +211,7 @@ void CSection::AddDataAt(
 	}
 }
 
-unsigned short CSection::AllocateDataBlock(unsigned short size)
+int CSection::AllocateDataBlock(int size)
 {
 	m_LocationCounter += size;
 	return m_LocationCounter;

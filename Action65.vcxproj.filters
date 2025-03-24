@@ -446,9 +446,6 @@
     <ClCompile Include="Act65InitDATA.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Act65Identifier.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Act65FUNC.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -558,6 +555,15 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Act65TypeFIELD.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="VirtualReg.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Settings.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Linker.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -973,9 +979,6 @@
     <ClInclude Include="Act65InitDATA.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Act65Identifier.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Act65FUNC.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -1087,6 +1090,15 @@
     <ClInclude Include="Act65TypeFIELD.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="VirtualReg.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Settings.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Linker.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Grammar\Action.gram">
@@ -1123,6 +1135,12 @@
       <Filter>Grammar</Filter>
     </None>
     <None Include="Grammar\action2.gram">
+      <Filter>Grammar</Filter>
+    </None>
+    <None Include="Grammar\Settings.gram">
+      <Filter>Grammar</Filter>
+    </None>
+    <None Include="Grammar\Linker.gram">
       <Filter>Grammar</Filter>
     </None>
   </ItemGroup>

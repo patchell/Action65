@@ -51,6 +51,7 @@ class CSymbol: public CBin
 	// a user defined TYPE
 	//---------------------------
 	CParameterChain* m_pParamChain;
+	CParameterChain* m_pTypeDefChain;
 public:
 	CSymbol() {
 		m_Address = 0;
@@ -59,6 +60,7 @@ public:
 		m_UnResolved = true;
 		m_pTypeChain = 0;
 		m_pParamChain = 0;
+		m_pTypeDefChain = 0;
 	}
 	virtual ~CSymbol() {}
 	bool Create() { return true; }
@@ -75,6 +77,13 @@ public:
 	void CreateParamChain() {
 		m_pParamChain = new CParameterChain;
 		m_pParamChain->Create();
+	}
+	CParameterChain* GetTypeDefChain() {
+		return m_pTypeDefChain;
+	}
+	void CreateTypeDefChain() {
+		m_pTypeDefChain = new CParameterChain;
+		m_pTypeDefChain->Create();
 	}
 	virtual unsigned GetAddress() const { return m_Address; }
 	void SetAddress(unsigned A) { m_Address = A; }

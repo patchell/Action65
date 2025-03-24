@@ -27,10 +27,12 @@ CActionApp::CActionApp()
 	m_pObjectFile = 0;
 	m_pBinaryFile = 0;
 	m_pAsmSrcOut = 0;
+	m_pSettingsFile = 0;
 	m_pfSrc = 0;
 	m_pfLog = 0;
 	m_pfBin = 0;
 	m_pfObj = 0;
+	m_pfSettings = 0;
 }
 
 CActionApp::~CActionApp()
@@ -40,6 +42,7 @@ CActionApp::~CActionApp()
 	if (m_pObjectFile)delete[]m_pObjectFile;
 	if (m_pBinaryFile)delete[]m_pBinaryFile;
 	if (m_pAsmSrcOut) delete[] m_pAsmSrcOut;
+	if (m_pSettingsFile) delete[]m_pSettingsFile;
 	CloseAll();
 }
 
@@ -114,6 +117,12 @@ bool CActionApp::Create(int argc, char* argv[])
 					l = (int)strlen(argv[i]) + 1;
 					m_pAsmSrcOut = new char[l];
 					strcpy_s(m_pAsmSrcOut, l, argv[i]);
+					break;
+				case 'S':
+					++i;
+					l = (int)strlen(argv[i]) + 1;
+					m_pAsmSrcOut = new char[l];
+					strcpy_s(m_pSettingsFile, l, argv[i]);
 					break;
 				}
 			}
@@ -198,6 +207,20 @@ bool CActionApp::OpenBin()
 	return rV;
 }
 
+bool CActionApp::OpenSettings()
+{
+	bool rV = false;
+	errno_t err;
+
+	if (m_pBinaryFile)
+	{
+		err = fopen_s(&m_pfSettings, m_pSettingsFile, "wb");
+		if (err == 0)
+			rV = true;
+	}
+	return rV;
+}
+
 void CActionApp::CloseSource()
 {
 	if(m_pfSrc)
@@ -226,12 +249,19 @@ void CActionApp::CloseBin()
 	m_pfBin = 0;
 }
 
+void CActionApp::CloseSettings()
+{
+	if (m_pfSettings) fclose(m_pfSettings);
+	m_pfSettings = 0;
+}
+
 void CActionApp::CloseAll()
 {
 	CloseSource();
 	CloseLog();
 	CloseBin();
 	CloseObj();
+	CloseSettings();
 }
 
 char* CActionApp::IndentString(char* s, int Indent, int c)

@@ -43,12 +43,23 @@ private:
 	};
 	CLexer* m_pLex;
 	PHASE m_Phase;			// Phase of the compiler operation
-	CSection* m_pCurrentSection;
 	Processor m_Processor;
 	int m_Recursion;
 	int m_Bump;
 	CActionAstTree m_AstTree;
 	Token LookaHeadToken;
+	//------------------------------
+	// Default Memory Sections
+	//------------------------------
+	CSection* m_pCODEsection;
+	CSection* m_pGLOBALsection;
+	CSection* m_pZEROpageSection;
+	CSection* m_pSTACKsection;
+	CSection* m_pLOCALvarSection;
+	CSection* m_pVECTORsection;
+	CSection* m_pVIRTUALregistersSection;
+	//------------------------------
+	CSection* m_pCurrentSection;
 public:
 	CParser();
 	virtual ~CParser();
@@ -321,20 +332,13 @@ private:
 	CAstNode*  Immediate(Token OpCodeToken, CAstNode* pLabel);
 	CAstNode*  Absolute(Token  OpCodeToken, CAstNode* pLabel);
 	CAstNode* Accumulator(Token OpCodeToken, CAstNode* pLabel);
-	CAstNode* UnHookTopNode(CAstNode* pNodeList);
-	CAstNode* CheckForLabel(
-		CAstNode* pList,
-		CAstNode* pNext,
-		CAstNode* pChild,
-		const char* pSdebug = 0
-	);
 	//---------------- Debug Utillity ----------------------
 public:
 	void DebugTraverse(
-		CAstNode* pN, 
-		const char* pTitle, 
-		int MaxRecursions, 
-		int MaxLoops,
+		CAstNode* pN,		// head of tree
+		const char* pTitle, // title of dump
+		int MaxRecursions,	// Maximum number of recursions (safety limit)
+		int MaxLoops,		// ,axo,i, number of loops (safety limit)
 		int Misc = 0,
 		const char* pSmiscLabel = 0
 	);

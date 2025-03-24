@@ -1,0 +1,54 @@
+TERMINALS
+	"NUMBER" = 256,
+	"STRING",
+	"SECTION",
+	"CODE",
+	"GLOBAL",
+	"ZERO",
+	"STACK",
+	"LOCAL",
+	"VECTOR",
+	"VREG",
+	"NAME",
+	"START",
+	"SIZE",
+	"MODE",
+	"PAGEZERO",
+	"SIXTEENBITS",
+	"EIGHTBITS",
+	"READONLY",
+	"READWRITE"
+
+GRAMMAR
+
+Section		-> SectionName Section_1;
+Section_1	-> 'SECTION' SectionName Section_1
+			-> .
+			;
+
+
+SectionName		-> SectionParams SectionName_1;
+SectionName_1	-> 'NAME' '(' 'STRING' ')'
+				-> .
+				;
+
+SectionParams	-> Param SectionParams_1;
+SectionParams_1	-> ',' Param SectionParams_1
+				-> .
+				;
+
+Param			-> 'START' '=' 'NUMBER'
+				-> 'SIZE' '=' 'NUMBER'
+				-> 'MODE' '=' Mode
+				-> 'PAGEZERO' '=' PageZero
+				-> .
+				;
+
+Mode			-> 'READONLY'
+				-> 'READWRITE'
+				;
+
+PageZero		-> 'EIGHTBITS'
+				-> 'SIXTEENBITS'
+				;
+

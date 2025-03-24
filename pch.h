@@ -408,6 +408,8 @@ struct KeyWord {
 #include "ParameterChain.h"
 #include "Symbol.h"
 #include "Value.h"
+#include "SymTab.h"
+#include "Settings.h"
 
 constexpr auto MAX_EXCEPTION_STRING_LEN = 512;
 
@@ -534,7 +536,6 @@ public:
 	}
 };
 
-#include "SymTab.h"
 //--------------------------------------
 // Object File Format
 //--------------------------------------
@@ -550,6 +551,9 @@ public:
 #include "Section.h"
 #include "WhereSymbolIsUsed.h"
 #include "UnResolvedSymbol.h"
+#include "Linker.h"
+//------------- Virtual Registers --------
+#include "VirtualReg.h"
 //-------------- AST Base Class ----------
 #include "AstNode.h"
 //----------------------------------------
@@ -630,7 +634,6 @@ public:
 #include "Act65GTEQ.h"
 #include "Act65IDENT.h"
 #include "Act65IDENTaddress.h"
-#include "Act65Identifier.h"
 #include "Act65IdentList.h"
 #include "Act65IF.h"
 #include "Act65IFF.h"
