@@ -8,28 +8,55 @@ CSettings::~CSettings()
 {
 }
 
-bool CSettings::Create(FILE* pIN)
+bool CSettings::Create()
 {
-	if (pIN)
-	{
+	int i = 0;
+	CSettings::SectionSettings* pSettings = 0;
 
+
+	CSection* pSec;
+
+	if (Act()->GetSettingsFileName())
+	{
+		try
+		{ 
+			GetParser()->Create(Act()->GetSettingsFileName());
+			GetParser()->Run();
+		}
+		catch(Exception & BooBoo)
+		{
+			fprintf(
+				Act()->LogFile(),
+				"%s Line=%d  Col=%d\n",
+				BooBoo.GetExceptionTypeString(BooBoo.GetXCeptType()),
+				GetParser()->GetLexer()->GetLineNumber(),
+				GetParser()->GetLexer()->GetCollum()
+			);
+		}
 	}
 	else
 	{
 		// use default settings
+		for (i = 0; i < SETTINGS_DEFAULT_SECTIONS; ++i)
+		{
+			pSettings = GetSecSettings(i);
+			pSec = pSettings->CopyToSection();
+			Act()->GetParser()->AddSection(pSec);
+			fprintf(Act()->LogFile(), "Section:%s\n", pSec->GetName());
+		}
 	}
-	return false;
+	return true;
 }
 
-bool CSettings::Load(FILE* pIn)
+CSettings::SectionSettings* CSettings::GetSecSettings(int index)
 {
-	return false;
+	CSettings::SectionSettings* pSectionData = 0;
+	
+	if (index < SETTINGS_DEFAULT_SECTIONS)
+		pSectionData = &DefaultLUT[index];
+	return pSectionData;
 }
 
-bool CSettings::SectionSettings::Load()
-{
-	return false;
-}
 
 //----------------------------------------
 // LEXER
@@ -37,46 +64,66 @@ bool CSettings::SectionSettings::Load()
 
 CSettings::Lexer::Lexer()
 {
+	m_UngetBuffer = 0;
+	m_LexBuffIndex = 0;		// index into ^
+	m_Line = 0;
+	m_Col = 0;
+	m_LexValue = 0;
+	m_pLexSymbol = 0;
+	m_pFileBuffeer = 0;	// Buffer the source file is stored in
+	m_InFileSize = 0;	// Size of the buffer
+	m_FileIndex = 0;	// Current index into file buffer
+	memset(m_aLexBuff,0,256);	// Buffer for the current token string
 }
 
 CSettings::Lexer::~Lexer()
 {
 }
 
-bool CSettings::Lexer::Create(FILE* pIN)
+bool CSettings::Lexer::Create(const char* pSettingsFile)
 {
 	struct _stat32 FileStats;
 	unsigned BytesRead = 0;
+	bool rV = false;
 
 	//---------------------------------
 	// Open Input File
 	//---------------------------------
-	_stat32(Act()->GetSourceFileName(), &FileStats);
-	m_InFileSize = FileStats.st_size;
-	Act()->OpenSource();
-	m_pFileBuffeer = new char[m_InFileSize + 1];
-	if (m_pFileBuffeer && Act()->SrcFile())
-		BytesRead = (int)fread(m_pFileBuffeer, 1, m_InFileSize, Act()->SrcFile());
-	Act()->CloseSource();
-	if (BytesRead)
-		m_InFileSize = BytesRead;
-	//----------------------------
-	// Create Symbol Table
-	//----------------------------
-	m_SymbolTabel.Create(11);
-	if (LogFile())
-		fprintf(LogFile(), "File:%s has %d Bytes\n", Act()->GetSourceFileName(), m_InFileSize);
-	return true;
+	if (pSettingsFile)
+	{
+		if (_stat32(pSettingsFile, &FileStats) == 0)
+		{
+			m_InFileSize = FileStats.st_size;
+			if (Act()->OpenSettings())
+			{
+				m_pFileBuffeer = new char[m_InFileSize + 1];
+				if (m_pFileBuffeer && Act()->GetSettingsFile())
+					BytesRead = (int)fread(m_pFileBuffeer, 1, m_InFileSize, Act()->GetSettingsFile());
+				Act()->CloseSettings();
+				if (BytesRead)
+					m_InFileSize = BytesRead;
+				//----------------------------
+				// Create Symbol Table
+				//----------------------------
+				m_SymbolTabel.Create(11);
+				if (LogFile())
+					fprintf(LogFile(), "File:%s has %d Bytes\n", pSettingsFile, m_InFileSize);
+				rV = true;
+			}
+		}
+	}
+	return rV;
 }
 
 CSettings::Lexer::Token CSettings::Lexer::Lex()
 {
-	CSettings::Lexer::Token TokenValue;
+	CSettings::Lexer::Token TokenValue = CSettings::Lexer::Token(0);
 	bool Loop = true;
 	bool auxLoop = true;
 	int c;
 
-
+	m_LexBuffIndex = 0;
+	m_aLexBuff[0] = 0;
 	while (Loop)
 	{
 		c = LexGet();
@@ -145,6 +192,15 @@ CSettings::Lexer::Token CSettings::Lexer::Lex()
 			m_aLexBuff[m_LexBuffIndex++] = 0;
 			Loop = false;
 			TokenValue = Token::STRING;
+			break;
+		case '(':
+		case ')':
+		case ',':
+		case '=':
+		case '[':
+		case ']':
+			TokenValue = Lexer::Token(c);
+			Loop = false;
 			break;
 		default:
 			m_aLexBuff[m_LexBuffIndex++] = c;
@@ -332,6 +388,7 @@ CBin* CSettings::Lexer::LookupSymbol(const char* pName)
 
 CSettings::Parser::Parser()
 {
+	pSection = 0;
 	LookaHeadToken = CSettings::Lexer::Token(0);
 }
 
@@ -339,9 +396,9 @@ CSettings::Parser::~Parser()
 {
 }
 
-bool CSettings::Parser::Create(FILE* pIN)
+bool CSettings::Parser::Create(const char* pSettingFile)
 {
-	GetLexer()->Create(pIN);
+	GetLexer()->Create(pSettingFile);
 	return true;
 }
 
@@ -352,7 +409,11 @@ FILE* CSettings::Parser::LogFile()
 
 bool CSettings::Parser::Run()
 {
-	return false;
+	bool rV = true;
+
+	LookaHeadToken = GetLexer()->Lex();
+	Section();
+	return rV;
 }
 
 bool CSettings::Parser::Accept(CSettings::Lexer::Token Expected)
@@ -400,7 +461,10 @@ void CSettings::Parser::Section()
 		{
 		case CSettings::Lexer::Token::SECTION:
 			Expect(CSettings::Lexer::Token::SECTION);
+			pSection = new CSection;
 			SectionName();
+			Act()->GetParser()->AddSection(pSection);
+			pSection = 0;
 			break;
 		default:
 			Loop = false;
@@ -426,10 +490,33 @@ void CSettings::Parser::SectionName()
 		{
 		case CSettings::Lexer::Token::NAME:
 			Expect(CSettings::Lexer::Token::NAME);
+			Expect(CSettings::Lexer::Token('('));
+			pSection->SetName(GetLexer()->GetLexBuffer());
+			Expect(CSettings::Lexer::Token::STRING);
+			Expect(CSettings::Lexer::Token(')'));
+			ParamBlock();
 			break;
 		default:
+			Loop = false;
 			break;
 		}
+	}
+}
+
+void CSettings::Parser::ParamBlock()
+{
+	//--------------------------------------------
+	//	ParamBlock	-> '[' SectionParams ']';
+	//--------------------------------------------
+	switch (LookaHeadToken)
+	{
+	case CSettings::Lexer::Token('['):
+		Expect(CSettings::Lexer::Token('['));
+		SectionParams();
+		Expect(CSettings::Lexer::Token(']'));
+		break;
+	default:
+		break;
 	}
 }
 
@@ -450,8 +537,10 @@ void CSettings::Parser::SectionParams()
 		{
 		case CSettings::Lexer::Token(','):
 			Expect(CSettings::Lexer::Token(','));
+			Param();
 			break;
 		default:
+			Loop = false;
 			break;
 		}
 	}
@@ -464,6 +553,7 @@ void CSettings::Parser::Param()
 	//			-> 'SIZE' '=' 'NUMBER'
 	//			-> 'MODE' '=' Mode
 	//			-> 'PAGEZERO' '=' PageZero
+	//			-> 'TYPE' '=' Type
 	//			-> .
 	//			;
 	//--------------------------------------------
@@ -473,21 +563,29 @@ void CSettings::Parser::Param()
 	case CSettings::Lexer::Token::START:
 		Expect(CSettings::Lexer::Token::START);
 		Expect(CSettings::Lexer::Token('='));
+		pSection->SetStartAddress(GetLexer()->GetLexValue());
 		Expect(CSettings::Lexer::Token::NUMBER);
 		break;
 	case CSettings::Lexer::Token::SIZE:
 		Expect(CSettings::Lexer::Token::SIZE);
 		Expect(CSettings::Lexer::Token('='));
+		pSection->SetSectionSize(GetLexer()->GetLexValue());
 		Expect(CSettings::Lexer::Token::NUMBER);
 		break;
 	case CSettings::Lexer::Token::MODE:
 		Expect(CSettings::Lexer::Token::MODE);
 		Expect(CSettings::Lexer::Token('='));
-		Mode();		break;
+		Mode();		
+		break;
 	case CSettings::Lexer::Token::ADRSIZE:
 		Expect(CSettings::Lexer::Token::ADRSIZE);
 		Expect(CSettings::Lexer::Token('='));
 		PageZero();		break;
+		break;
+	case CSettings::Lexer::Token::TYPE:
+		Expect(CSettings::Lexer::Token::TYPE);
+		Expect(CSettings::Lexer::Token('='));
+		Type();
 		break;
 	default:
 		break;
@@ -506,9 +604,11 @@ void CSettings::Parser::Mode()
 	{
 	case CSettings::Lexer::Token::READONLY:
 		Expect(CSettings::Lexer::Token::READONLY);
+		pSection->SetAccessMode(CSection::Mode::MODE_READ_ONLY);
 		break;
 	case CSettings::Lexer::Token::READWRITE:
 		Expect(CSettings::Lexer::Token::READWRITE);
+		pSection->SetAccessMode(CSection::Mode::MODE_READ_WRITE);
 		break;
 	default:
 		break;
@@ -527,9 +627,28 @@ void CSettings::Parser::PageZero()
 	{
 	case CSettings::Lexer::Token::EIGHTBITS:
 		Expect(CSettings::Lexer::Token::EIGHTBITS);
+		pSection->SetZeroPageFlag(CSection::AddressSize::ADDRESSSIZE_ZEROPAGE);
 		break;
 	case CSettings::Lexer::Token::SIXTEENBITS:
 		Expect(CSettings::Lexer::Token::SIXTEENBITS);
+		pSection->SetZeroPageFlag(CSection::AddressSize::ADDRESSSIZE_WORD);
+		break;
+	default:
+		break;
+	}
+}
+
+void CSettings::Parser::Type()
+{
+	switch (LookaHeadToken)
+	{
+	case CSettings::Lexer::Token::RELOCATABLE:
+		Expect(CSettings::Lexer::Token::RELOCATABLE);
+		pSection->SetSectionType(CSection::SectionType::TYPE_RELOCATALE);
+		break;
+	case CSettings::Lexer::Token::ABSOLUTE:
+		Expect(CSettings::Lexer::Token::ABSOLUTE);
+		pSection->SetSectionType(CSection::SectionType::TYPE_ABSOLUTE);
 		break;
 	default:
 		break;
@@ -545,4 +664,18 @@ bool CSettings::Lexer::KeyWord::IsKeyword(const char* pLookupName) const
 	if (Result == 0)
 		rV = true;
 	return rV;
+}
+
+CSection* CSettings::SectionSettings::CopyToSection()
+{
+	CSection* pSec = 0;
+
+	pSec = new CSection;
+	pSec->Create();
+	pSec->SetAccessMode(CSection::Mode(m_Section_READWRITE));
+	pSec->SetZeroPageFlag(CSection::AddressSize(m_Section_PageZero));
+	pSec->SetName(m_pName);
+	pSec->SetStartAddress(m_StartAddress);
+	pSec->SetSectionSize(m_Section_Size);
+	return pSec;
 }

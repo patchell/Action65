@@ -17,6 +17,7 @@ public:
 		VREG() {
 			m_nBytes = RegSize::EIGHT_BITS;
 			m_RegID = 0;
+			m_pName = 0;
 		}
 		virtual ~VREG() {
 			if (m_pName)

@@ -1,0 +1,4 @@
+PARTITION {
+	REGION{} "CODE";
+};
+

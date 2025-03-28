@@ -279,6 +279,7 @@
     <ClCompile Include="Act65AssignOR.cpp" />
     <ClCompile Include="Act65FuncCall.cpp" />
     <ClCompile Include="Act65LogicalAND.cpp" />
+    <ClCompile Include="Act65CONST.cpp" />
     <ClCompile Include="AstNode.cpp" />
     <ClCompile Include="AstTree.cpp" />
     <ClCompile Include="Act65BOOL.cpp" />
@@ -458,6 +459,7 @@
     <ClInclude Include="Act65AssignOR.h" />
     <ClInclude Include="Act65FuncCall.h" />
     <ClInclude Include="Act65LogicalAND.h" />
+    <ClInclude Include="Act65CONST.h" />
     <ClInclude Include="AstNode.h" />
     <ClInclude Include="AstTree.h" />
     <ClInclude Include="Act65BOOL.h" />

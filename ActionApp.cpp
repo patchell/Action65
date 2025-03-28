@@ -10,7 +10,7 @@ CActionApp* Act()
 
 int main(int argc, char* argv[])
 {
-	fprintf(stderr, "The Action! Compiler for the 6502 Ver 0.0.1\nFeb 10, 2025\n");
+	fprintf(stderr, "The Action! Compiler for the 6502 Ver 0.0.2\nFeb 10, 2025\n");
 	if(ActApp.Create(argc, argv))
 		ActApp.Run();
 	fprintf(stderr, "Done\n");
@@ -28,11 +28,13 @@ CActionApp::CActionApp()
 	m_pBinaryFile = 0;
 	m_pAsmSrcOut = 0;
 	m_pSettingsFile = 0;
+	m_pLinkerScript = 0;
 	m_pfSrc = 0;
 	m_pfLog = 0;
 	m_pfBin = 0;
 	m_pfObj = 0;
 	m_pfSettings = 0;
+	m_pfLinkerScript = 0;
 }
 
 CActionApp::~CActionApp()
@@ -43,6 +45,7 @@ CActionApp::~CActionApp()
 	if (m_pBinaryFile)delete[]m_pBinaryFile;
 	if (m_pAsmSrcOut) delete[] m_pAsmSrcOut;
 	if (m_pSettingsFile) delete[]m_pSettingsFile;
+	if (m_pLinkerScript) delete[]m_pLinkerScript;
 	CloseAll();
 }
 
@@ -59,6 +62,8 @@ bool CActionApp::Create(int argc, char* argv[])
 	// -O <object file output
 	// -B <binary file output for burning rom>
 	// -s <asm file output>
+	// -C <Parser Settings File>
+	// -K <Linker Script File>
 	//--------------------------------
 
 	int i;
@@ -73,7 +78,9 @@ bool CActionApp::Create(int argc, char* argv[])
 		fprintf(stderr, "-L <Log File Name>\n");
 		fprintf(stderr, "-B <Binary File Name>\n");
 		fprintf(stderr, "-O <Object File Name>\n");
-		fprintf(stderr, "-s <Assembly Source File Output\n");
+		fprintf(stderr, "-s <Assembly Source File Output>\n");
+		fprintf(stderr, "-C <Compiler Settings>\n");
+		fprintf(stderr, "-K <Linker Script File>\n");
 	}
 	else
 	{
@@ -110,19 +117,25 @@ bool CActionApp::Create(int argc, char* argv[])
 					++i;
 					l = (int)strlen(argv[i]) + 1;
 					m_pBinaryFile = new char[l];
-					strcpy_s(m_pBinaryFile, l, argv[i]);
+					strncpy_s(m_pBinaryFile, l, argv[i], l);
 					break;
 				case 's':
 					++i;
 					l = (int)strlen(argv[i]) + 1;
 					m_pAsmSrcOut = new char[l];
-					strcpy_s(m_pAsmSrcOut, l, argv[i]);
+					strncpy_s(m_pAsmSrcOut, l, argv[i], l);
 					break;
-				case 'S':
+				case 'C':
 					++i;
 					l = (int)strlen(argv[i]) + 1;
-					m_pAsmSrcOut = new char[l];
-					strcpy_s(m_pSettingsFile, l, argv[i]);
+					m_pSettingsFile = new char[l];
+					strncpy_s(m_pSettingsFile,l,argv[i], l);
+					break;
+				case 'K':	// linker script
+					++i;
+					l = (int)strlen(argv[i]) + 1;
+					m_pLinkerScript = new char[l];
+					strncpy_s(m_pLinkerScript, l, argv[i],l);
 					break;
 				}
 			}
@@ -212,9 +225,23 @@ bool CActionApp::OpenSettings()
 	bool rV = false;
 	errno_t err;
 
-	if (m_pBinaryFile)
+	if (m_pSettingsFile)
 	{
-		err = fopen_s(&m_pfSettings, m_pSettingsFile, "wb");
+		err = fopen_s(&m_pfSettings, m_pSettingsFile, "r");
+		if (err == 0)
+			rV = true;
+	}
+	return rV;
+}
+
+bool CActionApp::OpenLinkerScript()
+{
+	bool rV = false;
+	errno_t err;
+
+	if (m_pLinkerScript)
+	{
+		err = fopen_s(&m_pfLinkerScript, m_pLinkerScript, "r");
 		if (err == 0)
 			rV = true;
 	}
@@ -255,6 +282,13 @@ void CActionApp::CloseSettings()
 	m_pfSettings = 0;
 }
 
+void CActionApp::CloseLinkerScript()
+{
+	if (m_pfLinkerScript)
+		fclose(m_pfLinkerScript);
+	m_pfLinkerScript = 0;
+}
+
 void CActionApp::CloseAll()
 {
 	CloseSource();
@@ -262,6 +296,7 @@ void CActionApp::CloseAll()
 	CloseBin();
 	CloseObj();
 	CloseSettings();
+	CloseLinkerScript();
 }
 
 char* CActionApp::IndentString(char* s, int Indent, int c)

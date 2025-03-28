@@ -165,7 +165,7 @@ int CSymTab::Hash(const char* name)
 void CSymTab::PrintTable(FILE* pOut)
 {
 	char* s = new char[512];
-	CBin* pB;
+	CBin* pSym;
 	int i;
 	int maxStringLen = 0;
 	int l;
@@ -179,16 +179,16 @@ void CSymTab::PrintTable(FILE* pOut)
 	{
 		if (m_ppTab[i] == NULL)
 		{
-			pB = NULL;
+			pSym = NULL;
 		}
 		else
-			pB = m_ppTab[i]->GetHead();
-		while (pB)
+			pSym = m_ppTab[i]->GetHead();
+		while (pSym)
 		{
-			l = (int)strlen(pB->GetName());
+			l = (int)strlen(pSym->GetName());
 			if (l > maxStringLen)
 				maxStringLen = l;
-			pB = pB->GetNext();
+			pSym = pSym->GetNext();
 		}
 	}
 
@@ -196,14 +196,14 @@ void CSymTab::PrintTable(FILE* pOut)
 	{
 		if (m_ppTab[i] == NULL)
 		{
-			pB = NULL;
+			pSym = NULL;
 		}
 		else
-			pB = m_ppTab[i]->GetHead();
-		while (pB)
+			pSym = m_ppTab[i]->GetHead();
+		while (pSym)
 		{
-			pB->Print(pOut);
-			pB = pB->GetNext();
+			pSym->Print(pOut);
+			pSym = pSym->GetNext();
 		}
 	}
 }

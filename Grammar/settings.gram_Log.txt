@@ -55,32 +55,49 @@ TERMINALS['Terminals'] { 'NUMBER','STRING','SECTION','CODE','GLOBAL','ZERO','STA
 FIRST['READWRITE'] { 'READWRITE' }
 TERMINALS['Terminals'] { 'NUMBER','STRING','SECTION','CODE','GLOBAL','ZERO','STACK'
 ,'LOCAL','VECTOR','VREG','NAME','START','SIZE','MODE','PAGEZERO','SIXTEENBITS','EIGHTBITS'
-,'READONLY','READWRITE','(',')',',','=','e','$' }
+,'READONLY','READWRITE','TYPE' }
+FIRST['TYPE'] { 'TYPE' }
+TERMINALS['Terminals'] { 'NUMBER','STRING','SECTION','CODE','GLOBAL','ZERO','STACK'
+,'LOCAL','VECTOR','VREG','NAME','START','SIZE','MODE','PAGEZERO','SIXTEENBITS','EIGHTBITS'
+,'READONLY','READWRITE','TYPE','ABSOLUTE' }
+FIRST['ABSOLUTE'] { 'ABSOLUTE' }
+TERMINALS['Terminals'] { 'NUMBER','STRING','SECTION','CODE','GLOBAL','ZERO','STACK'
+,'LOCAL','VECTOR','VREG','NAME','START','SIZE','MODE','PAGEZERO','SIXTEENBITS','EIGHTBITS'
+,'READONLY','READWRITE','TYPE','ABSOLUTE','RELOCATABLE' }
+FIRST['RELOCATABLE'] { 'RELOCATABLE' }
+TERMINALS['Terminals'] { 'NUMBER','STRING','SECTION','CODE','GLOBAL','ZERO','STACK'
+,'LOCAL','VECTOR','VREG','NAME','START','SIZE','MODE','PAGEZERO','SIXTEENBITS','EIGHTBITS'
+,'READONLY','READWRITE','TYPE','ABSOLUTE','RELOCATABLE','(',')','[',']',',','=','e'
+,'$' }
 NONTERMINALS['Non Terminals'] { 'Section','Section_1','SectionName','SectionName_1'
-,'SectionParams','SectionParams_1','Param','Mode','PageZero' }
+,'ParamBlock','SectionParams','SectionParams_1','Param','Mode','PageZero','Type' }
 *********** Build Nullable Set **********
 ****************Create NOT nullable set ************************
 ----- Calc First Sets------
-FIRST['Section'] { 'START','SIZE','MODE','PAGEZERO' }
+FIRST['Section'] { 'START','SIZE','TYPE','MODE','PAGEZERO' }
 FIRST['Section_1'] { 'SECTION','e' }
-FIRST['SectionName'] { 'START','SIZE','MODE','PAGEZERO' }
+FIRST['SectionName'] { 'START','SIZE','TYPE','MODE','PAGEZERO' }
 FIRST['SectionName_1'] { 'NAME','e' }
-FIRST['SectionParams'] { 'e','START','SIZE','MODE','PAGEZERO' }
+FIRST['ParamBlock'] { '[' }
+FIRST['SectionParams'] { 'e','START','SIZE','TYPE','MODE','PAGEZERO' }
 FIRST['SectionParams_1'] { ',','e' }
-FIRST['Param'] { 'START','SIZE','MODE','PAGEZERO','e' }
+FIRST['Param'] { 'START','SIZE','TYPE','MODE','PAGEZERO','e' }
 FIRST['Mode'] { 'READONLY','READWRITE' }
 FIRST['PageZero'] { 'EIGHTBITS','SIXTEENBITS' }
+FIRST['Type'] { 'ABSOLUTE','RELOCATABLE' }
 ----- Calc Follow Sets------
 ------------ Follow Sets ---------------
 FOLLOW['Section'] { '$' }
 FOLLOW['Section_1'] { '$' }
 FOLLOW['SectionName'] { 'SECTION','$' }
 FOLLOW['SectionName_1'] { 'SECTION','$' }
-FOLLOW['SectionParams'] { 'NAME','SECTION','$' }
-FOLLOW['SectionParams_1'] { 'NAME','SECTION','$' }
-FOLLOW['Param'] { ',','NAME','SECTION','$' }
+FOLLOW['ParamBlock'] { }
+FOLLOW['SectionParams'] { 'NAME','SECTION','$',']' }
+FOLLOW['SectionParams_1'] { 'NAME','SECTION','$',']' }
+FOLLOW['Param'] { ',','NAME','SECTION','$',']' }
 FOLLOW['Mode'] { }
 FOLLOW['PageZero'] { }
+FOLLOW['Type'] { }
 ---------------- Create Parse Table --------------
-Table Entries = 41
+Table Entries = 51
 ------------ Check For Conflicts-------------

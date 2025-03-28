@@ -77,10 +77,13 @@ int CParameterChain::Print(char* pS, int l)
 	int ls = 0;
 
 	pSym = (CSymbol*)GetHead();
+	ls += sprintf_s(&pS[ls], l , "\n");
 	while (pSym)
 	{
 		ls += pSym->Print(&pS[ls], l - ls, "\t");
 		pSym = (CSymbol*)pSym->GetNext();
+		if(pSym)
+			ls += sprintf_s(&pS[ls], l - ls, "\n");
 	}
 	return ls;
 }

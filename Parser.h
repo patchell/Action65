@@ -51,15 +51,11 @@ private:
 	//------------------------------
 	// Default Memory Sections
 	//------------------------------
-	CSection* m_pCODEsection;
-	CSection* m_pGLOBALsection;
-	CSection* m_pZEROpageSection;
-	CSection* m_pSTACKsection;
-	CSection* m_pLOCALvarSection;
-	CSection* m_pVECTORsection;
-	CSection* m_pVIRTUALregistersSection;
+	CSection* m_pHead;
+	CSection* m_pTail;
 	//------------------------------
 	CSection* m_pCurrentSection;
+	CLinker* m_pLinkerScript;
 public:
 	CParser();
 	virtual ~CParser();
@@ -74,6 +70,16 @@ public:
 	CActionAstTree* GetAstTree() { return &m_AstTree; }
 	FILE* LogFile();
 	CAstNode* Run();
+	//----------------------------------
+	// Manage Memory Sections
+	//---------------------------------
+	CSection* GetSectionHead() { return m_pHead; }
+	void SetSectionHead(CSection* pH) { m_pHead = pH; }
+	CSection* GetSectionTail() { return m_pTail;}
+	void SetSectionTail(CSection* pT) { m_pTail = pT; }
+	CSection* FindSection(const char* pSectionName);
+	void AddSection(CSection* pSection);
+	void PrintSections();
 	//---------------------------------
 	void Expect(Token Expected);
 	bool Accept(Token Expected);
@@ -218,21 +224,21 @@ private:
 	CAstNode*  IrqBody();
 	//------------------
 	CAstNode*  ProcDecl(CTypeChain* pTypeChain);
-	CAstNode*  ProcDeclParams();
+	CAstNode*  ProcDeclParams(CSymbol* pFuncSym);
 	CAstNode*  ProcBody();
 	//------------------
-	CAstNode*  FuncDecl();
-	CAstNode*  FuncDeclParams();
+	CAstNode*  FuncDecl(CTypeChain* pTypeChain);
+	CAstNode*  FuncDeclParams(CSymbol* pFuncSym);
 	CAstNode*  FuncBody();
 	//------------------
 	CAstNode*  OptInit();
 	//-------------------------------------------
 	// Parameter Declarations
 	//-------------------------------------------
-	CAstNode*  ParamList();
-	CAstNode*  ParamTypeSpec(CTypeChain* pTypeChain);
-	CAstNode*  DefineParamIdentList(CTypeChain* pTypeChain);
-	CAstNode*  DefineParamIdent(CTypeChain* pTypeChain);
+	CAstNode*  ParamList(CSymbol* pFuncSym);
+	CAstNode*  ParamTypeSpec(CTypeChain* pTypeChain, CSymbol* pFuncSym);
+	CAstNode*  DefineParamIdentList(CTypeChain* pTypeChain, CSymbol* pFuncSym);
+	CAstNode*  DefineParamIdent(CTypeChain* pTypeChain, CSymbol* pFuncSym);
 	//-----------------------------------------------
 	// Local Variableas
 	//-----------------------------------------------

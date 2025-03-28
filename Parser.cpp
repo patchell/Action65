@@ -5,18 +5,13 @@ CParser::CParser()
 	m_Phase = PHASE::NONE;
 	m_pLex = 0;
 	m_Processor = Processor::R6502;
-	m_pCurrentSection = 0;
 	m_Recursion = 0;
 	m_Bump = 0;
 	LookaHeadToken = Token(0);
 
-	m_pCODEsection = 0;
-	m_pGLOBALsection = 0;
-	m_pZEROpageSection = 0;
-	m_pSTACKsection = 0;
-	m_pLOCALvarSection = 0;
-	m_pVECTORsection = 0;
-	m_pVIRTUALregistersSection = 0;
+	m_pCurrentSection = 0;
+	m_pHead = 0;
+	m_pTail = 0;
 }
 
 CParser::~CParser()
@@ -28,71 +23,24 @@ CParser::~CParser()
 bool CParser::Create()
 {
 	bool rV = true;
+	CSection* pSec = 0;
+	CSettings* pSettings;
+	FILE* pIn = 0;
 
 	m_pLex = new CLexer;
 	m_pLex->Create();
 	GetAstTree()->Create();
+	pSettings = new CSettings;
+	pSettings->Create();
+	PrintSections();
+	m_pLinkerScript = new CLinker;
+	m_pLinkerScript->Create();
 
-	if (LogFile())
-		fprintf(LogFile(), "Parser Created\n");
 	//-----------------------------------
 	// Initialize Default Sections
 	//-----------------------------------
-	m_pCODEsection = new CSection;
-	m_pCODEsection->Create();
-	m_pCODEsection->SetName("CODE");
-	m_pCODEsection->SetAccessMode(CSection::Mode::MODE_READ_ONLY);
-	m_pCODEsection->SetSectionSize(0x2000 - 6);	//six bytes for IRQ vectors
-	m_pCODEsection->SetStartAddress(0xe000);
-	m_pCODEsection->SetZeroPageFlag(CSection::AddressSize::ADDRESSSIZE_WORD);
-	//---------------------------------
-	m_pGLOBALsection = new CSection;
-	m_pGLOBALsection->Create();
-	m_pGLOBALsection->SetName("GLOBAL");
-	m_pGLOBALsection->SetAccessMode(CSection::Mode::MODE_READ_WRITE);
-	m_pGLOBALsection->SetSectionSize(0x200);	//six bytes for IRQ vectors
-	m_pGLOBALsection->SetStartAddress(0);
-	m_pGLOBALsection->SetZeroPageFlag(CSection::AddressSize::ADDRESSSIZE_WORD);
-	//---------------------------------
-	m_pZEROpageSection = new CSection;
-	m_pZEROpageSection->Create();
-	m_pZEROpageSection->SetName("ZERO");
-	m_pZEROpageSection->SetAccessMode(CSection::Mode::MODE_READ_WRITE);
-	m_pZEROpageSection->SetSectionSize(0x100);	//six bytes for IRQ vectors
-	m_pZEROpageSection->SetStartAddress(0);
-	m_pZEROpageSection->SetZeroPageFlag(CSection::AddressSize::ADDRESSSIZE_ZEROPAGE);
-	//---------------------------------
-	m_pSTACKsection = new CSection;
-	m_pSTACKsection->Create();
-	m_pSTACKsection->SetName("STACK");
-	m_pSTACKsection->SetAccessMode(CSection::Mode::MODE_READ_WRITE);
-	m_pSTACKsection->SetSectionSize(0x100);	//six bytes for IRQ vectors
-	m_pSTACKsection->SetStartAddress(0x100);
-	m_pSTACKsection->SetZeroPageFlag(CSection::AddressSize::ADDRESSSIZE_WORD);
-	//---------------------------------
-	m_pLOCALvarSection = new CSection;
-	m_pLOCALvarSection->Create();
-	m_pLOCALvarSection->SetName("LOCAL");
-	m_pLOCALvarSection->SetAccessMode(CSection::Mode::MODE_READ_WRITE);
-	m_pLOCALvarSection->SetSectionSize(0x200);	//six bytes for IRQ vectors
-	m_pLOCALvarSection->SetStartAddress(0);
-	m_pLOCALvarSection->SetZeroPageFlag(CSection::AddressSize::ADDRESSSIZE_WORD);
-	//---------------------------------
-	m_pLOCALvarSection->Create();
-	m_pLOCALvarSection->SetName("VECTOR");
-	m_pLOCALvarSection->SetAccessMode(CSection::Mode::MODE_READ_WRITE);
-	m_pLOCALvarSection->SetSectionSize(6);	//six bytes for IRQ vectors
-	m_pLOCALvarSection->SetStartAddress(0xfffa);
-	m_pLOCALvarSection->SetZeroPageFlag(CSection::AddressSize::ADDRESSSIZE_WORD);
-	m_pVECTORsection = new CSection;
-	//---------------------------------
-	m_pVIRTUALregistersSection = new CSection;
-	m_pVIRTUALregistersSection->SetName("VIRTUAL");
-	m_pVIRTUALregistersSection->SetAccessMode(CSection::Mode::MODE_READ_WRITE);
-	m_pVIRTUALregistersSection->SetSectionSize(6);	//six bytes for IRQ vectors
-	m_pVIRTUALregistersSection->SetStartAddress(0xfffa);
-	m_pVIRTUALregistersSection->SetZeroPageFlag(CSection::AddressSize::ADDRESSSIZE_WORD);
-	m_pVIRTUALregistersSection = new CSection;
+	if (LogFile())
+		fprintf(LogFile(), "Parser Created\n");
 	return true;
 }
 
@@ -126,7 +74,7 @@ CAstNode* CParser::Run()
 		GetAstTree()->Print(LogFile());
 		GetAstTree()->Process();	//gemerate cpde
 //		GetCurrentSection()->Print(LogFile());
-//		GetLexer()->GetSymTab()->PrintTable(LogFile());
+		GetLexer()->GetSymTab()->PrintTable(LogFile());
 		fprintf(stderr, "Lines Compiled:%d\n", GetLexer()->GetLineNumber());
 		fprintf(LogFile(), "Lines Compiled:%d\n", GetLexer()->GetLineNumber());
 	}
@@ -262,6 +210,58 @@ CAstNode* CParser::Run()
 //	reutns the next Lookahead token (>0)
 //	reutnrs 0 or negative if we did not get what we Expected
 //*********************************************
+
+CSection* CParser::FindSection(const char* pSectionName)
+{
+	CSection* pSection = 0;
+	CSection* pSec = GetSectionHead();
+	bool Loop = true;
+
+	while (pSec && Loop)
+	{
+		if (strcmp(pSec->GetName(), pSectionName) == 0)
+		{
+			pSection = pSec;
+			Loop = false;
+		}
+		else
+			pSec = pSec->GetNextSection();
+	}
+	return pSection;
+}
+
+void CParser::AddSection(CSection* pSection)
+{
+	//----------------------
+	// Add section to Section
+	// list and the symbol
+	// table
+	//----------------------
+	if (GetSectionHead())
+	{
+		pSection->SetNextSection(GetSectionHead());
+		GetSectionHead()->SetPrevSection(pSection);
+		SetSectionHead(pSection);
+	}
+	else
+	{
+		SetSectionHead(pSection);
+		SetSectionTail(pSection);
+	}
+	GetLexer()->GetSymTab()->AddSymbol(pSection);
+}
+
+void CParser::PrintSections()
+{
+	CSection* pSec = 0;
+
+	pSec = GetSectionHead();
+	while (pSec)
+	{
+		pSec->Print(LogFile(), "");
+		pSec = (CSection * )pSec->GetNextSection();
+	}
+}
 
 void CParser::Expect(Token Expected)
 {
@@ -2811,6 +2811,16 @@ void CParser::DECLAREParamTypeSpec(CTypeChain* pTypeChain)
 	{
 		switch (LookaHeadToken)
 		{
+		case Token::CONST:
+			//-------------- Declaration ----------------------
+			pOTC = new CObjTypeChain;
+			pOTC->Create();
+			pOTC->SetSpec(CObjTypeChain::Spec::CONST);
+			pTypeChain->AddToTail(pOTC);
+			//---------------- Parsing -------------------
+			Expect(Token::CONST);
+			DECLAREParamIdentList(pTypeChain);
+			break;
 		case Token::POINTER:
 			//-------------- Declaration ----------------------
 			pOTC = new CObjTypeChain;
@@ -3011,6 +3021,16 @@ void CParser::DECLAREFuncTypeSpec(CTypeChain* pTypeChain)
 	{
 		switch (LookaHeadToken)
 		{
+		case Token::CONST:
+			//-------------- Declaration ----------------------
+			pOTC = new CObjTypeChain;
+			pOTC->Create();
+			pOTC->SetSpec(CObjTypeChain::Spec::CONST);
+			pTypeChain->AddToTail(pOTC);
+			//---------------- Parsing -------------------
+			Expect(Token::CONST);
+			DECLAREfunction(pTypeChain);
+			break;
 		case Token::POINTER:
 			//-------------- Declaration ----------------------
 			pOTC = new CObjTypeChain;
@@ -3368,6 +3388,20 @@ CAstNode* CParser::FundTypeSpec(CTypeChain* pTypeChain)
 	{
 		switch (LookaHeadToken)
 		{
+		case Token::CONST:
+			//-------------- Declaration ----------------------
+			pOTC = new CObjTypeChain;
+			pOTC->Create();
+			pOTC->SetSpec(CObjTypeChain::Spec::CONST);
+			pTypeChain->AddToTail(pOTC);
+			//---------------- Parsing -------------------
+			Expect(Token::CONST);
+			pN = new CAct65CONST;
+			pChild = IdentList(pTypeChain);
+			//--------- Abstract Syntax Tree Node ----------------------------
+			pN->SetChild(pChild);
+			pNext = CAstNode::AddToChildChain(pNext, pN);
+			break;
 		case Token::POINTER:
 			//-------------- Declaration ----------------------
 			pOTC = new CObjTypeChain;
@@ -3494,7 +3528,7 @@ CAstNode* CParser::Ident(CTypeChain* pTypeChain)
 		pTypeChain->AddToTail(pOTC);
 		//----------------- Parsing --------------------
 		Expect(Token::FUNC);
-		pChild = FuncDecl();
+		pChild = FuncDecl(pTypeChain);
 		//---------------------------------------------
 		pN = new CAct65FUNC;
 		pChild = pN->SetChild(pChild);
@@ -3708,7 +3742,7 @@ CAstNode* CParser::ProcDecl(CTypeChain* pTypeChain)
 		{
 			pInit = OptInit();
 		}
-		pChild = ProcDeclParams();
+		pChild = ProcDeclParams(pSym);
 		if (pInit)
 		{
 			pInit->SetChild(pChild);
@@ -3727,7 +3761,7 @@ CAstNode* CParser::ProcDecl(CTypeChain* pTypeChain)
 
 }
 
-CAstNode* CParser::ProcDeclParams()
+CAstNode* CParser::ProcDeclParams(CSymbol* pFuncSym)
 {
 	//--------------------------------------------
 	//	ProcDeclParams	-> '(' ParamList ')' ProcBody;
@@ -3740,7 +3774,7 @@ CAstNode* CParser::ProcDeclParams()
 		Expect(Token('('));
 		//--------- Declaration ----------------------
 		//----------- Parse --------------------------
-		pChild = ParamList();
+		pChild = ParamList(pFuncSym);
 		pNext = new CAct65ParamList;
 		pNext->SetChild(pChild);
 		Expect(Token(')'));
@@ -3779,7 +3813,7 @@ CAstNode* CParser::ProcBody()
 
 //----------------- FUNC -----------------
 
-CAstNode* CParser::FuncDecl()
+CAstNode* CParser::FuncDecl(CTypeChain* pTypeChain)
 {
 	//--------------------------------------------
 	//	FuncDecl	-> 'IDENT' OptInit FuncDeclParams;
@@ -3795,12 +3829,14 @@ CAstNode* CParser::FuncDecl()
 	//--------------------
 	pSym = (CSymbol*)GetLexer()->GetLexSymbol();
 	pSym->SetToken(Token::FUNC_IDENT);
+	pSym->CreateTypeChain(pTypeChain);
+	GetLexer()->GetSymTab()->AddSymbol(pSym);
 	Expect(Token::IDENT);
 	pInit = OptInit();
 	pN = new CAct65IDENT;
 	pN->SetSymbol(pSym);
 	pN->SetChild(pInit);
-	pChild = FuncDeclParams();
+	pChild = FuncDeclParams(pSym);
 	if (pInit)
 		pInit->SetChild(pChild);
 	else
@@ -3811,7 +3847,7 @@ CAstNode* CParser::FuncDecl()
 
 }
 
-CAstNode* CParser::FuncDeclParams()
+CAstNode* CParser::FuncDeclParams(CSymbol* pFuncSym)
 {
 	//--------------------------------------------
 	//	FuncDeclParams	-> '(' ParamList ')' FuncBody;
@@ -3821,7 +3857,7 @@ CAstNode* CParser::FuncDeclParams()
 
 	Expect(Token('('));
 	//----------- Parse --------------------------
-	pChild = ParamList();
+	pChild = ParamList(pFuncSym);
 	pNext = new CAct65ParamList;
 	pNext->SetChild(pChild);
 	Expect(Token(')'));
@@ -3883,7 +3919,7 @@ CAstNode* CParser::OptInit()
 // Function Parameters Declarations
 //-------------------------------------------
 
-CAstNode* CParser::ParamList()
+CAstNode* CParser::ParamList(CSymbol* pFuncSym)
 {
 	//--------------------------------------------
 	//	ParamList->ParamTypeSpec Param_1;
@@ -3926,7 +3962,7 @@ CAstNode* CParser::ParamList()
 			pTypeChain->AddToTail(pOTC);		//node -> ROOT
 			//------------------ Parse ------------------------
 			Expect(Token::CHAR);
-			pChild = ParamTypeSpec(pTypeChain);
+			pChild = ParamTypeSpec(pTypeChain, pFuncSym);
 			//-------- Abstract Syntax Tree Node --------------
 			pN = new CAct65CHAR;
 			pN->SetChild(pChild);
@@ -3949,7 +3985,7 @@ CAstNode* CParser::ParamList()
 			pTypeChain->AddToTail(pOTC);		//node -> ROOT
 			//------------------ Parse ------------------------
 			Expect(Token::BYTE);
-			pChild = ParamTypeSpec(pTypeChain);
+			pChild = ParamTypeSpec(pTypeChain, pFuncSym);
 			//-------- Abstract Syntax Tree Node --------------
 			pN = new CAct65BYTE;
 			pN->SetChild(pChild);
@@ -3972,7 +4008,7 @@ CAstNode* CParser::ParamList()
 			pTypeChain->AddToTail(pOTC);		//node -> ROOT
 			//------------------ Parse ------------------------
 			Expect(Token::CARD);
-			pChild = ParamTypeSpec(pTypeChain);
+			pChild = ParamTypeSpec(pTypeChain, pFuncSym);
 			//-------- Abstract Syntax Tree Node --------------
 			pN = new CAct65CARD;;
 			pN->SetChild(pChild);
@@ -3994,7 +4030,7 @@ CAstNode* CParser::ParamList()
 			pTypeChain->AddToTail(pOTC);		//node -> ROOT
 			//------------------ Parse ------------------------
 			Expect(Token::INT);
-			pChild = ParamTypeSpec(pTypeChain);
+			pChild = ParamTypeSpec(pTypeChain, pFuncSym);
 			//-------- Abstract Syntax Tree Node --------------
 			pN = new CAct65INT;
 			pN->SetChild(pChild);
@@ -4017,7 +4053,7 @@ CAstNode* CParser::ParamList()
 			pTypeChain->AddToTail(pOTC);		//node -> ROOT
 			//------------------ Parse ------------------------
 			Expect(Token::BOOL);
-			pChild = ParamTypeSpec(pTypeChain);
+			pChild = ParamTypeSpec(pTypeChain, pFuncSym);
 			//-------- Abstract Syntax Tree Node --------------
 			pN = new CAct65BOOL;;
 			pN->SetChild(pChild);
@@ -4040,7 +4076,7 @@ CAstNode* CParser::ParamList()
 			pTypeChain->AddToTail(pOTC);		//node -> ROOT
 			//------------------ Parse ------------------------
 			Expect(Token::RECORDTYPE);
-			pChild = ParamTypeSpec(pTypeChain);
+			pChild = ParamTypeSpec(pTypeChain, pFuncSym);
 			//-------- Abstract Syntax Tree Node --------------
 			pN = new CAct65RECTYPE;;
 			pN->SetChild(pChild);
@@ -4055,7 +4091,7 @@ CAstNode* CParser::ParamList()
 	return pNext;
 }
 
-CAstNode* CParser::ParamTypeSpec(CTypeChain* pTypeChain)
+CAstNode* CParser::ParamTypeSpec(CTypeChain* pTypeChain, CSymbol* pFuncSym)
 {
 	//--------------------------------------------
 	//	ParamTypeSpec	->DefineParamIdentList ParamTypeSpec_1;
@@ -4070,11 +4106,25 @@ CAstNode* CParser::ParamTypeSpec(CTypeChain* pTypeChain)
 	bool Loop = true;
 	int LoopCount = 0;
 
-	pNext = DefineParamIdentList(pTypeChain);
+	pNext = DefineParamIdentList(pTypeChain, pFuncSym);
 	while (Loop)
 	{
 		switch (LookaHeadToken)
 		{
+		case Token::CONST:
+			//-------------- Declaration ----------------------
+			pOTC = new CObjTypeChain;
+			pOTC->Create();
+			pOTC->SetSpec(CObjTypeChain::Spec::CONST);
+			pTypeChain->AddToTail(pOTC);
+			//---------------- Parsing -------------------
+			Expect(Token::CONST);
+			pN = new CAct65CONST;
+			pChild = DefineParamIdentList(pTypeChain, pFuncSym);
+			//--------- Abstract Syntax Tree Node ----------------------------
+			pN->SetChild(pChild);
+			pNext = CAstNode::AddToChildChain(pNext, pN);
+			break;
 		case Token::POINTER:
 			//-------------- Declaration ----------------------
 			pOTC = new CObjTypeChain;
@@ -4083,7 +4133,7 @@ CAstNode* CParser::ParamTypeSpec(CTypeChain* pTypeChain)
 			pTypeChain->AddToTail(pOTC);
 			//---------------- Parsing -------------------
 			Expect(Token::POINTER);
-			pChild = DefineParamIdentList(pTypeChain);
+			pChild = DefineParamIdentList(pTypeChain, pFuncSym);
 			//--------- Abstract Syntax Tree Node ----------------------------
 			pN = new CAct65POINTER;
 			pN->SetChild(pChild);
@@ -4097,7 +4147,7 @@ CAstNode* CParser::ParamTypeSpec(CTypeChain* pTypeChain)
 			pTypeChain->AddToTail(pOTC);
 			//-------------- Parsing ------------------------
 			Expect(Token::ARRAY);
-			pChild = DefineParamIdentList(pTypeChain);
+			pChild = DefineParamIdentList(pTypeChain, pFuncSym);
 			//------- Abstract Syntax Tree Node --------------
 			pN = new CAct65ARRAY;
 			pN->SetChild(pChild);
@@ -4111,7 +4161,7 @@ CAstNode* CParser::ParamTypeSpec(CTypeChain* pTypeChain)
 	return pNext;
 }
 
-CAstNode* CParser::DefineParamIdentList(CTypeChain* pTypeChain)
+CAstNode* CParser::DefineParamIdentList(CTypeChain* pTypeChain, CSymbol* pFuncSym)
 {
 	//--------------------------------------------
 	//	DefineParamIdentList	->DefineParamIdent DefineParamIdentList_1;
@@ -4131,7 +4181,7 @@ CAstNode* CParser::DefineParamIdentList(CTypeChain* pTypeChain)
 	CAstNode* pNext = 0, *pChild = 0;
 	CObjTypeChain* pOTC = 0;
 
-	pNext = DefineParamIdent(pTypeChain);
+	pNext = DefineParamIdent(pTypeChain, pFuncSym);
 	while (Loop)
 	{
 		switch (LookaHeadToken)
@@ -4139,7 +4189,7 @@ CAstNode* CParser::DefineParamIdentList(CTypeChain* pTypeChain)
 		case Token(','):
 
 			Expect(Token(','));
-			pChild = DefineParamIdent(pTypeChain);
+			pChild = DefineParamIdent(pTypeChain, pFuncSym);
 			pNext = CAstNode::MakeNextList(pNext, pChild);;
 			break;
 		default:
@@ -4150,7 +4200,7 @@ CAstNode* CParser::DefineParamIdentList(CTypeChain* pTypeChain)
 	return pNext;
 }
 
-CAstNode* CParser::DefineParamIdent(CTypeChain* pTypeChain)
+CAstNode* CParser::DefineParamIdent(CTypeChain* pTypeChain, CSymbol* pFuncSym)
 {
 	//--------------------------------------------
 	//	DefineParamIdent	-> 'IDENT';
@@ -4172,6 +4222,11 @@ CAstNode* CParser::DefineParamIdent(CTypeChain* pTypeChain)
 		//--------------- Declaration -----------------
 		pSym = GetLexer()->GetLexSymbol();
 		pSym->CreateTypeChain(pTypeChain);
+		if (pFuncSym->GetParamChain() == nullptr)
+		{
+			pFuncSym->CreateParamChain();
+		}
+		pFuncSym->GetParamChain()->AddToTail(pSym);
 		//--------------------- Parse ------------------------
 		Expect(Token::IDENT);
 		//--------------- Abstract Syntax  --------------------
@@ -4419,6 +4474,20 @@ CAstNode* CParser::LocalTypeSpec(CTypeChain* pTypeChain)
 	{
 		switch (LookaHeadToken)
 		{
+		case Token::CONST:
+			//-------------- Declaration ----------------------
+			pOTC = new CObjTypeChain;
+			pOTC->Create();
+			pOTC->SetSpec(CObjTypeChain::Spec::CONST);
+			pTypeChain->AddToTail(pOTC);
+			//---------------- Parsing -------------------
+			Expect(Token::CONST);
+			pN = new CAct65CONST;
+			pChild = IdentList(pTypeChain);
+			//--------- Abstract Syntax Tree Node ----------------------------
+			pN->SetChild(pChild);
+			pNext = CAstNode::AddToChildChain(pNext, pN);
+			break;
 		case Token::POINTER:
 			//-------------- Declaration ----------------------
 			pOTC = new CObjTypeChain;

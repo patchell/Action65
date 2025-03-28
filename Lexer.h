@@ -157,6 +157,7 @@ private:
 		{Token::TYPE, "TYPE"},
 		{Token::RECORDTYPE,"Record Type (TYPE)"},
 		{Token::POINTER,"POINTER"},
+		{Token::CONST,"CONST"},
 		{Token::ARRAY,"ARRAY"},
 		{Token::VAR_GLOBAL,"VAR_GLOBAL"},
 		{Token::VAR_LOCAL,"VAR_LOCAL"},

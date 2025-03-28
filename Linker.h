@@ -1,5 +1,7 @@
 #pragma once
 
+constexpr auto LINKER_KEYWORD_SIZE = 8;
+
 //---------------------------------------
 // Linker/Locator
 //---------------------------------------
@@ -16,7 +18,38 @@ class CLinker
 			STRING,
 			IDENT,
 			NAME,
-			SECTION
+			PARTITION,
+			REGION,
+			RELADDR,
+			ABSADDR,
+			SIZE,
+			LSH,
+			RSH
+		};
+	private:
+		struct KeyWord {
+			CLinker::LexerLnk::Token m_Token;
+			const char* m_pName;
+		public:
+			KeyWord() {
+				m_Token = CLinker::LexerLnk::Token(0);
+				m_pName = 0;
+			}
+			KeyWord(CLinker::LexerLnk::Token TokenVal, const char* pName) {
+				m_Token = TokenVal;
+				m_pName = pName;
+			}
+			bool IsKeyword(const char* pName) const;
+		};
+		inline static CLinker::LexerLnk::KeyWord KeyWordLUT[LINKER_KEYWORD_SIZE] = {
+			{LexerLnk::Token::NAME, "NAME"},
+			{LexerLnk::Token::PARTITION, "PARTITION"},
+			{LexerLnk::Token::REGION, "REGION"},
+			{LexerLnk::Token::RELADDR, "RELADDR"},
+			{LexerLnk::Token::ABSADDR, "ABSADDR"},
+			{LexerLnk::Token::SIZE, "SIZE"},
+			{LexerLnk::Token::LSH, "<<"},
+			{LexerLnk::Token::RSH, ">>"}
 		};
 	private:
 		CSymTab m_SymbolTabel;
@@ -33,7 +66,7 @@ class CLinker
 	public:
 		LexerLnk();
 		virtual ~LexerLnk();
-		bool Create();
+		bool Create(const char* pLinkScriptName);
 		CLinker::LexerLnk::Token Lex();
 		int LexGet();
 		int LexLook(int index);
@@ -50,16 +83,19 @@ class CLinker
 		int GetCollum() const { return m_Col; }
 		CBin* LookupSymbol(const char* pName);
 		CSymTab* GetSymTab() { return &m_SymbolTabel; }
-	};
+	};	//end of CLinker::LexerLnk
 	//-----------------------------
 	// Linker Script ParserLnk
 	//-----------------------------	
 	class ParserLnk
 	{
+		LexerLnk Lexer;
+		LexerLnk::Token LookaHeadToken;
 	public:
 		ParserLnk();
 		virtual ~ParserLnk();
-		bool Create();
+		bool Create(const char* pFileName);
+		LexerLnk* GetLexer() { return &Lexer; };
 	private:
 		//--------- Parsing Methods ---------------
 		bool Accept(CLinker::LexerLnk::Token Expected);
@@ -83,13 +119,18 @@ class CLinker
 		void Mult();
 		void Unary();
 		void Factor();
-	};
+	};	// end of CLinker::ParserLnk
 	//----------------------------------------
-	// CLinker
+	// CLinker Methods
 	//----------------------------------------
+private:
+	ParserLnk m_Parser;
 public:
 	CLinker();
 	virtual ~CLinker();
-	bool Create(FILE* pfIn);
+	bool Create();
+	bool Run();
+	ParserLnk* GetParser() { return &m_Parser; }
+	LexerLnk* GetLexer() { return GetParser()->GetLexer(); }
 };
 

@@ -122,14 +122,13 @@ int CSymbol::Print(char* pSO, int l, const char* s)
 		ls += GetTypeChain()->Print(&pSO[ls], l - ls);
 	}
 	size = l - ls;
-	ls += sprintf_s(&pSO[ls],size, ":Address=%08lx\n",
+	ls += sprintf_s(&pSO[ls],size, ":Address=%08lx",
 		GetAddress()
 	);
 	if (GetParamChain())
 	{
 		size = l - ls;
-		ls += sprintf_s(&pSO[ls], size, "\tParameters\n");
-		GetParamChain()->Print(&pSO[ls], l - ls);
+		GetParamChain()->Print(&pSO[ls], size);
 	}
 	return ls;
 }

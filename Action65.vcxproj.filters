@@ -566,6 +566,9 @@
     <ClCompile Include="Linker.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Act65CONST.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -1097,6 +1100,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Linker.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Act65CONST.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

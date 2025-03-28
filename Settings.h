@@ -1,6 +1,7 @@
 #pragma once
 
-constexpr auto SETTINGS_KEYWORD_SIZE = 10;
+constexpr auto SETTINGS_KEYWORD_SIZE = 13;
+constexpr auto SETTINGS_DEFAULT_SECTIONS = 9;
 
 class CSettings
 {
@@ -23,7 +24,10 @@ class CSettings
 			READONLY,
 			READWRITE,
 			EIGHTBITS,
-			SIXTEENBITS
+			SIXTEENBITS,
+			TYPE,
+			ABSOLUTE,
+			RELOCATABLE
 		};
 		struct KeyWord {
 			CSettings::Lexer::Token m_Token;
@@ -49,7 +53,10 @@ class CSettings
 			{Lexer::Token::SECTION, "SECTION"},
 			{Lexer::Token::SIXTEENBITS, "SIXTEENBITS"},
 			{Lexer::Token::SIZE, "SIZE"},
-			{Lexer::Token::START, "START"}
+			{Lexer::Token::START, "START"},
+			{ Lexer::Token::TYPE, "TYPE" },
+			{ Lexer::Token::ABSOLUTE, "ABSOLUTE" },
+			{ Lexer::Token::RELOCATABLE, "RELOCATABLE" }
 		};
 	private:
 		CSymTab m_SymbolTabel;
@@ -66,7 +73,7 @@ class CSettings
 	public:
 		Lexer();
 		virtual ~Lexer();
-		bool Create(FILE* pIN);
+		bool Create(const char* pSettingsFile);
 		CSettings::Lexer::Token Lex();
 		int LexGet();
 		int LexLook(int index);
@@ -77,6 +84,7 @@ class CSettings
 		bool IsValidNameChar(int c);
 		bool IsWhiteSpace(int c);
 		char* GetLexBuffer() { return m_aLexBuff; }
+		int GetLexValue() { return m_LexValue; }
 		FILE* LogFile(); 
 		Lexer::Token LookupKeyWord(const char* pKeyWord);
 		int GetLineNumber() const { return m_Line; }
@@ -92,13 +100,14 @@ class CSettings
 	//---------------------------------
 	class Parser
 	{
+		CSection* pSection;
 		Lexer SettingsLexer;
 	public:
 		CSettings::Lexer::Token LookaHeadToken;
 	public:
 		Parser();
 		virtual ~Parser();
-		bool Create(FILE* pIN);
+		bool Create(const char* pSettingFile);
 		FILE* LogFile();
 		bool Run();
 		Lexer* GetLexer() { return &SettingsLexer; }
@@ -108,10 +117,12 @@ class CSettings
 		void Expect(CSettings::Lexer::Token T);
 		void Section();
 		void SectionName();
+		void ParamBlock();
 		void SectionParams();
 		void Param();
 		void Mode();
 		void PageZero();
+		void Type();
 	};
 public:
 	enum  SettingsMode {
@@ -120,7 +131,7 @@ public:
 	};
 	enum SettingsAdrSize {
 		ADDRESSSIZE_WORD,
-		ADDRESSSIZE_ZEROPAGE
+		ADDRESSSIZE_BYTE
 	};
 
 	struct SectionSettings {
@@ -160,29 +171,26 @@ public:
 		SettingsMode GetMode() const { return m_Section_READWRITE; }
 		void SetAddressSize(SettingsAdrSize AS) { m_Section_PageZero = AS; }
 		SettingsAdrSize GetAddressSize() { return m_Section_PageZero; }
-		bool Load();
+		CSection* CopyToSection();
 	};
 private:
-	SectionSettings DefaultLUT[7] = {
+	inline static SectionSettings DefaultLUT[SETTINGS_DEFAULT_SECTIONS] = {
 		{"CODE", 0xe000, 0x2000, SettingsMode::MODE_READ_ONLY, SettingsAdrSize::ADDRESSSIZE_WORD},
+		{"CONST", 0xe000, 0x2000, SettingsMode::MODE_READ_ONLY, SettingsAdrSize::ADDRESSSIZE_WORD},
+		{"STRING", 0xe000, 0x2000, SettingsMode::MODE_READ_ONLY, SettingsAdrSize::ADDRESSSIZE_WORD},
 		{"GLOBAL", 0x200, 0x200, SettingsMode::MODE_READ_WRITE, SettingsAdrSize::ADDRESSSIZE_WORD},
-		{"ZERO", 0x0010, 0x00F0, SettingsMode::MODE_READ_WRITE, SettingsAdrSize::ADDRESSSIZE_WORD},
+		{"ZERO", 0x0010, 0x00F0, SettingsMode::MODE_READ_WRITE, SettingsAdrSize::ADDRESSSIZE_BYTE},
 		{"STACK", 0x0100, 0x0100, SettingsMode::MODE_READ_WRITE, SettingsAdrSize::ADDRESSSIZE_WORD},
 		{"LOCAL", 0x0400, 0x200, SettingsMode::MODE_READ_WRITE, SettingsAdrSize::ADDRESSSIZE_WORD},
 		{"VECTOR", 0xfffa, 6, SettingsMode::MODE_READ_WRITE, SettingsAdrSize::ADDRESSSIZE_WORD},
-		{"VREG", 0, 0x0010, SettingsMode::MODE_READ_WRITE, SettingsAdrSize::ADDRESSSIZE_WORD}
+		{"VREG", 0, 0x0010, SettingsMode::MODE_READ_WRITE, SettingsAdrSize::ADDRESSSIZE_BYTE}
 	};
-	SectionSettings m_CODE;
-	SectionSettings m_GLOBAL;
-	SectionSettings m_ZERO;
-	SectionSettings m_STACK;
-	SectionSettings m_LOCAL;
-	SectionSettings m_VECTOR;
-	SectionSettings m_VREG;
+	Parser m_Parser;
 public:
 	CSettings();
 	virtual ~CSettings();
-	bool Create(FILE* pIN);	//create default settings
-	bool Load(FILE* pIn);
+	bool Create();	//create default settings
+	SectionSettings* GetSecSettings(int index);
+	Parser* GetParser() { return &m_Parser; }
 };
 

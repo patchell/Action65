@@ -6,8 +6,11 @@ CSection::CSection():CBin(BinType::SECTION)
 	m_Size = 0;
 	m_LocationCounter = 0;
 	m_pSectionData = 0;
+	m_Type = SectionType::TYPE_ABSOLUTE;
 	m_AccessMode = Mode::MODE_READ_ONLY;
 	m_ZeroPageAddressSize = AddressSize::ADDRESSSIZE_WORD;
+	m_pNextSection = 0;
+	m_pPrevSection = 0;
 }
 
 CSection::~CSection()
@@ -219,17 +222,23 @@ int CSection::AllocateDataBlock(int size)
 
 void CSection::Print(FILE* pOut, const char* s)
 {
-	fprintf(pOut, "Section:%s:Size:$%04X MODE:%s\n",
+	fprintf(pOut, "Section:%s:Start:$%04X Size:$%04X MODE:%s:%s Address Size:%s\n",
 		GetName(),
+		m_StartAddress,
 		m_Size,
-		int(m_AccessMode) ? "Read/Write" : "Read Only"
+		int(m_AccessMode) ? "R/W" : "RO",
+		int(m_Type) ? "RELOCATALE" : "ABSOLUTE",
+		int(m_ZeroPageAddressSize)?"BYTE":"WORD"
 	);
-	CActionApp::Dump(
-		pOut,
-		m_pSectionData,
-		GetStartAddress(),
-		GetSectionSize()
-	);
+	//if (PrintMode)
+	//{
+	//	CActionApp::Dump(
+	//		pOut,
+	//		m_pSectionData,
+	//		GetStartAddress(),
+	//		GetSectionSize()
+	//	);
+	//}
 }
 
 void CSection::Info()

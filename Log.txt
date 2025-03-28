@@ -1,4 +1,16 @@
 File:test1.act has 2541 Bytes
+File:Action.Act65_settings has 976 Bytes
+Section:STACK:Start:$0100 Size:$0100 MODE:R/W:ABSOLUTE Address Size:WORD
+Section:LOCALS:Start:$1200 Size:$0800 MODE:R/W:ABSOLUTE Address Size:WORD
+Section:PARAMS:Start:$0A00 Size:$0800 MODE:R/W:ABSOLUTE Address Size:WORD
+Section:VARIABLES:Start:$0200 Size:$0800 MODE:R/W:ABSOLUTE Address Size:WORD
+Section:VECTOR:Start:$FFFA Size:$0006 MODE:RO:ABSOLUTE Address Size:WORD
+Section:CONST:Start:$F800 Size:$0800 MODE:RO:ABSOLUTE Address Size:WORD
+Section:STRINGS:Start:$F800 Size:$0800 MODE:RO:ABSOLUTE Address Size:WORD
+Section:ZERO:Start:$0000 Size:$0100 MODE:R/W:ABSOLUTE Address Size:BYTE
+Section:CODE:Start:$F800 Size:$0800 MODE:RO:ABSOLUTE Address Size:WORD
+Section:VREG:Start:$0000 Size:$0100 MODE:R/W:RELOCATALE Address Size:BYTE
+File:Linker.Act65_LinkerScript has 38 Bytes
 Parser Created
 	 NUMB  CHILD  NEXT
      2      3     -1  +- 'ROOT'
@@ -581,4 +593,72 @@ EMIT:IDENT:ID=371:two
 EMIT:IDENT:ID=372:three
 EMIT:CARD:ID=369
 EMIT:MODULE ID=365
+------------ Symbol Table --------------
+e: LOCAL:CHAR::Address=00000000
+Start: :Address=00008000
+First: :Address=00000000
+Section:LOCALS:Start:$1200 Size:$0800 MODE:R/W:ABSOLUTE Address Size:WORD
+xyx: GLOBAL:CHAR::Address=00000000
+one: GLOBAL:CARD::Address=00000000
+ThirdW: :Address=00000200
+q: LOCAL:CHAR::Address=00000000
+Astring: :Address=00008000
+Here: :Address=00008000
+Section:STRINGS:Start:$F800 Size:$0800 MODE:RO:ABSOLUTE Address Size:WORD
+x: GLOBAL:INT:POINTER:ARRAY::Address=00000000
+three: GLOBAL:CARD::Address=00000000
+y: GLOBAL:INT:POINTER:ARRAY::Address=00000000
+Section:VARIABLES:Start:$0200 Size:$0800 MODE:R/W:ABSOLUTE Address Size:WORD
+z: GLOBAL:INT:POINTER:ARRAY::Address=00000000
+Second: :Address=00000200
+We: :Address=00008000
+two: GLOBAL:CARD::Address=00000000
+Section:Page2:Start:$0200 Size:$0100 MODE:R/W:ABSOLUTE Address Size:WORD
+DataBuff: GLOBAL:CHAR:ARRAY::Address=00000000
+Section:PageZero:Start:$0000 Size:$0100 MODE:R/W:ABSOLUTE Address Size:BYTE
+ProcNum1: GLOBAL:PROC::Address=00000000
+	a100: PARAM:BYTE::Address=00000000
+	a101: PARAM:BYTE::Address=00000000
+	i100: PARAM:INT::Address=00000000
+CString: :Address=00008000
+StorageB: :Address=00000000
+Section:CONST:Start:$F800 Size:$0800 MODE:RO:ABSOLUTE Address Size:WORD
+Yep: GLOBAL:CHAR::Address=00000000
+paData: LOCAL:CHAR:POINTER:ARRAY::Address=00000000
+Go: :Address=00008000
+Hey: INTERRUPT::Address=00000000
+Section:ZERO:Start:$0000 Size:$0100 MODE:R/W:ABSOLUTE Address Size:BYTE
+Again: :Address=00008000
+yxy: GLOBAL:CHAR::Address=00000000
+FuncName2: GLOBAL:INT:FUNC::Address=00000000
+	c100: PARAM:CARD:POINTER::Address=00000000
+	c101: PARAM:CARD:POINTER::Address=00000000
+	h190: PARAM:CHAR:ARRAY:POINTER::Address=00000000
+Section:VECTOR:Start:$FFFA Size:$0006 MODE:RO:ABSOLUTE Address Size:WORD
+Are: :Address=00008000
+aData: LOCAL:CHAR:ARRAY::Address=00000000
+Stuff: GLOBAL:CHAR::Address=00000000
+Section:PARAMS:Start:$0A00 Size:$0800 MODE:R/W:ABSOLUTE Address Size:WORD
+Section:STACK:Start:$0100 Size:$0100 MODE:R/W:ABSOLUTE Address Size:WORD
+StirageA: :Address=00000000
+pData: LOCAL:CHAR:POINTER::Address=00000000
+Section:Code:Start:$8000 Size:$1000 MODE:RO:ABSOLUTE Address Size:WORD
+Section:VREG:Start:$0000 Size:$0100 MODE:R/W:RELOCATALE Address Size:BYTE
+Avar: GLOBAL:INT:POINTER:ARRAY::Address=00000000
+CrudOne: LOCAL:INT::Address=00000000
+la: LOCAL:CHAR::Address=00000000
+lb: LOCAL:CHAR::Address=00000000
+lc: LOCAL:CARD::Address=00000000
+cc: LOCAL:INT:POINTER:ARRAY:POINTER::Address=00000000
+ld: LOCAL:CARD::Address=00000000
+ForthL: :Address=00000200
+le: LOCAL:CARD::Address=00000000
+Cvar: GLOBAL:CARD::Address=00000000
+cx100: LOCAL:CARD::Address=00000000
+lf: LOCAL:BYTE::Address=00000000
+CrudTwo: LOCAL:CHAR::Address=00000000
+x100: LOCAL:BYTE::Address=00000000
+pX: LOCAL:INT:POINTER::Address=00000000
+Section:CODE:Start:$F800 Size:$0800 MODE:RO:ABSOLUTE Address Size:WORD
+d: LOCAL:CHAR::Address=00000000
 Lines Compiled:212

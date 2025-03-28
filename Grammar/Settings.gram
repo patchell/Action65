@@ -17,7 +17,10 @@ TERMINALS
 	"SIXTEENBITS",
 	"EIGHTBITS",
 	"READONLY",
-	"READWRITE"
+	"READWRITE",
+	"TYPE",
+	"ABSOLUTE",
+	"RELOCATABLE"
 
 GRAMMAR
 
@@ -28,9 +31,11 @@ Section_1	-> 'SECTION' SectionName Section_1
 
 
 SectionName		-> SectionParams SectionName_1;
-SectionName_1	-> 'NAME' '(' 'STRING' ')'
+SectionName_1	-> 'NAME' '(' 'STRING' ')' ParamBlock
 				-> .
 				;
+
+ParamBlock		-> '[' SectionParams ']';
 
 SectionParams	-> Param SectionParams_1;
 SectionParams_1	-> ',' Param SectionParams_1
@@ -39,6 +44,7 @@ SectionParams_1	-> ',' Param SectionParams_1
 
 Param			-> 'START' '=' 'NUMBER'
 				-> 'SIZE' '=' 'NUMBER'
+				-> 'TYPE' '=' Type
 				-> 'MODE' '=' Mode
 				-> 'PAGEZERO' '=' PageZero
 				-> .
@@ -52,3 +58,5 @@ PageZero		-> 'EIGHTBITS'
 				-> 'SIXTEENBITS'
 				;
 
+Type			-> 'ABSOLUTE'
+				-> 'RELOCATABLE'

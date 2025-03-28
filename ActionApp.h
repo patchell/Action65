@@ -8,11 +8,13 @@ class CActionApp
 	char* m_pBinaryFile;
 	char* m_pAsmSrcOut;
 	char* m_pSettingsFile;
+	char* m_pLinkerScript;
 	FILE* m_pfSrc;
 	FILE* m_pfLog;
 	FILE* m_pfBin;
 	FILE* m_pfObj;
 	FILE* m_pfSettings;
+	FILE* m_pfLinkerScript;
 	CParser m_ActParse;
 public:
 	CActionApp();
@@ -25,11 +27,14 @@ public:
 	bool OpenBin();
 	bool OpenSettings();
 
+    bool OpenLinkerScript();
+
 	void CloseSource();
 	void CloseLog();
 	void CloseObj();
 	void CloseBin();
 	void CloseSettings();
+	void CloseLinkerScript();
 	void CloseAll();
 	char* GetSourceFileName() {
 		return m_pSourceFile;
@@ -43,6 +48,12 @@ public:
 	char* GetBinFileName() {
 		return m_pBinaryFile;
 	}
+	char* GetSettingsFileName() {
+		return m_pSettingsFile;
+	}
+	char* GetLinkerScriptName() {
+		return m_pLinkerScript;
+	}
 	virtual FILE* SrcFile() {
 		return m_pfSrc;
 	}
@@ -54,6 +65,12 @@ public:
 	}
 	virtual FILE* BinFile() {
 		return m_pfBin;
+	}
+	virtual FILE* GetSettingsFile() {
+		return m_pfSettings;
+	}
+	virtual FILE* GetLinkerScriptFile() {
+		return m_pfLinkerScript;
 	}
 	virtual CParser* GetParser()
 	{

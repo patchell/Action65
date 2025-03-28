@@ -62,6 +62,7 @@ enum  class Token {
 	INT,
 	CARD,
 	POINTER,
+	CONST,
 	TYPE,
 	RECORDTYPE,
 	ARRAY,
@@ -596,6 +597,7 @@ public:
 #include "Act65CharConstant.h"
 #include "Act65CodeBlock.h"
 #include "Act65CONDITIONAL.h"
+#include "Act65CONST.h"
 #include "Act65CONSTANT.h"
 #include "Act65ConstLIST.h"
 #include "Act65CurrentLocation.h"

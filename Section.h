@@ -5,6 +5,10 @@ class CAct65Opcode;
 class CSection : public CBin
 {
 public:
+	enum class SectionType {
+		TYPE_ABSOLUTE,
+		TYPE_RELOCATALE
+	};
 	enum class Mode {
 		MODE_READ_ONLY,
 		MODE_READ_WRITE
@@ -12,6 +16,10 @@ public:
 	enum class AddressSize {
 		ADDRESSSIZE_WORD,
 		ADDRESSSIZE_ZEROPAGE
+	};
+	inline static const char* TypeLUT[2] = {
+		"ABSOLUTE",
+		"RELOCATALE"
 	};
 	inline static const char* ModeLUT[2] = {
 		"MODE_READ_ONLY",
@@ -28,10 +36,19 @@ private:
 	char* m_pSectionData;	//where the data is
 	Mode m_AccessMode;	//read only or read write
 	AddressSize m_ZeroPageAddressSize;
+	SectionType m_Type;
+	CSection* m_pNextSection;
+	CSection* m_pPrevSection;
 public:
 	CSection();
 	virtual ~CSection(); 
 	bool Create();
+	CSection* GetNextSection() { return m_pNextSection; }
+	void SetNextSection(CSection* pN) { m_pNextSection = pN; }
+	CSection* GetPrevSection(){ return m_pPrevSection; }
+	void SetPrevSection(CSection* pP) { m_pPrevSection = pP; }
+	SectionType GetSectionType() { return m_Type; }
+	void SetSectionType(SectionType ST) { m_Type = ST; }
 	int GetStartAddress() { return m_StartAddress; }
 	void SetStartAddress(int SA);
 	int GetSectionSize() { return m_Size; }
