@@ -30,6 +30,7 @@ public:
 		"TRUE"
 	};
 private:
+	//---------- Parameters ---------------
 	int m_StartAddress;	//where section starts in memory
 	int m_Size;		//max size of the memory block
 	int m_LocationCounter;	//current location to store data
@@ -37,6 +38,7 @@ private:
 	Mode m_AccessMode;	//read only or read write
 	AddressSize m_ZeroPageAddressSize;
 	SectionType m_Type;
+	//---------- Section List --------------
 	CSection* m_pNextSection;
 	CSection* m_pPrevSection;
 public:
@@ -69,6 +71,7 @@ public:
 	void SetZeroPageFlag(AddressSize SizeFlag) { m_ZeroPageAddressSize = SizeFlag; }
 	CSection::AddressSize GetZeroPageFlag() { return m_ZeroPageAddressSize; }
 	virtual void Print(FILE* pOut, const char* s = 0);
+	void Dump(FILE* pOut, const char* s = 0);
 	void Info();
 	bool Compare(const char* name, int scope);
 	bool IsPageZero() const {

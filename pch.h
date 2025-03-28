@@ -551,7 +551,6 @@ public:
 //--------------------------------------
 #include "Section.h"
 #include "WhereSymbolIsUsed.h"
-#include "UnResolvedSymbol.h"
 #include "Linker.h"
 //------------- Virtual Registers --------
 #include "VirtualReg.h"

@@ -86,9 +86,6 @@
     <ClCompile Include="Section.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="UnResolvedSymbol.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="WhereSymbolIsUsed.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -623,9 +620,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Section.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="UnResolvedSymbol.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="WhereSymbolIsUsed.h">

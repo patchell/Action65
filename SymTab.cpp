@@ -93,26 +93,32 @@ CBin* CSymTab::FindSymbol(const char* name, int scope)
 void CSymTab::AddSymbol(CBin* pSym)
 {
 	int Index = Hash(pSym->GetName());	//generate index
-	
-	if (m_ppTab[Index] == NULL)	//there is NO bucket here
-	{
-		m_ppTab[Index] = new CBucket;
-		m_ppTab[Index]->Create();
-	}
+	CBin* pSymbol = 0;
 
-	if (m_ppTab[Index]->GetHead() == NULL)	//nobody home
+	pSymbol = FindSymbol(pSym->GetName(), 0);
+	if (pSymbol == 0)
 	{
-		m_ppTab[Index]->SetHead(pSym);
-		m_ppTab[Index]->SetTail(pSym);
+		Index = Hash(pSym->GetName());	//generate HASH index
+		if (m_ppTab[Index] == NULL)	//there is NO bucket here
+		{
+			m_ppTab[Index] = new CBucket;
+			m_ppTab[Index]->Create();
+		}
+
+		if (m_ppTab[Index]->GetHead() == NULL)	//nobody home
+		{
+			m_ppTab[Index]->SetHead(pSym);
+			m_ppTab[Index]->SetTail(pSym);
+		}
+		else
+		{
+			CBucket* pB = m_ppTab[Index];
+			pB->GetTail()->SetNext(pSym);
+			pSym->SetPrev(pB->GetTail());
+			pB->SetTail(pSym);
+		}
+		++m_nElements;	//increment number of symbols
 	}
-	else
-	{
-		CBucket* pB = m_ppTab[Index];
-		pB->GetTail()->SetNext(pSym);
-		pSym->SetPrev(pB->GetTail());
-		pB->SetTail(pSym);
-	}
-	++m_nElements;	//increment number of symbols
 }
 
 //*****************************************************
@@ -188,6 +194,8 @@ void CSymTab::PrintTable(FILE* pOut)
 			l = (int)strlen(pSym->GetName());
 			if (l > maxStringLen)
 				maxStringLen = l;
+			if (i == 0x1b)
+				printf("Well\n");
 			pSym = pSym->GetNext();
 		}
 	}

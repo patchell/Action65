@@ -16,6 +16,19 @@ bool CWhereSymbolIsUsed::Create()
 	return CBin::Create();
 }
 
+int CWhereSymbolIsUsed::Print(char* pSO, int Strlen, const char* s)
+{
+	int l = 0;
+	int Size = 0;
+
+	Size = Strlen - l;
+	l += sprintf_s(&pSO[l], Size, "Useed@ %s:$%04X",
+		GetSection()->GetName(),
+		m_Address
+	);
+	return l;
+}
+
 bool CWhereSymbolIsUsed::Compare(const char* name, int scope)
 {
 	bool rV = false;

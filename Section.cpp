@@ -118,6 +118,9 @@ void CSection::SetLocationCounter(int NewAddress)
 
 int CSection::AddInstruction(CAct65Opcode* pINS)
 {
+	int OperandAddress = 0;
+	CWhereSymbolIsUsed* pWSIU = 0;
+
 	switch (pINS->GetAdrModeType())
 	{
 	case AdrModeType::IMPLIED:
@@ -129,18 +132,45 @@ int CSection::AddInstruction(CAct65Opcode* pINS)
 	case AdrModeType::ZERO_PAGE_Y_ADR:
 	case AdrModeType::INDEXED_INDIRECT_X_ADR:
 	case AdrModeType::INDIRECT_INDEXED_Y_ADR:
-		AddData(1, pINS->GetOpCode());
+		OperandAddress = AddData(1, pINS->GetOpCode());
+		if (pINS->GetOperand()->GetValueType() == CValue::ValueType::SYMBOL)
+		{
+			pWSIU = new CWhereSymbolIsUsed;
+			pWSIU->Create();
+			pWSIU->SetSection(this);
+			pWSIU->SetAddress(OperandAddress);
+			pWSIU->SetUnResType(CWhereSymbolIsUsed::UnResolvedType::ABSOLUTE_REFERENCE);
+			pINS->GetOperand()->GetSymbol()->Add(pWSIU);	//add where used entry
+		}
 		AddData(1, pINS->GetOperand()->GetTotalValue());
 		break;
 	case AdrModeType::ABSOLUTE_ADR:
 	case AdrModeType::ABSOLUTE_X_ADR:
 	case AdrModeType::ABSOLUTE_Y_ADR:
 	case AdrModeType::INDIRECT_ADR:
-		AddData(1, pINS->GetOpCode());
+		OperandAddress = AddData(1, pINS->GetOpCode());
+		if (pINS->GetOperand()->GetValueType() == CValue::ValueType::SYMBOL)
+		{
+			pWSIU = new CWhereSymbolIsUsed;
+			pWSIU->Create();
+			pWSIU->SetSection(this);
+			pWSIU->SetAddress(OperandAddress);
+			pWSIU->SetUnResType(CWhereSymbolIsUsed::UnResolvedType::ABSOLUTE_REFERENCE);
+			pINS->GetOperand()->GetSymbol()->Add(pWSIU);	//add where used entry
+		}
 		AddData(2, pINS->GetOperand()->GetTotalValue());
 		break;
 	case AdrModeType::RELATIVE:
-		AddData(1, pINS->GetOpCode());
+		OperandAddress = AddData(1, pINS->GetOpCode());
+		if (pINS->GetOperand()->GetValueType() == CValue::ValueType::SYMBOL)
+		{
+			pWSIU = new CWhereSymbolIsUsed;
+			pWSIU->Create();
+			pWSIU->SetSection(this);
+			pWSIU->SetAddress(OperandAddress);
+			pWSIU->SetUnResType(CWhereSymbolIsUsed::UnResolvedType::RELATIVE_REFERENCE);
+			pINS->GetOperand()->GetSymbol()->Add(pWSIU);	//add where used entry
+		}
 		AddData(1, pINS->GetOperand()->GetTotalValue() - 1);
 		break;
 	}
@@ -230,15 +260,18 @@ void CSection::Print(FILE* pOut, const char* s)
 		int(m_Type) ? "RELOCATALE" : "ABSOLUTE",
 		int(m_ZeroPageAddressSize)?"BYTE":"WORD"
 	);
-	//if (PrintMode)
-	//{
-	//	CActionApp::Dump(
-	//		pOut,
-	//		m_pSectionData,
-	//		GetStartAddress(),
-	//		GetSectionSize()
-	//	);
-	//}
+}
+
+void CSection::Dump(FILE* pOut, const char* s)
+{
+	if (s)
+		fprintf(pOut, "--------- %s ---------\n", s);
+	CActionApp::Dump(
+		pOut,
+		m_pSectionData,
+		GetStartAddress(),
+		GetSectionSize()
+	);
 }
 
 void CSection::Info()

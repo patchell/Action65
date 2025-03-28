@@ -45,8 +45,24 @@ void CAct65Opcode::PrintNode(FILE* pOut, int Indent, bool* pbNextFlag)
 
 CValue* CAct65Opcode::Emit(CValue* pVc, CValue* pVn)
 {
-	fprintf(Act()->LogFile(), "EMIT:OPCODE\n");
-	GetParser()->GetCurrentSection()->AddInstruction(this);
+	CSection* pSection = GetSection();
+	int size = 256;
+	int ls = 0;
+	int l = size;
+
+	char* pS = new char[size];
+	ls += sprintf_s(pS, size, "Emit:");
+	if (GetLabelSymbol())
+	{
+		l = size - ls;
+		ls += sprintf_s(&pS[ls], l, "%s", GetLabelSymbol()->GetName());
+	}
+	l = size - ls;
+	ls += sprintf_s(&pS[ls], l, "\t%s\t", GetKeyWord()->m_Name);
+	ls += AddressModeString(&pS[ls], size - ls, GetAdrModeType());
+	fprintf(Act()->LogFile(), "%s\n", pS);
+	pSection->AddInstruction(this);
+	delete[] pS;
 	return nullptr;
 }
 
@@ -63,6 +79,32 @@ int CAct65Opcode::Print(int Indent, char* s, int Strlen, bool* pbNextFlag)
 		GetOpCode() & 0x0ff,
 		AdrModeToTxtTabel.LookupAddressingMode(GetAdrModeType())
 	);
+	l += AddressModeString(&s[l], Strlen - l, GetAdrModeType());
+	size = Strlen - l;
+	l += ToString(&s[l], size);
+	size = Strlen - l;
+	if (GetSection())
+	{
+		l += sprintf_s(&s[l], size, " SECTION:%s", GetSection()->GetName());
+	}
+	else
+	{
+		l += sprintf_s(&s[l], size, "ERROR:No Section");
+	}
+	if (GetParent())
+	{
+		size = Strlen - l;
+		l += sprintf_s(&s[l], size, " (Parent:%s", GetParent()->GetNodeName());
+	}
+	return l;
+}
+
+int CAct65Opcode::AddressModeString(char* s, int Strlen, AdrModeType AdrMode)
+{
+	int size = 0;
+	int l = 0;
+	int c = 0;
+
 	switch (GetAdrModeType())
 	{
 	case AdrModeType::ABSOLUTE_ADR:
@@ -329,22 +371,6 @@ int CAct65Opcode::Print(int Indent, char* s, int Strlen, bool* pbNextFlag)
 		);
 		break;
 	}
-	size = Strlen - l;
-	l += ToString(&s[l], size);
-	size = Strlen - l;
-	if (GetSection())
-	{
-		l += sprintf_s(&s[l], size, " SECTION:%s", GetSection()->GetName());
-	}
-	else
-	{
-		l += sprintf_s(&s[l], size, "ERROR:No Section");
-	}
-	if (GetParent())
-	{
-		size = Strlen - l;
-		l += sprintf_s(&s[l], size, " (Parent:%s", GetParent()->GetNodeName());
-	}
 	return l;
 }
 
@@ -352,8 +378,8 @@ void CAct65Opcode::PrepareInstruction(
 	Token OpToken, 
 	AdrModeType AddressMode,
 	CValue* pOperandValue,
-	CSymbol* pLabelSym
-
+	CSection* pSection,		//section where instruction is to be put
+	CSymbol* pLabelSym		// Label associated with this instruction
 )
 {
 	CLexer* pLex = Act()->GetParser()->GetLexer();
@@ -390,6 +416,8 @@ void CAct65Opcode::PrepareInstruction(
 		SetOpCode(pLex->MakeOpcode(OpToken, AddressMode));
 		SetByteCount(OperandByteCount::GetOperandByteCount(AddressMode) + 1);
 		SetValue(pOperandValue);
+		SetSection(pSection);
+		pSection->AddInstruction(this);
 	}
 	else   // :(
 	{
@@ -412,6 +440,15 @@ int CAct65Opcode::SaveInstruction(char* pM)
 	if(GetByteCount() > 2)
 		*pM++ = (char)((GetOperand()->GetConstVal() & 0xff00) >> 8);
 	return GetByteCount();
+}
+
+void CAct65Opcode::SetInstructionAddress(int Adr)
+{
+	m_InstructionAddress = Adr;
+	if (GetLabelSymbol())
+	{
+		GetLabelSymbol()->SetAddress(Adr);
+	}
 }
 
 const char* CAct65Opcode::GetOpcodeName()

@@ -37,6 +37,8 @@ int CAct65Label::Print(int Indent, char* s, int Strlen, bool* pbNextFlag)
 
 CValue* CAct65Label::Emit(CValue* pVc, CValue* pVn)
 {
+	CSection* pSection = GetSection();
+
 	return nullptr;
 }
 

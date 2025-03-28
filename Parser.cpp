@@ -4866,6 +4866,7 @@ CAstNode* CParser::Section()
 			SectionName(pSection);
 			SetCurrentSection(pSection);
 			GetLexer()->GetSymTab()->AddSymbol(pSection);
+			AddSection(pSection);
 			pN = new CAct65SECTION;;
 			pN->SetSection(pSection);
 			pNext = CAstNode::MakeNextList(pNext, pN);
@@ -5693,6 +5694,7 @@ CAstNode* CParser::AsmStatements()
 				OpCodeToken,
 				AdrModeType::IMPLIED,
 				0,
+				GetCurrentSection(),
 				pLabel?(CSymbol*)pLabel->GetSymbol():0
 			);
 			if (pLabel)
@@ -5882,7 +5884,7 @@ CAstNode* CParser::OptLabel()
 			pSym->SetToken(Token::LABEL);
 			pSym->SetIdentType(IdentType::GLOBAL);
 			pSym->SetAddress(GetCurrentSection()->GetLocationCounter());
-			pSym->SetResolved();
+			pSym->SetResolved();	//Indicate this is a resolved symbol
 			pSym->SetSection(GetCurrentSection());
 			pSym->BackFillUnresolved();
 			GetLexer()->GetSymTab()->AddSymbol(pSym);
@@ -5903,7 +5905,7 @@ CAstNode* CParser::OptLabel()
 			pSym->SetToken(Token::LABEL);
 			pSym->SetIdentType(IdentType::LOCAL);
 			pSym->SetAddress(GetCurrentSection()->GetLocationCounter());
-			pSym->SetResolved();
+			pSym->SetResolved();	//Indicate this is a resolved symbol
 			pSym->SetSection(GetCurrentSection());
 			pSym->BackFillUnresolved();
 			GetLexer()->GetSymTab()->AddSymbol(pSym);
@@ -5972,12 +5974,16 @@ CAstNode* CParser::RelAddressingMode(Token OpCodeToken, CAstNode* pLabel)
 		OpCodeToken, 
 		AdrModeType::RELATIVE, 
 		pValue,
+		GetCurrentSection(),
 		pLabel ? (CSymbol*)pLabel->GetSymbol() : 0
 	);
 	return pN;
 }
 
-CAstNode* CParser::JumpAddressingModes(Token OpCodeToken, CAstNode* pLabel)
+CAstNode* CParser::JumpAddressingModes(
+	Token OpCodeToken, 
+	CAstNode* pLabel	//label for address of instruction location
+)
 {
 	//--------------------------------------------------
 	//	JumpAddressingModes	-> AsmConstant
@@ -5998,6 +6004,7 @@ CAstNode* CParser::JumpAddressingModes(Token OpCodeToken, CAstNode* pLabel)
 			OpCodeToken, 
 			AdrModeType::INDIRECT_ADR, 
 			pAddress,
+			GetCurrentSection(),
 			pLabel?(CSymbol*)pLabel->GetSymbol():0
 		);
 		break;
@@ -6247,6 +6254,7 @@ CAstNode* CParser::Indirect(Token OpCodeToken, CAstNode* pLabel)
 			OpCodeToken, 
 			AdrModeType::INDIRECT_INDEXED_Y_ADR, 
 			pAddress,
+			GetCurrentSection(),
 			pLabel ? (CSymbol*)pLabel->GetSymbol() : 0
 		);
 		Expect(Token(')'));
@@ -6259,6 +6267,7 @@ CAstNode* CParser::Indirect(Token OpCodeToken, CAstNode* pLabel)
 			OpCodeToken,
 			AdrModeType::INDEXED_INDIRECT_X_ADR,
 			pAddress,
+			GetCurrentSection(),
 			pLabel ? (CSymbol*)pLabel->GetSymbol() : 0
 		);
 		Expect(Token(','));
@@ -6286,12 +6295,16 @@ CAstNode* CParser::Immediate(Token OpCodeToken, CAstNode* pLabel)
 		OpCodeToken, 
 		AdrModeType::IMMEDIATE_ADR, 
 		pValue,
+		GetCurrentSection(),
 		pLabel ? (CSymbol*)pLabel->GetSymbol() : 0
 	);
 	return pOpCode;
 }
 
-CAstNode* CParser::Absolute(Token OpCodeToken, CAstNode* pLabel)
+CAstNode* CParser::Absolute(
+	Token OpCodeToken, 
+	CAstNode* pLabel	// label where instuction is defined
+)
 {
 	//---------------------------------------
 	// Absolute:
@@ -6328,6 +6341,7 @@ CAstNode* CParser::Absolute(Token OpCodeToken, CAstNode* pLabel)
 					OpCodeToken, 
 					AdrModeType::ZERO_PAGE_X_ADR, 
 					pOperandValue,
+					GetCurrentSection(),
 					pLabel ? (CSymbol*)pLabel->GetSymbol() : 0
 				);
 			else
@@ -6335,6 +6349,7 @@ CAstNode* CParser::Absolute(Token OpCodeToken, CAstNode* pLabel)
 					OpCodeToken, 
 					AdrModeType::ABSOLUTE_X_ADR, 
 					pOperandValue,
+					GetCurrentSection(),
 					pLabel ? (CSymbol*)pLabel->GetSymbol() : 0
 				);
 			break;
@@ -6344,6 +6359,7 @@ CAstNode* CParser::Absolute(Token OpCodeToken, CAstNode* pLabel)
 					OpCodeToken, 
 					AdrModeType::ZERO_PAGE_Y_ADR, 
 					pOperandValue,
+					GetCurrentSection(),
 					pLabel ? (CSymbol*)pLabel->GetSymbol() : 0
 				);
 			else
@@ -6351,6 +6367,7 @@ CAstNode* CParser::Absolute(Token OpCodeToken, CAstNode* pLabel)
 					OpCodeToken, 
 					AdrModeType::ABSOLUTE_Y_ADR, 
 					pOperandValue,
+					GetCurrentSection(),
 					pLabel ? (CSymbol*)pLabel->GetSymbol() : 0
 				);
 			break;
@@ -6381,6 +6398,7 @@ CAstNode* CParser::Absolute(Token OpCodeToken, CAstNode* pLabel)
 						OpCodeToken,
 						AdrModeType::ABSOLUTE_ADR,
 						pOperandValue,
+						GetCurrentSection(),
 						pLabel ? (CSymbol*)pLabel->GetSymbol() : 0
 					);
 					break;
@@ -6389,6 +6407,7 @@ CAstNode* CParser::Absolute(Token OpCodeToken, CAstNode* pLabel)
 						OpCodeToken,
 						AdrModeType::ZERO_PAGE_ADR,
 						pOperandValue,
+						GetCurrentSection(),
 						pLabel ? (CSymbol*)pLabel->GetSymbol() : 0
 					);
 					break;
@@ -6399,6 +6418,7 @@ CAstNode* CParser::Absolute(Token OpCodeToken, CAstNode* pLabel)
 					OpCodeToken, 
 					AdrModeType::ABSOLUTE_ADR, 
 					pOperandValue,
+					GetCurrentSection(),
 					pLabel ? (CSymbol*)pLabel->GetSymbol() : 0
 				);
 		}
@@ -6416,6 +6436,7 @@ CAstNode* CParser::Accumulator(Token OpCodeToken, CAstNode* pLabel)
 		OpCodeToken,
 		AdrModeType::ACCUMULATOR,
 		nullptr,
+		GetCurrentSection(),
 		pLabel ? (CSymbol*)pLabel->GetSymbol() : 0
 	);
 	return pOpCode;

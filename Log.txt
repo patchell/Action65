@@ -444,95 +444,95 @@ EMIT:IDENT:ID=87:CrudTwo
 EMIT:CHAR:ID=88
 EMIT:This is an ACTION! string:Code
 EMIT:This is a C String:Code
-EMIT:OPCODE
-EMIT:OPCODE
-EMIT:OPCODE
-EMIT:OPCODE
-EMIT:OPCODE
-EMIT:OPCODE
+Emit:Start	STY	 First
+Emit:	STY	 First,.X
+Emit:Here	STY	 Second
+Emit:	STX	 First
+Emit:	STX	 First,.Y
+Emit:We	STX	 Second
 EMIT:IDENT:ID=156:First
-EMIT:OPCODE
-EMIT:OPCODE
-EMIT:OPCODE
-EMIT:OPCODE
-EMIT:OPCODE
-EMIT:OPCODE
-EMIT:OPCODE
-EMIT:OPCODE
-EMIT:OPCODE
-EMIT:OPCODE
-EMIT:OPCODE
-EMIT:OPCODE
-EMIT:OPCODE
-EMIT:OPCODE
-EMIT:OPCODE
-EMIT:OPCODE
-EMIT:OPCODE
-EMIT:OPCODE
-EMIT:OPCODE
-EMIT:OPCODE
-EMIT:OPCODE
-EMIT:OPCODE
-EMIT:OPCODE
-EMIT:OPCODE
-EMIT:OPCODE
-EMIT:OPCODE
-EMIT:OPCODE
-EMIT:OPCODE
-EMIT:OPCODE
-EMIT:OPCODE
-EMIT:OPCODE
-EMIT:OPCODE
-EMIT:OPCODE
-EMIT:OPCODE
-EMIT:OPCODE
-EMIT:OPCODE
-EMIT:OPCODE
-EMIT:OPCODE
-EMIT:OPCODE
-EMIT:OPCODE
-EMIT:OPCODE
-EMIT:OPCODE
-EMIT:OPCODE
-EMIT:OPCODE
-EMIT:OPCODE
-EMIT:OPCODE
-EMIT:OPCODE
-EMIT:OPCODE
-EMIT:OPCODE
-EMIT:OPCODE
-EMIT:OPCODE
-EMIT:OPCODE
-EMIT:OPCODE
-EMIT:OPCODE
-EMIT:OPCODE
-EMIT:OPCODE
-EMIT:OPCODE
-EMIT:OPCODE
-EMIT:OPCODE
-EMIT:OPCODE
-EMIT:OPCODE
-EMIT:OPCODE
-EMIT:OPCODE
-EMIT:OPCODE
-EMIT:OPCODE
-EMIT:OPCODE
-EMIT:OPCODE
-EMIT:OPCODE
-EMIT:OPCODE
-EMIT:OPCODE
-EMIT:OPCODE
-EMIT:OPCODE
-EMIT:OPCODE
-EMIT:OPCODE
-EMIT:OPCODE
-EMIT:OPCODE
-EMIT:OPCODE
-EMIT:OPCODE
-EMIT:OPCODE
-EMIT:OPCODE
-EMIT:OPCODE
-EMIT:OPCODE
+Emit:	JSR	 First
+Emit:Are	JSR	 Second
+Emit:	JMP	 First
+Emit:	JMP	 Second
+Emit:	JMP	(First)
+Emit:	JMP	(Second)
+Emit:	BEQ	 Are
+Emit:	BNE	 Are
+Emit:	BVS	 Are
+Emit:	BVC	 Are
+Emit:	BMI	 Are
+Emit:	BPL	 Are
+Emit:Go	DEC	 First
+Emit:	DEC	 First,.X
+Emit:Again	DEC	 Second
+Emit:	DEC	 Second,X
+Emit:	INC	 First
+Emit:	INC	 First,.X
+Emit:	INC	 Second
+Emit:	INC	 Second,X
+Emit:	CPY	 #'J'  #$4A
+Emit:	CPY	 First
+Emit:	CPY	 Second
+Emit:	CPX	 #'k'  #$6B
+Emit:	CPX	 First
+Emit:	CPX	 Second
+Emit:	BIT	 First
+Emit:	BIT	 Second
+Emit:	ASL	 .A
+Emit:	LSR	 .A
+Emit:	ROR	 .A
+Emit:	ROL	 .A
+Emit:	ASL	 First
+Emit:	ASL	 First,.X
+Emit:	ASL	 Second
+Emit:	ASL	 Second,X
+Emit:	BRK	
+Emit:	CLC	
+Emit:	CLD	
+Emit:	CLI	
+Emit:	CLV	
+Emit:	DEX	
+Emit:	DEY	
+Emit:	INX	
+Emit:	INY	
+Emit:	NOP	
+Emit:	PHA	
+Emit:	PLA	
+Emit:	PHP	
+Emit:	PLP	
+Emit:	RTI	
+Emit:	RTS	
+Emit:	SEC	
+Emit:	SED	
+Emit:	SEI	
+Emit:	TAX	
+Emit:	TAY	
+Emit:	TXA	
+Emit:	TYA	
+Emit:	TXS	
+Emit:	TSX	
+Emit:	LDA	 #'J'  #$4A
+Emit:	LDA	(First),.Y
+Emit:	LDA	 #$CD
+Emit:	LDA	 #$AB
+Emit:	LDA	 First
+Emit:	LDA	 First,.X
+Emit:	LDA	 Second
+Emit:	LDA	 Second,X
+Emit:	LDA	 Second,Y
+Emit:	LDA	(First,.X)
+Emit:	LDA	 First + 2
+Emit:	LDX	 #'E'  #$45
+Emit:	LDX	 First
+Emit:	LDX	 First,.Y
+Emit:	LDX	 Second
+Emit:	LDX	 Second,Y
+Emit:	LDY	 #'a'  #$61
+Emit:	LDY	 First
+Emit:	LDY	 First,.X
+Emit:	LDY	 Second
+Emit:	LDY	 Second,X
 EMIT:IDENT:ID=249:lb
 EMIT:IDENT:ID=247:la
 EMIT:IDENT:ID=255:le
@@ -594,71 +594,172 @@ EMIT:IDENT:ID=372:three
 EMIT:CARD:ID=369
 EMIT:MODULE ID=365
 ------------ Symbol Table --------------
-e: LOCAL:CHAR::Address=00000000
-Start: :Address=00008000
-First: :Address=00000000
+e: LOCAL:CHAR::Address=$0000
+Start: :Address=$8000
+First: :Address=$0000		Useed@ Code:$8001
+		Useed@ Code:$8003
+		Useed@ Code:$8008
+		Useed@ Code:$800A
+		Useed@ Code:$800F
+		Useed@ Code:$8015
+		Useed@ Code:$801B
+		Useed@ Code:$802D
+		Useed@ Code:$802F
+		Useed@ Code:$8037
+		Useed@ Code:$8039
+		Useed@ Code:$8043
+		Useed@ Code:$804A
+		Useed@ Code:$804F
+		Useed@ Code:$8054
+		Useed@ Code:$8056
+		Useed@ Code:$8079
+		Useed@ Code:$807F
+		Useed@ Code:$8081
+		Useed@ Code:$808C
+		Useed@ Code:$808E
+		Useed@ Code:$8092
+		Useed@ Code:$8094
+		Useed@ Code:$809E
+		Useed@ Code:$80A0
+		Useed@ Code:$80D6
+		Useed@ Code:$80D8
+		Useed@ Code:$80DD
+		Useed@ Code:$80DF
+		Useed@ Code:$80E4
+		Useed@ Code:$80EA
+		Useed@ Code:$80F0
+		Useed@ Code:$8102
+		Useed@ Code:$8104
+		Useed@ Code:$810C
+		Useed@ Code:$810E
+		Useed@ Code:$8118
+		Useed@ Code:$811F
+		Useed@ Code:$8124
+		Useed@ Code:$8129
+		Useed@ Code:$812B
+		Useed@ Code:$814E
+		Useed@ Code:$8154
+		Useed@ Code:$8156
+		Useed@ Code:$8161
+		Useed@ Code:$8163
+		Useed@ Code:$8167
+		Useed@ Code:$8169
+		Useed@ Code:$8173
+		Useed@ Code:$8175
 Section:LOCALS:Start:$1200 Size:$0800 MODE:R/W:ABSOLUTE Address Size:WORD
-xyx: GLOBAL:CHAR::Address=00000000
-one: GLOBAL:CARD::Address=00000000
-ThirdW: :Address=00000200
-q: LOCAL:CHAR::Address=00000000
-Astring: :Address=00008000
-Here: :Address=00008000
+xyx: GLOBAL:CHAR::Address=$0000
+one: GLOBAL:CARD::Address=$0000
+ThirdW: :Address=$0200
+q: LOCAL:CHAR::Address=$0000
+Astring: :Address=$8000
+Here: :Address=$8004
 Section:STRINGS:Start:$F800 Size:$0800 MODE:RO:ABSOLUTE Address Size:WORD
-x: GLOBAL:INT:POINTER:ARRAY::Address=00000000
-three: GLOBAL:CARD::Address=00000000
-y: GLOBAL:INT:POINTER:ARRAY::Address=00000000
+x: GLOBAL:INT:POINTER:ARRAY::Address=$0000
+three: GLOBAL:CARD::Address=$0000
+y: GLOBAL:INT:POINTER:ARRAY::Address=$0000
 Section:VARIABLES:Start:$0200 Size:$0800 MODE:R/W:ABSOLUTE Address Size:WORD
-z: GLOBAL:INT:POINTER:ARRAY::Address=00000000
-Second: :Address=00000200
-We: :Address=00008000
-two: GLOBAL:CARD::Address=00000000
+z: GLOBAL:INT:POINTER:ARRAY::Address=$0000
+Second: :Address=$0200		Useed@ Code:$8005
+		Useed@ Code:$800C
+		Useed@ Code:$8012
+		Useed@ Code:$8018
+		Useed@ Code:$801E
+		Useed@ Code:$8031
+		Useed@ Code:$8034
+		Useed@ Code:$803B
+		Useed@ Code:$803E
+		Useed@ Code:$8045
+		Useed@ Code:$804C
+		Useed@ Code:$8051
+		Useed@ Code:$8058
+		Useed@ Code:$805B
+		Useed@ Code:$8083
+		Useed@ Code:$8086
+		Useed@ Code:$8089
+		Useed@ Code:$8096
+		Useed@ Code:$8099
+		Useed@ Code:$80A2
+		Useed@ Code:$80A5
+		Useed@ Code:$80DA
+		Useed@ Code:$80E1
+		Useed@ Code:$80E7
+		Useed@ Code:$80ED
+		Useed@ Code:$80F3
+		Useed@ Code:$8106
+		Useed@ Code:$8109
+		Useed@ Code:$8110
+		Useed@ Code:$8113
+		Useed@ Code:$811A
+		Useed@ Code:$8121
+		Useed@ Code:$8126
+		Useed@ Code:$812D
+		Useed@ Code:$8130
+		Useed@ Code:$8158
+		Useed@ Code:$815B
+		Useed@ Code:$815E
+		Useed@ Code:$816B
+		Useed@ Code:$816E
+		Useed@ Code:$8177
+		Useed@ Code:$817A
+We: :Address=$800b
+two: GLOBAL:CARD::Address=$0000
 Section:Page2:Start:$0200 Size:$0100 MODE:R/W:ABSOLUTE Address Size:WORD
-DataBuff: GLOBAL:CHAR:ARRAY::Address=00000000
+DataBuff: GLOBAL:CHAR:ARRAY::Address=$0000
 Section:PageZero:Start:$0000 Size:$0100 MODE:R/W:ABSOLUTE Address Size:BYTE
-ProcNum1: GLOBAL:PROC::Address=00000000
-	a100: PARAM:BYTE::Address=00000000
-	a101: PARAM:BYTE::Address=00000000
-	i100: PARAM:INT::Address=00000000
-CString: :Address=00008000
-StorageB: :Address=00000000
+ProcNum1: GLOBAL:PROC::Address=$0000
+	a100: PARAM:BYTE::Address=$0000
+	a101: PARAM:BYTE::Address=$0000
+	i100: PARAM:INT::Address=$0000
+CString: :Address=$8000
+StorageB: :Address=$0000
 Section:CONST:Start:$F800 Size:$0800 MODE:RO:ABSOLUTE Address Size:WORD
-Yep: GLOBAL:CHAR::Address=00000000
-paData: LOCAL:CHAR:POINTER:ARRAY::Address=00000000
-Go: :Address=00008000
-Hey: INTERRUPT::Address=00000000
+Yep: GLOBAL:CHAR::Address=$0000
+paData: LOCAL:CHAR:POINTER:ARRAY::Address=$0000
+Go: :Address=$802c
+Hey: INTERRUPT::Address=$0000
 Section:ZERO:Start:$0000 Size:$0100 MODE:R/W:ABSOLUTE Address Size:BYTE
-Again: :Address=00008000
-yxy: GLOBAL:CHAR::Address=00000000
-FuncName2: GLOBAL:INT:FUNC::Address=00000000
-	c100: PARAM:CARD:POINTER::Address=00000000
-	c101: PARAM:CARD:POINTER::Address=00000000
-	h190: PARAM:CHAR:ARRAY:POINTER::Address=00000000
+Again: :Address=$8030
+yxy: GLOBAL:CHAR::Address=$0000
+FuncName2: GLOBAL:INT:FUNC::Address=$0000
+	c100: PARAM:CARD:POINTER::Address=$0000
+	c101: PARAM:CARD:POINTER::Address=$0000
+	h190: PARAM:CHAR:ARRAY:POINTER::Address=$0000
 Section:VECTOR:Start:$FFFA Size:$0006 MODE:RO:ABSOLUTE Address Size:WORD
-Are: :Address=00008000
-aData: LOCAL:CHAR:ARRAY::Address=00000000
-Stuff: GLOBAL:CHAR::Address=00000000
+Are: :Address=$8011		Useed@ Code:$8021
+		Useed@ Code:$8023
+		Useed@ Code:$8025
+		Useed@ Code:$8027
+		Useed@ Code:$8029
+		Useed@ Code:$802B
+		Useed@ Code:$80F6
+		Useed@ Code:$80F8
+		Useed@ Code:$80FA
+		Useed@ Code:$80FC
+		Useed@ Code:$80FE
+		Useed@ Code:$8100
+aData: LOCAL:CHAR:ARRAY::Address=$0000
+Stuff: GLOBAL:CHAR::Address=$0000
 Section:PARAMS:Start:$0A00 Size:$0800 MODE:R/W:ABSOLUTE Address Size:WORD
 Section:STACK:Start:$0100 Size:$0100 MODE:R/W:ABSOLUTE Address Size:WORD
-StirageA: :Address=00000000
-pData: LOCAL:CHAR:POINTER::Address=00000000
+StirageA: :Address=$0000
+pData: LOCAL:CHAR:POINTER::Address=$0000
 Section:Code:Start:$8000 Size:$1000 MODE:RO:ABSOLUTE Address Size:WORD
 Section:VREG:Start:$0000 Size:$0100 MODE:R/W:RELOCATALE Address Size:BYTE
-Avar: GLOBAL:INT:POINTER:ARRAY::Address=00000000
-CrudOne: LOCAL:INT::Address=00000000
-la: LOCAL:CHAR::Address=00000000
-lb: LOCAL:CHAR::Address=00000000
-lc: LOCAL:CARD::Address=00000000
-cc: LOCAL:INT:POINTER:ARRAY:POINTER::Address=00000000
-ld: LOCAL:CARD::Address=00000000
-ForthL: :Address=00000200
-le: LOCAL:CARD::Address=00000000
-Cvar: GLOBAL:CARD::Address=00000000
-cx100: LOCAL:CARD::Address=00000000
-lf: LOCAL:BYTE::Address=00000000
-CrudTwo: LOCAL:CHAR::Address=00000000
-x100: LOCAL:BYTE::Address=00000000
-pX: LOCAL:INT:POINTER::Address=00000000
+Avar: GLOBAL:INT:POINTER:ARRAY::Address=$0000
+CrudOne: LOCAL:INT::Address=$0000
+la: LOCAL:CHAR::Address=$0000
+lb: LOCAL:CHAR::Address=$0000
+lc: LOCAL:CARD::Address=$0000
+cc: LOCAL:INT:POINTER:ARRAY:POINTER::Address=$0000
+ld: LOCAL:CARD::Address=$0000
+ForthL: :Address=$0200
+le: LOCAL:CARD::Address=$0000
+Cvar: GLOBAL:CARD::Address=$0000
+cx100: LOCAL:CARD::Address=$0000
+lf: LOCAL:BYTE::Address=$0000
+CrudTwo: LOCAL:CHAR::Address=$0000
+x100: LOCAL:BYTE::Address=$0000
+pX: LOCAL:INT:POINTER::Address=$0000
 Section:CODE:Start:$F800 Size:$0800 MODE:RO:ABSOLUTE Address Size:WORD
-d: LOCAL:CHAR::Address=00000000
+d: LOCAL:CHAR::Address=$0000
 Lines Compiled:212

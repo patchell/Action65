@@ -122,13 +122,32 @@ int CSymbol::Print(char* pSO, int l, const char* s)
 		ls += GetTypeChain()->Print(&pSO[ls], l - ls);
 	}
 	size = l - ls;
-	ls += sprintf_s(&pSO[ls],size, ":Address=%08lx",
+	ls += sprintf_s(&pSO[ls],size, ":Address=$%04lx",
 		GetAddress()
 	);
 	if (GetParamChain())
 	{
 		size = l - ls;
 		GetParamChain()->Print(&pSO[ls], size);
+	}
+	if (GetHead())	//print where the symbol is used
+	{
+		CWhereSymbolIsUsed* pWSIU = 0;
+
+		pWSIU = (CWhereSymbolIsUsed*)GetHead();
+		while (pWSIU)
+		{
+			size = l - ls;
+			ls += sprintf_s(&pSO[ls], size, "\t\t");
+			size = l - ls;
+			ls += pWSIU->Print(&pSO[ls], size,0);
+			pWSIU = (CWhereSymbolIsUsed*)pWSIU->GetNext();
+			if (pWSIU)
+			{
+				size = l - ls;
+				ls += sprintf_s(&pSO[ls], size, "\n");
+			}
+		}
 	}
 	return ls;
 }

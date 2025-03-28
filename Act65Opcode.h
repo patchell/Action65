@@ -45,6 +45,7 @@ class CAct65Opcode : public CAstNode
 	int m_ByteCount;
 	//-----------------------
 	CSymbol* m_pLabel;	// Symbol for instruction location
+	int m_InstructionAddress;
 public:
 	CAct65Opcode();
 	virtual ~CAct65Opcode();
@@ -56,17 +57,21 @@ public:
 	virtual void PrintNode(FILE* pOut, int Indent, bool* pbNextFlag);
 	virtual CValue* Emit(CValue* pVc, CValue* pVn);
 	virtual int Print(int Indent, char* s, int l, bool* pbNextFlag);
+	int AddressModeString(char* pS, int StrLen, AdrModeType AdrMode);
 	virtual const char* GetNodeName() { return m_pNodeTyypeName; }
 	virtual void PrepareInstruction(
 		Token Tk, 
 		AdrModeType AddressMode,
 		CValue* pOperandValue_Node,
+		CSection* pSection,
 		CSymbol* pLabelSym = 0
 	);
 	int SaveInstruction(char* pM);
 	//-----------------------------
 	// Setter/Getter Methods
 	//-----------------------------
+	int GetInstructionAddress() const { return m_InstructionAddress; }
+	void SetInstructionAddress(int Adr);
 	Token GetToken() const { return m_OpcodeToken; }
 	void SetToken(Token t) { m_OpcodeToken = t; }
 	const char* GetOpcodeName();

@@ -308,7 +308,6 @@
     <ClCompile Include="Symbol.cpp" />
     <ClCompile Include="SymTab.cpp" />
     <ClCompile Include="TypeChain.cpp" />
-    <ClCompile Include="UnResolvedSymbol.cpp" />
     <ClCompile Include="Value.cpp" />
     <ClCompile Include="VirtualReg.cpp" />
     <ClCompile Include="WhereSymbolIsUsed.cpp" />
@@ -488,7 +487,6 @@
     <ClInclude Include="Symbol.h" />
     <ClInclude Include="SymTab.h" />
     <ClInclude Include="TypeChain.h" />
-    <ClInclude Include="UnResolvedSymbol.h" />
     <ClInclude Include="Value.h" />
     <ClInclude Include="VirtualReg.h" />
     <ClInclude Include="WhereSymbolIsUsed.h" />

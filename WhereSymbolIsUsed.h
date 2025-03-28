@@ -31,6 +31,7 @@ public:
 	CWhereSymbolIsUsed();
 	virtual ~CWhereSymbolIsUsed();
 	bool Create();
+	virtual int Print(char* pSO, int l, const char* s);
 	virtual bool Compare(const char* name, int scope);
 	void SetAddress(int a);
 	virtual unsigned GetAddress() const { return m_Address; }
@@ -41,6 +42,6 @@ public:
 		return m_pSection; 
 	}
 	void SetUnResType(UnResolvedType type) { m_UnResRefType = type; }
-	UnResolvedType GetUnResType() { return m_UnResRefType; }
+	UnResolvedType GetUnResType() const { return m_UnResRefType; }
 };
 
