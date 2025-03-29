@@ -2,13 +2,12 @@
 
 CParser::CParser()
 {
-	m_Phase = PHASE::NONE;
 	m_pLex = 0;
 	m_Processor = Processor::R6502;
 	m_Recursion = 0;
 	m_Bump = 0;
 	LookaHeadToken = Token(0);
-
+	m_pLinkerScript = 0;
 	m_pCurrentSection = 0;
 	m_pHead = 0;
 	m_pTail = 0;
@@ -64,6 +63,7 @@ CAstNode* CParser::Run()
 	else
 		ErrorDest = stderr;
 	try {
+		NextPass();
 		pRoot = (CAct65ROOT*)GetAstTree()->GetRootNode();
 		pRoot = new CAct65ROOT;
 		pRoot->Create();
@@ -72,9 +72,14 @@ CAstNode* CParser::Run()
 		pN = Action65();
 		pRoot->SetChild(pN);
 		GetAstTree()->Print(LogFile());
+		NextPass();
 		GetAstTree()->Process();	//gemerate cpde
-//		GetCurrentSection()->Print(LogFile());
+		NextPass();
+		NextPass();
 		GetLexer()->GetSymTab()->PrintTable(LogFile());
+		CSection* pSec = FindSection("Code");
+		if (pSec)
+			pSec->Dump(LogFile(), "Code");
 		fprintf(stderr, "Lines Compiled:%d\n", GetLexer()->GetLineNumber());
 		fprintf(LogFile(), "Lines Compiled:%d\n", GetLexer()->GetLineNumber());
 	}
@@ -4865,7 +4870,6 @@ CAstNode* CParser::Section()
 			pSection = new CSection;
 			SectionName(pSection);
 			SetCurrentSection(pSection);
-			GetLexer()->GetSymTab()->AddSymbol(pSection);
 			AddSection(pSection);
 			pN = new CAct65SECTION;;
 			pN->SetSection(pSection);
@@ -5778,14 +5782,6 @@ CAstNode* CParser::AsmStatements()
 		case Token::DAS:	//define action string
 			Expect(Token::DAS);
 			pChild = AsmConstList();
-			pN = new CAct65DAS;
-			if (CAstNode::NodeType::STRING == pChild->GetNodeType())
-			{
-				CAct65STRING* pSN = (CAct65STRING*)pChild;
-				((CAct65DAS*)pN)->SetString(pSN->GetString());
-				//				delete pChild;
-			}
-			pChild = pN->SetChild(pChild);
 			if (pLabel)
 				pChild = pLabel->SetChild(pChild);
 			pList = CAstNode::MakeNextList(pList, pChild);
@@ -5795,14 +5791,6 @@ CAstNode* CParser::AsmStatements()
 		case Token::DCS:	//define 'C' string
 			Expect(Token::DCS);
 			pChild = AsmConstList();
-			pN = new CAct65DCS;
-			if (CAstNode::NodeType::STRING == pChild->GetNodeType())
-			{
-				CAct65STRING* pSN = (CAct65STRING*)pChild;
-				((CAct65DCS*)pN)->SetString(pSN->GetString());
-				//				delete pChild;
-			}
-			pChild = pN->SetChild(pChild);
 			if (pLabel)
 				pChild = pLabel->SetChild(pChild);
 			pList = CAstNode::MakeNextList(pList, pChild);
@@ -6446,6 +6434,11 @@ CAstNode* CParser::Accumulator(Token OpCodeToken, CAstNode* pLabel)
 // Debug Utilities
 //-------------------------------------------
 
+void CParser::NextPass()
+{
+	fprintf(stderr, "%s\n", m_Pass.NextPass());
+}
+
 void CParser::DebugTraverse(
 	CAstNode* pN,
 	const char* pTitle,
@@ -6507,12 +6500,8 @@ void CParser::DebugTraverse(
 	delete[]pbNextFlags;
 }
 
-const char* CParser::PHASE_LUT::LookupPhaseName(PHASE phase)
+const char* CParser::PASS::NextPass()
 {
-	return nullptr;
-}
-
-CParser::PHASE CParser::PHASE_LUT::LookupPhaseToken(const char* pName)
-{
-	return PHASE();
+	m_Phase = PHASE(int(m_Phase) + 1);
+	return CParser::ParsePhase[int(m_Phase)].m_pName;
 }

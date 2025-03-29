@@ -18,6 +18,7 @@ constexpr auto ADR_MODE_RELATIVE = 0x0400;
 constexpr auto ADR_MODE_ACCUMULATOR = 0x0800;
 constexpr auto ADR_MODE_IMPLIED = 0x1000;
 
+constexpr auto PHASE_LUT_DIM = 5;
 class CParser
 {
 public:
@@ -29,20 +30,28 @@ public:
 		GENTERATE_OUT_FILES
 	};
 private:
-	struct PHASE_LUT {
+	struct PASS {
 		PHASE m_Phase;
 		const char* m_pName;
-		const char* LookupPhaseName(PHASE phase);
-		PHASE LookupPhaseToken(const char* pName);
+		PASS() {
+			m_Phase = PHASE::NONE;
+			m_pName = 0;
+		}
+		PASS(PHASE ph, const char* pN) {
+			m_Phase = ph;
+			m_pName = pN;
+		}
+		const char* NextPass();
 	};
-	static inline PHASE_LUT ParsePhase[4] = {
-		{PHASE::GENERATE_AST,"GENERATE_AST"},
-		{PHASE::EXECUTE_AST_PASS1,"EXECUTE_AST_PASS1"},
-		{PHASE::EXECUTE_AST_PASS2,"EXECUTE_AST_PASS2"},
-		{PHASE::GENTERATE_OUT_FILES,"GENTERATE_OUT_FILES"},
+	static inline PASS ParsePhase[PHASE_LUT_DIM] = {
+		{PHASE::NONE,"NONE"},
+		{PHASE::GENERATE_AST,"Pass 1:AST Generation"},
+		{PHASE::EXECUTE_AST_PASS1,"Pass 2:CODE Generation"},
+		{PHASE::EXECUTE_AST_PASS2,"Pass 3:Linking"},
+		{PHASE::GENTERATE_OUT_FILES,"Pass 4:Generate Ouput File"},
 	};
 	CLexer* m_pLex;
-	PHASE m_Phase;			// Phase of the compiler operation
+	PASS m_Pass;			// Phase of the compiler operation
 	Processor m_Processor;
 	int m_Recursion;
 	int m_Bump;
@@ -340,6 +349,7 @@ private:
 	CAstNode* Accumulator(Token OpCodeToken, CAstNode* pLabel);
 	//---------------- Debug Utillity ----------------------
 public:
+	void NextPass();
 	void DebugTraverse(
 		CAstNode* pN,		// head of tree
 		const char* pTitle, // title of dump

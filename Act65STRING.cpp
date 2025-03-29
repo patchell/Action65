@@ -2,29 +2,16 @@
 
 CAct65STRING::CAct65STRING() :CAstNode(m_pNodeTyypeName, NodeType::STRING)
 {
-	m_pString = 0;
-	m_StringType = StringType::ACTION_STRING;
 }
 
 CAct65STRING::~CAct65STRING()
 {
-	if (m_pString)
-		delete[] m_pString;
-}
-
-const char* CAct65STRING::GetStringTypeName() const
-{
-    return StringTypeLUT[int(m_StringType)].m_pName;
 }
 
 void CAct65STRING::SetString(const char* s)
 {
-	rsize_t l = 0;
-	int i = 0;
-
-	l = strlen(s) + 1;
-	m_pString = new char[l+1];
-	strncpy_s(m_pString, l, s,l);
+	CreateValue(s);
+	GetValue()->SetValueType(CValue::ValueType::CSTRING);
 }
 
 bool CAct65STRING::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
@@ -43,8 +30,11 @@ CValue* CAct65STRING::Process()
 int CAct65STRING::Print(int Indent, char* s, int Strlen, bool* pbNextFlag)
 {
 	int l = 0;
+	int size = 0;
 
 	l = CAstNode::Print(Indent, s, Strlen, pbNextFlag);
+	size = Strlen - l;
+	l += sprintf_s(&s[l], size, ":\'%s\'", GetValue()->GetString());
 	return l;
 }
 
@@ -67,4 +57,14 @@ void CAct65STRING::PrintNode(FILE* pOut, int Indent, bool* pbNextFlag)
 CValue* CAct65STRING::Emit(CValue* pVc, CValue* pVn)
 {
     return nullptr;
+}
+
+char* CAct65STRING::GetString()
+{
+	return GetValue()->GetString();
+}
+
+int CAct65STRING::GetStrLen()
+{
+	return GetValue()->GetConstVal();
 }

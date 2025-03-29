@@ -161,7 +161,6 @@ void CAstTree::TraverseTree(
 
 CValue* CAstTree::Process()
 {
-	fprintf(stderr, "Generating Code\n");
     return GetRootNode()->Process();
 }
 

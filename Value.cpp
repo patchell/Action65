@@ -15,8 +15,7 @@ CValue::~CValue()
 
 bool CValue::Create(const char* s)
 {
-	SetString(s);
-	m_ValType = ValueType::STRING;
+	SetString(s, ValueType::CSTRING);	//default is C-String
 	return true;
 }
 
@@ -96,12 +95,14 @@ int CValue::GetTotalValue()
 	return rV;
 }
 
-void CValue::SetString(const char* s)
+void CValue::SetString(const char* s, ValueType Type)
 {
-	int l = int(strlen(s)) + 1;
+	int l = int(strlen(s));
 
-	m_pString = new char[l];
-	strcpy_s(m_pString, l, s);
+	m_pString = new char[l + 1];
+	strncpy_s(m_pString, l + 1, s, l +1);
+	m_ConstantValue = l;	//this is the string length
+	m_ValType = Type;
 }
 
 void CValue::Add(CValue* pVal)

@@ -66,7 +66,7 @@ public:
 	bool Create() { return true; }
 	virtual bool Compare(const char* name, int scope);
 	virtual void Print(FILE* pOut, const char* s);
-	virtual int Print(char* pSO,int l, const char* s);
+	virtual int Print(char* pSO,int l, const char* s = 0);
 	//-----------------------------
 	// Accessor Methods
 	//-----------------------------

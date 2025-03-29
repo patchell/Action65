@@ -1,6 +1,6 @@
 #pragma once
 
-constexpr auto VALUE_LUT_DIM = 4;
+constexpr auto VALUE_LUT_DIM = 6;
 
 class CValue
 {
@@ -9,7 +9,9 @@ public:
 		NONE,
 		CONSTANT,
 		SYMBOL,
-		STRING
+		STRING,
+		CSTRING,
+		ASTRING
 	};
 	struct CValueTypeItem {
 		ValueType m_Type;
@@ -41,7 +43,9 @@ private:
 		{ValueType::NONE,"NONE"},
 		{ValueType::CONSTANT,"CONSTANT"},
 		{ValueType::SYMBOL,"SYMBOL"},
-		{ ValueType::STRING,"STRING" }
+		{ ValueType::STRING,"STRING" },
+		{ ValueType::CSTRING,"C STRING" },
+		{ ValueType::ASTRING,"Act STRING" }
 	};
 	inline static UpperLowerItem UpperLowerLUT[3] = {
 		{UpperLower::NONE,"NONE"},
@@ -49,7 +53,15 @@ private:
 		{UpperLower::LOWER,"LOWER"},
 	};
 	CBin* m_pSym;
-	int m_ConstantValue;
+	int m_ConstantValue;	// this value can be:
+							// 1. A constant value
+							// 2. An offset for a symbol
+							// 3. The length of a string
+							// A string is store as a
+							// C - String, i.e. the
+							// last character is '0'
+							// which is not included
+							// in the length
 	char* m_pString;
 	ValueType m_ValType;
 	UpperLower m_UpperLOwer;
@@ -68,8 +80,9 @@ public:
 		m_ValType = ValueType::CONSTANT;
 	}
 	int GetTotalValue();
+	void SetValueType(ValueType VT) { m_ValType = VT; }
 	ValueType GetValueType() const { return m_ValType; }
-	void SetString(const char* s);
+	void SetString(const char* s, ValueType Type);
 	char* GetString() { return m_pString; }
 	void Add(CValue* pVal);
 	void Sub(CValue* pVal);

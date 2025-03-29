@@ -194,6 +194,7 @@ Token CLexer::Lex()
 	bool auxLoop = true;
 	int c = 0,c1 = 0, c2 = 0;
 	Token TokenValue = Token(0);
+	CBin* pSym = 0;
 	static Token PreviousSymbolType = Token::NONE;
 
 	m_LexBuffIndex = 0;

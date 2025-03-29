@@ -250,9 +250,35 @@ int CSection::AllocateDataBlock(int size)
 	return m_LocationCounter;
 }
 
+bool CSection::EmitToSection(CAstNode* pNode, int ObjectSize, CSymbol* pLabel)
+{
+	bool rV = true;
+	CValue* pValue;
+
+	if (pLabel)
+		pLabel->SetAddress(GetLocationCounter());
+	while (pNode)
+	{
+		pValue = pNode->GetValue();
+		switch (pValue->GetValueType())
+		{
+		case CValue::ValueType::SYMBOL:
+			break;
+		case CValue::ValueType::CONSTANT:
+			AddData(ObjectSize, pValue->GetConstVal());
+			break;
+		case CValue::ValueType::STRING:
+			break;
+		}
+		pNode = pNode->GetNext();
+	}
+    return rV;
+}
+
 void CSection::Print(FILE* pOut, const char* s)
 {
-	fprintf(pOut, "Section:%s:Start:$%04X Size:$%04X MODE:%s:%s Address Size:%s\n",
+	fprintf(pOut, "%sSection:%s:Start:$%04X Size:$%04X MODE:%s:%s Address Size:%s\n",
+		s?s:"",
 		GetName(),
 		m_StartAddress,
 		m_Size,

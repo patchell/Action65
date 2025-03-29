@@ -32,6 +32,25 @@ int CAct65Label::Print(int Indent, char* s, int Strlen, bool* pbNextFlag)
 	l += sprintf_s(&s[l], Size, " \'%s\'", 
 		GetSymbol()->GetName()
 	);
+	if (GetHead())	//print where the symbol is used
+	{
+		CWhereSymbolIsUsed* pWSIU = 0;
+
+		pWSIU = (CWhereSymbolIsUsed*)GetHead();
+		while (pWSIU)
+		{
+			Size = Strlen - l;
+			l += sprintf_s(&s[l], Size, "\t\t");
+			Size = Strlen - l;
+			l += pWSIU->Print(&s[l], Size, 0);
+			pWSIU = (CWhereSymbolIsUsed*)pWSIU->GetNext();
+			if (pWSIU)
+			{
+				Size = Strlen - l;
+				l += sprintf_s(&s[l], Size, "\n");
+			}
+		}
+	}
 	return l;
 }
 

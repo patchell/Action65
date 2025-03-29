@@ -31,7 +31,7 @@ public:
 	CWhereSymbolIsUsed();
 	virtual ~CWhereSymbolIsUsed();
 	bool Create();
-	virtual int Print(char* pSO, int l, const char* s);
+	virtual int Print(char* pSO, int l, const char* s = 0);
 	virtual bool Compare(const char* name, int scope);
 	void SetAddress(int a);
 	virtual unsigned GetAddress() const { return m_Address; }

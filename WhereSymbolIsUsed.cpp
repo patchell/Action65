@@ -21,6 +21,11 @@ int CWhereSymbolIsUsed::Print(char* pSO, int Strlen, const char* s)
 	int l = 0;
 	int Size = 0;
 
+	if (s)
+	{
+		Size = Strlen - l;
+		l += sprintf_s(&pSO[l], Size, "%s", s);
+	}
 	Size = Strlen - l;
 	l += sprintf_s(&pSO[l], Size, "Useed@ %s:$%04X",
 		GetSection()->GetName(),

@@ -194,8 +194,6 @@ void CSymTab::PrintTable(FILE* pOut)
 			l = (int)strlen(pSym->GetName());
 			if (l > maxStringLen)
 				maxStringLen = l;
-			if (i == 0x1b)
-				printf("Well\n");
 			pSym = pSym->GetNext();
 		}
 	}

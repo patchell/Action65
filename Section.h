@@ -1,6 +1,7 @@
 #pragma once
 
 class CAct65Opcode;
+class CAstNode;
 
 class CSection : public CBin
 {
@@ -61,15 +62,18 @@ public:
 		return m_LocationCounter;
 	}
 	void SetLocationCounter(int NewAddress);
+	void SetAccessMode(Mode Am) { m_AccessMode = Am; }
+	CSection::Mode GetAccessMode() { return m_AccessMode; }
+	void SetZeroPageFlag(AddressSize SizeFlag) { m_ZeroPageAddressSize = SizeFlag; }
+	CSection::AddressSize GetZeroPageFlag() { return m_ZeroPageAddressSize; }
+	//----- Adding Data --------
 	int AddInstruction(CAct65Opcode* pINS);
 	int AddData(int ObjectSize, int Value);
 	int AddData(int ObjSize, const char* pData);
 	void AddDataAt(unsigned Adr, unsigned ObjectSize, int valu);
 	int AllocateDataBlock(int size);	//define Storage
-	void SetAccessMode(Mode Am) { m_AccessMode = Am; }
-	CSection::Mode GetAccessMode() { return m_AccessMode; }
-	void SetZeroPageFlag(AddressSize SizeFlag) { m_ZeroPageAddressSize = SizeFlag; }
-	CSection::AddressSize GetZeroPageFlag() { return m_ZeroPageAddressSize; }
+	bool EmitToSection(CAstNode* pNode, int ObjectSize, CSymbol* pLabel);
+	//------ Debug/Diagnosis -----------------
 	virtual void Print(FILE* pOut, const char* s = 0);
 	void Dump(FILE* pOut, const char* s = 0);
 	void Info();

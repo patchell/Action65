@@ -174,8 +174,6 @@
     <ClCompile Include="Act65CONSTANT.cpp" />
     <ClCompile Include="Act65ConstLIST.cpp" />
     <ClCompile Include="Act65CurrentLocation.cpp" />
-    <ClCompile Include="Act65DAS.cpp" />
-    <ClCompile Include="Act65DCS.cpp" />
     <ClCompile Include="Act65DEFINE.cpp" />
     <ClCompile Include="Act65DefineOBJECT.cpp" />
     <ClCompile Include="Act65DefLIST.cpp" />
@@ -353,8 +351,6 @@
     <ClInclude Include="Act65CONSTANT.h" />
     <ClInclude Include="Act65ConstLIST.h" />
     <ClInclude Include="Act65CurrentLocation.h" />
-    <ClInclude Include="Act65DAS.h" />
-    <ClInclude Include="Act65DCS.h" />
     <ClInclude Include="Act65DEFINE.h" />
     <ClInclude Include="Act65DefineOBJECT.h" />
     <ClInclude Include="Act65DefLIST.h" />

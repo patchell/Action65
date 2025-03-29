@@ -134,6 +134,9 @@ int CSymbol::Print(char* pSO, int l, const char* s)
 	{
 		CWhereSymbolIsUsed* pWSIU = 0;
 
+		size = l - ls;
+		ls += sprintf_s(&pSO[ls], size, "\n");
+
 		pWSIU = (CWhereSymbolIsUsed*)GetHead();
 		while (pWSIU)
 		{
