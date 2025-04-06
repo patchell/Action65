@@ -5850,6 +5850,7 @@ CAstNode* CParser::AsmStatements()
 	CAstNode* pN = 0;
 	CAct65Opcode* pOpCode = 0;
 	CValue* pValue = 0;
+	int Address = 0;
 
 	pLabel = OptLabel();
 	while(Loop)
@@ -5976,8 +5977,11 @@ CAstNode* CParser::AsmStatements()
 			pChild = new CAct65DS;
 			pChild->SetSection(GetCurrentSection());
 			pChild->SetChild(pN);
+			Address = GetCurrentSection()->AllocateDataBlock(pValue->GetConstVal());
 			if (pLabel)
+			{
 				pChild = pLabel->SetChild(pChild);
+			}
 			pList = CAstNode::MakeNextList(pList, pChild);
 			//-----------------------------------------
 			pLabel = OptLabel();
@@ -6110,7 +6114,6 @@ CAstNode* CParser::OptLabel()
 			pSym->SetAddress(GetCurrentSection()->GetLocationCounter());
 			pSym->SetResolved();	//Indicate this is a resolved symbol
 			pSym->SetSection(GetCurrentSection());
-			pSym->BackFillUnresolved();
 			GetLexer()->GetSymTab()->AddSymbol(pSym);
 		}
 		else if (pSym->IsUnResolved())

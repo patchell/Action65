@@ -256,8 +256,10 @@ void CSection::AddDataAt(
 
 int CSection::AllocateDataBlock(int size)
 {
+	int Temp = m_LocationCounter;
+
 	m_LocationCounter += size;
-	return m_LocationCounter;
+	return Temp;
 }
 
 bool CSection::EmitToSection(CAstNode* pNode, int ObjectSize, CSymbol* pLabel)

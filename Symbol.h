@@ -53,7 +53,7 @@ public:
 		m_pTypeDefChain->Create();
 	}
 	virtual unsigned GetAddress() const { return m_Address; }
-	void SetAddress(unsigned A) { 
+	virtual void SetAddress(unsigned A) { 
 		m_Address = A; 
 		SetResolved();
 		BackFillUnresolved();
