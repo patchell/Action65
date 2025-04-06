@@ -107,6 +107,22 @@ int CTypeChain::Print(char* pSO, int l)
 	return ls;
 }
 
+bool CTypeChain::IsField()
+{
+	bool rV = false;
+	CObjTypeChain* pOT;
+
+	pOT = GetHead();
+	while (pOT && !rV)
+	{
+		if (pOT->GetSpec() == CObjTypeChain::Spec::TYPE_FIELD)
+			rV = true;
+		else
+			pOT = pOT->GetNext();
+	}
+	return rV;
+}
+
 bool CTypeChain::IsGlobal()
 {
 	bool rV = false;

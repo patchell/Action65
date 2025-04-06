@@ -20,7 +20,8 @@ public:
 		INTERRUPT,
 		LOCAL,
 		PARAM,
-		GLOBAL
+		GLOBAL,
+		TYPE_FIELD
 	};
 private:
 	struct Types {
@@ -54,6 +55,7 @@ private:
 		{Spec::LOCAL,"LOCAL"},
 		{Spec::PARAM,"PARAM"},
 		{Spec::GLOBAL,"GLOBAL"},
+		{Spec::TYPE_FIELD,"FIELD"},
 		{Spec(-1),0}
 	};
 	Spec m_SpecType;

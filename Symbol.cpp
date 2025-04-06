@@ -1,5 +1,17 @@
 #include "pch.h"
 
+CSymbol::CSymbol() : CBin(CBin::BinType::SYMBOL)
+{
+	m_Address = 0;
+	m_Scope = SYMBOL_SCOPE_ANY;
+	m_pSection = 0;
+	m_UnResolved = true;
+	m_pTypeChain = 0;
+	m_pParamChain = 0;
+	m_pTypeDefChain = 0;
+	m_pLocalVariables = 0;	//list of local variables
+}
+
 bool CSymbol::Compare(const char* name, int scope)
 {
 	bool rV = false;
@@ -35,41 +47,44 @@ void CSymbol::BackFillUnresolved()
 	pWSIU = (CWhereSymbolIsUsed*)GetHead();
 	while (pWSIU)
 	{
-		URLocation = pWSIU->GetAddress();
-		//		fprintf(
-		//			As65App.LogFile(),
-		//			"Unresolved: @0x%04x\n",
-		//			URLocatioon
-		//		);
-		if (pWSIU->GetUnResType() == CWhereSymbolIsUsed::UnResolvedType::ABSOLUTE_REFERENCE)
+		if (!pWSIU->IsResolveProcessed())
 		{
-			//------------------------------------------
-			// Get the location of an unresolved value,
-			// and then put the data defined by this
-			// symbol in there.
-			//------------------------------------------
-			pWSIU->GetSection()->AddDataAt(
-				pWSIU->GetAddress(),	//address of data
-				2,						// size of object
-				Address					// object value
+			URLocation = pWSIU->GetAddress();
+			fprintf(
+				Act()->LogFile(),
+				"Unresolved: @0x%04x\n",
+				URLocation
 			);
-		}
-		else
-		{
-			//------------------------------------------
-			// for relative address, subtract the
-			// location of the unresoved symbol from
-			// the value of this object.
-			//------------------------------------------
-			unsigned WhereSymIsUsedAddress = pWSIU->GetAddress();
-			unsigned RelAddress = Address - WhereSymIsUsedAddress;
+			if (pWSIU->GetUnResType() == CWhereSymbolIsUsed::UnResolvedType::ABSOLUTE_REFERENCE)
+			{
+				//------------------------------------------
+				// Get the location of an unresolved value,
+				// and then put the data defined by this
+				// symbol in there.
+				//------------------------------------------
+				pWSIU->GetSection()->AddDataAt(
+					pWSIU->GetAddress(),	//address of data
+					2,						// size of object
+					Address					// object value
+				);
+			}
+			else
+			{
+				//------------------------------------------
+				// for relative address, subtract the
+				// location of the unresoved symbol from
+				// the value of this object.
+				//------------------------------------------
+				unsigned WhereSymIsUsedAddress = pWSIU->GetAddress();
+				unsigned RelAddress = Address - WhereSymIsUsedAddress;
 
-			RelAddress--;
-			pWSIU->GetSection()->AddDataAt(
-				WhereSymIsUsedAddress,
-				1,
-				RelAddress
-			);
+				RelAddress--;
+				pWSIU->GetSection()->AddDataAt(
+					WhereSymIsUsedAddress,
+					1,
+					RelAddress
+				);
+			}
 		}
 		pWSIU = (CWhereSymbolIsUsed*)pWSIU->GetNext();
 	}
@@ -149,6 +164,22 @@ int CSymbol::Print(char* pSO, int l, const char* s)
 			{
 				size = l - ls;
 				ls += sprintf_s(&pSO[ls], size, "\n");
+			}
+		}
+		CChainBinItem* pLocalSyms = 0;
+		if (GetLocalVars())
+		{
+			pLocalSyms = (CChainBinItem * )GetLocalVars()->GetHead();
+		}
+		if (pLocalSyms)
+		{
+			size = l - ls;
+			ls += sprintf_s(&pSO[ls], size, "Proceedure Local Variables:\n");
+			while (pLocalSyms)
+			{
+				size = l - ls;
+				ls += ((CSymbol*)pLocalSyms->GetSymbol())->Print(&pSO[ls], size, "\t");
+				pLocalSyms = (CChainBinItem *) pLocalSyms->GetNext();
 			}
 		}
 	}

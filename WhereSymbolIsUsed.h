@@ -27,6 +27,7 @@ private:
 	int m_Address;	//address location where found
 	CSection* m_pSection;	// section block where found
 	UnResolvedType m_UnResRefType;	//type of reference
+	bool m_ResolveProcessed;
 public:
 	CWhereSymbolIsUsed();
 	virtual ~CWhereSymbolIsUsed();
@@ -43,5 +44,9 @@ public:
 	}
 	void SetUnResType(UnResolvedType type) { m_UnResRefType = type; }
 	UnResolvedType GetUnResType() const { return m_UnResRefType; }
+	bool IsResolveProcessed() const {
+		return m_ResolveProcessed;
+	}
+	void SetResolveProcessed() { m_ResolveProcessed = true; }
 };
 

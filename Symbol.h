@@ -12,32 +12,6 @@ class CSymbol: public CBin
 	int m_Scope;
 	CSection* m_pSection;	//Memory Section where symbol is defined
 	bool m_UnResolved;	//Unresolved/Not Defined
-	class CIdentType {
-		IdentType m_Type;
-		const char* m_pName;
-	public:
-		CIdentType() {
-			m_Type = IdentType(0);
-			m_pName = 0;
-		}
-		CIdentType(IdentType IT, const char* pN) {
-			m_Type = IT;
-			m_pName = pN;
-		}
-		const char* LookupIdentType(IdentType IT);
-	};
-	inline static CSymbol::CIdentType IdentTypeLUT[] = {
-		{IdentType::NONE , "NONE"},
-		{IdentType::NEW_SYMBOL , "NEW SYMBOL"},
-		{IdentType::LABEL_GLOBAL , "Global LABEL"},
-		{IdentType::LABEL_PRIVATE , "Private LABEL"},
-		{IdentType::LABEL , "LABEL"},
-		{IdentType::PROC , "PROC"},
-		{IdentType::FUNC , "FUNC"},
-		{IdentType::GLOBAL , "GLOBAL"},
-		{IdentType::LOCAL , "LOCAL"},
-		{IdentType::SECTION , "SECTION"}
-	};
 	//---------------------------
 	// Type Chain
 	//---------------------------
@@ -52,16 +26,9 @@ class CSymbol: public CBin
 	//---------------------------
 	CParameterChain* m_pParamChain;
 	CParameterChain* m_pTypeDefChain;
+	CChain* m_pLocalVariables;
 public:
-	CSymbol() {
-		m_Address = 0;
-		m_Scope = SYMBOL_SCOPE_ANY;
-		m_pSection = 0;	
-		m_UnResolved = true;
-		m_pTypeChain = 0;
-		m_pParamChain = 0;
-		m_pTypeDefChain = 0;
-	}
+	CSymbol();
 	virtual ~CSymbol() {}
 	bool Create() { return true; }
 	virtual bool Compare(const char* name, int scope);
@@ -86,7 +53,11 @@ public:
 		m_pTypeDefChain->Create();
 	}
 	virtual unsigned GetAddress() const { return m_Address; }
-	void SetAddress(unsigned A) { m_Address = A; }
+	void SetAddress(unsigned A) { 
+		m_Address = A; 
+		SetResolved();
+		BackFillUnresolved();
+	}
 	int GetScope() const { return m_Scope; }
 	void SetScope(int S) { m_Scope = S; }
 	CSection* GetSection() { return m_pSection; }
@@ -109,5 +80,12 @@ public:
 	CTypeChain* GetTypeChain() { return m_pTypeChain; }
 //	void SetTypeChain(CTypeChain* pTC) { m_pTypeChain = pTC; }
 	virtual	void CreateTypeChain(CTypeChain* pTC = 0);
+	//---------------------------------------
+	// Manage List of Local Variables/Labels
+	//---------------------------------------
+	CChain* GetLocalVars() { return m_pLocalVariables; }
+	void CreateLocalVars() {
+		m_pLocalVariables = new CChain;
+	}
 };
 

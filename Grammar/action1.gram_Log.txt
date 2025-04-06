@@ -1886,18 +1886,19 @@ NONTERMINALS['Non Terminals'] { 'Action65','Modules','Modules_1','Set','Set_1','
 ,'IdentList','IdentList_1','Ident','IdentInitType','InitData','InitData_1','IrqDecl'
 ,'IrqDeclParams','IrqBody','ProcDecl','ProcDeclParams','ProcBody','FuncDecl','FuncDeclParams'
 ,'FuncBody','OptInit','ParamList','Param_1','ParamTypeSpec','ParamTypeSpec_1','DefineParamIdentList'
-,'DefineParamIdentList_1','DefineParamIdent','LocalDecls','LocalTypeDef_1','LocalVarDecls'
-,'LocalVarDecls_1','LocalTypeSpec','LocalTypeSpec_1','ComstListEnd','ComstListEnd_1'
-,'CompConst','CompConst_1','BaseCompConst','AsmStmt','Processor_1','ProcessorType'
-,'AsmSet','AsmSet_1','AsmSetObjects','AsmSectionName','Section','Section_1','SectionName'
-,'SectionName_1','SectionDef','SectionAtributes','Modes','AddressSize','IFFend','IFFend_1'
-,'IFFthenpart','IFFthenpart_1','IffRelOper','IffRelOper_1','IffRegister','IffRegister_1'
-,'Bits','Bits_1','BitValue','StatusFlags','StatusFlags_1','OptNot','PopDestList','PopDestList_1'
-,'PopDest','PopDest_1','PushSourceList','PushSourceList_1','PushSource','PushSource_1'
-,'AsmProcEnd','AsmProcEnd_1','AsmProcBody','AsmProcBody_1','AsmProcName','AsmStmts'
-,'AsmStmts_1','OptLabel','Operand','Operand_1','RelAddressingMode','OptIndexReg','AsmConstList'
-,'AsmConstList_1','AsmConstList_2','AsmConstant','AsmConstAddSub_1','AsmConstUpLow'
-,'BaseAsmConstant','Indirect','Indirect_1','Immediate','Absolute','Absolute_1' }
+,'DefineParamIdentList_1','DefineParamIdent','TypeField','TypeField_1','LocalDecls'
+,'LocalTypeDef_1','LocalVarDecls','LocalVarDecls_1','LocalTypeSpec','LocalTypeSpec_1'
+,'ComstListEnd','ComstListEnd_1','CompConst','CompConst_1','BaseCompConst','AsmStmt'
+,'Processor_1','ProcessorType','AsmSet','AsmSet_1','AsmSetObjects','AsmSectionName'
+,'Section','Section_1','SectionName','SectionName_1','SectionDef','SectionAtributes'
+,'Modes','AddressSize','IFFend','IFFend_1','IFFthenpart','IFFthenpart_1','IffRelOper'
+,'IffRelOper_1','IffRegister','IffRegister_1','Bits','Bits_1','BitValue','StatusFlags'
+,'StatusFlags_1','OptNot','PopDestList','PopDestList_1','PopDest','PopDest_1','PushSourceList'
+,'PushSourceList_1','PushSource','PushSource_1','AsmProcEnd','AsmProcEnd_1','AsmProcBody'
+,'AsmProcBody_1','AsmProcName','AsmStmts','AsmStmts_1','OptLabel','Operand','Operand_1'
+,'RelAddressingMode','OptIndexReg','AsmConstList','AsmConstList_1','AsmConstList_2'
+,'AsmConstant','AsmConstAddSub_1','AsmConstUpLow','BaseAsmConstant','Indirect','Indirect_1'
+,'Immediate','Absolute','Absolute_1' }
 *********** Build Nullable Set **********
 ****************Create NOT nullable set ************************
 ----- Calc First Sets------
@@ -2058,6 +2059,8 @@ FIRST['ParamTypeSpec_1'] { 'POINTER','ARRAY','e' }
 FIRST['DefineParamIdentList'] { 'IDENT' }
 FIRST['DefineParamIdentList_1'] { ',','e' }
 FIRST['DefineParamIdent'] { 'IDENT' }
+FIRST['TypeField'] { 'IDENT','FUNC' }
+FIRST['TypeField_1'] { 'CHAR','BYTE','INT','CARD','BOOL','RECORDTYPE','e' }
 FIRST['LocalDecls'] { 'IDENT','FUNC' }
 FIRST['LocalTypeDef_1'] { 'TYPE','e' }
 FIRST['LocalVarDecls'] { 'IDENT','FUNC' }
@@ -2406,6 +2409,8 @@ FOLLOW['DefineParamIdentList_1'] { 'POINTER','ARRAY','RECORDTYPE','CHAR','BYTE',
 ,'CARD','BOOL' }
 FOLLOW['DefineParamIdent'] { ',','POINTER','ARRAY','RECORDTYPE','CHAR','BYTE','INT'
 ,'CARD','BOOL' }
+FOLLOW['TypeField'] { }
+FOLLOW['TypeField_1'] { }
 FOLLOW['LocalDecls'] { '(' }
 FOLLOW['LocalTypeDef_1'] { '(' }
 FOLLOW['LocalVarDecls'] { 'TYPE','(' }
@@ -2495,5 +2500,5 @@ FOLLOW['Immediate'] { }
 FOLLOW['Absolute'] { '#','(','AREG' }
 FOLLOW['Absolute_1'] { '#','(','AREG' }
 ---------------- Create Parse Table --------------
-Table Entries = 1631
+Table Entries = 1640
 ------------ Check For Conflicts-------------

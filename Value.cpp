@@ -232,14 +232,6 @@ bool CValue::IsPageZero()
 				if (((CSymbol*)GetSymbol())->GetSection()->IsPageZero())
 					rV = true;
 			}
-			else
-			{
-				fprintf(stderr, "CValue::IsPageZero()::Internal Error:Line %d  Col %d",
-					Act()->GetParser()->GetLexer()->GetLineNumber(),
-					Act()->GetParser()->GetLexer()->GetColunm()
-				);
-				Act()->Exit(33);
-			}
 		}
 		else
 		{

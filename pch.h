@@ -64,6 +64,7 @@ enum  class Token {
 	POINTER,
 	CONST,
 	TYPE,
+	TYPE_FIELD,
 	RECORDTYPE,
 	ARRAY,
 	VAR_GLOBAL,
@@ -219,21 +220,6 @@ enum  class Token {
 	ENDOFTOKENS = 0
 };
 
-enum class IdentType {
-	NONE,
-	NEW_SYMBOL,
-	LABEL_GLOBAL,
-	LABEL_PRIVATE,
-	LABEL,
-	PROC,
-	FUNC,
-	IRQPROC,
-	GLOBAL,
-	LOCAL,
-	PARAMETER,
-	SECTION,
-	TYPE_DEF
-};
 
 enum class AdrModeType {
 	NA,
@@ -405,6 +391,9 @@ struct KeyWord {
 
 #include "Bin.h"
 #include "Bucket.h"
+#include "ChainItem.h"
+#include "ChainBinItem.h"
+#include "Chain.h"
 #include "TypeChain.h"
 #include "ParameterChain.h"
 #include "Symbol.h"

@@ -50,13 +50,13 @@ public:
 	void SetNextSection(CSection* pN) { m_pNextSection = pN; }
 	CSection* GetPrevSection(){ return m_pPrevSection; }
 	void SetPrevSection(CSection* pP) { m_pPrevSection = pP; }
-	SectionType GetSectionType() { return m_Type; }
+	SectionType GetSectionType() const { return m_Type; }
 	void SetSectionType(SectionType ST) { m_Type = ST; }
-	int GetStartAddress() { return m_StartAddress; }
+	int GetStartAddress() const { return m_StartAddress; }
 	void SetStartAddress(int SA);
-	int GetSectionSize() { return m_Size; }
+	int GetSectionSize() const { return m_Size; }
 	void SetSectionSize(int S);
-	int GetLocationCounter() { return m_LocationCounter; }
+	int GetLocationCounter() const { return m_LocationCounter; }
 	int IncrementLocationCounterBy(int v) {
 		m_LocationCounter += v;
 		return m_LocationCounter;
@@ -65,7 +65,7 @@ public:
 	void SetAccessMode(Mode Am) { m_AccessMode = Am; }
 	CSection::Mode GetAccessMode() { return m_AccessMode; }
 	void SetZeroPageFlag(AddressSize SizeFlag) { m_ZeroPageAddressSize = SizeFlag; }
-	CSection::AddressSize GetZeroPageFlag() { return m_ZeroPageAddressSize; }
+	CSection::AddressSize GetZeroPageFlag() const { return m_ZeroPageAddressSize; }
 	//----- Adding Data --------
 	int AddInstruction(CAct65Opcode* pINS);
 	int AddData(int ObjectSize, int Value);

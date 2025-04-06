@@ -1,0 +1,8 @@
+April 5 2025
+
+Section Scrip Completed.
+Next, update memory access references. (CSymbol::BackFillUnresolved)
+
+April 5, 2025
+Came up with a way to deal with Local Variables
+Next, update memory access references. (CSymbol::BackFillUnresolved)

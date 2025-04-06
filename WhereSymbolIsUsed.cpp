@@ -5,6 +5,7 @@ CWhereSymbolIsUsed::CWhereSymbolIsUsed() :CBin(CBin::BinType::WHERE_USED)
 	m_Address = 0;
 	m_pSection = 0;
 	m_UnResRefType = UnResolvedType::ABSOLUTE_REFERENCE;
+	m_ResolveProcessed = false;
 }
 
 CWhereSymbolIsUsed::~CWhereSymbolIsUsed()

@@ -73,8 +73,8 @@ INTERRUPT Hey()
 		PUSH .X
 
 		IFF .A = First THEN We FFI
-		JSR First
-:Are		JSR Second
+		JSR Again
+:Are	JSR Go
 
 		JMP	First
 		JMP Second

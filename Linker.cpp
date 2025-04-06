@@ -205,7 +205,7 @@ CLinker::LexerLnk::Token CLinker::LexerLnk::Lex()
 					m_pLexSymbol = new CSymbol;
 					m_pLexSymbol->Create();
 					TokenValue = Token::IDENT;
-					m_pLexSymbol->SetIdentType(IdentType::NEW_SYMBOL);
+					m_pLexSymbol->SetIdentType(CBin::IdentType::NEW_SYMBOL);
 					m_pLexSymbol->SetName(GetLexBuffer());
 					Loop = false;
 				}

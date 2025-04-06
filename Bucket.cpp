@@ -57,12 +57,18 @@ void CBucket::Unlink(CBin* pSym)
 	if (m_pHead == pSym)
 	{
 		m_pHead = pSym->GetNext();
-		m_pHead->SetPrev(0);
+		if (m_pHead)
+			m_pHead->SetPrev(0);
+		else
+			m_pTail = 0;
 	}
 	else if (m_pTail == pSym)
 	{
 		m_pTail = pSym->GetPrev();
-		m_pTail->SetNext(0);
+		if (m_pTail)
+			m_pTail->SetNext(0);
+		else
+			m_pHead = 0;
 	}
 	else
 	{

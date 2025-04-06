@@ -33,6 +33,6 @@ public:
 		int NumberOfObject,
 		CBin** ppObjects
 	);
-	int RemoveAllOfType(IdentType Type);
+	int RemoveAllOfType(CBin::IdentType Type);
 };
 

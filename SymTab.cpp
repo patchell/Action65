@@ -252,8 +252,44 @@ bool CSymTab::FindAll(CBin::BinType Type, int NumberOfObject, CBin** ppObjects)
 	return rV;
 }
 
-int CSymTab::RemoveAllOfType(IdentType Type)
+int CSymTab::RemoveAllOfType(CBin::IdentType Type)
 {
-	return 0;
+	
+	char* s = new char[512];
+	CBin* pSym, *pTemp;
+	int i;
+	int maxStringLen = 0;
+	int l;
+	int Count = 0;
+
+	fprintf(Act()->LogFile(), "------------ Remove Symbol(s) From Table --------------\n");
+
+	for (i = 0; i < m_tSize; ++i)
+	{
+		if (i == 0x5a)
+			printf("Opps\n");
+		if (m_ppTab[i] == NULL)
+		{
+			pSym = NULL;
+		}
+		else
+			pSym = m_ppTab[i]->GetHead();
+		while (pSym)
+		{
+			if (pSym->GetIdentType() == Type)
+			{
+				pTemp = pSym->GetNext();
+				m_ppTab[i]->Unlink(pSym);
+				++Count;
+				fprintf(Act()->LogFile(), "\t%s was removed\n",
+					pSym->GetName()
+				);
+				pSym = pTemp;
+			}
+			else
+				pSym = pSym->GetNext();
+		}
+	}
+	return Count;
 }
 

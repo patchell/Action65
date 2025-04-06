@@ -11,6 +11,7 @@ CParser::CParser()
 	m_pCurrentSection = 0;
 	m_pHead = 0;
 	m_pTail = 0;
+	m_pCurrentProceedure = 0;
 }
 
 CParser::~CParser()
@@ -2098,7 +2099,10 @@ CAstNode* CParser::MemContents()
 	case Token::IDENT:
 		pSym = GetLexer()->GetLexSymbol();
 		Expect(Token::IDENT);
-		fprintf(LogFile(), "%s is Undefined\n", pSym->GetName());
+		fprintf(LogFile(), "%s is Undefined Line %d\n", 
+			pSym->GetName(),
+			GetLexer()->GetLineNumber()
+		);
 		Act()->Exit(26);
 		break;
 	case Token::LABEL:
@@ -2530,7 +2534,7 @@ CAstNode* CParser::TypeDef()
 {
 	//--------------------------------------------
 	//	TypeDef		->IDENT TypeDef_1;
-	//	TypeDef_1	-> '=' '[' LocalDecls TypeDef_2;
+	//	TypeDef_1	-> '=' '[' TypeField TypeDef_2;
 	//	TypeDef_2	-> ']';
 	//--------------------------------------------
 	CAstNode* pTypeFields= 0;
@@ -2540,7 +2544,7 @@ CAstNode* CParser::TypeDef()
 	CSymbol* pSym = 0;
 
 	pSym = GetLexer()->GetLexSymbol();
-	pSym->SetIdentType(IdentType::TYPE_DEF);
+	pSym->SetIdentType(CBin::IdentType::TYPE_DEF);
 	pSym->SetToken(Token::RECORDTYPE);
 	Expect(Token::IDENT);
 	pTypeName = new CAct65TYPEname;
@@ -2551,7 +2555,7 @@ CAstNode* CParser::TypeDef()
 	{
 	case Token('['):
 		Expect(Token('['));
-		pChild = LocalDecls();
+		pChild = TypeField(pSym);
 		pTypeFields = new CAct65TypeFIELDS;
 		pChild = pTypeFields->SetChild(pChild);
 		pNext = pTypeName->SetChild(pChild);
@@ -2571,6 +2575,177 @@ CAstNode* CParser::TypeDef()
 	}
 	return pNext;
 
+}
+
+CAstNode* CParser::TypeField(CSymbol* pFuncSym)
+{
+	//--------------------------------------------
+	//	TypeField		->LocalTypeSpec TypeField_1;
+	//	TypeField_1		-> 'CHAR' LocalTypeSpec  TypeField_1
+	//					-> 'BYTE' LocalTypeSpec  TypeField_1
+	//					-> 'INT' LocalTypeSpec  TypeField_1
+	//					-> 'CARD' LocalTypeSpec  TypeField_1
+	//					-> 'BOOL' LocalTypeSpec TypeField_1
+	//					-> 'RECORDTYPE' LocalTypeSpec TypeField_1
+	//					-> .
+	//					;	
+	//--------------------------------------------
+	// On Entry:
+	//	LookaHead.m_pTypeChain = 0 or Don't Care
+	//	LookaHead.m_pSymbol = Symbol for function name
+	//--------------------------------------------
+	bool Loop = true;
+	CAstNode* pN = 0;
+	CAstNode* pNext = 0, * pChild = 0;
+	CObjTypeChain* pOTC = 0;
+	CTypeChain* pTypeChain = 0;
+
+	while (Loop)
+	{
+		switch (LookaHeadToken)
+		{
+		case Token::CHAR:
+			//--------------- Declaration -------------
+			pTypeChain = new CTypeChain;
+			pTypeChain->Create();
+			//----------------------------------------
+			pOTC = new CObjTypeChain;
+			pOTC->Create();
+			pOTC->SetSpec(CObjTypeChain::Spec::TYPE_FIELD);
+			pTypeChain->AddToTail(pOTC);		//node -> ROOT
+			//---------------------------------
+			pOTC = new CObjTypeChain;
+			pOTC->Create();
+			pOTC->SetSpec(CObjTypeChain::Spec::CHAR);
+			pTypeChain->AddToTail(pOTC);		//node -> ROOT
+			//------------------ Parse ------------------------
+			Expect(Token::CHAR);
+			pChild = LocalTypeSpec(pTypeChain);
+			//-------- Abstract Syntax Tree Node --------------
+			pN = new CAct65CHAR;
+			pN->SetChild(pChild);
+			pNext = CAstNode::MakeNextList(pNext, pN);
+			delete pTypeChain;
+			break;
+		case Token::BYTE:
+			//--------------- Declaration -------------
+			pTypeChain = new CTypeChain;
+			pTypeChain->Create();
+			//----------------------------------------
+			pOTC = new CObjTypeChain;
+			pOTC->Create();
+			pOTC->SetSpec(CObjTypeChain::Spec::TYPE_FIELD);
+			pTypeChain->AddToTail(pOTC);		//node -> ROOT
+			//-----------------------------------
+			pOTC = new CObjTypeChain;
+			pOTC->Create();
+			pOTC->SetSpec(CObjTypeChain::Spec::BYTE);
+			pTypeChain->AddToTail(pOTC);		//node -> ROOT
+			//------------------ Parse ------------------------
+			Expect(Token::BYTE);
+			pChild = LocalTypeSpec(pTypeChain);
+			//-------- Abstract Syntax Tree Node --------------
+			pN = new CAct65BYTE;
+			pN->SetChild(pChild);
+			pNext = CAstNode::MakeNextList(pNext, pN);
+			delete pTypeChain;
+			break;
+		case Token::CARD:
+			//--------------- Declaration -------------
+			pTypeChain = new CTypeChain;
+			pTypeChain->Create();
+			//----------------------------------------
+			pOTC = new CObjTypeChain;
+			pOTC->Create();
+			pOTC->SetSpec(CObjTypeChain::Spec::TYPE_FIELD);
+			pTypeChain->AddToTail(pOTC);		//node -> ROOT
+			//-------------------------------------
+			pOTC = new CObjTypeChain;
+			pOTC->Create();
+			pOTC->SetSpec(CObjTypeChain::Spec::CARD);
+			pTypeChain->AddToTail(pOTC);		//node -> ROOT
+			//------------------ Parse ------------------------
+			Expect(Token::CARD);
+			pChild = LocalTypeSpec(pTypeChain);
+			//-------- Abstract Syntax Tree Node --------------
+			pN = new CAct65CARD;;
+			pN->SetChild(pChild);
+			pNext = CAstNode::MakeNextList(pNext, pN);
+			delete pTypeChain;
+			break;
+		case Token::INT:
+			//--------------- Declaration -------------
+			pTypeChain = new CTypeChain;
+			pTypeChain->Create();
+			//----------------------------------------
+			pOTC = new CObjTypeChain;
+			pOTC->Create();
+			pOTC->SetSpec(CObjTypeChain::Spec::TYPE_FIELD);
+			pTypeChain->AddToTail(pOTC);		//node -> ROOT
+			//-------------------------------------
+			pOTC = new CObjTypeChain;
+			pOTC->Create();
+			pOTC->SetSpec(CObjTypeChain::Spec::INT);
+			pTypeChain->AddToTail(pOTC);		//node -> ROOT
+			//------------------ Parse ------------------------
+			Expect(Token::INT);
+			pChild = LocalTypeSpec(pTypeChain);
+			//-------- Abstract Syntax Tree Node --------------
+			pN = new CAct65INT;;
+			pN->SetChild(pChild);
+			pNext = CAstNode::MakeNextList(pNext, pN);
+			delete pTypeChain;
+			break;
+		case Token::BOOL:
+			//--------------- Declaration -------------
+			pTypeChain = new CTypeChain;
+			pTypeChain->Create();
+			//----------------------------------------
+			pOTC = new CObjTypeChain;
+			pOTC->Create();
+			pOTC->SetSpec(CObjTypeChain::Spec::TYPE_FIELD);
+			pTypeChain->AddToTail(pOTC);		//node -> ROOT
+			pOTC = new CObjTypeChain;
+			pOTC->Create();
+			pOTC->SetSpec(CObjTypeChain::Spec::BOOL);
+			pTypeChain->AddToTail(pOTC);		//node -> ROOT
+			//------------------ Parse ------------------------
+			Expect(Token::BOOL);
+			pChild = LocalTypeSpec(pTypeChain);
+			//-------- Abstract Syntax Tree Node --------------
+			pN = new CAct65BOOL;;
+			pN->SetChild(pChild);
+			pNext = CAstNode::MakeNextList(pNext, pN);
+			delete pTypeChain;
+			break;
+		case Token::RECORDTYPE:
+			pTypeChain = new CTypeChain;
+			pTypeChain->Create();
+			//----------------------------------------
+			pOTC = new CObjTypeChain;
+			pOTC->Create();
+			pOTC->SetSpec(CObjTypeChain::Spec::TYPE_FIELD);
+			pTypeChain->AddToTail(pOTC);		//node -> ROOT
+			//-------------------------------
+			pOTC = new CObjTypeChain;
+			pOTC->Create();
+			pOTC->SetSpec(CObjTypeChain::Spec::TYPE);
+			pTypeChain->AddToTail(pOTC);		//node -> ROOT
+			//------------------ Parse ------------------------
+			Expect(Token::RECORDTYPE);
+			pChild = LocalTypeSpec(pTypeChain);
+			//-------- Abstract Syntax Tree Node --------------
+			pN = new CAct65RECTYPE;;
+			pN->SetChild(pChild);
+			pNext = CAstNode::MakeNextList(pNext, pN);
+			delete pTypeChain;
+			break;
+		default:
+			Loop = false;
+			break;
+		}
+	}
+	return pNext;
 }
 
 //----------------------------------------
@@ -2896,7 +3071,7 @@ void CParser::DECLAREParamIdent(CTypeChain* pTypeChain)
 	case Token::IDENT:
 		pSym = GetLexer()->GetLexSymbol();
 		pSym->CreateTypeChain(pTypeChain);
-		pSym->SetIdentType(IdentType::PARAMETER);
+		pSym->SetIdentType(CBin::IdentType::PARAMETER);
 		pSym->SetToken(Token::VAR_PARAM);
 		Expect(Token::IDENT);
 		break;
@@ -3136,17 +3311,17 @@ void CParser::DECLAREFuncName(CTypeChain* pTypeChain)
 		pSym->CreateTypeChain(pTypeChain);
 		if (pTypeChain->IsFunc())
 		{
-			pSym->SetIdentType(IdentType::FUNC);
+			pSym->SetIdentType(CBin::IdentType::FUNC);
 			pSym->SetToken(Token::FUNC_IDENT);
 		}
 		else if (pTypeChain->IsProc())
 		{
-			pSym->SetIdentType(IdentType::PROC);
+			pSym->SetIdentType(CBin::IdentType::PROC);
 			pSym->SetToken(Token::PROC_IDENT);
 		}
 		else if (pTypeChain->IsInterrupt())
 		{
-			pSym->SetIdentType(IdentType::IRQPROC);
+			pSym->SetIdentType(CBin::IdentType::IRQPROC);
 			pSym->SetToken(Token::INTERRUPT_IDENT);
 		}
 		GetLexer()->GetSymTab()->AddSymbol(pSym);
@@ -3167,7 +3342,7 @@ CAstNode* CParser::FundDecl()
 	//--------------------------------------------
 	//	FundDecl	->FundPointerDecl FundDecl_1;
 	//	FundDecl_1	-> 'BOOL' FundPointerDecl FundDecl_1
-	//				-> 'CHAR' FundPointerDecl FundDecl_1
+	//				-> 'CHAR' FundPoterDecl FundDecl_1
 	//				-> 'BYTE' FundPointerDecl FundDecl_1
 	//				-> 'INT' FundPointerDecl FundDecl_1
 	//				-> 'CARD' FundPointerDecl FundDecl_1
@@ -3507,16 +3682,60 @@ CAstNode* CParser::Ident(CTypeChain* pTypeChain)
 		pSym = GetLexer()->GetLexSymbol();
 		pSym->CreateTypeChain(pTypeChain);
 		if (pTypeChain->IsFunc())
+		{
+			pSym->SetIdentType(CBin::IdentType::FUNC);
 			pSym->SetToken(Token::FUNC_IDENT);
+			GetLexer()->GetSymTab()->AddSymbol(pSym);
+		}
 		else if (pTypeChain->IsProc())
+		{
+			pSym->SetIdentType(CBin::IdentType::PROC);
 			pSym->SetToken(Token::PROC_IDENT);
+			GetLexer()->GetSymTab()->AddSymbol(pSym);
+		}
 		else if (pTypeChain->IsInterrupt())
+		{
+			pSym->SetIdentType(CBin::IdentType::IRQPROC);
 			pSym->SetToken(Token::INTERRUPT_IDENT);
+			GetLexer()->GetSymTab()->AddSymbol(pSym);
+		}
 		else if (pSym->GetTypeChain()->IsGlobal())
+		{
+			pSym->SetIdentType(CBin::IdentType::GLOBAL);
 			pSym->SetToken(Token::VAR_GLOBAL);
+			GetLexer()->GetSymTab()->AddSymbol(pSym);
+		}
+		else if (pSym->GetTypeChain()->IsField())
+		{
+			pSym->SetToken(Token::TYPE_FIELD);
+		}
 		else if (pSym->GetTypeChain()->IsLocal())
+		{
 			pSym->SetToken(Token::VAR_LOCAL);
-		GetLexer()->GetSymTab()->AddSymbol(pSym);
+			if (GetCurrentProc())
+			{
+				CChainBinItem* pCBI = new CChainBinItem;
+
+				pCBI->SetSymbol(pSym);
+				pSym->SetIdentType(CBin::IdentType::LOCAL);
+				if(GetCurrentProc()->GetLocalVars())
+					GetCurrentProc()->GetLocalVars()->AddToTail(pCBI);
+				else
+				{
+					GetCurrentProc()->CreateLocalVars();
+					GetCurrentProc()->GetLocalVars()->AddToTail(pCBI);
+				}
+			}
+			else
+			{
+				fprintf(LogFile(), "Local Variable, But no PROC? Symbol:%s Line:%d\n", 
+					pSym->GetName(),
+					GetLexer()->GetLineNumber()
+				);
+				Act()->Exit(354);
+			}
+			GetLexer()->GetSymTab()->AddSymbol(pSym);
+		}
 		//---------------- Parse --------------------------
 		Expect(Token::IDENT);
 		pN = new CAct65IDENT;
@@ -3648,9 +3867,10 @@ CAstNode* CParser::IrqDecl(CTypeChain* pTypeChain)
 		//--------------- Declaration --------------
 		//--------------------------
 		pSym = (CSymbol*)GetLexer()->GetLexSymbol();
-		pSym->SetIdentType(IdentType::IRQPROC);
+		pSym->SetIdentType(CBin::IdentType::IRQPROC);
 		pSym->SetToken(Token::INTERRUPT_IDENT);
 		pSym->CreateTypeChain(pTypeChain);
+		SetCurrentProc(pSym);
 		GetLexer()->GetSymTab()->AddSymbol(pSym);
 		//------------- Parsing ------------
 		Expect(Token::IDENT);
@@ -3708,6 +3928,7 @@ CAstNode* CParser::IrqBody()
 	pStatements = Statements();
 	pChild = CAstNode::MakeNextList(pNext, pStatements);
 	pNext = pN->SetChild(pChild);
+	GetLexer()->GetSymTab()->RemoveAllOfType(CBin::IdentType::LOCAL);
 	return pNext;
 
 }
@@ -3734,8 +3955,9 @@ CAstNode* CParser::ProcDecl(CTypeChain* pTypeChain)
 	{
 	case Token::IDENT:
 		pSym = (CSymbol*)GetLexer()->GetLexSymbol();
-		pSym->SetIdentType(IdentType::PROC);
+		pSym->SetIdentType(CBin::IdentType::PROC);
 		pSym->SetToken(Token::PROC_IDENT);
+		SetCurrentProc(pSym);
 		//-------- Add Typechain to Symbol ---------
 		pSym->CreateTypeChain(pTypeChain);
 		GetLexer()->GetSymTab()->AddSymbol(pSym);
@@ -3813,6 +4035,7 @@ CAstNode* CParser::ProcBody()
 	pStatements = Statements();
 	pChild = CAstNode::MakeNextList(pNext, pStatements);
 	pNext = pN->SetChild(pChild);
+	GetLexer()->GetSymTab()->RemoveAllOfType(CBin::IdentType::LOCAL);
 	return pNext;
 }
 
@@ -3832,21 +4055,29 @@ CAstNode* CParser::FuncDecl(CTypeChain* pTypeChain)
 	// Set symbol type to
 	// FUNC_IDENT
 	//--------------------
-	pSym = (CSymbol*)GetLexer()->GetLexSymbol();
-	pSym->SetToken(Token::FUNC_IDENT);
-	pSym->CreateTypeChain(pTypeChain);
-	GetLexer()->GetSymTab()->AddSymbol(pSym);
-	Expect(Token::IDENT);
-	pInit = OptInit();
-	pN = new CAct65IDENT;
-	pN->SetSymbol(pSym);
-	pN->SetChild(pInit);
-	pChild = FuncDeclParams(pSym);
-	if (pInit)
-		pInit->SetChild(pChild);
-	else
-		pN->SetChild(pChild);
-	pNext = CAstNode::MakeNextList(pNext, pN);
+	switch (LookaHeadToken)
+	{
+	case Token::IDENT:
+		pSym = (CSymbol*)GetLexer()->GetLexSymbol();
+		pSym->SetToken(Token::FUNC_IDENT);
+		pSym->CreateTypeChain(pTypeChain);
+		SetCurrentProc(pSym);
+		GetLexer()->GetSymTab()->AddSymbol(pSym);
+		Expect(Token::IDENT);
+		pInit = OptInit();
+		pN = new CAct65IDENT;
+		pN->SetSymbol(pSym);
+		pN->SetChild(pInit);
+		pChild = FuncDeclParams(pSym);
+		if (pInit)
+			pInit->SetChild(pChild);
+		else
+			pN->SetChild(pChild);
+		pNext = CAstNode::MakeNextList(pNext, pN);
+		break;
+	default:
+		break;
+	}
 	//-----------------------------------------
 	return pNext;
 
@@ -3892,6 +4123,7 @@ CAstNode* CParser::FuncBody()
 	pStatements = Statements();
 	pChild = CAstNode::MakeNextList(pNext, pStatements);
 	pNext = pN->SetChild(pChild);
+	GetLexer()->GetSymTab()->RemoveAllOfType(CBin::IdentType::LOCAL);
 	return pNext;
 }
 
@@ -4244,6 +4476,7 @@ CAstNode* CParser::DefineParamIdent(CTypeChain* pTypeChain, CSymbol* pFuncSym)
 	}
 	return pN;
 }
+
 
 
 
@@ -4905,7 +5138,7 @@ void CParser::SectionName(CSection* pSection)
 	{
 	case Token::STRING:
 		pSectionName = GetLexer()->GetLexBuffer();
-		pSection->SetIdentType(IdentType::SECTION);
+		pSection->SetIdentType(CBin::IdentType::SECTION);
 		pSection->SetToken(Token::SECTION_NAME);
 		pSection->SetName(pSectionName);
 		Expect(Token::STRING);
@@ -5867,19 +6100,29 @@ CAstNode* CParser::OptLabel()
 	case Token::GLOBAL_LABEL:
 		pSym = GetLexer()->GetLexSymbol();
 		Expect(Token::GLOBAL_LABEL);
-		if (pSym->GetIdentType() == IdentType::NEW_SYMBOL)
+		if (pSym->GetIdentType() == CBin::IdentType::NEW_SYMBOL)
 		{
 			pSym->SetToken(Token::LABEL);
-			pSym->SetIdentType(IdentType::GLOBAL);
+			pSym->SetIdentType(CBin::IdentType::GLOBAL);
 			pSym->SetAddress(GetCurrentSection()->GetLocationCounter());
 			pSym->SetResolved();	//Indicate this is a resolved symbol
 			pSym->SetSection(GetCurrentSection());
 			pSym->BackFillUnresolved();
 			GetLexer()->GetSymTab()->AddSymbol(pSym);
 		}
+		else if (pSym->IsUnResolved())
+		{
+			pSym->SetToken(Token::LABEL);
+			pSym->SetIdentType(CBin::IdentType::GLOBAL);
+			pSym->SetAddress(GetCurrentSection()->GetLocationCounter());
+			pSym->SetResolved();	//Indicate this is a resolved symbol
+			pSym->SetSection(GetCurrentSection());
+			pSym->BackFillUnresolved();
+		}
 		else
 		{
 			//redefinition error
+			printf("Redefined\n");
 		}
 		pLabel = new CAct65Label;
 		pLabel->SetSymbol(pSym);
@@ -5888,10 +6131,10 @@ CAstNode* CParser::OptLabel()
 	case Token::LOCAL_LABEL:
 		pSym = GetLexer()->GetLexSymbol();
 		Expect(Token::LOCAL_LABEL);
-		if (pSym->GetIdentType() == IdentType::NEW_SYMBOL)
+		if (pSym->GetIdentType() == CBin::IdentType::NEW_SYMBOL)
 		{
 			pSym->SetToken(Token::LABEL);
-			pSym->SetIdentType(IdentType::LOCAL);
+			pSym->SetIdentType(CBin::IdentType::LOCAL);
 			pSym->SetAddress(GetCurrentSection()->GetLocationCounter());
 			pSym->SetResolved();	//Indicate this is a resolved symbol
 			pSym->SetSection(GetCurrentSection());
@@ -5901,6 +6144,7 @@ CAstNode* CParser::OptLabel()
 		else
 		{
 			//redefinition error
+			printf("Not so bad");
 		}
 		pLabel = new CAct65Label;
 		pLabel->SetSymbol(pSym);
@@ -6173,6 +6417,8 @@ CValue* CParser::BaseAsmConstant( )
 	CValue* pValue = 0;
 	CSymbol* pSym = 0;
 
+	if (GetLexer()->GetLineNumber() == 76)
+		printf("Bad\n");
 	switch (LookaHeadToken)
 	{
 	case Token::NUMBER:
@@ -6203,6 +6449,13 @@ CValue* CParser::BaseAsmConstant( )
 		break;
 	case Token::IDENT:
 		pSym = GetLexer()->GetLexSymbol();
+		if (pSym->IsNewSymbol())
+		{
+			pSym->SetToken(Token::LABEL);
+			pSym->SetIdentType(CBin::IdentType::LABEL);
+			pSym->SetUnResolved();
+			GetLexer()->GetSymTab()->AddSymbol(pSym);
+		}
 		pValue = new CValue;
 		pValue->Create(CValue::ValueType::SYMBOL);
 		pValue->SetConstVal(0);
@@ -6314,6 +6567,8 @@ CAstNode* CParser::Absolute(
 	CValue* pOperandValue = 0;
 	AdrModeType AddressMode = AdrModeType::NA;
 
+	if (GetLexer()->GetLineNumber() == 76)
+		printf("Bad\n");
 	pOperandValue = AsmConstant();	// GetAddress
 	pOpCode = new CAct65Opcode;
 	switch (LookaHeadToken)

@@ -15,6 +15,7 @@ public:
 	void AddToTail(CBin* pB);
 	void AddToHead(CBin* pB);
 	CBin* Find(const char* pName);
+	void Remove(CBin* pSym);
 	int Print(char* pS, int l);
 };
 

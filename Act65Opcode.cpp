@@ -10,6 +10,7 @@ CAct65Opcode::CAct65Opcode():CAstNode(m_pNodeTyypeName, NodeType::OPCODE)
 	m_pKeyWord = 0;
 	m_ByteCount = 0;
 	m_OpCode = 0;
+	m_InstructionAddress = 0;
 }
 
 CAct65Opcode::~CAct65Opcode()
@@ -387,8 +388,6 @@ void CAct65Opcode::PrepareInstruction(
 	m_pKeyWord = pLex->FindKeyword(OpToken);
 	if (m_pKeyWord->m_pAddresModeLUT->ValidAddressingMode(AddressMode))
 	{
-		if (pLabelSym)
-			SetLabelSymbol(pLabelSym);
 		m_AdressMode = AddressMode;
 		switch (AddressMode)
 		{
@@ -417,6 +416,13 @@ void CAct65Opcode::PrepareInstruction(
 		SetByteCount(OperandByteCount::GetOperandByteCount(AddressMode) + 1);
 		SetValue(pOperandValue);
 		SetSection(pSection);
+		SetInstructionAddress(pSection->GetLocationCounter());
+		if (pLabelSym)
+		{
+			SetLabelSymbol(pLabelSym);
+			pLabelSym->SetAddress(pSection->GetLocationCounter());
+
+		}
 		pSection->AddInstruction(this);
 	}
 	else   // :(
@@ -467,7 +473,7 @@ int CAct65Opcode::ToString(char* s, int Size)
 		SZ = Size - l;
 		l += sprintf_s(&s[l], SZ, ":%s%c ",
 			GetLabelSymbol()->GetName(),
-			(GetLabelSymbol()->GetIdentType() == IdentType::LOCAL) ? ':' : ' '
+			(GetLabelSymbol()->GetIdentType() == CBin::IdentType::LOCAL) ? ':' : ' '
 		);
 	}
 	SZ = Size - l;

@@ -339,17 +339,29 @@ Token CLexer::Lex()
 					m_pLexSymbol->SetName(m_aLexBuff);
 					if (c == ':')
 					{
-						m_pLexSymbol->SetIdentType(IdentType::NEW_SYMBOL);
+						m_pLexSymbol->SetIdentType(CBin::IdentType::NEW_SYMBOL);
 						m_pLexSymbol->SetToken(Token::LOCAL_LABEL);
 					}
 					else
 					{
 						LexUnGet(c);
-						m_pLexSymbol->SetIdentType(IdentType::NEW_SYMBOL);
+						m_pLexSymbol->SetIdentType(CBin::IdentType::NEW_SYMBOL);
 						m_pLexSymbol->SetToken(Token::GLOBAL_LABEL);
 					}
+					TokenValue = m_pLexSymbol->GetToken();
 				}
-				TokenValue = m_pLexSymbol->GetToken();
+				else
+				{
+					if (':' == c)
+					{
+						TokenValue = Token::LOCAL_LABEL;
+					}
+					else
+					{
+						TokenValue = Token::GLOBAL_LABEL;
+						LexUnGet(c);
+					}
+				}
 				Loop = false;
 			}
 			else
@@ -587,7 +599,7 @@ Token CLexer::Lex()
 					m_pLexSymbol = new CSymbol;
 					m_pLexSymbol->Create();
 					TokenValue = Token::IDENT;
-					m_pLexSymbol->SetIdentType(IdentType::NEW_SYMBOL);
+					m_pLexSymbol->SetIdentType(CBin::IdentType::NEW_SYMBOL);
 					m_pLexSymbol->SetName(GetLexBuffer());
 					Loop = false;
 				}

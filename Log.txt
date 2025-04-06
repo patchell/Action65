@@ -1,4 +1,4 @@
-File:test1.act has 2541 Bytes
+File:test1.act has 2536 Bytes
 File:Action.Act65_settings has 976 Bytes
 Section:STACK:Start:$0100 Size:$0100 MODE:R/W:ABSOLUTE Address Size:WORD
 Section:LOCALS:Start:$1200 Size:$0800 MODE:R/W:ABSOLUTE Address Size:WORD
@@ -12,6 +12,27 @@ Section:CODE:Start:$F800 Size:$0800 MODE:RO:ABSOLUTE Address Size:WORD
 Section:VREG:Start:$0000 Size:$0100 MODE:R/W:RELOCATALE Address Size:BYTE
 File:Linker.Act65_LinkerScript has 38 Bytes
 Parser Created
+------------ Remove Symbol(s) From Table --------------
+	paData was removed
+	aData was removed
+	pData was removed
+	cx100 was removed
+------------ Remove Symbol(s) From Table --------------
+	x100 was removed
+Unresolved: @0x8012
+Unresolved: @0x8012
+Unresolved: @0x8012
+Unresolved: @0x800f
+Unresolved: @0x800f
+Unresolved: @0x800f
+------------ Remove Symbol(s) From Table --------------
+	la was removed
+	lb was removed
+	lc was removed
+	cc was removed
+	ld was removed
+	le was removed
+	lf was removed
 	 NUMB  CHILD  NEXT
      2      3     -1  +- 'ROOT'
      3      4    363     +- 'MODULE'
@@ -169,9 +190,9 @@ Parser Created
    156    157    158     |           |  |  +- 'THEN'
    157     -1     -1     |           |  |  |  +- 'LABEL' 'We'
    158     -1     -1     |           |  |  +- 'FFI'
-   159     -1    160     |           |  +- 'OPCODE' JSR ($20) ABSOLUTE First <JSR  First>   SECTION:Code
+   159     -1    160     |           |  +- 'OPCODE' JSR ($20) ABSOLUTE Again <JSR  Again>   SECTION:Code
    160    161    162     |           |  +- 'LABEL' 'Are'
-   161     -1     -1     |           |  |  +- 'OPCODE' JSR ($20) ABSOLUTE Second <:Are  JSR  Second>   SECTION:Code (Parent:LABEL
+   161     -1     -1     |           |  |  +- 'OPCODE' JSR ($20) ABSOLUTE Go <:Are  JSR  Go>   SECTION:Code (Parent:LABEL
    162     -1    163     |           |  +- 'OPCODE' JMP ($4C) ABSOLUTE First <JMP  First>   SECTION:Code
    163     -1    164     |           |  +- 'OPCODE' JMP ($4C) ABSOLUTE Second <JMP  Second>   SECTION:Code
    164     -1    165     |           |  +- 'OPCODE' JMP ($6C) INDIRECT(First) <JMP  (First)>   SECTION:Code
@@ -447,8 +468,8 @@ Emit:	STX	 First
 Emit:	STX	 First,.Y
 Emit:We	STX	 Second
 EMIT:IDENT:ID=154:First
-Emit:	JSR	 First
-Emit:Are	JSR	 Second
+Emit:	JSR	 Again
+Emit:Are	JSR	 Go
 Emit:	JMP	 First
 Emit:	JMP	 Second
 Emit:	JMP	(First)
@@ -590,14 +611,12 @@ EMIT:IDENT:ID=370:three
 EMIT:CARD:ID=367
 EMIT:MODULE ID=363
 ------------ Symbol Table --------------
-e: LOCAL:CHAR::Address=$0000
 Start: :Address=$8000
 First: :Address=$0000
 		Useed@ Code:$8001
 		Useed@ Code:$8003
 		Useed@ Code:$8008
 		Useed@ Code:$800A
-		Useed@ Code:$800F
 		Useed@ Code:$8015
 		Useed@ Code:$801B
 		Useed@ Code:$802D
@@ -622,7 +641,6 @@ First: :Address=$0000
 		Useed@ Code:$80AA
 		Useed@ Code:$80AF
 		Useed@ Code:$80B1
-		Useed@ Code:$80B6
 		Useed@ Code:$80BC
 		Useed@ Code:$80C2
 		Useed@ Code:$80D4
@@ -647,7 +665,6 @@ Section:LOCALS:Start:$1200 Size:$0800 MODE:R/W:ABSOLUTE Address Size:WORD
 xyx: GLOBAL:CHAR::Address=$0000
 one: GLOBAL:CARD::Address=$0000
 ThirdW: :Address=$0200
-q: LOCAL:CHAR::Address=$0000
 Astring: :Address=$8000
 Here: :Address=$8004
 Section:STRINGS:Start:$F800 Size:$0800 MODE:RO:ABSOLUTE Address Size:WORD
@@ -659,7 +676,6 @@ z: GLOBAL:INT:POINTER:ARRAY::Address=$0000
 Second: :Address=$0200
 		Useed@ Code:$8005
 		Useed@ Code:$800C
-		Useed@ Code:$8012
 		Useed@ Code:$8018
 		Useed@ Code:$801E
 		Useed@ Code:$8031
@@ -680,7 +696,6 @@ Second: :Address=$0200
 		Useed@ Code:$80A5
 		Useed@ Code:$80AC
 		Useed@ Code:$80B3
-		Useed@ Code:$80B9
 		Useed@ Code:$80BF
 		Useed@ Code:$80C5
 		Useed@ Code:$80D8
@@ -712,11 +727,14 @@ CString: :Address=$8000
 StorageB: :Address=$0000
 Section:CONST:Start:$F800 Size:$0800 MODE:RO:ABSOLUTE Address Size:WORD
 Yep: GLOBAL:CHAR::Address=$0000
-paData: LOCAL:CHAR:POINTER:ARRAY::Address=$0000
 Go: :Address=$802c
+		Useed@ Code:$8012
+		Useed@ Code:$80B9
 Hey: INTERRUPT::Address=$0000
 Section:ZERO:Start:$0000 Size:$0100 MODE:R/W:ABSOLUTE Address Size:BYTE
 Again: :Address=$8030
+		Useed@ Code:$800F
+		Useed@ Code:$80B6
 yxy: GLOBAL:CHAR::Address=$0000
 FuncName2: GLOBAL:INT:FUNC::Address=$0000
 	c100: PARAM:CARD:POINTER::Address=$0000
@@ -736,35 +754,20 @@ Are: :Address=$8011
 		Useed@ Code:$80CE
 		Useed@ Code:$80D0
 		Useed@ Code:$80D2
-aData: LOCAL:CHAR:ARRAY::Address=$0000
 Stuff: GLOBAL:CHAR::Address=$0000
 Section:PARAMS:Start:$0A00 Size:$0800 MODE:R/W:ABSOLUTE Address Size:WORD
 Section:STACK:Start:$0100 Size:$0100 MODE:R/W:ABSOLUTE Address Size:WORD
 StirageA: :Address=$0000
-pData: LOCAL:CHAR:POINTER::Address=$0000
 Section:Code:Start:$8000 Size:$1000 MODE:RO:ABSOLUTE Address Size:WORD
 Section:VREG:Start:$0000 Size:$0100 MODE:R/W:RELOCATALE Address Size:BYTE
 Avar: GLOBAL:INT:POINTER:ARRAY::Address=$0000
-CrudOne: LOCAL:INT::Address=$0000
-la: LOCAL:CHAR::Address=$0000
-lb: LOCAL:CHAR::Address=$0000
-lc: LOCAL:CARD::Address=$0000
-cc: LOCAL:INT:POINTER:ARRAY:POINTER::Address=$0000
-ld: LOCAL:CARD::Address=$0000
 ForthL: :Address=$0200
-le: LOCAL:CARD::Address=$0000
 Cvar: GLOBAL:CARD::Address=$0000
-cx100: LOCAL:CARD::Address=$0000
-lf: LOCAL:BYTE::Address=$0000
-CrudTwo: LOCAL:CHAR::Address=$0000
-x100: LOCAL:BYTE::Address=$0000
-pX: LOCAL:INT:POINTER::Address=$0000
 Section:CODE:Start:$F800 Size:$0800 MODE:RO:ABSOLUTE Address Size:WORD
-d: LOCAL:CHAR::Address=$0000
 --------- Code ---------
 8000 84 00 94 00 8C 00 02 86  ........
-8008 00 96 00 8E 00 02 20 00  ...... .
-8010 00 20 00 02 4C 00 00 4C  . ..L..L
+8008 00 96 00 8E 00 02 20 90  ...... .
+8010 80 20 84 80 4C 00 00 4C  . ..L..L
 8018 00 02 6C 00 00 6C 00 02  ..l..l..
 8020 F0 10 D0 10 70 10 50 10  ....p.P.
 8028 30 10 10 10 C6 00 D6 00  0.......
@@ -784,8 +787,8 @@ d: LOCAL:CHAR::Address=$0000
 8098 BE 00 02 A0 61 A4 00 B4  ....a...
 80A0 00 AC 00 02 BC 00 02 84  ........
 80A8 00 94 00 8C 00 02 86 00  ........
-80B0 96 00 8E 00 02 20 00 00  ..... ..
-80B8 20 00 02 4C 00 00 4C 00   ..L..L.
+80B0 96 00 8E 00 02 20 30 80  ..... 0.
+80B8 20 2C 80 4C 00 00 4C 00   ,.L..L.
 80C0 02 6C 00 00 6C 00 02 F0  .l..l...
 80C8 10 D0 10 70 10 50 10 30  ...p.P.0
 80D0 10 10 10 C6 00 D6 00 CE  ........

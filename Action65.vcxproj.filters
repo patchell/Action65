@@ -33,6 +33,10 @@
       <UniqueIdentifier>{f7ebbfe5-9ce1-41a8-bd41-b5010090d409}</UniqueIdentifier>
       <Extensions>exe</Extensions>
     </Filter>
+    <Filter Include="Notes">
+      <UniqueIdentifier>{c5459a00-eabf-414e-b534-29644a3a9ec8}</UniqueIdentifier>
+      <Extensions>txt</Extensions>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Bin.cpp">
@@ -558,6 +562,15 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Act65CONST.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Chain.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ChainItem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ChainBinItem.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -1087,6 +1100,15 @@
     <ClInclude Include="Act65CONST.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Chain.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ChainItem.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ChainBinItem.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Grammar\Action.gram">
@@ -1138,6 +1160,9 @@
     </Text>
     <Text Include="README.txt">
       <Filter>Readme</Filter>
+    </Text>
+    <Text Include="Notes.txt">
+      <Filter>Notes</Filter>
     </Text>
   </ItemGroup>
 </Project>

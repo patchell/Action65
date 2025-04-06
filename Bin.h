@@ -3,10 +3,51 @@
 class CBin
 {
 public:
-	enum BinType {
-		UNRESOLVED,
-		ALL,
+	enum class IdentType {
+		NONE,
+		NEW_SYMBOL,
+		LABEL_GLOBAL,
+		LABEL_PRIVATE,
 		LABEL,
+		PROC,
+		FUNC,
+		IRQPROC,
+		GLOBAL,
+		LOCAL,
+		PARAMETER,
+		SECTION,
+		TYPE_DEF
+	};
+private:
+	class CIdentType {
+		IdentType m_Type;
+		const char* m_pName;
+	public:
+		CIdentType() {
+			m_Type = IdentType(0);
+			m_pName = 0;
+		}
+		CIdentType(IdentType IT, const char* pN) {
+			m_Type = IT;
+			m_pName = pN;
+		}
+		const char* LookupIdentType(IdentType IT);
+	};
+	inline static CIdentType IdentTypeLUT[] = {
+		{IdentType::NONE , "NONE"},
+		{IdentType::NEW_SYMBOL , "NEW SYMBOL"},
+		{IdentType::LABEL_GLOBAL , "Global LABEL"},
+		{IdentType::LABEL_PRIVATE , "Private LABEL"},
+		{IdentType::LABEL , "Unresolved LABEL"},
+		{IdentType::PROC , "PROC"},
+		{IdentType::FUNC , "FUNC"},
+		{IdentType::GLOBAL , "GLOBAL"},
+		{IdentType::LOCAL , "LOCAL"},
+		{IdentType::SECTION , "SECTION"}
+	};
+public:
+	enum BinType {
+		NONE,
 		SYMBOL,
 		SECTION,
 		WHERE_USED,
@@ -37,7 +78,7 @@ public:
 		m_pNext = 0;
 		m_pPrev = 0;
 		m_pName = 0;
-		m_Type = BinType::UNRESOLVED;
+		m_Type = BinType::NONE;
 		m_Token = Token::NONE;
 		m_IdentType = IdentType::NEW_SYMBOL;
 	}
@@ -62,6 +103,14 @@ public:
 	void SetPrev(CBin* pB) { m_pPrev = pB; }
 	virtual void SetIdentType(IdentType IT) { m_IdentType = IT; }
 	virtual IdentType GetIdentType() { return m_IdentType; }
+	virtual bool IsNewSymbol() {
+		bool rV = false;
+
+		if (m_IdentType == IdentType::NEW_SYMBOL)
+			rV = true;
+		return rV;
+	}
+
 	virtual char* GetName(void) { return m_pName; }
 	 virtual void SetName(const char* pName) {
 		int l = (int)strlen(pName) + 1;

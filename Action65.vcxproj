@@ -286,6 +286,9 @@
     <ClCompile Include="Act65UnaryNEG.cpp" />
     <ClCompile Include="Bin.cpp" />
     <ClCompile Include="Bucket.cpp" />
+    <ClCompile Include="Chain.cpp" />
+    <ClCompile Include="ChainBinItem.cpp" />
+    <ClCompile Include="ChainItem.cpp" />
     <ClCompile Include="CodeGeneration.cpp" />
     <ClCompile Include="Lexer.cpp" />
     <ClCompile Include="Linker.cpp" />
@@ -461,6 +464,9 @@
     <ClInclude Include="Act65Module.h" />
     <ClInclude Include="Act65TypeDotField.h" />
     <ClInclude Include="Act65UnaryNEG.h" />
+    <ClInclude Include="Chain.h" />
+    <ClInclude Include="ChainBinItem.h" />
+    <ClInclude Include="ChainItem.h" />
     <ClInclude Include="CodeGeneration.h" />
     <ClInclude Include="Linker.h" />
     <ClInclude Include="ObjFormatCode.h" />
@@ -505,6 +511,7 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="log.txt" />
+    <Text Include="Notes.txt" />
     <Text Include="README.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -71,6 +71,10 @@ CBin* CParameterChain::Find(const char* pName)
     return pSym;
 }
 
+void CParameterChain::Remove(CBin* pSym)
+{
+}
+
 int CParameterChain::Print(char* pS, int l)
 {
 	CSymbol* pSym;

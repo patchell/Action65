@@ -65,10 +65,15 @@ private:
 	//------------------------------
 	CSection* m_pCurrentSection;
 	CLinker* m_pLinkerScript;
+	CSymbol* m_pCurrentProceedure;
 public:
 	CParser();
 	virtual ~CParser();
 	bool Create();
+	void SetCurrentProc(CSymbol* pProcSym) { m_pCurrentProceedure = pProcSym; }
+	CSymbol* GetCurrentProc() {
+		return m_pCurrentProceedure;
+	}
 	void SetCurrentSection(CSection* pSection) {
 		m_pCurrentSection = pSection;
 	}
@@ -248,6 +253,10 @@ private:
 	CAstNode*  ParamTypeSpec(CTypeChain* pTypeChain, CSymbol* pFuncSym);
 	CAstNode*  DefineParamIdentList(CTypeChain* pTypeChain, CSymbol* pFuncSym);
 	CAstNode*  DefineParamIdent(CTypeChain* pTypeChain, CSymbol* pFuncSym);
+	//-----------------------------------------------
+	// TYPE field members
+	//-----------------------------------------------
+	CAstNode* TypeField(CSymbol* pTypeSym);
 	//-----------------------------------------------
 	// Local Variableas
 	//-----------------------------------------------

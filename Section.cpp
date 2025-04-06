@@ -120,6 +120,7 @@ int CSection::AddInstruction(CAct65Opcode* pINS)
 {
 	int OperandAddress = 0;
 	CWhereSymbolIsUsed* pWSIU = 0;
+	CSymbol* pSym = 0;
 
 	switch (pINS->GetAdrModeType())
 	{
@@ -141,6 +142,9 @@ int CSection::AddInstruction(CAct65Opcode* pINS)
 			pWSIU->SetAddress(OperandAddress);
 			pWSIU->SetUnResType(CWhereSymbolIsUsed::UnResolvedType::ABSOLUTE_REFERENCE);
 			pINS->GetOperand()->GetSymbol()->Add(pWSIU);	//add where used entry
+			pSym = (CSymbol*)pINS->GetOperand()->GetSymbol();
+			if (pSym->IsResolved())
+				pWSIU->SetResolveProcessed();
 		}
 		AddData(1, pINS->GetOperand()->GetTotalValue());
 		break;
@@ -157,6 +161,9 @@ int CSection::AddInstruction(CAct65Opcode* pINS)
 			pWSIU->SetAddress(OperandAddress);
 			pWSIU->SetUnResType(CWhereSymbolIsUsed::UnResolvedType::ABSOLUTE_REFERENCE);
 			pINS->GetOperand()->GetSymbol()->Add(pWSIU);	//add where used entry
+			pSym = (CSymbol*)pINS->GetOperand()->GetSymbol();
+			if (pSym->IsResolved())
+				pWSIU->SetResolveProcessed();
 		}
 		AddData(2, pINS->GetOperand()->GetTotalValue());
 		break;
@@ -170,6 +177,9 @@ int CSection::AddInstruction(CAct65Opcode* pINS)
 			pWSIU->SetAddress(OperandAddress);
 			pWSIU->SetUnResType(CWhereSymbolIsUsed::UnResolvedType::RELATIVE_REFERENCE);
 			pINS->GetOperand()->GetSymbol()->Add(pWSIU);	//add where used entry
+			pSym = (CSymbol*)pINS->GetOperand()->GetSymbol();
+			if (pSym->IsResolved())
+				pWSIU->SetResolveProcessed();
 		}
 		AddData(1, pINS->GetOperand()->GetTotalValue() - 1);
 		break;
