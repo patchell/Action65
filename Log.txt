@@ -722,7 +722,8 @@ Section:PageZero:Start:$0000 Size:$0100 MODE:R/W:ABSOLUTE Address Size:BYTE
 ProcNum1: GLOBAL:PROC::Address=$0000
 	a100: PARAM:BYTE::Address=$0000
 	a101: PARAM:BYTE::Address=$0000
-	i100: PARAM:INT::Address=$0000
+	i100: PARAM:INT::Address=$0000Proceedure Local Variables:
+	x100: LOCAL:BYTE::Address=$0000
 CString: :Address=$8000
 StorageB: :Address=$0000
 Section:CONST:Start:$F800 Size:$0800 MODE:RO:ABSOLUTE Address Size:WORD
@@ -730,7 +731,14 @@ Yep: GLOBAL:CHAR::Address=$0000
 Go: :Address=$802c
 		Useed@ Code:$8012
 		Useed@ Code:$80B9
-Hey: INTERRUPT::Address=$0000
+Hey: INTERRUPT::Address=$0000Proceedure Local Variables:
+	cc: LOCAL:INT:POINTER:ARRAY:POINTER::Address=$0000
+	la: LOCAL:CHAR::Address=$0000
+	lb: LOCAL:CHAR::Address=$0000
+	lc: LOCAL:CARD::Address=$0000
+	ld: LOCAL:CARD::Address=$0000
+	le: LOCAL:CARD::Address=$0000
+	lf: LOCAL:BYTE::Address=$0000
 Section:ZERO:Start:$0000 Size:$0100 MODE:R/W:ABSOLUTE Address Size:BYTE
 Again: :Address=$8030
 		Useed@ Code:$800F
@@ -739,7 +747,11 @@ yxy: GLOBAL:CHAR::Address=$0000
 FuncName2: GLOBAL:INT:FUNC::Address=$0000
 	c100: PARAM:CARD:POINTER::Address=$0000
 	c101: PARAM:CARD:POINTER::Address=$0000
-	h190: PARAM:CHAR:ARRAY:POINTER::Address=$0000
+	h190: PARAM:CHAR:ARRAY:POINTER::Address=$0000Proceedure Local Variables:
+	cx100: LOCAL:CARD::Address=$0000
+	pData: LOCAL:CHAR:POINTER::Address=$0000
+	aData: LOCAL:CHAR:ARRAY::Address=$0000
+	paData: LOCAL:CHAR:POINTER:ARRAY::Address=$0000
 Section:VECTOR:Start:$FFFA Size:$0006 MODE:RO:ABSOLUTE Address Size:WORD
 Are: :Address=$8011
 		Useed@ Code:$8021

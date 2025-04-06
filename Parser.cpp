@@ -3929,6 +3929,7 @@ CAstNode* CParser::IrqBody()
 	pChild = CAstNode::MakeNextList(pNext, pStatements);
 	pNext = pN->SetChild(pChild);
 	GetLexer()->GetSymTab()->RemoveAllOfType(CBin::IdentType::LOCAL);
+	SetCurrentProc(0);
 	return pNext;
 
 }
@@ -4036,6 +4037,7 @@ CAstNode* CParser::ProcBody()
 	pChild = CAstNode::MakeNextList(pNext, pStatements);
 	pNext = pN->SetChild(pChild);
 	GetLexer()->GetSymTab()->RemoveAllOfType(CBin::IdentType::LOCAL);
+	SetCurrentProc(0);
 	return pNext;
 }
 
@@ -4124,6 +4126,7 @@ CAstNode* CParser::FuncBody()
 	pChild = CAstNode::MakeNextList(pNext, pStatements);
 	pNext = pN->SetChild(pChild);
 	GetLexer()->GetSymTab()->RemoveAllOfType(CBin::IdentType::LOCAL);
+	SetCurrentProc(0);
 	return pNext;
 }
 

@@ -83,7 +83,9 @@ public:
 	//---------------------------------------
 	// Manage List of Local Variables/Labels
 	//---------------------------------------
-	CChain* GetLocalVars() { return m_pLocalVariables; }
+	CChain* GetLocalVars() { 
+		return m_pLocalVariables; 
+	}
 	void CreateLocalVars() {
 		m_pLocalVariables = new CChain;
 	}

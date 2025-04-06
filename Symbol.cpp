@@ -127,6 +127,9 @@ int CSymbol::Print(char* pSO, int l, const char* s)
 		size = l - ls;
 		ls += sprintf_s(&pSO[ls], size, "%s", s);
 	}
+	if(GetTypeChain())
+		if (GetTypeChain()->IsFunc())
+			printf("Opps\n");
 	if (GetName())
 	{
 		size = l - ls;
@@ -143,7 +146,7 @@ int CSymbol::Print(char* pSO, int l, const char* s)
 	if (GetParamChain())
 	{
 		size = l - ls;
-		GetParamChain()->Print(&pSO[ls], size);
+		ls += GetParamChain()->Print(&pSO[ls], size);
 	}
 	if (GetHead())	//print where the symbol is used
 	{
@@ -166,21 +169,26 @@ int CSymbol::Print(char* pSO, int l, const char* s)
 				ls += sprintf_s(&pSO[ls], size, "\n");
 			}
 		}
-		CChainBinItem* pLocalSyms = 0;
-		if (GetLocalVars())
-		{
-			pLocalSyms = (CChainBinItem * )GetLocalVars()->GetHead();
-		}
-		if (pLocalSyms)
+	}
+	CChainBinItem* pLocalSyms = 0;
+	if (GetLocalVars())
+	{
+		pLocalSyms = (CChainBinItem*)GetLocalVars()->GetHead();
+	}
+	if (pLocalSyms)
+	{
+		size = l - ls;
+		ls += sprintf_s(&pSO[ls], size, "Proceedure Local Variables:\n");
+		while (pLocalSyms)
 		{
 			size = l - ls;
-			ls += sprintf_s(&pSO[ls], size, "Proceedure Local Variables:\n");
-			while (pLocalSyms)
+			ls += ((CSymbol*)pLocalSyms->GetSymbol())->Print(&pSO[ls], size, "\t");
+			if (pLocalSyms->GetNext())
 			{
 				size = l - ls;
-				ls += ((CSymbol*)pLocalSyms->GetSymbol())->Print(&pSO[ls], size, "\t");
-				pLocalSyms = (CChainBinItem *) pLocalSyms->GetNext();
+				ls += sprintf_s(&pSO[ls], size, "\n");
 			}
+			pLocalSyms = (CChainBinItem*)pLocalSyms->GetNext();
 		}
 	}
 	return ls;
