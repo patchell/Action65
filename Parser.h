@@ -356,6 +356,8 @@ private:
 	CAstNode*  Immediate(Token OpCodeToken, CAstNode* pLabel);
 	CAstNode*  Absolute(Token  OpCodeToken, CAstNode* pLabel);
 	CAstNode* Accumulator(Token OpCodeToken, CAstNode* pLabel);
+	//----------------- Symbol Generator -------------------
+	CSymbol* GenerateSymbol(const char* pPrefix);
 	//---------------- Debug Utillity ----------------------
 public:
 	void NextPass();

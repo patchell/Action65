@@ -5990,7 +5990,9 @@ CAstNode* CParser::AsmStatements()
 			Expect(Token::DB);
 			pChild = AsmConstList();
 			pN = new CAct65DB;
+			pChild->SetSection(GetCurrentSection());
 			pChild = pN->SetChild(pChild);
+			Address = GetCurrentSection()->AllocateDataBlock(1);
 			if (pLabel)
 				pChild = pLabel->SetChild(pChild);
 			pList = CAstNode::MakeNextList(pList, pChild);
@@ -6001,7 +6003,9 @@ CAstNode* CParser::AsmStatements()
 			Expect(Token::DW);
 			pChild = AsmConstList();
 			pN = new CAct65DW;
+			pChild->SetSection(GetCurrentSection());
 			pChild = pN->SetChild(pChild);
+			Address = GetCurrentSection()->AllocateDataBlock(4);
 			if (pLabel)
 				pChild = pLabel->SetChild(pChild);
 			pList = CAstNode::MakeNextList(pList, pChild);
@@ -6012,7 +6016,9 @@ CAstNode* CParser::AsmStatements()
 			Expect(Token::DL);
 			pChild = AsmConstList();
 			pN = new CAct65DL;
+			pChild->SetSection(GetCurrentSection());
 			pChild = pN->SetChild(pChild);
+			Address = GetCurrentSection()->AllocateDataBlock(4);
 			if (pLabel)
 				pChild = pLabel->SetChild(pChild);
 			pList = CAstNode::MakeNextList(pList, pChild);
@@ -6022,6 +6028,8 @@ CAstNode* CParser::AsmStatements()
 		case Token::DAS:	//define action string
 			Expect(Token::DAS);
 			pChild = AsmConstList();
+			pN = new CAct65DAS;
+			pChild = pN->SetChild(pChild);
 			if (pLabel)
 				pChild = pLabel->SetChild(pChild);
 			pList = CAstNode::MakeNextList(pList, pChild);
@@ -6031,6 +6039,9 @@ CAstNode* CParser::AsmStatements()
 		case Token::DCS:	//define 'C' string
 			Expect(Token::DCS);
 			pChild = AsmConstList();
+			pValue = pChild->GetValue();
+			pN = new CAct65DCS;
+			pChild = pN->SetChild(pChild);
 			if (pLabel)
 				pChild = pLabel->SetChild(pChild);
 			pList = CAstNode::MakeNextList(pList, pChild);
@@ -6318,7 +6329,7 @@ CAstNode* CParser::AsmConstList_1()
 	CAstNode* pN= 0;
 	CAstNode* pNext = 0, *pChild = 0;
 	CValue* pV = 0;
-
+	int LoopCount = 0;
 	pV = AsmConstant();
 	pNext = new CAct65CONSTANT;
 	pNext->SetValue(pV);
@@ -6327,8 +6338,12 @@ CAstNode* CParser::AsmConstList_1()
 		switch (LookaHeadToken)
 		{
 		case Token(','):
+			++LoopCount;
+			if (LoopCount == 7)
+				printf("HA\n");
 			Expect(Token(','));
 			pV = AsmConstant();
+			printf("%d->%d\n",LoopCount,  pV->GetConstVal());
 			pChild = new CAct65CONSTANT;
 			pChild->SetValue(pV);
 			pNext = CAstNode::MakeNextList(pNext, pChild);
@@ -6689,6 +6704,18 @@ CAstNode* CParser::Accumulator(Token OpCodeToken, CAstNode* pLabel)
 		pLabel ? (CSymbol*)pLabel->GetSymbol() : 0
 	);
 	return pOpCode;
+}
+
+CSymbol* CParser::GenerateSymbol(const char* pPrefix)
+{
+	CSymbol* pTheNewSymbol = 0;
+	char* s = new char[256];
+
+	pTheNewSymbol = new CSymbol;
+	sprintf_s(s, 256, "%s_%d", pPrefix, pTheNewSymbol->GetID());
+	pTheNewSymbol->SetName(s);
+	delete[]s;
+	return pTheNewSymbol;
 }
 
 //-------------------------------------------

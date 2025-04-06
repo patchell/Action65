@@ -75,6 +75,11 @@ int CValue::GetConstVal()
 	case ValueType::SYMBOL:
 		rV = m_ConstantValue;
 		break;
+	case ValueType::ASTRING:
+	case ValueType::CSTRING:
+	case ValueType::STRING:
+		rV = m_ConstantValue;
+		break;
 	}
 	return rV;
 }

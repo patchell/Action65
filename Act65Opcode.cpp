@@ -423,7 +423,7 @@ void CAct65Opcode::PrepareInstruction(
 			pLabelSym->SetAddress(pSection->GetLocationCounter());
 
 		}
-		pSection->AddInstruction(this);
+//		pSection->AddInstruction(this);
 	}
 	else   // :(
 	{

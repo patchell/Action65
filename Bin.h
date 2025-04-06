@@ -2,6 +2,8 @@
 
 class CBin
 {
+	int m_ID;
+	inline static int m_IDcount = 0;
 public:
 	enum class IdentType {
 		NONE,
@@ -81,6 +83,7 @@ public:
 		m_Type = BinType::NONE;
 		m_Token = Token::NONE;
 		m_IdentType = IdentType::NEW_SYMBOL;
+		m_ID = ++m_IDcount;
 	}
 	CBin(BinType type) {
 		m_pName = 0;
@@ -91,6 +94,7 @@ public:
 		m_Token = Token::NONE;
 		m_Type = type;
 		m_IdentType = IdentType::NEW_SYMBOL;
+		m_ID = ++m_IDcount;
 	}
 	virtual ~CBin() {
 		if (m_pName)
@@ -142,5 +146,6 @@ public:
 	 CBin* GetHead() { return m_pHead; }
 	 void SetTail(CBin* pT) { m_pTail = pT; }
 	 CBin* GetTail() { return m_pTail; }
+	 int GetID() const { return m_ID; }
 };
 

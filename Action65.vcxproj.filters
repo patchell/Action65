@@ -573,6 +573,12 @@
     <ClCompile Include="ChainBinItem.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Act65DAS.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Act65DCS.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -1107,6 +1113,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ChainBinItem.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Act65DAS.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Act65DCS.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

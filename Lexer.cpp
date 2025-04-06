@@ -541,13 +541,14 @@ Token CLexer::Lex()
 					m_Line++;
 					m_Col = 0;
 				}
-			}
+			}	// No need for Loop = false here
 			break;
 		case '\'':
 			m_LexValue = LexGet();
 			if (LexLook(0) == '\'')
 				c = LexGet();
 			TokenValue = Token::CHAR_CONSTANT;
+			Loop = false;
 			break;
 		default:	//Keywords and Identifiers
 			m_aLexBuff[m_LexBuffIndex++] = c;

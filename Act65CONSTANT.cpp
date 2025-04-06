@@ -25,8 +25,14 @@ int CAct65CONSTANT::Print(int Indent, char* s, int Strlen, bool* pbNextFlag)
 {
 	int l = 0;
 	int size;
+	static int Count = 0;
 
+	++Count;
+	if (Count == 14)
+		printf("Well Dang\n");
 	l = CAstNode::Print(Indent, s, Strlen, pbNextFlag);
+	if (GetValue() == 0)
+		printf("Dang\n");
 	size = Strlen - l;
 	l += sprintf_s(&s[l], size, " %5d  $%04X", 
 		GetValue()->GetConstVal(),
