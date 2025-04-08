@@ -36,6 +36,6 @@ void CAct65DCS::PrintNode(FILE* pOut, int Indent, bool* pbNextFlag)
 
 CValue* CAct65DCS::Emit(CValue* pVc, CValue* pVn)
 {
-	fprintf(LogFile(), "EMIT:DCS:ID=%d\n", GetID());
+//	fprintf(LogFile(), "EMIT:DCS:ID=%d\n", GetID());
 	return nullptr;
 }

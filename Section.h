@@ -39,6 +39,7 @@ private:
 	Mode m_AccessMode;	//read only or read write
 	AddressSize m_ZeroPageAddressSize;
 	SectionType m_Type;
+	CChain m_Values;
 	//---------- Section List --------------
 	CSection* m_pNextSection;
 	CSection* m_pPrevSection;
@@ -63,15 +64,17 @@ public:
 	}
 	void SetLocationCounter(int NewAddress);
 	void SetAccessMode(Mode Am) { m_AccessMode = Am; }
-	CSection::Mode GetAccessMode() { return m_AccessMode; }
+	CSection::Mode GetAccessMode() const { return m_AccessMode; }
 	void SetZeroPageFlag(AddressSize SizeFlag) { m_ZeroPageAddressSize = SizeFlag; }
 	CSection::AddressSize GetZeroPageFlag() const { return m_ZeroPageAddressSize; }
+	int Relocate(int NewBaseAddress);
 	//----- Adding Data --------
-	int AddInstruction(CAct65Opcode* pINS);
-	int AddData(int ObjectSize, int Value);
-	int AddData(int ObjSize, const char* pData);
+	int AddInstruction(CAct65Opcode* pINS, CValue* pLabelValue = 0);
+	int AddData(int ObjectSize, int Value, CValue* pLabelValue = 0);
+	int AddData(int ObjSize, const char* pData, CValue* pLabelValue = 0);
 	void AddDataAt(unsigned Adr, unsigned ObjectSize, int valu);
-	int AllocateDataBlock(int size);	//define Storage
+	int AllocateDataBlock(int size, CValue* pLabelValue = 0);	//define Storage000000000000000000000000rR0000000000000000w
+	void AddLabelValue(CValue* pLabelSym);
 	bool EmitToSection(CAstNode* pNode, int ObjectSize, CSymbol* pLabel);
 	//------ Debug/Diagnosis -----------------
 	virtual void Print(FILE* pOut, const char* s = 0);

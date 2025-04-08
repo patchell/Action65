@@ -6,3 +6,6 @@ Next, update memory access references. (CSymbol::BackFillUnresolved)
 April 5, 2025
 Came up with a way to deal with Local Variables
 Next, update memory access references. (CSymbol::BackFillUnresolved)
+
+April 8, 2025
+Labels need to be of type CValue, rather than CSymbol.

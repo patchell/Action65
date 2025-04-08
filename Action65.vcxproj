@@ -291,6 +291,7 @@
     <ClCompile Include="Chain.cpp" />
     <ClCompile Include="ChainBinItem.cpp" />
     <ClCompile Include="ChainItem.cpp" />
+    <ClCompile Include="ChainValueItem.cpp" />
     <ClCompile Include="CodeGeneration.cpp" />
     <ClCompile Include="Lexer.cpp" />
     <ClCompile Include="Linker.cpp" />
@@ -308,6 +309,9 @@
     <ClCompile Include="pch.cpp" />
     <ClCompile Include="Section.cpp" />
     <ClCompile Include="Settings.cpp" />
+    <ClCompile Include="Stack.cpp" />
+    <ClCompile Include="StackItem.cpp" />
+    <ClCompile Include="StackNodeItem.cpp" />
     <ClCompile Include="Symbol.cpp" />
     <ClCompile Include="SymTab.cpp" />
     <ClCompile Include="TypeChain.cpp" />
@@ -471,6 +475,7 @@
     <ClInclude Include="Chain.h" />
     <ClInclude Include="ChainBinItem.h" />
     <ClInclude Include="ChainItem.h" />
+    <ClInclude Include="ChainValueItem.h" />
     <ClInclude Include="CodeGeneration.h" />
     <ClInclude Include="Linker.h" />
     <ClInclude Include="ObjFormatCode.h" />
@@ -490,6 +495,9 @@
     <ClInclude Include="Parser.h" />
     <ClInclude Include="Section.h" />
     <ClInclude Include="Settings.h" />
+    <ClInclude Include="Stack.h" />
+    <ClInclude Include="StackItem.h" />
+    <ClInclude Include="StackNodeItem.h" />
     <ClInclude Include="Symbol.h" />
     <ClInclude Include="SymTab.h" />
     <ClInclude Include="TypeChain.h" />

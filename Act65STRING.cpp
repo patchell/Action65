@@ -56,7 +56,10 @@ void CAct65STRING::PrintNode(FILE* pOut, int Indent, bool* pbNextFlag)
 
 CValue* CAct65STRING::Emit(CValue* pVc, CValue* pVn)
 {
-    return nullptr;
+	CValue* pValue;
+
+	pValue = GetValue();
+    return pValue;
 }
 
 char* CAct65STRING::GetString()

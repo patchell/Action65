@@ -579,6 +579,18 @@
     <ClCompile Include="Act65DCS.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ChainValueItem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Stack.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="StackItem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="StackNodeItem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -1119,6 +1131,18 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Act65DCS.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ChainValueItem.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Stack.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="StackItem.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="StackNodeItem.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

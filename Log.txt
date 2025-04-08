@@ -12,6 +12,7 @@ Section:CODE:Start:$F800 Size:$0800 MODE:RO:ABSOLUTE Address Size:WORD
 Section:VREG:Start:$0000 Size:$0100 MODE:R/W:RELOCATALE Address Size:BYTE
 File:Linker.Act65_LinkerScript has 38 Bytes
 Parser Created
+------------  Pass 1:AST Generation  ------------------
 ------------ Remove Symbol(s) From Table --------------
 	paData was removed
 	aData was removed
@@ -411,249 +412,48 @@ Parser Created
    383     -1    384           +- 'IDENT': one
    384     -1    385           +- 'IDENT': two
    385     -1     -1           +- 'IDENT': three
-EMIT:IDENT:ID=6:DataBuff
-EMIT:CHAR:ID=4
-EMIT:IDENT:ID=12:Avar
-EMIT:IDENT:ID=13:x
-EMIT:IDENT:ID=14:y
-EMIT:IDENT:ID=15:z
-EMIT:INT:ID=9
-EMIT:IDENT:ID=17:Cvar
-EMIT:CARD:ID=16
-EMIT:IDENT:ID=19:Stuff
-EMIT:IDENT:ID=20:Yep
-EMIT:CHAR:ID=18
-EMIT:IDENT:ID=22:q
-EMIT:IDENT:ID=23:e
-EMIT:IDENT:ID=24:d
-EMIT:CHAR:ID=25
-EMIT:IDENT:ID=27:pX
-EMIT:INT:ID=28
-EMIT:IDENT:ID=34:c100
-EMIT:IDENT:ID=35:c101
-EMIT:CARD:ID=37
-EMIT:IDENT:ID=39:h190
-EMIT:CHAR:ID=41
-EMIT:IDENT:ID=45:cx100
-EMIT:CARD:ID=46
-EMIT:IDENT:ID=48:pData
-EMIT:CHAR:ID=49
-EMIT:IDENT:ID=51:aData
-EMIT:CHAR:ID=54
-EMIT:IDENT:ID=57:paData
-EMIT:CHAR:ID=58
-EMIT:IDENT:ID=63:Stuff
-EMIT:IDENT:ID=61:cx100
-EMIT:IDENT:ID=33:FuncName2
-EMIT:INT:ID=32
-EMIT:IDENT:ID=67:a100
-EMIT:IDENT:ID=68:a101
-EMIT:BYTE:ID=69
-EMIT:IDENT:ID=70:i100
-EMIT:INT:ID=71
-EMIT:IDENT:ID=75:x100
-EMIT:BYTE:ID=76
-EMIT:IDENT:ID=66:ProcNum1
-EMIT:IDENT:ID=80:Hey
-EMIT:IDENT:ID=95:cc
-EMIT:INT:ID=96
-EMIT:IDENT:ID=97:la
-EMIT:IDENT:ID=98:lb
-EMIT:CHAR:ID=99
-EMIT:IDENT:ID=100:lc
-EMIT:IDENT:ID=101:ld
-EMIT:IDENT:ID=102:le
-EMIT:CARD:ID=103
-EMIT:IDENT:ID=104:lf
-EMIT:BYTE:ID=105
-EMIT:IDENT:ID=85:CrudOne
-EMIT:INT:ID=86
-EMIT:IDENT:ID=87:CrudTwo
-EMIT:CHAR:ID=88
-EMIT:DAS:ID=148
-EMIT:DCS:ID=151
-Emit:Start	STY	 First
-Emit:	STY	 First,.X
-Emit:Here	STY	 Second
-Emit:	STX	 First
-Emit:	STX	 First,.Y
-Emit:We	STX	 Second
-EMIT:IDENT:ID=169:First
-Emit:	JSR	 Again
-Emit:Are	JSR	 Go
-Emit:	JMP	 First
-Emit:	JMP	 Second
-Emit:	JMP	(First)
-Emit:	JMP	(Second)
-Emit:	BEQ	 Are
-Emit:	BNE	 Are
-Emit:	BVS	 Are
-Emit:	BVC	 Are
-Emit:	BMI	 Are
-Emit:	BPL	 Are
-Emit:Go	DEC	 First
-Emit:	DEC	 First,.X
-Emit:Again	DEC	 Second
-Emit:	DEC	 Second,X
-Emit:	INC	 First
-Emit:	INC	 First,.X
-Emit:	INC	 Second
-Emit:	INC	 Second,X
-Emit:	CPY	 #'J'  #$4A
-Emit:	CPY	 First
-Emit:	CPY	 Second
-Emit:	CPX	 #'k'  #$6B
-Emit:	CPX	 First
-Emit:	CPX	 Second
-Emit:	BIT	 First
-Emit:	BIT	 Second
-Emit:	ASL	 .A
-Emit:	LSR	 .A
-Emit:	ROR	 .A
-Emit:	ROL	 .A
-Emit:	ASL	 First
-Emit:	ASL	 First,.X
-Emit:	ASL	 Second
-Emit:	ASL	 Second,X
-Emit:	BRK	
-Emit:	CLC	
-Emit:	CLD	
-Emit:	CLI	
-Emit:	CLV	
-Emit:	DEX	
-Emit:	DEY	
-Emit:	INX	
-Emit:	INY	
-Emit:	NOP	
-Emit:	PHA	
-Emit:	PLA	
-Emit:	PHP	
-Emit:	PLP	
-Emit:	RTI	
-Emit:	RTS	
-Emit:	SEC	
-Emit:	SED	
-Emit:	SEI	
-Emit:	TAX	
-Emit:	TAY	
-Emit:	TXA	
-Emit:	TYA	
-Emit:	TXS	
-Emit:	TSX	
-Emit:	LDA	 #'J'  #$4A
-Emit:	LDA	(First),.Y
-Emit:	LDA	 #$CD
-Emit:	LDA	 #$AB
-Emit:	LDA	 First
-Emit:	LDA	 First,.X
-Emit:	LDA	 Second
-Emit:	LDA	 Second,X
-Emit:	LDA	 Second,Y
-Emit:	LDA	(First,.X)
-Emit:	LDA	 First + 2
-Emit:	LDX	 #'E'  #$45
-Emit:	LDX	 First
-Emit:	LDX	 First,.Y
-Emit:	LDX	 Second
-Emit:	LDX	 Second,Y
-Emit:	LDY	 #'a'  #$61
-Emit:	LDY	 First
-Emit:	LDY	 First,.X
-Emit:	LDY	 Second
-Emit:	LDY	 Second,X
-EMIT:IDENT:ID=262:lb
-EMIT:IDENT:ID=260:la
-EMIT:IDENT:ID=268:le
-EMIT:IDENT:ID=266:lb
-EMIT:IDENT:ID=264:la
-EMIT:IDENT:ID=273:lf
-EMIT:IDENT:ID=271:ld
-EMIT:IDENT:ID=279:le
-EMIT:IDENT:ID=277:lb
-EMIT:IDENT:ID=275:la
-EMIT:IDENT:ID=284:lf
-EMIT:IDENT:ID=282:ld
-EMIT:IDENT:ID=290:le
-EMIT:IDENT:ID=288:lb
-EMIT:IDENT:ID=286:la
-EMIT:IDENT:ID=297:lf
-EMIT:IDENT:ID=310:ld
-EMIT:IDENT:ID=308:lf
-EMIT:IDENT:ID=306:la
-EMIT:IDENT:ID=314:ld
-EMIT:IDENT:ID=312:lc
-EMIT:IDENT:ID=320:ld
-EMIT:IDENT:ID=318:lf
-EMIT:IDENT:ID=316:la
-EMIT:IDENT:ID=331:lf
-EMIT:IDENT:ID=329:lc
-EMIT:IDENT:ID=327:lb
-EMIT:IDENT:ID=325:la
-EMIT:IDENT:ID=341:lb
-EMIT:IDENT:ID=339:la
-EMIT:IDENT:ID=346:y
-EMIT:IDENT:ID=344:x
-EMIT:IDENT:ID=342:Avar
-EMIT:IDENT:ID=351:y
-EMIT:IDENT:ID=349:x
-EMIT:IDENT:ID=347:Avar
-EMIT:IDENT:ID=356:y
-EMIT:IDENT:ID=354:x
-EMIT:IDENT:ID=352:Avar
-EMIT:IDENT:ID=361:y
-EMIT:IDENT:ID=359:x
-EMIT:IDENT:ID=357:Avar
-EMIT:IDENT:ID=366:y
-EMIT:IDENT:ID=364:x
-EMIT:IDENT:ID=362:Avar
-EMIT:IDENT:ID=371:y
-EMIT:IDENT:ID=369:x
-EMIT:IDENT:ID=367:Avar
-EMIT:IDENT:ID=376:y
-EMIT:IDENT:ID=374:x
-EMIT:IDENT:ID=372:Avar
-EMIT:MODULE ID=3
-EMIT:IDENT:ID=380:xyx
-EMIT:IDENT:ID=381:yxy
-EMIT:CHAR:ID=379
-EMIT:IDENT:ID=383:one
-EMIT:IDENT:ID=384:two
-EMIT:IDENT:ID=385:three
-EMIT:CARD:ID=382
-EMIT:MODULE ID=378
+------------  Pass 2:CODE Generation  ------------------
+RELATIVE: Sym:Are  802B  32811 REL:EF
+RELATIVE: Sym:Are  802B  32811 REL:ED
+RELATIVE: Sym:Are  802B  32811 REL:EB
+RELATIVE: Sym:Are  802B  32811 REL:E9
+RELATIVE: Sym:Are  802B  32811 REL:E7
+RELATIVE: Sym:Are  802B  32811 REL:E5
+------------  Pass 3:Linking  ------------------
+------------  Pass 4:Generate Ouput File  ------------------
 ------------ Symbol Table --------------
-Start: :Address=$8001
+Start: :Address=$801a
 First: :Address=$0050
-		Useed@ Code:$8002
-		Useed@ Code:$8004
-		Useed@ Code:$8009
-		Useed@ Code:$800B
-		Useed@ Code:$8016
-		Useed@ Code:$801C
-		Useed@ Code:$802E
-		Useed@ Code:$8030
-		Useed@ Code:$8038
-		Useed@ Code:$803A
-		Useed@ Code:$8044
-		Useed@ Code:$804B
-		Useed@ Code:$8050
-		Useed@ Code:$8055
-		Useed@ Code:$8057
-		Useed@ Code:$807A
-		Useed@ Code:$8080
-		Useed@ Code:$8082
-		Useed@ Code:$808D
-		Useed@ Code:$808F
+		Useed@ Code:$801B
+		Useed@ Code:$801D
+		Useed@ Code:$8022
+		Useed@ Code:$8024
+		Useed@ Code:$802F
+		Useed@ Code:$8035
+		Useed@ Code:$8047
+		Useed@ Code:$8049
+		Useed@ Code:$8051
+		Useed@ Code:$8053
+		Useed@ Code:$805D
+		Useed@ Code:$8064
+		Useed@ Code:$8069
+		Useed@ Code:$806E
+		Useed@ Code:$8070
 		Useed@ Code:$8093
-		Useed@ Code:$8095
-		Useed@ Code:$809F
-		Useed@ Code:$80A1
+		Useed@ Code:$8099
+		Useed@ Code:$809B
+		Useed@ Code:$80A6
+		Useed@ Code:$80A8
+		Useed@ Code:$80AC
+		Useed@ Code:$80AE
+		Useed@ Code:$80B8
+		Useed@ Code:$80BA
 Section:LOCALS:Start:$1200 Size:$0800 MODE:R/W:ABSOLUTE Address Size:WORD
 xyx: GLOBAL:CHAR::Address=$0000
 one: GLOBAL:CARD::Address=$0000
-ThirdW: :Address=$0201
-Astring: :Address=$8001
-Here: :Address=$8001
+ThirdW: :Address=$0200
+Astring: :Address=$8000
+Here: :Address=$801e
 Section:STRINGS:Start:$F800 Size:$0800 MODE:RO:ABSOLUTE Address Size:WORD
 x: GLOBAL:INT:POINTER:ARRAY::Address=$0000
 three: GLOBAL:CARD::Address=$0000
@@ -661,27 +461,27 @@ y: GLOBAL:INT:POINTER:ARRAY::Address=$0000
 Section:VARIABLES:Start:$0200 Size:$0800 MODE:R/W:ABSOLUTE Address Size:WORD
 z: GLOBAL:INT:POINTER:ARRAY::Address=$0000
 Second: :Address=$0200
-		Useed@ Code:$8006
-		Useed@ Code:$800D
-		Useed@ Code:$8019
 		Useed@ Code:$801F
+		Useed@ Code:$8026
 		Useed@ Code:$8032
-		Useed@ Code:$8035
-		Useed@ Code:$803C
-		Useed@ Code:$803F
-		Useed@ Code:$8046
-		Useed@ Code:$804D
-		Useed@ Code:$8052
-		Useed@ Code:$8059
-		Useed@ Code:$805C
-		Useed@ Code:$8084
-		Useed@ Code:$8087
-		Useed@ Code:$808A
-		Useed@ Code:$8097
-		Useed@ Code:$809A
+		Useed@ Code:$8038
+		Useed@ Code:$804B
+		Useed@ Code:$804E
+		Useed@ Code:$8055
+		Useed@ Code:$8058
+		Useed@ Code:$805F
+		Useed@ Code:$8066
+		Useed@ Code:$806B
+		Useed@ Code:$8072
+		Useed@ Code:$8075
+		Useed@ Code:$809D
+		Useed@ Code:$80A0
 		Useed@ Code:$80A3
-		Useed@ Code:$80A6
-We: :Address=$8001
+		Useed@ Code:$80B0
+		Useed@ Code:$80B3
+		Useed@ Code:$80BC
+		Useed@ Code:$80BF
+We: :Address=$8025
 two: GLOBAL:CARD::Address=$0000
 Section:Page2:Start:$0200 Size:$0100 MODE:R/W:ABSOLUTE Address Size:WORD
 DataBuff: GLOBAL:CHAR:ARRAY::Address=$0000
@@ -691,12 +491,12 @@ ProcNum1: GLOBAL:PROC::Address=$0000
 	a101: PARAM:BYTE::Address=$0000
 	i100: PARAM:INT::Address=$0000Proceedure Local Variables:
 	x100: LOCAL:BYTE::Address=$0000
-CString: :Address=$8001
+CString: :Address=$8000
 StorageB: :Address=$0040
 Section:CONST:Start:$F800 Size:$0800 MODE:RO:ABSOLUTE Address Size:WORD
 Yep: GLOBAL:CHAR::Address=$0000
-Go: :Address=$8001
-		Useed@ Code:$8013
+Go: :Address=$8046
+		Useed@ Code:$802C
 Hey: INTERRUPT::Address=$0000Proceedure Local Variables:
 	cc: LOCAL:INT:POINTER:ARRAY:POINTER::Address=$0000
 	la: LOCAL:CHAR::Address=$0000
@@ -706,8 +506,8 @@ Hey: INTERRUPT::Address=$0000Proceedure Local Variables:
 	le: LOCAL:CARD::Address=$0000
 	lf: LOCAL:BYTE::Address=$0000
 Section:ZERO:Start:$0000 Size:$0100 MODE:R/W:ABSOLUTE Address Size:BYTE
-Again: :Address=$8001
-		Useed@ Code:$8010
+Again: :Address=$804a
+		Useed@ Code:$8029
 yxy: GLOBAL:CHAR::Address=$0000
 FuncName2: GLOBAL:INT:FUNC::Address=$0000
 	c100: PARAM:CARD:POINTER::Address=$0000
@@ -718,13 +518,13 @@ FuncName2: GLOBAL:INT:FUNC::Address=$0000
 	aData: LOCAL:CHAR:ARRAY::Address=$0000
 	paData: LOCAL:CHAR:POINTER:ARRAY::Address=$0000
 Section:VECTOR:Start:$FFFA Size:$0006 MODE:RO:ABSOLUTE Address Size:WORD
-Are: :Address=$8001
-		Useed@ Code:$8022
-		Useed@ Code:$8024
-		Useed@ Code:$8026
-		Useed@ Code:$8028
-		Useed@ Code:$802A
-		Useed@ Code:$802C
+Are: :Address=$802b
+		Useed@ Code:$803B
+		Useed@ Code:$803D
+		Useed@ Code:$803F
+		Useed@ Code:$8041
+		Useed@ Code:$8043
+		Useed@ Code:$8045
 CodeDB: :Address=$8000
 Stuff: GLOBAL:CHAR::Address=$0000
 Section:PARAMS:Start:$0A00 Size:$0800 MODE:R/W:ABSOLUTE Address Size:WORD
@@ -733,35 +533,35 @@ StirageA: :Address=$0000
 Section:Code:Start:$8000 Size:$1000 MODE:RO:ABSOLUTE Address Size:WORD
 Section:VREG:Start:$0000 Size:$0100 MODE:R/W:RELOCATALE Address Size:BYTE
 Avar: GLOBAL:INT:POINTER:ARRAY::Address=$0000
-ForthL: :Address=$0205
+ForthL: :Address=$0200
 Cvar: GLOBAL:CARD::Address=$0000
 Section:CODE:Start:$F800 Size:$0800 MODE:RO:ABSOLUTE Address Size:WORD
 --------- Code ---------
-8000 00 84 50 94 50 8C 00 02  ..P.P...
-8008 86 50 96 50 8E 00 02 20  .P.P... 
-8010 01 80 20 01 80 4C 50 00  .. ..LP.
-8018 4C 00 02 6C 50 00 6C 00  L..lP.l.
-8020 02 F0 00 D0 00 70 00 50  .....p.P
-8028 00 30 00 10 00 C6 50 D6  .0....P.
-8030 50 CE 00 02 DE 00 02 E6  P.......
-8038 50 F6 50 EE 00 02 FE 00  P.P.....
-8040 02 C0 4A C4 50 CC 00 02  ..J.P...
-8048 E0 6B E4 50 EC 00 02 24  .k.P...$
-8050 50 2C 00 02 06 50 16 50  P,...P.P
-8058 0E 00 02 1E 00 02 00 18  ........
-8060 D8 58 B8 CA 88 E8 C8 EA  .X......
-8068 48 68 08 28 40 60 38 F8  Hh.(@`8.
-8070 78 AA A8 8A 98 9A BA A9  x.......
-8078 4A B1 50 A9 CD A9 AB A5  J.P.....
-8080 50 B5 50 AD 00 02 BD 00  P.P.....
-8088 02 B9 00 02 A1 50 A5 52  .....P.R
-8090 A2 45 A6 50 B6 50 AE 00  .E.P.P..
-8098 02 BE 00 02 A0 61 A4 50  .....a.P
-80A0 B4 50 AC 00 02 BC 00 02  .P......
-80A8 00 00 00 00 00 00 00 00  ........
-80B0 00 00 00 00 00 00 00 00  ........
-80B8 00 00 00 00 00 00 00 00  ........
-80C0 00 00 00 00 00 00 00 00  ........
+8000 19 54 68 69 73 20 69 73  .This is
+8008 20 61 6E 20 41 43 54 49   an ACTI
+8010 4F 4E 21 20 73 74 72 69  ON! stri
+8018 6E 67 84 50 94 50 8C 00  ng.P.P..
+8020 02 86 50 96 50 8E 00 02  ..P.P...
+8028 20 00 80 20 00 80 4C 50   .. ..LP
+8030 00 4C 00 02 6C 50 00 6C  .L..lP.l
+8038 00 02 F0 EF D0 ED 70 EB  ......p.
+8040 50 E9 30 E7 10 E5 C6 50  P.0....P
+8048 D6 50 CE 00 02 DE 00 02  .P......
+8050 E6 50 F6 50 EE 00 02 FE  .P.P....
+8058 00 02 C0 4A C4 50 CC 00  ...J.P..
+8060 02 E0 6B E4 50 EC 00 02  ..k.P...
+8068 24 50 2C 00 02 06 50 16  $P,...P.
+8070 50 0E 00 02 1E 00 02 00  P.......
+8078 18 D8 58 B8 CA 88 E8 C8  ..X.....
+8080 EA 48 68 08 28 40 60 38  .Hh.(@`8
+8088 F8 78 AA A8 8A 98 9A BA  .x......
+8090 A9 4A B1 50 A9 CD A9 AB  .J.P....
+8098 A5 50 B5 50 AD 00 02 BD  .P.P....
+80A0 00 02 B9 00 02 A1 50 A5  ......P.
+80A8 52 A2 45 A6 50 B6 50 AE  R.E.P.P.
+80B0 00 02 BE 00 02 A0 61 A4  ......a.
+80B8 50 B4 50 AC 00 02 BC 00  P.P.....
+80C0 02 00 00 00 00 00 00 00  ........
 80C8 00 00 00 00 00 00 00 00  ........
 80D0 00 00 00 00 00 00 00 00  ........
 80D8 00 00 00 00 00 00 00 00  ........

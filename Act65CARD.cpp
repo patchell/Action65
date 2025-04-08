@@ -37,6 +37,6 @@ void CAct65CARD::PrintNode(FILE* pOut, int Indent, bool* pbNextFlag)
 
 CValue* CAct65CARD::Emit(CValue* pVc, CValue* pVn)
 {
-	fprintf(LogFile(), "EMIT:CARD:ID=%d\n", GetID());
+//	fprintf(LogFile(), "EMIT:CARD:ID=%d\n", GetID());
 	return nullptr;
 }

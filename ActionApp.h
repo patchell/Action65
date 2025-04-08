@@ -16,6 +16,14 @@ class CActionApp
 	FILE* m_pfSettings;
 	FILE* m_pfLinkerScript;
 	CParser m_ActParse;
+	//-----------------------------------------
+	// Stacks used during code generation
+	//-----------------------------------------
+	CStack DO_OD_Stack;
+	CStack FOR_Stack;
+	CStack WHILE_Stack;
+	CStack IF_FI_Stack;
+	CStack IFF_FFI_Stack;
 public:
 	CActionApp();
 	virtual ~CActionApp();
@@ -84,6 +92,14 @@ public:
 		unsigned Size
 	);
 	void Exit(int Err);
+	//-----------------------------------------
+	// Access Stacks
+	//-----------------------------------------
+	CStack* GetDOODStack() { return &DO_OD_Stack; }
+	CStack* GetFORStack() { return &FOR_Stack; }
+	CStack* GetWHILEStack() { return &WHILE_Stack; }
+	CStack* GetIFFIStack() { return &IF_FI_Stack;}
+	CStack* GetIFFFFIStack() { return &IFF_FFI_Stack; }
 	//-----------------------------------------
 	char* CreateIndentString(char* s, int n, int Indent, int c = ' ');
 };

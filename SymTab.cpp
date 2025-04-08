@@ -259,7 +259,6 @@ int CSymTab::RemoveAllOfType(CBin::IdentType Type)
 	CBin* pSym, *pTemp;
 	int i;
 	int maxStringLen = 0;
-	int l;
 	int Count = 0;
 
 	fprintf(Act()->LogFile(), "------------ Remove Symbol(s) From Table --------------\n");

@@ -12,6 +12,8 @@ constexpr auto MAX_SYMBOL_NAME_LEN = 256;
 constexpr auto MAX_NAME_LEN = 64;
 constexpr auto MAX_STRING_LEN = 512;
 
+constexpr auto INTERNAL_ERROR = 2;
+
 enum class RegType {
 	NONE,
 	A,
@@ -398,6 +400,7 @@ struct KeyWord {
 #include "ParameterChain.h"
 #include "Symbol.h"
 #include "Value.h"
+#include "ChainValueItem.h"
 #include "SymTab.h"
 #include "Settings.h"
 
@@ -696,8 +699,14 @@ public:
 #include "Act65XOR.h"
 #include "Act65XREG.h"
 #include "Act65YREG.h"
-
-
+//-------------------------------------
+// Stack Class
+//-------------------------------------
+#include "StackItem.h"
+#include "StackNodeItem.h"
+#include "Stack.h"
+//-------------------------------------
+// Abstract Syntax Tree Class
 //-------------------------------------
 #include "AstTree.h"
 #include "ActionAstTree.h"

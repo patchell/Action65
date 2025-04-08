@@ -44,7 +44,7 @@ class CAct65Opcode : public CAstNode
 	int m_OpCode;
 	int m_ByteCount;
 	//-----------------------
-	CSymbol* m_pLabel;	// Symbol for instruction location
+	CValue* m_pLabel;	// Symbol for instruction location
 	int m_InstructionAddress;
 public:
 	CAct65Opcode();
@@ -64,7 +64,7 @@ public:
 		AdrModeType AddressMode,
 		CValue* pOperandValue_Node,
 		CSection* pSection,
-		CSymbol* pLabelSym = 0
+		CValue* pLabel = 0
 	);
 	int SaveInstruction(char* pM);
 	//-----------------------------
@@ -92,7 +92,7 @@ public:
 	int GetByteCount() const { return m_ByteCount; }
 	void SetByteCount(int BC) { m_ByteCount = BC; }
 	KeyWord* GetKeyWord() { return m_pKeyWord; }
-	CSymbol* GetLabelSymbol() { return m_pLabel; }
-	void SetLabelSymbol(CSymbol* pSym) { m_pLabel = pSym; }
+	CValue *GetLabel() { return m_pLabel; }
+	void SetLabel(CValue* pLab) { m_pLabel = pLab; }
 	int ToString(char* s, int Size);
 };

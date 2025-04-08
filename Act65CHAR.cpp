@@ -36,6 +36,6 @@ void CAct65CHAR::PrintNode(FILE* pOut, int Indent, bool* pbNextFlag)
 
 CValue* CAct65CHAR::Emit(CValue* pVc, CValue* pVn)
 {
-	fprintf(LogFile(), "EMIT:CHAR:ID=%d\n", GetID());
+//	fprintf(LogFile(), "EMIT:CHAR:ID=%d\n", GetID());
 	return nullptr;
 }

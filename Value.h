@@ -52,7 +52,7 @@ private:
 		{UpperLower::UPPER,"UPPER"},
 		{UpperLower::LOWER,"LOWER"},
 	};
-	CBin* m_pSym;
+	CSymbol* m_pSym;
 	int m_ConstantValue;	// this value can be:
 							// 1. A constant value
 							// 2. An offset for a symbol
@@ -69,11 +69,12 @@ public:
 	CValue();
 	virtual ~CValue();
 	bool Create(const char* s);
-	bool Create(CBin* pSym = 0);
+	bool Create(CSymbol* pSym = 0);
 	bool Create(ValueType VT);
 	bool Create(int V);
-	void SetSymbol(CBin* pSym);
-	CBin* GetSymbol() { return m_pSym; }
+	void SetSymbol(CSymbol* pSym);
+	CSymbol* GetSymbol() { return m_pSym; }
+	char* GetName();
 	int GetConstVal();
 	void SetConstVal(int v) {
 		m_ConstantValue = v;

@@ -73,6 +73,7 @@ CAstNode* CParser::Run()
 		pN = Action65();
 		pRoot->SetChild(pN);
 		GetAstTree()->Print(LogFile());
+//		fflush(LogFile());
 		NextPass();
 		GetAstTree()->Process();	//gemerate cpde
 		NextPass();
@@ -5936,7 +5937,7 @@ CAstNode* CParser::AsmStatements()
 				AdrModeType::IMPLIED,
 				0,
 				GetCurrentSection(),
-				pLabel?(CSymbol*)pLabel->GetSymbol():0
+				pLabel ? pLabel->GetValue() : 0
 			);
 			if (pLabel)
 				pChild = pLabel->SetChild(pOpCode);
@@ -5992,7 +5993,6 @@ CAstNode* CParser::AsmStatements()
 			pN = new CAct65DB;
 			pChild->SetSection(GetCurrentSection());
 			pChild = pN->SetChild(pChild);
-			Address = GetCurrentSection()->AllocateDataBlock(1);
 			if (pLabel)
 				pChild = pLabel->SetChild(pChild);
 			pList = CAstNode::MakeNextList(pList, pChild);
@@ -6005,7 +6005,6 @@ CAstNode* CParser::AsmStatements()
 			pN = new CAct65DW;
 			pChild->SetSection(GetCurrentSection());
 			pChild = pN->SetChild(pChild);
-			Address = GetCurrentSection()->AllocateDataBlock(4);
 			if (pLabel)
 				pChild = pLabel->SetChild(pChild);
 			pList = CAstNode::MakeNextList(pList, pChild);
@@ -6018,7 +6017,6 @@ CAstNode* CParser::AsmStatements()
 			pN = new CAct65DL;
 			pChild->SetSection(GetCurrentSection());
 			pChild = pN->SetChild(pChild);
-			Address = GetCurrentSection()->AllocateDataBlock(4);
 			if (pLabel)
 				pChild = pLabel->SetChild(pChild);
 			pList = CAstNode::MakeNextList(pList, pChild);
@@ -6224,7 +6222,7 @@ CAstNode* CParser::RelAddressingMode(Token OpCodeToken, CAstNode* pLabel)
 		AdrModeType::RELATIVE, 
 		pValue,
 		GetCurrentSection(),
-		pLabel ? (CSymbol*)pLabel->GetSymbol() : 0
+		pLabel ? pLabel->GetValue() : 0
 	);
 	return pN;
 }
@@ -6254,7 +6252,7 @@ CAstNode* CParser::JumpAddressingModes(
 			AdrModeType::INDIRECT_ADR, 
 			pAddress,
 			GetCurrentSection(),
-			pLabel?(CSymbol*)pLabel->GetSymbol():0
+			pLabel?pLabel->GetValue():0
 		);
 		break;
 	default:
@@ -6517,7 +6515,7 @@ CAstNode* CParser::Indirect(Token OpCodeToken, CAstNode* pLabel)
 			AdrModeType::INDIRECT_INDEXED_Y_ADR, 
 			pAddress,
 			GetCurrentSection(),
-			pLabel ? (CSymbol*)pLabel->GetSymbol() : 0
+			pLabel ? pLabel->GetValue() : 0
 		);
 		Expect(Token(')'));
 		Expect(Token(','));
@@ -6530,7 +6528,7 @@ CAstNode* CParser::Indirect(Token OpCodeToken, CAstNode* pLabel)
 			AdrModeType::INDEXED_INDIRECT_X_ADR,
 			pAddress,
 			GetCurrentSection(),
-			pLabel ? (CSymbol*)pLabel->GetSymbol() : 0
+			pLabel ? pLabel->GetValue() : 0
 		);
 		Expect(Token(','));
 		Expect(Token::XREG);
@@ -6558,7 +6556,7 @@ CAstNode* CParser::Immediate(Token OpCodeToken, CAstNode* pLabel)
 		AdrModeType::IMMEDIATE_ADR, 
 		pValue,
 		GetCurrentSection(),
-		pLabel ? (CSymbol*)pLabel->GetSymbol() : 0
+		pLabel ? pLabel->GetValue() : 0
 	);
 	return pOpCode;
 }
@@ -6606,7 +6604,7 @@ CAstNode* CParser::Absolute(
 					AdrModeType::ZERO_PAGE_X_ADR, 
 					pOperandValue,
 					GetCurrentSection(),
-					pLabel ? (CSymbol*)pLabel->GetSymbol() : 0
+					pLabel ? pLabel->GetValue() : 0
 				);
 			else
 				pOpCode->PrepareInstruction(
@@ -6614,7 +6612,7 @@ CAstNode* CParser::Absolute(
 					AdrModeType::ABSOLUTE_X_ADR, 
 					pOperandValue,
 					GetCurrentSection(),
-					pLabel ? (CSymbol*)pLabel->GetSymbol() : 0
+					pLabel ? pLabel->GetValue() : 0
 				);
 			break;
 		case RegType::Y:
@@ -6624,7 +6622,7 @@ CAstNode* CParser::Absolute(
 					AdrModeType::ZERO_PAGE_Y_ADR, 
 					pOperandValue,
 					GetCurrentSection(),
-					pLabel ? (CSymbol*)pLabel->GetSymbol() : 0
+					pLabel ? pLabel->GetValue() : 0
 				);
 			else
 				pOpCode->PrepareInstruction(
@@ -6632,7 +6630,7 @@ CAstNode* CParser::Absolute(
 					AdrModeType::ABSOLUTE_Y_ADR, 
 					pOperandValue,
 					GetCurrentSection(),
-					pLabel ? (CSymbol*)pLabel->GetSymbol() : 0
+					pLabel ? pLabel->GetValue() : 0
 				);
 			break;
 		default:
@@ -6663,7 +6661,7 @@ CAstNode* CParser::Absolute(
 						AdrModeType::ABSOLUTE_ADR,
 						pOperandValue,
 						GetCurrentSection(),
-						pLabel ? (CSymbol*)pLabel->GetSymbol() : 0
+						pLabel ? pLabel->GetValue() : 0
 					);
 					break;
 				default:
@@ -6672,7 +6670,7 @@ CAstNode* CParser::Absolute(
 						AdrModeType::ZERO_PAGE_ADR,
 						pOperandValue,
 						GetCurrentSection(),
-						pLabel ? (CSymbol*)pLabel->GetSymbol() : 0
+						pLabel ? pLabel->GetValue() : 0
 					);
 					break;
 				}
@@ -6683,7 +6681,7 @@ CAstNode* CParser::Absolute(
 					AdrModeType::ABSOLUTE_ADR, 
 					pOperandValue,
 					GetCurrentSection(),
-					pLabel ? (CSymbol*)pLabel->GetSymbol() : 0
+					pLabel ? pLabel->GetValue() : 0
 				);
 		}
 		break;
@@ -6701,7 +6699,7 @@ CAstNode* CParser::Accumulator(Token OpCodeToken, CAstNode* pLabel)
 		AdrModeType::ACCUMULATOR,
 		nullptr,
 		GetCurrentSection(),
-		pLabel ? (CSymbol*)pLabel->GetSymbol() : 0
+		pLabel ? pLabel->GetValue() : 0
 	);
 	return pOpCode;
 }
@@ -6724,7 +6722,9 @@ CSymbol* CParser::GenerateSymbol(const char* pPrefix)
 
 void CParser::NextPass()
 {
-	fprintf(stderr, "%s\n", m_Pass.NextPass());
+	const char* pPass = m_Pass.NextPass();
+	fprintf(stderr, "%s\n", pPass);
+	fprintf(LogFile(), "------------  %s  ------------------\n", pPass);
 }
 
 void CParser::DebugTraverse(

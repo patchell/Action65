@@ -192,7 +192,7 @@ public:
 		CAstNode* pChild = 0,
 		CAstNode* pNext = 0
 	);
-	virtual void CreateValue(CBin* pSym);
+	virtual void CreateValue(CSymbol* pSym);
 	virtual void CreateValue(const char* s);
 	virtual CAstNode* CreateValue(int V);
 	virtual CValue* Process();
@@ -222,7 +222,7 @@ public:
 	void SetID(int Id) { m_NodeID = Id; }
 	NodeType GetNodeType() const { return m_NodeType; }
 	virtual const char* GetNodeName() { return 0; }
-	bool SetSymbol(CBin* pSym) {
+	bool SetSymbol(CSymbol* pSym) {
 		bool rV = true;
 
 		if (m_pValue)

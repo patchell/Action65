@@ -19,7 +19,7 @@ bool CValue::Create(const char* s)
 	return true;
 }
 
-bool CValue::Create(CBin* pSym)
+bool CValue::Create(CSymbol* pSym)
 {
 	bool rV = true;
 
@@ -46,7 +46,7 @@ bool CValue::Create(int V)
 	return true;
 }
 
-void CValue::SetSymbol(CBin* pSym)
+void CValue::SetSymbol(CSymbol* pSym)
 {
 //	if(int(pSym) > 8)
 //		fprintf(stderr, "Symbol:  %s  :%x\n", pSym->GetName(),int(pSym));
@@ -58,6 +58,19 @@ void CValue::SetSymbol(CBin* pSym)
 	m_pSym = pSym;
 	if (pSym)
 		m_ValType = ValueType::SYMBOL;
+}
+
+char* CValue::GetName()
+{
+	char* pName = 0;
+	if (GetSymbol())
+		pName = GetSymbol()->GetName();
+	else
+	{
+		fprintf(stderr, "Internal Error:No Symbol Attatch to Value\n");
+		Act()->Exit(INTERNAL_ERROR);
+	}
+    return pName;
 }
 
 int CValue::GetConstVal()

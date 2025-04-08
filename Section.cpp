@@ -116,16 +116,35 @@ void CSection::SetLocationCounter(int NewAddress)
 	}
 }
 
-int CSection::AddInstruction(CAct65Opcode* pINS)
+int CSection::Relocate(int NewBaseAddress)
+{
+	CChainValueItem* pValChainItem = 0;
+
+	pValChainItem = (CChainValueItem*)m_Values.GetHead();
+	while (pValChainItem)
+	{
+		pValChainItem->GetValue()->GetSymbol()->SetAddress(NewBaseAddress + pValChainItem->GetLocation());
+		pValChainItem->GetValue()->GetSymbol()->BackFillUnresolved();
+		pValChainItem = (CChainValueItem*)pValChainItem->GetNext();
+	}
+    return 0;
+}
+
+int CSection::AddInstruction(CAct65Opcode* pInstruction, CValue* pOprandVal)
 {
 	int OperandAddress = 0;
 	CWhereSymbolIsUsed* pWSIU = 0;
 	CSymbol* pSym = 0;
 
-	switch (pINS->GetAdrModeType())
+	if (pInstruction->GetLabel())
+	{
+		AddLabelValue(pInstruction->GetLabel());
+		pInstruction->GetLabel()->GetSymbol()->SetAddress(m_LocationCounter);
+	}
+	switch (pInstruction->GetAdrModeType())
 	{
 	case AdrModeType::IMPLIED:
-		AddData(1, pINS->GetOpCode());
+		AddData(1, pInstruction->GetOpCode());
 		break;
 	case AdrModeType::IMMEDIATE_ADR:
 	case AdrModeType::ZERO_PAGE_ADR:
@@ -133,66 +152,80 @@ int CSection::AddInstruction(CAct65Opcode* pINS)
 	case AdrModeType::ZERO_PAGE_Y_ADR:
 	case AdrModeType::INDEXED_INDIRECT_X_ADR:
 	case AdrModeType::INDIRECT_INDEXED_Y_ADR:
-		OperandAddress = AddData(1, pINS->GetOpCode());
-		if (pINS->GetOperand()->GetValueType() == CValue::ValueType::SYMBOL)
+		OperandAddress = AddData(1, pInstruction->GetOpCode());
+		if (pInstruction->GetOperand()->GetValueType() == CValue::ValueType::SYMBOL)
 		{
 			pWSIU = new CWhereSymbolIsUsed;
 			pWSIU->Create();
 			pWSIU->SetSection(this);
 			pWSIU->SetAddress(OperandAddress);
 			pWSIU->SetUnResType(CWhereSymbolIsUsed::UnResolvedType::ABSOLUTE_REFERENCE);
-			pINS->GetOperand()->GetSymbol()->Add(pWSIU);	//add where used entry
-			pSym = (CSymbol*)pINS->GetOperand()->GetSymbol();
+			pInstruction->GetOperand()->GetSymbol()->Add(pWSIU);	//add where used entry
+			pSym = pInstruction->GetOperand()->GetSymbol();
 			if (pSym->IsResolved())
 				pWSIU->SetResolveProcessed();
 		}
-		AddData(1, pINS->GetOperand()->GetTotalValue());
+		AddData(1, pInstruction->GetOperand()->GetTotalValue());
 		break;
 	case AdrModeType::ABSOLUTE_ADR:
 	case AdrModeType::ABSOLUTE_X_ADR:
 	case AdrModeType::ABSOLUTE_Y_ADR:
 	case AdrModeType::INDIRECT_ADR:
-		OperandAddress = AddData(1, pINS->GetOpCode());
-		if (pINS->GetOperand()->GetValueType() == CValue::ValueType::SYMBOL)
+		OperandAddress = AddData(1, pInstruction->GetOpCode());
+		if (pInstruction->GetOperand()->GetValueType() == CValue::ValueType::SYMBOL)
 		{
 			pWSIU = new CWhereSymbolIsUsed;
 			pWSIU->Create();
 			pWSIU->SetSection(this);
 			pWSIU->SetAddress(OperandAddress);
 			pWSIU->SetUnResType(CWhereSymbolIsUsed::UnResolvedType::ABSOLUTE_REFERENCE);
-			pINS->GetOperand()->GetSymbol()->Add(pWSIU);	//add where used entry
-			pSym = (CSymbol*)pINS->GetOperand()->GetSymbol();
+			pInstruction->GetOperand()->GetSymbol()->Add(pWSIU);	//add where used entry
+			pSym = pInstruction->GetOperand()->GetSymbol();
 			if (pSym->IsResolved())
 				pWSIU->SetResolveProcessed();
 		}
-		AddData(2, pINS->GetOperand()->GetTotalValue());
+		AddData(2, pInstruction->GetOperand()->GetTotalValue());
 		break;
 	case AdrModeType::RELATIVE:
-		OperandAddress = AddData(1, pINS->GetOpCode());
-		if (pINS->GetOperand()->GetValueType() == CValue::ValueType::SYMBOL)
+		//fprintf(Act()->LogFile(), "RELATIVE: Sym:%s  %04X  %d REL:%02X\n", 
+		//	pInstruction->GetOperand()->GetName(),
+		//	pInstruction->GetOperand()->GetSymbol()->GetAddress(),
+		//	pInstruction->GetOperand()->GetSymbol()->GetAddress(),
+		//	(pInstruction->GetOperand()->GetTotalValue() - (m_LocationCounter + 2)) & 0x0ff
+		//);
+		OperandAddress = AddData(1, pInstruction->GetOpCode());
+		if (pInstruction->GetOperand()->GetValueType() == CValue::ValueType::SYMBOL)
 		{
 			pWSIU = new CWhereSymbolIsUsed;
 			pWSIU->Create();
 			pWSIU->SetSection(this);
 			pWSIU->SetAddress(OperandAddress);
 			pWSIU->SetUnResType(CWhereSymbolIsUsed::UnResolvedType::RELATIVE_REFERENCE);
-			pINS->GetOperand()->GetSymbol()->Add(pWSIU);	//add where used entry
-			pSym = (CSymbol*)pINS->GetOperand()->GetSymbol();
+			pInstruction->GetOperand()->GetSymbol()->Add(pWSIU);	//add where used entry
+			pSym = (CSymbol*)pInstruction->GetOperand()->GetSymbol();
 			if (pSym->IsResolved())
 				pWSIU->SetResolveProcessed();
 		}
-		AddData(1, pINS->GetOperand()->GetTotalValue() - 1);
+		//---------------------------------------------
+		// m_LocationCounter is one away from the
+		// next instruction, so by adding 1 to 
+		// m_LocationCounter that gets us up to the
+		// next instruction
+		//---------------------------------------------
+		AddData(1, pInstruction->GetOperand()->GetTotalValue() - (m_LocationCounter + 1));
 		break;
 	}
     return m_LocationCounter;
 }
 
-int CSection::AddData(int ObjectSize, int Value)
+int CSection::AddData(int ObjectSize, int Value, CValue* pLabelValue)
 {
 	char* b;
 	short* s;
 	long* l;
 
+	if (pLabelValue)
+		AddLabelValue(pLabelValue);
 	Info();
 	switch (ObjectSize)
 	{
@@ -215,10 +248,12 @@ int CSection::AddData(int ObjectSize, int Value)
     return m_LocationCounter;
 }
 
-int CSection::AddData(int ObjSize, const char* pData)
+int CSection::AddData(int ObjSize, const char* pData, CValue* pLabelValue)
 {
 	int i = 0;
 
+	if (pLabelValue)
+		AddLabelValue(pLabelValue);
 	for (i = 0; i < ObjSize; ++i)
 	{
 		AddData(1, pData[i]);
@@ -254,12 +289,28 @@ void CSection::AddDataAt(
 	}
 }
 
-int CSection::AllocateDataBlock(int size)
+int CSection::AllocateDataBlock(int size, CValue* pLabelValue)
 {
 	int Temp = m_LocationCounter;
 
+	if (pLabelValue)
+	{
+		AddLabelValue(pLabelValue);
+		if (pLabelValue->GetSymbol())
+		{
+			pLabelValue->GetSymbol()->SetAddress(Temp);
+		}
+	}
 	m_LocationCounter += size;
 	return Temp;
+}
+
+void CSection::AddLabelValue(CValue* pLabelValue)
+{
+	CChainValueItem* pValueItem = new CChainValueItem;
+	pValueItem->SetValue(pLabelValue);
+	pValueItem->SetLocation(m_LocationCounter);
+	m_Values.AddToHead(pValueItem);
 }
 
 bool CSection::EmitToSection(CAstNode* pNode, int ObjectSize, CSymbol* pLabel)

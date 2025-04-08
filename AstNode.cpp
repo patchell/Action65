@@ -81,7 +81,7 @@ CAstNode* CAstNode::MakeNode(
 	return this;
 }
 
-void CAstNode::CreateValue(CBin* pSym)
+void CAstNode::CreateValue(CSymbol* pSym)
 {
 	m_pValue = new CValue;
 	m_pValue->Create(pSym);
@@ -122,7 +122,7 @@ CValue* CAstNode::Process()
 		pValueNext = pNext->Emit(pValueChild, pValueNext);
 		pNext = pNext->GetNext();
 	}
-	return pValueNext;
+	return pValueChild;
 }
 
 CValue* CAstNode::Emit(CValue* pVc, CValue* pVn)

@@ -36,6 +36,11 @@ void CAct65DAS::PrintNode(FILE* pOut, int Indent, bool* pbNextFlag)
 
 CValue* CAct65DAS::Emit(CValue* pVc, CValue* pVn)
 {
-	fprintf(LogFile(), "EMIT:DAS:ID=%d\n", GetID());
+	CSection* pSec = GetSection();
+	CValue* pValue = pVc;
+	pSec->AddData(1, pValue->GetConstVal());
+	pSec->AddData(pValue->GetConstVal(), pValue->GetString());
+//	fprintf(LogFile(), "EMIT:DAS:ID=%d\n", GetID());
+
 	return nullptr;
 }

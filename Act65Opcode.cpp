@@ -53,15 +53,17 @@ CValue* CAct65Opcode::Emit(CValue* pVc, CValue* pVn)
 
 	char* pS = new char[size];
 	ls += sprintf_s(pS, size, "Emit:");
-	if (GetLabelSymbol())
+	if (GetLabel())
 	{
 		l = size - ls;
-		ls += sprintf_s(&pS[ls], l, "%s", GetLabelSymbol()->GetName());
+		ls += sprintf_s(&pS[ls], l, "%s", GetLabel()->GetName());
 	}
 	l = size - ls;
 	ls += sprintf_s(&pS[ls], l, "\t%s\t", GetKeyWord()->m_Name);
 	ls += AddressModeString(&pS[ls], size - ls, GetAdrModeType());
-	fprintf(Act()->LogFile(), "%s\n", pS);
+//	fprintf(Act()->LogFile(), "%s\n", pS);
+	if (m_OpCode == 0x10)
+		printf("Oh Boy\n");
 	pSection->AddInstruction(this);
 	delete[] pS;
 	return nullptr;
@@ -380,11 +382,18 @@ void CAct65Opcode::PrepareInstruction(
 	AdrModeType AddressMode,
 	CValue* pOperandValue,
 	CSection* pSection,		//section where instruction is to be put
-	CSymbol* pLabelSym		// Label associated with this instruction
+	CValue* pLabel		// Label associated with this instruction
 )
 {
 	CLexer* pLex = Act()->GetParser()->GetLexer();
 
+	if (pLabel)
+	{
+		if (strcmp("Are", pLabel->GetName()) == 0)
+		{
+			printf("%s\n", pLabel->GetName());
+		}
+	}
 	m_pKeyWord = pLex->FindKeyword(OpToken);
 	if (m_pKeyWord->m_pAddresModeLUT->ValidAddressingMode(AddressMode))
 	{
@@ -417,10 +426,10 @@ void CAct65Opcode::PrepareInstruction(
 		SetValue(pOperandValue);
 		SetSection(pSection);
 		SetInstructionAddress(pSection->GetLocationCounter());
-		if (pLabelSym)
+		if (pLabel)
 		{
-			SetLabelSymbol(pLabelSym);
-			pLabelSym->SetAddress(pSection->GetLocationCounter());
+			SetLabel(pLabel);
+			SetInstructionAddress(pSection->GetLocationCounter());
 
 		}
 //		pSection->AddInstruction(this);
@@ -451,9 +460,15 @@ int CAct65Opcode::SaveInstruction(char* pM)
 void CAct65Opcode::SetInstructionAddress(int Adr)
 {
 	m_InstructionAddress = Adr;
-	if (GetLabelSymbol())
+	if (GetLabel())
 	{
-		GetLabelSymbol()->SetAddress(Adr);
+		if(GetLabel()->GetSymbol())
+			GetLabel()->GetSymbol()->SetAddress(Adr);
+		else
+		{
+			fprintf(stderr, "Internal Error:No Symbol Associated with Label Line %d\n", GetLine());
+			Act()->Exit(INTERNAL_ERROR);
+		}
 	}
 }
 
@@ -472,12 +487,14 @@ int CAct65Opcode::ToString(char* s, int Size)
 	{
 		SZ = Size - l;
 		l += sprintf_s(&s[l], SZ, ":%s%c ",
-			GetLabelSymbol()->GetName(),
-			(GetLabelSymbol()->GetIdentType() == CBin::IdentType::LOCAL) ? ':' : ' '
+			GetLabel()->GetName(),
+			(GetLabel()->GetSymbol()->GetIdentType() == CBin::IdentType::LOCAL) ? ':' : ' '
 		);
 	}
 	SZ = Size - l;
-	l += sprintf_s(&s[l], SZ, "%s ", KeyWord::LookupToString(GetToken()));
+	l += sprintf_s(&s[l], SZ, "%s ", 
+		KeyWord::LookupToString(GetToken())
+	);
 	switch (GetAdrModeType())
 	{
 	case AdrModeType::ABSOLUTE_ADR:
