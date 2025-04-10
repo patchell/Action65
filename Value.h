@@ -1,6 +1,6 @@
 #pragma once
 
-constexpr auto VALUE_LUT_DIM = 6;
+constexpr auto VALUE_LUT_DIM = 8;
 
 class CValue
 {
@@ -9,6 +9,8 @@ public:
 		NONE,
 		CONSTANT,
 		SYMBOL,
+		REGISTER,
+		VIRTUAL_REGISTER,
 		STRING,
 		CSTRING,
 		ASTRING
@@ -43,6 +45,8 @@ private:
 		{ValueType::NONE,"NONE"},
 		{ValueType::CONSTANT,"CONSTANT"},
 		{ValueType::SYMBOL,"SYMBOL"},
+		{ ValueType::REGISTER,"REGISTER" },
+		{ ValueType::VIRTUAL_REGISTER,"VIRTUAL REGISTER" },
 		{ ValueType::STRING,"STRING" },
 		{ ValueType::CSTRING,"C STRING" },
 		{ ValueType::ASTRING,"Act STRING" }
@@ -65,6 +69,7 @@ private:
 	char* m_pString;
 	ValueType m_ValType;
 	UpperLower m_UpperLOwer;
+	RegType m_Reg;
 public:
 	CValue();
 	virtual ~CValue();

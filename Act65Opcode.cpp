@@ -61,9 +61,7 @@ CValue* CAct65Opcode::Emit(CValue* pVc, CValue* pVn)
 	l = size - ls;
 	ls += sprintf_s(&pS[ls], l, "\t%s\t", GetKeyWord()->m_Name);
 	ls += AddressModeString(&pS[ls], size - ls, GetAdrModeType());
-//	fprintf(Act()->LogFile(), "%s\n", pS);
-	if (m_OpCode == 0x10)
-		printf("Oh Boy\n");
+	fprintf(Act()->LogFile(), "%s\n", pS);
 	pSection->AddInstruction(this);
 	delete[] pS;
 	return nullptr;

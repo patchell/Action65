@@ -310,6 +310,7 @@
     <ClCompile Include="Section.cpp" />
     <ClCompile Include="Settings.cpp" />
     <ClCompile Include="Stack.cpp" />
+    <ClCompile Include="StackDOODItem.cpp" />
     <ClCompile Include="StackItem.cpp" />
     <ClCompile Include="StackNodeItem.cpp" />
     <ClCompile Include="Symbol.cpp" />
@@ -496,6 +497,7 @@
     <ClInclude Include="Section.h" />
     <ClInclude Include="Settings.h" />
     <ClInclude Include="Stack.h" />
+    <ClInclude Include="StackDOODItem.h" />
     <ClInclude Include="StackItem.h" />
     <ClInclude Include="StackNodeItem.h" />
     <ClInclude Include="Symbol.h" />

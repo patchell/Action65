@@ -70,6 +70,9 @@ public:
 	CParser();
 	virtual ~CParser();
 	bool Create();
+	//----------------- Symbol Generator -------------------
+	CSymbol* GenerateSymbol(const char* pPrefix);
+	//------------------------------------------------------
 	void SetCurrentProc(CSymbol* pProcSym) { m_pCurrentProceedure = pProcSym; }
 	CSymbol* GetCurrentProc() {
 		return m_pCurrentProceedure;
@@ -356,8 +359,6 @@ private:
 	CAstNode*  Immediate(Token OpCodeToken, CAstNode* pLabel);
 	CAstNode*  Absolute(Token  OpCodeToken, CAstNode* pLabel);
 	CAstNode* Accumulator(Token OpCodeToken, CAstNode* pLabel);
-	//----------------- Symbol Generator -------------------
-	CSymbol* GenerateSymbol(const char* pPrefix);
 	//---------------- Debug Utillity ----------------------
 public:
 	void NextPass();

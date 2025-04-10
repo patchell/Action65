@@ -42,7 +42,7 @@ void CStack::Push(CStackItem* pItem)
 	}
 }
 
-CStackItem* CStack::Pop(CStackItem::ItemType Type)
+CStackItem* CStack::Pop()
 {
 	CStackItem* pRV = 0;
 
@@ -51,26 +51,9 @@ CStackItem* CStack::Pop(CStackItem::ItemType Type)
 		--m_ItemCount;
 		if (GetHead())
 		{
-			if (IsTopOfType(Type))
-			{
 				pRV = GetHead();
 				SetHead(GetHead()->GetNext());
 				Print(Act()->LogFile(), "POP", 4, pRV);
-			}
-			else
-			{
-				sprintf_s(
-					m_sExceptionString,
-					MAX_STRING_LEN,
-					"Got Stack Item Type:%s\nWanted Stack Item Type:%s\n",
-					GetHead()->LookupItemName(GetHead()->GetStackItemType()),
-					GetHead()->LookupItemName(Type)
-				);
-				StackException(
-					m_sExceptionString,
-					Exception::ExceptionSubType::STACK_ITEM_MISMATCH
-				);
-			}
 		}
 		else
 		{
@@ -91,7 +74,7 @@ CStackItem* CStack::Pop(CStackItem::ItemType Type)
 	return pRV;
 }
 
-CStackItem* CStack::Look(int Depth, CStackItem::ItemType Type)
+CStackItem* CStack::Look(int Depth)
 {
 	int i = 0;
 	CStackItem* pRV = 0;;
@@ -109,21 +92,6 @@ CStackItem* CStack::Look(int Depth, CStackItem::ItemType Type)
 			{
 				pRV = pRV->GetNext();
 			}
-		}
-		if (!pRV->Verify(Type))
-		{
-			ThrownException.SetXCeptType(Exception::ExceptionType::INTERNAL_ERROR);
-			sprintf_s(
-				ThrownException.GetErrorString(),
-				ThrownException.GetMaxStringLen(),
-				"Look:%s Stack:Look:Got %s Expected %s--Line %d Col %d",
-				GetStackName(),
-				CStackItem::LookupItemName(pRV->GetStackItemType()),
-				CStackItem::LookupItemName(Type),
-				Act()->GetParser()->GetLexer()->GetLineNumber(),
-				Act()->GetParser()->GetLexer()->GetColunm()
-			);
-			throw(ThrownException);
 		}
 	}
 	return pRV;

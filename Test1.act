@@ -136,7 +136,7 @@ INTERRUPT Hey()
 		RTI
 		RTS
 		SEC
-		SED
+//		SED
 		SEI
 		TAX
 		TAY
@@ -169,6 +169,10 @@ INTERRUPT Hey()
 		LDY Second
 		LDY Second,.X
 	}
+	DO
+		DO
+		OD
+	OD
 	IF la = lb THEN
 		la ==+ lb - le
 	ELSEIF ld < lf THEN

@@ -22,6 +22,13 @@ enum class RegType {
 	S,
 	P
 };
+
+struct RegTypeItem
+{
+	RegType m_Reg;
+	const char* m_pName;
+};
+
 enum  class Token {
 	ENDOFFILE = -1,	// 1
 	NONE,
@@ -704,6 +711,7 @@ public:
 //-------------------------------------
 #include "StackItem.h"
 #include "StackNodeItem.h"
+#include "StackDOODItem.h"
 #include "Stack.h"
 //-------------------------------------
 // Abstract Syntax Tree Class

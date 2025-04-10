@@ -114,12 +114,12 @@ CValue* CAstNode::Process()
 	if (pChild)
 	{
 		pValueChild = pChild->Process();
-		pValueChild = pChild->Emit(pValueChild, 0);
+		pValueChild = pChild->Emit(pValueChild, pValueNext);
 	}
 	while (pNext)
 	{
 		pValueNext = pNext->Process();
-		pValueNext = pNext->Emit(pValueChild, pValueNext);
+		pValueChild = pNext->Emit(pValueChild, pValueNext);
 		pNext = pNext->GetNext();
 	}
 	return pValueChild;

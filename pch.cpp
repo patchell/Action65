@@ -1,6 +1,15 @@
 #include "pch.h"
 
 
+RegTypeItem RegTypeLUT[] = {
+	{RegType::NONE,"NONE"},
+	{RegType::A,"A"},
+	{RegType::X,"X"},
+	{RegType::Y,"Y"},
+	{RegType::S,"S"},
+	{RegType::P,"P"}
+};
+
 Exception ThrownException;
 AdrModeToTextLUT AdrModeToTxtTabel;
 

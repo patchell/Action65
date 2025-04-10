@@ -7,6 +7,7 @@ CValue::CValue()
 	m_ConstantValue = 0;
 	m_UpperLOwer = UpperLower::NONE;
 	m_pString = 0;
+	m_Reg = RegType::NONE;
 }
 
 CValue::~CValue()
