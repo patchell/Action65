@@ -80,5 +80,8 @@ public:
 	bool IsFunction() const;
 	bool IsProc() const;
 	bool IsInterrupt() const;
+	bool IsFundamentalType();
+	bool IsPointer() const;
+	bool IsArray() const;
 };
 

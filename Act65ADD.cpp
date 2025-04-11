@@ -45,6 +45,60 @@ void CAct65ADD::PrintNode(FILE* pOut, int Indent, bool* pbNextFlag)
 }
 CValue* CAct65ADD::Emit(CValue* pVc, CValue* pVn)
 {
+	CTypeChain* pTCchild = 0;
+	CTypeChain* pTCnext = 0;
+	CAct65Opcode* pOpcode = new CAct65Opcode;
+	int MaxNumberOfBytes = 0;
+
+	pTCchild = pVc->GetTypeChain();
+	pTCnext = pVn->GetTypeChain();
+	pOpcode->PrepareInstruction(Token::CLC, 0, GetSection(), 0);
+	GetSection()->AddInstruction(pOpcode);
+	pOpcode->Reset();
+	MaxNumberOfBytes = pVc->SizeOf();
+	if (MaxNumberOfBytes < pVn->SizeOf())
+		MaxNumberOfBytes = pVn->SizeOf();
+	for (int i = 0; i < MaxNumberOfBytes; ++i)
+	{
+		//------------------------------------------
+		// Operand 1
+		//------------------------------------------
+		if (pTCchild->GetTail()->IsFundamentalType())
+		{
+			pOpcode->PrepareInstruction(Token::LDA, pVc, GetSection(), 0);
+			GetSection()->AddInstruction(pOpcode);
+			pOpcode->Reset();
+		}
+		else if (pTCchild->GetTail()->IsPointer())
+		{
+
+		}
+		else if (pTCchild->GetTail()->IsArray())
+		{
+
+		}
+		//------------------------------------------
+		// Operand 2
+		//------------------------------------------
+		if (pTCnext->GetTail()->IsFundamentalType())
+		{
+			pOpcode->PrepareInstruction(Token::LDA, pVc, GetSection(), 0);
+			GetSection()->AddInstruction(pOpcode);
+			pOpcode->Reset();
+		}
+		else if (pTCnext->GetTail()->IsPointer())
+		{
+
+		}
+		else if (pTCnext->GetTail()->IsArray())
+		{
+
+		}
+		//------------------------------------------
+		// Result
+		//------------------------------------------
+
+	}
     return nullptr;
 }
 /*

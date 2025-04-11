@@ -13,6 +13,19 @@ CAct65Opcode::CAct65Opcode():CAstNode(m_pNodeTyypeName, NodeType::OPCODE)
 	m_InstructionAddress = 0;
 }
 
+void CAct65Opcode::Reset()
+{
+	m_OpcodeToken = Token(-1);
+	m_LineNumber = 0;
+	m_ColumnNumber = 0;
+	m_pLabel = 0;
+	m_AdressMode = AdrModeType::NA;
+	m_pKeyWord = 0;
+	m_ByteCount = 0;
+	m_OpCode = 0;
+	m_InstructionAddress = 0;
+}
+
 CAct65Opcode::~CAct65Opcode()
 {
 }
@@ -442,6 +455,46 @@ void CAct65Opcode::PrepareInstruction(
 			Act()->GetParser()->GetLexer()->GetLineNumber()
 		);
 		throw(ThrownException);
+	}
+}
+
+void CAct65Opcode::PrepareInstruction(
+	Token OpToken,
+	CValue* pOperandValue, 
+	CSection* pCodeSection,		//section where instruction is to be put
+	CValue* pLabel
+)
+{
+	CTypeChain* pTypeChain = 0;
+	CObjTypeChain* pTCitem = 0;
+	AdrModeType AddressMode = AdrModeType(0);
+
+	//---------------------------------------
+	// From the value properties, figgure
+	//---------------------------------------
+	CLexer* pLex = Act()->GetParser()->GetLexer();
+	m_pKeyWord = pLex->FindKeyword(OpToken);
+	SetToken(OpToken);
+	SetLineNumber(pLex->GetLineNumber());
+	SetColumnNumber(pLex->GetColunm());
+	SetOpCode(pLex->MakeOpcode(OpToken, AddressMode));
+	SetByteCount(OperandByteCount::GetOperandByteCount(AddressMode) + 1);
+	SetValue(pOperandValue);
+	SetSection(pCodeSection);
+	SetInstructionAddress(pCodeSection->GetLocationCounter());
+	if (pLabel)
+	{
+		SetLabel(pLabel);
+		pLabel->GetSymbol()->SetAddress(pCodeSection->GetLocationCounter());
+	}
+	//-------------------------------------------------
+	// Figure out the kind of addressing mode to use
+	//-------------------------------------------------
+	pTypeChain = pOperandValue->GetTypeChain();
+	pTCitem = pTypeChain->GetTail();
+	if (pTCitem->IsFundamentalType())
+	{
+
 	}
 }
 

@@ -6262,27 +6262,27 @@ CAstNode* CParser::JumpAddressingModes(
 	return pNext;
 }
 
-RegType CParser::OptIndexReg()
+CReg::RegType CParser::OptIndexReg()
 {
 	//--------------------------------------------------
 	//	OptIndexReg_1	-> XREG
 	//					-> YREG
 	//					;
 	//--------------------------------------------------
-	RegType Reg = RegType::NONE;
+	CReg::RegType Reg = CReg::RegType::NONE;
 
 	switch (LookaHeadToken)
 	{
 	case Token::XREG:
 		Expect(Token::XREG);
-		Reg = RegType::X;
+		Reg = CReg::RegType::X;
 		break;
 	case Token::YREG:
 		Expect(Token::YREG);
-		Reg = RegType::Y;
+		Reg = CReg::RegType::Y;
 		break;
 	default:
-		Reg = RegType::NONE;
+		Reg = CReg::RegType::NONE;
 		break;
 	}
 	return Reg;
@@ -6502,7 +6502,7 @@ CAstNode* CParser::Indirect(Token OpCodeToken, CAstNode* pLabel)
 	//--------------------------------------------------
 	CValue* pAddress = 0;
 	CAstNode* pNext = 0, *pChild = 0;
-	RegType Reg = RegType::NONE;
+	CReg::RegType Reg = CReg::RegType::NONE;
 	CAct65Opcode* pOpCode = 0;
 
 	pAddress = AsmConstant();
@@ -6581,7 +6581,7 @@ CAstNode* CParser::Absolute(
 	// such as a NUMBER or it can be a LABEL.
 	//---------------------------------------
 
-	RegType Reg = RegType::NONE;
+	CReg::RegType Reg = CReg::RegType::NONE;
 	CAct65Opcode* pOpCode;
 	CValue* pOperandValue = 0;
 	AdrModeType AddressMode = AdrModeType::NA;
@@ -6597,7 +6597,7 @@ CAstNode* CParser::Absolute(
 		Reg = OptIndexReg();
 		switch (Reg)
 		{
-		case RegType::X:
+		case CReg::RegType::X:
 			if (pOperandValue->IsPageZero())	// page zero
 				pOpCode->PrepareInstruction(
 					OpCodeToken, 
@@ -6615,7 +6615,7 @@ CAstNode* CParser::Absolute(
 					pLabel ? pLabel->GetValue() : 0
 				);
 			break;
-		case RegType::Y:
+		case CReg::RegType::Y:
 			if (pOperandValue->IsPageZero())	// page zero
 				pOpCode->PrepareInstruction(
 					OpCodeToken, 

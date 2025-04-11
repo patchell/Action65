@@ -71,6 +71,41 @@ bool CObjTypeChain::IsInterrupt() const
 	return rV;
 }
 
+bool CObjTypeChain::IsFundamentalType()
+{
+	bool rV = false;
+
+	switch (m_SpecType)
+	{
+	case Spec::BOOL:
+	case Spec::BYTE:
+	case Spec::CARD:
+	case Spec::CHAR:
+	case Spec::INT:
+		rV = true;
+		break;
+	}
+    return rV;
+}
+
+bool CObjTypeChain::IsPointer() const
+{
+	bool rV = false;
+
+	if (m_SpecType == Spec::POINTER)
+		rV = true;
+	return rV;
+}
+
+bool CObjTypeChain::IsArray() const
+{
+	bool rV = false;
+
+	if (m_SpecType == Spec::ARRAY)
+		rV = true;
+	return rV;
+}
+
 const char* CObjTypeChain::Types::FindName(Spec T)
 {
 	return TypesLUT[int(T)].m_pName;

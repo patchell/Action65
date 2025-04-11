@@ -1,5 +1,8 @@
 #include "pch.h"
 
+#define BYTE_SIZE	1
+#define WORD_SIZE	2
+
 CValue::CValue()
 {
 	m_pSym = 0;
@@ -7,7 +10,6 @@ CValue::CValue()
 	m_ConstantValue = 0;
 	m_UpperLOwer = UpperLower::NONE;
 	m_pString = 0;
-	m_Reg = RegType::NONE;
 }
 
 CValue::~CValue()
@@ -263,4 +265,113 @@ bool CValue::IsPageZero()
 		break;
 	}
     return rV;
+}
+
+CValue* CValue::BinaryOp(BinaryOps Op, CValue* pOperand)
+{
+	//---------------------------------------------------
+	// Binary Operation
+	// 
+	// this = this <OP> Operand
+	//---------------------------------------------------
+	CValue* pResult = 0;
+    return nullptr;
+}
+
+CValue* CValue::Addition(CValue* pOperand)
+{
+	int SizeOfThis = SizeOf();
+	int SizeOfOperand = pOperand->SizeOf();
+
+	switch (SizeOfThis)
+	{
+	case BYTE_SIZE:
+		switch (SizeOfOperand)
+		{
+		case BYTE_SIZE:
+//			if(pOperand->Is)
+			break;
+		case WORD_SIZE:
+			break;
+		}
+		break;
+	case WORD_SIZE:
+		switch (SizeOfOperand)
+		{
+		case BYTE_SIZE:
+			break;
+		case WORD_SIZE:
+			break;
+		}
+		break;
+	}
+	return nullptr;
+}
+
+CValue* CValue::Subtraction(CValue* pOperand)
+{
+	return nullptr;
+}
+
+CValue* CValue::Mul(CValue* pOperand)
+{
+	return nullptr;
+}
+
+CValue* CValue::Div(CValue* pOperand)
+{
+	return nullptr;
+}
+
+CValue* CValue::Mod(CValue* pOperand)
+{
+	return nullptr;
+}
+
+CValue* CValue::And(CValue* pOperand)
+{
+	return nullptr;
+}
+
+CValue* CValue::Or(CValue* pOperand)
+{
+	return nullptr;
+}
+
+CValue* CValue::Xor(CValue* pOperand)
+{
+	return nullptr;
+}
+
+CValue* CValue::LSH(CValue* pOperand)
+{
+	return nullptr;
+}
+
+CValue* CValue::RSH(CValue* pOperand)
+{
+	return nullptr;
+}
+
+CValue* CValue::Assign(BinaryOps Op, CValue* pValue)
+{
+	return nullptr;
+}
+
+CValue* CValue::Assign(CValue* pValue)
+{
+	return nullptr;
+}
+
+int CValue::SizeOf()
+{
+	int rV = 0;
+
+	if (m_TypeChain.IsPointer())
+		rV = 2;
+	else if (m_TypeChain.IsByte())
+		rV = 1;
+	else if (m_TypeChain.IsWord())
+		rV = 2;
+	return rV;
 }

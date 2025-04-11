@@ -1,0 +1,21 @@
+MODULE
+
+
+INTERRUPT Hey()
+	BYTE Result, V1, V2
+
+	ASM {
+		SECTION "Code" [
+			START = $8000
+			SIZE  = $1000
+			MODE  = READ_ONLY
+		]
+	}
+	DO
+		Result = V1 + V2
+		DO
+			Result = V1 - V2
+		OD
+	OD
+	RETURN
+

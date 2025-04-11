@@ -2,7 +2,7 @@
 
 class CAct65XREG : public CAstNode
 {
-	RegType m_Reg;
+	CReg::RegType m_Reg;
 	inline static const char* m_pNodeTyypeName = ".X";
 public:
 	CAct65XREG();

@@ -2,7 +2,7 @@
 
 CAct65XREG::CAct65XREG() :CAstNode(m_pNodeTyypeName, NodeType::XREG)
 {
-	m_Reg = RegType::X;
+	m_Reg = CReg::RegType::X;
 }
 
 CAct65XREG::~CAct65XREG()

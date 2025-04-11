@@ -1,19 +1,36 @@
 #pragma once
 
-constexpr auto VALUE_LUT_DIM = 8;
+constexpr auto VALUE_LUT_DIM = 12;
 
 class CValue
 {
+	enum class BinaryOps {
+		ADD,
+		SUB,
+		LSH,
+		RSH,
+		MOD,
+		AND,
+		MUL,
+		DIV,
+		OR,
+		XOR,
+		CMP
+	};
 public:
 	enum class ValueType {
 		NONE,
 		CONSTANT,
 		SYMBOL,
-		REGISTER,
+		AREG,
+		XREG,
+		YREG,
+		SREG,
+		PREG,
 		VIRTUAL_REGISTER,
 		STRING,
-		CSTRING,
-		ASTRING
+		CSTRING,	// "C" string
+		ASTRING		// ACTION! String
 	};
 	struct CValueTypeItem {
 		ValueType m_Type;
@@ -25,8 +42,8 @@ public:
 	};
 	enum class UpperLower {
 		NONE,
-		UPPER,
-		LOWER
+		UPPER,	//upper part of word
+		LOWER	// Lower part of word
 	};
 	struct UpperLowerItem {
 		UpperLower m_UL;
@@ -45,7 +62,11 @@ private:
 		{ValueType::NONE,"NONE"},
 		{ValueType::CONSTANT,"CONSTANT"},
 		{ValueType::SYMBOL,"SYMBOL"},
-		{ ValueType::REGISTER,"REGISTER" },
+		{ ValueType::AREG,"REGISTER" },
+		{ ValueType::XREG,"REGISTER" },
+		{ ValueType::YREG,"REGISTER" },
+		{ ValueType::SREG,"REGISTER" },
+		{ ValueType::PREG,"REGISTER" },
 		{ ValueType::VIRTUAL_REGISTER,"VIRTUAL REGISTER" },
 		{ ValueType::STRING,"STRING" },
 		{ ValueType::CSTRING,"C STRING" },
@@ -69,7 +90,8 @@ private:
 	char* m_pString;
 	ValueType m_ValType;
 	UpperLower m_UpperLOwer;
-	RegType m_Reg;
+	CReg m_Reg;
+	CTypeChain m_TypeChain;
 public:
 	CValue();
 	virtual ~CValue();
@@ -79,6 +101,7 @@ public:
 	bool Create(int V);
 	void SetSymbol(CSymbol* pSym);
 	CSymbol* GetSymbol() { return m_pSym; }
+	CTypeChain* GetTypeChain() { return &m_TypeChain; }
 	char* GetName();
 	int GetConstVal();
 	void SetConstVal(int v) {
@@ -101,5 +124,22 @@ public:
 	inline static const char* UpLowStr(UpperLower UL) {
 		return UpperLowerLUT[int(UL)].m_pName;
 	}
+	//-------------------------------------------
+	// Code Generation
+	//-------------------------------------------
+	CValue* BinaryOp(BinaryOps Op, CValue* pOperand);
+	CValue* Addition(CValue* pOperand);
+	CValue* Subtraction(CValue* pOperand);
+	CValue* Mul(CValue* pOperand);
+	CValue* Div(CValue* pOperand);
+	CValue* Mod(CValue* pOperand);
+	CValue* And(CValue* pOperand);
+	CValue* Or(CValue* pOperand);
+	CValue* Xor(CValue* pOperand);
+	CValue* LSH(CValue* pOperand);
+	CValue* RSH(CValue* pOperand);
+	CValue* Assign(BinaryOps Op, CValue* pValue);
+	CValue* Assign(CValue* pValue);
+	int SizeOf();
 };
 

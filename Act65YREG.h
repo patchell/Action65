@@ -2,7 +2,7 @@
 
 class CAct65YREG : public CAstNode
 {
-	RegType m_Reg;
+	CReg::RegType m_Reg;
 	inline static const char* m_pNodeTyypeName = ".Y";
 public:
 	CAct65YREG();

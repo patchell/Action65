@@ -48,6 +48,7 @@ class CAct65Opcode : public CAstNode
 	int m_InstructionAddress;
 public:
 	CAct65Opcode();
+	void Reset();
 	virtual ~CAct65Opcode();
 	virtual bool Create(CAstNode* pChild = 0, CAstNode* pNext = 0, CBin* pSym = 0);
 	//-----------------------------
@@ -64,6 +65,12 @@ public:
 		AdrModeType AddressMode,
 		CValue* pOperandValue_Node,
 		CSection* pSection,
+		CValue* pLabel = 0
+	);
+	virtual void PrepareInstruction(
+		Token Tk,
+		CValue* pOperandValue_Node,
+		CSection* pCodeSection,		//section where instruction is to be put
 		CValue* pLabel = 0
 	);
 	int SaveInstruction(char* pM);

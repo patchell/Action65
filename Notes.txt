@@ -9,3 +9,94 @@ Next, update memory access references. (CSymbol::BackFillUnresolved)
 
 April 8, 2025
 Labels need to be of type CValue, rather than CSymbol.
+
+April 11, 2025
+How do I convert an AST for an expression tocode?
+
+As the AST is being processed, it ends up at a terminal
+node that will be "something", such as a memory location
+or a constant.  This value will then be passed back up
+the chain, being further processed, such as dereferencing
+pointers or indexing arrays.  When we get back to the binary
+operator node, this process will have been completed for
+both the child branch and the next branch.  The result of both of these will
+be in one of the following:
+1. Accumulator
+2. Index Register X
+3. Index Register Y
+4. A memory location
+
+I am pretty sure that these are the only 4 choices.
+Examples:
+Two 8 bit quantities in the A and X registers:
+STX Temp
+CLC
+ADC Temp
+
+Twp 16 bit operands in memory:
+CLC
+LDA V1
+ADC V2
+STA V3
+LDA V1+1
+ADC V2+1
+STA V3+1
+
+A 16 bit value ( CValue ), should always end up in a
+memory location, since having them end up in the accumulator
+and index register might be kind of messy, although:
+
+CLC
+ADC V1
+STA V2
+TXA (or TYA)
+ADC V1+1
+TAX (or TAY)
+LDA V2
+
+Dereferencing a Point
+
+CHAR POINT pA
+CHAR B
+CHAR R
+
+R = B + pA^
+
+Pointers are always 16 bits.  Page Zero is a good place
+to put these as Indirect addressing is used to access the
+value that is being pointed to.  SO:
+
+LDA pA
+STA zT
+LDA pA+1
+STA zT+1
+LDY #0
+LDA (zT),Y
+ADC B
+STA R
+
+Accessing a member of an ARRAY
+
+BYTE ARRAY A
+BYTE B,R,X
+
+R = B + A(X)
+
+Generates something like this
+
+LDY	X
+LDA #>A
+STA zT
+LDA #<A
+STA zT+1
+CLC
+LDA (zT),Y
+ADC B
+STA R
+
+If thise were 16 bit quanties, we wopuld add:
+
+INY
+LDA (zT),Y
+ADC B+1
+STA R+1

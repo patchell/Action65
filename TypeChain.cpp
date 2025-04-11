@@ -203,3 +203,73 @@ bool CTypeChain::IsFunc()
 	return rV;
 }
 
+bool CTypeChain::IsPointer()
+{
+	bool rV = false;
+	CObjTypeChain* pOT;
+
+	pOT = GetHead();
+	while (pOT && !rV)
+	{
+		if (pOT->GetSpec() == CObjTypeChain::Spec::POINTER)
+			rV = true;
+		else
+			pOT = pOT->GetNext();
+	}
+	return rV;
+}
+
+bool CTypeChain::IsArray()
+{
+	bool rV = false;
+	CObjTypeChain* pOT;
+
+	pOT = GetHead();
+	while (pOT && !rV)
+	{
+		if (pOT->GetSpec() == CObjTypeChain::Spec::ARRAY)
+			rV = true;
+		else
+			pOT = pOT->GetNext();
+	}
+	return rV;
+}
+
+bool CTypeChain::IsByte()
+{
+	bool rV = false;
+	CObjTypeChain* pOT;
+
+	pOT = GetHead();
+	while (pOT && !rV)
+	{
+		if (pOT->GetSpec() == CObjTypeChain::Spec::BYTE)
+			rV = true;
+		else if (pOT->GetSpec() == CObjTypeChain::Spec::CHAR)
+			rV = true;
+		else if (pOT->GetSpec() == CObjTypeChain::Spec::BOOL)
+			rV = true;
+		else
+			pOT = pOT->GetNext();
+	}
+	return rV;
+}
+
+bool CTypeChain::IsWord()
+{
+	bool rV = false;
+	CObjTypeChain* pOT;
+
+	pOT = GetHead();
+	while (pOT && !rV)
+	{
+		if (pOT->GetSpec() == CObjTypeChain::Spec::CARD)
+			rV = true;
+		else if (pOT->GetSpec() == CObjTypeChain::Spec::INT)
+			rV = true;
+		else
+			pOT = pOT->GetNext();
+	}
+	return rV;
+}
+

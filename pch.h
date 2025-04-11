@@ -14,19 +14,56 @@ constexpr auto MAX_STRING_LEN = 512;
 
 constexpr auto INTERNAL_ERROR = 2;
 
-enum class RegType {
-	NONE,
-	A,
-	X,
-	Y,
-	S,
-	P
+class CReg 
+{
+public:
+	enum class RegType {
+		NONE,
+		A,
+		X,
+		Y,
+		S,
+		P
+	};
+private:
+	struct RegTypeItem
+	{
+		RegType m_Reg;
+		const char* m_pName;
+		const char* GetRegName(RegType Reg);
+	};
+	inline static RegTypeItem RegTypeLUT[] = {
+		{RegType::NONE,"NONE"},
+		{RegType::A,".A"},
+		{RegType::X,".X"},
+		{RegType::Y,".Y"},
+		{RegType::S,".S"},
+		{RegType::P,".P"}
+	};
+	bool m_InUse;
+	RegType m_Type;
+public:
+	CReg() {
+		m_InUse = false;
+		m_Type = RegType::NONE;
+	}
+	virtual ~CReg() {}
+	void Lock() { m_InUse = true; }
+	void UnLock() { m_InUse = false; }
+	bool IsUnLocked() const { return !m_InUse; }
+	void SetType(RegType Type) { m_Type = Type; }
+	RegType GetType() const { return m_Type; }
+	const char* ToString() const { return RegTypeLUT[int(m_Type)].m_pName; }
 };
 
-struct RegTypeItem
+class CRegPool
 {
-	RegType m_Reg;
-	const char* m_pName;
+	CReg m_aRegisters[6];;
+public:
+	CRegPool();
+	virtual ~CRegPool(){}
+	CReg* Lock(CReg::RegType Register);
+	void UnLock(CReg::RegType Register);
 };
 
 enum  class Token {
