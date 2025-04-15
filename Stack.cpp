@@ -38,7 +38,7 @@ void CStack::Push(CStackItem* pItem)
 		SetHead(pItem);
 		if (m_ItemCount > 100)
 			printf("Is Stack Overflowing? %d\n", m_ItemCount);
-		Print(Act()->LogFile(), "PUSH", 4, pItem);
+//		Print(Act()->LogFile(), "PUSH", 4, pItem);
 	}
 }
 
@@ -53,7 +53,7 @@ CStackItem* CStack::Pop()
 		{
 				pRV = GetHead();
 				SetHead(GetHead()->GetNext());
-				Print(Act()->LogFile(), "POP", 4, pRV);
+//				Print(Act()->LogFile(), "POP", 4, pRV);
 		}
 		else
 		{

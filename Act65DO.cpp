@@ -15,21 +15,26 @@ bool CAct65DO::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 
 CValue* CAct65DO::Process()
 {
-	CValue* pVChild = 0;
-	CValue* pVNext = 0;
-	CAstNode* pNChild = 0;
-	CAstNode* pNNext = 0;
-	fprintf(LogFile(), "Process Do ID = %d\n", GetID());
+	CAstNode* pChild = 0, * pNext = 0;
+	CValue* pValue = 0;
 
-	pNChild = GetChild();
-	if(GetChild())
-		pNNext = GetChild()->GetNext();
-	Emit(pVChild, pVNext);
-	if(pNChild)
-		pVChild = pNChild->Process();
-	if(pNNext)
-		pVNext = pNNext->Process();
-	return pVNext;
+//	fprintf(Act()->LogFile(), "Process %s Node:%d\n", GetNodeName(), GetID());
+	pValue = Emit(m_pChildValue, m_pChildValue);
+	pChild = GetChild();
+	if (pChild)
+	{
+		pNext = pChild->GetNext();
+	}
+	if (pChild)
+	{
+		m_pChildValue = pChild->Process();
+	}
+	while (pNext)
+	{
+		m_pNextValue = pNext->Process();
+		pNext = pNext->GetNext();
+	}
+	return pValue;
 }
 
 int CAct65DO::Print(int Indent, char* s, int Strlen, bool* pbNextFlag)
@@ -52,7 +57,7 @@ CValue* CAct65DO::Emit(CValue* pVc, CValue* pVn)
 	CStackDOODItem* pDOODStackItem = 0;
 	CValue* pLabelValue = 0;
 
-	fprintf(LogFile(), "Emit DO ID = %d\n", GetID());
+//	fprintf(LogFile(), "Emit DO ID = %d\n", GetID());
 	StartAddressOfDO = GetSection()->GetLocationCounter();
 	pStartSymbol = Act()->GetParser()->GenerateSymbol("DOlabel_");
 	pStartSymbol->SetAddress(StartAddressOfDO);

@@ -51,16 +51,12 @@ bool CValue::Create(int V)
 
 void CValue::SetSymbol(CSymbol* pSym)
 {
-//	if(int(pSym) > 8)
-//		fprintf(stderr, "Symbol:  %s  :%x\n", pSym->GetName(),int(pSym));
-//	else if (int(pSym) > 0)
-//	{
-//		fprintf(stderr, "Opps\n");
-//		Act()->Exit(123);
-//	}
 	m_pSym = pSym;
 	if (pSym)
+	{
 		m_ValType = ValueType::SYMBOL;
+		GetTypeChain()->CopyTypeChain(pSym->GetTypeChain());
+	}
 }
 
 char* CValue::GetName()
@@ -267,107 +263,11 @@ bool CValue::IsPageZero()
     return rV;
 }
 
-CValue* CValue::BinaryOp(BinaryOps Op, CValue* pOperand)
-{
-	//---------------------------------------------------
-	// Binary Operation
-	// 
-	// this = this <OP> Operand
-	//---------------------------------------------------
-	CValue* pResult = 0;
-    return nullptr;
-}
-
-CValue* CValue::Addition(CValue* pOperand)
-{
-	int SizeOfThis = SizeOf();
-	int SizeOfOperand = pOperand->SizeOf();
-
-	switch (SizeOfThis)
-	{
-	case BYTE_SIZE:
-		switch (SizeOfOperand)
-		{
-		case BYTE_SIZE:
-//			if(pOperand->Is)
-			break;
-		case WORD_SIZE:
-			break;
-		}
-		break;
-	case WORD_SIZE:
-		switch (SizeOfOperand)
-		{
-		case BYTE_SIZE:
-			break;
-		case WORD_SIZE:
-			break;
-		}
-		break;
-	}
-	return nullptr;
-}
-
-CValue* CValue::Subtraction(CValue* pOperand)
-{
-	return nullptr;
-}
-
-CValue* CValue::Mul(CValue* pOperand)
-{
-	return nullptr;
-}
-
-CValue* CValue::Div(CValue* pOperand)
-{
-	return nullptr;
-}
-
-CValue* CValue::Mod(CValue* pOperand)
-{
-	return nullptr;
-}
-
-CValue* CValue::And(CValue* pOperand)
-{
-	return nullptr;
-}
-
-CValue* CValue::Or(CValue* pOperand)
-{
-	return nullptr;
-}
-
-CValue* CValue::Xor(CValue* pOperand)
-{
-	return nullptr;
-}
-
-CValue* CValue::LSH(CValue* pOperand)
-{
-	return nullptr;
-}
-
-CValue* CValue::RSH(CValue* pOperand)
-{
-	return nullptr;
-}
-
-CValue* CValue::Assign(BinaryOps Op, CValue* pValue)
-{
-	return nullptr;
-}
-
-CValue* CValue::Assign(CValue* pValue)
-{
-	return nullptr;
-}
-
 int CValue::SizeOf()
 {
 	int rV = 0;
 
-	if (m_TypeChain.IsPointer())
+	if (m_TypeChain.Is(CObjTypeChain::Spec::POINTER))
 		rV = 2;
 	else if (m_TypeChain.IsByte())
 		rV = 1;

@@ -25,11 +25,8 @@ public:
 public:
 	CCodeGeneration();
 	virtual ~CCodeGeneration();
-	bool Create(CAstTree* pAstTree);
-	bool Run();
 	//---------------------------
-	void EmitBinary();
+	CValue* EmitBinaryOp(Token Op, CValue* pV1, CValue* pV2, CValue* pV3, CSection* pSection);
 	void EmitSource();
-	//-------- Code Generation ------
 };
 

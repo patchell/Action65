@@ -21,7 +21,11 @@ public:
 		LOCAL,
 		PARAM,
 		GLOBAL,
-		TYPE_FIELD
+		TYPE_FIELD,
+		POINTER_DREF,
+		AREG,
+		XREG,
+		YREG
 	};
 private:
 	struct Types {
@@ -55,7 +59,8 @@ private:
 		{Spec::LOCAL,"LOCAL"},
 		{Spec::PARAM,"PARAM"},
 		{Spec::GLOBAL,"GLOBAL"},
-		{Spec::TYPE_FIELD,"FIELD"},
+		{Spec::TYPE_FIELD,"Dereferenced POINTER"},
+		{Spec::POINTER_DREF,"FIELD"},
 		{Spec(-1),0}
 	};
 	Spec m_SpecType;
@@ -73,15 +78,9 @@ public:
 	void SetNext(CObjTypeChain* pN) { m_pNext = pN; }
 	CObjTypeChain* GetPrev() { return m_pPrev; }
 	void SetPrev(CObjTypeChain* pP) { m_pPrev = pP; }
-	Spec GetSpec() { return m_SpecType; }
+	Spec GetSpec() const { return m_SpecType; }
 	void SetSpec(Spec s) { m_SpecType = s; }
-	bool IsGlobal() const;
-	bool IsLocal() const;
-	bool IsFunction() const;
-	bool IsProc() const;
-	bool IsInterrupt() const;
 	bool IsFundamentalType();
-	bool IsPointer() const;
-	bool IsArray() const;
+	bool Is(Spec SpecType) const;
 };
 

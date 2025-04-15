@@ -13,8 +13,7 @@ bool CAstTree::Create()
 {
 	bool rV = true;
 
-	m_pRoot = new CAct65ROOT;
-	return true;
+	return rV;
 }
 
 void CAstTree::Print(FILE* pOut)
@@ -72,7 +71,7 @@ void CAstTree::TraverseTree(
 	--Recursions;
 	if (Recursions <= 0)
 	{
-		fprintf(Act()->LogFile(), "Too Many Recursions in CAstTree::TraverseTree  Line:%d Col:%d\n",
+		fprintf(Act()->LogFile(), "Internal Error::Too Many Recursions in CAstTree::TraverseTree  Line:%d Col:%d\n",
 			pNode->GetLine(),
 			pNode->GetColumn()
 		);

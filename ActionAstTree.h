@@ -6,5 +6,12 @@ public:
 	CActionAstTree();
 	virtual ~CActionAstTree();
 	bool Create();
+	void Optimize();
+	int OptimizeTree(
+		CAstNode* pNode,
+		int Recursions,
+		int MaxLoops
+	);
+	void CheckNode(CAstNode* pNode);
 };
 

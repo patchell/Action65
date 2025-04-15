@@ -124,22 +124,6 @@ public:
 	inline static const char* UpLowStr(UpperLower UL) {
 		return UpperLowerLUT[int(UL)].m_pName;
 	}
-	//-------------------------------------------
-	// Code Generation
-	//-------------------------------------------
-	CValue* BinaryOp(BinaryOps Op, CValue* pOperand);
-	CValue* Addition(CValue* pOperand);
-	CValue* Subtraction(CValue* pOperand);
-	CValue* Mul(CValue* pOperand);
-	CValue* Div(CValue* pOperand);
-	CValue* Mod(CValue* pOperand);
-	CValue* And(CValue* pOperand);
-	CValue* Or(CValue* pOperand);
-	CValue* Xor(CValue* pOperand);
-	CValue* LSH(CValue* pOperand);
-	CValue* RSH(CValue* pOperand);
-	CValue* Assign(BinaryOps Op, CValue* pValue);
-	CValue* Assign(CValue* pValue);
 	int SizeOf();
 };
 

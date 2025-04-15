@@ -26,15 +26,8 @@ public:
 	//---------------------------------------
 	// What is it
 	//---------------------------------------
-    bool IsField();
-	bool IsGlobal();
-	bool IsLocal();
-	bool IsInterrupt();
-	bool IsProc();
-	bool IsFunc();
-	bool IsPointer();
-	bool IsArray();
 	bool IsByte();
 	bool IsWord();
+	bool Is(CObjTypeChain::Spec SpecType);
 };
 

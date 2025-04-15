@@ -15,10 +15,25 @@ bool CAct65ArrayINDEX::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 
 CValue* CAct65ArrayINDEX::Process()
 {
-	CValue* pV = 0;
+	CAstNode* pChild = 0, * pNext = 0;
+	CValue* pValue = 0;
 
-	pV = CAstNode::Process();
-	return pV;
+	fprintf(Act()->LogFile(), "Process %s Node:%d\n", GetNodeName(), GetID());
+	pChild = GetChild();
+	if (pChild)
+	{
+		pNext = pChild->GetNext();
+	}
+	if (pChild)
+	{
+		m_pChildValue = pChild->Process();
+	}
+	if (pNext)
+	{
+		fprintf(Act()->LogFile(), "Internal Error:CAct65ArrayINDEX cannot have a NEXT node Line:%d\n", GetLine());
+		Act()->Exit(2);
+	}
+	return Emit(m_pChildValue, m_pChildValue);
 }
 
 int CAct65ArrayINDEX::Print(int Indent, char* s, int Strlen, bool* pbNextFlag)
@@ -47,5 +62,5 @@ void CAct65ArrayINDEX::PrintNode(FILE* pOut, int Indent, bool* pbNextFlag)
 
 CValue* CAct65ArrayINDEX::Emit(CValue* pVc, CValue* pVn)
 {
-    return nullptr;
+    return pVc;
 }

@@ -25,8 +25,8 @@ public:
 	enum class PHASE {
 		NONE,
 		GENERATE_AST,
+		OPTIMAZE_AST,
 		EXECUTE_AST_PASS1,
-		EXECUTE_AST_PASS2,
 		GENTERATE_OUT_FILES
 	};
 private:
@@ -46,8 +46,8 @@ private:
 	static inline PASS ParsePhase[PHASE_LUT_DIM] = {
 		{PHASE::NONE,"NONE"},
 		{PHASE::GENERATE_AST,"Pass 1:AST Generation"},
+		{PHASE::OPTIMAZE_AST,"Pass 1:AST Optimization"},
 		{PHASE::EXECUTE_AST_PASS1,"Pass 2:CODE Generation"},
-		{PHASE::EXECUTE_AST_PASS2,"Pass 3:Linking"},
 		{PHASE::GENTERATE_OUT_FILES,"Pass 4:Generate Ouput File"},
 	};
 	CLexer* m_pLex;

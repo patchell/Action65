@@ -15,10 +15,24 @@ bool CAct65RETURN::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 
 CValue* CAct65RETURN::Process()
 {
-	CValue* pV = 0;
+	CAstNode* pChild = 0, * pNext = 0;
+	CValue* pValue = 0;
 
-	pV = CAstNode::Process();
-	return pV;
+//	fprintf(Act()->LogFile(), "Process %s Node:%d\n", GetNodeName(), GetID());
+	pChild = GetChild();
+	if (pChild)
+	{
+		pNext = pChild->GetNext();
+	}
+	if (pChild)
+	{
+		m_pChildValue = pChild->Process();
+	}
+	if (pNext)
+	{
+		m_pNextValue = pNext->Process();
+	}
+	return Emit(m_pChildValue, m_pChildValue);
 }
 
 int CAct65RETURN::Print(int Indent, char* s, int Strlen, bool* pbNextFlag)
@@ -36,5 +50,9 @@ void CAct65RETURN::PrintNode(FILE* pOut, int Indent, bool* pbNextFlag)
 
 CValue* CAct65RETURN::Emit(CValue* pVc, CValue* pVn)
 {
+	CAct65Opcode* pInstruction = new CAct65Opcode;
+	
+	pInstruction->PrepareInstruction(Token::RTS, AdrModeType::IMPLIED,0, GetSection(),0);
+	pInstruction->Emit(0, 0);
     return nullptr;
 }

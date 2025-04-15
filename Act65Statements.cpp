@@ -15,27 +15,25 @@ bool CAct65Statements::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 
 CValue* CAct65Statements::Process()
 {
-	CValue* pVChild = 0;
-	CValue* pVNext = 0;
-	CAstNode* pNChild = 0;
-	CAstNode* pNNext = 0;
-	fprintf(LogFile(), "Process STATEMENTS ID = %d\n", GetID());
+	CAstNode* pChild = 0, * pNext = 0;
 
-	if (GetChild())
+//	fprintf(Act()->LogFile(), "Process %s Node:%d\n", GetNodeName(), GetID());
+	pChild = GetChild();
+	if (pChild)
 	{
-		pNChild = GetChild();
-		if (pNChild)
-		{
-			pNNext = GetChild()->GetNext();
-			pVChild = pNChild->Process();
-			while (pNNext)
-			{
-				pVNext = pNNext->Process();
-				pNNext = pNNext->GetNext();
-			}
-		}
+		pNext = pChild->GetNext();
 	}
-	return pVNext;
+	Emit(0, 0);
+	if (pChild)
+	{
+		pChild->Process();
+	}
+	while (pNext)
+	{
+		pNext->Process();
+		pNext = pNext->GetNext();
+	}
+	return nullptr;
 }
 
 int CAct65Statements::Print(int Indent, char* s, int Strlen, bool* pbNextFlag)
@@ -53,6 +51,6 @@ void CAct65Statements::PrintNode(FILE* pOut, int Indent, bool* pbNextFlag)
 
 CValue* CAct65Statements::Emit(CValue* pVc, CValue* pVn)
 {
-	fprintf(LogFile(), "EMIT STATMENTS ID = %d\n", GetID());
+//	fprintf(LogFile(), "EMIT STATMENTS ID = %d\n", GetID());
 	return nullptr;
 }

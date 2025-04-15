@@ -107,134 +107,6 @@ int CTypeChain::Print(char* pSO, int l)
 	return ls;
 }
 
-bool CTypeChain::IsField()
-{
-	bool rV = false;
-	CObjTypeChain* pOT;
-
-	pOT = GetHead();
-	while (pOT && !rV)
-	{
-		if (pOT->GetSpec() == CObjTypeChain::Spec::TYPE_FIELD)
-			rV = true;
-		else
-			pOT = pOT->GetNext();
-	}
-	return rV;
-}
-
-bool CTypeChain::IsGlobal()
-{
-	bool rV = false;
-	CObjTypeChain* pOT;
-
-	pOT = GetHead();
-	while (pOT && !rV)
-	{
-		if (pOT->GetSpec() == CObjTypeChain::Spec::GLOBAL)
-			rV = true;
-		else
-			pOT = pOT->GetNext();
-	}
-    return rV;
-}
-
-bool CTypeChain::IsLocal()
-{
-	bool rV = false;
-	CObjTypeChain* pOT;
-
-	pOT = GetHead();
-	while (pOT && !rV)
-	{
-		if (pOT->GetSpec() == CObjTypeChain::Spec::LOCAL)
-			rV = true;
-		else
-			pOT = pOT->GetNext();
-	}
-	return rV;
-}
-
-bool CTypeChain::IsInterrupt()
-{
-	bool rV = false;
-	CObjTypeChain* pOT;
-
-	pOT = GetHead();
-	while (pOT && !rV)
-	{
-		if (pOT->GetSpec() == CObjTypeChain::Spec::INTERRUPT)
-			rV = true;
-		else
-			pOT = pOT->GetNext();
-	}
-	return rV;
-}
-
-bool CTypeChain::IsProc()
-{
-	bool rV = false;
-	CObjTypeChain* pOT;
-
-	pOT = GetHead();
-	while (pOT && !rV)
-	{
-		if (pOT->GetSpec() == CObjTypeChain::Spec::PROC)
-			rV = true;
-		else
-			pOT = pOT->GetNext();
-	}
-	return rV;
-}
-
-bool CTypeChain::IsFunc()
-{
-	bool rV = false;
-	CObjTypeChain* pOT;
-
-	pOT = GetHead();
-	while (pOT && !rV)
-	{
-		if (pOT->GetSpec() == CObjTypeChain::Spec::FUNC)
-			rV = true;
-		else
-			pOT = pOT->GetNext();
-	}
-	return rV;
-}
-
-bool CTypeChain::IsPointer()
-{
-	bool rV = false;
-	CObjTypeChain* pOT;
-
-	pOT = GetHead();
-	while (pOT && !rV)
-	{
-		if (pOT->GetSpec() == CObjTypeChain::Spec::POINTER)
-			rV = true;
-		else
-			pOT = pOT->GetNext();
-	}
-	return rV;
-}
-
-bool CTypeChain::IsArray()
-{
-	bool rV = false;
-	CObjTypeChain* pOT;
-
-	pOT = GetHead();
-	while (pOT && !rV)
-	{
-		if (pOT->GetSpec() == CObjTypeChain::Spec::ARRAY)
-			rV = true;
-		else
-			pOT = pOT->GetNext();
-	}
-	return rV;
-}
-
 bool CTypeChain::IsByte()
 {
 	bool rV = false;
@@ -243,11 +115,11 @@ bool CTypeChain::IsByte()
 	pOT = GetHead();
 	while (pOT && !rV)
 	{
-		if (pOT->GetSpec() == CObjTypeChain::Spec::BYTE)
+		if (pOT->Is(CObjTypeChain::Spec::BYTE))
 			rV = true;
-		else if (pOT->GetSpec() == CObjTypeChain::Spec::CHAR)
+		else if (pOT->Is(CObjTypeChain::Spec::CHAR))
 			rV = true;
-		else if (pOT->GetSpec() == CObjTypeChain::Spec::BOOL)
+		else if (pOT->Is(CObjTypeChain::Spec::BOOL))
 			rV = true;
 		else
 			pOT = pOT->GetNext();
@@ -263,9 +135,25 @@ bool CTypeChain::IsWord()
 	pOT = GetHead();
 	while (pOT && !rV)
 	{
-		if (pOT->GetSpec() == CObjTypeChain::Spec::CARD)
+		if (pOT->Is(CObjTypeChain::Spec::CARD))
 			rV = true;
-		else if (pOT->GetSpec() == CObjTypeChain::Spec::INT)
+		else if (pOT->Is(CObjTypeChain::Spec::INT))
+			rV = true;
+		else
+			pOT = pOT->GetNext();
+	}
+	return rV;
+}
+
+bool CTypeChain::Is(CObjTypeChain::Spec SpecType)
+{
+	bool rV = false;
+	CObjTypeChain* pOT;
+
+	pOT = GetHead();
+	while (pOT && !rV)
+	{
+		if (pOT->Is(SpecType))
 			rV = true;
 		else
 			pOT = pOT->GetNext();

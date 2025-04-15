@@ -64,7 +64,7 @@ CAstNode* CParser::Run()
 	else
 		ErrorDest = stderr;
 	try {
-		NextPass();
+		NextPass();	// Generate AST
 		pRoot = (CAct65ROOT*)GetAstTree()->GetRootNode();
 		pRoot = new CAct65ROOT;
 		pRoot->Create();
@@ -73,11 +73,13 @@ CAstNode* CParser::Run()
 		pN = Action65();
 		pRoot->SetChild(pN);
 		GetAstTree()->Print(LogFile());
-//		fflush(LogFile());
-		NextPass();
+		NextPass();	// AST optimization
+		GetAstTree()->Optimize();
+		GetAstTree()->Print(LogFile());
+		NextPass();	// Generate Code
 		GetAstTree()->Process();	//gemerate cpde
-		NextPass();
-		NextPass();
+		Act()->Exit(0);
+		NextPass();	//Create Output file
 		GetLexer()->GetSymTab()->PrintTable(LogFile());
 		CSection* pSec = FindSection("Code");
 		if (pSec)
@@ -276,47 +278,6 @@ void CParser::Expect(Token Expected)
 	char* pLookaheadToken = 0;
 	int number = 0;
 
-	//if (LogFile())
-	//{
-	//	switch (LookaHeadToken.GetToken())
-	//	{
-	//	case Token::IDENT:
-	//		pLookaheadToken = GetLexer()->GetLexSymbol()->GetName();
-	//		if (LookaHeadToken.GetToken() == Expected)
-	//		{
-	//			pExpectedToken = pLookaheadToken;
-	//		}
-	//		else
-	//			pExpectedToken = (char*)"Unexpected";
-	//		fprintf(LogFile(), "%d::Expected CLHead: %s  Lookahead = %s Line:%d\n",
-	//			m_Recursion,
-	//			pExpectedToken,
-	//			pLookaheadToken,
-	//			GetLexer()->GetLineNumber()
-	//		);
-	//		break;
-	//	case Token::NUMBER:
-	//		number = GetLexer()->GetLexValue();
-	//		pExpectedToken = (char*)GetLexer()->LookupToName(Expected);
-	//		fprintf(LogFile(), "%d::Expected CLHead: %s  Lookahead = %d Line:%d\n",
-	//			m_Recursion,
-	//			pExpectedToken,
-	//			number,
-	//			GetLexer()->GetLineNumber()
-	//		);
-	//		break;
-	//	default:
-	//		pLookaheadToken = (char*)GetLexer()->LookupToName(LookaHeadToken.GetToken());
-	//		pExpectedToken = (char*)GetLexer()->LookupToName(Expected);
-	//		fprintf(LogFile(), "%d::Expected CLHead: %s  LookaHeadToken = %s Line:%d\n",
-	//			m_Recursion,
-	//			pExpectedToken,
-	//			pLookaheadToken,
-	//			GetLexer()->GetLineNumber()
-	//		);
-	//		break;
-	//	}
-	//}
 	if (Accept(Expected))
 		LookaHeadToken = GetLexer()->Lex();
 	else
@@ -3310,17 +3271,17 @@ void CParser::DECLAREFuncName(CTypeChain* pTypeChain)
 	case Token::IDENT:
 		pSym = GetLexer()->GetLexSymbol();
 		pSym->CreateTypeChain(pTypeChain);
-		if (pTypeChain->IsFunc())
+		if (pTypeChain->Is(CObjTypeChain::Spec::FUNC))
 		{
 			pSym->SetIdentType(CBin::IdentType::FUNC);
 			pSym->SetToken(Token::FUNC_IDENT);
 		}
-		else if (pTypeChain->IsProc())
+		else if (pTypeChain->Is(CObjTypeChain::Spec::PROC))
 		{
 			pSym->SetIdentType(CBin::IdentType::PROC);
 			pSym->SetToken(Token::PROC_IDENT);
 		}
-		else if (pTypeChain->IsInterrupt())
+		else if (pTypeChain->Is(CObjTypeChain::Spec::INTERRUPT))
 		{
 			pSym->SetIdentType(CBin::IdentType::IRQPROC);
 			pSym->SetToken(Token::INTERRUPT_IDENT);
@@ -3676,42 +3637,45 @@ CAstNode* CParser::Ident(CTypeChain* pTypeChain)
 	CAstNode* pNext = 0, *pChild = 0;
 	CSymbol* pSym = 0;
 	CObjTypeChain* pOTC = 0;
+	CSection* pSection = 0; 
 
 	switch (LookaHeadToken)
 	{
 	case Token::IDENT:
 		pSym = GetLexer()->GetLexSymbol();
 		pSym->CreateTypeChain(pTypeChain);
-		if (pTypeChain->IsFunc())
+		if (pTypeChain->Is(CObjTypeChain::Spec::FUNC))
 		{
 			pSym->SetIdentType(CBin::IdentType::FUNC);
 			pSym->SetToken(Token::FUNC_IDENT);
 			GetLexer()->GetSymTab()->AddSymbol(pSym);
 		}
-		else if (pTypeChain->IsProc())
+		else if (pTypeChain->Is(CObjTypeChain::Spec::PROC))
 		{
 			pSym->SetIdentType(CBin::IdentType::PROC);
 			pSym->SetToken(Token::PROC_IDENT);
 			GetLexer()->GetSymTab()->AddSymbol(pSym);
 		}
-		else if (pTypeChain->IsInterrupt())
+		else if (pTypeChain->Is(CObjTypeChain::Spec::INTERRUPT))
 		{
 			pSym->SetIdentType(CBin::IdentType::IRQPROC);
 			pSym->SetToken(Token::INTERRUPT_IDENT);
 			GetLexer()->GetSymTab()->AddSymbol(pSym);
 		}
-		else if (pSym->GetTypeChain()->IsGlobal())
+		else if (pSym->GetTypeChain()->Is(CObjTypeChain::Spec::GLOBAL))
 		{
 			pSym->SetIdentType(CBin::IdentType::GLOBAL);
 			pSym->SetToken(Token::VAR_GLOBAL);
 			GetLexer()->GetSymTab()->AddSymbol(pSym);
+			pSym->SetSection(FindSection("GLOBALS"));
 		}
-		else if (pSym->GetTypeChain()->IsField())
+		else if (pSym->GetTypeChain()->Is(CObjTypeChain::Spec::TYPE_FIELD))
 		{
 			pSym->SetToken(Token::TYPE_FIELD);
 		}
-		else if (pSym->GetTypeChain()->IsLocal())
+		else if (pSym->GetTypeChain()->Is(CObjTypeChain::Spec::LOCAL))
 		{
+			pSym->SetSection(FindSection("LOCALS"));
 			pSym->SetToken(Token::VAR_LOCAL);
 			if (GetCurrentProc())
 			{

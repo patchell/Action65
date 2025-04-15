@@ -37,6 +37,10 @@
       <UniqueIdentifier>{c5459a00-eabf-414e-b534-29644a3a9ec8}</UniqueIdentifier>
       <Extensions>txt</Extensions>
     </Filter>
+    <Filter Include="SettingsFiles">
+      <UniqueIdentifier>{88da395b-a4aa-45ba-b77e-3ea4498a2954}</UniqueIdentifier>
+      <Extensions>Act65_setting</Extensions>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Bin.cpp">
@@ -1194,6 +1198,15 @@
     </None>
     <None Include="Grammar\Linker.gram">
       <Filter>Grammar</Filter>
+    </None>
+    <None Include="test9.act">
+      <Filter>Action</Filter>
+    </None>
+    <None Include="Action.Act65_settings">
+      <Filter>SettingsFiles</Filter>
+    </None>
+    <None Include="Linker.Act65_LinkerScript">
+      <Filter>SettingsFiles</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

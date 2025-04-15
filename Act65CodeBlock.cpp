@@ -15,10 +15,24 @@ bool CAct65CodeBlock::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 
 CValue* CAct65CodeBlock::Process()
 {
-	CValue* pV = 0;
+	CAstNode* pChild = 0, * pNext = 0;
+	CValue* pValue = 0;
 
-	pV = CAstNode::Process();
-	return pV;
+	fprintf(Act()->LogFile(), "Process %s Node:%d\n", GetNodeName(), GetID());
+	pChild = GetChild();
+	if (pChild)
+	{
+		pNext = pChild->GetNext();
+	}
+	if (pChild)
+	{
+		m_pChildValue = pChild->Process();
+	}
+	if (pNext)
+	{
+		m_pNextValue = pNext->Process();
+	}
+	return Emit(m_pChildValue, m_pChildValue);
 }
 
 int CAct65CodeBlock::Print(int Indent, char* s, int Strlen, bool* pbNextFlag)
@@ -56,10 +70,24 @@ bool CAct65CODEBLOCKend::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 
 CValue* CAct65CODEBLOCKend::Process()
 {
-	CValue* pV = 0;
+	CAstNode* pChild = 0, * pNext = 0;
+	CValue* pValue = 0;
 
-	pV = CAstNode::Process();
-	return pV;
+	fprintf(Act()->LogFile(), "Process %s Node:%d\n", GetNodeName(), GetID());
+	pChild = GetChild();
+	if (pChild)
+	{
+		pNext = pChild->GetNext();
+	}
+	if (pChild)
+	{
+		m_pChildValue = pChild->Process();
+	}
+	if (pNext)
+	{
+		m_pNextValue = pNext->Process();
+	}
+	return Emit(m_pChildValue, m_pChildValue);
 }
 
 int CAct65CODEBLOCKend::Print(int Indent, char* s, int Strlen, bool* pbNextFlag)

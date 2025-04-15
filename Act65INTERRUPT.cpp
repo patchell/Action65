@@ -15,10 +15,26 @@ bool CAct65INTERRUPT::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 
 CValue* CAct65INTERRUPT::Process()
 {
-	CValue* pV = 0;
+	CAstNode* pChild = 0, * pNext = 0;
+	CValue* pValue = 0;
 
-	pV = CAstNode::Process();
-	return pV;
+//	fprintf(Act()->LogFile(), "Process %s Node:%d\n", GetNodeName(), GetID());
+	Emit(0, 0);
+	pChild = GetChild();
+	if (pChild)
+	{
+		pNext = pChild->GetNext();
+	}
+	if (pChild)
+	{
+		m_pChildValue = pChild->Process();
+	}
+	while (pNext)
+	{
+		m_pNextValue = pNext->Process();
+		pNext = pNext->GetNext();
+	}
+	return nullptr;
 }
 
 int CAct65INTERRUPT::Print(int Indent, char* s, int Strlen, bool* pbNextFlag)

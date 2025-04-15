@@ -15,23 +15,24 @@ bool CAct65Assignment::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 
 CValue* CAct65Assignment::Process()
 {
-	CValue* pV = 0;
-	CValue* pVChild = 0;
-	CValue* pVNext = 0;
-	CAstNode* pNodeChild = 0;
-	CAstNode* pNodeNext = 0;
+	CAstNode* pChild = 0, * pNext = 0;
+	CValue* pValue = 0;
 
-	fprintf(LogFile(), "Process ASSIGNMENT ID = %d\n", GetID());
-
-	pNodeChild = GetChild();
-	if (GetChild())
-		pNodeNext = GetChild()->GetNext();
-	if (pNodeChild)
-		pVChild = pNodeChild->Process();
-	if (pNodeNext)
-		pVNext = pNodeNext->Process();
-	Emit(pVChild, pVNext);
-	return pV;
+	fprintf(Act()->LogFile(), "Process %s Node:%d\n", GetNodeName(), GetID());
+	pChild = GetChild();
+	if (pChild)
+	{
+		pNext = pChild->GetNext();
+	}
+	if (pChild)
+	{
+		m_pChildValue = pChild->Process();
+	}
+	if (pNext)
+	{
+		m_pNextValue = pNext->Process();
+	}
+	return Emit(m_pChildValue, m_pChildValue);
 }
 
 int CAct65Assignment::Print(int Indent, char* s, int Strlen, bool* pbNextFlag)

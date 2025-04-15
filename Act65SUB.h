@@ -12,5 +12,6 @@ public:
 	virtual void PrintNode(FILE* pOut, int Indent, bool* pbNextFlag);
 	virtual const char* GetNodeName() { return m_pNodeTyypeName; }
 	virtual CValue* Emit(CValue* pVc, CValue* pVn);
+	virtual CValue* AltEmit(CValue* pVc, CValue* pVn, CValue* pVr);
 };
 

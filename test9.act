@@ -2,19 +2,21 @@ MODULE
 
 
 INTERRUPT Hey()
-	BYTE Result, V1, V2
+	BYTE Result, V1, V2, V3
+	BYTE ARRAY aX
+	BYTE POINTER pY
 
 	ASM {
 		SECTION "Code" [
-			START = $8000
+			START = $0000
 			SIZE  = $1000
 			MODE  = READ_ONLY
 		]
 	}
 	DO
-		Result = V1 + V2
+		Result = pY^ + aX(V2 + V3)
 		DO
-			Result = V1 - V2
+			Result = V1 - V2 + V3
 		OD
 	OD
 	RETURN

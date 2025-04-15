@@ -128,7 +128,7 @@ int CSymbol::Print(char* pSO, int l, const char* s)
 		ls += sprintf_s(&pSO[ls], size, "%s", s);
 	}
 	if(GetTypeChain())
-		if (GetTypeChain()->IsFunc())
+		if (GetTypeChain()->Is(CObjTypeChain::Spec::FUNC))
 			printf("Opps\n");
 	if (GetName())
 	{

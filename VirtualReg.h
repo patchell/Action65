@@ -5,11 +5,18 @@ class CVirtualReg
 	inline static int m_ID = 0;
 	int m_MaxRegs;
 	int* m_pLockTabel;
+	CSection* m_pSection;	//memory section where virtual registers reside
+	int m_BaseAddress;
+public:
 	enum class RegSize {
+		NONE,
 		EIGHT_BITS,
 		SIXTEEN_BITS
 	};
 public:
+	//--------------------------------------
+	// Virtual Register Object Definition
+	//--------------------------------------
 	struct VREG {
 		RegSize m_nBytes;
 		int m_RegID;
@@ -31,10 +38,13 @@ public:
 		}
 		RegSize GetSize() const { return m_nBytes; }
 	};
+	//------------------------------------------
+	// VirtualRegister Pool Methods
+	//------------------------------------------
 public:
 	CVirtualReg();
 	virtual ~CVirtualReg();
 	bool Create(int RHeapSize);
-	VREG* Lock(RegSize size);
+	CValue* Lock(RegSize size);
 	bool UnLock(VREG* pReg);
 };

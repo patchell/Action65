@@ -15,10 +15,32 @@ bool CAct65ADD::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 
 CValue* CAct65ADD::Process()
 {
-	CValue* pV = 0;
+	CAstNode* pChild = 0, * pNext = 0;
+	CValue* pValue = 0;
 
-	pV = CAstNode::Process();
-	return pV;
+//	fprintf(Act()->LogFile(), "Process %s Node:%d\n",GetNodeName(), GetID());
+	pChild = GetChild();
+	if (pChild)
+	{
+		pNext = pChild->GetNext();
+	}
+	if (pChild)
+	{
+		m_pChildValue = pChild->Process();
+	}
+ 	if (pNext)
+	{
+		m_pNextValue = pNext->Process();
+	}
+	if (pNext->GetNext())
+	{
+		m_pResultValue = pNext->GetNext()->Process();
+	}
+	if (m_pResultValue)
+		pValue = AltEmit(m_pChildValue, m_pNextValue, m_pResultValue);
+	else
+		pValue = Emit(m_pChildValue, m_pNextValue);
+	return pValue;
 }
 
 int CAct65ADD::Print(int Indent, char* s, int Strlen, bool* pbNextFlag)
@@ -45,19 +67,34 @@ void CAct65ADD::PrintNode(FILE* pOut, int Indent, bool* pbNextFlag)
 }
 CValue* CAct65ADD::Emit(CValue* pVc, CValue* pVn)
 {
+	//-----------------------------------------------
+	// ADD
+	// 
+	// For this operation, the result will be stored
+	// in a temporary location ("Virtual Register").
+	// For BYTE operations, this could potentially
+	// be a 6502 register, such as the Accumulator
+	// or one of the index registers, or on the stack
+	//-----------------------------------------------
 	CTypeChain* pTCchild = 0;
 	CTypeChain* pTCnext = 0;
 	CAct65Opcode* pOpcode = new CAct65Opcode;
 	int MaxNumberOfBytes = 0;
+	CReg::RegType ChildDref = CReg::RegType::NONE;
+	CReg::RegType NextDref = CReg::RegType::NONE;
+	CVirtualReg::VREG* pR1 = 0, * pR2 = 0;
+	AdrModeType AddressMode = AdrModeType::NA;
+	CValue* pReturnValue = 0;
 
 	pTCchild = pVc->GetTypeChain();
 	pTCnext = pVn->GetTypeChain();
-	pOpcode->PrepareInstruction(Token::CLC, 0, GetSection(), 0);
-	GetSection()->AddInstruction(pOpcode);
+	pOpcode->PrepareInstruction(Token::CLC, AdrModeType::IMPLIED, 0, GetSection(), 0);
+	pOpcode->Emit(0,0);
 	pOpcode->Reset();
 	MaxNumberOfBytes = pVc->SizeOf();
 	if (MaxNumberOfBytes < pVn->SizeOf())
 		MaxNumberOfBytes = pVn->SizeOf();
+
 	for (int i = 0; i < MaxNumberOfBytes; ++i)
 	{
 		//------------------------------------------
@@ -65,110 +102,89 @@ CValue* CAct65ADD::Emit(CValue* pVc, CValue* pVn)
 		//------------------------------------------
 		if (pTCchild->GetTail()->IsFundamentalType())
 		{
-			pOpcode->PrepareInstruction(Token::LDA, pVc, GetSection(), 0);
-			GetSection()->AddInstruction(pOpcode);
+			if (pVc->GetSymbol()->GetSection()->IsPageZero())
+				AddressMode = AdrModeType::ZERO_PAGE_ADR;
+			else
+				AddressMode = AdrModeType::ABSOLUTE_ADR;
+			pOpcode->PrepareInstruction(Token::LDA, AddressMode, pVc, GetSection(), 0);
+			pOpcode->Emit(0, 0);
 			pOpcode->Reset();
 		}
-		else if (pTCchild->GetTail()->IsPointer())
+		else if (pTCchild->GetTail()->Is(CObjTypeChain::Spec::POINTER))
 		{
-
+			fprintf(Act()->LogFile(), "Pointer\n");
 		}
-		else if (pTCchild->GetTail()->IsArray())
+		else if (pTCchild->GetTail()->Is(CObjTypeChain::Spec::ARRAY))
 		{
-
+			fprintf(Act()->LogFile(), "Array\n");
 		}
 		//------------------------------------------
 		// Operand 2
 		//------------------------------------------
 		if (pTCnext->GetTail()->IsFundamentalType())
 		{
-			pOpcode->PrepareInstruction(Token::LDA, pVc, GetSection(), 0);
-			GetSection()->AddInstruction(pOpcode);
+			if (pVn->GetSymbol()->GetSection()->IsPageZero())
+				AddressMode = AdrModeType::ZERO_PAGE_ADR;
+			else
+				AddressMode = AdrModeType::ABSOLUTE_ADR;
+			pOpcode->PrepareInstruction(Token::ADC, AddressMode, pVn, GetSection(), 0);
+			pOpcode->Emit(0, 0);
 			pOpcode->Reset();
 		}
-		else if (pTCnext->GetTail()->IsPointer())
+		else if (pTCnext->GetTail()->Is(CObjTypeChain::Spec::POINTER))
 		{
-
+			fprintf(Act()->LogFile(), "Pointer\n");
 		}
-		else if (pTCnext->GetTail()->IsArray())
+		else if (pTCnext->GetTail()->Is(CObjTypeChain::Spec::ARRAY))
 		{
-
+			fprintf(Act()->LogFile(), "Array\n");
 		}
 		//------------------------------------------
 		// Result
+		// The result needs to be stored someplace.
+		// If this is a BYTE operation, leave the
+		// combination in the accumulator
+		// otherewise, allocate a virtual register
+		// to put the result into
 		//------------------------------------------
+		if (MaxNumberOfBytes == 1)
+		{
+			pReturnValue = new CValue;
+			pReturnValue->SetValueType(CValue::ValueType::AREG);
+		}
+		else      // Allocate a virtural Register
+		{
+			if (i == 0)
+			{
+				pReturnValue = Act()->GetVirtualRegPool()->Lock(CVirtualReg::RegSize::SIXTEEN_BITS);
+				pOpcode->PrepareInstruction(Token::STA, AdrModeType::ZERO_PAGE_ADR, pReturnValue, GetSection(), 0);
+				pOpcode->Emit(0, 0);
+				pOpcode->Reset();
+			}
+			else
+			{
+				pReturnValue->SetConstVal(pReturnValue->GetConstVal() + 1);
+				pOpcode->PrepareInstruction(Token::STA, AdrModeType::ZERO_PAGE_ADR, pReturnValue, GetSection(), 0);
+				pOpcode->Emit(0, 0);
+				pOpcode->Reset();
+			}
 
+		}
 	}
-    return nullptr;
+    return pReturnValue;
 }
-/*
-static value* binary(NODE* n, int op)
+
+CValue* CAct65ADD::AltEmit(CValue* pVc, CValue* pVn, CValue* pVr)
 {
-	NODE* n1, * n2;		/*	child nodes	*/
-//	value* v1, * v2;      /*	values returned from processor nodes	*/
-//	value* rV = NULL;
-//	value* Lv;		//left value
-//
-//	if (Debug) printf("BINOP=%s\n", binop_strings[op]);
-//	n1 = n->down;
-//	n2 = n1->next;
-//	Lv = (value*)n->aux;
-//	if (Lv) fprintf(stderr, "Levft Value is %s\n", Lv->name);
-//	v1 = (node_proc[n1->id])(n1);		/*	process nodes	*/
-//	v2 = (node_proc[n2->id])(n2);
-//	if (v1 && v2)	//good values?
-//	{
-//		//printf("VALUE1 %s  VALUE2 %s\n",v1->name,v2->name);
-//		if (do_binary_const(&v1, binop_ops[op], &v2))		/*	was this a const	*/
-//		{
-//			release_value(v2);
-//			if (Debug) printf("VALUE=%d\n", v1->type->V_INT);
-//			rV = v1;
-//		}
-//		else
-//		{
-//			if ((SizeOfRef(v1->type) != SizeOfRef(v2->type)) && (!IS_CONSTANT(v1->type) && !IS_CONSTANT(v2->type)))
-//				//----------------------------
-				//OK, these guys are not the
-				//smae size and they need to
-				// be in order to combine them
-				//----------------------------
-//				if (SizeOfRef(v1->type) > SizeOfRef(v2->type))
-//				{
-////					v2 = ConvertTypeUp(OutFile, v2, v1->type);
-//					//---------------------------
-//					// this operation leaves the
-////					// in registers if v2 is not
-//					// a long. so we need to save
-					// v2 to a temp otherwise
-					//--------------------------
-//				}
-//				else if (SizeOfRef(v2->type) > SizeOfRef(v1->type))
-////				{
-//					v1 = ConvertTypeUp(OutFile, v1, v2->type);
-//				}
-//			}
-//			if (ValInMem(v1) && !ValInMem(v2))
-//			{
-//				if (NotRelOp(op))	//we can swap operands
-//				{
-//					value* t;
-//					t = v1;
-//					v1 = v2;
-//					v2 = t;		//swap around the args
-//				}
-//				else
-//				{
-//					v2 = SaveToTemp(OutFile, v2);	//put in temp
-//				}
-//			}
-//			else if (!ValInMem(v1) && !ValInMem(v2))
-//			{
-//				v2 = SaveToTemp(OutFile, v2);	//put V2 in a temp
-//			}
-//			rV = DoBinary(OutFile, v1, op, v2, 1, 1, NULL, NULL, Lv);
-			//			release_value(v2);
-//		}
-//	}
-//	return rV;
-//}
+	if (!pVc)
+	{
+		fprintf(Act()->LogFile(), "ADD Child Value NULL\n");
+		Act()->Exit(2);
+	}
+	if (!pVn)
+	{
+		fprintf(Act()->LogFile(), "ADD Next Value NULL\n");
+		Act()->Exit(2);
+	}
+	return Act()->GetCodeGenUtils()->EmitBinaryOp(Token::ADC, pVc, pVn, pVr, GetSection());
+}

@@ -4,6 +4,8 @@ CVirtualReg::CVirtualReg()
 {
 	m_MaxRegs = 0;
 	m_pLockTabel = 0;
+	m_pSection = 0;
+	m_BaseAddress = 0;
 }
 
 CVirtualReg::~CVirtualReg()
@@ -23,26 +25,8 @@ bool CVirtualReg::Create(int RHeapSize)
 	return true;
 }
 
-CVirtualReg::VREG* CVirtualReg::Lock(RegSize size)
+CValue* CVirtualReg::Lock(RegSize size)
 {
-	VREG* pReg = 0;
-	int i = 0;
-	bool Loop = true;
-
-	//--- Find a free slot(s)
-	for (i = 0; (i < m_MaxRegs) && Loop; ++i)
-	{
-		if (m_pLockTabel[i] == 0)
-		{
-			switch (size) 
-			{
-			case RegSize::SIXTEEN_BITS:
-				break;
-			case RegSize::EIGHT_BITS:
-				break;
-			}
-		}
-	}
 	return nullptr;
 }
 

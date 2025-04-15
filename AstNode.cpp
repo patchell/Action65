@@ -16,6 +16,9 @@ CAstNode::CAstNode()
 	m_pSection = GetParser()->GetCurrentSection();
 	m_Line = Act()->GetParser()->GetLexer()->GetLineNumber();
 	m_Column = Act()->GetParser()->GetLexer()->GetColunm();
+	m_pChildValue = 0;
+	m_pNextValue = 0;
+	m_pResultValue = 0;
 }
 
 CAstNode::CAstNode(const char* pName, NodeType NT)
@@ -101,35 +104,6 @@ CAstNode* CAstNode::CreateValue(int V)
 	return this;
 }
 
-CValue* CAstNode::Process()
-{
-	CAstNode* pChild = 0, * pNext = 0;
-	CValue* pValueChild = 0, * pValueNext = 0;
-
-	pChild = GetChild();
-	if (pChild)
-	{
-		pNext = pChild->GetNext();
-	}
-	if (pChild)
-	{
-		pValueChild = pChild->Process();
-		pValueChild = pChild->Emit(pValueChild, pValueNext);
-	}
-	while (pNext)
-	{
-		pValueNext = pNext->Process();
-		pValueChild = pNext->Emit(pValueChild, pValueNext);
-		pNext = pNext->GetNext();
-	}
-	return pValueChild;
-}
-
-CValue* CAstNode::Emit(CValue* pVc, CValue* pVn)
-{
-	return nullptr;
-}
-
 void CAstNode::PrintNode(FILE* pOut, int Indent, bool* pbNextFlag)
 {
 	if (pOut)
@@ -163,6 +137,28 @@ int CAstNode::Print(int Indent, char* s, int strLen, bool* pbNextFlag)
 	size = strLen - l;
 	l += sprintf_s(&s[l], size, "+- \'%s\'", GetNodeName());
 	return l;
+}
+
+bool CAstNode::IsBinOpNode()
+{
+	bool rV = false;
+
+	switch (GetNodeType())
+	{
+	case NodeType::SUBTRACT:
+	case NodeType::ADDEXPR:
+	case NodeType::BITWISE_AND:
+	case NodeType::BITWISE_OR:
+	case NodeType::XOR:
+	case NodeType::LSH:
+	case NodeType::RSH:
+	case NodeType::MULTIPLY:
+	case NodeType::DIVIDE:
+	case NodeType::MOD:
+		rV = true;
+		break;
+	}
+    return rV;
 }
 
 CAstNode* CAstNode::SetChild(CAstNode* pAN)

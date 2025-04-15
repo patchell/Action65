@@ -35,6 +35,11 @@ CActionApp::CActionApp()
 	m_pfObj = 0;
 	m_pfSettings = 0;
 	m_pfLinkerScript = 0;
+	DO_OD_Stack.Create("DO STACK");
+	FOR_Stack.Create("FOR STACK");
+	WHILE_Stack.Create("WHILE STACI");
+	IF_FI_Stack.Create("IF STACK");
+	IFF_FFI_Stack.Create("IFF STACK");
 }
 
 CActionApp::~CActionApp()

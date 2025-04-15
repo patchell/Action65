@@ -26,51 +26,6 @@ int CObjTypeChain::Print(char* pSO, int l)
 	return ls;
 }
 
-bool CObjTypeChain::IsGlobal() const
-{
-	bool rV = false;
-
-	if (m_SpecType == Spec::GLOBAL)
-		rV = true;
-    return rV;
-}
-
-bool CObjTypeChain::IsLocal() const
-{
-	bool rV = false;
-
-	if (m_SpecType == Spec::LOCAL)
-		rV = true;
-	return rV;
-}
-
-bool CObjTypeChain::IsFunction() const
-{
-	bool rV = false;
-
-	if (m_SpecType == Spec::FUNC)
-		rV = true;
-	return rV;
-}
-
-bool CObjTypeChain::IsProc() const
-{
-	bool rV = false;
-
-	if (m_SpecType == Spec::PROC)
-		rV = true;
-	return rV;
-}
-
-bool CObjTypeChain::IsInterrupt() const
-{
-	bool rV = false;
-
-	if (m_SpecType == Spec::INTERRUPT)
-		rV = true;
-	return rV;
-}
-
 bool CObjTypeChain::IsFundamentalType()
 {
 	bool rV = false;
@@ -88,20 +43,11 @@ bool CObjTypeChain::IsFundamentalType()
     return rV;
 }
 
-bool CObjTypeChain::IsPointer() const
+bool CObjTypeChain::Is(Spec SpecType) const
 {
 	bool rV = false;
 
-	if (m_SpecType == Spec::POINTER)
-		rV = true;
-	return rV;
-}
-
-bool CObjTypeChain::IsArray() const
-{
-	bool rV = false;
-
-	if (m_SpecType == Spec::ARRAY)
+	if (m_SpecType == SpecType)
 		rV = true;
 	return rV;
 }
