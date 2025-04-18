@@ -30,15 +30,18 @@ bool CParser::Create()
 	m_pLex = new CLexer;
 	m_pLex->Create();
 	GetAstTree()->Create();
+	//-----------------------------------
+	// Initialize Default Sections
+	//-----------------------------------
 	pSettings = new CSettings;
 	pSettings->Create();
 	PrintSections();
 	m_pLinkerScript = new CLinker;
 	m_pLinkerScript->Create();
-
 	//-----------------------------------
-	// Initialize Default Sections
+	// Create Code Generation Utillities
 	//-----------------------------------
+	GetCodeGenUtils()->Create(16, FindSection("ZERO"));
 	if (LogFile())
 		fprintf(LogFile(), "Parser Created\n");
 	return true;
@@ -4830,20 +4833,30 @@ CAstNode* CParser::BaseCompConst()
 	CAstNode* pNext= 0;
 	CValue* pVal = 0;
 	CSymbol* pSym = 0;
+	CObjTypeChain* pTCobj = 0;
+	int V = 0;
 
 	switch (LookaHeadToken)
 	{
 	case Token::NUMBER:
+		V = GetLexer()->GetLexValue();
 		pVal = new CValue;
-		pVal->Create();
+		pVal->Create(V);
 		pVal->SetConstVal(GetLexer()->GetLexValue());
+		pTCobj = new CObjTypeChain;
+		pTCobj->SetSpec(CObjTypeChain::Spec::CONSTANT);
+		pVal->GetTypeChain()->AddToHead(pTCobj);
 		pNext = new CAct65NUMBER;
 		pNext->SetValue(pVal);
 		Expect(Token::NUMBER);
 		break;
 	case Token::CUR_LOC:
+		V = GetCurrentSection()->GetLocationCounter();
 		pVal = new CValue;
-		pVal->Create();
+		pVal->Create(V);
+		pTCobj = new CObjTypeChain;
+		pTCobj->SetSpec(CObjTypeChain::Spec::CONSTANT);
+		pVal->GetTypeChain()->AddToHead(pTCobj);
 		pNext = new CAct65CurrentLocation;
 		pNext->SetValue(pVal);
 		Expect(Token::CUR_LOC);
@@ -4852,6 +4865,10 @@ CAstNode* CParser::BaseCompConst()
 		Expect(Token('@'));
 		pVal = new CValue;
 		pVal->Create(GetLexer()->GetLexSymbol());
+		pVal->SetValueType(CValue::ValueType::ADDRESS_OF);
+		pTCobj = new CObjTypeChain;
+		pTCobj->SetSpec(CObjTypeChain::Spec::CONSTANT);
+		pVal->GetTypeChain()->AddToHead(pTCobj);
 		pNext = new CAct65AdrOfCONST;
 		pNext->SetValue(pVal);
 		Expect(Token::IDENT);
@@ -4859,6 +4876,10 @@ CAstNode* CParser::BaseCompConst()
 	case Token::INTERRUPT_IDENT:
 		pVal = new CValue;
 		pVal->Create(GetLexer()->GetLexSymbol());
+		pVal->SetValueType(CValue::ValueType::ADDRESS_OF);
+		pTCobj = new CObjTypeChain;
+		pTCobj->SetSpec(CObjTypeChain::Spec::CONSTANT);
+		pVal->GetTypeChain()->AddToHead(pTCobj);
 		pNext = new CAct65AddrOfINTERRUPT;
 		pNext->SetValue(pVal);
 		Expect(Token::INTERRUPT_IDENT);
@@ -4866,6 +4887,10 @@ CAstNode* CParser::BaseCompConst()
 	case Token::FUNC_IDENT:
 		pVal = new CValue;
 		pVal->Create(GetLexer()->GetLexSymbol());
+		pVal->SetValueType(CValue::ValueType::ADDRESS_OF);
+		pTCobj = new CObjTypeChain;
+		pTCobj->SetSpec(CObjTypeChain::Spec::CONSTANT);
+		pVal->GetTypeChain()->AddToHead(pTCobj);
 		pNext = new CAct65FuncADDR;
 		pNext->SetValue(pVal);
 		Expect(Token::FUNC_IDENT);
@@ -4873,6 +4898,10 @@ CAstNode* CParser::BaseCompConst()
 	case Token::PROC_IDENT:
 		pVal = new CValue;
 		pVal->Create(GetLexer()->GetLexSymbol());
+		pVal->SetValueType(CValue::ValueType::ADDRESS_OF);
+		pTCobj = new CObjTypeChain;
+		pTCobj->SetSpec(CObjTypeChain::Spec::CONSTANT);
+		pVal->GetTypeChain()->AddToHead(pTCobj);
 		pNext = new CAct65ProcADDR;
 		pNext->SetValue(pVal);
 		Expect(Token::PROC_IDENT);

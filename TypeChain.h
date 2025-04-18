@@ -22,6 +22,7 @@ public:
 	void SetTail(CObjTypeChain* pOTC) { m_pTail = pOTC; }
 	CObjTypeChain* GetTail() { return m_pTail; }
 	void CopyTypeChain(CTypeChain* pSrcTC);
+	void MoveTypeChain(CTypeChain* pSrcTC);
 	int Print(char* pSO, int l);
 	//---------------------------------------
 	// What is it
@@ -29,5 +30,6 @@ public:
 	bool IsByte();
 	bool IsWord();
 	bool Is(CObjTypeChain::Spec SpecType);
+	CObjTypeChain::Spec GetFundSpec();
 };
 

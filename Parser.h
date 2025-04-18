@@ -19,6 +19,7 @@ constexpr auto ADR_MODE_ACCUMULATOR = 0x0800;
 constexpr auto ADR_MODE_IMPLIED = 0x1000;
 
 constexpr auto PHASE_LUT_DIM = 5;
+
 class CParser
 {
 public:
@@ -66,6 +67,7 @@ private:
 	CSection* m_pCurrentSection;
 	CLinker* m_pLinkerScript;
 	CSymbol* m_pCurrentProceedure;
+	CCodeGeneration m_CodeGenerationUtils;
 public:
 	CParser();
 	virtual ~CParser();
@@ -73,6 +75,9 @@ public:
 	//----------------- Symbol Generator -------------------
 	CSymbol* GenerateSymbol(const char* pPrefix);
 	//------------------------------------------------------
+	CCodeGeneration* GetCodeGenUtils() {
+		return &m_CodeGenerationUtils;
+	}
 	void SetCurrentProc(CSymbol* pProcSym) { m_pCurrentProceedure = pProcSym; }
 	CSymbol* GetCurrentProc() {
 		return m_pCurrentProceedure;

@@ -443,6 +443,7 @@ struct KeyWord {
 #include "TypeChain.h"
 #include "ParameterChain.h"
 #include "Symbol.h"
+#include "VirtualReg.h" //- Virtual Registers 
 #include "Value.h"
 #include "ChainValueItem.h"
 #include "SymTab.h"
@@ -588,8 +589,6 @@ public:
 #include "Section.h"
 #include "WhereSymbolIsUsed.h"
 #include "Linker.h"
-//------------- Virtual Registers --------
-#include "VirtualReg.h"
 //-------------- AST Base Class ----------
 #include "AstNode.h"
 //----------------------------------------

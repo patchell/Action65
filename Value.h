@@ -1,6 +1,7 @@
 #pragma once
 
-constexpr auto VALUE_LUT_DIM = 12;
+constexpr auto VALUE_LUT_DIM = 13;
+
 
 class CValue
 {
@@ -30,7 +31,8 @@ public:
 		VIRTUAL_REGISTER,
 		STRING,
 		CSTRING,	// "C" string
-		ASTRING		// ACTION! String
+		ASTRING,	// ACTION! String
+		ADDRESS_OF	// Address of a Symbol
 	};
 	struct CValueTypeItem {
 		ValueType m_Type;
@@ -70,7 +72,8 @@ private:
 		{ ValueType::VIRTUAL_REGISTER,"VIRTUAL REGISTER" },
 		{ ValueType::STRING,"STRING" },
 		{ ValueType::CSTRING,"C STRING" },
-		{ ValueType::ASTRING,"Act STRING" }
+		{ ValueType::ASTRING,"Act STRING" },
+		{ ValueType::ADDRESS_OF,"Address Of" }
 	};
 	inline static UpperLowerItem UpperLowerLUT[3] = {
 		{UpperLower::NONE,"NONE"},
@@ -91,23 +94,29 @@ private:
 	ValueType m_ValType;
 	UpperLower m_UpperLOwer;
 	CReg m_Reg;
-	CTypeChain m_TypeChain;
+	CVirtualReg::VREG* m_pVirtualReg;
+	CTypeChain m_AltTypeChain;
 public:
 	CValue();
 	virtual ~CValue();
+	bool Create(CVirtualReg::VREG* pVReg);
 	bool Create(const char* s);
 	bool Create(CSymbol* pSym = 0);
 	bool Create(ValueType VT);
 	bool Create(int V);
 	void SetSymbol(CSymbol* pSym);
-	CSymbol* GetSymbol() { return m_pSym; }
-	CTypeChain* GetTypeChain() { return &m_TypeChain; }
+	CVirtualReg::VREG* GetVirtualReg() { return m_pVirtualReg; }
+	CSymbol* GetSymbol();
+	CTypeChain* GetTypeChain();
+	void SetTypeChain(CTypeChain* pTC);
 	char* GetName();
 	int GetConstVal();
 	void SetConstVal(int v) {
 		m_ConstantValue = v;
 		m_ValType = ValueType::CONSTANT;
 	}
+	int Inc() { return ++m_ConstantValue; }
+	int Dec() { return --m_ConstantValue; }
 	int GetTotalValue();
 	void SetValueType(ValueType VT) { m_ValType = VT; }
 	ValueType GetValueType() const { return m_ValType; }

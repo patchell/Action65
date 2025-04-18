@@ -229,6 +229,7 @@ int CAct65Opcode::AddressModeString(char* s, int Strlen, AdrModeType AdrMode)
 		switch (GetValue()->GetValueType())
 		{
 		case CValue::ValueType::SYMBOL:
+		case CValue::ValueType::VIRTUAL_REGISTER:
 			if (GetValue()->GetConstVal() > 0)
 				l += sprintf_s(&s[l], size, "(%s+%d,.X)",
 					GetSymbol()->GetName(),
@@ -279,6 +280,7 @@ int CAct65Opcode::AddressModeString(char* s, int Strlen, AdrModeType AdrMode)
 		switch (GetValue()->GetValueType())
 		{
 		case CValue::ValueType::SYMBOL:
+		case CValue::ValueType::VIRTUAL_REGISTER:
 			if (GetValue()->GetConstVal() > 0)
 				l += sprintf_s(&s[l], size, "(%s+%d),.Y",
 					GetSymbol()->GetName(),
@@ -323,6 +325,7 @@ int CAct65Opcode::AddressModeString(char* s, int Strlen, AdrModeType AdrMode)
 		switch (GetValue()->GetValueType())
 		{
 		case CValue::ValueType::SYMBOL:
+		case CValue::ValueType::VIRTUAL_REGISTER:
 			if (GetValue()->GetConstVal() > 0)
 				l += sprintf_s(&s[l], size, " %s + %d",
 					GetSymbol()->GetName(),
@@ -348,6 +351,7 @@ int CAct65Opcode::AddressModeString(char* s, int Strlen, AdrModeType AdrMode)
 		switch (GetValue()->GetValueType())
 		{
 		case CValue::ValueType::SYMBOL:
+		case CValue::ValueType::VIRTUAL_REGISTER:
 			if (GetValue()->GetConstVal() > 0)
 				l += sprintf_s(&s[l], size, " %s + %d,.X",
 					GetSymbol()->GetName(),
@@ -373,6 +377,7 @@ int CAct65Opcode::AddressModeString(char* s, int Strlen, AdrModeType AdrMode)
 		switch (GetValue()->GetValueType())
 		{
 		case CValue::ValueType::SYMBOL:
+		case CValue::ValueType::VIRTUAL_REGISTER:
 			if (GetValue()->GetConstVal() > 0)
 				l += sprintf_s(&s[l], size, " %s + %d,.Y",
 					GetSymbol()->GetName(),
@@ -436,8 +441,9 @@ void CAct65Opcode::PrepareInstruction(
 				sprintf_s(
 					ThrownException.GetErrorString(),
 					ThrownException.GetMaxStringLen(),
-					"Line %d: Address is NOT page Zero\n",
-					Act()->GetParser()->GetLexer()->GetLineNumber()
+					"Line %d: Address is NOT page Zero:%s\n",
+					GetLineNumber(),
+					pOperandValue->GetSymbol()->GetName()
 				);
 				throw(ThrownException);
 			}
@@ -469,52 +475,6 @@ void CAct65Opcode::PrepareInstruction(
 			Act()->GetParser()->GetLexer()->GetLineNumber()
 		);
 		throw(ThrownException);
-	}
-}
-
-void CAct65Opcode::PrepareInstruction(
-	Token OpToken,
-	CValue* pOperandValue, 
-	CSection* pCodeSection,		//section where instruction is to be put
-	CValue* pLabel
-)
-{
-	CTypeChain* pTypeChain = 0;
-	CObjTypeChain* pTCitem = 0;
-	AdrModeType AddressMode = AdrModeType(0);
-
-	//---------------------------------------
-	// From the value properties, figgure
-	//---------------------------------------
-	CLexer* pLex = Act()->GetParser()->GetLexer();
-	m_pKeyWord = pLex->FindKeyword(OpToken);
-	SetToken(OpToken);
-	SetLineNumber(pLex->GetLineNumber());
-	SetColumnNumber(pLex->GetColunm());
-	if (pOperandValue)
-	{
-
-	}
-	else
-		AddressMode = AdrModeType::IMPLIED;
-	SetOpCode(pLex->MakeOpcode(OpToken, AddressMode));
-	SetByteCount(OperandByteCount::GetOperandByteCount(AddressMode) + 1);
-	SetValue(pOperandValue);
-	SetSection(pCodeSection);
-	SetInstructionAddress(pCodeSection->GetLocationCounter());
-	if (pLabel)
-	{
-		SetLabel(pLabel);
-		pLabel->GetSymbol()->SetAddress(pCodeSection->GetLocationCounter());
-	}
-	//-------------------------------------------------
-	// Figure out the kind of addressing mode to use
-	//-------------------------------------------------
-	pTypeChain = pOperandValue->GetTypeChain();
-	pTCitem = pTypeChain->GetTail();
-	if (pTCitem->IsFundamentalType())
-	{
-
 	}
 }
 

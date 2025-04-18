@@ -58,10 +58,10 @@ void CAct65SUB::PrintNode(FILE* pOut, int Indent, bool* pbNextFlag)
 
 CValue* CAct65SUB::Emit(CValue* pVc, CValue* pVn)
 {
-	return Act()->GetCodeGenUtils()->EmitBinaryOp(Token::SBC, pVc, pVn, 0, GetSection());
+	return Act()->GetParser()->GetCodeGenUtils()->EmitBinaryOp(Token::SBC, pVc, pVn, 0, GetSection());
 }
 
 CValue* CAct65SUB::AltEmit(CValue* pVc, CValue* pVn, CValue* pVr)
 {
-	return Act()->GetCodeGenUtils()->EmitBinaryOp(Token::SBC, pVc, pVn, pVr, GetSection());
+	return Act()->GetParser()->GetCodeGenUtils()->EmitBinaryOp(Token::SBC, pVc, pVn, pVr, GetSection());
 }

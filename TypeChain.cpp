@@ -94,6 +94,14 @@ void CTypeChain::CopyTypeChain(CTypeChain* pSrcTC)
 	}
 }
 
+void CTypeChain::MoveTypeChain(CTypeChain* pSrcTC)
+{
+	SetHead(pSrcTC->GetHead());
+	SetTail(pSrcTC->GetTail());
+	pSrcTC->SetHead(0);
+	pSrcTC->SetHead(0);
+}
+
 int CTypeChain::Print(char* pSO, int l)
 {
 	int ls = 0;
@@ -159,5 +167,26 @@ bool CTypeChain::Is(CObjTypeChain::Spec SpecType)
 			pOT = pOT->GetNext();
 	}
 	return rV;
+}
+
+CObjTypeChain::Spec CTypeChain::GetFundSpec()
+{
+	CObjTypeChain::Spec rSpec;
+	bool Loop = true;
+	CObjTypeChain* pOT;
+
+	pOT = GetHead();
+	while (pOT && Loop)
+	{
+		if (pOT->IsFundamentalType())
+		{
+			Loop = false;
+			rSpec = pOT->GetSpec();
+		}
+		else
+			pOT = pOT->GetNext();
+	}
+
+    return rSpec;
 }
 

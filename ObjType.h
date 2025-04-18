@@ -25,7 +25,9 @@ public:
 		POINTER_DREF,
 		AREG,
 		XREG,
-		YREG
+		YREG,
+		VIRTUAL_REG,
+		CONSTANT
 	};
 private:
 	struct Types {
@@ -61,6 +63,11 @@ private:
 		{Spec::GLOBAL,"GLOBAL"},
 		{Spec::TYPE_FIELD,"Dereferenced POINTER"},
 		{Spec::POINTER_DREF,"FIELD"},
+		{Spec::AREG,"AREG"},
+		{Spec::XREG,"XREG"},
+		{Spec::YREG,"YREG"},
+		{Spec::VIRTUAL_REG,"VIRTUAL REGister"},
+		{Spec::CONSTANT,"CONSTANT"},
 		{Spec(-1),0}
 	};
 	Spec m_SpecType;

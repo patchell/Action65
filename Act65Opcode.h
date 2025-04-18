@@ -67,12 +67,6 @@ public:
 		CSection* pSection,
 		CValue* pLabel = 0
 	);
-	virtual void PrepareInstruction(
-		Token Tk,
-		CValue* pOperandValue_Node,
-		CSection* pCodeSection,		//section where instruction is to be put
-		CValue* pLabel = 0
-	);
 	int SaveInstruction(char* pM);
 	//-----------------------------
 	// Setter/Getter Methods

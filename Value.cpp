@@ -10,10 +10,19 @@ CValue::CValue()
 	m_ConstantValue = 0;
 	m_UpperLOwer = UpperLower::NONE;
 	m_pString = 0;
+	m_pVirtualReg = 0;
+	m_AltTypeChain.Create();
 }
 
 CValue::~CValue()
 {
+}
+
+bool CValue::Create(CVirtualReg::VREG* pVReg)
+{
+	m_ValType = ValueType::VIRTUAL_REGISTER;
+	m_pVirtualReg = pVReg;
+	return false;
 }
 
 bool CValue::Create(const char* s)
@@ -32,7 +41,11 @@ bool CValue::Create(CSymbol* pSym)
 		m_ValType = ValueType::SYMBOL;
 	}
 	else
-		m_ValType = ValueType::CONSTANT;
+	{
+		rV = false;
+		fprintf(Act()->LogFile(), "Internal Error: Value Create Error:NULL Symbol\n");
+		Act()->Exit(2);
+	}
     return rV;
 }
 
@@ -55,7 +68,54 @@ void CValue::SetSymbol(CSymbol* pSym)
 	if (pSym)
 	{
 		m_ValType = ValueType::SYMBOL;
-		GetTypeChain()->CopyTypeChain(pSym->GetTypeChain());
+	}
+}
+
+CSymbol* CValue::GetSymbol()
+{
+	CSymbol* pSym = 0;
+
+	switch (m_ValType)
+	{
+	case ValueType::SYMBOL:
+		pSym = m_pSym;
+		break;
+	case ValueType::VIRTUAL_REGISTER:
+		pSym = m_pVirtualReg->GetSymbol();
+		break;
+	}
+	return pSym;
+}
+
+CTypeChain* CValue::GetTypeChain()
+{
+	CTypeChain* pTC = 0;
+
+	switch (m_ValType)
+	{
+	case ValueType::VIRTUAL_REGISTER:
+	case ValueType::SYMBOL:
+		pTC = GetSymbol()->GetTypeChain();
+		break;
+	case ValueType::CONSTANT:
+	case ValueType::ADDRESS_OF:
+		pTC = &m_AltTypeChain;
+		break;
+	}
+	return pTC;
+}
+
+void CValue::SetTypeChain(CTypeChain* pTC)
+{
+	switch (GetValueType())
+	{
+	case ValueType::SYMBOL:
+	case ValueType::VIRTUAL_REGISTER:
+		GetSymbol()->CreateTypeDefChain();
+		GetSymbol()->GetTypeChain()->CopyTypeChain(pTC);
+		break;
+	case ValueType::CONSTANT:
+		break;
 	}
 }
 
@@ -242,6 +302,7 @@ bool CValue::IsPageZero()
 			rV = true;
 		break;
 	case ValueType::SYMBOL:
+	case ValueType::VIRTUAL_REGISTER:
 		if (GetSymbol())
 		{
 			if (((CSymbol*)GetSymbol())->GetSection())
@@ -266,12 +327,16 @@ bool CValue::IsPageZero()
 int CValue::SizeOf()
 {
 	int rV = 0;
+	CTypeChain* pTypeChain = 0;
 
-	if (m_TypeChain.Is(CObjTypeChain::Spec::POINTER))
+	pTypeChain = GetTypeChain();
+	if (!pTypeChain)
+		printf("Oh-Oh\n");
+	if (pTypeChain->Is(CObjTypeChain::Spec::POINTER))
 		rV = 2;
-	else if (m_TypeChain.IsByte())
+	else if (pTypeChain->IsByte())
 		rV = 1;
-	else if (m_TypeChain.IsWord())
+	else if (pTypeChain->IsWord())
 		rV = 2;
 	return rV;
 }

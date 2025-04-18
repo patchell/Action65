@@ -27,8 +27,6 @@ class CActionApp
 	//-----------------------------------------
 	// Code Generation Utilities
 	//-----------------------------------------
-	CCodeGeneration CodeGenerationUtils;
-	CVirtualReg VREG_Pool;
 public:
 	CActionApp();
 	virtual ~CActionApp();
@@ -89,9 +87,7 @@ public:
 	{
 		return &m_ActParse;
 	}
-	virtual CVirtualReg* GetVirtualRegPool() {
-		return &VREG_Pool;
-	}
+
 	char* IndentString(char* s, int Indent, int c);
 	static void Dump(
 		FILE* pOut, 
@@ -108,7 +104,6 @@ public:
 	CStack* GetWHILEStack() { return &WHILE_Stack; }
 	CStack* GetIFFIStack() { return &IF_FI_Stack;}
 	CStack* GetIFFFFIStack() { return &IFF_FFI_Stack; }
-	CCodeGeneration* GetCodeGenUtils() { return &CodeGenerationUtils; }
 	//-----------------------------------------
 	char* CreateIndentString(char* s, int n, int Indent, int c = ' ');
 };

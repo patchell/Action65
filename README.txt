@@ -9,6 +9,17 @@ Compatibility Issues with the real ACTION!
 	Hopefully, in the future I will find a way to fix
 	this conflict.
 
+
+April 17, 2025
+
+Still working on code generation.  Hopefull, after I get over this
+hurdle, things will pick up again.  Just for the fun of it, I took
+a peek at the original compiler code.  It was about 3000 lines of
+6502 assembly code.  Hmmm...I am not sure exactly how many lines
+of code I have written so far, but I am willing to bet it is around
+30,000 lines of C++ code.  Well!  I do have to hand it to
+Clinton Parker, a very compact and effective program.
+
 March 29, 2025
 
 Be sure to look at log.txt, this contains all of the

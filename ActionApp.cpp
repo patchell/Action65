@@ -153,9 +153,9 @@ bool CActionApp::Create(int argc, char* argv[])
 bool CActionApp::Run()
 {
 	bool rV = false;
-	OpenLog();
-	m_ActParse.Create();
-	m_ActParse.Run();
+	OpenLog();		// Open Log file
+	m_ActParse.Create();	//Create parser
+	m_ActParse.Run();		// Run Parser
 	return rV;
 }
 
@@ -374,6 +374,8 @@ void CActionApp::Dump(
 
 void CActionApp::Exit(int Err)
 {
+	if (Err == 2)
+		fprintf(stderr, "Internal Error:See Log File\n");
 	CloseAll();
 	exit(Err);
 }

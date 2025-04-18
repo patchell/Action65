@@ -8,9 +8,15 @@ CCodeGeneration::~CCodeGeneration()
 {
 }
 
+bool CCodeGeneration::Create(int VirtRegPoolSize, CSection* pVirtRegSection)
+{
+	m_VirtualRegisterPool.Create(VirtRegPoolSize, pVirtRegSection);
+	return false;
+}
+
 //------------------ Emit Operations -----------------
 
-CValue* CCodeGeneration::EmitBinaryOp(Token Op, CValue* pVc, CValue* pVn, CValue* pV3, CSection* pSection)
+CValue* CCodeGeneration::EmitBinaryOp(Token Op, CValue* pVc, CValue* pVn, CValue* pVr, CSection* pSection)
 {
 	CTypeChain* pTCchild = 0;
 	CTypeChain* pTCnext = 0;
@@ -91,36 +97,152 @@ CValue* CCodeGeneration::EmitBinaryOp(Token Op, CValue* pVc, CValue* pVn, CValue
 		// otherewise, allocate a virtual register
 		// to put the result into
 		//------------------------------------------
-		if (MaxNumberOfBytes == 1)
+		if (pVr)		//This is where the result will go
 		{
-			pReturnValue = new CValue;
-			pReturnValue->SetValueType(CValue::ValueType::AREG);
-			pReturnValue->GetTypeChain()->Create();
-			CObjTypeChain* pTypeObj = new CObjTypeChain;
-			pTypeObj->Create();
-			pTypeObj->SetSpec(CObjTypeChain::Spec::AREG);
-			pReturnValue->GetTypeChain()->AddToHead(pTypeObj);
+			switch (pVr->GetValueType())
+			{
+			case CValue::ValueType::SYMBOL:
+				break;
+			case CValue::ValueType::VIRTUAL_REGISTER:
+				break;
+			case CValue::ValueType::ADDRESS_OF:
+				break;
+			case CValue::ValueType::AREG:
+				break;
+			case CValue::ValueType::XREG:
+				break;
+			case CValue::ValueType::YREG:
+				break;
+			default:
+				fprintf(Act()->LogFile(), "Internal Error:Binary Operation:Unknown Destination\n");
+				Act()->Exit(2);
+				break;
+			}
 		}
-		else      // Allocate a virtural Register
+		else
 		{
-			if (i == 0)
+			//The result need to go someplace else
+			if (MaxNumberOfBytes == 1)
 			{
-				pReturnValue = Act()->GetVirtualRegPool()->Lock(CVirtualReg::RegSize::SIXTEEN_BITS);
-				pOpcode->PrepareInstruction(Token::STA, AdrModeType::ZERO_PAGE_ADR, pReturnValue, pSection, 0);
-				pOpcode->Emit(0, 0);
-				pOpcode->Reset();
+				pReturnValue = new CValue;
+				pReturnValue->SetValueType(CValue::ValueType::AREG);
+				pReturnValue->GetTypeChain()->Create();
+				CObjTypeChain* pTypeObj = new CObjTypeChain;
+				pTypeObj->Create();
+				pTypeObj->SetSpec(CObjTypeChain::Spec::AREG);
+				pReturnValue->GetTypeChain()->AddToHead(pTypeObj);
 			}
-			else
+			else      // Allocate a virtural Register
 			{
-				pReturnValue->SetConstVal(pReturnValue->GetConstVal() + 1);
-				pOpcode->PrepareInstruction(Token::STA, AdrModeType::ZERO_PAGE_ADR, pReturnValue, pSection, 0);
-				pOpcode->Emit(0, 0);
-				pOpcode->Reset();
-			}
+				if (i == 0)
+				{
+					pReturnValue = Act()->GetParser()->GetCodeGenUtils()->GetVirtRegPool()->Lock(CVirtualReg::RegStatus::LOCKED_WORD);
+					pOpcode->PrepareInstruction(Token::STA, AdrModeType::ZERO_PAGE_ADR, pReturnValue, pSection, 0);
+					pOpcode->Emit(0, 0);
+					pOpcode->Reset();
+				}
+				else
+				{
+					pReturnValue->SetConstVal(pReturnValue->GetConstVal() + 1);
+					pOpcode->PrepareInstruction(Token::STA, AdrModeType::ZERO_PAGE_ADR, pReturnValue, pSection, 0);
+					pOpcode->Emit(0, 0);
+					pOpcode->Reset();
+				}
 
+			}
 		}
 	}
 	return pReturnValue;
+}
+
+CValue* CCodeGeneration::EmitDirect(Token Op, CValue* pVdest, int Byte, CSection* pSection, CValue* pLabel)
+{
+	CAct65Opcode* pInstruction = new CAct65Opcode;;
+	AdrModeType AddressingMode = AdrModeType::ABSOLUTE_ADR;
+
+	if (pVdest->IsPageZero())
+		AddressingMode = AdrModeType::ZERO_PAGE_ADR;
+	switch (Byte)
+	{
+	case ByteOrder::LOWBYTE:
+		pInstruction->PrepareInstruction(Op, AddressingMode, pVdest, pSection, pLabel);
+		break;
+	case ByteOrder::HIGHBYTE:
+		pVdest->Inc();
+		pInstruction->PrepareInstruction(Op, AddressingMode, pVdest, pSection, pLabel);
+		pVdest->Dec();
+		break;
+	default:
+		fprintf(Act()->LogFile(), "Internal Error:Code Gen:Unknown Byte Order:%d\n", Byte);
+		Act()->Exit(2);
+		break;
+	}
+	pInstruction->Emit(0, 0);
+	return nullptr;
+}
+
+CValue* CCodeGeneration::EmitIndirect(Token Op, CValue* pVdestPointer, int Byte, CSection* pSection, CValue* pLabel, bool IncYreg)
+{
+	CAct65Opcode* pInstruction = new CAct65Opcode;;
+	AdrModeType AddressingMode = AdrModeType::INDIRECT_INDEXED_Y_ADR;
+
+	if (IncYreg)
+	{
+		pInstruction->PrepareInstruction(Token::INY, AdrModeType::IMPLIED, 0, pSection, pLabel);
+		pInstruction->Emit(0, 0);
+		pInstruction->Reset();
+	}
+	switch (Byte)
+	{
+	case ByteOrder::LOWBYTE:
+	case ByteOrder::HIGHBYTE:
+		pInstruction->PrepareInstruction(Op, AddressingMode, pVdestPointer, pSection, pLabel);
+		pInstruction->Emit(0, 0);
+		break;
+	default:
+		fprintf(Act()->LogFile(), "Internal Error:Code Gen:Unknown Byte Order:%d\n", Byte);
+		break;
+	}
+	return nullptr;
+}
+
+CValue* CCodeGeneration::EmitIndexed(Token Op, CValue* pVdest, CValue* pIndex, int Byte, CSection* pSection, CValue* pLabel)
+{
+	CAct65Opcode* pInstruction = new CAct65Opcode;;
+	AdrModeType AddressingMode = AdrModeType::INDIRECT_INDEXED_Y_ADR;
+
+	switch (pIndex->GetValueType())
+	{
+	case CValue::ValueType::XREG:
+		if (pVdest->IsPageZero())
+			AddressingMode = AdrModeType::ZERO_PAGE_X_ADR;
+		else
+			AddressingMode = AdrModeType::ABSOLUTE_X_ADR;
+		break;
+	case CValue::ValueType::YREG:
+		if (pVdest->IsPageZero())
+			AddressingMode = AdrModeType::ZERO_PAGE_Y_ADR;
+		else
+			AddressingMode = AdrModeType::ABSOLUTE_Y_ADR;
+		break;
+	}
+	switch (Byte)
+	{
+	case ByteOrder::LOWBYTE:
+		pInstruction->PrepareInstruction(Op, AddressingMode, pVdestPointer, pSection, pLabel);
+		pInstruction->Emit(0, 0);
+		break;
+	case ByteOrder::HIGHBYTE:
+		pVdest->Inc();
+		pInstruction->PrepareInstruction(Op, AddressingMode, pVdestPointer, pSection, pLabel);
+		pVdest->Dec();
+		pInstruction->Emit(0, 0);
+		break;
+	default:
+		fprintf(Act()->LogFile(), "Internal Error:Code Gen:Unknown Byte Order:%d\n", Byte);
+		break;
+	}
+	return nullptr;
 }
 
 void CCodeGeneration::EmitSource()
