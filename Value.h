@@ -1,7 +1,8 @@
 #pragma once
 
-constexpr auto VALUE_LUT_DIM = 13;
+constexpr auto VALUE_LUT_DIM = 9;
 
+class CReg;
 
 class CValue
 {
@@ -23,11 +24,7 @@ public:
 		NONE,
 		CONSTANT,
 		SYMBOL,
-		AREG,
-		XREG,
-		YREG,
-		SREG,
-		PREG,
+		REG,
 		VIRTUAL_REGISTER,
 		STRING,
 		CSTRING,	// "C" string
@@ -64,11 +61,7 @@ private:
 		{ValueType::NONE,"NONE"},
 		{ValueType::CONSTANT,"CONSTANT"},
 		{ValueType::SYMBOL,"SYMBOL"},
-		{ ValueType::AREG,"REGISTER" },
-		{ ValueType::XREG,"REGISTER" },
-		{ ValueType::YREG,"REGISTER" },
-		{ ValueType::SREG,"REGISTER" },
-		{ ValueType::PREG,"REGISTER" },
+		{ ValueType::REG,"REGISTER" },
 		{ ValueType::VIRTUAL_REGISTER,"VIRTUAL REGISTER" },
 		{ ValueType::STRING,"STRING" },
 		{ ValueType::CSTRING,"C STRING" },
@@ -93,7 +86,7 @@ private:
 	char* m_pString;
 	ValueType m_ValType;
 	UpperLower m_UpperLOwer;
-	CReg m_Reg;
+	CReg* m_pReg;
 	CVirtualReg::VREG* m_pVirtualReg;
 	CTypeChain m_AltTypeChain;
 public:
@@ -101,10 +94,12 @@ public:
 	virtual ~CValue();
 	bool Create(CVirtualReg::VREG* pVReg);
 	bool Create(const char* s);
-	bool Create(CSymbol* pSym = 0);
+	bool Create(CSymbol* pSym);
 	bool Create(ValueType VT);
 	bool Create(int V);
+    bool Create(CReg* pReg);
 	void SetSymbol(CSymbol* pSym);
+	CReg* GetRegister() { return m_pReg; }
 	CVirtualReg::VREG* GetVirtualReg() { return m_pVirtualReg; }
 	CSymbol* GetSymbol();
 	CTypeChain* GetTypeChain();

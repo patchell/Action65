@@ -598,6 +598,12 @@
     <ClCompile Include="StackDOODItem.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Reg.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RegPool.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -1153,6 +1159,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="StackDOODItem.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Reg.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RegPool.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

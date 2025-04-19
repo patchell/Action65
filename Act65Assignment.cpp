@@ -55,25 +55,91 @@ CValue* CAct65Assignment::Emit(CValue* pVc, CValue* pVn)
 	// Value to store to is pVn
 	//----------------------------------------------
 	CAct65Opcode* pOpCode = 0;
+	Token OpToken = Token::NONE;
+	AdrModeType AddressingMode = AdrModeType::NA;
+	int ValueSizeC;
+	int ValueSizeN;
+	CValue* pTempValue = 0;
+	int V = 0;
 
-	switch (pVc->GetValueType())	// from here
+	ValueSizeC = pVc->SizeOf();
+	ValueSizeN = pVn->SizeOf();
+	
+	pOpCode = new CAct65Opcode;
+	for (int i = 0; i < ValueSizeN; ++i)
 	{
-	case CValue::ValueType::CONSTANT:
-		break;
-	case CValue::ValueType::AREG:
-		pOpCode = new CAct65Opcode;
-//		pOpCode->PrepareInstruction(Token::STA,)
-		break;
-	case CValue::ValueType::XREG:
-		break;
-	case CValue::ValueType::YREG:
-		break;
-	case CValue::ValueType::SYMBOL:
-		break;
-	case CValue::ValueType::VIRTUAL_REGISTER:
-		break;
-	default:
-		break;
+		switch (pVc->GetValueType())	// from here
+		{
+		case CValue::ValueType::CONSTANT:
+			if (i == 0)
+			{
+				pTempValue = new CValue;
+				V = pVc->GetConstVal();
+				pTempValue->Create(V & 0xff);
+				pOpCode->PrepareInstruction(
+					Token::LDA, 
+					AdrModeType::IMMEDIATE_ADR, 
+					pTempValue, 
+					GetSection(), 
+					0
+				);
+				pOpCode->Emit(0, 0);
+				pOpCode->Reset();
+				delete pTempValue;
+			}
+			else
+			{
+				// Second Byte if any
+				pTempValue = new CValue;
+				pTempValue->Create((V & 0xff00) >> 8);
+				pOpCode->PrepareInstruction(
+					Token::LDA,
+					AdrModeType::IMMEDIATE_ADR,
+					pTempValue,
+					GetSection(),
+					0
+				);
+				pOpCode->Emit(0, 0);
+				pOpCode->Reset();
+				delete pTempValue;
+			}
+			break;
+		case CValue::ValueType::REG:
+			switch (pVc->GetRegister()->GetType())
+			{
+			case CReg::RegType::A:
+				OpToken = Token::STA;
+				break;
+			case CReg::RegType::X:
+				OpToken = Token::STX;
+				break;
+			case CReg::RegType::Y:
+				OpToken = Token::STY;
+				break;
+			}
+			break;
+		case CValue::ValueType::SYMBOL:
+			break;
+		case CValue::ValueType::VIRTUAL_REGISTER:
+			break;
+		default:
+			break;
+		}
+
+		switch (pVn->GetValueType())	//to here
+		{
+		case CValue::ValueType::SYMBOL:
+			if (pVn->IsPageZero())
+				AddressingMode = AdrModeType::ZERO_PAGE_ADR;
+			else
+				AddressingMode = AdrModeType::ABSOLUTE_ADR;
+			pOpCode->PrepareInstruction(OpToken, AddressingMode, pVc, GetSection());
+			break;
+		case CValue::ValueType::VIRTUAL_REGISTER:
+			break;
+		default:
+			break;
+		}
 	}
     return nullptr;
 }

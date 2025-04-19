@@ -1,14 +1,22 @@
-April 5 2025
+April 18, 2025
 
-Section Scrip Completed.
-Next, update memory access references. (CSymbol::BackFillUnresolved)
+Even though I have the source code for the original ACTION!,
+I have never looked at it, mostly because I considered a waste
+of my time.  Following assembler code is not an easy task.
 
-April 5, 2025
-Came up with a way to deal with Local Variables
-Next, update memory access references. (CSymbol::BackFillUnresolved)
+But last night, I decided to take a peek.  Like I said, not at
+all easy to follow, but I did see several things that did peek
+my interest, and maybe some time I will look a lot closer.
 
-April 8, 2025
-Labels need to be of type CValue, rather than CSymbol.
+One thing I did notice, however, was the lack of comments which
+does compound the problem of trying to follow the program flow.  Then
+I realized that I was pretty much committing the same crime.  I have
+been coding so fast that I generally don't pause to add comments to
+indicate what is actually going on, and what a particular section of
+code is trying to accomplish.  So, I am going to attempt to do a 
+little better in this department, and to comment code that I need
+to go back and revisit for whatever reason.
+
 
 April 11, 2025
 How do I convert an AST for an expression tocode?
@@ -100,3 +108,15 @@ INY
 LDA (zT),Y
 ADC B+1
 STA R+1
+April 5 2025
+
+April 8, 2025
+Labels need to be of type CValue, rather than CSymbol.
+
+Section Scrip Completed.
+Next, update memory access references. (CSymbol::BackFillUnresolved)
+
+April 5, 2025
+Came up with a way to deal with Local Variables
+Next, update memory access references. (CSymbol::BackFillUnresolved)
+

@@ -48,6 +48,6 @@ public:
 	CVirtualReg();
 	virtual ~CVirtualReg();
 	bool Create(int RHeapSize, CSection* pSection);
-	CValue* Lock(RegStatus size, CTypeChain* pTC);
+	CValue* Lock(RegStatus size, CTypeChain* pTC = 0);
 	bool UnLock(CValue* pVReg);
 };

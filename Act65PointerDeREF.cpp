@@ -50,53 +50,103 @@ void CAct65PointerDeREF::PrintNode(FILE* pOut, int Indent, bool* pbNextFlag)
 
 CValue* CAct65PointerDeREF::Emit(CValue* pVc, CValue* pVn)
 {
+	//----------------------------------------
+	// A pointier is a variable someplace in
+	// memory that references an object
+	// somewhere else in memory.
+	// 
+	// On entry:
+	//	pVc....Child Value that is the pointer
+	//	pVn....is NULL, not used
+	// 
+	// The type chain should look something
+	// like this:
+	// <Scope>:<Fund Type>:<Modifier>
+	// 
+	// Examples:
+	// GLOBAL:INT:POINTER
+	// LOCAL:CHAR:POINTER
+	// 
+	// A dereferenced pointer MUST live in a
+	// VIRTUAL_REG that is on page zero so
+	// an Indirect Indexed addressing mode
+	// can be used to access the object, i.e.
+	// LDA (VR0),.Y or
+	// ADC (VR1),.Y, etc
+	// 
+	// The return value will be a va;ie tjat
+	// will have a type chain something like
+	// VIRTUAL_REG:CHAR:POINTER_DREF
+	//----------------------------------------
 	CTypeChain* pTypeChain = pVc->GetTypeChain();
+	CTypeChain* pNewTypeChain = new CTypeChain;	// Type chain for dereferenced pointer
+	CValue* pVirtualReg = 0;	//will define a virtual register
 	CObjTypeChain* pNewTypeItem = 0;
 	CAct65Opcode* pInstruction = 0;
 	CObjTypeChain::Spec FundSpec;
+	AdrModeType AddressingMode;
+
 	bool Byte = false;
 
-	if (pTypeChain->IsByte())
-	{
-		Byte = true;
-	}
-	else
-	{
-
-	}
+	pNewTypeChain->Create();
+	// Scope is a Virtual Register
+	pNewTypeItem = new CObjTypeChain;
+	pNewTypeItem->SetSpec(CObjTypeChain::Spec::VIRTUAL_REG);
+	pNewTypeChain->AddToTail(pNewTypeItem);
+	//what are we referencing here
+	FundSpec = pTypeChain->GetFundSpec();	//get fundamental type for pVc
+	pNewTypeItem = new CObjTypeChain;
+	pNewTypeItem->SetSpec(FundSpec);
+	pNewTypeChain->AddToTail(pNewTypeItem);
+	//------- Value is a Dereferenced --------
 	pNewTypeItem = new CObjTypeChain;
 	pNewTypeItem->SetSpec(CObjTypeChain::Spec::POINTER_DREF);
-	pTypeChain->AddToTail(pNewTypeItem);
+	pNewTypeChain->AddToTail(pNewTypeItem);
 	//------------------------------------------------
 	// Allocate a Virtual Register for the Pointer
 	//------------------------------------------------
-	CValue* pVirtualReg = 0;
-
+	pVirtualReg = GetCodeGenUtils()->GetVirtRegPool()->Lock(CVirtualReg::RegStatus::LOCKED_WORD, pNewTypeChain);
 	//------------------------------------------------
-	// Create a type chain for the dereferenced point
+	// Emit the code to dereference the pointer
 	//------------------------------------------------
-	pTypeChain = new CTypeChain;
-	pVirtualReg = Act()->GetParser()->GetCodeGenUtils()->GetVirtRegPool()->Lock();
-
-
-
-
-	pVirtualReg = Act()->GetParser()->GetCodeGenUtils()->GetVirtRegPool()->Lock(CVirtualReg::RegStatus::LOCKED_WORD);
+	// Load accumulator witht the low byte of the address (pointer)
 	pInstruction = new CAct65Opcode;
-	pInstruction->PrepareInstruction(Token::LDA, AdrModeType::ABSOLUTE_ADR, pVc, GetSection(), 0);
+	if (pVc->IsPageZero())
+		AddressingMode = AdrModeType::ZERO_PAGE_ADR;
+	else
+		AddressingMode = AdrModeType::ABSOLUTE_ADR;
+	pInstruction->PrepareInstruction(Token::LDA, AddressingMode, pVc, GetSection(), 0);
 	pInstruction->Emit(0, 0);
 	pInstruction->Reset();
+	// Save the accumulator into the virtual reg (dereference)
 	pInstruction->PrepareInstruction(Token::STA, AdrModeType::ZERO_PAGE_ADR, pVirtualReg, GetSection(), 0);
 	pInstruction->Emit(0, 0);
 	pInstruction->Reset();
-	pVc->SetConstVal(pVc->GetConstVal() + 1);
-	pVirtualReg->SetConstVal(pVirtualReg->GetConstVal() + 1);
-	pInstruction->PrepareInstruction(Token::LDA, AdrModeType::ABSOLUTE_ADR, pVc, GetSection(), 0);
+	// Load the accumulator with the high byte of the address (pointer)
+	pVc->Inc();	//adds one to the address of source
+	if (pVc->IsPageZero())
+		AddressingMode = AdrModeType::ZERO_PAGE_ADR;
+	else
+		AddressingMode = AdrModeType::ABSOLUTE_ADR;
+
+	pVc->Inc();
+	pInstruction->PrepareInstruction(Token::LDA, AddressingMode, pVc, GetSection(), 0);
 	pInstruction->Emit(0, 0);
 	pInstruction->Reset();
+	pVc->Dec();
+
+
+	pVirtualReg->Inc();
 	pInstruction->PrepareInstruction(Token::STA, AdrModeType::ZERO_PAGE_ADR, pVirtualReg, GetSection(), 0);
 	pInstruction->Emit(0, 0);
 	pInstruction->Reset();
-	pVirtualReg->SetConstVal(pVirtualReg->GetConstVal() - 1);
+	pVirtualReg->Dec();
+
+
 	return pVirtualReg;
+}
+
+CCodeGeneration* CAct65PointerDeREF::GetCodeGenUtils()
+{
+	return Act()->GetParser()->GetCodeGenUtils();;
 }

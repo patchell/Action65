@@ -307,6 +307,8 @@
     <ClCompile Include="ParameterChain.cpp" />
     <ClCompile Include="Parser.cpp" />
     <ClCompile Include="pch.cpp" />
+    <ClCompile Include="Reg.cpp" />
+    <ClCompile Include="RegPool.cpp" />
     <ClCompile Include="Section.cpp" />
     <ClCompile Include="Settings.cpp" />
     <ClCompile Include="Stack.cpp" />
@@ -494,6 +496,8 @@
     <ClInclude Include="Bucket.h" />
     <ClInclude Include="Lexer.h" />
     <ClInclude Include="Parser.h" />
+    <ClInclude Include="Reg.h" />
+    <ClInclude Include="RegPool.h" />
     <ClInclude Include="Section.h" />
     <ClInclude Include="Settings.h" />
     <ClInclude Include="Stack.h" />

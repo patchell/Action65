@@ -27,6 +27,7 @@ CValue* CCodeGeneration::EmitBinaryOp(Token Op, CValue* pVc, CValue* pVn, CValue
 	CVirtualReg::VREG* pR1 = 0, * pR2 = 0;
 	AdrModeType AddressMode = AdrModeType::NA;
 	CValue* pReturnValue = 0;
+	CObjTypeChain* pTypeObj = 0;
 
 	pTCchild = pVc->GetTypeChain();
 	pTCnext = pVn->GetTypeChain();
@@ -107,11 +108,7 @@ CValue* CCodeGeneration::EmitBinaryOp(Token Op, CValue* pVc, CValue* pVn, CValue
 				break;
 			case CValue::ValueType::ADDRESS_OF:
 				break;
-			case CValue::ValueType::AREG:
-				break;
-			case CValue::ValueType::XREG:
-				break;
-			case CValue::ValueType::YREG:
+			case CValue::ValueType::REG:
 				break;
 			default:
 				fprintf(Act()->LogFile(), "Internal Error:Binary Operation:Unknown Destination\n");
@@ -121,31 +118,57 @@ CValue* CCodeGeneration::EmitBinaryOp(Token Op, CValue* pVc, CValue* pVn, CValue
 		}
 		else
 		{
+			//--------------------------------------------
 			//The result need to go someplace else
+			// If this is a BYTE operation, then just leave
+			// the value in the accumulator
+			//---------------------------------------------
 			if (MaxNumberOfBytes == 1)
 			{
+				//----------------------------------------
+				// Just Eight bits, leave it in the A reg
+				//----------------------------------------
 				pReturnValue = new CValue;
-				pReturnValue->SetValueType(CValue::ValueType::AREG);
-				pReturnValue->GetTypeChain()->Create();
-				CObjTypeChain* pTypeObj = new CObjTypeChain;
+				CReg* pReg = new CReg;
+
+				pReg->CreateTypeChain();
+				pTypeObj = new CObjTypeChain;
 				pTypeObj->Create();
 				pTypeObj->SetSpec(CObjTypeChain::Spec::AREG);
-				pReturnValue->GetTypeChain()->AddToHead(pTypeObj);
+				pReg->GetTypeChain()->AddToHead(pTypeObj);
+
+				pTypeObj = new CObjTypeChain;
+				pTypeObj->Create();
+				pTypeObj->SetSpec(CObjTypeChain::Spec::BYTE);
+				pReg->GetTypeChain()->AddToHead(pTypeObj);
+
+				pReturnValue->Create(pReg);
 			}
 			else      // Allocate a virtural Register
 			{
-				if (i == 0)
+				if (i == 0)		// is this the low order byte?
 				{
-					pReturnValue = Act()->GetParser()->GetCodeGenUtils()->GetVirtRegPool()->Lock(CVirtualReg::RegStatus::LOCKED_WORD);
+					pReturnValue = GetVirtRegPool()->Lock(CVirtualReg::RegStatus::LOCKED_WORD);
+					pReturnValue->GetSymbol()->CreateTypeChain();
+
+					pTypeObj = new CObjTypeChain;
+					pTypeObj->SetSpec(CObjTypeChain::Spec::VIRTUAL_REG);
+					pReturnValue->GetSymbol()->GetTypeChain()->AddToTail(pTypeObj);
+
+					pTypeObj = new CObjTypeChain;
+					pTypeObj->SetSpec(CObjTypeChain::Spec::INT);
+					pReturnValue->GetSymbol()->GetTypeChain()->AddToTail(pTypeObj);
+
 					pOpcode->PrepareInstruction(Token::STA, AdrModeType::ZERO_PAGE_ADR, pReturnValue, pSection, 0);
 					pOpcode->Emit(0, 0);
 					pOpcode->Reset();
 				}
 				else
 				{
-					pReturnValue->SetConstVal(pReturnValue->GetConstVal() + 1);
+					pReturnValue->Inc();
 					pOpcode->PrepareInstruction(Token::STA, AdrModeType::ZERO_PAGE_ADR, pReturnValue, pSection, 0);
 					pOpcode->Emit(0, 0);
+					pReturnValue->Dec();
 					pOpcode->Reset();
 				}
 
@@ -213,28 +236,22 @@ CValue* CCodeGeneration::EmitIndexed(Token Op, CValue* pVdest, CValue* pIndex, i
 
 	switch (pIndex->GetValueType())
 	{
-	case CValue::ValueType::XREG:
+	case CValue::ValueType::REG:
 		if (pVdest->IsPageZero())
 			AddressingMode = AdrModeType::ZERO_PAGE_X_ADR;
 		else
 			AddressingMode = AdrModeType::ABSOLUTE_X_ADR;
 		break;
-	case CValue::ValueType::YREG:
-		if (pVdest->IsPageZero())
-			AddressingMode = AdrModeType::ZERO_PAGE_Y_ADR;
-		else
-			AddressingMode = AdrModeType::ABSOLUTE_Y_ADR;
-		break;
 	}
 	switch (Byte)
 	{
 	case ByteOrder::LOWBYTE:
-		pInstruction->PrepareInstruction(Op, AddressingMode, pVdestPointer, pSection, pLabel);
+		pInstruction->PrepareInstruction(Op, AddressingMode, pVdest, pSection, pLabel);
 		pInstruction->Emit(0, 0);
 		break;
 	case ByteOrder::HIGHBYTE:
 		pVdest->Inc();
-		pInstruction->PrepareInstruction(Op, AddressingMode, pVdestPointer, pSection, pLabel);
+		pInstruction->PrepareInstruction(Op, AddressingMode, pVdest, pSection, pLabel);
 		pVdest->Dec();
 		pInstruction->Emit(0, 0);
 		break;

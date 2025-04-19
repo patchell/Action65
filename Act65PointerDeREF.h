@@ -1,5 +1,7 @@
 #pragma once
 
+class CCodeGeneration;
+
 class CAct65PointerDeREF : public CAstNode
 {
 	inline static const char* m_pNodeTyypeName = "DEREF";
@@ -12,5 +14,6 @@ public:
 	virtual void PrintNode(FILE* pOut, int Indent, bool* pbNextFlag);
 	virtual const char* GetNodeName() { return m_pNodeTyypeName; }
 	virtual CValue* Emit(CValue* pVc, CValue* pVn);
+	CCodeGeneration* GetCodeGenUtils();
 };
 

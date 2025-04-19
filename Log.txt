@@ -217,4 +217,53 @@ Process IDENT V2 Node:10
 EMIT:IDENT:ID=10:V2
 Process IDENT V3 Node:11
 EMIT:IDENT:ID=11:V3
-P
+Process ARRAY Node:13
+Process IDENT aX Node:14
+EMIT:IDENT:ID=14:aX
+Process ASM Node:20
+Process SECTION Node:21
+Process Assign = Node:25
+Process IDENT aX Node:33
+Process INDEX Node:32
+Process IDENT V3 Node:31
+EMIT:IDENT:ID=31:V3
+Process IDENT V2 Node:29
+EMIT:IDENT:ID=29:V2
+Emit:	CLC	
+Emit:	LDA	 V3
+Emit:	ADC	 V2
+EMIT:IDENT:ID=33:aX
+Process DEREF Node:27
+Process IDENT pY Node:26
+EMIT:IDENT:ID=26:pY
+Emit:	LDA	 pY
+Emit:	STA	 VR1_0
+Emit:	LDA	 pY + $0002
+Emit:	STA	 VR1_0
+Process IDENT Result Node:24
+EMIT:IDENT:ID=24:Result
+Emit:	CLC	
+Array
+Pointer DeRef
+Process Assign = Node:37
+Process IDENT V3 Node:42
+EMIT:IDENT:ID=42:V3
+Process SUB Node:39
+Process IDENT V2 Node:40
+EMIT:IDENT:ID=40:V2
+Process IDENT V1 Node:38
+EMIT:IDENT:ID=38:V1
+Emit:	CLC	
+Emit:	LDA	 V2
+Emit:	SBC	 V1
+Process IDENT Result Node:36
+EMIT:IDENT:ID=36:Result
+Emit:	CLC	
+Emit:	LDA	 V3
+Process OD Node:43
+Emit OD ID = 43
+Emit:	JMP	 DOlabel__25
+Process OD Node:44
+Emit OD ID = 44
+Emit:	JMP	 DOlabel__19
+Emit:	RTS	

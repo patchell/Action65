@@ -65,6 +65,8 @@ CValue* CVirtualReg::Lock(RegStatus size, CTypeChain* pTC)
 		pValue->Create(pVReg);
 		
 		pVReg->GetSymbol()->SetSection(m_pSection);
+		if (pTC)
+			pVReg->GetSymbol()->GetTypeChain()->MoveTypeChain(pTC);
 	}
 	return pValue;
 }
@@ -137,9 +139,7 @@ bool CVirtualReg::UnLock(CValue* pVRegValue)
 		// Value is not a virtual register
 		switch (pVRegValue->GetValueType())
 		{
-		case CValue::ValueType::AREG:
-		case CValue::ValueType::XREG:
-		case CValue::ValueType::YREG:
+		case CValue::ValueType::REG:
 			fprintf(Act()->LogFile(), "Internal Error:Using Hardware Register as Virtual Register\n");
 			break;
 		case CValue::ValueType::ASTRING:

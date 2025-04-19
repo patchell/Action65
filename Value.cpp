@@ -12,6 +12,7 @@ CValue::CValue()
 	m_pString = 0;
 	m_pVirtualReg = 0;
 	m_AltTypeChain.Create();
+	m_pReg = 0;
 }
 
 CValue::~CValue()
@@ -33,6 +34,9 @@ bool CValue::Create(const char* s)
 
 bool CValue::Create(CSymbol* pSym)
 {
+	//-----------------------------------------------
+	// Creates a Value from a symbol
+	//-----------------------------------------------
 	bool rV = true;
 
 	if (pSym)
@@ -42,6 +46,9 @@ bool CValue::Create(CSymbol* pSym)
 	}
 	else
 	{
+		//-------------------------
+		// Symbol was NULL, so fail
+		//-------------------------
 		rV = false;
 		fprintf(Act()->LogFile(), "Internal Error: Value Create Error:NULL Symbol\n");
 		Act()->Exit(2);
@@ -59,6 +66,13 @@ bool CValue::Create(int V)
 {
 	m_ConstantValue = V;
 	m_ValType = ValueType::CONSTANT;
+	return true;
+}
+
+bool CValue::Create(CReg* pReg)
+{
+	m_pReg = pReg;
+	m_ValType = ValueType::REG;
 	return true;
 }
 
@@ -100,6 +114,9 @@ CTypeChain* CValue::GetTypeChain()
 	case ValueType::CONSTANT:
 	case ValueType::ADDRESS_OF:
 		pTC = &m_AltTypeChain;
+		break;
+	case ValueType::REG:
+		pTC = m_pReg->GetTypeChain();
 		break;
 	}
 	return pTC;

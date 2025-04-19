@@ -117,6 +117,10 @@ int CTypeChain::Print(char* pSO, int l)
 
 bool CTypeChain::IsByte()
 {
+	//---------------------------------------
+	// Determin if the type defined
+	// references an object 8 bits or 16 bits
+	//---------------------------------------
 	bool rV = false;
 	CObjTypeChain* pOT;
 
