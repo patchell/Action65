@@ -123,7 +123,6 @@ CValue* CAct65PointerDeREF::Emit(CValue* pVc, CValue* pVn)
 	pInstruction->Emit(0, 0);
 	pInstruction->Reset();
 	// Load the accumulator with the high byte of the address (pointer)
-	pVc->Inc();	//adds one to the address of source
 	if (pVc->IsPageZero())
 		AddressingMode = AdrModeType::ZERO_PAGE_ADR;
 	else

@@ -9,6 +9,30 @@ Compatibility Issues with the real ACTION!
 	Hopefully, in the future I will find a way to fix
 	this conflict.
 
+April 19, 2025
+
+The first glimmer of code generation:
+Emit:	LDA	 pY
+Emit:	STA	 VR1_0
+Emit:	LDA	 pY + $0001
+Emit:	STA	 VR1_0 + 1
+Emit:	CLC	
+Emit:	LDA	 V3
+Emit:	ADC	 V2
+Emit:	TAX	
+Emit:	CLC	
+Emit:	LDA	 aX,X
+Emit:	LDY	 #$00
+Emit:	ADC	(VR1_0),.Y
+Emit:	STA	 Result
+
+Result = pY^ + aX(V2 + V3)		-ACTION!
+Result = *pY + aX[V2 + V3];		- C/C++
+
+Next, I need to fill in all the blanks an then test this part
+of the program.  I suspect I am going to have problems with
+something like: y = a + b + c.  And the above is actually a
+fairly trivial code generation problem.
 
 April 17, 2025
 

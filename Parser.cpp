@@ -1708,20 +1708,20 @@ CAstNode* CParser::AddExpr()
 	//--------------------------------------------
 	bool Loop = true;
 	CAstNode* pN = 0;
-	CAstNode* pNext = 0, *pChild = 0;
+	CAstNode* pNext = 0, * pChild = 0;
 
 	pNext = ShifExpr();
 	while (Loop)
 	{
 		switch (LookaHeadToken)
 		{
-		case Token('+'):	
+		case Token('+'):
 			Expect(Token('+'));
 			pN = new CAct65ADD;
 			pChild = ShifExpr();
-			pNext = pN->MakeNode(pChild,pNext);
+			pNext = pN->MakeNode(pNext, pChild);
 			break;
-		case Token('-'):	
+		case Token('-'):
 			Expect(Token('-'));
 			pN = new CAct65SUB;
 			pChild = ShifExpr();
@@ -1734,6 +1734,44 @@ CAstNode* CParser::AddExpr()
 	}
 	return pNext;
 }
+
+//CAstNode* CParser::AddExpr()
+//{
+//	//--------------------------------------------
+//	// AddExpr	-> ShifExpr AddExpr_1;
+//	// AddExpr_1	-> '+' ShifExpr AddExpr_1
+//	//				-> '-' ShifExpr AddExpr_1
+//	//				-> .
+//	//				;
+//	//--------------------------------------------
+//	bool Loop = true;
+//	CAstNode* pN = 0;
+//	CAstNode* pNext = 0, *pChild = 0;
+//
+//	pNext = ShifExpr();
+//	while (Loop)
+//	{
+//		switch (LookaHeadToken)
+//		{
+//		case Token('+'):	
+//			Expect(Token('+'));
+//			pN = new CAct65ADD;
+//			pChild = ShifExpr();
+//			pNext = pN->MakeNode(pChild,pNext);
+//			break;
+//		case Token('-'):	
+//			Expect(Token('-'));
+//			pN = new CAct65SUB;
+//			pChild = ShifExpr();
+//			pNext = pN->MakeNode(pChild, pNext);
+//			break;
+//		default:
+//			Loop = false;
+//			break;
+//		}
+//	}
+//	return pNext;
+//}
 
 CAstNode* CParser::ShifExpr()
 {

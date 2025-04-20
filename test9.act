@@ -15,9 +15,26 @@ INTERRUPT Hey()
 	}
 	DO
 		Result = pY^ + aX(V2 + V3)
-		DO
-			Result = V1 - V2 + V3
-		OD
 	OD
 	RETURN
 
+	//	CLC
+	//	LDA		pY
+	//	ADC		aX		//A <- pY + ax
+	//	STA		Result
+
+	//should end up like:
+
+	//	LDA		pY
+	//	STA		VR_1
+	//	LDA		pY+1
+	//	STA		VR_1+1
+	//	CLC
+	//	LDA		V2
+	//	ADC		V3
+	//	TAX
+	//	LDY		#0
+	//	CLC
+	//	LDA		(VR),Y
+	//	ADC		aX,X
+	//	STA		Result

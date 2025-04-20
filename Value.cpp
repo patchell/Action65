@@ -162,6 +162,7 @@ int CValue::GetConstVal()
 		rV = m_ConstantValue;
 		break;
 	case ValueType::SYMBOL:
+	case ValueType::VIRTUAL_REGISTER:
 		rV = m_ConstantValue;
 		break;
 	case ValueType::ASTRING:

@@ -62,5 +62,38 @@ void CAct65ArrayINDEX::PrintNode(FILE* pOut, int Indent, bool* pbNextFlag)
 
 CValue* CAct65ArrayINDEX::Emit(CValue* pVc, CValue* pVn)
 {
-    return pVc;
+	//---------------------------------
+	// pVc...... Index Value
+	// pVn.......Should be NULL
+	// For now, the value will end up
+	// in the XREG
+	//---------------------------------
+	CValue* pRetValue = 0;
+	CAct65Opcode* pInstruction = 0;
+
+	switch (pVc->GetValueType())
+	{
+	case CValue::ValueType::REG:
+		switch (pVc->GetRegister()->GetType())
+		{
+		case CReg::RegType::A:
+			pInstruction = new CAct65Opcode;
+			pInstruction->PrepareInstruction(Token::TAX, AdrModeType::IMPLIED, 0, GetSection(), 0);
+			pInstruction->Emit(0, 0);
+			pVc->GetRegister()->SetType(CReg::RegType::X);
+			delete pInstruction;
+			break;
+		case CReg::RegType::X:
+			break;
+		case CReg::RegType::Y:
+			break;
+		}
+		break;
+	case CValue::ValueType::VIRTUAL_REGISTER:
+	case CValue::ValueType::SYMBOL:
+		break;
+	case CValue::ValueType::CONSTANT:
+		break;
+	}
+    return pRetValue;
 }

@@ -1,4 +1,4 @@
-File:test9.act has 252 Bytes
+File:test9.act has 468 Bytes
 File:Action.Act65_settings has 974 Bytes
 Section:STACK:Start:$0100 Size:$0100 MODE:R/W:ABSOLUTE Address Size:WORD
 Section:LOCALS:Start:$1200 Size:$0800 MODE:R/W:ABSOLUTE Address Size:WORD
@@ -41,30 +41,20 @@ Parser Created
     19     20     -1              +- 'STATEMENTS'
     20     21     22                 +- 'ASM'
     21     -1     -1                 |  +- 'SECTION' Code Start:$0000 SIZE:$1000 MODE:MODE_READ_ONLY PAGE0:FALSE
-    22     23     45                 +- 'DO'
-    23     25     44                 |  +- 'STATEMENTS'
-    25     28     34                 |  |  +- 'Assign ='
-    28     33     24                 |  |  |  +- 'ADD'
-    33     32     27                 |  |  |  |  +- 'IDENT': aX
-    32     30     -1                 |  |  |  |  |  +- 'INDEX'
-    30     31     -1                 |  |  |  |  |     +- 'ADD'
-    31     -1     29                 |  |  |  |  |        +- 'IDENT': V3
-    29     -1     -1                 |  |  |  |  |        +- 'IDENT': V2
-    27     26     -1                 |  |  |  |  +- 'DEREF'
-    26     -1     -1                 |  |  |  |     +- 'IDENT': pY
-    24     -1     -1                 |  |  |  +- 'IDENT': Result
-    34     35     -1                 |  |  +- 'DO'
-    35     37     43                 |  |     +- 'STATEMENTS'
-    37     41     -1                 |  |     |  +- 'Assign ='
-    41     42     36                 |  |     |     +- 'ADD'
-    42     -1     39                 |  |     |     |  +- 'IDENT': V3
-    39     40     -1                 |  |     |     |  +- 'SUB'
-    40     -1     38                 |  |     |     |     +- 'IDENT': V2
-    38     -1     -1                 |  |     |     |     +- 'IDENT': V1
-    36     -1     -1                 |  |     |     +- 'IDENT': Result
-    43     -1     -1                 |  |     +- 'OD'
-    44     -1     -1                 |  +- 'OD'
-    45     -1     -1                 +- 'RETURN'
+    22     23     35                 +- 'DO'
+    23     25     34                 |  +- 'STATEMENTS'
+    25     28     -1                 |  |  +- 'Assign ='
+    28     27     24                 |  |     +- 'ADD'
+    27     26     33                 |  |     |  +- 'DEREF'
+    26     -1     -1                 |  |     |  |  +- 'IDENT': pY
+    33     32     -1                 |  |     |  +- 'IDENT': aX
+    32     30     -1                 |  |     |     +- 'INDEX'
+    30     29     -1                 |  |     |        +- 'ADD'
+    29     -1     31                 |  |     |           +- 'IDENT': V2
+    31     -1     -1                 |  |     |           +- 'IDENT': V3
+    24     -1     -1                 |  |     +- 'IDENT': Result
+    34     -1     -1                 |  +- 'OD'
+    35     -1     -1                 +- 'RETURN'
 ------------  Pass 1:AST Optimization  ------------------
 CheckNode:ROOT
 Node     1::ROOT
@@ -116,6 +106,10 @@ CheckNode::Child:ADD
 Node    25::Assign =
 CheckNode:ADD
 Node    28::ADD
+CheckNode:DEREF
+Node    27::DEREF
+CheckNode:IDENT
+Node    26::IDENT
 CheckNode:IDENT
 Node    33::IDENT
 CheckNode:INDEX
@@ -123,41 +117,15 @@ Node    32::INDEX
 CheckNode:ADD
 Node    30::ADD
 CheckNode:IDENT
+Node    29::IDENT
+CheckNode:IDENT
 Node    31::IDENT
 CheckNode:IDENT
-Node    29::IDENT
-CheckNode:DEREF
-Node    27::DEREF
-CheckNode:IDENT
-Node    26::IDENT
-CheckNode:IDENT
 Node    24::IDENT
-CheckNode:DO
-Node    34::DO
-CheckNode:STATEMENTS
-Node    35::STATEMENTS
-CheckNode:Assign =
-Optimize this NODE: Assign =
-CheckNode::Child:ADD
-Node    37::Assign =
-CheckNode:ADD
-Node    41::ADD
-CheckNode:IDENT
-Node    42::IDENT
-CheckNode:SUB
-Node    39::SUB
-CheckNode:IDENT
-Node    40::IDENT
-CheckNode:IDENT
-Node    38::IDENT
-CheckNode:IDENT
-Node    36::IDENT
 CheckNode:OD
-Node    43::OD
-CheckNode:OD
-Node    44::OD
+Node    34::OD
 CheckNode:RETURN
-Node    45::RETURN
+Node    35::RETURN
 	 NUMB  CHILD  NEXT
      1      2     -1  +- 'ROOT'
      2      3     -1     +- 'MODULE'
@@ -179,30 +147,20 @@ Node    45::RETURN
     19     20     -1              +- 'STATEMENTS'
     20     21     22                 +- 'ASM'
     21     -1     -1                 |  +- 'SECTION' Code Start:$0000 SIZE:$1000 MODE:MODE_READ_ONLY PAGE0:FALSE
-    22     23     45                 +- 'DO'
-    23     25     44                 |  +- 'STATEMENTS'
-    25     28     34                 |  |  +- 'Assign ='
-    28     33     -1                 |  |  |  +- 'ADD'
-    33     32     27                 |  |  |     +- 'IDENT': aX
-    32     30     -1                 |  |  |     |  +- 'INDEX'
-    30     31     -1                 |  |  |     |     +- 'ADD'
-    31     -1     29                 |  |  |     |        +- 'IDENT': V3
-    29     -1     -1                 |  |  |     |        +- 'IDENT': V2
-    27     26     24                 |  |  |     +- 'DEREF'
-    26     -1     -1                 |  |  |     |  +- 'IDENT': pY
-    24     -1     -1                 |  |  |     +- 'IDENT': Result
-    34     35     -1                 |  |  +- 'DO'
-    35     37     43                 |  |     +- 'STATEMENTS'
-    37     41     -1                 |  |     |  +- 'Assign ='
-    41     42     -1                 |  |     |     +- 'ADD'
-    42     -1     39                 |  |     |        +- 'IDENT': V3
-    39     40     36                 |  |     |        +- 'SUB'
-    40     -1     38                 |  |     |        |  +- 'IDENT': V2
-    38     -1     -1                 |  |     |        |  +- 'IDENT': V1
-    36     -1     -1                 |  |     |        +- 'IDENT': Result
-    43     -1     -1                 |  |     +- 'OD'
-    44     -1     -1                 |  +- 'OD'
-    45     -1     -1                 +- 'RETURN'
+    22     23     35                 +- 'DO'
+    23     25     34                 |  +- 'STATEMENTS'
+    25     28     -1                 |  |  +- 'Assign ='
+    28     27     -1                 |  |     +- 'ADD'
+    27     26     33                 |  |        +- 'DEREF'
+    26     -1     -1                 |  |        |  +- 'IDENT': pY
+    33     32     24                 |  |        +- 'IDENT': aX
+    32     30     -1                 |  |        |  +- 'INDEX'
+    30     29     -1                 |  |        |     +- 'ADD'
+    29     -1     31                 |  |        |        +- 'IDENT': V2
+    31     -1     -1                 |  |        |        +- 'IDENT': V3
+    24     -1     -1                 |  |        +- 'IDENT': Result
+    34     -1     -1                 |  +- 'OD'
+    35     -1     -1                 +- 'RETURN'
 ------------  Pass 2:CODE Generation  ------------------
 Process ROOT Node:1
 Process MODULE Node:2
@@ -223,47 +181,33 @@ EMIT:IDENT:ID=14:aX
 Process ASM Node:20
 Process SECTION Node:21
 Process Assign = Node:25
-Process IDENT aX Node:33
-Process INDEX Node:32
-Process IDENT V3 Node:31
-EMIT:IDENT:ID=31:V3
-Process IDENT V2 Node:29
-EMIT:IDENT:ID=29:V2
-Emit:	CLC	
-Emit:	LDA	 V3
-Emit:	ADC	 V2
-EMIT:IDENT:ID=33:aX
 Process DEREF Node:27
 Process IDENT pY Node:26
 EMIT:IDENT:ID=26:pY
 Emit:	LDA	 pY
 Emit:	STA	 VR1_0
-Emit:	LDA	 pY + $0002
-Emit:	STA	 VR1_0
+Emit:	LDA	 pY + $0001
+Emit:	STA	 VR1_0 + 1
+Process IDENT aX Node:33
+Process INDEX Node:32
+Process IDENT V2 Node:29
+EMIT:IDENT:ID=29:V2
+Process IDENT V3 Node:31
+EMIT:IDENT:ID=31:V3
+Emit:	CLC	
+Emit:	LDA	 V3
+Emit:	ADC	 V2
+Emit:	TAX	
+EMIT:IDENT:ID=33:aX
 Process IDENT Result Node:24
 EMIT:IDENT:ID=24:Result
 Emit:	CLC	
-Array
-Pointer DeRef
-Process Assign = Node:37
-Process IDENT V3 Node:42
-EMIT:IDENT:ID=42:V3
-Process SUB Node:39
-Process IDENT V2 Node:40
-EMIT:IDENT:ID=40:V2
-Process IDENT V1 Node:38
-EMIT:IDENT:ID=38:V1
-Emit:	CLC	
-Emit:	LDA	 V2
-Emit:	SBC	 V1
-Process IDENT Result Node:36
-EMIT:IDENT:ID=36:Result
-Emit:	CLC	
-Emit:	LDA	 V3
-Process OD Node:43
-Emit OD ID = 43
-Emit:	JMP	 DOlabel__25
-Process OD Node:44
-Emit OD ID = 44
+Array Arg aX
+Emit:	LDA	 aX,X
+Emit:	LDY	 #$00
+Emit:	ADC	(VR1_0),.Y
+Emit:	STA	 Result
+Process OD Node:34
+Emit OD ID = 34
 Emit:	JMP	 DOlabel__19
 Emit:	RTS	
