@@ -1884,22 +1884,21 @@ NONTERMINALS['Non Terminals'] { 'Action65','Modules','Modules_1','Set','Set_1','
 ,'DECLAREParamIdent','DECLAREFuncType','DECLAREFuncType_1','DECLARETypeSpec','DECLARETypeSpec_1'
 ,'DECLAREfunction','DECLAREFuncName','FundDecl','FundDecl_1','FundTypeSpec','FundTypeSpec_1'
 ,'IdentList','IdentList_1','Ident','IdentInitType','InitData','InitData_1','IrqDecl'
-,'IrqDeclParams','IrqBody','ProcDecl','ProcDeclParams','ProcBody','FuncDecl','FuncDeclParams'
-,'FuncBody','OptInit','ParamList','Param_1','ParamTypeSpec','ParamTypeSpec_1','DefineParamIdentList'
-,'DefineParamIdentList_1','DefineParamIdent','LocalDecls','LocalTypeDef_1','LocalVarDecls'
-,'LocalVarDecls_1','LocalTypeSpec','LocalTypeSpec_1','ComstListEnd','ComstListEnd_1'
-,'CompConst','CompConst_1','BaseCompConst','AsmStmt','Processor_1','ProcessorType'
-,'AsmSet','AsmSet_1','AsmSetObjects','AsmSectionName','Section','Section_1','SectionName'
-,'SectionName_1','SectionDef','SectionAtributes','Modes','AddressSize','Iff','Iff_1'
-,'IFFend','IFFend_1','IFFthenpart','IFFthenpart_1','IffRelOper','IffRelOper_1','IffRegister'
-,'IffRegister_1','Bits','Bits_1','BitValue','StatusFlags','StatusFlags_1','OptNot'
-,'Pop','Pop_1','PopDestList','PopDestList_1','PopDest','PopDest_1','Push','Push_1'
-,'PushSourceList','PushSourceList_1','PushSource','PushSource_1','Org','Org_1','DefineMemory'
-,'DefineMemory_2','DefineStorage','DefineStorage_1','Proceedure','Proceedure_1','AsmProcEnd'
-,'AsmProcEnd_1','AsmProcBody','AsmProcBody_1','AsmProcName','Instruction','Instruction_1'
-,'DefineLabel','Operand','Operand_1','RelAddressingMode','OptIndexReg','AsmConstList'
-,'AsmConstList_1','AsmConstList_2','AsmConstant','AsmConstAddSub_1','AsmConstUpLow'
-,'BaseAsmConstant','Indirect','Indirect_1','Immediate','Absolute','Absolute_1' }
+,'IrqBody','IrqBody_1','IrqBody_2','IrqDeclParams','ProcDecl','ProcDeclParams','ProcBody'
+,'FuncDecl','FuncDeclParams','FuncBody','OptInit','ParamList','Param_1','ParamTypeSpec'
+,'ParamTypeSpec_1','DefineParamIdentList','DefineParamIdentList_1','DefineParamIdent'
+,'TypeField','TypeField_1','LocalDecls','LocalTypeDef_1','LocalVarDecls','LocalVarDecls_1'
+,'LocalTypeSpec','LocalTypeSpec_1','ComstListEnd','ComstListEnd_1','CompConst','CompConst_1'
+,'BaseCompConst','AsmStmt','Processor_1','ProcessorType','AsmSet','AsmSet_1','AsmSetObjects'
+,'AsmSectionName','Section','Section_1','SectionName','SectionName_1','SectionDef'
+,'SectionAtributes','Modes','AddressSize','IFFend','IFFend_1','IFFthenpart','IFFthenpart_1'
+,'IffRelOper','IffRelOper_1','IffRegister','IffRegister_1','Bits','Bits_1','BitValue'
+,'StatusFlags','StatusFlags_1','OptNot','PopDestList','PopDestList_1','PopDest','PopDest_1'
+,'PushSourceList','PushSourceList_1','PushSource','PushSource_1','AsmProcEnd','AsmProcEnd_1'
+,'AsmProcBody','AsmProcBody_1','AsmProcName','AsmStmts','AsmStmts_1','OptLabel','Operand'
+,'Operand_1','RelAddressingMode','OptIndexReg','AsmConstList','AsmConstList_1','AsmConstList_2'
+,'AsmConstant','AsmConstAddSub_1','AsmConstUpLow','BaseAsmConstant','Indirect','Indirect_1'
+,'Immediate','Absolute','Absolute_1' }
 *********** Build Nullable Set **********
 ****************Create NOT nullable set ************************
 ----- Calc First Sets------
@@ -2044,8 +2043,10 @@ FIRST['InitData'] { 'NUMBER','CUR_LOC','@','DEFINED_IDENT','INTERRUPT_IDENT','FU
 ,'PROC_IDENT' }
 FIRST['InitData_1'] { 'STRING','[','e' }
 FIRST['IrqDecl'] { 'IDENT' }
+FIRST['IrqBody'] { '(' }
+FIRST['IrqBody_1'] { 'IDENT','FUNC' }
+FIRST['IrqBody_2'] { '(' }
 FIRST['IrqDeclParams'] { '(' }
-FIRST['IrqBody'] { 'IDENT','FUNC' }
 FIRST['ProcDecl'] { 'IDENT' }
 FIRST['ProcDeclParams'] { '(' }
 FIRST['ProcBody'] { 'IDENT','FUNC' }
@@ -2060,6 +2061,8 @@ FIRST['ParamTypeSpec_1'] { 'POINTER','ARRAY','e' }
 FIRST['DefineParamIdentList'] { 'IDENT' }
 FIRST['DefineParamIdentList_1'] { ',','e' }
 FIRST['DefineParamIdent'] { 'IDENT' }
+FIRST['TypeField'] { 'IDENT','FUNC' }
+FIRST['TypeField_1'] { 'CHAR','BYTE','INT','CARD','BOOL','RECORDTYPE','e' }
 FIRST['LocalDecls'] { 'IDENT','FUNC' }
 FIRST['LocalTypeDef_1'] { 'TYPE','e' }
 FIRST['LocalVarDecls'] { 'IDENT','FUNC' }
@@ -2075,14 +2078,14 @@ FIRST['CompConst'] { 'NUMBER','CUR_LOC','@','DEFINED_IDENT','INTERRUPT_IDENT','F
 FIRST['CompConst_1'] { '+','-','e' }
 FIRST['BaseCompConst'] { 'NUMBER','CUR_LOC','@','DEFINED_IDENT','INTERRUPT_IDENT','FUNC_IDENT'
 ,'PROC_IDENT' }
-FIRST['AsmStmt'] { 'GLOBAL_LABEL','LOCAL_LABEL' }
+FIRST['AsmStmt'] { 'LOCAL_LABEL','GLOBAL_LABEL' }
 FIRST['Processor_1'] { 'PROCESSOR','e' }
 FIRST['ProcessorType'] { 'R6502','WD65C02','WD65C816' }
-FIRST['AsmSet'] { 'GLOBAL_LABEL','LOCAL_LABEL' }
+FIRST['AsmSet'] { 'LOCAL_LABEL','GLOBAL_LABEL' }
 FIRST['AsmSet_1'] { 'SET','e' }
 FIRST['AsmSetObjects'] { 'SECTION','e' }
 FIRST['AsmSectionName'] { 'SECTION_NAME' }
-FIRST['Section'] { 'GLOBAL_LABEL','LOCAL_LABEL' }
+FIRST['Section'] { 'LOCAL_LABEL','GLOBAL_LABEL' }
 FIRST['Section_1'] { 'SECTION','e' }
 FIRST['SectionName'] { 'e','[',']' }
 FIRST['SectionName_1'] { 'STRING','e' }
@@ -2090,8 +2093,6 @@ FIRST['SectionDef'] { '[',']','e' }
 FIRST['SectionAtributes'] { 'START','SIZE','MODE','ZEROPAGE',']',',' }
 FIRST['Modes'] { 'READ_ONLY','READ_WRITE' }
 FIRST['AddressSize'] { 'TRUE','FALSE' }
-FIRST['Iff'] { 'GLOBAL_LABEL','LOCAL_LABEL' }
-FIRST['Iff_1'] { 'IFF','e' }
 FIRST['IFFend'] { '^' }
 FIRST['IFFend_1'] { 'FFI' }
 FIRST['IFFthenpart'] { '^' }
@@ -2106,38 +2107,27 @@ FIRST['BitValue'] { '[',']' }
 FIRST['StatusFlags'] { '^' }
 FIRST['StatusFlags_1'] { 'NEG','CARRY','ZERO','OVERFLOW' }
 FIRST['OptNot'] { '^','e' }
-FIRST['Pop'] { 'GLOBAL_LABEL','LOCAL_LABEL' }
-FIRST['Pop_1'] { 'POP','e' }
 FIRST['PopDestList'] { '(' }
 FIRST['PopDestList_1'] { ',','e' }
 FIRST['PopDest'] { '(' }
 FIRST['PopDest_1'] { 'AREG','XREG','YREG','SR','e' }
-FIRST['Push'] { 'GLOBAL_LABEL','LOCAL_LABEL' }
-FIRST['Push_1'] { 'PUSH','e' }
 FIRST['PushSourceList'] { '-','(' }
 FIRST['PushSourceList_1'] { ',','e' }
 FIRST['PushSource'] { '-','(' }
 FIRST['PushSource_1'] { 'AREG','XREG','YREG','SR','e' }
-FIRST['Org'] { 'GLOBAL_LABEL','LOCAL_LABEL' }
-FIRST['Org_1'] { 'ORG','e' }
-FIRST['DefineMemory'] { 'GLOBAL_LABEL','LOCAL_LABEL' }
-FIRST['DefineMemory_2'] { 'DB','DW','DL','DAS','DCS','e' }
-FIRST['DefineStorage'] { 'GLOBAL_LABEL','LOCAL_LABEL' }
-FIRST['DefineStorage_1'] { 'DS','e' }
-FIRST['Proceedure'] { 'GLOBAL_LABEL','LOCAL_LABEL' }
-FIRST['Proceedure_1'] { 'PROC','e' }
 FIRST['AsmProcEnd'] { 'IDENT' }
 FIRST['AsmProcEnd_1'] { 'EPROC' }
 FIRST['AsmProcBody'] { 'IDENT' }
 FIRST['AsmProcBody_1'] { 'BEFIN' }
 FIRST['AsmProcName'] { 'IDENT' }
-FIRST['Instruction'] { 'e','GLOBAL_LABEL','LOCAL_LABEL' }
-FIRST['Instruction_1'] { 'ADC','AND','EOR','ORA','CMP','SBC','LDA','STA','ASL','ROL'
-,'LSR','ROR','BCC','BCS','BEQ','BMI','BNE','BPL','BVC','BVS','BIT','BRK','CLC','CLD'
-,'CLI','CLV','DEX','DEY','INX','INY','NOP','PHA','PLA','PHP','PLP','RTI','RTS','SEC'
-,'SED','SEI','TAX','TAY','TXA','TYA','TXS','TSX','INC','DEC','JMP','JSR','CPX','CPY'
-,'LDX','LDY','STX','STY','e' }
-FIRST['DefineLabel'] { 'GLOBAL_LABEL','LOCAL_LABEL','e' }
+FIRST['AsmStmts'] { 'e','LOCAL_LABEL','GLOBAL_LABEL' }
+FIRST['AsmStmts_1'] { 'ADC','AND','EOR','ORA','CMP','SBC','LDA','STA','ASL','ROL','LSR'
+,'ROR','BCC','BCS','BEQ','BMI','BNE','BPL','BVC','BVS','BIT','BRK','CLC','CLD','CLI'
+,'CLV','DEX','DEY','INX','INY','NOP','PHA','PLA','PHP','PLP','RTI','RTS','SEC','SED'
+,'SEI','TAX','TAY','TXA','TYA','TXS','TSX','INC','DEC','JMP','JSR','CPX','CPY','LDX'
+,'LDY','STX','STY','PROC','DS','DB','DW','DL','DAS','DCS','ORG','PUSH','POP','IFF'
+,'e' }
+FIRST['OptLabel'] { 'LOCAL_LABEL','GLOBAL_LABEL','e' }
 FIRST['Operand'] { '>','<','NUMBER','CHAR_CONSTANT','*','LABEL','IDENT' }
 FIRST['Operand_1'] { '#','(','AREG','e' }
 FIRST['RelAddressingMode'] { '>','<','NUMBER','CHAR_CONSTANT','*','LABEL','IDENT' }
@@ -2164,14 +2154,20 @@ FOLLOW['Set'] { 'MODULE','$' }
 FOLLOW['Set_1'] { 'MODULE','$' }
 FOLLOW['SetObjects'] { }
 FOLLOW['SetSectionName'] { }
-FOLLOW['Statements'] { 'OD' }
-FOLLOW['ProcCall_1'] { 'OD' }
+FOLLOW['Statements'] { 'OD','BOOL','CHAR','BYTE','INT','CARD','RECORDTYPE','PROC','INTERRUPT'
+,'DECLARE','TYPE','DEFINE','VECTOR','SET','MODULE','$','IDENT','FUNC' }
+FOLLOW['ProcCall_1'] { 'OD','BOOL','CHAR','BYTE','INT','CARD','RECORDTYPE','PROC','INTERRUPT'
+,'DECLARE','TYPE','DEFINE','VECTOR','SET','MODULE','$','IDENT','FUNC' }
 FOLLOW['ProcParams'] { }
 FOLLOW['ProcParams_1'] { }
 FOLLOW['ProcParamsEnd'] { '(' }
 FOLLOW['ProcParamsEnd_1'] { '(' }
-FOLLOW['ForStmt'] { 'PROC_IDENT','FUNC_IDENT','OD' }
-FOLLOW['ForStmt_1'] { 'PROC_IDENT','FUNC_IDENT','OD' }
+FOLLOW['ForStmt'] { 'PROC_IDENT','FUNC_IDENT','OD','BOOL','CHAR','BYTE','INT','CARD'
+,'RECORDTYPE','PROC','INTERRUPT','DECLARE','TYPE','DEFINE','VECTOR','SET','MODULE'
+,'$','IDENT','FUNC' }
+FOLLOW['ForStmt_1'] { 'PROC_IDENT','FUNC_IDENT','OD','BOOL','CHAR','BYTE','INT','CARD'
+,'RECORDTYPE','PROC','INTERRUPT','DECLARE','TYPE','DEFINE','VECTOR','SET','MODULE'
+,'$','IDENT','FUNC' }
 FOLLOW['ForDOend'] { }
 FOLLOW['ForDOend_1'] { }
 FOLLOW['STEPoption'] { 'DO','OD' }
@@ -2180,8 +2176,12 @@ FOLLOW['ForTO'] { 'STEP','DO','OD' }
 FOLLOW['ForTO_1'] { 'STEP','DO','OD' }
 FOLLOW['Itterrator'] { 'TO' }
 FOLLOW['Itterrator_1'] { 'TO' }
-FOLLOW['IfStmt'] { 'FOR','PROC_IDENT','FUNC_IDENT','OD' }
-FOLLOW['IfStmt_1'] { 'FOR','PROC_IDENT','FUNC_IDENT','OD' }
+FOLLOW['IfStmt'] { 'FOR','PROC_IDENT','FUNC_IDENT','OD','BOOL','CHAR','BYTE','INT','CARD'
+,'RECORDTYPE','PROC','INTERRUPT','DECLARE','TYPE','DEFINE','VECTOR','SET','MODULE'
+,'$','IDENT','FUNC' }
+FOLLOW['IfStmt_1'] { 'FOR','PROC_IDENT','FUNC_IDENT','OD','BOOL','CHAR','BYTE','INT'
+,'CARD','RECORDTYPE','PROC','INTERRUPT','DECLARE','TYPE','DEFINE','VECTOR','SET','MODULE'
+,'$','IDENT','FUNC' }
 FOLLOW['EndIF'] { }
 FOLLOW['EndIF_1'] { }
 FOLLOW['ElsePart'] { 'FI' }
@@ -2190,44 +2190,74 @@ FOLLOW['ElseIfPart'] { 'ELSE','FI' }
 FOLLOW['ElseIfPart_1'] { 'ELSE','FI' }
 FOLLOW['ThenPart'] { 'ELSEIF','ELSE','FI' }
 FOLLOW['ThenPart_1'] { 'ELSEIF','ELSE','FI' }
-FOLLOW['WhileStmt'] { 'IF','FOR','PROC_IDENT','FUNC_IDENT','OD' }
-FOLLOW['WhileStmt_1'] { 'IF','FOR','PROC_IDENT','FUNC_IDENT','OD' }
+FOLLOW['WhileStmt'] { 'IF','FOR','PROC_IDENT','FUNC_IDENT','OD','BOOL','CHAR','BYTE'
+,'INT','CARD','RECORDTYPE','PROC','INTERRUPT','DECLARE','TYPE','DEFINE','VECTOR','SET'
+,'MODULE','$','IDENT','FUNC' }
+FOLLOW['WhileStmt_1'] { 'IF','FOR','PROC_IDENT','FUNC_IDENT','OD','BOOL','CHAR','BYTE'
+,'INT','CARD','RECORDTYPE','PROC','INTERRUPT','DECLARE','TYPE','DEFINE','VECTOR','SET'
+,'MODULE','$','IDENT','FUNC' }
 FOLLOW['WhileDO'] { }
 FOLLOW['WhileDO_1'] { }
-FOLLOW['DoStmt'] { 'WHILE','IF','FOR','PROC_IDENT','FUNC_IDENT','OD' }
-FOLLOW['DoStmt_1'] { 'WHILE','IF','FOR','PROC_IDENT','FUNC_IDENT','OD' }
+FOLLOW['DoStmt'] { 'WHILE','IF','FOR','PROC_IDENT','FUNC_IDENT','OD','BOOL','CHAR','BYTE'
+,'INT','CARD','RECORDTYPE','PROC','INTERRUPT','DECLARE','TYPE','DEFINE','VECTOR','SET'
+,'MODULE','$','IDENT','FUNC' }
+FOLLOW['DoStmt_1'] { 'WHILE','IF','FOR','PROC_IDENT','FUNC_IDENT','OD','BOOL','CHAR'
+,'BYTE','INT','CARD','RECORDTYPE','PROC','INTERRUPT','DECLARE','TYPE','DEFINE','VECTOR'
+,'SET','MODULE','$','IDENT','FUNC' }
 FOLLOW['DoEnd'] { }
 FOLLOW['DoEnd_1'] { }
-FOLLOW['EXITstmt'] { 'DO','WHILE','IF','FOR','PROC_IDENT','FUNC_IDENT','OD' }
-FOLLOW['EXITstmt_1'] { 'DO','WHILE','IF','FOR','PROC_IDENT','FUNC_IDENT','OD' }
-FOLLOW['RetStmt'] { 'EXIT','DO','WHILE','IF','FOR','PROC_IDENT','FUNC_IDENT','OD' }
+FOLLOW['EXITstmt'] { 'DO','WHILE','IF','FOR','PROC_IDENT','FUNC_IDENT','OD','BOOL','CHAR'
+,'BYTE','INT','CARD','RECORDTYPE','PROC','INTERRUPT','DECLARE','TYPE','DEFINE','VECTOR'
+,'SET','MODULE','$','IDENT','FUNC' }
+FOLLOW['EXITstmt_1'] { 'DO','WHILE','IF','FOR','PROC_IDENT','FUNC_IDENT','OD','BOOL'
+,'CHAR','BYTE','INT','CARD','RECORDTYPE','PROC','INTERRUPT','DECLARE','TYPE','DEFINE'
+,'VECTOR','SET','MODULE','$','IDENT','FUNC' }
+FOLLOW['RetStmt'] { 'EXIT','DO','WHILE','IF','FOR','PROC_IDENT','FUNC_IDENT','OD','BOOL'
+,'CHAR','BYTE','INT','CARD','RECORDTYPE','PROC','INTERRUPT','DECLARE','TYPE','DEFINE'
+,'VECTOR','SET','MODULE','$','IDENT','FUNC' }
 FOLLOW['RetStmt_1'] { 'EXIT','DO','WHILE','IF','FOR','PROC_IDENT','FUNC_IDENT','OD'
- }
+,'BOOL','CHAR','BYTE','INT','CARD','RECORDTYPE','PROC','INTERRUPT','DECLARE','TYPE'
+,'DEFINE','VECTOR','SET','MODULE','$','IDENT','FUNC' }
 FOLLOW['InlineAssembly'] { 'RETURN','EXIT','DO','WHILE','IF','FOR','PROC_IDENT','FUNC_IDENT'
-,'OD' }
+,'OD','BOOL','CHAR','BYTE','INT','CARD','RECORDTYPE','PROC','INTERRUPT','DECLARE'
+,'TYPE','DEFINE','VECTOR','SET','MODULE','$','IDENT','FUNC' }
 FOLLOW['InlineAssembly_1'] { 'RETURN','EXIT','DO','WHILE','IF','FOR','PROC_IDENT','FUNC_IDENT'
-,'OD' }
+,'OD','BOOL','CHAR','BYTE','INT','CARD','RECORDTYPE','PROC','INTERRUPT','DECLARE'
+,'TYPE','DEFINE','VECTOR','SET','MODULE','$','IDENT','FUNC' }
 FOLLOW['InlineAssBlock'] { }
 FOLLOW['CodeBlock'] { 'ASM','RETURN','EXIT','DO','WHILE','IF','FOR','PROC_IDENT','FUNC_IDENT'
-,'OD' }
+,'OD','BOOL','CHAR','BYTE','INT','CARD','RECORDTYPE','PROC','INTERRUPT','DECLARE'
+,'TYPE','DEFINE','VECTOR','SET','MODULE','$','IDENT','FUNC' }
 FOLLOW['CodeBlock_1'] { 'ASM','RETURN','EXIT','DO','WHILE','IF','FOR','PROC_IDENT','FUNC_IDENT'
-,'OD' }
+,'OD','BOOL','CHAR','BYTE','INT','CARD','RECORDTYPE','PROC','INTERRUPT','DECLARE'
+,'TYPE','DEFINE','VECTOR','SET','MODULE','$','IDENT','FUNC' }
 FOLLOW['UntillStmt'] { '[','ASM','RETURN','EXIT','DO','WHILE','IF','FOR','PROC_IDENT'
-,'FUNC_IDENT','OD' }
+,'FUNC_IDENT','OD','BOOL','CHAR','BYTE','INT','CARD','RECORDTYPE','PROC','INTERRUPT'
+,'DECLARE','TYPE','DEFINE','VECTOR','SET','MODULE','$','IDENT','FUNC' }
 FOLLOW['UntillStmt_1'] { '[','ASM','RETURN','EXIT','DO','WHILE','IF','FOR','PROC_IDENT'
-,'FUNC_IDENT','OD' }
+,'FUNC_IDENT','OD','BOOL','CHAR','BYTE','INT','CARD','RECORDTYPE','PROC','INTERRUPT'
+,'DECLARE','TYPE','DEFINE','VECTOR','SET','MODULE','$','IDENT','FUNC' }
 FOLLOW['Break'] { 'UNTILL','[','ASM','RETURN','EXIT','DO','WHILE','IF','FOR','PROC_IDENT'
-,'FUNC_IDENT','OD' }
+,'FUNC_IDENT','OD','BOOL','CHAR','BYTE','INT','CARD','RECORDTYPE','PROC','INTERRUPT'
+,'DECLARE','TYPE','DEFINE','VECTOR','SET','MODULE','$','IDENT','FUNC' }
 FOLLOW['Break_1'] { 'UNTILL','[','ASM','RETURN','EXIT','DO','WHILE','IF','FOR','PROC_IDENT'
-,'FUNC_IDENT','OD' }
+,'FUNC_IDENT','OD','BOOL','CHAR','BYTE','INT','CARD','RECORDTYPE','PROC','INTERRUPT'
+,'DECLARE','TYPE','DEFINE','VECTOR','SET','MODULE','$','IDENT','FUNC' }
 FOLLOW['Rti'] { 'BREAK','UNTILL','[','ASM','RETURN','EXIT','DO','WHILE','IF','FOR','PROC_IDENT'
-,'FUNC_IDENT','OD' }
+,'FUNC_IDENT','OD','BOOL','CHAR','BYTE','INT','CARD','RECORDTYPE','PROC','INTERRUPT'
+,'DECLARE','TYPE','DEFINE','VECTOR','SET','MODULE','$','IDENT','FUNC' }
 FOLLOW['Rti_1'] { 'BREAK','UNTILL','[','ASM','RETURN','EXIT','DO','WHILE','IF','FOR'
-,'PROC_IDENT','FUNC_IDENT','OD' }
+,'PROC_IDENT','FUNC_IDENT','OD','BOOL','CHAR','BYTE','INT','CARD','RECORDTYPE','PROC'
+,'INTERRUPT','DECLARE','TYPE','DEFINE','VECTOR','SET','MODULE','$','IDENT','FUNC'
+ }
 FOLLOW['Assignment'] { 'RTI','BREAK','UNTILL','[','ASM','RETURN','EXIT','DO','WHILE'
-,'IF','FOR','PROC_IDENT','FUNC_IDENT','OD' }
+,'IF','FOR','PROC_IDENT','FUNC_IDENT','OD','BOOL','CHAR','BYTE','INT','CARD','RECORDTYPE'
+,'PROC','INTERRUPT','DECLARE','TYPE','DEFINE','VECTOR','SET','MODULE','$','IDENT'
+,'FUNC' }
 FOLLOW['Assignment_1'] { 'RTI','BREAK','UNTILL','[','ASM','RETURN','EXIT','DO','WHILE'
-,'IF','FOR','PROC_IDENT','FUNC_IDENT','OD' }
+,'IF','FOR','PROC_IDENT','FUNC_IDENT','OD','BOOL','CHAR','BYTE','INT','CARD','RECORDTYPE'
+,'PROC','INTERRUPT','DECLARE','TYPE','DEFINE','VECTOR','SET','MODULE','$','IDENT'
+,'FUNC' }
 FOLLOW['RelOperation'] { 'THEN','ELSEIF','ELSE','FI','DO',')' }
 FOLLOW['RelOperation_1'] { 'THEN','ELSEIF','ELSE','FI','DO',')' }
 FOLLOW['LogicalOR'] { '>','<','GTEQ','LTEQ','=','#','THEN','ELSEIF','ELSE','FI','DO'
@@ -2241,97 +2271,133 @@ FOLLOW['LogicalAND_1'] { 'OR','>','<','GTEQ','LTEQ','=','#','THEN','ELSEIF','ELS
 FOLLOW['ArithExpr'] { '=','==+','==-','==*','==/','==MOD','==&','==!','==%','==LSH'
 ,'==RSH','AND','OR','>','<','GTEQ','LTEQ','#','THEN','ELSEIF','ELSE','FI','DO',')'
 ,'AREG','XREG','YREG','SR','RTI','BREAK','UNTILL','[','ASM','RETURN','EXIT','WHILE'
-,'IF','FOR','PROC_IDENT','FUNC_IDENT','OD',',' }
+,'IF','FOR','PROC_IDENT','FUNC_IDENT','OD',',','BOOL','CHAR','BYTE','INT','CARD','RECORDTYPE'
+,'PROC','INTERRUPT','DECLARE','TYPE','DEFINE','VECTOR','SET','MODULE','$','IDENT'
+,'FUNC' }
 FOLLOW['BitwiseOR_1'] { '=','==+','==-','==*','==/','==MOD','==&','==!','==%','==LSH'
 ,'==RSH','AND','OR','>','<','GTEQ','LTEQ','#','THEN','ELSEIF','ELSE','FI','DO',')'
 ,'AREG','XREG','YREG','SR','RTI','BREAK','UNTILL','[','ASM','RETURN','EXIT','WHILE'
-,'IF','FOR','PROC_IDENT','FUNC_IDENT','OD',',' }
+,'IF','FOR','PROC_IDENT','FUNC_IDENT','OD',',','BOOL','CHAR','BYTE','INT','CARD','RECORDTYPE'
+,'PROC','INTERRUPT','DECLARE','TYPE','DEFINE','VECTOR','SET','MODULE','$','IDENT'
+,'FUNC' }
 FOLLOW['BitwiseAND'] { '%','=','==+','==-','==*','==/','==MOD','==&','==!','==%','==LSH'
 ,'==RSH','AND','OR','>','<','GTEQ','LTEQ','#','THEN','ELSEIF','ELSE','FI','DO',')'
 ,'AREG','XREG','YREG','SR','RTI','BREAK','UNTILL','[','ASM','RETURN','EXIT','WHILE'
-,'IF','FOR','PROC_IDENT','FUNC_IDENT','OD',',' }
+,'IF','FOR','PROC_IDENT','FUNC_IDENT','OD',',','BOOL','CHAR','BYTE','INT','CARD','RECORDTYPE'
+,'PROC','INTERRUPT','DECLARE','TYPE','DEFINE','VECTOR','SET','MODULE','$','IDENT'
+,'FUNC' }
 FOLLOW['BitwiseAND_1'] { '%','=','==+','==-','==*','==/','==MOD','==&','==!','==%','==LSH'
 ,'==RSH','AND','OR','>','<','GTEQ','LTEQ','#','THEN','ELSEIF','ELSE','FI','DO',')'
 ,'AREG','XREG','YREG','SR','RTI','BREAK','UNTILL','[','ASM','RETURN','EXIT','WHILE'
-,'IF','FOR','PROC_IDENT','FUNC_IDENT','OD',',' }
+,'IF','FOR','PROC_IDENT','FUNC_IDENT','OD',',','BOOL','CHAR','BYTE','INT','CARD','RECORDTYPE'
+,'PROC','INTERRUPT','DECLARE','TYPE','DEFINE','VECTOR','SET','MODULE','$','IDENT'
+,'FUNC' }
 FOLLOW['BitwiseXOR'] { '&','%','=','==+','==-','==*','==/','==MOD','==&','==!','==%'
 ,'==LSH','==RSH','AND','OR','>','<','GTEQ','LTEQ','#','THEN','ELSEIF','ELSE','FI'
 ,'DO',')','AREG','XREG','YREG','SR','RTI','BREAK','UNTILL','[','ASM','RETURN','EXIT'
-,'WHILE','IF','FOR','PROC_IDENT','FUNC_IDENT','OD',',' }
+,'WHILE','IF','FOR','PROC_IDENT','FUNC_IDENT','OD',',','BOOL','CHAR','BYTE','INT'
+,'CARD','RECORDTYPE','PROC','INTERRUPT','DECLARE','TYPE','DEFINE','VECTOR','SET','MODULE'
+,'$','IDENT','FUNC' }
 FOLLOW['BitwiseXOR_1'] { '&','%','=','==+','==-','==*','==/','==MOD','==&','==!','==%'
 ,'==LSH','==RSH','AND','OR','>','<','GTEQ','LTEQ','#','THEN','ELSEIF','ELSE','FI'
 ,'DO',')','AREG','XREG','YREG','SR','RTI','BREAK','UNTILL','[','ASM','RETURN','EXIT'
-,'WHILE','IF','FOR','PROC_IDENT','FUNC_IDENT','OD',',' }
+,'WHILE','IF','FOR','PROC_IDENT','FUNC_IDENT','OD',',','BOOL','CHAR','BYTE','INT'
+,'CARD','RECORDTYPE','PROC','INTERRUPT','DECLARE','TYPE','DEFINE','VECTOR','SET','MODULE'
+,'$','IDENT','FUNC' }
 FOLLOW['AddExpr'] { '!','XOR','&','%','=','==+','==-','==*','==/','==MOD','==&','==!'
 ,'==%','==LSH','==RSH','AND','OR','>','<','GTEQ','LTEQ','#','THEN','ELSEIF','ELSE'
 ,'FI','DO',')','AREG','XREG','YREG','SR','RTI','BREAK','UNTILL','[','ASM','RETURN'
-,'EXIT','WHILE','IF','FOR','PROC_IDENT','FUNC_IDENT','OD',',' }
+,'EXIT','WHILE','IF','FOR','PROC_IDENT','FUNC_IDENT','OD',',','BOOL','CHAR','BYTE'
+,'INT','CARD','RECORDTYPE','PROC','INTERRUPT','DECLARE','TYPE','DEFINE','VECTOR','SET'
+,'MODULE','$','IDENT','FUNC' }
 FOLLOW['AddExpr_1'] { '!','XOR','&','%','=','==+','==-','==*','==/','==MOD','==&','==!'
 ,'==%','==LSH','==RSH','AND','OR','>','<','GTEQ','LTEQ','#','THEN','ELSEIF','ELSE'
 ,'FI','DO',')','AREG','XREG','YREG','SR','RTI','BREAK','UNTILL','[','ASM','RETURN'
-,'EXIT','WHILE','IF','FOR','PROC_IDENT','FUNC_IDENT','OD',',' }
+,'EXIT','WHILE','IF','FOR','PROC_IDENT','FUNC_IDENT','OD',',','BOOL','CHAR','BYTE'
+,'INT','CARD','RECORDTYPE','PROC','INTERRUPT','DECLARE','TYPE','DEFINE','VECTOR','SET'
+,'MODULE','$','IDENT','FUNC' }
 FOLLOW['ShifExpr'] { '+','-','!','XOR','&','%','=','==+','==-','==*','==/','==MOD','==&'
 ,'==!','==%','==LSH','==RSH','AND','OR','>','<','GTEQ','LTEQ','#','THEN','ELSEIF'
 ,'ELSE','FI','DO',')','AREG','XREG','YREG','SR','RTI','BREAK','UNTILL','[','ASM','RETURN'
-,'EXIT','WHILE','IF','FOR','PROC_IDENT','FUNC_IDENT','OD',',' }
+,'EXIT','WHILE','IF','FOR','PROC_IDENT','FUNC_IDENT','OD',',','BOOL','CHAR','BYTE'
+,'INT','CARD','RECORDTYPE','PROC','INTERRUPT','DECLARE','TYPE','DEFINE','VECTOR','SET'
+,'MODULE','$','IDENT','FUNC' }
 FOLLOW['ShiftExpr_1'] { '+','-','!','XOR','&','%','=','==+','==-','==*','==/','==MOD'
 ,'==&','==!','==%','==LSH','==RSH','AND','OR','>','<','GTEQ','LTEQ','#','THEN','ELSEIF'
 ,'ELSE','FI','DO',')','AREG','XREG','YREG','SR','RTI','BREAK','UNTILL','[','ASM','RETURN'
-,'EXIT','WHILE','IF','FOR','PROC_IDENT','FUNC_IDENT','OD',',' }
+,'EXIT','WHILE','IF','FOR','PROC_IDENT','FUNC_IDENT','OD',',','BOOL','CHAR','BYTE'
+,'INT','CARD','RECORDTYPE','PROC','INTERRUPT','DECLARE','TYPE','DEFINE','VECTOR','SET'
+,'MODULE','$','IDENT','FUNC' }
 FOLLOW['MultExpr'] { 'LSH','RSH','+','-','!','XOR','&','%','=','==+','==-','==*','==/'
 ,'==MOD','==&','==!','==%','==LSH','==RSH','AND','OR','>','<','GTEQ','LTEQ','#','THEN'
 ,'ELSEIF','ELSE','FI','DO',')','AREG','XREG','YREG','SR','RTI','BREAK','UNTILL','['
-,'ASM','RETURN','EXIT','WHILE','IF','FOR','PROC_IDENT','FUNC_IDENT','OD',',' }
+,'ASM','RETURN','EXIT','WHILE','IF','FOR','PROC_IDENT','FUNC_IDENT','OD',',','BOOL'
+,'CHAR','BYTE','INT','CARD','RECORDTYPE','PROC','INTERRUPT','DECLARE','TYPE','DEFINE'
+,'VECTOR','SET','MODULE','$','IDENT','FUNC' }
 FOLLOW['MultExpr_1'] { 'LSH','RSH','+','-','!','XOR','&','%','=','==+','==-','==*','==/'
 ,'==MOD','==&','==!','==%','==LSH','==RSH','AND','OR','>','<','GTEQ','LTEQ','#','THEN'
 ,'ELSEIF','ELSE','FI','DO',')','AREG','XREG','YREG','SR','RTI','BREAK','UNTILL','['
-,'ASM','RETURN','EXIT','WHILE','IF','FOR','PROC_IDENT','FUNC_IDENT','OD',',' }
+,'ASM','RETURN','EXIT','WHILE','IF','FOR','PROC_IDENT','FUNC_IDENT','OD',',','BOOL'
+,'CHAR','BYTE','INT','CARD','RECORDTYPE','PROC','INTERRUPT','DECLARE','TYPE','DEFINE'
+,'VECTOR','SET','MODULE','$','IDENT','FUNC' }
 FOLLOW['Unary'] { '*','/','MOD','LSH','RSH','+','-','!','XOR','&','%','=','==+','==-'
 ,'==*','==/','==MOD','==&','==!','==%','==LSH','==RSH','AND','OR','>','<','GTEQ','LTEQ'
 ,'#','THEN','ELSEIF','ELSE','FI','DO',')','AREG','XREG','YREG','SR','RTI','BREAK'
 ,'UNTILL','[','ASM','RETURN','EXIT','WHILE','IF','FOR','PROC_IDENT','FUNC_IDENT','OD'
-,',' }
+,',','BOOL','CHAR','BYTE','INT','CARD','RECORDTYPE','PROC','INTERRUPT','DECLARE','TYPE'
+,'DEFINE','VECTOR','SET','MODULE','$','IDENT','FUNC' }
 FOLLOW['ValueList'] { ')' }
 FOLLOW['ValueList_1'] { ')' }
 FOLLOW['Value'] { '*','/','MOD','LSH','RSH','+','-','!','XOR','&','%','=','==+','==-'
 ,'==*','==/','==MOD','==&','==!','==%','==LSH','==RSH','AND','OR','>','<','GTEQ','LTEQ'
 ,'#','THEN','ELSEIF','ELSE','FI','DO',')','AREG','XREG','YREG','SR',',','RTI','BREAK'
 ,'UNTILL','[','ASM','RETURN','EXIT','WHILE','IF','FOR','PROC_IDENT','FUNC_IDENT','OD'
- }
+,'BOOL','CHAR','BYTE','INT','CARD','RECORDTYPE','PROC','INTERRUPT','DECLARE','TYPE'
+,'DEFINE','VECTOR','SET','MODULE','$','IDENT','FUNC' }
 FOLLOW['Value_1'] { '*','/','MOD','LSH','RSH','+','-','!','XOR','&','%','=','==+','==-'
 ,'==*','==/','==MOD','==&','==!','==%','==LSH','==RSH','AND','OR','>','<','GTEQ','LTEQ'
 ,'#','THEN','ELSEIF','ELSE','FI','DO',')','AREG','XREG','YREG','SR',',','RTI','BREAK'
 ,'UNTILL','[','ASM','RETURN','EXIT','WHILE','IF','FOR','PROC_IDENT','FUNC_IDENT','OD'
- }
+,'BOOL','CHAR','BYTE','INT','CARD','RECORDTYPE','PROC','INTERRUPT','DECLARE','TYPE'
+,'DEFINE','VECTOR','SET','MODULE','$','IDENT','FUNC' }
 FOLLOW['AddressOf'] { }
 FOLLOW['AddressOf_1'] { }
 FOLLOW['MemContentsType'] { '=','==+','==-','==*','==/','==MOD','==&','==!','==%','==LSH'
 ,'==RSH','RTI','BREAK','UNTILL','[','ASM','RETURN','EXIT','DO','WHILE','IF','FOR'
 ,'PROC_IDENT','FUNC_IDENT','OD','NUMBER','CUR_LOC','@','*','/','MOD','LSH','RSH','+'
 ,'-','!','XOR','&','%','AND','OR','>','<','GTEQ','LTEQ','#','THEN','ELSEIF','ELSE'
-,'FI',')','AREG','XREG','YREG','SR',',','INTERRUPT_IDENT' }
+,'FI',')','AREG','XREG','YREG','SR',',','INTERRUPT_IDENT','BOOL','CHAR','BYTE','INT'
+,'CARD','RECORDTYPE','PROC','INTERRUPT','DECLARE','TYPE','DEFINE','VECTOR','SET','MODULE'
+,'$','IDENT','FUNC' }
 FOLLOW['MemContentsType_1'] { '=','==+','==-','==*','==/','==MOD','==&','==!','==%'
 ,'==LSH','==RSH','RTI','BREAK','UNTILL','[','ASM','RETURN','EXIT','DO','WHILE','IF'
 ,'FOR','PROC_IDENT','FUNC_IDENT','OD','NUMBER','CUR_LOC','@','*','/','MOD','LSH','RSH'
 ,'+','-','!','XOR','&','%','AND','OR','>','<','GTEQ','LTEQ','#','THEN','ELSEIF','ELSE'
-,'FI',')','AREG','XREG','YREG','SR',',','INTERRUPT_IDENT' }
+,'FI',')','AREG','XREG','YREG','SR',',','INTERRUPT_IDENT','BOOL','CHAR','BYTE','INT'
+,'CARD','RECORDTYPE','PROC','INTERRUPT','DECLARE','TYPE','DEFINE','VECTOR','SET','MODULE'
+,'$','IDENT','FUNC' }
 FOLLOW['MemContents'] { '^','.','=','==+','==-','==*','==/','==MOD','==&','==!','==%'
 ,'==LSH','==RSH','RTI','BREAK','UNTILL','[','ASM','RETURN','EXIT','DO','WHILE','IF'
 ,'FOR','PROC_IDENT','FUNC_IDENT','OD','NUMBER','CUR_LOC','@','*','/','MOD','LSH','RSH'
 ,'+','-','!','XOR','&','%','AND','OR','>','<','GTEQ','LTEQ','#','THEN','ELSEIF','ELSE'
-,'FI',')','AREG','XREG','YREG','SR',',','INTERRUPT_IDENT' }
+,'FI',')','AREG','XREG','YREG','SR',',','INTERRUPT_IDENT','BOOL','CHAR','BYTE','INT'
+,'CARD','RECORDTYPE','PROC','INTERRUPT','DECLARE','TYPE','DEFINE','VECTOR','SET','MODULE'
+,'$','IDENT','FUNC' }
 FOLLOW['MemContents_1'] { '^','.','=','==+','==-','==*','==/','==MOD','==&','==!','==%'
 ,'==LSH','==RSH','RTI','BREAK','UNTILL','[','ASM','RETURN','EXIT','DO','WHILE','IF'
 ,'FOR','PROC_IDENT','FUNC_IDENT','OD','NUMBER','CUR_LOC','@','*','/','MOD','LSH','RSH'
 ,'+','-','!','XOR','&','%','AND','OR','>','<','GTEQ','LTEQ','#','THEN','ELSEIF','ELSE'
-,'FI',')','AREG','XREG','YREG','SR',',','INTERRUPT_IDENT' }
+,'FI',')','AREG','XREG','YREG','SR',',','INTERRUPT_IDENT','BOOL','CHAR','BYTE','INT'
+,'CARD','RECORDTYPE','PROC','INTERRUPT','DECLARE','TYPE','DEFINE','VECTOR','SET','MODULE'
+,'$','IDENT','FUNC' }
 FOLLOW['ArrayIndex'] { }
 FOLLOW['Factor'] { 'VAR_GLOBAL','VAR_LOCAL','VAR_PARAM','^','.','=','==+','==-','==*'
 ,'==/','==MOD','==&','==!','==%','==LSH','==RSH','RTI','BREAK','UNTILL','[','ASM'
 ,'RETURN','EXIT','DO','WHILE','IF','FOR','PROC_IDENT','FUNC_IDENT','OD','NUMBER','CUR_LOC'
 ,'@','*','/','MOD','LSH','RSH','+','-','!','XOR','&','%','AND','OR','>','<','GTEQ'
 ,'LTEQ','#','THEN','ELSEIF','ELSE','FI',')','AREG','XREG','YREG','SR',',','INTERRUPT_IDENT'
- }
+,'BOOL','CHAR','BYTE','INT','CARD','RECORDTYPE','PROC','INTERRUPT','DECLARE','TYPE'
+,'DEFINE','VECTOR','SET','MODULE','$','IDENT','FUNC' }
 FOLLOW['MemoryValue'] { '=' }
 FOLLOW['MemoryValue_1'] { '=' }
 FOLLOW['MemValLocation'] { '^','.','=' }
@@ -2397,11 +2463,14 @@ FOLLOW['Ident'] { ',','POINTER','ARRAY','BOOL','CHAR','BYTE','INT','CARD','RECOR
 FOLLOW['IdentInitType'] { }
 FOLLOW['InitData'] { }
 FOLLOW['InitData_1'] { }
-FOLLOW['IrqDecl'] { 'BOOL','CHAR','BYTE','INT','CARD','RECORDTYPE','PROC','INTERRUPT'
+FOLLOW['IrqDecl'] { }
+FOLLOW['IrqBody'] { 'BOOL','CHAR','BYTE','INT','CARD','RECORDTYPE','PROC','INTERRUPT'
 ,'DECLARE','TYPE','DEFINE','VECTOR','SET','MODULE','$','IDENT','FUNC' }
-FOLLOW['IrqDeclParams'] { 'BOOL','CHAR','BYTE','INT','CARD','RECORDTYPE','PROC','INTERRUPT'
+FOLLOW['IrqBody_1'] { 'BOOL','CHAR','BYTE','INT','CARD','RECORDTYPE','PROC','INTERRUPT'
 ,'DECLARE','TYPE','DEFINE','VECTOR','SET','MODULE','$','IDENT','FUNC' }
-FOLLOW['IrqBody'] { }
+FOLLOW['IrqBody_2'] { 'BOOL','CHAR','BYTE','INT','CARD','RECORDTYPE','PROC','INTERRUPT'
+,'DECLARE','TYPE','DEFINE','VECTOR','SET','MODULE','$','IDENT','FUNC' }
+FOLLOW['IrqDeclParams'] { 'IDENT','FUNC' }
 FOLLOW['ProcDecl'] { 'BOOL','CHAR','BYTE','INT','CARD','RECORDTYPE','PROC','INTERRUPT'
 ,'DECLARE','TYPE','DEFINE','VECTOR','SET','MODULE','$','IDENT','FUNC' }
 FOLLOW['ProcDeclParams'] { 'BOOL','CHAR','BYTE','INT','CARD','RECORDTYPE','PROC','INTERRUPT'
@@ -2421,6 +2490,8 @@ FOLLOW['DefineParamIdentList_1'] { 'POINTER','ARRAY','RECORDTYPE','CHAR','BYTE',
 ,'CARD','BOOL' }
 FOLLOW['DefineParamIdent'] { ',','POINTER','ARRAY','RECORDTYPE','CHAR','BYTE','INT'
 ,'CARD','BOOL' }
+FOLLOW['TypeField'] { }
+FOLLOW['TypeField_1'] { }
 FOLLOW['LocalDecls'] { '(' }
 FOLLOW['LocalTypeDef_1'] { '(' }
 FOLLOW['LocalVarDecls'] { 'TYPE','(' }
@@ -2452,8 +2523,6 @@ FOLLOW['SectionDef'] { 'STRING' }
 FOLLOW['SectionAtributes'] { }
 FOLLOW['Modes'] { 'START','SIZE','MODE','ZEROPAGE',']',',' }
 FOLLOW['AddressSize'] { 'START','SIZE','MODE','ZEROPAGE',']',',' }
-FOLLOW['Iff'] { 'SECTION','SET','PROCESSOR','{','}' }
-FOLLOW['Iff_1'] { 'SECTION','SET','PROCESSOR','{','}' }
 FOLLOW['IFFend'] { }
 FOLLOW['IFFend_1'] { }
 FOLLOW['IFFthenpart'] { 'FFI' }
@@ -2470,47 +2539,27 @@ FOLLOW['StatusFlags'] { 'BITS','BIT','AREG','XREG','YREG','<','GTEQ','=','^','TH
 FOLLOW['StatusFlags_1'] { 'BITS','BIT','AREG','XREG','YREG','<','GTEQ','=','^','THEN'
 ,'FFI' }
 FOLLOW['OptNot'] { 'NEG','CARRY','ZERO','OVERFLOW' }
-FOLLOW['Pop'] { 'IFF','SECTION','SET','PROCESSOR','{','}' }
-FOLLOW['Pop_1'] { 'IFF','SECTION','SET','PROCESSOR','{','}' }
 FOLLOW['PopDestList'] { }
 FOLLOW['PopDestList_1'] { }
 FOLLOW['PopDest'] { ',' }
 FOLLOW['PopDest_1'] { ',' }
-FOLLOW['Push'] { 'POP','IFF','SECTION','SET','PROCESSOR','{','}' }
-FOLLOW['Push_1'] { 'POP','IFF','SECTION','SET','PROCESSOR','{','}' }
 FOLLOW['PushSourceList'] { }
 FOLLOW['PushSourceList_1'] { }
 FOLLOW['PushSource'] { ',' }
 FOLLOW['PushSource_1'] { ',' }
-FOLLOW['Org'] { 'PUSH','POP','IFF','SECTION','SET','PROCESSOR','{','}' }
-FOLLOW['Org_1'] { 'PUSH','POP','IFF','SECTION','SET','PROCESSOR','{','}' }
-FOLLOW['DefineMemory'] { 'ORG','PUSH','POP','IFF','SECTION','SET','PROCESSOR','{','}'
- }
-FOLLOW['DefineMemory_2'] { 'ORG','PUSH','POP','IFF','SECTION','SET','PROCESSOR','{'
-,'}' }
-FOLLOW['DefineStorage'] { 'DB','DW','DL','DAS','DCS','ORG','PUSH','POP','IFF','SECTION'
-,'SET','PROCESSOR','{','}' }
-FOLLOW['DefineStorage_1'] { 'DB','DW','DL','DAS','DCS','ORG','PUSH','POP','IFF','SECTION'
-,'SET','PROCESSOR','{','}' }
-FOLLOW['Proceedure'] { 'DS','DB','DW','DL','DAS','DCS','ORG','PUSH','POP','IFF','SECTION'
-,'SET','PROCESSOR','{','}' }
-FOLLOW['Proceedure_1'] { 'DS','DB','DW','DL','DAS','DCS','ORG','PUSH','POP','IFF','SECTION'
-,'SET','PROCESSOR','{','}' }
 FOLLOW['AsmProcEnd'] { }
 FOLLOW['AsmProcEnd_1'] { }
 FOLLOW['AsmProcBody'] { 'EPROC' }
 FOLLOW['AsmProcBody_1'] { 'EPROC' }
 FOLLOW['AsmProcName'] { 'BEFIN' }
-FOLLOW['Instruction'] { 'PROC','DS','DB','DW','DL','DAS','DCS','ORG','PUSH','POP','IFF'
+FOLLOW['AsmStmts'] { 'SECTION','SET','PROCESSOR','{','}' }
+FOLLOW['AsmStmts_1'] { 'SECTION','SET','PROCESSOR','{','}' }
+FOLLOW['OptLabel'] { 'ADC','AND','EOR','ORA','CMP','SBC','LDA','STA','ASL','ROL','LSR'
+,'ROR','BCC','BCS','BEQ','BMI','BNE','BPL','BVC','BVS','BIT','BRK','CLC','CLD','CLI'
+,'CLV','DEX','DEY','INX','INY','NOP','PHA','PLA','PHP','PLP','RTI','RTS','SEC','SED'
+,'SEI','TAX','TAY','TXA','TYA','TXS','TSX','INC','DEC','JMP','JSR','CPX','CPY','LDX'
+,'LDY','STX','STY','PROC','DS','DB','DW','DL','DAS','DCS','ORG','PUSH','POP','IFF'
 ,'SECTION','SET','PROCESSOR','{','}' }
-FOLLOW['Instruction_1'] { 'PROC','DS','DB','DW','DL','DAS','DCS','ORG','PUSH','POP'
-,'IFF','SECTION','SET','PROCESSOR','{','}' }
-FOLLOW['DefineLabel'] { 'ADC','AND','EOR','ORA','CMP','SBC','LDA','STA','ASL','ROL'
-,'LSR','ROR','BCC','BCS','BEQ','BMI','BNE','BPL','BVC','BVS','BIT','BRK','CLC','CLD'
-,'CLI','CLV','DEX','DEY','INX','INY','NOP','PHA','PLA','PHP','PLP','RTI','RTS','SEC'
-,'SED','SEI','TAX','TAY','TXA','TYA','TXS','TSX','INC','DEC','JMP','JSR','CPX','CPY'
-,'LDX','LDY','STX','STY','PROC','DS','DB','DW','DL','DAS','DCS','ORG','PUSH','POP'
-,'IFF','SECTION','SET','PROCESSOR','{','}' }
 FOLLOW['Operand'] { }
 FOLLOW['Operand_1'] { }
 FOLLOW['RelAddressingMode'] { }
@@ -2532,5 +2581,5 @@ FOLLOW['Immediate'] { }
 FOLLOW['Absolute'] { '#','(','AREG' }
 FOLLOW['Absolute_1'] { '#','(','AREG' }
 ---------------- Create Parse Table --------------
-Table Entries = 1738
+Table Entries = 2050
 ------------ Check For Conflicts-------------

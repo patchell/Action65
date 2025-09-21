@@ -18,7 +18,6 @@ CValue* CAct65ADD::Process()
 	CAstNode* pChild = 0, * pNext = 0;
 	CValue* pValue = 0;
 
-//	fprintf(Act()->LogFile(), "Process %s Node:%d\n",GetNodeName(), GetID());
 	pChild = GetChild();
 	if (pChild)
 	{
@@ -36,11 +35,7 @@ CValue* CAct65ADD::Process()
 	{
 		m_pResultValue = pNext->GetNext()->Process();
 	}
-	if (m_pResultValue)
-		pValue = AltEmit(m_pChildValue, m_pNextValue, m_pResultValue);
-	else
-		pValue = Emit(m_pChildValue, m_pNextValue);
-	return pValue;
+	return Emit(m_pChildValue, m_pNextValue, m_pResultValue);
 }
 
 int CAct65ADD::Print(int Indent, char* s, int Strlen, bool* pbNextFlag)
@@ -65,22 +60,8 @@ void CAct65ADD::PrintNode(FILE* pOut, int Indent, bool* pbNextFlag)
 {
 	CAstNode::PrintNode(pOut, Indent, pbNextFlag);
 }
-CValue* CAct65ADD::Emit(CValue* pVc, CValue* pVn)
-{
-	if (!pVc)
-	{
-		fprintf(Act()->LogFile(), "Internal Error:ADD op Child Value is NULL Line:%d Col:%d\n", GetLine(), GetColumn());
-		Act()->Exit(2);
-	}
-	if (!pVn)
-	{
-		fprintf(Act()->LogFile(), "Internal Error:ADD op Next Value is NULL  Line:%d Col:%d\n", GetLine(), GetColumn());
-		Act()->Exit(2);
-	}
-	return Act()->GetParser()->GetCodeGenUtils()->EmitBinaryOp(Token::ADC, pVc, pVn, 0, GetSection());
-}
 
-CValue* CAct65ADD::AltEmit(CValue* pVc, CValue* pVn, CValue* pVr)
+CValue* CAct65ADD::Emit(CValue* pVc, CValue* pVn, CValue* pVr)
 {
 	if (!pVc)
 	{
@@ -92,5 +73,5 @@ CValue* CAct65ADD::AltEmit(CValue* pVc, CValue* pVn, CValue* pVr)
 		fprintf(Act()->LogFile(), "Internal Error:ADD op Next Value is NULL  Line:%d Col:%d\n", GetLine(), GetColumn());
 		Act()->Exit(2);
 	}
-	return Act()->GetParser()->GetCodeGenUtils()->EmitBinaryOp(Token::ADC, pVc, pVn, pVr, GetSection());
+	return Act()->GetParser()->GetCodeGenUtils()->EmitBinaryOp(Token::ADC, pVc, pVn, pVr, GetSection(),Token::CLC);
 }

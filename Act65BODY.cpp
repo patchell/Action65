@@ -52,5 +52,26 @@ void CAct65BODY::PrintNode(FILE* pOut, int Indent, bool* pbNextFlag)
 
 CValue* CAct65BODY::Emit(CValue* pVc, CValue* pVn)
 {
+	//-------------------------------
+	// Emit code for entry into an
+	// interrupt routine
+	//-------------------------------
+	CAct65Opcode* pInstruction = new CAct65Opcode;
+
+	pInstruction->PrepareInstruction(Token::PHA, AdrModeType::IMPLIED, 0, GetSection(), 0);
+	pInstruction->Emit(0, 0);
+	pInstruction->Reset();
+	pInstruction->PrepareInstruction(Token::TXA, AdrModeType::IMPLIED, 0, GetSection(), 0);	
+	pInstruction->Emit(0, 0);
+	pInstruction->Reset();
+	pInstruction->PrepareInstruction(Token::PHA, AdrModeType::IMPLIED, 0, GetSection(), 0);
+	pInstruction->Emit(0, 0);
+	pInstruction->Reset();
+	pInstruction->PrepareInstruction(Token::TYA, AdrModeType::IMPLIED, 0, GetSection(), 0);
+	pInstruction->Emit(0, 0);
+	pInstruction->Reset();
+	pInstruction->PrepareInstruction(Token::PHA, AdrModeType::IMPLIED, 0, GetSection(), 0);
+	pInstruction->Emit(0, 0);
+	delete pInstruction;
     return nullptr;
 }

@@ -32,7 +32,11 @@ CValue* CAct65BitWiseAND::Process()
 	{
 		m_pNextValue = pNext->Process();
 	}
-	return Emit(m_pChildValue, m_pChildValue);
+	if (pNext->GetNext())
+	{
+		m_pResultValue = pNext->GetNext()->Process();
+	}
+	return Emit(m_pChildValue, m_pNextValue, m_pResultValue);
 }
 
 int CAct65BitWiseAND::Print(int Indent, char* s, int Strlen, bool* pbNextFlag)
@@ -48,7 +52,23 @@ void CAct65BitWiseAND::PrintNode(FILE* pOut, int Indent, bool* pbNextFlag)
 	CAstNode::PrintNode(pOut, Indent, pbNextFlag);
 }
 
-CValue* CAct65BitWiseAND::Emit(CValue* pVc, CValue* pVn)
+CValue* CAct65BitWiseAND::Emit(CValue* pVc, CValue* pVn, CValue* pVr)
 {
-    return nullptr;
+	if (!pVc)
+	{
+		fprintf(Act()->LogFile(), "Internal Error:ADD op Child Value is NULL Line:%d Col:%d\n", GetLine(), GetColumn());
+		Act()->Exit(2);
+	}
+	if (!pVn)
+	{
+		fprintf(Act()->LogFile(), "Internal Error:ADD op Next Value is NULL  Line:%d Col:%d\n", GetLine(), GetColumn());
+		Act()->Exit(2);
+	}
+	return GetCodeGen()->EmitBinaryOp(
+		Token::AND, 
+		pVc, 
+		pVn, 
+		pVr, 
+		GetSection()
+	);
 }

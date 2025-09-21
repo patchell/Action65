@@ -1,4 +1,5 @@
 #include "pch.h"
+class CCodeGeneration;
 
 CAstNode::CAstNode()
 {
@@ -233,19 +234,26 @@ CAstNode* CAstNode::MakeChildList(CAstNode* pList, CAstNode* pChild)
 
 	if (pList)
 	{
-		pChild->SetParent(pList);
-		pNode = pList->GetChild();
-		if (pNode)
+		if (pChild)
 		{
-			while (pNode->GetNext())
+			pChild->SetParent(pList);
+			pNode = pList->GetChild();
+			if (pNode)
 			{
-				pNode = pNode->GetNext();
+				while (pNode->GetNext())
+				{
+					pNode = pNode->GetNext();
+				}
+				pNode->SetNext(pChild);
 			}
-			pNode->SetNext(pChild);
+			else
+			{
+				pList->SetChild(pChild);
+			}
 		}
 		else
 		{
-			pList->SetChild(pChild);
+			fprintf(stderr, "WARNING CAstNode::MakeChildList ... Child was NULL\n");
 		}
 	}
 	else
@@ -290,4 +298,9 @@ CParser* CAstNode::GetParser()
 FILE* CAstNode::LogFile()
 {
 	return GetParser()->LogFile();
+}
+
+CCodeGeneration* CAstNode::GetCodeGen()
+{
+    return Act()->GetParser()->GetCodeGenUtils();
 }

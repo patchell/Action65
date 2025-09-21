@@ -34,6 +34,7 @@ public:
 	CReg() {
 		m_InUse = false;
 		m_Type = RegType::NONE;
+		m_pTypeChain = 0;
 	}
 	virtual ~CReg() {}
 	void Lock() { m_InUse = true; }

@@ -36,11 +36,7 @@ CValue* CAct65SUB::Process()
 	{
 		m_pResultValue = pNext->GetNext()->Process();
 	}
-	if (m_pResultValue)
-		pValue = AltEmit(m_pChildValue, m_pNextValue, m_pResultValue);
-	else
-		pValue = Emit(m_pChildValue, m_pNextValue);
-	return pValue;
+	return Emit(m_pChildValue, m_pNextValue, m_pResultValue);
 }
 
 int CAct65SUB::Print(int Indent, char* s, int Strlen, bool* pbNextFlag)
@@ -56,12 +52,8 @@ void CAct65SUB::PrintNode(FILE* pOut, int Indent, bool* pbNextFlag)
 	CAstNode::PrintNode(pOut, Indent, pbNextFlag);
 }
 
-CValue* CAct65SUB::Emit(CValue* pVc, CValue* pVn)
-{
-	return Act()->GetParser()->GetCodeGenUtils()->EmitBinaryOp(Token::SBC, pVc, pVn, 0, GetSection());
-}
 
-CValue* CAct65SUB::AltEmit(CValue* pVc, CValue* pVn, CValue* pVr)
+CValue* CAct65SUB::Emit(CValue* pVc, CValue* pVn, CValue* pVr)
 {
-	return Act()->GetParser()->GetCodeGenUtils()->EmitBinaryOp(Token::SBC, pVc, pVn, pVr, GetSection());
+	return GetCodeGen()->EmitBinaryOp(Token::SBC, pVc, pVn, pVr, GetSection(), Token::SEC);
 }

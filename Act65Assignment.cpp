@@ -18,7 +18,6 @@ CValue* CAct65Assignment::Process()
 	CAstNode* pChild = 0, * pNext = 0;
 	CValue* pValue = 0;
 
-	fprintf(Act()->LogFile(), "Process %s Node:%d\n", GetNodeName(), GetID());
 	pChild = GetChild();
 	if (pChild)
 	{

@@ -18,7 +18,6 @@ CValue* CAct65OD::Process()
 	CAstNode* pChild = 0, * pNext = 0;
 	CValue* pValue = 0;
 
-	fprintf(Act()->LogFile(), "Process %s Node:%d\n", GetNodeName(), GetID());
 	pChild = GetChild();
 	if (pChild)
 	{
@@ -53,7 +52,6 @@ CValue* CAct65OD::Emit(CValue* pVc, CValue* pVn)
 	CStackDOODItem* pDOODItem = 0;
 	CAct65Opcode* pInstruction = 0;
 
-	fprintf(LogFile(), "Emit OD ID = %d\n", GetID());
 	pDOODItem = (CStackDOODItem*)Act()->GetDOODStack()->Pop();
 	if (pDOODItem)
 	{

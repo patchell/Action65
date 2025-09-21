@@ -32,7 +32,11 @@ CValue* CAct65XOR::Process()
 	{
 		m_pNextValue = pNext->Process();
 	}
-	return Emit(m_pChildValue, m_pChildValue);
+	if (pNext->GetNext())
+	{
+		m_pResultValue = pNext->GetNext()->Process();
+	}
+	return Emit(m_pChildValue, m_pNextValue, m_pResultValue);
 }
 
 int CAct65XOR::Print(int Indent, char* s, int Strlen, bool* pbNextFlag)
@@ -48,7 +52,13 @@ void CAct65XOR::PrintNode(FILE* pOut, int Indent, bool* pbNextFlag)
 	CAstNode::PrintNode(pOut, Indent, pbNextFlag);
 }
 
-CValue* CAct65XOR::Emit(CValue* pVc, CValue* pVn)
+CValue* CAct65XOR::Emit(CValue* pVc, CValue* pVn, CValue* pVr)
 {
-    return nullptr;
+	return GetCodeGen()->EmitBinaryOp(
+		Token::EOR, 
+		pVc, 
+		pVn, 
+		pVr, 
+		GetSection()
+	);
 }

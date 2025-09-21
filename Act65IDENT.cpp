@@ -18,7 +18,6 @@ CValue* CAct65IDENT::Process()
 	CAstNode* pChild = 0, * pNext = 0;
 	CValue* pValue = 0;
 
-	fprintf(Act()->LogFile(), "Process %s %s Node:%d\n", GetNodeName(), GetSymbol()->GetName(), GetID());
 	pChild = GetChild();
 	if (pChild)
 	{
@@ -63,9 +62,5 @@ void CAct65IDENT::PrintNode(FILE* pOut, int Indent, bool* pbNextFlag)
 
 CValue* CAct65IDENT::Emit(CValue* pVc, CValue* pVn)
 {
-	fprintf(LogFile(), "EMIT:IDENT:ID=%d:%s\n", 
-		GetID(), 
-		GetSymbol()->GetName()
-	);
     return GetValue();
 }

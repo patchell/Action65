@@ -12,10 +12,14 @@ public:
 	virtual int Print(int Indent, char* s, int l, bool* pbNextFlag);
 	virtual void PrintNode(FILE* pOut, int Indent, bool* pbNextFlag);
 	virtual CValue* Emit(CValue* pVc, CValue* pVn);
-	virtual const char* GetNodeName() { return m_pNodeTyypeName; }
-	void SetSection(CSection* pSection) {
-		m_pSection = pSection;
+	virtual const char* GetNodeName() { 
+		return m_pNodeTyypeName; 
 	}
-	CSection* GetSection() { return m_pSection; }
+	//void SetSection(CSection* pSection) {
+	//	m_pSection = pSection;
+	//}
+	//CSection* GetSection() { 
+	//	return m_pSection; 
+	//}
 };
 

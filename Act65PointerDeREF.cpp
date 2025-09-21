@@ -18,7 +18,6 @@ CValue* CAct65PointerDeREF::Process()
 	CAstNode* pChild = 0, * pNext = 0;
 	CValue* pValue = 0;
 
-	fprintf(Act()->LogFile(), "Process %s Node:%d\n", GetNodeName(), GetID());
 	pChild = GetChild();
 	if (pChild)
 	{
@@ -85,7 +84,7 @@ CValue* CAct65PointerDeREF::Emit(CValue* pVc, CValue* pVn)
 	CAct65Opcode* pInstruction = 0;
 	CObjTypeChain::Spec FundSpec;
 	AdrModeType AddressingMode;
-
+	CValue* pLabel = GetCodeGen()->GetPendingLabel();
 	bool Byte = false;
 
 	pNewTypeChain->Create();
@@ -115,7 +114,7 @@ CValue* CAct65PointerDeREF::Emit(CValue* pVc, CValue* pVn)
 		AddressingMode = AdrModeType::ZERO_PAGE_ADR;
 	else
 		AddressingMode = AdrModeType::ABSOLUTE_ADR;
-	pInstruction->PrepareInstruction(Token::LDA, AddressingMode, pVc, GetSection(), 0);
+	pInstruction->PrepareInstruction(Token::LDA, AddressingMode, pVc, GetSection(), pLabel);
 	pInstruction->Emit(0, 0);
 	pInstruction->Reset();
 	// Save the accumulator into the virtual reg (dereference)

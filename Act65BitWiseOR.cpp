@@ -18,7 +18,6 @@ CValue* CAct65BitWiseOR::Process()
 	CAstNode* pChild = 0, * pNext = 0;
 	CValue* pValue = 0;
 
-	fprintf(Act()->LogFile(), "Process %s Node:%d\n", GetNodeName(), GetID());
 	pChild = GetChild();
 	if (pChild)
 	{
@@ -32,7 +31,11 @@ CValue* CAct65BitWiseOR::Process()
 	{
 		m_pNextValue = pNext->Process();
 	}
-	return Emit(m_pChildValue, m_pChildValue);
+	if (pNext->GetNext())
+	{
+		m_pResultValue = pNext->GetNext()->Process();
+	}
+	return Emit(m_pChildValue, m_pNextValue, m_pResultValue);
 }
 
 int CAct65BitWiseOR::Print(int Indent, char* s, int Strlen, bool* pbNextFlag)
@@ -48,7 +51,23 @@ void CAct65BitWiseOR::PrintNode(FILE* pOut, int Indent, bool* pbNextFlag)
 	CAstNode::PrintNode(pOut, Indent, pbNextFlag);
 }
 
-CValue* CAct65BitWiseOR::Emit(CValue* pVc, CValue* pVn)
+CValue* CAct65BitWiseOR::Emit(CValue* pVc, CValue* pVn, CValue* pVr)
 {
-    return nullptr;
+	if (!pVc)
+	{
+		fprintf(Act()->LogFile(), "Internal Error:ADD op Child Value is NULL Line:%d Col:%d\n", GetLine(), GetColumn());
+		Act()->Exit(2);
+	}
+	if (!pVn)
+	{
+		fprintf(Act()->LogFile(), "Internal Error:ADD op Next Value is NULL  Line:%d Col:%d\n", GetLine(), GetColumn());
+		Act()->Exit(2);
+	}
+	return GetCodeGen()->EmitBinaryOp(
+		Token::ORA,
+		pVc,
+		pVn,
+		pVr,
+		GetSection()
+	);
 }

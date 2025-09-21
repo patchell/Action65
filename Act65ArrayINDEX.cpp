@@ -18,7 +18,6 @@ CValue* CAct65ArrayINDEX::Process()
 	CAstNode* pChild = 0, * pNext = 0;
 	CValue* pValue = 0;
 
-	fprintf(Act()->LogFile(), "Process %s Node:%d\n", GetNodeName(), GetID());
 	pChild = GetChild();
 	if (pChild)
 	{
@@ -70,7 +69,9 @@ CValue* CAct65ArrayINDEX::Emit(CValue* pVc, CValue* pVn)
 	//---------------------------------
 	CValue* pRetValue = 0;
 	CAct65Opcode* pInstruction = 0;
+	CValue* pLabel;
 
+	pLabel = GetCodeGen()->GetPendingLabel();
 	switch (pVc->GetValueType())
 	{
 	case CValue::ValueType::REG:
@@ -78,7 +79,7 @@ CValue* CAct65ArrayINDEX::Emit(CValue* pVc, CValue* pVn)
 		{
 		case CReg::RegType::A:
 			pInstruction = new CAct65Opcode;
-			pInstruction->PrepareInstruction(Token::TAX, AdrModeType::IMPLIED, 0, GetSection(), 0);
+			pInstruction->PrepareInstruction(Token::TAX, AdrModeType::IMPLIED, 0, GetSection(), pLabel);
 			pInstruction->Emit(0, 0);
 			pVc->GetRegister()->SetType(CReg::RegType::X);
 			delete pInstruction;

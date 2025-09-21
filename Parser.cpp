@@ -270,7 +270,7 @@ void CParser::PrintSections()
 	pSec = GetSectionHead();
 	while (pSec)
 	{
-		pSec->Print(LogFile(), "");
+		pSec->Print(LogFile(), "   ");
 		pSec = (CSection * )pSec->GetNextSection();
 	}
 }
@@ -3358,6 +3358,7 @@ CAstNode* CParser::FundDecl()
 	bool Loop = true;
 	CAstNode* pN= 0;
 	CAstNode* pNext = 0, *pChild = 0;
+	CAstNode* pOtherNode = 0;
 	CObjTypeChain* pOTC = 0;
 	CTypeChain* pTC = 0;
 
@@ -3540,6 +3541,8 @@ CAstNode* CParser::FundDecl()
 			pChild = IrqDecl(pTC);
 			//------------Abstract syntax Tree Node -----------
 			pN->SetChild(pChild);
+			pOtherNode = IrqBody();
+			pChild = CAstNode::MakeNextList(pChild, pOtherNode);
 			pNext = CAstNode::MakeNextList(pNext, pN);
 			delete pTC;
 			break;
@@ -3850,12 +3853,12 @@ CAstNode* CParser::InitData()
 	return pNext;
 }
 
-//---------------- INTERRUPT ----------------
+//---------------- INTERRUPT Procedure ----------------
 
 CAstNode* CParser::IrqDecl(CTypeChain* pTypeChain)
 {
 	//--------------------------------------------
-	//	IrqDecl	-> 'IDENT' OptInit IrqDeclParams;
+	//	IrqDecl	-> 'IDENT' OptInit;
 	//--------------------------------------------
 	CAstNode* pNext = 0;
 	CAstNode* pInit = 0;
@@ -3885,8 +3888,6 @@ CAstNode* CParser::IrqDecl(CTypeChain* pTypeChain)
 		pNext->CreateValue(pSym);
 		pInit = OptInit();
 		pNext->SetChild(pInit);
-		pChild = IrqDeclParams();
-		pNext = CAstNode::MakeNextList(pNext, pChild);
 		//--------------- Wrap Up ------------------------
 		break;
 	default:
@@ -3899,44 +3900,43 @@ CAstNode* CParser::IrqDecl(CTypeChain* pTypeChain)
 CAstNode* CParser::IrqDeclParams()
 {
 	//--------------------------------------------
-	//	IrqDeclParams	-> '(' ')' IrqBody;
+	//	IrqDeclParams	-> '(' ')';
 	//--------------------------------------------
 	CAstNode* pBody = 0;
 	CAstNode* pParamList = 0;
-	CAstNode* pNext = 0;
 
 	Expect(Token('('));
 	pParamList = new CAct65ParamList;
 	Expect(Token(')'));
-	pBody = IrqBody();
-	pNext = CAstNode::MakeNextList(pNext, pBody);
-	return pNext;
+	return pParamList;
 }
 
 
 CAstNode* CParser::IrqBody()
 {
 	//--------------------------------------------
-	//	IrqBody->LocalDecls Statements;
+	//	IrqBody->IrqDeclParams IrqBody_1;
+	//	IrqBody_1->LocalDecls IrqBody_2;
+	//	IrqBody_2->Statements;
 	//--------------------------------------------
 	CAstNode* pN = 0;
 	CAstNode* pChild = 0;
 	CAstNode* pStatements = 0;
 	CAstNode* pNext = 0;
 	CAstNode* pLocal = 0;
+	CAstNode* pParamList = 0;
 
-	pLocal = new CAct65LocalVar;
 	pN = new CAct65BODY;
+	pParamList = IrqDeclParams();
 	pChild = LocalDecls();
-	pLocal->SetChild(pChild);
-	pNext = CAstNode::MakeNextList(pNext, pLocal);
+	pParamList = CAstNode::MakeNextList(pParamList, pChild);
 	//-------------------
 	pStatements = Statements();
-	pChild = CAstNode::MakeNextList(pNext, pStatements);
-	pNext = pN->SetChild(pChild);
+	pParamList = CAstNode::MakeNextList(pParamList, pStatements);
+	pN->SetChild(pParamList);
 	GetLexer()->GetSymTab()->RemoveAllOfType(CBin::IdentType::LOCAL);
 	SetCurrentProc(0);
-	return pNext;
+	return pN;
 
 }
 

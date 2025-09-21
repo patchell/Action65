@@ -1,60 +1,40 @@
-File:test9.act has 468 Bytes
+File:test9.act has 461 Bytes
 File:Action.Act65_settings has 974 Bytes
-Section:STACK:Start:$0100 Size:$0100 MODE:R/W:ABSOLUTE Address Size:WORD
-Section:LOCALS:Start:$1200 Size:$0800 MODE:R/W:ABSOLUTE Address Size:WORD
-Section:PARAMS:Start:$0A00 Size:$0800 MODE:R/W:ABSOLUTE Address Size:WORD
-Section:GLOBALS:Start:$0200 Size:$0800 MODE:R/W:ABSOLUTE Address Size:WORD
-Section:VECTOR:Start:$FFFA Size:$0006 MODE:RO:ABSOLUTE Address Size:WORD
-Section:CONST:Start:$F800 Size:$0800 MODE:RO:ABSOLUTE Address Size:WORD
-Section:STRINGS:Start:$F800 Size:$0800 MODE:RO:ABSOLUTE Address Size:WORD
-Section:ZERO:Start:$0000 Size:$0100 MODE:R/W:ABSOLUTE Address Size:BYTE
-Section:CODE:Start:$F800 Size:$0800 MODE:RO:ABSOLUTE Address Size:WORD
-Section:VREG:Start:$0000 Size:$0100 MODE:R/W:RELOCATALE Address Size:BYTE
+   Section:STACK:Start:$0100 Size:$0100 MODE:R/W:ABSOLUTE Address Size:WORD
+   Section:LOCALS:Start:$1200 Size:$0800 MODE:R/W:ABSOLUTE Address Size:WORD
+   Section:PARAMS:Start:$0A00 Size:$0800 MODE:R/W:ABSOLUTE Address Size:WORD
+   Section:GLOBALS:Start:$0200 Size:$0800 MODE:R/W:ABSOLUTE Address Size:WORD
+   Section:VECTOR:Start:$FFFA Size:$0006 MODE:RO:ABSOLUTE Address Size:WORD
+   Section:CONST:Start:$F800 Size:$0800 MODE:RO:ABSOLUTE Address Size:WORD
+   Section:STRINGS:Start:$F800 Size:$0800 MODE:RO:ABSOLUTE Address Size:WORD
+   Section:ZERO:Start:$0000 Size:$0100 MODE:R/W:ABSOLUTE Address Size:BYTE
+   Section:CODE:Start:$F800 Size:$0800 MODE:RO:ABSOLUTE Address Size:WORD
+   Section:VREG:Start:$0000 Size:$0100 MODE:R/W:RELOCATALE Address Size:BYTE
 File:Linker.Act65_LinkerScript has 38 Bytes
 Parser Created
 ------------  Pass 1:AST Generation  ------------------
 ------------ Remove Symbol(s) From Table --------------
-	V1 was removed
-	V2 was removed
-	V3 was removed
-	aX was removed
-	Result was removed
-	pY was removed
 	 NUMB  CHILD  NEXT
      1      2     -1  +- 'ROOT'
      2      3     -1     +- 'MODULE'
-     3      4     -1        +- 'IRQ-PROC'
-     4     -1      7           +- 'IDENT': Hey
-     7      6     -1           +- 'Body'
-     6     12     19              +- 'LOCAL Vars'
-    12      8     15              |  +- 'BYTE'
-     8     -1      9              |  |  +- 'IDENT': Result
-     9     -1     10              |  |  +- 'IDENT': V1
-    10     -1     11              |  |  +- 'IDENT': V2
-    11     -1     -1              |  |  +- 'IDENT': V3
-    15     13     18              |  +- 'BYTE'
-    13     14     -1              |  |  +- 'ARRAY'
-    14     -1     -1              |  |     +- 'IDENT': aX
-    18     16     -1              |  +- 'BYTE'
-    16     17     -1              |     +- 'POINTER'
-    17     -1     -1              |        +- 'IDENT': pY
-    19     20     -1              +- 'STATEMENTS'
-    20     21     22                 +- 'ASM'
-    21     -1     -1                 |  +- 'SECTION' Code Start:$0000 SIZE:$1000 MODE:MODE_READ_ONLY PAGE0:FALSE
-    22     23     35                 +- 'DO'
-    23     25     34                 |  +- 'STATEMENTS'
-    25     28     -1                 |  |  +- 'Assign ='
-    28     27     24                 |  |     +- 'ADD'
-    27     26     33                 |  |     |  +- 'DEREF'
-    26     -1     -1                 |  |     |  |  +- 'IDENT': pY
-    33     32     -1                 |  |     |  +- 'IDENT': aX
-    32     30     -1                 |  |     |     +- 'INDEX'
-    30     29     -1                 |  |     |        +- 'ADD'
-    29     -1     31                 |  |     |           +- 'IDENT': V2
-    31     -1     -1                 |  |     |           +- 'IDENT': V3
-    24     -1     -1                 |  |     +- 'IDENT': Result
-    34     -1     -1                 |  +- 'OD'
-    35     -1     -1                 +- 'RETURN'
+     3      4     10        +- 'IRQ-PROC'
+     4     -1      5        |  +- 'IDENT': Hey
+     5      6     -1        |  +- 'Body'
+     6     -1      7        |     +- 'Param LIST'
+     7      8     -1        |     +- 'STATEMENTS'
+     8      9     -1        |        +- 'ASM'
+     9     -1     -1        |           +- 'SECTION' Code Start:$0000 SIZE:$1000 MODE:MODE_READ_ONLY PAGE0:FALSE
+    10     11     15        +- 'BYTE'
+    11     -1     12        |  +- 'IDENT': Result
+    12     -1     13        |  +- 'IDENT': V1
+    13     -1     14        |  +- 'IDENT': V2
+    14     -1     -1        |  +- 'IDENT': V3
+    15     16     18        +- 'BYTE'
+    16     17     -1        |  +- 'ARRAY'
+    17     -1     -1        |     +- 'IDENT': aX
+    18     19     -1        +- 'BYTE'
+    19     20     -1           +- 'POINTER'
+    20     -1     -1              +- 'IDENT': pY
 ------------  Pass 1:AST Optimization  ------------------
 CheckNode:ROOT
 Node     1::ROOT
@@ -65,149 +45,59 @@ Node     3::IRQ-PROC
 CheckNode:IDENT
 Node     4::IDENT
 CheckNode:Body
-Node     7::Body
-CheckNode:LOCAL Vars
-Node     6::LOCAL Vars
+Node     5::Body
+CheckNode:Param LIST
+Node     6::Param LIST
+CheckNode:STATEMENTS
+Node     7::STATEMENTS
+CheckNode:ASM
+Node     8::ASM
+CheckNode:SECTION
+Node     9::SECTION
 CheckNode:BYTE
-Node    12::BYTE
-CheckNode:IDENT
-Node     8::IDENT
-CheckNode:IDENT
-Node     9::IDENT
-CheckNode:IDENT
-Node    10::IDENT
+Node    10::BYTE
 CheckNode:IDENT
 Node    11::IDENT
-CheckNode:BYTE
-Node    15::BYTE
-CheckNode:ARRAY
-Node    13::ARRAY
+CheckNode:IDENT
+Node    12::IDENT
+CheckNode:IDENT
+Node    13::IDENT
 CheckNode:IDENT
 Node    14::IDENT
 CheckNode:BYTE
-Node    18::BYTE
-CheckNode:POINTER
-Node    16::POINTER
+Node    15::BYTE
+CheckNode:ARRAY
+Node    16::ARRAY
 CheckNode:IDENT
 Node    17::IDENT
-CheckNode:STATEMENTS
-Node    19::STATEMENTS
-CheckNode:ASM
-Node    20::ASM
-CheckNode:SECTION
-Node    21::SECTION
-CheckNode:DO
-Node    22::DO
-CheckNode:STATEMENTS
-Node    23::STATEMENTS
-CheckNode:Assign =
-Optimize this NODE: Assign =
-CheckNode::Child:ADD
-Node    25::Assign =
-CheckNode:ADD
-Node    28::ADD
-CheckNode:DEREF
-Node    27::DEREF
+CheckNode:BYTE
+Node    18::BYTE
+CheckNode:POINTER
+Node    19::POINTER
 CheckNode:IDENT
-Node    26::IDENT
-CheckNode:IDENT
-Node    33::IDENT
-CheckNode:INDEX
-Node    32::INDEX
-CheckNode:ADD
-Node    30::ADD
-CheckNode:IDENT
-Node    29::IDENT
-CheckNode:IDENT
-Node    31::IDENT
-CheckNode:IDENT
-Node    24::IDENT
-CheckNode:OD
-Node    34::OD
-CheckNode:RETURN
-Node    35::RETURN
+Node    20::IDENT
 	 NUMB  CHILD  NEXT
      1      2     -1  +- 'ROOT'
      2      3     -1     +- 'MODULE'
-     3      4     -1        +- 'IRQ-PROC'
-     4     -1      7           +- 'IDENT': Hey
-     7      6     -1           +- 'Body'
-     6     12     19              +- 'LOCAL Vars'
-    12      8     15              |  +- 'BYTE'
-     8     -1      9              |  |  +- 'IDENT': Result
-     9     -1     10              |  |  +- 'IDENT': V1
-    10     -1     11              |  |  +- 'IDENT': V2
-    11     -1     -1              |  |  +- 'IDENT': V3
-    15     13     18              |  +- 'BYTE'
-    13     14     -1              |  |  +- 'ARRAY'
-    14     -1     -1              |  |     +- 'IDENT': aX
-    18     16     -1              |  +- 'BYTE'
-    16     17     -1              |     +- 'POINTER'
-    17     -1     -1              |        +- 'IDENT': pY
-    19     20     -1              +- 'STATEMENTS'
-    20     21     22                 +- 'ASM'
-    21     -1     -1                 |  +- 'SECTION' Code Start:$0000 SIZE:$1000 MODE:MODE_READ_ONLY PAGE0:FALSE
-    22     23     35                 +- 'DO'
-    23     25     34                 |  +- 'STATEMENTS'
-    25     28     -1                 |  |  +- 'Assign ='
-    28     27     -1                 |  |     +- 'ADD'
-    27     26     33                 |  |        +- 'DEREF'
-    26     -1     -1                 |  |        |  +- 'IDENT': pY
-    33     32     24                 |  |        +- 'IDENT': aX
-    32     30     -1                 |  |        |  +- 'INDEX'
-    30     29     -1                 |  |        |     +- 'ADD'
-    29     -1     31                 |  |        |        +- 'IDENT': V2
-    31     -1     -1                 |  |        |        +- 'IDENT': V3
-    24     -1     -1                 |  |        +- 'IDENT': Result
-    34     -1     -1                 |  +- 'OD'
-    35     -1     -1                 +- 'RETURN'
+     3      4     10        +- 'IRQ-PROC'
+     4     -1      5        |  +- 'IDENT': Hey
+     5      6     -1        |  +- 'Body'
+     6     -1      7        |     +- 'Param LIST'
+     7      8     -1        |     +- 'STATEMENTS'
+     8      9     -1        |        +- 'ASM'
+     9     -1     -1        |           +- 'SECTION' Code Start:$0000 SIZE:$1000 MODE:MODE_READ_ONLY PAGE0:FALSE
+    10     11     15        +- 'BYTE'
+    11     -1     12        |  +- 'IDENT': Result
+    12     -1     13        |  +- 'IDENT': V1
+    13     -1     14        |  +- 'IDENT': V2
+    14     -1     -1        |  +- 'IDENT': V3
+    15     16     18        +- 'BYTE'
+    16     17     -1        |  +- 'ARRAY'
+    17     -1     -1        |     +- 'IDENT': aX
+    18     19     -1        +- 'BYTE'
+    19     20     -1           +- 'POINTER'
+    20     -1     -1              +- 'IDENT': pY
 ------------  Pass 2:CODE Generation  ------------------
 Process ROOT Node:1
 Process MODULE Node:2
-Process IDENT Hey Node:4
-EMIT:IDENT:ID=4:Hey
-Process LOCAL Vars Node:6
-Process IDENT Result Node:8
-EMIT:IDENT:ID=8:Result
-Process IDENT V1 Node:9
-EMIT:IDENT:ID=9:V1
-Process IDENT V2 Node:10
-EMIT:IDENT:ID=10:V2
-Process IDENT V3 Node:11
-EMIT:IDENT:ID=11:V3
-Process ARRAY Node:13
-Process IDENT aX Node:14
-EMIT:IDENT:ID=14:aX
-Process ASM Node:20
-Process SECTION Node:21
-Process Assign = Node:25
-Process DEREF Node:27
-Process IDENT pY Node:26
-EMIT:IDENT:ID=26:pY
-Emit:	LDA	 pY
-Emit:	STA	 VR1_0
-Emit:	LDA	 pY + $0001
-Emit:	STA	 VR1_0 + 1
-Process IDENT aX Node:33
-Process INDEX Node:32
-Process IDENT V2 Node:29
-EMIT:IDENT:ID=29:V2
-Process IDENT V3 Node:31
-EMIT:IDENT:ID=31:V3
-Emit:	CLC	
-Emit:	LDA	 V3
-Emit:	ADC	 V2
-Emit:	TAX	
-EMIT:IDENT:ID=33:aX
-Process IDENT Result Node:24
-EMIT:IDENT:ID=24:Result
-Emit:	CLC	
-Array Arg aX
-Emit:	LDA	 aX,X
-Emit:	LDY	 #$00
-Emit:	ADC	(VR1_0),.Y
-Emit:	STA	 Result
-Process OD Node:34
-Emit OD ID = 34
-Emit:	JMP	 DOlabel__19
-Emit:	RTS	
+No Section Defined 0:(null)  Line:16 Col:3

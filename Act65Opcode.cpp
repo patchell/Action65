@@ -40,7 +40,6 @@ CValue* CAct65Opcode::Process()
 	CAstNode* pChild = 0, * pNext = 0;
 	CValue* pValue = 0;
 
-	fprintf(Act()->LogFile(), "Process %s Node:%d\n", GetNodeName(), GetID());
 	pChild = GetChild();
 	if (pChild)
 	{
@@ -416,13 +415,16 @@ void CAct65Opcode::PrepareInstruction(
 )
 {
 	CLexer* pLex = Act()->GetParser()->GetLexer();
-
-	if (pLabel)
+	if(pSection == 0)
 	{
-		if (strcmp("Are", pLabel->GetName()) == 0)
-		{
-			printf("%s\n", pLabel->GetName());
-		}
+		ThrownException.SetXCeptType(Exception::ExceptionType::NOSECTION_DEFINED);
+		sprintf_s(
+			ThrownException.GetErrorString(),
+			ThrownException.GetMaxStringLen(),
+			"Line %d: No Section Defined for Instruction\n",
+			pLex->GetLineNumber()
+		);
+		throw(ThrownException);
 	}
 	m_pKeyWord = pLex->FindKeyword(OpToken);
 	if (m_pKeyWord->m_pAddresModeLUT->ValidAddressingMode(AddressMode))

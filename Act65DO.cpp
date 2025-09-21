@@ -57,7 +57,6 @@ CValue* CAct65DO::Emit(CValue* pVc, CValue* pVn)
 	CStackDOODItem* pDOODStackItem = 0;
 	CValue* pLabelValue = 0;
 
-//	fprintf(LogFile(), "Emit DO ID = %d\n", GetID());
 	StartAddressOfDO = GetSection()->GetLocationCounter();
 	pStartSymbol = Act()->GetParser()->GenerateSymbol("DOlabel_");
 	pStartSymbol->SetAddress(StartAddressOfDO);
@@ -68,6 +67,7 @@ CValue* CAct65DO::Emit(CValue* pVc, CValue* pVn)
 	pLabelValue->Create(pStartSymbol);
 	pDOODStackItem = new CStackDOODItem;
 	pDOODStackItem->Create(pLabelValue);
+	Act()->GetParser()->GetCodeGenUtils()->SetPendingLabel(pLabelValue);
 	Act()->GetDOODStack()->Push(pDOODStackItem);
     return nullptr;
 }

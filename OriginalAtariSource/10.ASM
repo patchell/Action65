@@ -29,7 +29,7 @@
 
 
 
-segment	proc	
+segment	proc		; parse proc and func
 	cmp	#proc
 	beq	..proc
 	ldx	nxttoken
@@ -958,4 +958,4 @@ addcdsp	proc
 ..acsret	pla	
 	sta	(arg14),y
 	rts	
-›arrayt+8	; small array?
+›arrayt+8	; small array?

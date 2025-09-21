@@ -66,21 +66,6 @@
 //	anyway.  I will eventually add the rest
 //	of the PL/65 statements, well, maybe
 //	most of them.
-//
-//	March 17. 2025
-//	Om tje assembler, changed the way
-//	LABELs are parsed, to fix a really
-//	to work with AST tree
-//
-// Version 0.0.12 March 19, 2025
-// Gave up on the fancy assembler grammar
-// and went with something simple that I knew
-// would work.
-//
-// Version 0.0.14 April 5, 2025
-// Added a new variable decel grammar
-// just for TYPE rather than using
-// the one for LocalVaiables
 //----------------------------------
 
 TERMINALS
@@ -633,8 +618,8 @@ TypeDefDecl_1	-> 'TYPE' TypeDef Declare TypeDefDecl_1
 				-> .
 				;
 
-TypeDef			-> 'IDENT' TypeDef_1;
-TypeDef_1		-> '=' '[' TypeField
+TypeDef			-> IDENT TypeDef_1;
+TypeDef_1		-> '=' '[' LocalDecls
 				-> ']';
 
 //--------------------------------------------
@@ -803,21 +788,6 @@ DefineParamIdentList_1	-> ',' DefineParamIdent DefineParamIdentList_1
 						;
 
 DefineParamIdent		-> 'IDENT';
-
-//-----------------------------------------------
-// TYPE field members
-//-----------------------------------------------
-
-TypeField		-> LocalTypeSpec TypeField_1;
-TypeField_1		-> 'CHAR' LocalTypeSpec  TypeField_1
-				-> 'BYTE' LocalTypeSpec  TypeField_1
-				-> 'INT' LocalTypeSpec  TypeField_1
-				-> 'CARD' LocalTypeSpec  TypeField_1
-				-> 'BOOL' LocalTypeSpec TypeField_1
-				-> 'RECORDTYPE' LocalTypeSpec TypeField_1
-				-> .
-				;
-
 //-----------------------------------------------
 // Local Variableas
 //-----------------------------------------------
@@ -873,7 +843,7 @@ BaseCompConst	-> 'NUMBER'
 //  Inline assembly code
 //----------------------------------------
 //----------------------------------------
-//	Assembler Directives
+//	Statements
 //----------------------------------------
 
 AsmStmt			-> AsmSet Processor_1;
@@ -885,6 +855,12 @@ ProcessorType	-> 'R6502'
 				-> 'WD65C816'
 				;
 
+//-----------------------------------------
+// Code
+//		These statements are what actually
+// do something that concerns the machine
+// code that is executed
+//-----------------------------------------
 
 //-----------------------------------------
 // SET
@@ -904,8 +880,8 @@ AsmSectionName	-> SECTION_NAME;
 // SECITON
 //-----------------------------------------
 
-Section		-> AsmStmts Section_1;
-Section_1	-> 'SECTION' SectionName AsmStmts Section_1
+Section		-> Iff Section_1;
+Section_1	-> 'SECTION' SectionName Iff Section_1
 				-> .
 				;
 SectionName		-> SectionDef SectionName_1;
@@ -934,10 +910,6 @@ AddressSize		-> 'TRUE'
 				-> 'FALSE'
 				;
 
-//----------------------------------------
-// Code Statements
-//---------------------------------------
-
 //-------------------------------------
 // PL/65 Statements
 //-------------------------------------
@@ -945,6 +917,11 @@ AddressSize		-> 'TRUE'
 //-------------------------------------------------
 // IFF Statement
 //-------------------------------------------------
+
+Iff		-> Pop Iff_1;
+Iff_1	-> 'IFF' IFFend Pop Iff_1
+		-> .
+		;
 
 IFFend		-> IFFthenpart IFFend_1;
 IFFend_1	-> 'FFI';
@@ -992,6 +969,9 @@ OptNot			-> '^'
 //---------------------------------------------------
 // POP Statment
 //---------------------------------------------------
+Pop			-> Push Pop_1;
+Pop_1		-> 'POP' PopDestList Push Pop_1
+			-> .
 			;
 PopDestList		-> PopDest PopDestList_1;
 PopDestList_1	-> ',' PopDest PopDestList_1
@@ -1008,6 +988,11 @@ PopDest_1	-> 'AREG'
 //---------------------------------------------------
 // PUSH Statement
 //---------------------------------------------------
+
+Push		-> Org Push_1;
+Push_1		-> 'PUSH' PushSourceList Org Push_1
+			-> .
+			;
 PushSourceList	-> PushSource PushSourceList_1;
 PushSourceList_1-> ',' PushSource PushSourceList_1
 				-> .
@@ -1021,8 +1006,43 @@ PushSource_1-> 'AREG'
 			;
 
 //-------------------------------------
+// Org  Sets the location counter
+// for the current section
+//-------------------------------------
+Org				-> DefineMemory Org_1;
+Org_1			-> 'ORG' AsmConstant DefineMemory Org_1
+				-> .
+				;
+
+//-------------------------------------
+// DefineMemeory
+//-------------------------------------
+				
+DefineMemory	-> DefineStorage DefineMemory_2;
+DefineMemory_2	-> 'DB' AsmConstList DefineStorage DefineMemory_2 
+				-> 'DW' AsmConstList DefineStorage DefineMemory_2
+				-> 'DL' AsmConstList DefineStorage DefineMemory_2
+				-> 'DAS' 'STRING' DefineStorage DefineMemory_2
+				-> 'DCS' 'STRING' DefineStorage DefineMemory_2
+				-> .
+				;
+
+
+//-------------------------------------
+// DefineStorage
+//-------------------------------------
+DefineStorage	-> Proceedure DefineStorage_1;
+DefineStorage_1	-> 'DS' AsmConstant Proceedure DefineStorage_1
+				-> .
+				;
+
+//-------------------------------------
 // Proceedure
 //-------------------------------------
+Proceedure		-> Instruction Proceedure_1;
+Proceedure_1	-> 'PROC' AsmProcEnd Instruction Proceedure_1
+				-> .
+				;
 
 AsmProcEnd		-> AsmProcBody AsmProcEnd_1;
 AsmProcEnd_1	-> 'EPROC';
@@ -1035,82 +1055,75 @@ AsmProcName		-> IDENT;
 
 //--------------------------------------
 // Opcodes
+//	[<DefineLabel>]	<OP> <addressing mode>
 //--------------------------------------
-AsmStmts		-> OptLabel AsmStmts_1;
-AsmStmts_1		-> 'ADC'  Operand  OptLabel AsmStmts_1 //ALU Opcodes		
-				-> 'AND'  Operand OptLabel AsmStmts_1				
-				-> 'EOR'  Operand OptLabel AsmStmts_1
-				-> 'ORA'  Operand 	OptLabel AsmStmts_1
-				-> 'CMP'  Operand OptLabel AsmStmts_1
-				-> 'SBC'  Operand OptLabel AsmStmts_1	
-				-> 'LDA'  Operand OptLabel AsmStmts_1	
-				-> 'STA'  Operand OptLabel AsmStmts_1	
-				-> 'ASL' Operand OptLabel AsmStmts_1			//shift addressing modes
-				-> 'ROL' Operand OptLabel AsmStmts_1	
-				-> 'LSR' Operand OptLabel AsmStmts_1 
-				-> 'ROR' Operand OptLabel AsmStmts_1	 
-				-> 'BCC' RelAddressingMode OptLabel AsmStmts_1				// Branch Op Codes
-				-> 'BCS' RelAddressingMode OptLabel AsmStmts_1	 
-				-> 'BEQ' RelAddressingMode OptLabel AsmStmts_1
-				-> 'BMI' RelAddressingMode OptLabel AsmStmts_1
-				-> 'BNE' RelAddressingMode OptLabel AsmStmts_1
-				-> 'BPL' RelAddressingMode OptLabel AsmStmts_1
-				-> 'BVC' RelAddressingMode OptLabel AsmStmts_1
-				-> 'BVS' RelAddressingMode OptLabel AsmStmts_1
-				-> 'BIT' Operand OptLabel AsmStmts_1			//BIT opcode
-				-> 'BRK' OptLabel AsmStmts_1				//Implied Addressing Mode 
-				-> 'CLC' OptLabel AsmStmts_1	 
-				-> 'CLD' OptLabel AsmStmts_1	
-				-> 'CLI' OptLabel AsmStmts_1	
-				-> 'CLV' OptLabel AsmStmts_1	
-				-> 'DEX' OptLabel AsmStmts_1	
-				-> 'DEY' OptLabel AsmStmts_1	
-				-> 'INX' OptLabel AsmStmts_1	
-				-> 'INY' OptLabel AsmStmts_1	
-				-> 'NOP' OptLabel AsmStmts_1	
-				-> 'PHA' OptLabel AsmStmts_1	
-				-> 'PLA' OptLabel AsmStmts_1	
-				-> 'PHP' OptLabel AsmStmts_1	
-				-> 'PLP' OptLabel AsmStmts_1	
-				-> 'RTI' OptLabel AsmStmts_1	
-				-> 'RTS' OptLabel AsmStmts_1	
-				-> 'SEC' OptLabel AsmStmts_1	
-				-> 'SED' OptLabel AsmStmts_1	
-				-> 'SEI' OptLabel AsmStmts_1	
-				-> 'TAX' OptLabel AsmStmts_1	
-				-> 'TAY' OptLabel AsmStmts_1	
-				-> 'TXA' OptLabel AsmStmts_1	
-				-> 'TYA' OptLabel AsmStmts_1	
-				-> 'TXS' OptLabel AsmStmts_1	
-				-> 'TSX' OptLabel AsmStmts_1	
-				-> 'INC' Operand OptLabel AsmStmts_1			//Inc/Dec Addressing Modes
-				-> 'DEC' Operand OptLabel AsmStmts_1	
-				-> 'JMP' Operand OptLabel AsmStmts_1		// Jump
-				-> 'JSR' Operand OptLabel AsmStmts_1			// Jump To Subroutine
-				-> 'CPX'  Operand OptLabel AsmStmts_1	
-				-> 'CPY'  Operand OptLabel AsmStmts_1	 
-				-> 'LDX' Operand OptLabel AsmStmts_1	
-				-> 'LDY' Operand OptLabel AsmStmts_1	
-				-> 'STX' Operand OptLabel AsmStmts_1	
-				-> 'STY' Operand OptLabel AsmStmts_1
-				-> 'PROC' AsmProcEnd OptLabel AsmStmts_1
-				-> 'DS' AsmConstant OptLabel AsmStmts_1
-				-> 'DB' AsmConstList OptLabel AsmStmts_1 
-				-> 'DW' AsmConstList OptLabel AsmStmts_1
-				-> 'DL' AsmConstList OptLabel AsmStmts_1
-				-> 'DAS' 'STRING' OptLabel AsmStmts_1
-				-> 'DCS' 'STRING' OptLabel AsmStmts_1
-				-> 'ORG' AsmConstant  OptLabel AsmStmts_1
-				-> 'PUSH' PushSourceList  OptLabel AsmStmts_1
-				-> 'POP' PopDestList  OptLabel AsmStmts_1
-				-> 'IFF' IFFend  OptLabel AsmStmts_1
+Instruction		-> DefineLabel Instruction_1;	
+Instruction_1	-> 'ADC'  Operand	DefineLabel Instruction_1 //ALU Opcodes		
+				-> 'AND'  Operand	DefineLabel Instruction_1
+				-> 'EOR'  Operand	DefineLabel Instruction_1	
+				-> 'ORA'  Operand	DefineLabel Instruction_1	
+				-> 'CMP'  Operand	DefineLabel Instruction_1
+				-> 'SBC'  Operand	DefineLabel Instruction_1	
+				-> 'LDA'  Operand	DefineLabel Instruction_1	
+				-> 'STA'  Operand DefineLabel Instruction_1	
+				-> 'ASL' Operand	DefineLabel Instruction_1			//shift addressing modes
+				-> 'ROL' Operand	DefineLabel Instruction_1	
+				-> 'LSR' Operand	DefineLabel Instruction_1 
+				-> 'ROR' Operand	DefineLabel Instruction_1	 
+				-> 'BCC' RelAddressingMode DefineLabel Instruction_1				// Branch Op Codes
+				-> 'BCS' RelAddressingMode DefineLabel Instruction_1	 
+				-> 'BEQ' RelAddressingMode DefineLabel Instruction_1
+				-> 'BMI' RelAddressingMode DefineLabel Instruction_1
+				-> 'BNE' RelAddressingMode DefineLabel Instruction_1
+				-> 'BPL' RelAddressingMode DefineLabel Instruction_1
+				-> 'BVC' RelAddressingMode DefineLabel Instruction_1
+				-> 'BVS' RelAddressingMode DefineLabel Instruction_1
+				-> 'BIT' Operand	DefineLabel Instruction_1			//BIT opcode
+				-> 'BRK'	DefineLabel Instruction_1				//Implied Addressing Mode 
+				-> 'CLC'	DefineLabel Instruction_1	 
+				-> 'CLD'	DefineLabel Instruction_1	
+				-> 'CLI'	DefineLabel Instruction_1	
+				-> 'CLV'	DefineLabel Instruction_1	
+				-> 'DEX'	DefineLabel Instruction_1	
+				-> 'DEY'	DefineLabel Instruction_1	
+				-> 'INX'	DefineLabel Instruction_1	
+				-> 'INY'	DefineLabel Instruction_1	
+				-> 'NOP'	DefineLabel Instruction_1	
+				-> 'PHA'	DefineLabel Instruction_1	
+				-> 'PLA'	DefineLabel Instruction_1	
+				-> 'PHP'	DefineLabel Instruction_1	
+				-> 'PLP'	DefineLabel Instruction_1	
+				-> 'RTI'	DefineLabel Instruction_1	
+				-> 'RTS'	DefineLabel Instruction_1	
+				-> 'SEC'	DefineLabel Instruction_1	
+				-> 'SED'	DefineLabel Instruction_1	
+				-> 'SEI'	DefineLabel Instruction_1	
+				-> 'TAX'	DefineLabel Instruction_1	
+				-> 'TAY'	DefineLabel Instruction_1	
+				-> 'TXA'	DefineLabel Instruction_1	
+				-> 'TYA'	DefineLabel Instruction_1	
+				-> 'TXS'	DefineLabel Instruction_1	
+				-> 'TSX'	DefineLabel Instruction_1	
+				-> 'INC' Operand	DefineLabel Instruction_1			//Inc/Dec Addressing Modes
+				-> 'DEC' Operand	DefineLabel Instruction_1	
+				-> 'JMP' Operand	DefineLabel Instruction_1		// Jump
+				-> 'JSR' Operand	DefineLabel Instruction_1			// Jump To Subroutine
+				-> 'CPX'  Operand	DefineLabel Instruction_1	
+				-> 'CPY'  Operand		DefineLabel Instruction_1
+				-> 'LDX' Operand	DefineLabel Instruction_1	
+				-> 'LDY' Operand	DefineLabel Instruction_1	
+				-> 'STX' Operand	DefineLabel Instruction_1	
+				-> 'STY' Operand	DefineLabel Instruction_1	
 				-> .
 				;
 
-OptLabel		-> 'LOCAL_LABEL' OptLabel
-				-> 'GLOBAL_LABEL' OptLabel
-				-> .
-				;
+//---------------------------------------------
+// Lables
+//---------------------------------------------
+DefineLabel	-> 'GLOBAL_LABEL'	//Global
+			-> 'LOCAL_LABEL'	// Local
+			-> .
+			;
 
 //------------------------------------------
 // Operand (addressing modes)

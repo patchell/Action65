@@ -2,6 +2,7 @@
 
 CCodeGeneration::CCodeGeneration()
 {
+	m_pPendingLabel = 0;
 }
 
 CCodeGeneration::~CCodeGeneration()
@@ -21,7 +22,8 @@ CValue* CCodeGeneration::EmitBinaryOp(
 	CValue* pVc,		//Second Operand (Child)
 	CValue* pVn,		//First Operand (Next)
 	CValue* pVr,		// Result
-	CSection* pSection	// Memory section to emit code to
+	CSection* pSection,	// Memory section to emit code to
+	Token OpAux			// used for things like CLC, SEC, INX, ...etc
 )
 {
 	CTypeChain* pTCchild = 0;
@@ -36,12 +38,17 @@ CValue* CCodeGeneration::EmitBinaryOp(
 	CValue* pTempConst = 0;
 	CObjTypeChain* pTypeObj = 0;
 	int YregValue = -1;
+	CValue* pLabel = 0;
 
 	pTCchild = pVc->GetTypeChain();
 	pTCnext = pVn->GetTypeChain();
-	pOpcode->PrepareInstruction(Token::CLC, AdrModeType::IMPLIED, 0, pSection, 0);
-	pOpcode->Emit(0, 0);
-	pOpcode->Reset();
+	pLabel = GetPendingLabel();
+	if (OpAux > Token::NONE)
+	{
+		pOpcode->PrepareInstruction(OpAux, AdrModeType::IMPLIED, 0, pSection, pLabel);
+		pOpcode->Emit(0, 0);
+		pOpcode->Reset();
+	}
 	MaxNumberOfBytes = pVc->SizeOf();
 	if (MaxNumberOfBytes < pVn->SizeOf())
 		MaxNumberOfBytes = pVn->SizeOf();
@@ -53,17 +60,31 @@ CValue* CCodeGeneration::EmitBinaryOp(
 		//------------------------------------------
 		if (pTCnext->GetTail()->IsFundamentalType())
 		{
-			if (pVn->GetSymbol()->GetSection()->IsPageZero())
-				AddressMode = AdrModeType::ZERO_PAGE_ADR;
+			if (i == 0)	//first time though
+			{
+				if (pVn->GetSymbol()->GetSection()->IsPageZero())
+					AddressMode = AdrModeType::ZERO_PAGE_ADR;
+				else
+					AddressMode = AdrModeType::ABSOLUTE_ADR;
+				pOpcode->PrepareInstruction(Token::LDA, AddressMode, pVn, pSection, 0);
+				pOpcode->Emit(0, 0);
+				pOpcode->Reset();
+			}
 			else
-				AddressMode = AdrModeType::ABSOLUTE_ADR;
-			pOpcode->PrepareInstruction(Token::LDA, AddressMode, pVn, pSection, 0);
-			pOpcode->Emit(0, 0);
-			pOpcode->Reset();
+			{
+				if (pVn->GetSymbol()->GetSection()->IsPageZero())
+					AddressMode = AdrModeType::ZERO_PAGE_ADR;
+				else
+					AddressMode = AdrModeType::ABSOLUTE_ADR;
+				pVn->Inc();
+				pOpcode->PrepareInstruction(Token::LDA, AddressMode, pVn, pSection, 0);
+				pOpcode->Emit(0, 0);
+				pVn->Dec();
+				pOpcode->Reset();
+			}
 		}
 		else if (pTCnext->GetTail()->Is(CObjTypeChain::Spec::POINTER_DREF))
 		{
-			fprintf(Act()->LogFile(), "Pointer Deref\n");
 			if (i == 0)	//first time though
 			{
 				if (YregValue < 0)
@@ -82,38 +103,98 @@ CValue* CCodeGeneration::EmitBinaryOp(
 			}
 			else
 			{
-				// second and greater times though
-				
+				pOpcode->PrepareInstruction(Token::INY, AdrModeType::IMPLIED, 0, pSection, 0);
+				pOpcode->Emit(0, 0);
+				pOpcode->Reset();
 			}
+			pOpcode->PrepareInstruction(Token::LDA, AdrModeType::INDIRECT_INDEXED_Y_ADR, pVn, pSection, 0);
+			pOpcode->Emit(0, 0);
+			pOpcode->Reset();
 		}
 		else if (pTCnext->GetTail()->Is(CObjTypeChain::Spec::POINTER))
 		{
+			//------------------------------------------------
+			// Performing Arithmatic on a POINTER is the same
+			// as performing arithmatic on a CARD
+			//------------------------------------------------
 			fprintf(Act()->LogFile(), "Pointer\n");
+			if (i == 0)	//first time though
+			{
+				if (pVn->GetSymbol()->GetSection()->IsPageZero())
+					AddressMode = AdrModeType::ZERO_PAGE_ADR;
+				else
+					AddressMode = AdrModeType::ABSOLUTE_ADR;
+				pOpcode->PrepareInstruction(Token::LDA, AddressMode, pVn, pSection, 0);
+				pOpcode->Emit(0, 0);
+				pOpcode->Reset();
+			}
+			else
+			{
+				// second time through
+				if (pVn->GetSymbol()->GetSection()->IsPageZero())
+					AddressMode = AdrModeType::ZERO_PAGE_ADR;
+				else
+					AddressMode = AdrModeType::ABSOLUTE_ADR;
+				pVn->Inc();
+				pOpcode->PrepareInstruction(Token::LDA, AddressMode, pVn, pSection, 0);
+				pOpcode->Emit(0, 0);
+				pVn->Dec();
+				pOpcode->Reset();
+			}
 		}
 		else if (pTCnext->GetTail()->Is(CObjTypeChain::Spec::ARRAY))
 		{
-			fprintf(Act()->LogFile(), "Array Arg %s\n", pVn->GetSymbol()->GetName());
-			if (pVn->IsPageZero())
-				AddressMode = AdrModeType::ZERO_PAGE_X_ADR;
+			if (i == 0)	//first time through
+			{
+				if (pVn->IsPageZero())
+					AddressMode = AdrModeType::ZERO_PAGE_X_ADR;
+				else
+					AddressMode = AdrModeType::ABSOLUTE_X_ADR;
+				pOpcode->PrepareInstruction(Token::LDA, AddressMode, pVn, pSection);
+				pOpcode->Emit(0, 0);
+				pOpcode->Reset();
+			}
 			else
-				AddressMode = AdrModeType::ABSOLUTE_X_ADR;
-			pOpcode->PrepareInstruction(Token::LDA, AddressMode, pVn, pSection);
-			pOpcode->Emit(0, 0);
-			pOpcode->Reset();
-
+			{
+				//second time through
+				if (pVn->IsPageZero())
+					AddressMode = AdrModeType::ZERO_PAGE_X_ADR;
+				else
+					AddressMode = AdrModeType::ABSOLUTE_X_ADR;
+				pVn->Inc();
+				pOpcode->PrepareInstruction(Token::LDA, AddressMode, pVn, pSection);
+				pOpcode->Emit(0, 0);
+				pVn->Dec();
+				pOpcode->Reset();
+			}
 		}
 		//------------------------------------------
 		// Operand 2
 		//------------------------------------------
 		if (pTCchild->GetTail()->IsFundamentalType())
 		{
-			if (pVc->GetSymbol()->GetSection()->IsPageZero())
-				AddressMode = AdrModeType::ZERO_PAGE_ADR;
+			if (i == 0)
+			{
+				if (pVc->GetSymbol()->GetSection()->IsPageZero())
+					AddressMode = AdrModeType::ZERO_PAGE_ADR;
+				else
+					AddressMode = AdrModeType::ABSOLUTE_ADR;
+				pOpcode->PrepareInstruction(Op, AddressMode, pVc, pSection, 0);
+				pOpcode->Emit(0, 0);
+				pOpcode->Reset();
+			}
 			else
-				AddressMode = AdrModeType::ABSOLUTE_ADR;
-			pOpcode->PrepareInstruction(Op, AddressMode, pVc, pSection, 0);
-			pOpcode->Emit(0, 0);
-			pOpcode->Reset();
+			{
+				if (pVc->GetSymbol()->GetSection()->IsPageZero())
+					AddressMode = AdrModeType::ZERO_PAGE_ADR;
+				else
+					AddressMode = AdrModeType::ABSOLUTE_ADR;
+				pVc->Inc();
+				pOpcode->PrepareInstruction(Op, AddressMode, pVc, pSection, 0);
+				pOpcode->Emit(0, 0);
+				pVc->Dec();
+				pOpcode->Reset();
+			}
 		}
 		else if (pTCchild->GetTail()->Is(CObjTypeChain::Spec::POINTER_DREF))
 		{
@@ -144,7 +225,6 @@ CValue* CCodeGeneration::EmitBinaryOp(
 		}
 		else if (pTCchild->GetTail()->Is(CObjTypeChain::Spec::ARRAY))
 		{
-			fprintf(Act()->LogFile(), "Array\n");
 			if (i == 0)
 			{
 				//---------------  First time Through ----------------------------
@@ -257,6 +337,26 @@ CValue* CCodeGeneration::EmitBinaryOp(
 	return pReturnValue;
 }
 
+CValue* CCodeGeneration::EmitShift(Token Op, CValue* pV1, CValue* pV2, CValue* pV3, CSection* pSection, Token OpAux)
+{
+	return nullptr;
+}
+
+CValue* CCodeGeneration::EmitMult(Token Op, CValue* pV1, CValue* pV2, CValue* pV3, CSection* pSection, Token OpAux)
+{
+	return nullptr;
+}
+
+CValue* CCodeGeneration::EmitLogical(Token Op, CValue* pV1, CValue* pV2, CValue* pV3, CSection* pSection, Token OpAux)
+{
+	return nullptr;
+}
+
+CValue* CCodeGeneration::EmitCompare(Token Op, CValue* pV1, CValue* pV2, CValue* pV3, CSection* pSection, Token OpAux)
+{
+	return nullptr;
+}
+
 CValue* CCodeGeneration::EmitDirect(Token Op, CValue* pVdest, int Byte, CSection* pSection, CValue* pLabel)
 {
 	CAct65Opcode* pInstruction = new CAct65Opcode;;
@@ -339,6 +439,25 @@ CValue* CCodeGeneration::EmitIndexed(Token Op, CValue* pVdest, CValue* pIndex, i
 		break;
 	}
 	return nullptr;
+}
+
+bool CCodeGeneration::SetPendingLabel(CValue* pPendingLabel)
+{
+	bool rV = true;
+
+	if (m_pPendingLabel)
+		rV = false;	//there is already a pending label
+	else
+		m_pPendingLabel = pPendingLabel;
+	return rV;
+}
+
+CValue* CCodeGeneration::GetPendingLabel()
+{
+	CValue* pLabel = m_pPendingLabel;
+	
+	m_pPendingLabel = 0;
+	return pLabel;
 }
 
 void CCodeGeneration::EmitSource()

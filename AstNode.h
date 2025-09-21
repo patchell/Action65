@@ -1,6 +1,7 @@
 #pragma once
 
 class CParser;
+class CCodeGeneration;
 
 class CAstNode
 {
@@ -166,8 +167,16 @@ public:
 		DAS,
 		DCS
 	};
+	enum class ProcType {
+		NONE,
+		PROC,
+		FUNC,
+		IRQPROC
+	};
 private:
 	inline static int m_NodeCount = 0;
+	inline static ProcType m_CurrentProcType = ProcType::NONE;
+	inline static CSymbol* m_pCurrentProcSym = 0;
 	int m_NodeID;
 	NodeType m_NodeType;
 	const char* m_pNodeName;
@@ -181,7 +190,7 @@ private:
 	CAstNode* m_pParent;
 	//---------- Value ---------------
 	CValue* m_pValue;
-	CSection* m_pSection;
+	CSection* m_pSection = 0;
 	int m_Line;
 	int m_Column;
 public:
@@ -214,7 +223,9 @@ public:
 	CAstNode* GetPrev() { return m_pPrev; }
 	CAstNode* GetChild() { return m_pChild; } 
 	CAstNode* GetParent() { return m_pParent; }
-	CSection* GetSection() { return m_pSection; }
+	CSection* GetSection() { 
+		return m_pSection; 
+	}
 	void SetHead(CAstNode* pAN) { m_pHead = pAN; }
 	void SetTail(CAstNode* pAN) { m_pTail = pAN; }
 	void SetStart(CAstNode* pAN) { m_pStart = pAN; }
@@ -266,4 +277,10 @@ public:
 	int GetColumn() const { return m_Column; }
 	CParser* GetParser();
 	FILE* LogFile();
+	CCodeGeneration* GetCodeGen();
+	//------------------------------
+	ProcType GetCurrentProcType() { return m_CurrentProcType; }
+	void SetCurrentProcType(ProcType PT) { m_CurrentProcType = PT; }
+	CSymbol* GetCurrentProcSym() { return m_pCurrentProcSym; }
+	void SetCurrentProcSym(CSymbol* pSym) { m_pCurrentProcSym = pSym; }
 };

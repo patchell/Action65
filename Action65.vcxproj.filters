@@ -1202,9 +1202,6 @@
     <None Include="Grammar\Action1.gram">
       <Filter>Grammar</Filter>
     </None>
-    <None Include="Grammar\action2.gram">
-      <Filter>Grammar</Filter>
-    </None>
     <None Include="Grammar\Settings.gram">
       <Filter>Grammar</Filter>
     </None>

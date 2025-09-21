@@ -516,7 +516,6 @@
     <None Include="Bin\action.exe" />
     <None Include="Grammar\Action.gram" />
     <None Include="Grammar\Action1.gram" />
-    <None Include="Grammar\action2.gram" />
     <None Include="Grammar\Linker.gram" />
     <None Include="Grammar\Settings.gram" />
     <None Include="Linker.Act65_LinkerScript" />
