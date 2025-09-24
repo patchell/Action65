@@ -10,7 +10,9 @@ CAct65Assignment::~CAct65Assignment()
 
 bool CAct65Assignment::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
-	return true;
+	bool rV = true;
+	rV = CAstNode::Create(pChild, pNext, pSym);
+	return rV;
 }
 
 CValue* CAct65Assignment::Process()
@@ -53,7 +55,7 @@ CValue* CAct65Assignment::Emit(CValue* pVc, CValue* pVn)
 	// Value to store (assign to) is in pVc
 	// Value to store to is pVn
 	//----------------------------------------------
-	CAct65Opcode* pOpCode = 0;
+	CInstruction* pOpCode = 0;
 	Token OpToken = Token::NONE;
 	AdrModeType AddressingMode = AdrModeType::NA;
 	int ValueSizeC;
@@ -64,7 +66,6 @@ CValue* CAct65Assignment::Emit(CValue* pVc, CValue* pVn)
 	ValueSizeC = pVc->SizeOf();
 	ValueSizeN = pVn->SizeOf();
 	
-	pOpCode = new CAct65Opcode;
 	for (int i = 0; i < ValueSizeN; ++i)
 	{
 		switch (pVc->GetValueType())	// from here
@@ -75,31 +76,31 @@ CValue* CAct65Assignment::Emit(CValue* pVc, CValue* pVn)
 				pTempValue = new CValue;
 				V = pVc->GetConstVal();
 				pTempValue->Create(V & 0xff);
-				pOpCode->PrepareInstruction(
-					Token::LDA, 
-					AdrModeType::IMMEDIATE_ADR, 
-					pTempValue, 
-					GetSection(), 
+				pOpCode = new CInstruction;
+				pOpCode->GenInstruction(
+					Token::LDA,
+					AdrModeType::IMMEDIATE_ADR,
+					pTempValue,
+					0,
 					0
 				);
-				pOpCode->Emit(0, 0);
-				pOpCode->Reset();
-				delete pTempValue;
+				GetSection()->AddInstruction(pOpCode);
+				pOpCode = 0;
 			}
 			else
 			{
 				// Second Byte if any
 				pTempValue = new CValue;
 				pTempValue->Create((V & 0xff00) >> 8);
-				pOpCode->PrepareInstruction(
+				pOpCode->GenInstruction(
 					Token::LDA,
 					AdrModeType::IMMEDIATE_ADR,
 					pTempValue,
-					GetSection(),
+					0,
 					0
 				);
-				pOpCode->Emit(0, 0);
-				pOpCode->Reset();
+				GetSection()->AddInstruction(pOpCode);
+				pOpCode = 0;
 				delete pTempValue;
 			}
 			break;
@@ -132,7 +133,15 @@ CValue* CAct65Assignment::Emit(CValue* pVc, CValue* pVn)
 				AddressingMode = AdrModeType::ZERO_PAGE_ADR;
 			else
 				AddressingMode = AdrModeType::ABSOLUTE_ADR;
-			pOpCode->PrepareInstruction(OpToken, AddressingMode, pVc, GetSection());
+			pOpCode = new CInstruction;
+			pOpCode->GenInstruction(
+				OpToken,
+				AddressingMode,
+				pVn,
+				0,
+				0
+			);
+			GetSection()->AddInstruction(pOpCode);
 			break;
 		case CValue::ValueType::VIRTUAL_REGISTER:
 			break;

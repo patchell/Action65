@@ -10,7 +10,9 @@ CAct65PROCasm::~CAct65PROCasm()
 
 bool CAct65PROCasm::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
-	return true;
+	bool rV = true;
+	rV = CAstNode::Create(pChild, pNext, pSym);
+	return rV;
 }
 
 CValue* CAct65PROCasm::Process()

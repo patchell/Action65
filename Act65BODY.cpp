@@ -10,7 +10,9 @@ CAct65BODY::~CAct65BODY()
 
 bool CAct65BODY::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
-	return true;
+	bool rV = true;
+	rV = CAstNode::Create(pChild, pNext, pSym);
+	return rV;
 }
 
 CValue* CAct65BODY::Process()
@@ -56,22 +58,65 @@ CValue* CAct65BODY::Emit(CValue* pVc, CValue* pVn)
 	// Emit code for entry into an
 	// interrupt routine
 	//-------------------------------
-	CAct65Opcode* pInstruction = new CAct65Opcode;
+	CSymbol* pSym = 0;
+	CValue* pLabelVal = 0;
+	CInstruction* pInst = 0;
+	int Address = 0;
 
-	pInstruction->PrepareInstruction(Token::PHA, AdrModeType::IMPLIED, 0, GetSection(), 0);
-	pInstruction->Emit(0, 0);
-	pInstruction->Reset();
-	pInstruction->PrepareInstruction(Token::TXA, AdrModeType::IMPLIED, 0, GetSection(), 0);	
-	pInstruction->Emit(0, 0);
-	pInstruction->Reset();
-	pInstruction->PrepareInstruction(Token::PHA, AdrModeType::IMPLIED, 0, GetSection(), 0);
-	pInstruction->Emit(0, 0);
-	pInstruction->Reset();
-	pInstruction->PrepareInstruction(Token::TYA, AdrModeType::IMPLIED, 0, GetSection(), 0);
-	pInstruction->Emit(0, 0);
-	pInstruction->Reset();
-	pInstruction->PrepareInstruction(Token::PHA, AdrModeType::IMPLIED, 0, GetSection(), 0);
-	pInstruction->Emit(0, 0);
-	delete pInstruction;
+	Address = GetSection()->GetLocationCounter();
+	pLabelVal = new CValue;
+	pSym = GetProcSym();
+	pLabelVal->Create(pSym);	//this is the label for the instruction location
+
+	pInst = new CInstruction;
+	pInst->GenInstruction(
+		Token::PHA, 
+		AdrModeType::IMPLIED, 
+		0, // operand
+		pLabelVal,
+		Address
+	);
+	Address = GetSection()->AddInstruction(pInst);
+
+	pInst = new CInstruction;
+	pInst->GenInstruction(
+		Token::TXA, 
+		AdrModeType::IMPLIED, 
+		0,	// Operand
+		0,	// Label
+		Address
+	);
+	Address = GetSection()->AddInstruction(pInst);
+
+	pInst = new CInstruction;
+	pInst->GenInstruction(
+		Token::PHA, 
+		AdrModeType::IMPLIED, 
+		0,	// Operand
+		0,	// Label
+		Address
+	);
+	Address = GetSection()->AddInstruction(pInst);
+
+	pInst = new CInstruction;
+	pInst->GenInstruction(
+		Token::TYA, 
+		AdrModeType::IMPLIED, 
+		0,	// Operand
+		0,	// Label
+		Address
+	);
+	Address = GetSection()->AddInstruction(pInst);
+
+	pInst = new CInstruction;
+	pInst->GenInstruction(
+		Token::PHA, 
+		AdrModeType::IMPLIED, 
+		0,	// Operand
+		0,	// Label
+		Address
+	);
+	GetSection()->AddInstruction(pInst);
+	//-------------------------------
     return nullptr;
 }

@@ -10,7 +10,9 @@ CAct65IDENTaddress::~CAct65IDENTaddress()
 
 bool CAct65IDENTaddress::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
-	return false;
+	bool rV = true;
+	rV = CAstNode::Create(pChild, pNext, pSym);
+	return rV;
 }
 
 CValue* CAct65IDENTaddress::Process()

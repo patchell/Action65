@@ -10,7 +10,9 @@ CAct65ForSTEP::~CAct65ForSTEP()
 
 bool CAct65ForSTEP::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
-	return true;
+	bool rV = true;
+	rV = CAstNode::Create(pChild, pNext, pSym);
+	return rV;
 }
 
 CValue* CAct65ForSTEP::Process()

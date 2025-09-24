@@ -10,7 +10,9 @@ CAct65OD::~CAct65OD()
 
 bool CAct65OD::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
-	return true;
+	bool rV = true;
+	rV = CAstNode::Create(pChild, pNext, pSym);
+	return rV;
 }
 
 CValue* CAct65OD::Process()
@@ -50,19 +52,20 @@ void CAct65OD::PrintNode(FILE* pOut, int Indent, bool* pbNextFlag)
 CValue* CAct65OD::Emit(CValue* pVc, CValue* pVn)
 {
 	CStackDOODItem* pDOODItem = 0;
-	CAct65Opcode* pInstruction = 0;
+	CInstruction* pOpCode = 0;
 
 	pDOODItem = (CStackDOODItem*)Act()->GetDOODStack()->Pop();
 	if (pDOODItem)
 	{
-		pInstruction = new CAct65Opcode;
-		pInstruction->PrepareInstruction(
+		pOpCode = new CInstruction;
+		pOpCode->GenInstruction(
 			Token::JMP,
 			AdrModeType::ABSOLUTE_ADR,
 			pDOODItem->GetLabelValue(),
-			GetSection()
+			0,
+			0
 		);
-		pInstruction->Emit(0, 0);
+		GetSection()->AddInstruction(pOpCode);
 	}
 	return nullptr;
 }

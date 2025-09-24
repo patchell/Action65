@@ -12,7 +12,9 @@ CAct65DS::~CAct65DS()
 
 bool CAct65DS::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
-	return true;
+	bool rV = true;
+	rV = CAstNode::Create(pChild, pNext, pSym);
+	return rV;
 }
 
 CValue* CAct65DS::Process()

@@ -10,7 +10,9 @@ CAct65DefLIST::~CAct65DefLIST()
 
 bool CAct65DefLIST::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
-	return true;
+	bool rV = true;
+	rV = CAstNode::Create(pChild, pNext, pSym);
+	return rV;
 }
 
 CValue* CAct65DefLIST::Process()

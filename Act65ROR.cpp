@@ -10,8 +10,11 @@ CAct65ROR::~CAct65ROR()
 
 bool CAct65ROR::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
-	return true;
+	bool rV = true;
+	rV = CAstNode::Create(pChild, pNext, pSym);
+	return rV;
 }
+
 
 CValue* CAct65ROR::Process()
 {

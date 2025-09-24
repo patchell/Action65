@@ -29,12 +29,14 @@ CActionApp::CActionApp()
 	m_pAsmSrcOut = 0;
 	m_pSettingsFile = 0;
 	m_pLinkerScript = 0;
+	m_pListingFile = 0;
 	m_pfSrc = 0;
 	m_pfLog = 0;
 	m_pfBin = 0;
 	m_pfObj = 0;
 	m_pfSettings = 0;
 	m_pfLinkerScript = 0;
+	m_pfListing = 0;
 	DO_OD_Stack.Create("DO STACK");
 	FOR_Stack.Create("FOR STACK");
 	WHILE_Stack.Create("WHILE STACI");
@@ -51,6 +53,7 @@ CActionApp::~CActionApp()
 	if (m_pAsmSrcOut) delete[] m_pAsmSrcOut;
 	if (m_pSettingsFile) delete[]m_pSettingsFile;
 	if (m_pLinkerScript) delete[]m_pLinkerScript;
+	if (m_pListingFile) delete[]m_pListingFile;
 	CloseAll();
 }
 
@@ -154,6 +157,7 @@ bool CActionApp::Run()
 {
 	bool rV = false;
 	OpenLog();		// Open Log file
+	OpenListing();	// Open Listing file
 	m_ActParse.Create();	//Create parser
 	m_ActParse.Run();		// Run Parser
 	return rV;
@@ -253,6 +257,30 @@ bool CActionApp::OpenLinkerScript()
 	return rV;
 }
 
+bool CActionApp::OpenListing()
+{
+	bool rV = false;
+	errno_t err;
+	char* pInPath;
+	char* pLastDot;
+
+	pInPath = new char[512];
+	strcpy_s(pInPath, 512, m_pSourceFile);
+	pLastDot = strrchr(pInPath, '.');
+	*pLastDot = 0;
+
+	m_pListingFile = new char[512];
+	sprintf_s(m_pListingFile, 512, "%s.ACT65_list.txt", pInPath);
+	if (m_pListingFile)
+	{
+		err = fopen_s(&m_pfListing, m_pListingFile, "w");
+		if (err == 0)
+			rV = true;
+	}
+	delete[] pInPath;
+	return rV;
+}
+
 void CActionApp::CloseSource()
 {
 	if(m_pfSrc)
@@ -294,6 +322,12 @@ void CActionApp::CloseLinkerScript()
 	m_pfLinkerScript = 0;
 }
 
+void CActionApp::CloseListing()
+{
+	if (m_pfListing) fclose(m_pfListing);
+	m_pfListing = 0;
+}
+
 void CActionApp::CloseAll()
 {
 	CloseSource();
@@ -302,6 +336,7 @@ void CActionApp::CloseAll()
 	CloseObj();
 	CloseSettings();
 	CloseLinkerScript();
+	CloseListing();
 }
 
 char* CActionApp::IndentString(char* s, int Indent, int c)

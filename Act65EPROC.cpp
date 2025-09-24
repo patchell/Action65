@@ -10,7 +10,9 @@ CAct65EPROC::~CAct65EPROC()
 
 bool CAct65EPROC::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
-	return true;
+	bool rV = true;
+	rV = CAstNode::Create(pChild, pNext, pSym);
+	return rV;
 }
 
 CValue* CAct65EPROC::Process()

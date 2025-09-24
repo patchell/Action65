@@ -1,6 +1,6 @@
 #include "pch.h"
 
-CAct65AddrOfINTERRUPT::CAct65AddrOfINTERRUPT() :CAstNode(m_pNodeTyypeName, NodeType::ADDRESS_OF_INTERRUPT)
+CAct65AddrOfINTERRUPT::CAct65AddrOfINTERRUPT() :CAstNode(m_pNodeTyypeName, NodeType::INTERRUPT_ADDRESS)
 {
 }
 
@@ -10,7 +10,9 @@ CAct65AddrOfINTERRUPT::~CAct65AddrOfINTERRUPT()
 
 bool CAct65AddrOfINTERRUPT::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
-	return true;
+	bool rV = true;
+	rV = CAstNode::Create(pChild, pNext, pSym);
+	return rV;
 }
 
 CValue* CAct65AddrOfINTERRUPT::Process()

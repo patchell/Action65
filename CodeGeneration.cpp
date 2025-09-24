@@ -28,7 +28,6 @@ CValue* CCodeGeneration::EmitBinaryOp(
 {
 	CTypeChain* pTCchild = 0;
 	CTypeChain* pTCnext = 0;
-	CAct65Opcode* pOpcode = new CAct65Opcode;
 	int MaxNumberOfBytes = 0;
 	CReg::RegType ChildDref = CReg::RegType::NONE;
 	CReg::RegType NextDref = CReg::RegType::NONE;
@@ -39,15 +38,23 @@ CValue* CCodeGeneration::EmitBinaryOp(
 	CObjTypeChain* pTypeObj = 0;
 	int YregValue = -1;
 	CValue* pLabel = 0;
+	CInstruction* pOpCode = 0;
 
 	pTCchild = pVc->GetTypeChain();
 	pTCnext = pVn->GetTypeChain();
 	pLabel = GetPendingLabel();
 	if (OpAux > Token::NONE)
 	{
-		pOpcode->PrepareInstruction(OpAux, AdrModeType::IMPLIED, 0, pSection, pLabel);
-		pOpcode->Emit(0, 0);
-		pOpcode->Reset();
+		pOpCode = new CInstruction;
+		pOpCode->GenInstruction(
+			OpAux,
+			AdrModeType::IMPLIED,
+			0,
+			pLabel,
+			pSection->GetLocationCounter()
+		);
+		pSection->AddInstruction(pOpCode);
+		pOpCode = 0;
 	}
 	MaxNumberOfBytes = pVc->SizeOf();
 	if (MaxNumberOfBytes < pVn->SizeOf())
@@ -66,9 +73,16 @@ CValue* CCodeGeneration::EmitBinaryOp(
 					AddressMode = AdrModeType::ZERO_PAGE_ADR;
 				else
 					AddressMode = AdrModeType::ABSOLUTE_ADR;
-				pOpcode->PrepareInstruction(Token::LDA, AddressMode, pVn, pSection, 0);
-				pOpcode->Emit(0, 0);
-				pOpcode->Reset();
+				pOpCode = new CInstruction;
+				pOpCode->GenInstruction(
+					Token::LDA,
+					AddressMode,
+					pVn,
+					pLabel,
+					pSection->GetLocationCounter()
+				);
+				pSection->AddInstruction(pOpCode);
+				pOpCode = 0;
 			}
 			else
 			{
@@ -77,10 +91,17 @@ CValue* CCodeGeneration::EmitBinaryOp(
 				else
 					AddressMode = AdrModeType::ABSOLUTE_ADR;
 				pVn->Inc();
-				pOpcode->PrepareInstruction(Token::LDA, AddressMode, pVn, pSection, 0);
-				pOpcode->Emit(0, 0);
+				pOpCode = new CInstruction;
+				pOpCode->GenInstruction(
+					Token::LDA,
+					AddressMode,
+					pVn,
+					pLabel,
+					pSection->GetLocationCounter()
+				);
+				pSection->AddInstruction(pOpCode);
 				pVn->Dec();
-				pOpcode->Reset();
+				pOpCode = 0;
 			}
 		}
 		else if (pTCnext->GetTail()->Is(CObjTypeChain::Spec::POINTER_DREF))
@@ -92,24 +113,50 @@ CValue* CCodeGeneration::EmitBinaryOp(
 					YregValue = 0;
 					pTempConst = new CValue;
 					pTempConst->Create(YregValue);
-					pOpcode->PrepareInstruction(Token::LDY, AdrModeType::IMMEDIATE_ADR, pTempConst, pSection, 0);
-					pOpcode->Emit(0, 0);
-					pOpcode->Reset();
-					delete pTempConst;
+					pOpCode = new CInstruction;
+					pOpCode->GenInstruction(
+						Token::LDY,
+						AdrModeType::IMMEDIATE_ADR,
+						pTempConst,
+						pLabel,
+						pSection->GetLocationCounter()
+					);
+					pSection->AddInstruction(pOpCode);
+					pOpCode = 0;
 				}
-				pOpcode->PrepareInstruction(Token::LDA, AdrModeType::INDIRECT_INDEXED_Y_ADR, pVn, pSection, 0);
-				pOpcode->Emit(0, 0);
-				pOpcode->Reset();
+				pOpCode = new CInstruction;
+				pOpCode->GenInstruction(
+					Token::LDA,
+					AdrModeType::INDIRECT_INDEXED_Y_ADR,
+					pVn,
+					pLabel,
+					pSection->GetLocationCounter()
+				);
+				pSection->AddInstruction(pOpCode);
+				pOpCode = 0;
 			}
 			else
 			{
-				pOpcode->PrepareInstruction(Token::INY, AdrModeType::IMPLIED, 0, pSection, 0);
-				pOpcode->Emit(0, 0);
-				pOpcode->Reset();
+				pOpCode = new CInstruction;
+				pOpCode->GenInstruction(
+					Token::INY,
+					AdrModeType::IMPLIED,
+					0,
+					pLabel,
+					pSection->GetLocationCounter()
+				);
+				pOpCode = 0;
 			}
-			pOpcode->PrepareInstruction(Token::LDA, AdrModeType::INDIRECT_INDEXED_Y_ADR, pVn, pSection, 0);
-			pOpcode->Emit(0, 0);
-			pOpcode->Reset();
+			pOpCode = new CInstruction;
+			pOpCode->GenInstruction(
+				Token::LDA,
+				AdrModeType::INDIRECT_INDEXED_Y_ADR,
+				pVn,
+				pLabel,
+				pSection->GetLocationCounter()
+			);
+			pSection->AddInstruction(pOpCode);
+			pOpCode = 0;
 		}
 		else if (pTCnext->GetTail()->Is(CObjTypeChain::Spec::POINTER))
 		{
@@ -124,9 +171,16 @@ CValue* CCodeGeneration::EmitBinaryOp(
 					AddressMode = AdrModeType::ZERO_PAGE_ADR;
 				else
 					AddressMode = AdrModeType::ABSOLUTE_ADR;
-				pOpcode->PrepareInstruction(Token::LDA, AddressMode, pVn, pSection, 0);
-				pOpcode->Emit(0, 0);
-				pOpcode->Reset();
+				pOpCode = new CInstruction;
+				pOpCode->GenInstruction(
+					Token::LDA,
+					AddressMode,
+					pVn,
+					pLabel,
+					pSection->GetLocationCounter()
+				);
+				pSection->AddInstruction(pOpCode);
+				pOpCode = 0;
 			}
 			else
 			{
@@ -136,10 +190,17 @@ CValue* CCodeGeneration::EmitBinaryOp(
 				else
 					AddressMode = AdrModeType::ABSOLUTE_ADR;
 				pVn->Inc();
-				pOpcode->PrepareInstruction(Token::LDA, AddressMode, pVn, pSection, 0);
-				pOpcode->Emit(0, 0);
+				pOpCode = new CInstruction;
+				pOpCode->GenInstruction(
+					Token::LDA,
+					AddressMode,
+					pVn,
+					pLabel,
+					pSection->GetLocationCounter()
+				);
+				pSection->AddInstruction(pOpCode);
 				pVn->Dec();
-				pOpcode->Reset();
+				pOpCode = 0;
 			}
 		}
 		else if (pTCnext->GetTail()->Is(CObjTypeChain::Spec::ARRAY))
@@ -150,9 +211,16 @@ CValue* CCodeGeneration::EmitBinaryOp(
 					AddressMode = AdrModeType::ZERO_PAGE_X_ADR;
 				else
 					AddressMode = AdrModeType::ABSOLUTE_X_ADR;
-				pOpcode->PrepareInstruction(Token::LDA, AddressMode, pVn, pSection);
-				pOpcode->Emit(0, 0);
-				pOpcode->Reset();
+				pOpCode = new CInstruction;
+				pOpCode->GenInstruction(
+					Token::LDA,
+					AddressMode,
+					pVn,
+					pLabel,
+					pSection->GetLocationCounter()
+				);
+				pSection->AddInstruction(pOpCode);
+				pOpCode = 0;
 			}
 			else
 			{
@@ -162,10 +230,17 @@ CValue* CCodeGeneration::EmitBinaryOp(
 				else
 					AddressMode = AdrModeType::ABSOLUTE_X_ADR;
 				pVn->Inc();
-				pOpcode->PrepareInstruction(Token::LDA, AddressMode, pVn, pSection);
-				pOpcode->Emit(0, 0);
+				pOpCode = new CInstruction;
+				pOpCode->GenInstruction(
+					Token::LDA,
+					AddressMode,
+					pVn,
+					pLabel,
+					pSection->GetLocationCounter()
+				);
+				pSection->AddInstruction(pOpCode);
 				pVn->Dec();
-				pOpcode->Reset();
+				pOpCode = 0;
 			}
 		}
 		//------------------------------------------
@@ -179,9 +254,16 @@ CValue* CCodeGeneration::EmitBinaryOp(
 					AddressMode = AdrModeType::ZERO_PAGE_ADR;
 				else
 					AddressMode = AdrModeType::ABSOLUTE_ADR;
-				pOpcode->PrepareInstruction(Op, AddressMode, pVc, pSection, 0);
-				pOpcode->Emit(0, 0);
-				pOpcode->Reset();
+				pOpCode = new CInstruction;
+				pOpCode->GenInstruction(
+					Op,
+					AddressMode,
+					pVc,
+					pLabel,
+					pSection->GetLocationCounter()
+				);
+				pSection->AddInstruction(pOpCode);
+				pOpCode = 0;
 			}
 			else
 			{
@@ -190,10 +272,16 @@ CValue* CCodeGeneration::EmitBinaryOp(
 				else
 					AddressMode = AdrModeType::ABSOLUTE_ADR;
 				pVc->Inc();
-				pOpcode->PrepareInstruction(Op, AddressMode, pVc, pSection, 0);
-				pOpcode->Emit(0, 0);
+				pOpCode = new CInstruction;
+				pOpCode->GenInstruction(
+					Op,
+					AddressMode,
+					pVc,
+					pLabel,
+					pSection->GetLocationCounter()
+				);
 				pVc->Dec();
-				pOpcode->Reset();
+				pOpCode	= 0;
 			}
 		}
 		else if (pTCchild->GetTail()->Is(CObjTypeChain::Spec::POINTER_DREF))
@@ -205,14 +293,28 @@ CValue* CCodeGeneration::EmitBinaryOp(
 					YregValue = 0;
 					pTempConst = new CValue;
 					pTempConst->Create(YregValue);
-					pOpcode->PrepareInstruction(Token::LDY, AdrModeType::IMMEDIATE_ADR, pTempConst, pSection, 0);
-					pOpcode->Emit(0, 0);
-					pOpcode->Reset();
-					delete pTempConst;
+					pOpCode = new CInstruction;
+					pOpCode->GenInstruction(
+						Token::LDY,
+						AdrModeType::IMMEDIATE_ADR,
+						pTempConst,
+						pLabel,
+						pSection->GetLocationCounter()
+					);
+					pSection->AddInstruction(pOpCode);
+					pOpCode = 0;
+					pTempConst = 0;
 				}
-				pOpcode->PrepareInstruction(Op, AdrModeType::INDIRECT_INDEXED_Y_ADR, pVc, pSection, 0);
-				pOpcode->Emit(0, 0);
-				pOpcode->Reset();
+				pOpCode = new CInstruction;
+				pOpCode->GenInstruction(
+					Op,
+					AdrModeType::INDIRECT_INDEXED_Y_ADR,
+					pVc,
+					pLabel,
+					pSection->GetLocationCounter()
+				);
+				pSection->AddInstruction(pOpCode);
+				pOpCode = 0;
 			}
 			else
 			{
@@ -254,9 +356,16 @@ CValue* CCodeGeneration::EmitBinaryOp(
 						AddressMode = AdrModeType::ZERO_PAGE_ADR;
 					else
 						AddressMode = AdrModeType::ABSOLUTE_ADR;
-					pOpcode->PrepareInstruction(Token::STA, AddressMode, pVr, pSection, 0);
-					pOpcode->Emit(0, 0);
-					pOpcode->Reset();
+					pOpCode = new CInstruction;
+					pOpCode->GenInstruction(
+						Token::STA,
+						AddressMode,
+						pVr,
+						pLabel,
+						pSection->GetLocationCounter()
+					);
+					pSection->AddInstruction(pOpCode);
+					pOpCode = 0;
 				}
 				else
 				{
@@ -270,15 +379,20 @@ CValue* CCodeGeneration::EmitBinaryOp(
 			case CValue::ValueType::REG:
 				break;
 			default:
-				fprintf(Act()->LogFile(), "Internal Error:Binary Operation:Unknown Destination\n");
-				Act()->Exit(2);
+				ThrownException.SetXCeptType(Exception::ExceptionType::CODEGEN_UNKNOWN_BYTE_ORDER);
+				sprintf_s(
+					ThrownException.GetErrorString(),
+					ThrownException.GetMaxStringLen(),
+					"Internal Error:Binary Operation:Unknown Destination\n"
+				);
+				throw(ThrownException);
 				break;
 			}
 		}
 		else
 		{
 			//--------------------------------------------
-			//The result need to go someplace else
+			//The result needs to go someplace else
 			// If this is a BYTE operation, then just leave
 			// the value in the accumulator
 			//---------------------------------------------
@@ -318,17 +432,31 @@ CValue* CCodeGeneration::EmitBinaryOp(
 					pTypeObj->SetSpec(CObjTypeChain::Spec::INT);
 					pReturnValue->GetSymbol()->GetTypeChain()->AddToTail(pTypeObj);
 
-					pOpcode->PrepareInstruction(Token::STA, AdrModeType::ZERO_PAGE_ADR, pReturnValue, pSection, 0);
-					pOpcode->Emit(0, 0);
-					pOpcode->Reset();
+					pOpCode = new CInstruction;
+					pOpCode->GenInstruction(
+						Token::STA,
+						AdrModeType::ZERO_PAGE_ADR,
+						pReturnValue,
+						pLabel,
+						pSection->GetLocationCounter()
+					);
+					pSection->AddInstruction(pOpCode);
+					pOpCode = 0;
 				}
 				else
 				{
 					pReturnValue->Inc();
-					pOpcode->PrepareInstruction(Token::STA, AdrModeType::ZERO_PAGE_ADR, pReturnValue, pSection, 0);
-					pOpcode->Emit(0, 0);
+					pOpCode = new CInstruction;
+					pOpCode->GenInstruction(
+						Token::STA,
+						AdrModeType::ZERO_PAGE_ADR,
+						pReturnValue,
+						pLabel,
+						pSection->GetLocationCounter()
+					);
+					pSection->AddInstruction(pOpCode);
 					pReturnValue->Dec();
-					pOpcode->Reset();
+					pOpCode = 0;
 				}
 
 			}
@@ -357,9 +485,84 @@ CValue* CCodeGeneration::EmitCompare(Token Op, CValue* pV1, CValue* pV2, CValue*
 	return nullptr;
 }
 
+void CCodeGeneration::EmitInstruction(
+	Token OpToken, 
+	AdrModeType AddressMode,
+	CValue* pOperandValue,
+	CSection* pSection, 
+	CValue* pLabel
+)
+{
+	KeyWord* pKeyWord = 0;
+	int StartAddress = 0;
+
+	CLexer* pLex = Act()->GetParser()->GetLexer();
+	if (pSection == 0)
+	{
+		ThrownException.SetXCeptType(Exception::ExceptionType::CODEGEN_NO_SECTION);
+		sprintf_s(
+			ThrownException.GetErrorString(),
+			ThrownException.GetMaxStringLen(),
+			"Line %d: No Section Defined for Instruction\n",
+			pLex->GetLineNumber()
+		);
+		throw(ThrownException);
+	}
+	if (pLabel)
+	{
+		pLabel->SetAddress(pSection->GetLocationCounter());
+		pLabel->SetResolved(true);
+		if (pLabel->GetSymbol())
+		{
+			pLabel->GetSymbol()->BackFillUnresolved();
+		}
+		else
+		{
+			ThrownException.SetXCeptType(Exception::ExceptionType::CVALUE_NO_SYMBOL);
+			sprintf_s(
+				ThrownException.GetErrorString(),
+				ThrownException.GetMaxStringLen(),
+				"Internal Error:Instruction Label has no symbol\n"
+			);
+			throw(ThrownException);
+		}
+	}
+	else   // :(
+	{
+		ThrownException.SetXCeptType(Exception::ExceptionType::ILLEGAL_ADDRESSING_MODE);
+		sprintf_s(
+			ThrownException.GetErrorString(),
+			ThrownException.GetMaxStringLen(),
+			"Line %d: Illegal Addressing Mode\n",
+			Act()->GetParser()->GetLexer()->GetLineNumber()
+		);
+		throw(ThrownException);
+	}
+}
+
+CValue* CCodeGeneration::EmitImplied(Token Op, CSection* pSection, CValue* pLabel)
+{
+	return nullptr;
+}
+
+CValue* CCodeGeneration::EmitAccumulator(Token Op, CSection* pSection, CValue* pLabel)
+{
+	return nullptr;
+}
+
+CValue* CCodeGeneration::EmitImmediate(Token Op, CValue* pVsrc, int Byte, CSection* pSection, CValue* pLabel)
+{
+	return nullptr;
+}
+
+CValue* CCodeGeneration::EmitRelative(Token Op, CValue* pVsrc, CSection* pSection, CValue* pLabel)
+{
+	return nullptr;
+}
+
 CValue* CCodeGeneration::EmitDirect(Token Op, CValue* pVdest, int Byte, CSection* pSection, CValue* pLabel)
 {
-	CAct65Opcode* pInstruction = new CAct65Opcode;;
+	CInstruction* pOpCode = 0;
 	AdrModeType AddressingMode = AdrModeType::ABSOLUTE_ADR;
 
 	if (pVdest->IsPageZero())
@@ -367,42 +570,69 @@ CValue* CCodeGeneration::EmitDirect(Token Op, CValue* pVdest, int Byte, CSection
 	switch (Byte)
 	{
 	case ByteOrder::LOWBYTE:
-		pInstruction->PrepareInstruction(Op, AddressingMode, pVdest, pSection, pLabel);
+		pOpCode = new CInstruction;
+		pOpCode->GenInstruction(
+			Op,
+			AddressingMode,
+			pVdest,
+			pLabel,
+			pSection->GetLocationCounter()
+		);
+		pSection->AddInstruction(pOpCode);
 		break;
 	case ByteOrder::HIGHBYTE:
 		pVdest->Inc();
-		pInstruction->PrepareInstruction(Op, AddressingMode, pVdest, pSection, pLabel);
+		pOpCode = new CInstruction;
+		pOpCode->GenInstruction(
+			Op,
+			AddressingMode,
+			pVdest,
+			pLabel,
+			pSection->GetLocationCounter()
+		);
+		pSection->AddInstruction(pOpCode);
 		pVdest->Dec();
 		break;
 	default:
-		fprintf(Act()->LogFile(), "Internal Error:Code Gen:Unknown Byte Order:%d\n", Byte);
-		Act()->Exit(2);
+		ThrownException.SetXCeptType(Exception::ExceptionType::CODEGEN_UNKNOWN_BYTE_ORDER);
+		sprintf_s(
+			ThrownException.GetErrorString(),
+			ThrownException.GetMaxStringLen(),
+			"Internal Error:Code Gen:Unknown Byte Order:%d\n", Byte
+		);
+		throw(ThrownException);
 		break;
 	}
-	pInstruction->Emit(0, 0);
 	return nullptr;
 }
 
 CValue* CCodeGeneration::EmitIndirect(Token Op, CValue* pVdestPointer, int Byte, CSection* pSection, CValue* pLabel, bool IncYreg)
 {
-	CAct65Opcode* pInstruction = new CAct65Opcode;;
+	CInstruction* pOpCode = 0;
 	AdrModeType AddressingMode = AdrModeType::INDIRECT_INDEXED_Y_ADR;
 
 	if (IncYreg)
 	{
-		pInstruction->PrepareInstruction(Token::INY, AdrModeType::IMPLIED, 0, pSection, pLabel);
-		pInstruction->Emit(0, 0);
-		pInstruction->Reset();
+		pOpCode = new CInstruction;
+		pOpCode->GenInstruction(Token::INY, AdrModeType::IMPLIED, 0, pLabel, pSection->GetLocationCounter());
+		pSection->AddInstruction(pOpCode);
 	}
 	switch (Byte)
 	{
 	case ByteOrder::LOWBYTE:
 	case ByteOrder::HIGHBYTE:
-		pInstruction->PrepareInstruction(Op, AddressingMode, pVdestPointer, pSection, pLabel);
-		pInstruction->Emit(0, 0);
+		pOpCode = new CInstruction;
+		pOpCode->GenInstruction(Op, AddressingMode, pVdestPointer, pLabel, pSection->GetLocationCounter());
+		pSection->AddInstruction(pOpCode);
 		break;
 	default:
-		fprintf(Act()->LogFile(), "Internal Error:Code Gen:Unknown Byte Order:%d\n", Byte);
+		ThrownException.SetXCeptType(Exception::ExceptionType::CODEGEN_UNKNOWN_BYTE_ORDER);
+		sprintf_s(
+			ThrownException.GetErrorString(),
+			ThrownException.GetMaxStringLen(),
+			"Internal Error:Code Gen:Unknown Byte Order:%d\n", Byte
+		);
+		throw(ThrownException);
 		break;
 	}
 	return nullptr;
@@ -410,8 +640,8 @@ CValue* CCodeGeneration::EmitIndirect(Token Op, CValue* pVdestPointer, int Byte,
 
 CValue* CCodeGeneration::EmitIndexed(Token Op, CValue* pVdest, CValue* pIndex, int Byte, CSection* pSection, CValue* pLabel)
 {
-	CAct65Opcode* pInstruction = new CAct65Opcode;;
-	AdrModeType AddressingMode = AdrModeType::INDIRECT_INDEXED_Y_ADR;
+	CInstruction* pOpCode = 0;;
+	AdrModeType AddressingMode = AdrModeType::NA;
 
 	switch (pIndex->GetValueType())
 	{
@@ -425,18 +655,38 @@ CValue* CCodeGeneration::EmitIndexed(Token Op, CValue* pVdest, CValue* pIndex, i
 	switch (Byte)
 	{
 	case ByteOrder::LOWBYTE:
-		pInstruction->PrepareInstruction(Op, AddressingMode, pVdest, pSection, pLabel);
-		pInstruction->Emit(0, 0);
+		pOpCode = new CInstruction;
+		pOpCode->GenInstruction(
+			Op,
+			AddressingMode,
+			pVdest,
+			pLabel,
+			pSection->GetLocationCounter()
+		);
+		pSection->AddInstruction(pOpCode);
+
 		break;
 	case ByteOrder::HIGHBYTE:
 		pVdest->Inc();
-		pInstruction->PrepareInstruction(Op, AddressingMode, pVdest, pSection, pLabel);
+		pOpCode = new CInstruction;
+		pOpCode->GenInstruction(
+			Op,
+			AddressingMode,
+			pVdest,
+			pLabel,
+			pSection->GetLocationCounter()
+		);
+		pSection->AddInstruction(pOpCode);
 		pVdest->Dec();
-		pInstruction->Emit(0, 0);
 		break;
 	default:
-		fprintf(Act()->LogFile(), "Internal Error:Code Gen:Unknown Byte Order:%d\n", Byte);
-		break;
+		ThrownException.SetXCeptType(Exception::ExceptionType::CODEGEN_UNKNOWN_BYTE_ORDER);
+		sprintf_s(
+			ThrownException.GetErrorString(),
+			ThrownException.GetMaxStringLen(),
+			"Internal Error:Code Gen:Unknown Byte Order:%d\n", Byte
+		);
+		throw(ThrownException);
 	}
 	return nullptr;
 }
@@ -461,6 +711,10 @@ CValue* CCodeGeneration::GetPendingLabel()
 }
 
 void CCodeGeneration::EmitSource()
+{
+}
+
+void CCodeGeneration::EmitListing(Token Op, CSection* pSection, int Address, CValue* pLabel)
 {
 }
 

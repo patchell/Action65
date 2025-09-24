@@ -10,7 +10,9 @@ CAct65AssignRSH::~CAct65AssignRSH()
 
 bool CAct65AssignRSH::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
-	return true;
+	bool rV = true;
+	rV = CAstNode::Create(pChild, pNext, pSym);
+	return rV;
 }
 
 CValue* CAct65AssignRSH::Process()

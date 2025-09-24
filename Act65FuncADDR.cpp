@@ -10,8 +10,11 @@ CAct65FuncADDR::~CAct65FuncADDR()
 
 bool CAct65FuncADDR::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
-	return true;
+	bool rV = true;
+	rV = CAstNode::Create(pChild, pNext, pSym);
+	return rV;
 }
+
 
 CValue* CAct65FuncADDR::Process()
 {

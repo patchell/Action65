@@ -135,6 +135,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Act65ARRAYdim.cpp" />
+    <ClCompile Include="Act65AsmModule.cpp" />
     <ClCompile Include="Act65AssignEQ.cpp" />
     <ClCompile Include="Act65BITS.cpp" />
     <ClCompile Include="Act65CONDITIONAL.cpp" />
@@ -290,9 +291,11 @@
     <ClCompile Include="Bucket.cpp" />
     <ClCompile Include="Chain.cpp" />
     <ClCompile Include="ChainBinItem.cpp" />
+    <ClCompile Include="ChainInstruction.cpp" />
     <ClCompile Include="ChainItem.cpp" />
     <ClCompile Include="ChainValueItem.cpp" />
     <ClCompile Include="CodeGeneration.cpp" />
+    <ClCompile Include="Instruction.cpp" />
     <ClCompile Include="Lexer.cpp" />
     <ClCompile Include="Linker.cpp" />
     <ClCompile Include="ObjFormatCode.cpp" />
@@ -324,6 +327,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Act65ARRAYdim.h" />
+    <ClInclude Include="Act65AsmModule.h" />
     <ClInclude Include="Act65AssignEQ.h" />
     <ClInclude Include="Act65BITS.h" />
     <ClInclude Include="Act65CONDITIONAL.h" />
@@ -477,9 +481,11 @@
     <ClInclude Include="Act65UnaryNEG.h" />
     <ClInclude Include="Chain.h" />
     <ClInclude Include="ChainBinItem.h" />
+    <ClInclude Include="ChainInstruction.h" />
     <ClInclude Include="ChainItem.h" />
     <ClInclude Include="ChainValueItem.h" />
     <ClInclude Include="CodeGeneration.h" />
+    <ClInclude Include="Instruction.h" />
     <ClInclude Include="Linker.h" />
     <ClInclude Include="ObjFormatCode.h" />
     <ClInclude Include="ObjFormatData.h" />

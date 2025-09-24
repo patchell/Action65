@@ -27,8 +27,8 @@ public:
 		NONE,
 		GENERATE_AST,
 		OPTIMAZE_AST,
-		EXECUTE_AST_PASS1,
-		GENTERATE_OUT_FILES
+		CODE_GENERATION,
+		PROGRAM_LISTING,
 	};
 private:
 	struct PASS {
@@ -47,9 +47,9 @@ private:
 	static inline PASS ParsePhase[PHASE_LUT_DIM] = {
 		{PHASE::NONE,"NONE"},
 		{PHASE::GENERATE_AST,"Pass 1:AST Generation"},
-		{PHASE::OPTIMAZE_AST,"Pass 1:AST Optimization"},
-		{PHASE::EXECUTE_AST_PASS1,"Pass 2:CODE Generation"},
-		{PHASE::GENTERATE_OUT_FILES,"Pass 4:Generate Ouput File"},
+		{PHASE::OPTIMAZE_AST,"Pass 2:AST Optimization"},
+		{PHASE::CODE_GENERATION,"Pass 3:CODE Generation"},
+		{PHASE::PROGRAM_LISTING,"Pass 4:Program Listing Ouput File"},
 	};
 	CLexer* m_pLex;
 	PASS m_Pass;			// Phase of the compiler operation
@@ -67,7 +67,6 @@ private:
 	CSection* m_pCurrentSection;
 	CLinker* m_pLinkerScript;
 	CSymbol* m_pCurrentProceedure;
-	CCodeGeneration m_CodeGenerationUtils;
 public:
 	CParser();
 	virtual ~CParser();
@@ -75,10 +74,9 @@ public:
 	//----------------- Symbol Generator -------------------
 	CSymbol* GenerateSymbol(const char* pPrefix);
 	//------------------------------------------------------
-	CCodeGeneration* GetCodeGenUtils() {
-		return &m_CodeGenerationUtils;
+	void SetCurrentProc(CSymbol* pProcSym) { 
+		m_pCurrentProceedure = pProcSym; 
 	}
-	void SetCurrentProc(CSymbol* pProcSym) { m_pCurrentProceedure = pProcSym; }
 	CSymbol* GetCurrentProc() {
 		return m_pCurrentProceedure;
 	}
@@ -376,5 +374,6 @@ public:
 		const char* pSmiscLabel = 0
 	);
 	//---------------------------------
+	void ProgramListing();
 };
 

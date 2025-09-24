@@ -10,7 +10,11 @@ CAct65AssignEQ::~CAct65AssignEQ()
 
 bool CAct65AssignEQ::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
-	return true;
+	{
+		bool rV = true;
+		rV = CAstNode::Create(pChild, pNext, pSym);
+		return rV;
+	}
 }
 
 CValue* CAct65AssignEQ::Process()

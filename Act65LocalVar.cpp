@@ -10,7 +10,9 @@ CAct65LocalVar::~CAct65LocalVar()
 
 bool CAct65LocalVar::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
-	return true;
+	bool rV = true;
+	rV = CAstNode::Create(pChild, pNext, pSym);
+	return rV;
 }
 
 CValue* CAct65LocalVar::Process()

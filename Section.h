@@ -40,16 +40,17 @@ private:
 	AddressSize m_ZeroPageAddressSize;
 	SectionType m_Type;
 	CChain m_Values;
+	CChain m_Instructions;
 	//---------- Section List --------------
 	CSection* m_pNextSection;
 	CSection* m_pPrevSection;
 public:
 	CSection();
-	virtual ~CSection(); 
+	virtual ~CSection();
 	bool Create();
 	CSection* GetNextSection() { return m_pNextSection; }
 	void SetNextSection(CSection* pN) { m_pNextSection = pN; }
-	CSection* GetPrevSection(){ return m_pPrevSection; }
+	CSection* GetPrevSection() { return m_pPrevSection; }
 	void SetPrevSection(CSection* pP) { m_pPrevSection = pP; }
 	SectionType GetSectionType() const { return m_Type; }
 	void SetSectionType(SectionType ST) { m_Type = ST; }
@@ -69,7 +70,7 @@ public:
 	CSection::AddressSize GetZeroPageFlag() const { return m_ZeroPageAddressSize; }
 	int Relocate(int NewBaseAddress);
 	//----- Adding Data --------
-	int AddInstruction(CAct65Opcode* pINS, CValue* pLabelValue = 0);
+	int AddInstruction(CInstruction* pINS);
 	int AddData(int ObjectSize, int Value, CValue* pLabelValue = 0);
 	int AddData(int ObjSize, const char* pData, CValue* pLabelValue = 0);
 	void AddDataAt(unsigned Adr, unsigned ObjectSize, int valu);
@@ -88,5 +89,13 @@ public:
 			rV = true;
 		return rV;
 	}
+	CChain* GetInstructionsChain() {
+		return &m_Instructions;
+	}
+	CChain* GetValuesChain() {
+		return &m_Values;
+	}
+	void EmitListing();
+	void EmitBinary();
 };
 

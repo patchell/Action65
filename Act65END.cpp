@@ -10,7 +10,9 @@ CAct65END::~CAct65END()
 
 bool CAct65END::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
-	return true;
+	bool rV = true;
+	rV = CAstNode::Create(pChild, pNext, pSym);
+	return rV;
 }
 
 CValue* CAct65END::Process()

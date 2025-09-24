@@ -16,7 +16,11 @@ void CAct65STRING::SetString(const char* s)
 
 bool CAct65STRING::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
-	return true;
+	{
+		bool rV = true;
+		rV = CAstNode::Create(pChild, pNext, pSym);
+		return rV;
+	}
 }
 
 CValue* CAct65STRING::Process()

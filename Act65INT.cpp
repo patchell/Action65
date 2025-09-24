@@ -10,8 +10,11 @@ CAct65INT::~CAct65INT()
 
 bool CAct65INT::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
-	return true;
+	bool rV = true;
+	rV = CAstNode::Create(pChild, pNext, pSym);
+	return rV;
 }
+
 
 CValue* CAct65INT::Process()
 {

@@ -10,7 +10,9 @@ CAct65RTI::~CAct65RTI()
 
 bool CAct65RTI::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
-	return true;
+	bool rV = true;
+	rV = CAstNode::Create(pChild, pNext, pSym);
+	return rV;
 }
 
 CValue* CAct65RTI::Process()

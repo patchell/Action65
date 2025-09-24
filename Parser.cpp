@@ -41,7 +41,7 @@ bool CParser::Create()
 	//-----------------------------------
 	// Create Code Generation Utillities
 	//-----------------------------------
-	GetCodeGenUtils()->Create(16, FindSection("ZERO"));
+	Act()->GetCodeGen()->Create(16, FindSection("ZERO"));
 	if (LogFile())
 		fprintf(LogFile(), "Parser Created\n");
 	return true;
@@ -68,7 +68,8 @@ CAstNode* CParser::Run()
 		ErrorDest = stderr;
 	try {
 		NextPass();	// Generate AST
-		pRoot = (CAct65ROOT*)GetAstTree()->GetRootNode();
+		fprintf(stderr, "Generate Abstract Syntax Tree\n");
+		pRoot = (CAct65ROOT*)GetAstTree()->GetRootNode();	//???????
 		pRoot = new CAct65ROOT;
 		pRoot->Create();
 		GetAstTree()->SetRootNode(pRoot);
@@ -77,10 +78,15 @@ CAstNode* CParser::Run()
 		pRoot->SetChild(pN);
 		GetAstTree()->Print(LogFile());
 		NextPass();	// AST optimization
+		fprintf(stderr, "Optimize Abstract Syntax Tree\n");
 		GetAstTree()->Optimize();
 		GetAstTree()->Print(LogFile());
 		NextPass();	// Generate Code
+		fprintf(stderr, "Generate Cpde\n");
 		GetAstTree()->Process();	//gemerate cpde
+		NextPass();	//Generate Listing
+		fprintf(stderr, "Generate Listing\n");
+		this->ProgramListing();
 		Act()->Exit(0);
 		NextPass();	//Create Output file
 		GetLexer()->GetSymTab()->PrintTable(LogFile());
@@ -347,6 +353,7 @@ CAstNode* CParser::Modules()
 	//--------------------------------------------
 	//	Modules		->Set Modules_1;
 	//	Modules_1	-> 'MODULE' Set Modules_1
+	//	Modules_1	-> 'ASM' InlineAssBlock Set Modules_1
 	//				-> .
 	//				;
 	//--------------------------------------------
@@ -362,9 +369,21 @@ CAstNode* CParser::Modules()
 		case Token::MODULE:
 			Expect(Token::MODULE);
 			pN = new CAct65Module;
+			pN->Create(0, 0, GetCurrentProc());
 			pChild = Set();
 			pChild = pN->SetChild(pChild);
 			pNext = CAstNode::MakeNextList(pNext, pChild);
+			//---------------------------------------
+			pChild = Set();
+			pNext = CAstNode::MakeNextList(pNext, pChild);
+			break;
+		case Token::ASMMODULE:
+			Expect(Token::ASMMODULE);
+			pN = new CAct65AsmModule;
+			pN->Create(0, 0, GetCurrentProc());
+			pChild = InlineAssBlock();
+			pN->SetChild(pChild);
+			pNext = CAstNode::MakeNextList(pNext, pN);
 			//---------------------------------------
 			pChild = Set();
 			pNext = CAstNode::MakeNextList(pNext, pChild);
@@ -467,6 +486,7 @@ CAstNode* CParser::Statements()
 	bool Loop = true;
 
 	pN = new CAct65Statements;
+	pN->Create(0, 0, GetCurrentProc());
 	pChild = Call();
 	pN->SetChild(pChild);
 	return pN;
@@ -497,6 +517,7 @@ CAstNode* CParser::Call()
 		case Token::PROC_IDENT:
 			Expect(Token::PROC_IDENT);
 			pN = new CAct65ProcCall;
+			pN->Create(0, 0, GetCurrentProc());
 			pChild = ProcParams();
 			pN->SetChild(pChild);
 			pNext = CAstNode::MakeNextList(pNext, pN);
@@ -507,6 +528,7 @@ CAstNode* CParser::Call()
 		case Token::FUNC_IDENT:
 			Expect(Token::FUNC_IDENT);
 			pN = new CAct65FuncCall;
+			pN->Create(0, 0, GetCurrentProc());
 			pChild = ProcParams();
 			pN->SetChild(pChild);
 			pNext = CAstNode::MakeNextList(pNext, pN);
@@ -539,6 +561,7 @@ CAstNode* CParser::ProcParams()
 	case Token('('):
 		Expect(Token('('));
 		pN = new CAct65FuncCall;
+		pN->Create(0, 0, GetCurrentProc());
 		pChild = ProcParams();
 		pN->MakeNode(pChild,pNext);
 		Expect(Token(')'));
@@ -595,6 +618,7 @@ CAstNode* CParser::ForStmt()
 		case Token::FOR:
 			Expect(Token::FOR);
 			pN = new CAct65FOR;;
+			pN->Create(0, 0, GetCurrentProc());
 			pChild = ForDOendOD();
 			pN->SetChild(pChild);
 			pNext = CAstNode::MakeNextList(pNext, pN);
@@ -628,7 +652,9 @@ CAstNode* CParser::ForDOendOD()
 	case Token::DO:
 		Expect(Token::DO);
 		pNDO = new CAct65DO;
+		pNDO->Create(0, 0, GetCurrentProc());
 		pNOD = new CAct65OD;
+		pNOD->Create(0, 0, GetCurrentProc());
 		pStatements = Statements();
 		pNDO = CAstNode::MakeChildList(pNDO, pStatements);
 		pNDO = CAstNode::MakeChildList(pNDO, pNOD);
@@ -660,6 +686,7 @@ CAstNode* CParser::STEPoption()
 		Expect(Token::STEP);
 		pNArithExpr = ArithExpr();
 		pNStep = new CAct65ForSTEP;
+		pNStep->Create(0, 0, GetCurrentProc());
 		pNStep->SetChild(pNArithExpr);
 		pNTO = CAstNode::MakeNextList(pNTO, pNStep);
 		break;
@@ -686,6 +713,7 @@ CAstNode* CParser::ForTO()
 	case Token::TO:
 		Expect(Token::TO);
 		pNTO = new CAct65ForTO;
+		pNTO->Create(0, 0, GetCurrentProc());
 		pArithExpr = ArithExpr();
 		pNTO->SetChild(pArithExpr);
 		pItterator = CAstNode::MakeNextList(pItterator, pNTO);
@@ -749,6 +777,7 @@ CAstNode* CParser::IfStmt()
 		case Token::IF:
 			Expect(Token::IF);
 			pN = new CAct65IF;
+			pN->Create(0, 0, GetCurrentProc());
 			pChild = EndIF();
 			pN->SetChild(pChild);
 			pNext = CAstNode::MakeNextList(pNext, pN);
@@ -779,6 +808,7 @@ CAstNode* CParser::EndIF()
 	case Token::FI:
 		Expect(Token::FI);
 		pNFI = new CAct65FI;
+		pNFI->Create(0, 0, GetCurrentProc());
 		pElsePart = CAstNode::MakeNextList(pElsePart, pNFI);
 		break;
 	default:
@@ -806,6 +836,7 @@ CAstNode* CParser::ElsePart()
 		Expect(Token::ELSE);
 		pStatements = Statements();
 		pNElse = new CAct65ELSE;
+		pNElse->Create(0, 0, GetCurrentProc());
 		pNElse->SetChild(pStatements);
 		pElseIfPart = CAstNode::MakeNextList(pElseIfPart, pNElse);
 		break;
@@ -836,6 +867,7 @@ CAstNode* CParser::ElseIfPart()
 		case Token::ELSEIF:
 			Expect(Token::ELSEIF);
 			pNELSEIF = new CAct65ELSEIF;
+			pNELSEIF->Create(0, 0, GetCurrentProc());
 			pN = ThenPart();
 			pNELSEIF->SetChild(pN);
 			pNThenPart = CAstNode::MakeNextList(pNThenPart, pNELSEIF);
@@ -867,6 +899,7 @@ CAstNode* CParser::ThenPart()
 		Expect(Token::THEN);
 		pStatements = Statements();
 		pNThen = new CAct65THEN;
+		pNThen->Create(0, 0, GetCurrentProc());
 		pNThen->SetChild(pStatements);
 		pNRelOp = CAstNode::MakeChildList(pNRelOp, pNThen);
 		break;
@@ -900,6 +933,7 @@ CAstNode* CParser::WhileStmt()
 		case Token::WHILE:
 			Expect(Token::WHILE);
 			pN = new CAct65WHILE;
+			pN->Create(0, 0, GetCurrentProc());
 			pChild = WhileDO();
 			pChild = pN->SetChild(pChild);
 			pNext = CAstNode::MakeNextList(pNext, pChild);
@@ -935,6 +969,7 @@ CAstNode* CParser::WhileDO()
 		Expect(Token::DO);
 		pStatements = Statements();
 		pN = new CAct65DO;
+		pN->Create(0, 0, GetCurrentProc());
 		pChild = pN->SetChild(pStatements);
 		pNrel = CAstNode::MakeNextList(pNrel, pChild);
 		break;
@@ -946,6 +981,7 @@ CAstNode* CParser::WhileDO()
 	case Token::OD:
 		Expect(Token::OD);
 		pNOD = new CAct65OD;
+		pNOD->Create(0, 0, GetCurrentProc());
 		CAstNode::MakeNextList(pStatements, pNOD);;
 		break;
 	default:
@@ -978,6 +1014,7 @@ CAstNode* CParser::DoStmt()
 		case Token::DO:
 			Expect(Token::DO);
 			pN = new CAct65DO;
+			pN->Create(0, 0, GetCurrentProc());
 			pChild = DoEND();
 			pN->SetChild(pChild);
 			pNext = CAstNode::MakeNextList(pNext, pN);
@@ -1009,6 +1046,7 @@ CAstNode* CParser::DoEND()
 	case Token::OD:
 		Expect(Token::OD);
 		pNOD = new CAct65OD;
+		pNOD->Create(0, 0, GetCurrentProc());
 		pStatements = CAstNode::MakeNextList(pStatements, pNOD);
 		break;
 	default:
@@ -1078,6 +1116,7 @@ CAstNode* CParser::RetStmt()
 		case Token::RETURN:
 			Expect(Token::RETURN);
 			pNodeReturn = new CAct65RETURN;
+			pNodeReturn->Create(0, 0, 0);
 			pChild = ArithExpr();
 			pNodeReturn->SetChild(pChild);
 			pNext = CAstNode::MakeNextList(pNext, pNodeReturn);
@@ -3539,6 +3578,7 @@ CAstNode* CParser::FundDecl()
 			Expect(Token::INTERRUPT);
 			pN = new CAct65INTERRUPT;
 			pChild = IrqDecl(pTC);
+			pN->Create(0, 0, pChild->GetSymbol());
 			//------------Abstract syntax Tree Node -----------
 			pN->SetChild(pChild);
 			pOtherNode = IrqBody();
@@ -3879,6 +3919,16 @@ CAstNode* CParser::IrqDecl(CTypeChain* pTypeChain)
 		pSym->SetIdentType(CBin::IdentType::IRQPROC);
 		pSym->SetToken(Token::INTERRUPT_IDENT);
 		pSym->CreateTypeChain(pTypeChain);
+		pSym->SetSection(GetCurrentSection());
+		//--------------------------
+		// Set the current IRQ proc
+		// name that will be used
+		// by all of the nodes that
+		// are created for this proc.
+		// This is at the parser level
+		// This value will be used
+		// when the nodes are created
+		//--------------------------
 		SetCurrentProc(pSym);
 		GetLexer()->GetSymTab()->AddSymbol(pSym);
 		//------------- Parsing ------------
@@ -3927,6 +3977,7 @@ CAstNode* CParser::IrqBody()
 	CAstNode* pParamList = 0;
 
 	pN = new CAct65BODY;
+	pN->Create(0, 0, GetCurrentProc());
 	pParamList = IrqDeclParams();
 	pChild = LocalDecls();
 	pParamList = CAstNode::MakeNextList(pParamList, pChild);
@@ -6823,4 +6874,16 @@ const char* CParser::PASS::NextPass()
 {
 	m_Phase = PHASE(int(m_Phase) + 1);
 	return CParser::ParsePhase[int(m_Phase)].m_pName;
+}
+
+void CParser::ProgramListing()
+{
+	CSection* pSec = 0;
+
+	pSec = GetSectionHead();
+	while (pSec)
+	{
+		pSec->EmitListing();
+		pSec = (CSection*)pSec->GetNext();
+	}
 }

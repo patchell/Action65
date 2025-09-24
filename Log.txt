@@ -1,4 +1,4 @@
-File:test9.act has 461 Bytes
+File:test9.act has 468 Bytes
 File:Action.Act65_settings has 974 Bytes
    Section:STACK:Start:$0100 Size:$0100 MODE:R/W:ABSOLUTE Address Size:WORD
    Section:LOCALS:Start:$1200 Size:$0800 MODE:R/W:ABSOLUTE Address Size:WORD
@@ -14,90 +14,159 @@ File:Linker.Act65_LinkerScript has 38 Bytes
 Parser Created
 ------------  Pass 1:AST Generation  ------------------
 ------------ Remove Symbol(s) From Table --------------
+	V1 was removed
+	V2 was removed
+	V3 was removed
+	aX was removed
+	Result was removed
+	pY was removed
 	 NUMB  CHILD  NEXT
      1      2     -1  +- 'ROOT'
-     2      3     -1     +- 'MODULE'
-     3      4     10        +- 'IRQ-PROC'
-     4     -1      5        |  +- 'IDENT': Hey
-     5      6     -1        |  +- 'Body'
-     6     -1      7        |     +- 'Param LIST'
-     7      8     -1        |     +- 'STATEMENTS'
-     8      9     -1        |        +- 'ASM'
-     9     -1     -1        |           +- 'SECTION' Code Start:$0000 SIZE:$1000 MODE:MODE_READ_ONLY PAGE0:FALSE
-    10     11     15        +- 'BYTE'
-    11     -1     12        |  +- 'IDENT': Result
-    12     -1     13        |  +- 'IDENT': V1
-    13     -1     14        |  +- 'IDENT': V2
-    14     -1     -1        |  +- 'IDENT': V3
-    15     16     18        +- 'BYTE'
-    16     17     -1        |  +- 'ARRAY'
-    17     -1     -1        |     +- 'IDENT': aX
-    18     19     -1        +- 'BYTE'
-    19     20     -1           +- 'POINTER'
-    20     -1     -1              +- 'IDENT': pY
-------------  Pass 1:AST Optimization  ------------------
+     2      3      4     +- 'ASM MODULE' ASM MODULEERROR:No Section (Parent:ROOT
+     3     -1     -1     |  +- 'SECTION' Code Start:$0000 SIZE:$1000 MODE:MODE_READ_ONLY PAGE0:FALSE
+     4      5     -1     +- 'MODULE'
+     5      6     -1        +- 'IRQ-PROC'
+     6     -1      7           +- 'IDENT': Hey
+     7      8     -1           +- 'Body'
+     8     -1     13              +- 'Param LIST'
+    13      9     16              +- 'BYTE'
+     9     -1     10              |  +- 'IDENT': Result
+    10     -1     11              |  +- 'IDENT': V1
+    11     -1     12              |  +- 'IDENT': V2
+    12     -1     -1              |  +- 'IDENT': V3
+    16     14     19              +- 'BYTE'
+    14     15     -1              |  +- 'ARRAY'
+    15     -1     -1              |     +- 'IDENT': aX
+    19     17     20              +- 'BYTE'
+    17     18     -1              |  +- 'POINTER'
+    18     -1     -1              |     +- 'IDENT': pY
+    20     21     -1              +- 'STATEMENTS'
+    21     22     34                 +- 'DO'
+    22     24     33                 |  +- 'STATEMENTS'
+    24     27     -1                 |  |  +- 'Assign ='
+    27     26     23                 |  |     +- 'ADD'
+    26     25     32                 |  |     |  +- 'DEREF'
+    25     -1     -1                 |  |     |  |  +- 'IDENT': pY
+    32     31     -1                 |  |     |  +- 'IDENT': aX
+    31     29     -1                 |  |     |     +- 'INDEX'
+    29     28     -1                 |  |     |        +- 'ADD'
+    28     -1     30                 |  |     |           +- 'IDENT': V2
+    30     -1     -1                 |  |     |           +- 'IDENT': V3
+    23     -1     -1                 |  |     +- 'IDENT': Result
+    33     -1     -1                 |  +- 'OD'
+    34     -1     -1                 +- 'RETURN'
+------------  Pass 2:AST Optimization  ------------------
 CheckNode:ROOT
 Node     1::ROOT
-CheckNode:MODULE
-Node     2::MODULE
-CheckNode:IRQ-PROC
-Node     3::IRQ-PROC
-CheckNode:IDENT
-Node     4::IDENT
-CheckNode:Body
-Node     5::Body
-CheckNode:Param LIST
-Node     6::Param LIST
-CheckNode:STATEMENTS
-Node     7::STATEMENTS
-CheckNode:ASM
-Node     8::ASM
+CheckNode:ASM MODULE
+Node     2::ASM MODULE
 CheckNode:SECTION
-Node     9::SECTION
+Node     3::SECTION
+CheckNode:MODULE
+Node     4::MODULE
+CheckNode:IRQ-PROC
+Node     5::IRQ-PROC
+CheckNode:IDENT
+Node     6::IDENT
+CheckNode:Body
+Node     7::Body
+CheckNode:Param LIST
+Node     8::Param LIST
 CheckNode:BYTE
-Node    10::BYTE
+Node    13::BYTE
+CheckNode:IDENT
+Node     9::IDENT
+CheckNode:IDENT
+Node    10::IDENT
 CheckNode:IDENT
 Node    11::IDENT
 CheckNode:IDENT
 Node    12::IDENT
-CheckNode:IDENT
-Node    13::IDENT
-CheckNode:IDENT
-Node    14::IDENT
 CheckNode:BYTE
-Node    15::BYTE
+Node    16::BYTE
 CheckNode:ARRAY
-Node    16::ARRAY
+Node    14::ARRAY
 CheckNode:IDENT
-Node    17::IDENT
+Node    15::IDENT
 CheckNode:BYTE
-Node    18::BYTE
+Node    19::BYTE
 CheckNode:POINTER
-Node    19::POINTER
+Node    17::POINTER
 CheckNode:IDENT
-Node    20::IDENT
+Node    18::IDENT
+CheckNode:STATEMENTS
+Node    20::STATEMENTS
+CheckNode:DO
+Node    21::DO
+CheckNode:STATEMENTS
+Node    22::STATEMENTS
+CheckNode:Assign =
+Optimize this NODE: Assign =
+CheckNode::Child:ADD
+Node    24::Assign =
+CheckNode:ADD
+Node    27::ADD
+CheckNode:DEREF
+Node    26::DEREF
+CheckNode:IDENT
+Node    25::IDENT
+CheckNode:IDENT
+Node    32::IDENT
+CheckNode:INDEX
+Node    31::INDEX
+CheckNode:ADD
+Node    29::ADD
+CheckNode:IDENT
+Node    28::IDENT
+CheckNode:IDENT
+Node    30::IDENT
+CheckNode:IDENT
+Node    23::IDENT
+CheckNode:OD
+Node    33::OD
+CheckNode:RETURN
+Node    34::RETURN
 	 NUMB  CHILD  NEXT
      1      2     -1  +- 'ROOT'
-     2      3     -1     +- 'MODULE'
-     3      4     10        +- 'IRQ-PROC'
-     4     -1      5        |  +- 'IDENT': Hey
-     5      6     -1        |  +- 'Body'
-     6     -1      7        |     +- 'Param LIST'
-     7      8     -1        |     +- 'STATEMENTS'
-     8      9     -1        |        +- 'ASM'
-     9     -1     -1        |           +- 'SECTION' Code Start:$0000 SIZE:$1000 MODE:MODE_READ_ONLY PAGE0:FALSE
-    10     11     15        +- 'BYTE'
-    11     -1     12        |  +- 'IDENT': Result
-    12     -1     13        |  +- 'IDENT': V1
-    13     -1     14        |  +- 'IDENT': V2
-    14     -1     -1        |  +- 'IDENT': V3
-    15     16     18        +- 'BYTE'
-    16     17     -1        |  +- 'ARRAY'
-    17     -1     -1        |     +- 'IDENT': aX
-    18     19     -1        +- 'BYTE'
-    19     20     -1           +- 'POINTER'
-    20     -1     -1              +- 'IDENT': pY
-------------  Pass 2:CODE Generation  ------------------
+     2      3      4     +- 'ASM MODULE' ASM MODULEERROR:No Section (Parent:ROOT
+     3     -1     -1     |  +- 'SECTION' Code Start:$0000 SIZE:$1000 MODE:MODE_READ_ONLY PAGE0:FALSE
+     4      5     -1     +- 'MODULE'
+     5      6     -1        +- 'IRQ-PROC'
+     6     -1      7           +- 'IDENT': Hey
+     7      8     -1           +- 'Body'
+     8     -1     13              +- 'Param LIST'
+    13      9     16              +- 'BYTE'
+     9     -1     10              |  +- 'IDENT': Result
+    10     -1     11              |  +- 'IDENT': V1
+    11     -1     12              |  +- 'IDENT': V2
+    12     -1     -1              |  +- 'IDENT': V3
+    16     14     19              +- 'BYTE'
+    14     15     -1              |  +- 'ARRAY'
+    15     -1     -1              |     +- 'IDENT': aX
+    19     17     20              +- 'BYTE'
+    17     18     -1              |  +- 'POINTER'
+    18     -1     -1              |     +- 'IDENT': pY
+    20     21     -1              +- 'STATEMENTS'
+    21     22     34                 +- 'DO'
+    22     24     33                 |  +- 'STATEMENTS'
+    24     27     -1                 |  |  +- 'Assign ='
+    27     26     -1                 |  |     +- 'ADD'
+    26     25     32                 |  |        +- 'DEREF'
+    25     -1     -1                 |  |        |  +- 'IDENT': pY
+    32     31     23                 |  |        +- 'IDENT': aX
+    31     29     -1                 |  |        |  +- 'INDEX'
+    29     28     -1                 |  |        |     +- 'ADD'
+    28     -1     30                 |  |        |        +- 'IDENT': V2
+    30     -1     -1                 |  |        |        +- 'IDENT': V3
+    23     -1     -1                 |  |        +- 'IDENT': Result
+    33     -1     -1                 |  +- 'OD'
+    34     -1     -1                 +- 'RETURN'
+------------  Pass 3:CODE Generation  ------------------
 Process ROOT Node:1
-Process MODULE Node:2
-No Section Defined 0:(null)  Line:16 Col:3
+Process SECTION Node:3
+Process MODULE Node:4
+Process Param LIST Node:8
+Process ARRAY Node:14
+Process POINTER Node:17
+Process Assign = Node:24
+------------  Pass 4:Program Listing Ouput File  ------------------

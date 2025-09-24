@@ -18,6 +18,7 @@ public:
 		int MaxRecursion = 300,
 		int MaxLoops = 3000
 	);
+	void Run();
 	virtual CValue* Process();
 	//--------------------------------
 	void SetRootNode(CAstNode* pRoot) { m_pRoot = pRoot; }

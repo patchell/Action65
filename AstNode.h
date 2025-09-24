@@ -11,8 +11,6 @@ public:
 		AREG,
 		ADDEXPR,
 		ADDRESS_OF,
-		ADDRESS_OF_INTERRUPT,
-		ADDRESS_OF_CONSTANT,
 		ARRAY,
 		ARRAY_INDEX,
 		ARRAY_DIM,
@@ -40,26 +38,30 @@ public:
 		BREAK,
 		BYTE,
 		CARD,
+		CARRY_FLAG,
 		CHAR,
 		CHAR_CONSTANT,
 		CODE_BLOCK,
+		CONDITIONAL,
 		CONST,
 		CONSTANT,
+		CONSTANT_ADDRESS,
 		CONSTANT_LIST,
 		CURRENT_LOCATION,
+		DAS,
+		DCS,
 		DEFINE_ACTION_STRING,
 		DEFINE_BYTE,
 		DEFINE_C_STRING,
 		DECLARE_PARAMS,
 		DEFINE,
+		DEFINE_LONG,
 		DEFINE_OBJECT,
 		DEFINE_LIST,
-		DIVIDE,
-		DEFINE_LONG,
-		DO,
 		DEFINE_STORAGE,
 		DEFINE_WORD,
-		CONDITIONAL,
+		DIVIDE,
+		DO,
 		ELSE,
 		ELSEIF,
 		END,
@@ -68,10 +70,6 @@ public:
 		EXIT,
 		FFI,
 		FI,
-		CARRY_FLAG,
-		NEG_FLAG,
-		OVERFLOW_FLAG,
-		ZERO_FLAG,
 		FOR,
 		FOR_ITTERATOR,
 		FOR_STEP,
@@ -81,6 +79,9 @@ public:
 		FUNCTION_CALL,
 		GREATER_THAN,
 		GREATER_THAN_OR_EQUAL,
+		INTERRUPT_ADDRESS,
+		NEG_FLAG,
+		OVERFLOW_FLAG,
 		IDENT,
 		IDENTIFIER,
 		IDENT_LIST,
@@ -92,12 +93,12 @@ public:
 		INTERRUPT,
 		LABEL,
 		LESS_THAN,
+		LESS_THAN_OR_EQUAL,
 		LOCAL_VARIABLE,
 		LOGICAL_AND,
 		LOGICAL_OR,
 		LOWER_PART,
 		LSH,
-		LESS_THAN_OR_EQUAL,
 		MOD,
 		MODULE,
 		MULTIPLY,
@@ -117,9 +118,9 @@ public:
 		PROC_ADDRESS,
 		PROC_CALL,
 		PROCESSOR,
+		PROCESSOR_STATUS_REGISTER,
 		PROC_NAME,
 		PROC_PARAMETERS,
-		PROCESSOR_STATUS_REGISTER,
 		PUSH,
 		PUSH_SOURCE,
 		R6502,
@@ -130,16 +131,17 @@ public:
 		ROR,
 		RSH,
 		RTI,
+		SECTION,
 		SECTION_ATTRIBUTES,
 		SECTION_ATTRIBUTE_FALSE,
 		SECTION_ATTRIBUTE_MODE,
+		SECTION_ATTRIBUTE_PAGE_ZERO,
 		SECTION_ATRRIBUTE_READ_ONLY,
 		SECTION_ATTRIBUTE_READ_WRITE,
 		SECTION_ATTRIBUTE_SIZE,
 		SECTION_ATTRIBUTE_START,
-		SECTION_ATTRIBUTE_PAGE_ZERO,
 		SECTION_NAME,
-		SECTION,
+		SET,
 		STATEMENTS,
 		STATUS_FLAGS,
 		STRING,
@@ -163,9 +165,7 @@ public:
 		XOR,
 		XREG,
 		YREG,
-		SET,
-		DAS,
-		DCS
+		ZERO_FLAG
 	};
 	enum class ProcType {
 		NONE,
@@ -175,8 +175,8 @@ public:
 	};
 private:
 	inline static int m_NodeCount = 0;
-	inline static ProcType m_CurrentProcType = ProcType::NONE;
-	inline static CSymbol* m_pCurrentProcSym = 0;
+	ProcType m_ProcType = ProcType::NONE;
+	CSymbol* m_pProcSym = 0;
 	int m_NodeID;
 	NodeType m_NodeType;
 	const char* m_pNodeName;
@@ -202,6 +202,11 @@ public:
 	CAstNode();
 	CAstNode(const char* pName, NodeType NT);
 	virtual ~CAstNode();
+	virtual bool Create(
+		CAstNode* pChild, 
+		CAstNode* pNext, 
+		CBin* pSym
+	);
 	virtual CAstNode* MakeNode(
 		CAstNode* pChild = 0,
 		CAstNode* pNext = 0
@@ -279,8 +284,8 @@ public:
 	FILE* LogFile();
 	CCodeGeneration* GetCodeGen();
 	//------------------------------
-	ProcType GetCurrentProcType() { return m_CurrentProcType; }
-	void SetCurrentProcType(ProcType PT) { m_CurrentProcType = PT; }
-	CSymbol* GetCurrentProcSym() { return m_pCurrentProcSym; }
-	void SetCurrentProcSym(CSymbol* pSym) { m_pCurrentProcSym = pSym; }
+	ProcType GetProcType();
+	void SetProcType(ProcType PT); 
+	CSymbol* GetProcSym() { return m_pProcSym; }
+	void SetProcSym(CSymbol* pSym) { m_pProcSym = pSym; }
 };

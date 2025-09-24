@@ -50,8 +50,13 @@ bool CValue::Create(CSymbol* pSym)
 		// Symbol was NULL, so fail
 		//-------------------------
 		rV = false;
-		fprintf(Act()->LogFile(), "Internal Error: Value Create Error:NULL Symbol\n");
-		Act()->Exit(2);
+		ThrownException.SetXCeptType(Exception::ExceptionType::INTERNAL_SYMBOL_NULL);
+		sprintf_s(
+			ThrownException.GetErrorString(),
+			ThrownException.GetMaxStringLen(),
+			"Internal Error: Value Create Error:NULL Symbol\n"
+		);
+		throw(ThrownException);
 	}
     return rV;
 }
@@ -143,8 +148,13 @@ char* CValue::GetName()
 		pName = GetSymbol()->GetName();
 	else
 	{
-		fprintf(stderr, "Internal Error:No Symbol Attatch to Value\n");
-		Act()->Exit(INTERNAL_ERROR);
+		ThrownException.SetXCeptType(Exception::ExceptionType::CVALUE_NO_SYMBOL);
+		sprintf_s(
+			ThrownException.GetErrorString(),
+			ThrownException.GetMaxStringLen(),
+			"Internal Error:No Symbol Attatch to Value\n"
+		);
+		throw(ThrownException);
 	}
     return pName;
 }
@@ -357,4 +367,57 @@ int CValue::SizeOf()
 	else if (pTypeChain->IsWord())
 		rV = 2;
 	return rV;
+}
+
+void CValue::SetAddress(int Addr)
+{
+	if(m_pSym)
+		m_pSym->SetAddress(Addr);
+	else
+	{
+		ThrownException.SetXCeptType(Exception::ExceptionType::CVALUE_NO_SYMBOL);
+		sprintf_s(
+			ThrownException.GetErrorString(),
+			ThrownException.GetMaxStringLen(),
+			"CValue has no Symbol\n"
+		);
+		throw(ThrownException);
+	}
+}
+
+void CValue::SetResolved(bool bRes)
+{
+	if(m_pSym)
+	{
+		if(bRes)
+			m_pSym->SetResolved();
+		else
+			m_pSym->SetUnResolved();
+	}
+	else
+	{
+		ThrownException.SetXCeptType(Exception::ExceptionType::CVALUE_NO_SYMBOL);
+		sprintf_s(
+			ThrownException.GetErrorString(),
+			ThrownException.GetMaxStringLen(),
+			"CValue has no Symbol\n"
+		);
+		throw(ThrownException);
+	}
+}
+
+void CValue::BackFillUnresolved()
+{
+	if (m_pSym)
+		m_pSym->BackFillUnresolved();
+	else
+	{
+		ThrownException.SetXCeptType(Exception::ExceptionType::CVALUE_NO_SYMBOL);
+		sprintf_s(
+			ThrownException.GetErrorString(),
+			ThrownException.GetMaxStringLen(),
+			"CValue has no Symbol\n"
+		);
+		throw(ThrownException);
+	}
 }

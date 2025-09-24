@@ -10,7 +10,9 @@ CAct65W65C816::~CAct65W65C816()
 
 bool CAct65W65C816::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
-	return true;
+	bool rV = true;
+	rV = CAstNode::Create(pChild, pNext, pSym);
+	return rV;
 }
 
 CValue* CAct65W65C816::Process()

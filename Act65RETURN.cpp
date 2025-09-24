@@ -10,7 +10,9 @@ CAct65RETURN::~CAct65RETURN()
 
 bool CAct65RETURN::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
-	return true;
+	bool rV = true;
+	rV = CAstNode::Create(pChild, pNext, pSym);
+	return rV;
 }
 
 CValue* CAct65RETURN::Process()
@@ -50,9 +52,90 @@ void CAct65RETURN::PrintNode(FILE* pOut, int Indent, bool* pbNextFlag)
 
 CValue* CAct65RETURN::Emit(CValue* pVc, CValue* pVn)
 {
-	CAct65Opcode* pInstruction = new CAct65Opcode;
-	
-	pInstruction->PrepareInstruction(Token::RTS, AdrModeType::IMPLIED,0, GetSection(),0);
-	pInstruction->Emit(0, 0);
+	CInstruction* pOpCode = 0;
+	ProcType PT = GetProcType();
+
+	switch(PT)
+	{
+	case ProcType::IRQPROC:
+		//------------------------------
+		// Generate code to pop stack
+		//------------------------------
+		pOpCode = new CInstruction();
+		pOpCode->GenInstruction(
+			Token::PLA, 
+			AdrModeType::IMPLIED, 
+			0, 
+			0, 
+			0
+		);
+		GetSection()->AddInstruction(pOpCode);	
+
+		pOpCode = new CInstruction();
+		pOpCode->GenInstruction(
+			Token::TAY,
+			AdrModeType::IMPLIED,
+			0,
+			0,
+			0
+		);
+		GetSection()->AddInstruction(pOpCode);
+
+		pOpCode = new CInstruction();
+		pOpCode->GenInstruction(
+			Token::PLA,
+			AdrModeType::IMPLIED,
+			0,
+			0,
+			0
+		);
+		GetSection()->AddInstruction(pOpCode);
+
+		pOpCode = new CInstruction();
+		pOpCode->GenInstruction(
+			Token::TAX,
+			AdrModeType::IMPLIED,
+			0,
+			0,
+			0
+		);
+		GetSection()->AddInstruction(pOpCode);
+
+		pOpCode = new CInstruction();
+		pOpCode->GenInstruction(
+			Token::PLA,
+			AdrModeType::IMPLIED,
+			0,
+			0,
+			0
+		);
+		GetSection()->AddInstruction(pOpCode);
+
+		pOpCode = new CInstruction();
+		pOpCode->GenInstruction(
+			Token::RTI,
+			AdrModeType::IMPLIED,
+			0,
+			0,
+			0
+		);
+		GetSection()->AddInstruction(pOpCode);
+		break;
+	case ProcType::FUNC:
+		break;
+	case ProcType::NONE:
+		break;
+	case ProcType::PROC:
+		pOpCode = new CInstruction();
+		pOpCode->GenInstruction(
+			Token::RTS,
+			AdrModeType::IMPLIED,
+			0,
+			0,
+			0
+		);
+		GetSection()->AddInstruction(pOpCode);
+		break;
+	}
     return nullptr;
 }

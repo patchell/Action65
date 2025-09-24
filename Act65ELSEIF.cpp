@@ -10,7 +10,9 @@ CAct65ELSEIF::~CAct65ELSEIF()
 
 bool CAct65ELSEIF::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
-	return true;
+	bool rV = true;
+	rV = CAstNode::Create(pChild, pNext, pSym);
+	return rV;
 }
 
 CValue* CAct65ELSEIF::Process()

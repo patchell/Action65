@@ -10,8 +10,11 @@ CAct65PROCESSOR::~CAct65PROCESSOR()
 
 bool CAct65PROCESSOR::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
-	return true;
+	bool rV = true;
+	rV = CAstNode::Create(pChild, pNext, pSym);
+	return rV;
 }
+
 
 CValue* CAct65PROCESSOR::Process()
 {

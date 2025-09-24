@@ -1,6 +1,6 @@
 #include "pch.h"
 
-CAct65AdrOfCONST::CAct65AdrOfCONST() :CAstNode(m_pNodeTyypeName, NodeType::ADDRESS_OF_CONSTANT)
+CAct65AdrOfCONST::CAct65AdrOfCONST() :CAstNode(m_pNodeTyypeName, NodeType::CONSTANT_ADDRESS)
 {
 }
 
@@ -10,7 +10,9 @@ CAct65AdrOfCONST::~CAct65AdrOfCONST()
 
 bool CAct65AdrOfCONST::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
-	return true;
+	bool rV = true;
+	rV = CAstNode::Create(pChild, pNext, pSym);
+	return rV;
 }
 
 CValue* CAct65AdrOfCONST::Process()

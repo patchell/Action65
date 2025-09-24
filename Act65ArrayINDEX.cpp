@@ -10,7 +10,9 @@ CAct65ArrayINDEX::~CAct65ArrayINDEX()
 
 bool CAct65ArrayINDEX::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
-	return true;
+	bool rV = true;
+	rV = CAstNode::Create(pChild, pNext, pSym);
+	return rV;
 }
 
 CValue* CAct65ArrayINDEX::Process()
@@ -29,8 +31,14 @@ CValue* CAct65ArrayINDEX::Process()
 	}
 	if (pNext)
 	{
-		fprintf(Act()->LogFile(), "Internal Error:CAct65ArrayINDEX cannot have a NEXT node Line:%d\n", GetLine());
-		Act()->Exit(2);
+		ThrownException.SetXCeptType(Exception::ExceptionType::INTERNAL_SYMBOL_NULL);
+		sprintf_s(
+			ThrownException.GetErrorString(),
+			ThrownException.GetMaxStringLen(),
+			"Internal Error:CAct65ArrayINDEX cannot have a NEXT node Line:%d\n", 
+			GetLine()
+		);
+		throw(ThrownException);
 	}
 	return Emit(m_pChildValue, m_pChildValue);
 }
@@ -68,7 +76,7 @@ CValue* CAct65ArrayINDEX::Emit(CValue* pVc, CValue* pVn)
 	// in the XREG
 	//---------------------------------
 	CValue* pRetValue = 0;
-	CAct65Opcode* pInstruction = 0;
+	CInstruction* pOpCode = 0;
 	CValue* pLabel;
 
 	pLabel = GetCodeGen()->GetPendingLabel();
@@ -78,11 +86,10 @@ CValue* CAct65ArrayINDEX::Emit(CValue* pVc, CValue* pVn)
 		switch (pVc->GetRegister()->GetType())
 		{
 		case CReg::RegType::A:
-			pInstruction = new CAct65Opcode;
-			pInstruction->PrepareInstruction(Token::TAX, AdrModeType::IMPLIED, 0, GetSection(), pLabel);
-			pInstruction->Emit(0, 0);
+			pOpCode = new CInstruction;
+			pOpCode->GenInstruction(Token::TAX, AdrModeType::IMPLIED, 0, pLabel, GetSection()->GetLocationCounter());
+			GetSection()->AddInstruction(pOpCode);
 			pVc->GetRegister()->SetType(CReg::RegType::X);
-			delete pInstruction;
 			break;
 		case CReg::RegType::X:
 			break;

@@ -604,6 +604,15 @@
     <ClCompile Include="RegPool.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Act65AsmModule.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ChainInstruction.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Instruction.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -1165,6 +1174,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="RegPool.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Act65AsmModule.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ChainInstruction.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Instruction.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

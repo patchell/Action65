@@ -10,7 +10,9 @@ CAct65LTEQ::~CAct65LTEQ()
 
 bool CAct65LTEQ::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
-	return true;
+	bool rV = true;
+	rV = CAstNode::Create(pChild, pNext, pSym);
+	return rV;
 }
 
 CValue* CAct65LTEQ::Process()

@@ -15,8 +15,11 @@ CAct65TYPEname::~CAct65TYPEname()
 
 bool CAct65TYPEname::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
-	return false;
+	bool rV = true;
+	rV = CAstNode::Create(pChild, pNext, pSym);
+	return rV;
 }
+
 
 CValue* CAct65TYPEname::Process()
 {

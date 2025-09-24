@@ -10,7 +10,9 @@ CAct65DO::~CAct65DO()
 
 bool CAct65DO::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
-	return true;
+	bool rV = true;
+	rV = CAstNode::Create(pChild, pNext, pSym);
+	return rV;
 }
 
 CValue* CAct65DO::Process()
@@ -63,11 +65,13 @@ CValue* CAct65DO::Emit(CValue* pVc, CValue* pVn)
 	pStartSymbol->SetSection(GetSection());
 	pStartSymbol->SetIdentType(CBin::IdentType::LOCAL);
 	Act()->GetParser()->GetLexer()->GetSymTab()->AddSymbol(pStartSymbol);
+
 	pLabelValue = new CValue;
 	pLabelValue->Create(pStartSymbol);
 	pDOODStackItem = new CStackDOODItem;
 	pDOODStackItem->Create(pLabelValue);
-	Act()->GetParser()->GetCodeGenUtils()->SetPendingLabel(pLabelValue);
+
+	Act()->GetCodeGen()->SetPendingLabel(pLabelValue);
 	Act()->GetDOODStack()->Push(pDOODStackItem);
     return nullptr;
 }

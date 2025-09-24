@@ -47,7 +47,14 @@ int CActionAstTree::OptimizeTree(
 			pNode->GetColumn()
 		);
 		Act()->CloseAll();
-		Act()->Exit(2);
+		ThrownException.SetXCeptType(Exception::ExceptionType::AST_RECURSION_LIMIT);
+		sprintf_s(
+			ThrownException.GetErrorString(),
+			ThrownException.GetMaxStringLen(),
+			"Too Many Recursions in CAstTree::TraverseTree  Line:%d Col:%d\n",
+			pNode->GetLine(),
+			pNode->GetColumn());
+		throw(ThrownException);
 	}
 
 	pAN = pNode;

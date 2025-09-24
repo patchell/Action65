@@ -18,7 +18,6 @@ public:
 	};
 	class CodeObject {
 		const char* m_pName;
-		
 	public:
 		CodeObject();
 		virtual ~CodeObject();
@@ -79,6 +78,17 @@ public:
 		Token OpAux = Token::NONE
 	);
 	//----------------------------------------------------------
+	void EmitInstruction(
+		Token OpToken,
+		AdrModeType AddressMode,
+		CValue* pOperandValue,
+		CSection* pSection,
+		CValue* pLabel
+	);
+	CValue* EmitImplied(Token Op, CSection* pSection, CValue* pLabel = 0);
+	CValue* EmitAccumulator(Token Op, CSection* pSection, CValue* pLabel = 0);
+	CValue* EmitImmediate(Token Op, CValue* pVsrc, int Byte, CSection* pSection, CValue* pLabel = 0);
+	CValue* EmitRelative(Token Op, CValue* pVsrc, CSection* pSection, CValue* pLabel = 0);
 	CValue* EmitDirect(Token Op, CValue* pVdest, int Byte, CSection* pSection, CValue* pLabel = 0);
 	CValue* EmitIndirect(Token Op, CValue* pVdestPointer, int Byte, CSection* pSection, CValue* pLabel = 0, bool IncYreg = false);
 	CValue* EmitIndexed(Token Op, CValue* pVdest, CValue* pIndex, int Byte, CSection* pSection, CValue* pLabel = 0);
@@ -86,5 +96,6 @@ public:
 	bool SetPendingLabel(CValue* pPendingLabel);
 	CValue* GetPendingLabel();
 	void EmitSource();
+	void EmitListing(Token Op, CSection* pSection, int Address, CValue* pLabel = 0);
 };
 

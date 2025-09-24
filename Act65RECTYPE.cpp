@@ -10,7 +10,9 @@ CAct65RECTYPE::~CAct65RECTYPE()
 
 bool CAct65RECTYPE::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
-	return true;
+	bool rV = true;
+	rV = CAstNode::Create(pChild, pNext, pSym);
+	return rV;
 }
 
 CValue* CAct65RECTYPE::Process()

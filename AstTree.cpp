@@ -76,7 +76,15 @@ void CAstTree::TraverseTree(
 			pNode->GetColumn()
 		);
 		Act()->CloseAll();
-		Act()->Exit(2);
+		ThrownException.SetXCeptType(Exception::ExceptionType::AST_RECURSION_LIMIT);
+		sprintf_s(
+			ThrownException.GetErrorString(),
+			ThrownException.GetMaxStringLen(),
+			"Internal Error:Too Many Recursions in CAstTree::TraverseTree  Line:%d Col:%d\n",
+			pNode->GetLine(),
+			pNode->GetColumn()
+		);
+		throw(ThrownException);
 	}
 	
 	pAN = pNode;
@@ -129,8 +137,15 @@ void CAstTree::TraverseTree(
 					);
 				++i;
 			}
-			Act()->CloseAll();
-			Act()->Exit(7);
+			ThrownException.SetXCeptType(Exception::ExceptionType::AST_RECURSION_LIMIT);
+			sprintf_s(
+				ThrownException.GetErrorString(),
+				ThrownException.GetMaxStringLen(),
+				"Internal Error:Too Many Recursions in CAstTree::TraverseTree  Line:%d Col:%d\n",
+				pNode->GetLine(),
+				pNode->GetColumn()
+			);
+			throw(ThrownException);
 		}
 		pAN = pAN->GetNext();
 	}
@@ -156,6 +171,40 @@ void CAstTree::TraverseTree(
 //	printf("Recursions:%5d  Loops:%5d\n", Recursions, Loops);
 	pbNextFlags[Indent] = false;
 	Recursions++;
+}
+
+void CAstTree::Run()
+{
+	try 
+	{
+		if (GetRootNode())
+		{
+			GetRootNode()->Process();
+		}
+		else
+		{
+			if (Act()->LogFile())
+				fprintf(Act()->LogFile(), "Root Node is NULL");
+		}
+	}
+	catch (Exception& BooBoo)
+	{
+		char* s = new char[256];
+		Exception::ExceptionType ExcptType;
+
+		ExcptType = BooBoo.GetXCeptType();
+		switch (ExcptType)
+		{
+		case Exception::ExceptionType::WHOKNOWS:
+			fprintf(Act()->LogFile(), "Unknown Exception Caught\n");
+			break;
+		default:
+			fprintf(Act()->LogFile(), "%s\n", BooBoo.GetErrorString()	);
+			break;
+		}
+		int two = 2;
+		Act()->Exit(two);
+	}
 }
 
 CValue* CAstTree::Process()

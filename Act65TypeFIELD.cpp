@@ -8,9 +8,11 @@ CAct65TypeFIELD::~CAct65TypeFIELD()
 {
 }
 
-bool CAct65TypeFIELD::Create(CAstNode* pChild, CAstNode* pNex, CBin* pSym)
+bool CAct65TypeFIELD::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
-	return false;
+	bool rV = true;
+	rV = CAstNode::Create(pChild, pNext, pSym);
+	return rV;
 }
 
 CValue* CAct65TypeFIELD::Process()

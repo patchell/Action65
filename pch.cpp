@@ -76,6 +76,11 @@ int KeyWord::FindInc(AdrModeType AdrMode)
 	return IncValue;
 }
 
+int KeyWord::GetNumberOfBytes(AdrModeType AdrMode)
+{
+	return m_pAddresModeLUT->GetNumberOfBytes(AdrMode);
+}
+
 
 Token KeyWord::LookupToToken(const char* pName)
 {

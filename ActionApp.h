@@ -2,20 +2,28 @@
 
 class CActionApp
 {
-	char* m_pSourceFile;
-	char* m_pLogFile;
-	char* m_pObjectFile;
-	char* m_pBinaryFile;
-	char* m_pAsmSrcOut;
-	char* m_pSettingsFile;
-	char* m_pLinkerScript;
+	//-----------------------------------------
+	// File Names and File Pointers
+	//-----------------------------------------
+	char* m_pSourceFile;	// Source file
+	char* m_pLogFile;		// Log file
+	char* m_pObjectFile;	// Object file
+	char* m_pBinaryFile;	// Binary file
+	char* m_pAsmSrcOut;		// ASM source output
+	char* m_pSettingsFile;	// Settings file
+	char* m_pLinkerScript;	// Linker script
+	char* m_pListingFile;	// Listing file
 	FILE* m_pfSrc;
 	FILE* m_pfLog;
 	FILE* m_pfBin;
 	FILE* m_pfObj;
 	FILE* m_pfSettings;
 	FILE* m_pfLinkerScript;
+	FILE* m_pfListing;
+	//-----------------------------------------
+	CCodeGeneration m_CodeGenerationUtils;
 	CParser m_ActParse;
+	CAstTree m_AstTree;
 	//-----------------------------------------
 	// Stacks used during code generation
 	//-----------------------------------------
@@ -37,8 +45,8 @@ public:
 	bool OpenObj();
 	bool OpenBin();
 	bool OpenSettings();
-
     bool OpenLinkerScript();
+	bool OpenListing();
 
 	void CloseSource();
 	void CloseLog();
@@ -46,6 +54,7 @@ public:
 	void CloseBin();
 	void CloseSettings();
 	void CloseLinkerScript();
+	void CloseListing();
 	void CloseAll();
 	char* GetSourceFileName() {
 		return m_pSourceFile;
@@ -83,6 +92,9 @@ public:
 	virtual FILE* GetLinkerScriptFile() {
 		return m_pfLinkerScript;
 	}
+	virtual FILE* GetListingFile() {
+		return m_pfListing;
+	}
 	virtual CParser* GetParser()
 	{
 		return &m_ActParse;
@@ -106,6 +118,8 @@ public:
 	CStack* GetIFFFFIStack() { return &IFF_FFI_Stack; }
 	//-----------------------------------------
 	char* CreateIndentString(char* s, int n, int Indent, int c = ' ');
+	CLexer* GetLexer() { return m_ActParse.GetLexer(); }
+	CCodeGeneration* GetCodeGen() { return &m_CodeGenerationUtils; }
 };
 
 extern CActionApp* Act();

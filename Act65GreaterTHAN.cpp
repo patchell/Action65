@@ -10,7 +10,9 @@ CAct65GreaterTHAN::~CAct65GreaterTHAN()
 
 bool CAct65GreaterTHAN::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
-	return true;
+	bool rV = true;
+	rV = CAstNode::Create(pChild, pNext, pSym);
+	return rV;
 }
 
 CValue* CAct65GreaterTHAN::Process()

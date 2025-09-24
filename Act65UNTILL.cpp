@@ -10,7 +10,9 @@ CAct65UNTILL::~CAct65UNTILL()
 
 bool CAct65UNTILL::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
-	return true;
+	bool rV = true;
+	rV = CAstNode::Create(pChild, pNext, pSym);
+	return rV;
 }
 
 CValue* CAct65UNTILL::Process()

@@ -130,93 +130,93 @@ int CSection::Relocate(int NewBaseAddress)
     return 0;
 }
 
-int CSection::AddInstruction(CAct65Opcode* pInstruction, CValue* pOprandVal)
-{
-	int OperandAddress = 0;
-	CWhereSymbolIsUsed* pWSIU = 0;
-	CSymbol* pSym = 0;
-
-	if (pInstruction->GetLabel())
-	{
-		AddLabelValue(pInstruction->GetLabel());
-		pInstruction->GetLabel()->GetSymbol()->SetAddress(m_LocationCounter);
-	}
-	switch (pInstruction->GetAdrModeType())
-	{
-	case AdrModeType::IMPLIED:
-		AddData(1, pInstruction->GetOpCode());
-		break;
-	case AdrModeType::IMMEDIATE_ADR:
-	case AdrModeType::ZERO_PAGE_ADR:
-	case AdrModeType::ZERO_PAGE_X_ADR:
-	case AdrModeType::ZERO_PAGE_Y_ADR:
-	case AdrModeType::INDEXED_INDIRECT_X_ADR:
-	case AdrModeType::INDIRECT_INDEXED_Y_ADR:
-		OperandAddress = AddData(1, pInstruction->GetOpCode());
-		if (pInstruction->GetOperand()->GetValueType() == CValue::ValueType::SYMBOL)
-		{
-			pWSIU = new CWhereSymbolIsUsed;
-			pWSIU->Create();
-			pWSIU->SetSection(this);
-			pWSIU->SetAddress(OperandAddress);
-			pWSIU->SetUnResType(CWhereSymbolIsUsed::UnResolvedType::ABSOLUTE_REFERENCE);
-			pInstruction->GetOperand()->GetSymbol()->Add(pWSIU);	//add where used entry
-			pSym = pInstruction->GetOperand()->GetSymbol();
-			if (pSym->IsResolved())
-				pWSIU->SetResolveProcessed();
-		}
-		AddData(1, pInstruction->GetOperand()->GetTotalValue());
-		break;
-	case AdrModeType::ABSOLUTE_ADR:
-	case AdrModeType::ABSOLUTE_X_ADR:
-	case AdrModeType::ABSOLUTE_Y_ADR:
-	case AdrModeType::INDIRECT_ADR:
-		OperandAddress = AddData(1, pInstruction->GetOpCode());
-		if (pInstruction->GetOperand()->GetValueType() == CValue::ValueType::SYMBOL)
-		{
-			pWSIU = new CWhereSymbolIsUsed;
-			pWSIU->Create();
-			pWSIU->SetSection(this);
-			pWSIU->SetAddress(OperandAddress);
-			pWSIU->SetUnResType(CWhereSymbolIsUsed::UnResolvedType::ABSOLUTE_REFERENCE);
-			pInstruction->GetOperand()->GetSymbol()->Add(pWSIU);	//add where used entry
-			pSym = pInstruction->GetOperand()->GetSymbol();
-			if (pSym->IsResolved())
-				pWSIU->SetResolveProcessed();
-		}
-		AddData(2, pInstruction->GetOperand()->GetTotalValue());
-		break;
-	case AdrModeType::RELATIVE:
-		//fprintf(Act()->LogFile(), "RELATIVE: Sym:%s  %04X  %d REL:%02X\n", 
-		//	pInstruction->GetOperand()->GetName(),
-		//	pInstruction->GetOperand()->GetSymbol()->GetAddress(),
-		//	pInstruction->GetOperand()->GetSymbol()->GetAddress(),
-		//	(pInstruction->GetOperand()->GetTotalValue() - (m_LocationCounter + 2)) & 0x0ff
-		//);
-		OperandAddress = AddData(1, pInstruction->GetOpCode());
-		if (pInstruction->GetOperand()->GetValueType() == CValue::ValueType::SYMBOL)
-		{
-			pWSIU = new CWhereSymbolIsUsed;
-			pWSIU->Create();
-			pWSIU->SetSection(this);
-			pWSIU->SetAddress(OperandAddress);
-			pWSIU->SetUnResType(CWhereSymbolIsUsed::UnResolvedType::RELATIVE_REFERENCE);
-			pInstruction->GetOperand()->GetSymbol()->Add(pWSIU);	//add where used entry
-			pSym = (CSymbol*)pInstruction->GetOperand()->GetSymbol();
-			if (pSym->IsResolved())
-				pWSIU->SetResolveProcessed();
-		}
-		//---------------------------------------------
-		// m_LocationCounter is one away from the
-		// next instruction, so by adding 1 to 
-		// m_LocationCounter that gets us up to the
-		// next instruction
-		//---------------------------------------------
-		AddData(1, pInstruction->GetOperand()->GetTotalValue() - (m_LocationCounter + 1));
-		break;
-	}
-    return m_LocationCounter;
-}
+//int CSection::AddInstruction(CInstruction* pInstruction)
+//{
+//	int OperandAddress = 0;
+//	CWhereSymbolIsUsed* pWSIU = 0;
+//	CSymbol* pSym = 0;
+//
+//	if (pInstruction->GetLabel())
+//	{
+//		AddLabelValue(pInstruction->GetLabel());
+//		pInstruction->GetLabel()->GetSymbol()->SetAddress(m_LocationCounter);
+//	}
+//	switch (pInstruction->GetAdrModeType())
+//	{
+//	case AdrModeType::IMPLIED:
+//		AddData(1, pInstruction->GetOpCode());
+//		break;
+//	case AdrModeType::IMMEDIATE_ADR:
+//	case AdrModeType::ZERO_PAGE_ADR:
+//	case AdrModeType::ZERO_PAGE_X_ADR:
+//	case AdrModeType::ZERO_PAGE_Y_ADR:
+//	case AdrModeType::INDEXED_INDIRECT_X_ADR:
+//	case AdrModeType::INDIRECT_INDEXED_Y_ADR:
+//		OperandAddress = AddData(1, pInstruction->GetOpCode());
+//		if (pInstruction->GetOperand()->GetValueType() == CValue::ValueType::SYMBOL)
+//		{
+//			pWSIU = new CWhereSymbolIsUsed;
+//			pWSIU->Create();
+//			pWSIU->SetSection(this);
+//			pWSIU->SetAddress(OperandAddress);
+//			pWSIU->SetUnResType(CWhereSymbolIsUsed::UnResolvedType::ABSOLUTE_REFERENCE);
+//			pInstruction->GetOperand()->GetSymbol()->Add(pWSIU);	//add where used entry
+//			pSym = pInstruction->GetOperand()->GetSymbol();
+//			if (pSym->IsResolved())
+//				pWSIU->SetResolveProcessed();
+//		}
+//		AddData(1, pInstruction->GetOperand()->GetTotalValue());
+//		break;
+//	case AdrModeType::ABSOLUTE_ADR:
+//	case AdrModeType::ABSOLUTE_X_ADR:
+//	case AdrModeType::ABSOLUTE_Y_ADR:
+//	case AdrModeType::INDIRECT_ADR:
+//		OperandAddress = AddData(1, pInstruction->GetOpCode());
+//		if (pInstruction->GetOperand()->GetValueType() == CValue::ValueType::SYMBOL)
+//		{
+//			pWSIU = new CWhereSymbolIsUsed;
+//			pWSIU->Create();
+//			pWSIU->SetSection(this);
+//			pWSIU->SetAddress(OperandAddress);
+//			pWSIU->SetUnResType(CWhereSymbolIsUsed::UnResolvedType::ABSOLUTE_REFERENCE);
+//			pInstruction->GetOperand()->GetSymbol()->Add(pWSIU);	//add where used entry
+//			pSym = pInstruction->GetOperand()->GetSymbol();
+//			if (pSym->IsResolved())
+//				pWSIU->SetResolveProcessed();
+//		}
+//		AddData(2, pInstruction->GetOperand()->GetTotalValue());
+//		break;
+//	case AdrModeType::RELATIVE:
+//		//fprintf(Act()->LogFile(), "RELATIVE: Sym:%s  %04X  %d REL:%02X\n", 
+//		//	pInstruction->GetOperand()->GetName(),
+//		//	pInstruction->GetOperand()->GetSymbol()->GetAddress(),
+//		//	pInstruction->GetOperand()->GetSymbol()->GetAddress(),
+//		//	(pInstruction->GetOperand()->GetTotalValue() - (m_LocationCounter + 2)) & 0x0ff
+//		//);
+//		OperandAddress = AddData(1, pInstruction->GetOpCode());
+//		if (pInstruction->GetOperand()->GetValueType() == CValue::ValueType::SYMBOL)
+//		{
+//			pWSIU = new CWhereSymbolIsUsed;
+//			pWSIU->Create();
+//			pWSIU->SetSection(this);
+//			pWSIU->SetAddress(OperandAddress);
+//			pWSIU->SetUnResType(CWhereSymbolIsUsed::UnResolvedType::RELATIVE_REFERENCE);
+//			pInstruction->GetOperand()->GetSymbol()->Add(pWSIU);	//add where used entry
+//			pSym = (CSymbol*)pInstruction->GetOperand()->GetSymbol();
+//			if (pSym->IsResolved())
+//				pWSIU->SetResolveProcessed();
+//		}
+//		//---------------------------------------------
+//		// m_LocationCounter is one away from the
+//		// next instruction, so by adding 1 to 
+//		// m_LocationCounter that gets us up to the
+//		// next instruction
+//		//---------------------------------------------
+//		AddData(1, pInstruction->GetOperand()->GetTotalValue() - (m_LocationCounter + 1));
+//		break;
+//	}
+//    return m_LocationCounter;
+//}
 
 int CSection::AddData(int ObjectSize, int Value, CValue* pLabelValue)
 {
@@ -287,6 +287,36 @@ void CSection::AddDataAt(
 		*l = long(Value) + *l;
 		break;
 	}
+}
+
+int CSection::AddInstruction(CInstruction* pInstruction)
+{
+	int NextAddress = 0;
+	CChainInstruction* pInsChainItem = new CChainInstruction;
+
+	pInsChainItem->Create(pInstruction);
+	pInstruction->SetAddress(m_LocationCounter);
+	if(pInstruction->GetAdrMode() == AdrModeType::NA)
+	{
+		printf("Opps\n");
+	}
+	switch(pInstruction->GetNumBytes())
+	{
+	case 1:
+		NextAddress = AddData(1, pInstruction->GetData(0), pInstruction->GetLabel());
+		break;
+	case 2:
+		AddData(1, pInstruction->GetData(0), pInstruction->GetLabel());
+		NextAddress = AddData(1, pInstruction->GetData(1));
+		break;
+	case 3:
+		AddData(1, pInstruction->GetData(0), pInstruction->GetLabel());
+		AddData(1, pInstruction->GetData(1));
+		NextAddress = AddData(1, pInstruction->GetData(2));
+		break;
+	}
+	GetInstructionsChain()->AddToTail(pInsChainItem);
+	return NextAddress;
 }
 
 int CSection::AllocateDataBlock(int size, CValue* pLabelValue)
@@ -391,3 +421,16 @@ bool CSection::Compare(const char* name, int scope)
 	return rV;
 }
 
+void CSection::EmitListing()
+{
+	CChainInstruction* pInsChainItem = (CChainInstruction*)m_Instructions.GetHead();
+	while (pInsChainItem)
+	{
+		pInsChainItem->GetInstruction()->EmitListing();
+		pInsChainItem = (CChainInstruction*)pInsChainItem->GetNext();
+	}
+}
+
+void CSection::EmitBinary()
+{
+}

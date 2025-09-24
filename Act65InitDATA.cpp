@@ -10,7 +10,9 @@ CAct65InitDATA::~CAct65InitDATA()
 
 bool CAct65InitDATA::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
-	return true;
+	bool rV = true;
+	rV = CAstNode::Create(pChild, pNext, pSym);
+	return rV;
 }
 
 CValue* CAct65InitDATA::Process()

@@ -46,6 +46,31 @@ CAstNode::~CAstNode()
 		delete m_pValue;
 }
 
+bool CAstNode::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
+{
+	bool rV = true;
+
+	CSymbol* pProcSym = 0;
+
+	pProcSym = Act()->GetParser()->GetCurrentProc();
+	SetProcSym(pProcSym);
+	if (pChild)
+	{
+		SetChild(pChild);
+		pChild->SetParent(this);
+		if (pNext)
+			pNext->SetParent(this);
+		CAstNode* pNode = pChild;
+		while (pNode->GetNext())
+			pNode = pNode->GetNext();
+		pNode->SetNext(pNext);
+	}
+	if (pSym)
+	{
+		CreateValue((CSymbol*)pSym);
+	}
+	return rV;
+}
 CAstNode* CAstNode::MakeNode(
 	CAstNode* pChild,
 	CAstNode* pNext
@@ -302,5 +327,36 @@ FILE* CAstNode::LogFile()
 
 CCodeGeneration* CAstNode::GetCodeGen()
 {
-    return Act()->GetParser()->GetCodeGenUtils();
+    return Act()->GetCodeGen();
+}
+
+CAstNode::ProcType CAstNode::GetProcType()
+{
+	ProcType pT = m_ProcType;
+	CSymbol* pSym = (CSymbol*)GetProcSym();
+
+	if (pSym)
+	{
+		switch (pSym->GetIdentType())
+		{
+		case CBin::IdentType::PROC:
+			pT = ProcType::PROC;
+			break;
+		case CBin::IdentType::FUNC:
+			pT = ProcType::FUNC;
+			break;
+		case CBin::IdentType::IRQPROC:
+			pT = ProcType::IRQPROC;
+			break;
+		default:
+			pT = ProcType::NONE;
+			break;
+		}
+	}
+	return pT;
+}
+
+void CAstNode::SetProcType(ProcType PT)
+{
+	m_ProcType = PT;
 }

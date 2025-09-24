@@ -43,6 +43,7 @@ class CAct65Opcode : public CAstNode
 	AdrModeType m_AdressMode;
 	int m_OpCode;
 	int m_ByteCount;
+	CInstruction* m_pInstruction;
 	//-----------------------
 	CValue* m_pLabel;	// Symbol for instruction location
 	int m_InstructionAddress;

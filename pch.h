@@ -66,6 +66,7 @@ enum  class Token {
 	VAR_PARAM,
 	//--------Statements----------
 	MODULE,
+	ASMMODULE,
 	VECTOR,
 	FOR,
 	TO,
@@ -311,13 +312,16 @@ enum class Processor {
 struct AdressModeItem {
 	AdrModeType Mode;
 	int inc;
+	int m_numBytes;
 	AdressModeItem() {
 		Mode = AdrModeType::NA;
 		inc = 0;
+		m_numBytes = 0;
 	}
-	AdressModeItem(AdrModeType T, int I) {
+	AdressModeItem(AdrModeType T, int I, int N) {
 		Mode = T;
 		inc = I;
+		m_numBytes = N;
 	}
 	int GetInc(AdrModeType ModeType) const {
 		//---------------------------
@@ -334,6 +338,12 @@ struct AdressModeItem {
 
 		if (ModeType == Mode)
 			rV = inc;
+		return rV;
+	}
+	int GetNumBytes(AdrModeType ModeType) const {
+		int rV = -1;
+		if (ModeType == Mode)
+			rV = m_numBytes;
 		return rV;
 	}
 };
@@ -363,6 +373,18 @@ struct AdressModeLUT {
 		}
 		return rV;
 	}
+	int GetNumberOfBytes(AdrModeType Type) const {
+		int i, rV = -1;
+		bool Loop = true;
+
+		for (i = 0; Loop && i < m_nElements; ++i)
+		{
+			rV = m_pModeInc[i].GetNumBytes(Type);
+			if (rV >= 0)
+				Loop = false;
+		}
+		return rV;
+	}
 	bool ValidAddressingMode(AdrModeType AMT) const;
 };
 
@@ -376,6 +398,7 @@ struct KeyWord {
 	int NumOfAdrModes;
 	//------ Methods ------
 	int FindInc(AdrModeType AdrMode);
+	int GetNumberOfBytes(AdrModeType AdrMode);
 	static Token LookupToToken(const char* pName);
 	static const char* LookupToString(Token T);
 };
@@ -394,6 +417,8 @@ struct KeyWord {
 #include "VirtualReg.h" //- Virtual Registers 
 #include "Value.h"
 #include "ChainValueItem.h"
+#include "Instruction.h"
+#include "ChainInstruction.h"
 #include "SymTab.h"
 #include "Settings.h"
 
@@ -418,7 +443,16 @@ public:
 		EXPECTED_DATABLOCK,
 		EXPECTED_INDEX_REG,
 		EXPECTED_STRING,
-		EXPECTED_PROC_FUNC_INTERRUPT
+		EXPECTED_PROC_FUNC_INTERRUPT,
+		AST_RECURSION_LIMIT,
+		INTERNAL_SYMBOL_NULL,
+		INTERNAL_VALUE_NULL,
+		//--------------------
+		// Code Generation Exceptions
+		//--------------------
+		CODEGEN_NO_SECTION,
+		CVALUE_NO_SYMBOL,
+		CODEGEN_UNKNOWN_BYTE_ORDER
 	};
 	enum class ExceptionSubType {
 		WHOKNOWS,
@@ -534,11 +568,14 @@ public:
 #include "ObjFormatSection.h"
 #include "ObjFormatFile.h"
 //--------------------------------------
+
+#include "CodeGeneration.h"
 #include "Section.h"
 #include "WhereSymbolIsUsed.h"
 #include "Linker.h"
 #include "Reg.h"
 #include "RegPool.h"
+
 //-------------- AST Base Class ----------
 #include "AstNode.h"
 //----------------------------------------
@@ -553,6 +590,7 @@ public:
 #include "Act65ARRAYdim.h"
 #include "Act65ArrayINDEX.h"
 #include "Act65ASM.h"
+#include "Act65AsmModule.h"
 #include "Act65ASMstatement.h"
 #include "Act65ASMPROC.h"
 #include "Act65Assignment.h"
@@ -704,8 +742,6 @@ public:
 //-------------------------------------
 #include "AstTree.h"
 #include "ActionAstTree.h"
-
-#include "CodeGeneration.h"
 
 #include "Lexer.h"
 #include "Parser.h"

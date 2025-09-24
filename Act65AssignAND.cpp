@@ -10,7 +10,9 @@ CAct65AssignAND::~CAct65AssignAND()
 
 bool CAct65AssignAND::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
-	return true;
+	bool rV = true;
+	rV = CAstNode::Create(pChild, pNext, pSym);
+	return rV;
 }
 
 CValue* CAct65AssignAND::Process()

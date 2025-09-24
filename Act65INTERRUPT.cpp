@@ -10,7 +10,9 @@ CAct65INTERRUPT::~CAct65INTERRUPT()
 
 bool CAct65INTERRUPT::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
-	return true;
+	bool rV = true;
+	rV = CAstNode::Create(pChild, pNext, pSym);
+	return rV;
 }
 
 CValue* CAct65INTERRUPT::Process()
@@ -19,7 +21,6 @@ CValue* CAct65INTERRUPT::Process()
 	CValue* pValue = 0;
 
 //	fprintf(Act()->LogFile(), "Process %s Node:%d\n", GetNodeName(), GetID());
-	SetCurrentProcType(ProcType::IRQPROC);
 	Emit(0, 0);
 	pChild = GetChild();
 	if (pChild)
@@ -35,7 +36,6 @@ CValue* CAct65INTERRUPT::Process()
 		m_pNextValue = pNext->Process();
 		pNext = pNext->GetNext();
 	}
-	SetCurrentProcType(ProcType::NONE);
 	return nullptr;
 }
 

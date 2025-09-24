@@ -129,5 +129,8 @@ public:
 		return UpperLowerLUT[int(UL)].m_pName;
 	}
 	int SizeOf();
+	void SetAddress(int Address);
+	void SetResolved(bool bRes);
+	void BackFillUnresolved();
 };
 

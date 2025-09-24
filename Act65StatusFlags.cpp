@@ -10,7 +10,9 @@ CAct65StatusFLAGS::~CAct65StatusFLAGS()
 
 bool CAct65StatusFLAGS::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
-	return true;
+	bool rV = true;
+	rV = CAstNode::Create(pChild, pNext, pSym);
+	return rV;
 }
 
 CValue* CAct65StatusFLAGS::Process()

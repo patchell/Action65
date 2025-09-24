@@ -10,7 +10,9 @@ CAct65BIT::~CAct65BIT()
 
 bool CAct65BIT::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
-	return true;
+	bool rV = true;
+	rV = CAstNode::Create(pChild, pNext, pSym);
+	return rV;
 }
 
 CValue* CAct65BIT::Process()

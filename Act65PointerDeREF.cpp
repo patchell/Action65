@@ -10,7 +10,9 @@ CAct65PointerDeREF::~CAct65PointerDeREF()
 
 bool CAct65PointerDeREF::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
-	return true;
+	bool rV = true;
+	rV = CAstNode::Create(pChild, pNext, pSym);
+	return rV;
 }
 
 CValue* CAct65PointerDeREF::Process()
@@ -81,7 +83,7 @@ CValue* CAct65PointerDeREF::Emit(CValue* pVc, CValue* pVn)
 	CTypeChain* pNewTypeChain = new CTypeChain;	// Type chain for dereferenced pointer
 	CValue* pVirtualReg = 0;	//will define a virtual register
 	CObjTypeChain* pNewTypeItem = 0;
-	CAct65Opcode* pInstruction = 0;
+	CInstruction* pOpCode = 0;
 	CObjTypeChain::Spec FundSpec;
 	AdrModeType AddressingMode;
 	CValue* pLabel = GetCodeGen()->GetPendingLabel();
@@ -104,23 +106,36 @@ CValue* CAct65PointerDeREF::Emit(CValue* pVc, CValue* pVn)
 	//------------------------------------------------
 	// Allocate a Virtual Register for the Pointer
 	//------------------------------------------------
-	pVirtualReg = GetCodeGenUtils()->GetVirtRegPool()->Lock(CVirtualReg::RegStatus::LOCKED_WORD, pNewTypeChain);
+	pVirtualReg = GetCodeGen()->GetVirtRegPool()->Lock(CVirtualReg::RegStatus::LOCKED_WORD, pNewTypeChain);
 	//------------------------------------------------
 	// Emit the code to dereference the pointer
 	//------------------------------------------------
 	// Load accumulator witht the low byte of the address (pointer)
-	pInstruction = new CAct65Opcode;
+	pOpCode = new CInstruction;
 	if (pVc->IsPageZero())
 		AddressingMode = AdrModeType::ZERO_PAGE_ADR;
 	else
 		AddressingMode = AdrModeType::ABSOLUTE_ADR;
-	pInstruction->PrepareInstruction(Token::LDA, AddressingMode, pVc, GetSection(), pLabel);
-	pInstruction->Emit(0, 0);
-	pInstruction->Reset();
+	pOpCode->GenInstruction(
+		Token::LDA, 
+		AddressingMode, 
+		pVc, 
+		pLabel, 
+		0	// Address will be filled in by linker if needed
+	);
+	GetSection()->AddInstruction(pOpCode);
+	pOpCode = 0;
 	// Save the accumulator into the virtual reg (dereference)
-	pInstruction->PrepareInstruction(Token::STA, AdrModeType::ZERO_PAGE_ADR, pVirtualReg, GetSection(), 0);
-	pInstruction->Emit(0, 0);
-	pInstruction->Reset();
+	pOpCode = new CInstruction;
+	pOpCode->GenInstruction(
+		Token::STA,
+		AdrModeType::ZERO_PAGE_ADR,
+		pVirtualReg,
+		0,
+		0
+	);
+	GetSection()->AddInstruction(pOpCode);
+	pOpCode = 0;
 	// Load the accumulator with the high byte of the address (pointer)
 	if (pVc->IsPageZero())
 		AddressingMode = AdrModeType::ZERO_PAGE_ADR;
@@ -128,23 +143,32 @@ CValue* CAct65PointerDeREF::Emit(CValue* pVc, CValue* pVn)
 		AddressingMode = AdrModeType::ABSOLUTE_ADR;
 
 	pVc->Inc();
-	pInstruction->PrepareInstruction(Token::LDA, AddressingMode, pVc, GetSection(), 0);
-	pInstruction->Emit(0, 0);
-	pInstruction->Reset();
+	pOpCode = new CInstruction;
+	pOpCode->GenInstruction(
+		Token::LDA, 
+		AddressingMode, 
+		pVc, 
+		0,
+		0
+	);
+	GetSection()->AddInstruction(pOpCode);
+	pOpCode = 0;
 	pVc->Dec();
 
 
 	pVirtualReg->Inc();
-	pInstruction->PrepareInstruction(Token::STA, AdrModeType::ZERO_PAGE_ADR, pVirtualReg, GetSection(), 0);
-	pInstruction->Emit(0, 0);
-	pInstruction->Reset();
+	pOpCode = new CInstruction;
+	pOpCode->GenInstruction(
+		Token::STA, 
+		AdrModeType::ZERO_PAGE_ADR, 
+		pVirtualReg,
+		0,
+		0
+	);
+	GetSection()->AddInstruction(pOpCode);
+	pOpCode = 0;
 	pVirtualReg->Dec();
 
 
 	return pVirtualReg;
-}
-
-CCodeGeneration* CAct65PointerDeREF::GetCodeGenUtils()
-{
-	return Act()->GetParser()->GetCodeGenUtils();;
 }

@@ -10,8 +10,11 @@ CAct65PushSource::~CAct65PushSource()
 
 bool CAct65PushSource::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
-	return true;
+	bool rV = true;
+	rV = CAstNode::Create(pChild, pNext, pSym);
+	return rV;
 }
+
 
 CValue* CAct65PushSource::Process()
 {

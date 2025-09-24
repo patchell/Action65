@@ -11,6 +11,7 @@ CAct65Opcode::CAct65Opcode():CAstNode(m_pNodeTyypeName, NodeType::OPCODE)
 	m_ByteCount = 0;
 	m_OpCode = 0;
 	m_InstructionAddress = 0;
+	m_pInstruction = 0;
 }
 
 void CAct65Opcode::Reset()
@@ -24,6 +25,7 @@ void CAct65Opcode::Reset()
 	m_ByteCount = 0;
 	m_OpCode = 0;
 	m_InstructionAddress = 0;
+	m_pInstruction = 0;
 }
 
 CAct65Opcode::~CAct65Opcode()
@@ -32,7 +34,9 @@ CAct65Opcode::~CAct65Opcode()
 
 bool CAct65Opcode::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
-	return true;
+	bool rV = true;
+	rV = CAstNode::Create(pChild, pNext, pSym);
+	return rV;
 }
 
 CValue* CAct65Opcode::Process()
@@ -77,19 +81,15 @@ CValue* CAct65Opcode::Emit(CValue* pVc, CValue* pVn)
 	int ls = 0;
 	int l = size;
 
-	char* pS = new char[size];
-	ls += sprintf_s(pS, size, "Emit:");
-	if (GetLabel())
-	{
-		l = size - ls;
-		ls += sprintf_s(&pS[ls], l, "%s", GetLabel()->GetName());
-	}
-	l = size - ls;
-	ls += sprintf_s(&pS[ls], l, "\t%s\t", GetKeyWord()->m_Name);
-	ls += AddressModeString(&pS[ls], size - ls, GetAdrModeType());
-	fprintf(Act()->LogFile(), "%s\n", pS);
-	pSection->AddInstruction(this);
-	delete[] pS;
+	m_pInstruction = new CInstruction();
+	m_pInstruction->GenInstruction(
+		GetToken(),
+		GetAdrModeType(),
+		GetOperand(),
+		m_pLabel,
+		GetInstructionAddress()
+	);
+	pSection->AddInstruction(m_pInstruction);
 	return nullptr;
 }
 

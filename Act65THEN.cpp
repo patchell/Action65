@@ -10,7 +10,9 @@ CAct65THEN::~CAct65THEN()
 
 bool CAct65THEN::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
-	return true;
+	bool rV = true;
+	rV = CAstNode::Create(pChild, pNext, pSym);
+	return rV;
 }
 
 CValue* CAct65THEN::Process()

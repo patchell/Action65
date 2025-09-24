@@ -6,111 +6,111 @@ class CLexer
 private:
 	//alu access modes
 	static inline AdressModeItem Order8[8] = {
-		{AdrModeType::INDEXED_INDIRECT_X_ADR, 0},
-		{AdrModeType::ZERO_PAGE_ADR, 4},
-		{AdrModeType::IMMEDIATE_ADR, 8},
-		{AdrModeType::ABSOLUTE_ADR, 12},
-		{AdrModeType::INDIRECT_INDEXED_Y_ADR, 16},
-		{AdrModeType::ZERO_PAGE_X_ADR, 20},
-		{AdrModeType::ABSOLUTE_Y_ADR, 24},
-		{AdrModeType::ABSOLUTE_X_ADR, 28}
+		{AdrModeType::INDEXED_INDIRECT_X_ADR, 0, 2},
+		{AdrModeType::ZERO_PAGE_ADR, 4, 2},
+		{AdrModeType::IMMEDIATE_ADR, 8, 2},
+		{AdrModeType::ABSOLUTE_ADR, 12, 3},
+		{AdrModeType::INDIRECT_INDEXED_Y_ADR, 16, 2},
+		{AdrModeType::ZERO_PAGE_X_ADR, 20, 2},
+		{AdrModeType::ABSOLUTE_Y_ADR, 24, 3},
+		{AdrModeType::ABSOLUTE_X_ADR, 28, 3}
 	};
 	static inline AdressModeLUT LUT_Order8 = { 8, Order8 };
 
 	// sta address modes
 	static inline AdressModeItem Order7[7] = {
-		{AdrModeType::INDEXED_INDIRECT_X_ADR, 0},
-		{AdrModeType::ZERO_PAGE_ADR, 4},
-		{AdrModeType::ABSOLUTE_ADR, 12},
-		{AdrModeType::INDIRECT_INDEXED_Y_ADR, 16},
-		{AdrModeType::ZERO_PAGE_X_ADR, 20},
-		{AdrModeType::ABSOLUTE_Y_ADR, 24},
-		{AdrModeType::ABSOLUTE_X_ADR, 28}
+		{AdrModeType::INDEXED_INDIRECT_X_ADR, 0,2},
+		{AdrModeType::ZERO_PAGE_ADR, 4,2},
+		{AdrModeType::ABSOLUTE_ADR, 12,3},
+		{AdrModeType::INDIRECT_INDEXED_Y_ADR, 16,2},
+		{AdrModeType::ZERO_PAGE_X_ADR, 20,2},
+		{AdrModeType::ABSOLUTE_Y_ADR, 24,3},
+		{AdrModeType::ABSOLUTE_X_ADR, 28,3}
 	};
 	static inline AdressModeLUT LUT_Order7 = { 7, Order7 };
 	//---------------------------------------
 	// ASL, LSR, ROR, ROL
 	//---------------------------------------
 	static inline AdressModeItem Order5[5] = {
-		{AdrModeType::ZERO_PAGE_ADR, 0},
-		{AdrModeType::ACCUMULATOR,4},
-		{AdrModeType::ABSOLUTE_ADR, 8},
-		{AdrModeType::ZERO_PAGE_X_ADR, 16},
-		{AdrModeType::ABSOLUTE_X_ADR, 24}
+		{AdrModeType::ZERO_PAGE_ADR, 0,2},
+		{AdrModeType::ACCUMULATOR,4,1},
+		{AdrModeType::ABSOLUTE_ADR, 8,3},
+		{AdrModeType::ZERO_PAGE_X_ADR, 16,2},
+		{AdrModeType::ABSOLUTE_X_ADR, 24,3}
 	};
 	static inline AdressModeLUT LUT_Order5 = { 5, Order5 };
 	//----------------------------------------------
 	static inline AdressModeItem Order5_LDY[5] = {
-		{AdrModeType::IMMEDIATE_ADR,0},
-		{AdrModeType::ZERO_PAGE_ADR, 4},
-		{AdrModeType::ABSOLUTE_ADR, 12},
-		{AdrModeType::ZERO_PAGE_X_ADR, 20},
-		{AdrModeType::ABSOLUTE_X_ADR, 28}
+		{AdrModeType::IMMEDIATE_ADR,0,2},
+		{AdrModeType::ZERO_PAGE_ADR, 4,2},
+		{AdrModeType::ABSOLUTE_ADR, 12,3},
+		{AdrModeType::ZERO_PAGE_X_ADR, 20,2},
+		{AdrModeType::ABSOLUTE_X_ADR, 28,3}
 	};
 	static inline AdressModeLUT LUT_Order5_LDY = { 5, Order5_LDY };
 	//---------------------------------------------
 	static inline AdressModeItem Order5_LDX[5] = {
-		{AdrModeType::IMMEDIATE_ADR,0},
-		{AdrModeType::ZERO_PAGE_ADR, 4},
-		{AdrModeType::ABSOLUTE_ADR, 12},
-		{AdrModeType::ZERO_PAGE_Y_ADR, 20},
-		{AdrModeType::ABSOLUTE_Y_ADR, 28}
+		{AdrModeType::IMMEDIATE_ADR,0,2},
+		{AdrModeType::ZERO_PAGE_ADR, 4,2},
+		{AdrModeType::ABSOLUTE_ADR, 12,3},
+		{AdrModeType::ZERO_PAGE_Y_ADR, 20,2},
+		{AdrModeType::ABSOLUTE_Y_ADR, 28,3}
 	};
 	static inline AdressModeLUT LUT_Order5_LDX = { 5, Order5_LDX };
 	//---------------------------------------------
 	static inline AdressModeItem Order4[4] = {
-		{AdrModeType::ZERO_PAGE_ADR, 0},
-		{AdrModeType::ABSOLUTE_ADR, 8},
-		{AdrModeType::ZERO_PAGE_X_ADR, 16},
-		{AdrModeType::ABSOLUTE_X_ADR, 24}
+		{AdrModeType::ZERO_PAGE_ADR, 0,2},
+		{AdrModeType::ABSOLUTE_ADR, 8,3},
+		{AdrModeType::ZERO_PAGE_X_ADR, 16,2},
+		{AdrModeType::ABSOLUTE_X_ADR, 24,3}
 	};
 	static inline AdressModeLUT LUT_Order4 = { 4, Order4 };
 	//---------------------------------------------
 	static inline AdressModeItem Order3_STX[3] = {	//STX
-		{AdrModeType::ZERO_PAGE_ADR, 0},
-		{AdrModeType::ZERO_PAGE_Y_ADR,16},
-		{AdrModeType::ABSOLUTE_ADR, 8},
+		{AdrModeType::ZERO_PAGE_ADR, 0,2},
+		{AdrModeType::ZERO_PAGE_Y_ADR,16,2},
+		{AdrModeType::ABSOLUTE_ADR, 8,3},
 	};
 	static inline AdressModeLUT LUT_Order3_STX = { 3, Order3_STX };
 	//---------------------------------------------
 	static inline AdressModeItem Order3_STY[3] = {	//STY
-		{AdrModeType::ZERO_PAGE_ADR, 0},
-		{AdrModeType::ZERO_PAGE_X_ADR,16},
-		{AdrModeType::ABSOLUTE_ADR, 8},
+		{AdrModeType::ZERO_PAGE_ADR, 0, 2},
+		{AdrModeType::ZERO_PAGE_X_ADR, 16, 2},
+		{AdrModeType::ABSOLUTE_ADR, 8, 3},
 	};
 	static inline AdressModeLUT LUT_Order3_STY = { 3, Order3_STY };
 	//---------------------------------------------
 	static inline AdressModeItem Order3_CPY_CPX[3] = {	//CPY/CPX
-		{AdrModeType::IMMEDIATE_ADR,0},
-		{AdrModeType::ZERO_PAGE_ADR, 4},
-		{AdrModeType::ABSOLUTE_ADR, 12}
+		{AdrModeType::IMMEDIATE_ADR,0,2},
+		{AdrModeType::ZERO_PAGE_ADR, 4,2},
+		{AdrModeType::ABSOLUTE_ADR, 12,3}
 	};
 	static inline AdressModeLUT LUT_Order3__CPY_CPX = { 3, Order3_CPY_CPX };
 	//---------------------------------------------
 	static inline AdressModeItem Order2[2] = {
-		{AdrModeType::ABSOLUTE_ADR,0 },
-		{AdrModeType::INDIRECT_ADR,32 }
+		{AdrModeType::ABSOLUTE_ADR,0,3 },
+		{AdrModeType::INDIRECT_ADR,32,3 }
 	};
 	static inline AdressModeLUT LUT_Order2 = { 2, Order2 };
 	//---------------------------------------------
 	static inline AdressModeItem Order2_BIT[2] = {
-		{AdrModeType::ZERO_PAGE_ADR,0 },
-		{AdrModeType::ABSOLUTE_ADR,8 }
+		{AdrModeType::ZERO_PAGE_ADR,0,2 },
+		{AdrModeType::ABSOLUTE_ADR,8,3 }
 	};
 	static inline AdressModeLUT LUT_Order2_BIT = { 2, Order2_BIT };
 	//---------------------------------------------
 	static inline AdressModeItem Order1[1] = {
-		{AdrModeType::ABSOLUTE_ADR,0 }
+		{AdrModeType::ABSOLUTE_ADR,0 ,3}
 	};
 	static inline AdressModeLUT LUT_Order1 = {1, Order1};
 	//-------------------------------------------------
 	static inline AdressModeItem Order_BRANCH[1] = {
-		{AdrModeType::RELATIVE, 0}
+		{AdrModeType::RELATIVE, 0, 2}
 	};
 	static inline AdressModeLUT LUT_Relative = { 1, Order_BRANCH };
 	//------------------------------------------------00
 	static inline AdressModeItem Implied[1] = {
-		{AdrModeType::IMPLIED, 0}
+		{AdrModeType::IMPLIED, 0, 1}
 	};
 	static inline AdressModeLUT LUT_Implied = { 1, Implied };
 	//------------------------------------------------00
@@ -164,6 +164,7 @@ private:
 		{Token::VAR_PARAM,"VAR_PARAM"},
 	//--------- Statements --------------
 		{Token::MODULE,"MODULE"},
+		{Token::ASMMODULE,"ASMMODULE"},
 		{Token::VECTOR,"VECTOR"},
 		{Token::FOR,"FOR"},
 		{Token::TO,"TO"},

@@ -10,7 +10,9 @@ CAct65NUMBER::~CAct65NUMBER()
 
 bool CAct65NUMBER::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
-	return true;
+	bool rV = true;
+	rV = CAstNode::Create(pChild, pNext, pSym);
+	return rV;
 }
 
 CValue* CAct65NUMBER::Process()

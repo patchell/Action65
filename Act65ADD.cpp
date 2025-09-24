@@ -10,7 +10,9 @@ CAct65ADD::~CAct65ADD()
 
 bool CAct65ADD::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
-	return true;
+	bool rV = true;
+	rV = CAstNode::Create(pChild, pNext, pSym);
+	return rV;
 }
 
 CValue* CAct65ADD::Process()
@@ -65,13 +67,27 @@ CValue* CAct65ADD::Emit(CValue* pVc, CValue* pVn, CValue* pVr)
 {
 	if (!pVc)
 	{
-		fprintf(Act()->LogFile(), "Internal Error:ADD op Child Value is NULL Line:%d Col:%d\n", GetLine(), GetColumn());
-		Act()->Exit(2);
+		ThrownException.SetXCeptType(Exception::ExceptionType::INTERNAL_VALUE_NULL);
+		sprintf_s(
+			ThrownException.GetErrorString(),
+			ThrownException.GetMaxStringLen(),
+			"Internal Error:ADD op Next Value is NULL  Line:%d Col:%d\n",
+			GetLine(),
+			GetColumn()
+		);
+		throw(ThrownException);
 	}
 	if (!pVn)
 	{
-		fprintf(Act()->LogFile(), "Internal Error:ADD op Next Value is NULL  Line:%d Col:%d\n", GetLine(), GetColumn());
-		Act()->Exit(2);
+		ThrownException.SetXCeptType(Exception::ExceptionType::CODEGEN_UNKNOWN_BYTE_ORDER);
+		sprintf_s(
+			ThrownException.GetErrorString(),
+			ThrownException.GetMaxStringLen(),
+			"Internal Error:ADD op Next Value is NULL  Line:%d Col:%d\n", 
+			GetLine(), 
+			GetColumn()
+		);
+		throw(ThrownException);
 	}
-	return Act()->GetParser()->GetCodeGenUtils()->EmitBinaryOp(Token::ADC, pVc, pVn, pVr, GetSection(),Token::CLC);
+	return Act()->GetCodeGen()->EmitBinaryOp(Token::ADC, pVc, pVn, pVr, GetSection(),Token::CLC);
 }

@@ -10,7 +10,9 @@ CAct65CHAR::~CAct65CHAR()
 
 bool CAct65CHAR::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
-	return true;
+	bool rV = true;
+	rV = CAstNode::Create(pChild, pNext, pSym);
+	return rV;
 }
 
 CValue* CAct65CHAR::Process()

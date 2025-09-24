@@ -10,7 +10,9 @@ CAct65CONST::~CAct65CONST()
 
 bool CAct65CONST::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 {
-	return false;
+	bool rV = true;
+	rV = CAstNode::Create(pChild, pNext, pSym);
+	return rV;
 }
 
 CValue* CAct65CONST::Process()

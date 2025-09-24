@@ -81,6 +81,13 @@
 // Added a new variable decel grammar
 // just for TYPE rather than using
 // the one for LocalVaiables
+//
+// Version 0.0.15 September 20, 2025
+// Added the abbility to have inline
+// assembly outside of functions
+// So far, however, this is causing
+// problems with 2 conflicts in the
+// grammar.
 //----------------------------------
 
 TERMINALS
@@ -144,6 +151,7 @@ TERMINALS
 	"XREG",
 	"YREG",
 	"ASM",
+	"ASMMODULE",
 	//Assembler Tokens
 	"SECTION",
 	"SECTION_NAME",
@@ -277,9 +285,14 @@ Action65	-> Modules;
 
 Modules		-> Set Modules_1;
 Modules_1	-> 'MODULE' Set Modules_1
+			-> 'ASMMODULE' InlineAssBlock Set Modules_1
 			-> .
 			;
 
+
+//------------------------------------------
+// Grammar for SET and SECTION
+//------------------------------------------
 Set			-> SysDecl Set_1;
 Set_1		-> 'SET' SetObjects SysDecl Set_1
 			-> .
@@ -411,9 +424,9 @@ InlineAssembly_1	-> 'ASM' InlineAssBlock CodeBlock InlineAssembly_1
 					-> .
 					;
 
-InlineAssBlock		-> '{' AsmStmt InlineAssBlock
-					-> '}'
-					;
+InlineAssBlock		-> '{' AsmStmt '}';
+//					-> '}'
+//					;
 //-----------------------------------------------
 // CODE (Kluge) BLOCK statement
 //-----------------------------------------------
