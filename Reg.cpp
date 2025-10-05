@@ -7,21 +7,21 @@ const char* CReg::RegTypeItem::GetRegName(RegType Reg)
 }
 
 
-bool CReg::CreateTypeChain(CTypeChain* pTC)
+bool CReg::CreateTypeChain(CChainType* pTC)
 {
-	m_pTypeChain = new CTypeChain;
+	m_pTypeChain = new CChainType;
 	if (pTC)
 	{
 		//--------------------------------------
 		// Move the type chain objects into the
 		// new type chain
 		//--------------------------------------
-		CObjTypeChain* pTCobj = pTC->GetHead();
+		CChainTypeObject* pTCobj = (CChainTypeObject*)pTC->GetHead();
 		while (pTCobj)
 		{
 			m_pTypeChain->AddToTail(pTCobj);
 			pTC->Unlink(pTCobj);
-			pTCobj = pTC->GetHead();
+			pTCobj = (CChainTypeObject*)pTC->GetHead();
 		}
 	}
 	return true;

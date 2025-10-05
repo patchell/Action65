@@ -480,16 +480,6 @@ void CAct65Opcode::PrepareInstruction(
 	}
 }
 
-int CAct65Opcode::SaveInstruction(char* pM)
-{
-	*pM++ = (char)GetOpCode();
-	if (GetByteCount() > 1)
-		*pM++ = (char)GetOperand()->GetConstVal() & 0xff;
-	if(GetByteCount() > 2)
-		*pM++ = (char)((GetOperand()->GetConstVal() & 0xff00) >> 8);
-	return GetByteCount();
-}
-
 void CAct65Opcode::SetInstructionAddress(int Adr)
 {
 	m_InstructionAddress = Adr;
@@ -503,11 +493,6 @@ void CAct65Opcode::SetInstructionAddress(int Adr)
 			Act()->Exit(INTERNAL_ERROR);
 		}
 	}
-}
-
-const char* CAct65Opcode::GetOpcodeName()
-{
-	return m_pKeyWord->m_Name;
 }
 
 int CAct65Opcode::ToString(char* s, int Size)

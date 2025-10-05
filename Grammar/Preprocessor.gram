@@ -1,0 +1,99 @@
+//---------------------------------------
+// Preprocessor Grammar
+// Version 0.0.1 October 1, 2025
+//---------------------------------------
+
+TERMINALS
+	"STRING",
+	"NUMBER",
+	"SET",
+	"DEFINE",
+	"SECTION",
+	"START",
+	"SIZE",
+	"MODE",
+	"PAGEZERO",
+	"READ_ONLY",
+	"READ_WRITE",
+	"TRUE",
+	"FALSE",
+	"PROCESSOR",
+	"R6502",
+	"WD65C02",
+	"WD65C816",
+	"IDENT"
+
+
+
+GRAMMAR
+
+//-----------------------------------------
+// SET
+//-----------------------------------------
+Set		-> Define Set_1;
+Set_1	-> 'SET' SetObjects Define Set_1
+			-> .
+			;
+
+SetObjects	-> 'SECTION' 'STRING'
+			-> 'PROCESSOR' ProcessorType	
+			-> .
+			;
+
+//-------------------------------------------
+// DEFINE declaration  Sort of a MACRO defination
+//-------------------------------------------
+Define		-> 'DEFINE' DefObject Define
+			-> .
+			;
+
+DefObject	-> DefList DefObject_1;
+DefObject_1	-> 'SECTION' SectionName DefList DefObject_1
+			-> .
+			;
+
+//-------------------------------------------			
+SectionName		-> SectionDef SectionName_1;
+SectionName_1	-> 'STRING' SectionDef
+				-> .
+				;
+			
+SectionDef		-> '[' SectionAtributes
+				-> ']'
+				-> .
+				;
+
+SectionAtributes-> 'START' '=' 'NUMBER' SectionAtributes
+				-> 'SIZE' '=' 'NUMBER' SectionAtributes
+				-> 'MODE' '=' Modes SectionAtributes
+				-> 'PAGEZERO' '=' AddressSize SectionAtributes
+				-> ']'
+				-> ',' SectionAtributes
+				;
+
+Modes			-> 'READ_ONLY'
+				-> 'READ_WRITE'
+				;
+
+AddressSize		-> 'TRUE'
+				-> 'FALSE'
+				;
+//-------------------------------------------
+DefList		-> Def DefList_1;
+DefList_1	-> ',' Def DefList_1
+			-> .
+			;
+Def		-> 'IDENT' Def_1;
+Def_1	-> '=' 'IDENT'
+		-> 'IDENT'
+			-> .
+			;
+//-------------------------------------------
+// PROCESSOR declaration
+//-------------------------------------------
+
+ProcessorType	-> 'R6502'
+				-> 'WD65C02'
+				-> 'WD65C816'
+				;
+

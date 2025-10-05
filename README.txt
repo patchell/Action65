@@ -9,6 +9,18 @@ Compatibility Issues with the real ACTION!
 	Hopefully, in the future I will find a way to fix
 	this conflict.
 
+October 5, 2025
+
+Major Changes in progress.  I discoverred a big problem
+with the "Compiler Directives" SET, DEFINE and INCLUDE.
+They just don't seem to belong inside of the main
+language parser, so I have added a pre processor to
+take care of thse sort of things.  And after working
+on it a bit, it seems to be making good sense.
+Currently, the compiler doesn't work at all, but this
+seemed like a good point to make a commit.  It at 
+least compiles.
+
 April 19, 2025
 
 The first glimmer of code generation:

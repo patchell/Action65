@@ -5,6 +5,11 @@ class CReg;
 class CCodeGeneration
 {
 public:
+	enum class Processor {
+		R6502,
+		W65C02,
+		W65C816
+	};
 	enum ByteOrder {
 		LOWBYTE,
 		HIGHBYTE
@@ -29,6 +34,7 @@ public:
 	};
 	CVirtualReg m_VirtualRegisterPool;
 	CValue* m_pPendingLabel;
+	Processor m_ProcessorType;
 public:
 	CCodeGeneration();
 	virtual ~CCodeGeneration();
@@ -97,5 +103,8 @@ public:
 	CValue* GetPendingLabel();
 	void EmitSource();
 	void EmitListing(Token Op, CSection* pSection, int Address, CValue* pLabel = 0);
+	//------------------
+	Processor GetProcessorType() const { return m_ProcessorType; }
+	void SetProcessorType(Processor P) { m_ProcessorType = P; }
 };
 

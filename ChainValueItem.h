@@ -7,6 +7,8 @@ class CChainValueItem : public CChainItem
 public:
 	CChainValueItem();
 	virtual ~CChainValueItem();
+	virtual bool Create() { return true; }
+	virtual void Copy(CChainItem* pI);
 	virtual bool Compare(const char* pName);
 	void SetValue(CValue* pVal) { m_pValue = pVal; }
 	CValue* GetValue() { return m_pValue; }

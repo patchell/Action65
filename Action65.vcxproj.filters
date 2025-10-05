@@ -94,9 +94,6 @@
     <ClCompile Include="Section.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="WhereSymbolIsUsed.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="pch.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -397,7 +394,7 @@
     <ClCompile Include="Act65IDENT.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ObjType.cpp">
+    <ClCompile Include="ChainTypeObject.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Act65RTI.cpp">
@@ -491,12 +488,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Act65W65C816.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="TypeChain.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ParameterChain.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Act65ParamList.cpp">
@@ -613,6 +604,27 @@
     <ClCompile Include="Instruction.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ChainSymUsed.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ChainType.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ChainMisc.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ChainParameterItem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Macro.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PreProcessor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="KeyWord.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -667,9 +679,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Section.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="WhereSymbolIsUsed.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ActionApp.h">
@@ -969,7 +978,7 @@
     <ClInclude Include="Act65IDENT.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ObjType.h">
+    <ClInclude Include="ChainTypeObject.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Act65RTI.h">
@@ -1063,12 +1072,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Act65W65C816.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="TypeChain.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ParameterChain.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Act65ParamList.h">
@@ -1185,6 +1188,27 @@
     <ClInclude Include="Instruction.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ChainSymUsed.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ChainType.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ChainMisc.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ChainParameterItem.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Macro.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PreProcessor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="KeyWord.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Grammar\Action.gram">
@@ -1234,6 +1258,9 @@
     </None>
     <None Include="Linker.Act65_LinkerScript">
       <Filter>SettingsFiles</Filter>
+    </None>
+    <None Include="Grammar\Preprocessor.gram">
+      <Filter>Grammar</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

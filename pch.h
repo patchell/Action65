@@ -91,23 +91,8 @@ enum  class Token {
 	BITS,
 	BEGIN,
 	END,
-	// Compiler Directives
-	DEFINE,
-	SET,
-	INCLUDE,
 	//---------- Assembler Tokens ------------
 	//--------- Section --------
-	SECTION,
-	SECTION_NAME,
-	START,
-	SIZE,
-	NAME,
-	MODE,
-	READ_WRTE,
-	READ_ONLY,
-	ZEROPAGE,
-	TRUE,
-	FALSE,
 	//----- Assembler declarators
 	ORG,
 	DB,
@@ -388,37 +373,24 @@ struct AdressModeLUT {
 	bool ValidAddressingMode(AdrModeType AMT) const;
 };
 
-struct KeyWord {
-	Token m_TokenID;	//token value
-	const char* m_Name;	//token name
-	int m_MaxBytes;			//Maximum number of bytes for instruction
-	int m_OpCode;			//base opcode
-	Processor m_Processor;	//for which processor
-	AdressModeLUT* m_pAddresModeLUT;
-	int NumOfAdrModes;
-	//------ Methods ------
-	int FindInc(AdrModeType AdrMode);
-	int GetNumberOfBytes(AdrModeType AdrMode);
-	static Token LookupToToken(const char* pName);
-	static const char* LookupToString(Token T);
-};
-
-
-#include "ObjType.h"
-
+#include "KeyWord.h"
 #include "Bin.h"
 #include "Bucket.h"
+//--------------------------------------
 #include "ChainItem.h"
+#include "ChainTypeObject.h"
+#include "ChainParameterItem.h"
 #include "ChainBinItem.h"
+#include "ChainSymUsed.h"
 #include "Chain.h"
-#include "TypeChain.h"
-#include "ParameterChain.h"
+#include "ChainType.h"
+#include "ChainMisc.h"
+//--------------------------------------
 #include "Symbol.h"
+#include "Macro.h"
 #include "VirtualReg.h" //- Virtual Registers 
 #include "Value.h"
 #include "ChainValueItem.h"
-#include "Instruction.h"
-#include "ChainInstruction.h"
 #include "SymTab.h"
 #include "Settings.h"
 
@@ -452,7 +424,12 @@ public:
 		//--------------------
 		CODEGEN_NO_SECTION,
 		CVALUE_NO_SYMBOL,
-		CODEGEN_UNKNOWN_BYTE_ORDER
+		CODEGEN_UNKNOWN_BYTE_ORDER,
+		//--------------------
+		// Initialization Exceptions
+		//--------------------
+		INIT_INPUT_FILE,
+		INIT_SYMTAB
 	};
 	enum class ExceptionSubType {
 		WHOKNOWS,
@@ -514,6 +491,16 @@ private:
 		{ ExceptionType::EXPECTED_IDENT, "Expected an Identifier::ERROR!" },
 		{ ExceptionType::EXPECTED_CONSTANT, "Expected a Constant::ERROR!" },
 		{ ExceptionType::EXPECTED_DATABLOCK, "Expected a Data Block::ERROR!" },
+		{ ExceptionType::EXPECTED_INDEX_REG, "Expected an Index Register::ERROR!" },
+		{ ExceptionType::EXPECTED_STRING, "Expected a String::ERROR!" },
+		{ ExceptionType::EXPECTED_PROC_FUNC_INTERRUPT, "Expected a Proc, Func or Interrupt::ERROR!" },
+		{ ExceptionType::AST_RECURSION_LIMIT, "AST Recursion Limit Exceeded::ERROR!" },
+		{ ExceptionType::INTERNAL_SYMBOL_NULL, "Internal Symbol is NULL::ERROR!" },
+		{ ExceptionType::INTERNAL_VALUE_NULL, "Internal Value is NULL::ERROR!" },
+		{ ExceptionType::CODEGEN_NO_SECTION, "CodeGen: No Section Defined::ERROR!" },
+		{ ExceptionType::CVALUE_NO_SYMBOL, "CValue: No Symbol Defined::ERROR!" },
+		{ ExceptionType::CODEGEN_UNKNOWN_BYTE_ORDER, "CodeGen: Unknown Byte Order::ERROR!" },
+		{ ExceptionType::INIT_INPUT_FILE, "Initialization: Input File Error::ERROR!" },	
 		{ ExceptionType(-1), NULL}
 	};
 	//--------------------------------------------------
@@ -571,7 +558,6 @@ public:
 
 #include "CodeGeneration.h"
 #include "Section.h"
-#include "WhereSymbolIsUsed.h"
 #include "Linker.h"
 #include "Reg.h"
 #include "RegPool.h"
@@ -743,7 +729,10 @@ public:
 #include "AstTree.h"
 #include "ActionAstTree.h"
 
+#include "PreProcessor.h"
 #include "Lexer.h"
+#include "Instruction.h"
+#include "ChainInstruction.h"
 #include "Parser.h"
 #include "ActionApp.h"
 

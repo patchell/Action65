@@ -3,6 +3,7 @@
 CCodeGeneration::CCodeGeneration()
 {
 	m_pPendingLabel = 0;
+	m_ProcessorType = Processor::R6502;
 }
 
 CCodeGeneration::~CCodeGeneration()
@@ -26,8 +27,8 @@ CValue* CCodeGeneration::EmitBinaryOp(
 	Token OpAux			// used for things like CLC, SEC, INX, ...etc
 )
 {
-	CTypeChain* pTCchild = 0;
-	CTypeChain* pTCnext = 0;
+	CChainType* pTCchild = 0;
+	CChainType* pTCnext = 0;
 	int MaxNumberOfBytes = 0;
 	CReg::RegType ChildDref = CReg::RegType::NONE;
 	CReg::RegType NextDref = CReg::RegType::NONE;
@@ -35,7 +36,7 @@ CValue* CCodeGeneration::EmitBinaryOp(
 	AdrModeType AddressMode = AdrModeType::NA;
 	CValue* pReturnValue = 0;
 	CValue* pTempConst = 0;
-	CObjTypeChain* pTypeObj = 0;
+	CChainTypeObject* pTypeObj = 0;
 	int YregValue = -1;
 	CValue* pLabel = 0;
 	CInstruction* pOpCode = 0;
@@ -65,7 +66,7 @@ CValue* CCodeGeneration::EmitBinaryOp(
 		//------------------------------------------
 		// Operand 1
 		//------------------------------------------
-		if (pTCnext->GetTail()->IsFundamentalType())
+		if (((CChainTypeObject*)pTCnext->GetTail())->IsFundamentalType())
 		{
 			if (i == 0)	//first time though
 			{
@@ -104,7 +105,7 @@ CValue* CCodeGeneration::EmitBinaryOp(
 				pOpCode = 0;
 			}
 		}
-		else if (pTCnext->GetTail()->Is(CObjTypeChain::Spec::POINTER_DREF))
+		else if (((CChainTypeObject*)pTCnext->GetTail())->Is(CChainTypeObject::Spec::POINTER_DREF))
 		{
 			if (i == 0)	//first time though
 			{
@@ -158,7 +159,7 @@ CValue* CCodeGeneration::EmitBinaryOp(
 			pSection->AddInstruction(pOpCode);
 			pOpCode = 0;
 		}
-		else if (pTCnext->GetTail()->Is(CObjTypeChain::Spec::POINTER))
+		else if (((CChainTypeObject*)pTCnext->GetTail())->Is(CChainTypeObject::Spec::POINTER))
 		{
 			//------------------------------------------------
 			// Performing Arithmatic on a POINTER is the same
@@ -203,7 +204,7 @@ CValue* CCodeGeneration::EmitBinaryOp(
 				pOpCode = 0;
 			}
 		}
-		else if (pTCnext->GetTail()->Is(CObjTypeChain::Spec::ARRAY))
+		else if (((CChainTypeObject*)pTCnext->GetTail())->Is(CChainTypeObject::Spec::ARRAY))
 		{
 			if (i == 0)	//first time through
 			{
@@ -246,7 +247,7 @@ CValue* CCodeGeneration::EmitBinaryOp(
 		//------------------------------------------
 		// Operand 2
 		//------------------------------------------
-		if (pTCchild->GetTail()->IsFundamentalType())
+		if (((CChainTypeObject*)pTCchild->GetTail())->IsFundamentalType())
 		{
 			if (i == 0)
 			{
@@ -284,7 +285,7 @@ CValue* CCodeGeneration::EmitBinaryOp(
 				pOpCode	= 0;
 			}
 		}
-		else if (pTCchild->GetTail()->Is(CObjTypeChain::Spec::POINTER_DREF))
+		else if (((CChainTypeObject*)pTCchild->GetTail())->Is(CChainTypeObject::Spec::POINTER_DREF))
 		{
 			if (i == 0)	//first time though
 			{
@@ -321,11 +322,11 @@ CValue* CCodeGeneration::EmitBinaryOp(
 				// second and greater times though
 			}
 		}
-		else if (pTCchild->GetTail()->Is(CObjTypeChain::Spec::POINTER))
+		else if (((CChainTypeObject*)pTCchild->GetTail())->Is(CChainTypeObject::Spec::POINTER))
 		{
 			fprintf(Act()->LogFile(), "Pointer\n");
 		}
-		else if (pTCchild->GetTail()->Is(CObjTypeChain::Spec::ARRAY))
+		else if (((CChainTypeObject*)pTCchild->GetTail())->Is(CChainTypeObject::Spec::ARRAY))
 		{
 			if (i == 0)
 			{
@@ -405,14 +406,14 @@ CValue* CCodeGeneration::EmitBinaryOp(
 				CReg* pReg = new CReg;
 
 				pReg->CreateTypeChain();
-				pTypeObj = new CObjTypeChain;
+				pTypeObj = new CChainTypeObject;
 				pTypeObj->Create();
-				pTypeObj->SetSpec(CObjTypeChain::Spec::AREG);
+				pTypeObj->SetSpec(CChainTypeObject::Spec::AREG);
 				pReg->GetTypeChain()->AddToHead(pTypeObj);
 
-				pTypeObj = new CObjTypeChain;
+				pTypeObj = new CChainTypeObject;
 				pTypeObj->Create();
-				pTypeObj->SetSpec(CObjTypeChain::Spec::BYTE);
+				pTypeObj->SetSpec(CChainTypeObject::Spec::BYTE);
 				pReg->GetTypeChain()->AddToHead(pTypeObj);
 				pReg->SetType(CReg::RegType::A);
 				pReturnValue->Create(pReg);
@@ -424,12 +425,12 @@ CValue* CCodeGeneration::EmitBinaryOp(
 					pReturnValue = GetVirtRegPool()->Lock(CVirtualReg::RegStatus::LOCKED_WORD);
 					pReturnValue->GetSymbol()->CreateTypeChain();
 
-					pTypeObj = new CObjTypeChain;
-					pTypeObj->SetSpec(CObjTypeChain::Spec::VIRTUAL_REG);
+					pTypeObj = new CChainTypeObject;
+					pTypeObj->SetSpec(CChainTypeObject::Spec::VIRTUAL_REG);
 					pReturnValue->GetSymbol()->GetTypeChain()->AddToTail(pTypeObj);
 
-					pTypeObj = new CObjTypeChain;
-					pTypeObj->SetSpec(CObjTypeChain::Spec::INT);
+					pTypeObj = new CChainTypeObject;
+					pTypeObj->SetSpec(CChainTypeObject::Spec::INT);
 					pReturnValue->GetSymbol()->GetTypeChain()->AddToTail(pTypeObj);
 
 					pOpCode = new CInstruction;

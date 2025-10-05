@@ -14,7 +14,8 @@ public:
 		ACCESS_MODE,
 		DATA_SIZE,
 		BIN,
-		NODE
+		NODE,
+		DOOD
 	};
 	struct ItemTypeLUT {
 		ItemType m_Type;
@@ -42,12 +43,14 @@ private:
 		{ItemType::DATA_SIZE,"DATA SIZE"},
 		{ItemType::BIN,"BIN"},
 		{ItemType::NODE,"NODE"},
+		{ItemType::DOOD,"DO-OD"},
 		{ItemType(-1),NULL}
 	};
 	ItemType m_Type;
 	CStackItem* m_pNext;
 public:
 	CStackItem();
+	CStackItem(ItemType Type);
 	virtual ~CStackItem();
 	bool Create(ItemType Type);
 	void SetNext(CStackItem* pSI) {	m_pNext = pSI; }

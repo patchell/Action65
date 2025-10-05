@@ -88,6 +88,17 @@
 // So far, however, this is causing
 // problems with 2 conflicts in the
 // grammar.
+//
+// Version 0.0.16 October 1, 2025
+// Turns out t6hat SET and DEFINE
+// just don't belong with the 
+// language parser, so they are
+// being removed and a new pre-
+// processor will handle them.
+//
+// Version 0.0.17 October 5, 2025
+// Completely removed all of the
+// compiler directive grammar.
 //----------------------------------
 
 TERMINALS
@@ -283,26 +294,11 @@ GRAMMAR
 //--------------------------------
 Action65	-> Modules;
 
-Modules		-> Set Modules_1;
-Modules_1	-> 'MODULE' Set Modules_1
-			-> 'ASMMODULE' InlineAssBlock Set Modules_1
+Modules		-> SysDecl Modules_1;
+Modules_1	-> 'MODULE' SysDecl Modules_1
+			-> 'ASMMODULE' InlineAssBlock SysDecl Modules_1
 			-> .
 			;
-
-
-//------------------------------------------
-// Grammar for SET and SECTION
-//------------------------------------------
-Set			-> SysDecl Set_1;
-Set_1		-> 'SET' SetObjects SysDecl Set_1
-			-> .
-			;
-
-SetObjects	-> 'SECTION' SetSectionName
-			-> .
-			;
-
-SetSectionName		-> 'SECTION_NAME';
 
 //------------------------------------------
 // Grammar for code
@@ -604,8 +600,8 @@ MemValLocation		-> 'VAR_GLOBAL' ArrayIndex
 //-------------------------------------------
 // Vector Address, interrupt, indirect jmp, etc.
 //------------------------------------------
-SysDecl			-> Define Vector_1;
-Vector_1		-> 'VECTOR' VectorEnd Define Vector_1
+SysDecl			-> TypeDefDecl Vector_1;
+Vector_1		-> 'VECTOR' VectorEnd TypeDefDecl Vector_1
 				-> .
 				;
 
@@ -616,26 +612,6 @@ AddressEnd		-> VectorAddress AddressEnd_1;
 AddressEnd_1	-> ')'
 				;
 VectorAddress	-> '('  CompConst;
-
-
-//-------------------------------------------
-// DEFINE declaration  Sort of a MACRO defination
-//-------------------------------------------
-Define		-> TypeDefDecl Define_1;
-Define_1	-> 'DEFINE' DefObject TypeDefDecl Define
-			-> .
-			;
-
-DefObject	-> DefList DefObject_1;
-DefObject_1	-> 'SECTION' SectionName
-			-> DefList
-			;
-
-DefList	-> Def DefList_1;
-DefList_1	-> ',' Def DefList_1
-			-> .
-			;
-Def		-> IDENT '=' CompConst;
 
 //----------------------------------------------
 // TYPE Defination  Creates User define data
@@ -888,68 +864,6 @@ BaseCompConst	-> 'NUMBER'
 //  Inline assembly code
 //----------------------------------------
 //----------------------------------------
-//	Assembler Directives
-//----------------------------------------
-
-AsmStmt			-> AsmSet Processor_1;
-Processor_1		-> 'PROCESSOR' ProcessorType AsmSet Processor_1
-				-> .
-				;
-ProcessorType	-> 'R6502'
-				-> 'WD65C02'
-				-> 'WD65C816'
-				;
-
-
-//-----------------------------------------
-// SET
-//-----------------------------------------
-AsmSet		-> Section AsmSet_1;
-AsmSet_1	-> 'SET' AsmSetObjects Section AsmSet_1
-			-> .
-			;
-
-AsmSetObjects	-> 'SECTION' AsmSectionName
-				-> .
-				;
-
-AsmSectionName	-> SECTION_NAME;
-				
-//-----------------------------------------
-// SECITON
-//-----------------------------------------
-
-Section		-> AsmStmts Section_1;
-Section_1	-> 'SECTION' SectionName AsmStmts Section_1
-				-> .
-				;
-SectionName		-> SectionDef SectionName_1;
-SectionName_1	-> 'STRING' SectionDef
-				-> .
-				;
-			
-SectionDef		-> '[' SectionAtributes
-				-> ']'
-				-> .
-				;
-
-SectionAtributes-> 'START' '=' AsmConstant SectionAtributes
-				-> 'SIZE' '=' AsmConstant SectionAtributes
-				-> 'MODE' '=' Modes SectionAtributes
-				-> 'ZEROPAGE' '=' AddressSize SectionAtributes
-				-> ']'
-				-> ',' SectionAtributes
-				;
-
-Modes			-> 'READ_ONLY'
-				-> 'READ_WRITE'
-				;
-
-AddressSize		-> 'TRUE'
-				-> 'FALSE'
-				;
-
-//----------------------------------------
 // Code Statements
 //---------------------------------------
 
@@ -957,101 +871,11 @@ AddressSize		-> 'TRUE'
 // PL/65 Statements
 //-------------------------------------
 
-//-------------------------------------------------
-// IFF Statement
-//-------------------------------------------------
-
-IFFend		-> IFFthenpart IFFend_1;
-IFFend_1	-> 'FFI';
-
-IFFthenpart		-> IffRelOper IFFthenpart_1;
-IFFthenpart_1	-> 'THEN' AsmConstant
-				-> .
-				;
-
-
-IffRelOper		-> IffRegister IffRelOper_1;
-IffRelOper_1	-> '<' Value
-				-> 'GTEQ' Value
-				-> '=' Value
-				-> '^' '=' Value	//not equal
-				-> .
-				;
-
-IffRegister		-> Bits IffRegister_1;
-IffRegister_1	-> 'AREG'  
-				-> 'XREG'  
-				-> 'YREG'  
-				-> .
-				;
-
-Bits			->StatusFlags Bits_1;
-Bits_1			-> 'BITS' BitValue
-				-> BIT BitValue
-				-> .
-				;
-BitValue		-> '[' ArithExpr 
-				-> ']';
-
-StatusFlags		-> OptNot StatusFlags_1;
-StatusFlags_1	-> 'NEG'		//negative flag
-				-> 'CARRY'		//Carry flag
-				-> 'ZERO'		//Zero
-				-> 'OVERFLOW'		//Overflow
-				;
-
-OptNot			-> '^'
-				-> .
-				;
-
-//---------------------------------------------------
-// POP Statment
-//---------------------------------------------------
-			;
-PopDestList		-> PopDest PopDestList_1;
-PopDestList_1	-> ',' PopDest PopDestList_1
-				-> .
-				;
-PopDest		-> MemContentsType PopDest_1;
-PopDest_1	-> 'AREG'
-			-> 'XREG'
-			-> 'YREG'
-			-> 'SR'
-			-> .
-			;
-
-//---------------------------------------------------
-// PUSH Statement
-//---------------------------------------------------
-PushSourceList	-> PushSource PushSourceList_1;
-PushSourceList_1-> ',' PushSource PushSourceList_1
-				-> .
-				;
-PushSource	-> ArithExpr PushSource_1;
-PushSource_1-> 'AREG'
-			-> 'XREG'
-			-> 'YREG'
-			-> 'SR'
-			-> .
-			;
-
-//-------------------------------------
-// Proceedure
-//-------------------------------------
-
-AsmProcEnd		-> AsmProcBody AsmProcEnd_1;
-AsmProcEnd_1	-> 'EPROC';
-
-AsmProcBody		-> AsmProcName AsmProcBody_1;
-AsmProcBody_1	-> 'BEFIN' AsmStmt;
-	
-AsmProcName		-> IDENT;
-
 
 //--------------------------------------
 // Opcodes
 //--------------------------------------
-AsmStmts		-> OptLabel AsmStmts_1;
+AsmStmt		-> OptLabel AsmStmts_1;
 AsmStmts_1		-> 'ADC'  Operand  OptLabel AsmStmts_1 //ALU Opcodes		
 				-> 'AND'  Operand OptLabel AsmStmts_1				
 				-> 'EOR'  Operand OptLabel AsmStmts_1
@@ -1148,6 +972,96 @@ RelAddressingMode	-> AsmConstant;
 OptIndexReg		-> 'XREG'
 				-> 'YREG'
 				;
+
+//-------------------------------------------------
+// IFF Statement
+//-------------------------------------------------
+
+IFFend		-> IFFthenpart IFFend_1;
+IFFend_1	-> 'FFI';
+
+IFFthenpart		-> IffRelOper IFFthenpart_1;
+IFFthenpart_1	-> 'THEN' AsmConstant
+				-> .
+				;
+
+
+IffRelOper		-> IffRegister IffRelOper_1;
+IffRelOper_1	-> '<' Value
+				-> 'GTEQ' Value
+				-> '=' Value
+				-> '^' '=' Value	//not equal
+				-> .
+				;
+
+IffRegister		-> Bits IffRegister_1;
+IffRegister_1	-> 'AREG'  
+				-> 'XREG'  
+				-> 'YREG'  
+				-> .
+				;
+
+Bits			->StatusFlags Bits_1;
+Bits_1			-> 'BITS' BitValue
+				-> BIT BitValue
+				-> .
+				;
+BitValue		-> '[' ArithExpr 
+				-> ']';
+
+StatusFlags		-> OptNot StatusFlags_1;
+StatusFlags_1	-> 'NEG'		//negative flag
+				-> 'CARRY'		//Carry flag
+				-> 'ZERO'		//Zero
+				-> 'OVERFLOW'		//Overflow
+				;
+
+OptNot			-> '^'
+				-> .
+				;
+
+//---------------------------------------------------
+// POP Statment
+//---------------------------------------------------
+			;
+PopDestList		-> PopDest PopDestList_1;
+PopDestList_1	-> ',' PopDest PopDestList_1
+				-> .
+				;
+PopDest		-> MemContentsType PopDest_1;
+PopDest_1	-> 'AREG'
+			-> 'XREG'
+			-> 'YREG'
+			-> 'SR'
+			-> .
+			;
+
+//---------------------------------------------------
+// PUSH Statement
+//---------------------------------------------------
+PushSourceList	-> PushSource PushSourceList_1;
+PushSourceList_1-> ',' PushSource PushSourceList_1
+				-> .
+				;
+PushSource	-> ArithExpr PushSource_1;
+PushSource_1-> 'AREG'
+			-> 'XREG'
+			-> 'YREG'
+			-> 'SR'
+			-> .
+			;
+
+//-------------------------------------
+// Proceedure
+//-------------------------------------
+
+AsmProcEnd		-> AsmProcBody AsmProcEnd_1;
+AsmProcEnd_1	-> 'EPROC';
+
+AsmProcBody		-> AsmProcName AsmProcBody_1;
+AsmProcBody_1	-> 'BEFIN' AsmStmt;
+
+AsmProcName		-> 'IDENT';
 
 
 //---------------------------------------

@@ -30,7 +30,7 @@ void CBucket::Add(CBin* pSym)
 	}
 }
 
-CBin* CBucket::Find(const char* pName, int scope)
+CBin* CBucket::Find(const char* pName, CBin::BinType Type, int scope)
 {
 	CBin* pBin = 0;
 	bool loop = true;
@@ -38,7 +38,7 @@ CBin* CBucket::Find(const char* pName, int scope)
 	pBin = GetHead();
 	while (pBin && loop)
 	{
-		if (pBin->Compare(pName, scope))
+		if (pBin->Compare(pName, Type, scope))
 			loop = false;
 		else
 			pBin = pBin->GetNext();

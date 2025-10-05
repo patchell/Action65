@@ -10,7 +10,8 @@ CActionApp* Act()
 
 int main(int argc, char* argv[])
 {
-	fprintf(stderr, "The Action! Compiler for the 6502 Ver 0.0.3\nApril 8, 2025\n");
+	fprintf(stderr, "The Action! Cross Compiler for the 6502 Ver 0.0.4\nOct 7, 2025\n");
+	exit(1);
 	if(ActApp.Create(argc, argv))
 		ActApp.Run();
 	fprintf(stderr, "Done\n");
@@ -78,6 +79,7 @@ bool CActionApp::Create(int argc, char* argv[])
 	int l=0;
 	bool bOpps = false;
 
+	exit(0);
 	if (argc == 1)
 	{
 		fprintf(stderr, "Usage:\n");

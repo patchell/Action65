@@ -119,6 +119,7 @@ public:
 	//-----------------------------------------
 	char* CreateIndentString(char* s, int n, int Indent, int c = ' ');
 	CLexer* GetLexer() { return m_ActParse.GetLexer(); }
+	CSymTab* GetSymTab() { return m_ActParse.GetLexer()->GetSymTab(); }
 	CCodeGeneration* GetCodeGen() { return &m_CodeGenerationUtils; }
 };
 

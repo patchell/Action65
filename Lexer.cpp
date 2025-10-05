@@ -12,9 +12,6 @@ CLexer::CLexer()
 	m_Col = 0;
 	m_LexValue = 0;
 	m_pLexSymbol = 0;
-	m_pFileBuffeer = 0;
-	m_FileIndex = 0;
-	m_InFileSize = 0;
 	m_bAsmMode = false;
 }
 
@@ -25,27 +22,13 @@ CLexer::~CLexer()
 
 bool CLexer::Create()
 {
-	struct _stat32 FileStats;
-	unsigned BytesRead = 0;
 
-	//---------------------------------
-	// Open Input File
-	//---------------------------------
-	_stat32(Act()->GetSourceFileName(), &FileStats);
-	m_InFileSize = FileStats.st_size;
-	Act()->OpenSource();
-	m_pFileBuffeer = new char[m_InFileSize + 1];
-	if(m_pFileBuffeer && Act()->SrcFile())
-		BytesRead = (int)fread(m_pFileBuffeer, 1, m_InFileSize, Act()->SrcFile());
-	Act()->CloseSource();
-	if (BytesRead)
-		m_InFileSize = BytesRead;
 	//----------------------------
 	// Create Symbol Table
 	//----------------------------
 	m_SymbolTable.Create(101);
-	if(LogFile())
-	fprintf(LogFile(), "File:%s has %d Bytes\n", Act()->GetSourceFileName(), m_InFileSize);
+	//----------------------------
+	m_PreProc.Create(GetSymTab());
 	return true;
 }
 
@@ -58,12 +41,7 @@ int CLexer::LexGet()
 {
 	int c = EOF;
 
-	if (m_pFileBuffeer && (m_FileIndex < m_InFileSize))
-		c = m_pFileBuffeer[m_FileIndex++];
-	else if (m_FileIndex == m_InFileSize)
-	{
-		c = EOF;
-	}
+	c = GetPreProc()->GetChar();
 	m_Col++;
 	return c;
 }
@@ -80,26 +58,14 @@ int CLexer::LexLook(int index)
 	// ... ext.
 	//--------------------------------------
 	int c = EOF;
-	int i;
 
-	i = index + m_FileIndex;
-	if (m_pFileBuffeer && (i < m_InFileSize))
-		c = m_pFileBuffeer[i];
-	else if (m_FileIndex == m_InFileSize)
-	{
-		c = EOF;
-	}
+	c = GetPreProc()->LexLook(index);
 	return c;
 }
 
 void CLexer::LexUnGet(int c)
 {
-	if ((m_FileIndex > 0) && (c != EOF))
-	{
-		--m_FileIndex;
-		if (m_Col > 0)
-			m_Col--;
-	}
+	GetPreProc()->LexUnGet(c);
 }
 
 bool CLexer::IsValidHexNumber(int c)
@@ -331,7 +297,7 @@ Token CLexer::Lex()
 				}
 				m_aLexBuff[m_LexBuffIndex] = 0;
 				//Lookup Name
-				m_pLexSymbol = (CSymbol*)GetSymTab()->FindSymbol(m_aLexBuff, 0);
+				m_pLexSymbol = (CSymbol*)GetSymTab()->FindSymbol(m_aLexBuff, CBin::BinType::ANY, 0);
 				if (!m_pLexSymbol)	//new lable
 				{
 					m_pLexSymbol = new CSymbol;
@@ -437,6 +403,9 @@ Token CLexer::Lex()
 			}
 			else
 			{
+				//-------------------------------
+				// Look ahead just a tiny bit
+				//-------------------------------
 				c1 = LexLook(0);
 				c2 = LexLook(1);
 				if (!IsValidNameChar(c2))
@@ -445,47 +414,47 @@ Token CLexer::Lex()
 					{
 					case 'A':	//accumulator
 						TokenValue = Token::AREG;
-						m_FileIndex++;
+						IncFileIndex(1);
 						break;
 					case 'P':	//proecssor status
 						TokenValue = Token::PSREG;
-						m_FileIndex++;
+						IncFileIndex(1);
 						break;
 					case 'S':	// stack pointer
 						TokenValue = Token::SPREG;
-						m_FileIndex++;
+						IncFileIndex(1);
 						break;
 					case 'X':	// X index register
 						TokenValue = Token::XREG;
-						m_FileIndex++;
+						IncFileIndex(1);
 						break;
 					case 'Y':	// Y index register
 						TokenValue = Token::YREG;
-						m_FileIndex++;
+						IncFileIndex(1);
 						break;
 					case 'C':	// carry flag
 						TokenValue = Token::CARRY;
-						m_FileIndex++;
+						IncFileIndex(1);
 						break;
 					case 'D':
 						TokenValue = Token::DECIMAL_MODE;
-						m_FileIndex++;
+						IncFileIndex(1);
 						break;
 					case 'I':	// interrupt flag
 						TokenValue = Token::IRQENABLE;
-						m_FileIndex++;
+						IncFileIndex(1);
 						break;
 					case 'N':	// negative flag
 						TokenValue = Token::NEG;
-						m_FileIndex++;
+						IncFileIndex(1);
 						break;
 					case 'O':
 						TokenValue = Token::OVERFLOW;
-						m_FileIndex++;
+						IncFileIndex(1);
 						break;
 					case 'Z':
 						TokenValue = Token::ZERO;
-						m_FileIndex++;
+						IncFileIndex(1);
 						break;
 					case '*':
 						//-------------------------------------
@@ -494,7 +463,7 @@ Token CLexer::Lex()
 						//	Symbol be '.*' : (
 						//-------------------------------------
 						TokenValue = Token::CUR_LOC;
-						m_FileIndex++;
+						IncFileIndex(1);
 						break;
 					default:
 						TokenValue = Token('.');
@@ -613,14 +582,14 @@ Token CLexer::Lex()
 
 CBin* CLexer::LookupSymbol(const char* pName)
 {
-	return GetSymTab()->FindSymbol(pName,1);
+	return GetSymTab()->FindSymbol(pName, CBin::BinType::ANY,0);
 }
 
 Token CLexer::LookupKeyword(const char* pKeyword)
 {
 	Token Toke;
 
-	Toke = KeyWords->LookupToToken(pKeyword);
+	Toke = KeyWordsLUT->LookupToToken(pKeyword);
 	return Toke;
 }
 
@@ -632,15 +601,15 @@ KeyWord* CLexer::FindKeyword(Token KeywordToken)
 
 	while (Loop)
 	{
-		if (KeyWords[i].m_TokenID == KeywordToken)
+		if (KeyWordsLUT[i].m_TokenID == KeywordToken)
 		{
-			pKW = &KeyWords[i];
+			pKW = &KeyWordsLUT[i];
 			Loop = 0;
 		}
 		else
 		{
 			++i;
-			if (KeyWords[i].m_TokenID == Token::ENDOFTOKENS)
+			if (KeyWordsLUT[i].m_TokenID == Token::ENDOFTOKENS)
 			{
 				Loop = false;
 			}
@@ -657,15 +626,15 @@ Processor CLexer::LookupProcessor(Token KeywordToken)
 
 	while (Loop)
 	{
-		if (KeyWords[i].m_TokenID == KeywordToken)
+		if (KeyWordsLUT[i].m_TokenID == KeywordToken)
 		{
-			AppropriateProcessor = KeyWords[i].m_Processor;
+			AppropriateProcessor = KeyWordsLUT[i].m_Processor;
 			Loop = 0;
 		}
 		else
 		{
 			++i;
-			if (KeyWords[i].m_TokenID == Token::ENDOFTOKENS)
+			if (KeyWordsLUT[i].m_TokenID == Token::ENDOFTOKENS)
 			{
 				Loop = false;
 			}
@@ -680,12 +649,12 @@ int CLexer::LookupOpcode(Token OpcodeToken)
 	int i;
 	bool Loop = true;
 
-	for (i = 0; KeyWords[i].m_OpCode >= 0 && Loop; ++i)
+	for (i = 0; KeyWordsLUT[i].m_OpCode >= 0 && Loop; ++i)
 	{
-		if (KeyWords[i].m_TokenID == OpcodeToken)
+		if (KeyWordsLUT[i].m_TokenID == OpcodeToken)
 		{
 			Loop = false;
-			OpCode = KeyWords[i].m_OpCode;
+			OpCode = KeyWordsLUT[i].m_OpCode;
 		}
 	}
 	return OpCode;
@@ -708,11 +677,11 @@ int CLexer::GetOpcode(Token OpCodeToken)
 	int i = 0;
 	bool Loop = true;
 
-	while (KeyWords[i].m_TokenID != Token::ENDOFTOKENS && Loop)
+	while (KeyWordsLUT[i].m_TokenID != Token::ENDOFTOKENS && Loop)
 	{
-		if (KeyWords[i].m_TokenID == OpCodeToken)
+		if (KeyWordsLUT[i].m_TokenID == OpCodeToken)
 		{
-			OpCode = KeyWords[i].m_OpCode;
+			OpCode = KeyWordsLUT[i].m_OpCode;
 			Loop = false;
 		}
 		else
@@ -721,30 +690,3 @@ int CLexer::GetOpcode(Token OpCodeToken)
 	return OpCode;
 }
 
-const char* CLexer::LookupToName(Token Toke)
-{
-	bool Loop = true;
-	Token T = Token(0);
-	int i = 0;
-	const char* S =0;
-
-	while (Loop)
-	{
-		T = KeyWords[i].m_TokenID;
-		if (Toke == T)
-		{
-			Loop = false;
-			S = KeyWords[i].m_Name;
-		}
-		else if (T == Token::ENDOFTOKENS)
-		{
-			Loop = false;
-			S = 0;
-		}
-		else
-		{
-			++i;
-		}
-	}
-	return S;
-}

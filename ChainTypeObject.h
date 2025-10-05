@@ -1,6 +1,6 @@
 #pragma once
 
-class CObjTypeChain
+class CChainTypeObject : public CChainItem
 {
 public:
 	enum class Spec {
@@ -71,20 +71,16 @@ private:
 		{Spec(-1),0}
 	};
 	Spec m_SpecType;
-	CObjTypeChain* m_pNext;
-	CObjTypeChain* m_pPrev;
 public:
-	CObjTypeChain();
-	virtual ~CObjTypeChain();
-	bool Create();
+	CChainTypeObject();
+	virtual ~CChainTypeObject();
+	virtual bool Create();
+	virtual void Copy(CChainItem* pI);
+	virtual bool Compare(const char* pName);
 	int Print(char* pSO, int l);
 	const char* FindName(Spec T) {
 		return Types::FindName(T);
 	}
-	CObjTypeChain* GetNext() { return m_pNext; }
-	void SetNext(CObjTypeChain* pN) { m_pNext = pN; }
-	CObjTypeChain* GetPrev() { return m_pPrev; }
-	void SetPrev(CObjTypeChain* pP) { m_pPrev = pP; }
 	Spec GetSpec() const { return m_SpecType; }
 	void SetSpec(Spec s) { m_SpecType = s; }
 	bool IsFundamentalType();

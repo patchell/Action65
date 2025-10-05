@@ -2,8 +2,6 @@
 
 class CLexer
 {
-
-private:
 	//alu access modes
 	static inline AdressModeItem Order8[8] = {
 		{AdrModeType::INDEXED_INDIRECT_X_ADR, 0, 2},
@@ -114,100 +112,84 @@ private:
 	};
 	static inline AdressModeLUT LUT_Implied = { 1, Implied };
 	//------------------------------------------------00
-	static inline KeyWord KeyWords[] = {
-		{Token::ENDOFFILE,"End Of File"},		//1
-		{Token::IDENT," IDENT"},					//2
-		{Token::NUMBER,"NUMBER"},				//3
-		{Token::CUR_LOC, "Current Location"},
-		{Token::MOD,"MOD"},
-		{Token::DEFINED_IDENT, "DEFINED IDENT"},
+	static inline KeyWord KeyWordsLUT[] = {
+		{Token::ENDOFFILE,"End Of File",0,0, Processor::ALL, NULL, 0},		
+		{Token::IDENT," IDENT",0,0, Processor::ALL, NULL, 0},					//2
+		{Token::NUMBER,"NUMBER",0,0, Processor::ALL, NULL, 0},				//3
+		{Token::CUR_LOC, "Current Location",0,0, Processor::ALL, NULL, 0},
+		{Token::MOD,"MOD",0,0, Processor::ALL, NULL, 0},
+		{Token::DEFINED_IDENT, "DEFINED IDENT",0,0, Processor::ALL, NULL, 0},
 		//--------- Assignment -------------
-		{ Token::ASSIGN_ADD,"==+", 0 },
-		{ Token::ASSIGN_SUB,"==-", 0 },
-		{ Token::ASSIGN_MUL,"==*", 0 },
-		{ Token::ASSIGN_DIV,"==/", 0 },
-		{ Token::ASSIGN_MOD,"==MOD", 0 },
-		{ Token::ASSIGN_AND,"==&", 0 },
-		{ Token::ASSIGN_OR,"==%", 0 },
-		{ Token::ASSIGN_XOR,"==XOR", 0 },
-		{ Token::ASSIGN_RSH,"==RSH", 0 },
-		{ Token::ASSIGN_LSH,"==LSH", 0 },
+		{ Token::ASSIGN_ADD,"==+", 0 ,0, Processor::ALL, NULL, 0},
+		{ Token::ASSIGN_SUB,"==-", 0 ,0, Processor::ALL, NULL, 0},
+		{ Token::ASSIGN_MUL,"==*", 0 ,0, Processor::ALL, NULL, 0},
+		{ Token::ASSIGN_DIV,"==/", 0 ,0, Processor::ALL, NULL, 0},
+		{ Token::ASSIGN_MOD,"==MOD", 0 ,0, Processor::ALL, NULL, 0},
+		{ Token::ASSIGN_AND,"==&", 0 ,0, Processor::ALL, NULL, 0},
+		{ Token::ASSIGN_OR,"==%", 0 ,0, Processor::ALL, NULL, 0},
+		{ Token::ASSIGN_XOR,"==XOR", 0 ,0, Processor::ALL, NULL, 0},
+		{ Token::ASSIGN_RSH,"==RSH", 0 ,0, Processor::ALL, NULL, 0},
+		{ Token::ASSIGN_LSH,"==LSH", 0 ,0, Processor::ALL, NULL, 0},
 		//---------- Operators ------------
-		{Token::LSH,"LSH"},						
-		{Token::RSH,"RSH"},						
-		{Token::OR,"OR"},						
-		{Token::XOR, "XOR"},	
-		{Token::MOD,"MOD", 0 },
-		{Token::GTEQ,">=", 0 },
-		{Token::LTEQ,"<=", 0 },
+		{Token::LSH,"LSH", 0 ,0, Processor::ALL, NULL, 0},
+		{Token::RSH,"RSH", 0 ,0, Processor::ALL, NULL, 0},
+		{Token::OR,"OR", 0 ,0, Processor::ALL, NULL, 0},
+		{Token::XOR, "XOR", 0 ,0, Processor::ALL, NULL, 0},
+		{Token::MOD,"MOD",  0 ,0, Processor::ALL, NULL, 0},
+		{Token::GTEQ,">=",  0 ,0, Processor::ALL, NULL, 0},
+		{Token::LTEQ,"<=", 0 ,0, Processor::ALL, NULL, 0},
 		//--------------- Functions --------------
-		{Token::PROC,"PROC"},	// Proceedure Declaration
-		{Token::FUNC,"FUNC"},	//  Function Declaration
-		{Token::INTERRUPT,"INTERRUPT"},
-		{Token::PROC_IDENT,"PROC Idnet"},	//  Proceedure Declaration
-		{Token::FUNC_IDENT,"FUNC Ident"},	//  Function Declaration
-		{Token::INTERRUPT_IDENT,"INTERRUPT Indent"},
-		{Token::DECLARE,"DECLARE"},
+		{Token::PROC,"PROC", 0 ,0, Processor::ALL, NULL, 0},	// Proceedure Declaration
+		{Token::FUNC,"FUNC", 0 ,0, Processor::ALL, NULL, 0},	//  Function Declaration
+		{Token::INTERRUPT,"INTERRUPT", 0 ,0, Processor::ALL, NULL, 0},
+		{Token::PROC_IDENT,"PROC Idnet", 0 ,0, Processor::ALL, NULL, 0},	//  Proceedure Declaration
+		{Token::FUNC_IDENT,"FUNC Ident", 0 ,0, Processor::ALL, NULL, 0},	//  Function Declaration
+		{Token::INTERRUPT_IDENT,"INTERRUPT Indent", 0 ,0, Processor::ALL, NULL, 0},
+		{Token::DECLARE,"DECLARE", 0 ,0, Processor::ALL, NULL, 0},
 		//------ Data Types -----------------
-		{Token::BOOL,"BOOL"},
-		{Token::BYTE,"BYTE"},
-		{Token::CHAR,"CHAR"},
-		{Token::INT,"INT"},
-		{Token::CARD,"CARD"},
-		{Token::TYPE, "TYPE"},
-		{Token::RECORDTYPE,"Record Type (TYPE)"},
-		{Token::POINTER,"POINTER"},
-		{Token::CONST,"CONST"},
-		{Token::ARRAY,"ARRAY"},
-		{Token::VAR_GLOBAL,"VAR_GLOBAL"},
-		{Token::VAR_LOCAL,"VAR_LOCAL"},
-		{Token::VAR_PARAM,"VAR_PARAM"},
+		{Token::BOOL,"BOOL", 0 ,0, Processor::ALL, NULL, 0},
+		{Token::BYTE,"BYTE", 0 ,0, Processor::ALL, NULL, 0},
+		{Token::CHAR,"CHAR", 0 ,0, Processor::ALL, NULL, 0},
+		{Token::INT,"INT", 0 ,0, Processor::ALL, NULL, 0},
+		{Token::CARD,"CARD", 0 ,0, Processor::ALL, NULL, 0},
+		{Token::TYPE, "TYPE", 0 ,0, Processor::ALL, NULL, 0},
+		{Token::RECORDTYPE,"Record Type (TYPE)", 0 ,0, Processor::ALL, NULL, 0},
+		{Token::POINTER,"POINTER", 0 ,0, Processor::ALL, NULL, 0},
+		{Token::CONST,"CONST", 0 ,0, Processor::ALL, NULL, 0},
+		{Token::ARRAY,"ARRAY", 0 ,0, Processor::ALL, NULL, 0},
+		{Token::VAR_GLOBAL,"VAR_GLOBAL", 0 ,0, Processor::ALL, NULL, 0},
+		{Token::VAR_LOCAL,"VAR_LOCAL", 0 ,0, Processor::ALL, NULL, 0},
+		{Token::VAR_PARAM,"VAR_PARAM", 0 ,0, Processor::ALL, NULL, 0},
 	//--------- Statements --------------
-		{Token::MODULE,"MODULE"},
-		{Token::ASMMODULE,"ASMMODULE"},
-		{Token::VECTOR,"VECTOR"},
-		{Token::FOR,"FOR"},
-		{Token::TO,"TO"},
-		{Token::STEP,"STEP"},
-		{Token::IF,"IF"},
-		{Token::IFF,"IFF"},
-		{Token::THEN,"THEN"},
-		{Token::ELSEIF,"ELSEIF"},
-		{Token::ELSE,"ELSE"},
-		{Token::FI,"FI"},
-		{Token::FFI,"FFI"},
-		{Token::WHILE,"WHILE"},
-		{Token::DO,"DO"},
-		{Token::OD,"OD"},
-		{Token::UNTIL,"UNTIL"},
-		{Token::EXIT,"EXIT"},
-		{Token::RETURN,"RETURN"},
-		{Token::ASM,"ASM"},
-		{Token::PUSH,"PUSH"},
-		{Token::POP,"POP"},
-		{Token::BREAK, "BREAK"},
-		{Token::BITS,"BITS"},
-		{Token::BEGIN,"BEGIN"},
-		{Token::END, "END"},
-		//--------- Compiler Directives -----------------
-		{Token::DEFINE,"DEFINE"},
-		{Token::SET,"SET"},
-		{Token::INCLUDE,"INCLUDE"},
+		{Token::MODULE,"MODULE", 0 ,0, Processor::ALL, NULL, 0},
+		{Token::ASMMODULE,"ASMMODULE", 0 ,0, Processor::ALL, NULL, 0},
+		{Token::VECTOR,"VECTOR", 0 ,0, Processor::ALL, NULL, 0},
+		{Token::FOR,"FOR", 0 ,0, Processor::ALL, NULL, 0},
+		{Token::TO,"TO", 0 ,0, Processor::ALL, NULL, 0},
+		{Token::STEP,"STEP", 0 ,0, Processor::ALL, NULL, 0},
+		{Token::IF,"IF", 0 ,0, Processor::ALL, NULL, 0},
+		{Token::IFF,"IFF", 0 ,0, Processor::ALL, NULL, 0},
+		{Token::THEN,"THEN", 0 ,0, Processor::ALL, NULL, 0},
+		{Token::ELSEIF,"ELSEIF", 0 ,0, Processor::ALL, NULL, 0},
+		{Token::ELSE,"ELSE", 0 ,0, Processor::ALL, NULL, 0},
+		{Token::FI,"FI", 0 ,0, Processor::ALL, NULL, 0},
+		{Token::FFI,"FFI", 0 ,0, Processor::ALL, NULL, 0},
+		{Token::WHILE,"WHILE", 0 ,0, Processor::ALL, NULL, 0},
+		{Token::DO,"DO", 0 ,0, Processor::ALL, NULL, 0},
+		{Token::OD,"OD", 0 ,0, Processor::ALL, NULL, 0},
+		{Token::UNTIL,"UNTIL", 0 ,0, Processor::ALL, NULL, 0},
+		{Token::EXIT,"EXIT", 0 ,0, Processor::ALL, NULL, 0},
+		{Token::RETURN,"RETURN", 0 ,0, Processor::ALL, NULL, 0},
+		{Token::ASM,"ASM", 0 ,0, Processor::ALL, NULL, 0},
+		{Token::PUSH,"PUSH", 0 ,0, Processor::ALL, NULL, 0},
+		{Token::POP,"POP", 0 ,0, Processor::ALL, NULL, 0},
+		{Token::BREAK, "BREAK", 0 ,0, Processor::ALL, NULL, 0},
+		{Token::BITS,"BITS", 0 ,0, Processor::ALL, NULL, 0},
+		{Token::BEGIN,"BEGIN", 0 ,0, Processor::ALL, NULL, 0},
+		{Token::END, "END", 0 ,0, Processor::ALL, NULL, 0},
 		//---------------------------------
 		// Assembler Tokens
 		//---------------------------------
-		//--------- Section ------------
-		{Token::SECTION,"SECTION", 0,0, Processor::ALL,NULL,0},
-		{Token::SECTION_NAME,"SECTION NAME", 0,0, Processor::ALL,NULL,0},
-		{Token::START,"START", 0,0,Processor::ALL,NULL,0},
-		{Token::SIZE,"SIZE", 0,0,Processor::ALL,NULL,0},
-		{Token::NAME,"NAME", 0,0,Processor::ALL,NULL,0},
-		{Token::MODE,"MODE", 0,0,Processor::ALL,NULL,0},
-		{Token::READ_WRTE,"READ_WRITE", 0,0,Processor::ALL,NULL,0},
-		{Token::READ_ONLY,"READ_ONLY", 0,0,Processor::ALL,NULL,0},
-		{Token::ZEROPAGE,"ZEROPAGE", 0},
-		{Token::TRUE,"TRUE", 0},
-		{Token::FALSE,"FALSE", 0},
 		//----- Assembler Declarations
 		{Token::ORG,"ORG", 0,0, Processor::ALL,NULL,0},
 		{Token::DB,"DB", 0,0, Processor::ALL,NULL,0},
@@ -372,33 +354,33 @@ private:
 		//----------------------------------
 		// Misc
 		//----------------------------------
-		{ Token::EPROC,"EPROC", 0 },
-		{Token::CHAR_CONSTANT,"Character Constant"},
-		{ Token('('),"(", 0 },
-		{ Token(')'),")", 0 },
-		{ Token('{'),"{", 0 },
-		{ Token('}'),"}", 0 },
-		{ Token('['),"[", 0 },
-		{ Token(']'),"]", 0 },
-		{ Token('<'),"<", 0 },
-		{ Token('>'),">", 0 },
-		{ Token('!'),"!", 0 },
-		{ Token('@'),"@", 0 },
-		{ Token('#'),"#", 0 },
-		{ Token('$'),"$", 0 },
-		{ Token('%'),"%", 0 },
-		{ Token('^'),"^", 0 },
-		{ Token('&'),"&", 0 },
-		{ Token('*'),"*", 0 },
-		{ Token('-'),"-", 0 },
-		{ Token('='),"=", 0 },
-		{ Token('+'),"+", 0 },
-		{ Token(','),",", 0 },
-		{ Token('.'),".", 0 },
-		{ Token('/'),"/", 0 },
-		{ Token('?'),"?", 0 },
-		{ Token('~'),"~", 0 },
-		{Token::ENDOFTOKENS,NULL}
+		{ Token::EPROC,"EPROC", 0 ,0, Processor::ALL,NULL,0 },
+		{Token::CHAR_CONSTANT,"Character Constant", 0,0, Processor::ALL,NULL,0 },
+		{ Token('('),"(", 0,0, Processor::ALL,NULL,0 },
+		{ Token(')'),")", 0 ,0, Processor::ALL,NULL,0 },
+		{ Token('{'),"{", 0 ,0, Processor::ALL,NULL,0 },
+		{ Token('}'),"}", 0 ,0, Processor::ALL,NULL,0 },
+		{ Token('['),"[", 0 ,0, Processor::ALL,NULL,0 },
+		{ Token(']'),"]", 0 ,0, Processor::ALL,NULL,0 },
+		{ Token('<'),"<", 0 ,0, Processor::ALL,NULL,0 },
+		{ Token('>'),">", 0 ,0, Processor::ALL,NULL,0 },
+		{ Token('!'),"!", 0 ,0, Processor::ALL,NULL,0 },
+		{ Token('@'),"@", 0 ,0, Processor::ALL,NULL,0 },
+		{ Token('#'),"#", 0 ,0, Processor::ALL,NULL,0 },
+		{ Token('$'),"$", 0 ,0, Processor::ALL,NULL,0 },
+		{ Token('%'),"%", 0 ,0, Processor::ALL,NULL,0 },
+		{ Token('^'),"^", 0 ,0, Processor::ALL,NULL,0 },
+		{ Token('&'),"&", 0 ,0, Processor::ALL,NULL,0 },
+		{ Token('*'),"*", 0 ,0, Processor::ALL,NULL,0 },
+		{ Token('-'),"-", 0 ,0, Processor::ALL,NULL,0 },
+		{ Token('='),"=", 0 ,0, Processor::ALL,NULL,0 },
+		{ Token('+'),"+", 0 ,0, Processor::ALL,NULL,0 },
+		{ Token(','),",", 0 ,0, Processor::ALL,NULL,0 },
+		{ Token('.'),".", 0 ,0, Processor::ALL,NULL,0 },
+		{ Token('/'),"/", 0 ,0, Processor::ALL,NULL,0 },
+		{ Token('?'),"?", 0 ,0, Processor::ALL,NULL,0 },
+		{ Token('~'),"~", 0 ,0, Processor::ALL,NULL,0 },
+		{Token::ENDOFTOKENS,NULL, 0,0, Processor::ALL,NULL,0 }
 	};
 	CSymTab m_SymbolTable;
 	int m_UngetBuffer;
@@ -408,10 +390,8 @@ private:
 	int m_Col;
 	int m_LexValue;
 	CSymbol* m_pLexSymbol;
-	char* m_pFileBuffeer;	// Buffer the source file is stored in
-	int m_InFileSize;	// Size of the buffer
-	int m_FileIndex;	// Current index into file buffer
 	bool m_bAsmMode;
+	CPreProcessor m_PreProc;
 public:
 	CLexer();
 	virtual ~CLexer();
@@ -444,16 +424,29 @@ public:
 	int LookupOpcode(Token OpcodeToken);
 	int MakeOpcode(Token OpCodeToken, AdrModeType AddressMode);
 	int GetOpcode(Token OpCodeToken);
-	const char* LookupToName(Token Toke);
-	KeyWord* GetKeyWords() { return KeyWords; }
+	const char* LookupToString(Token Toke)
+	{
+		return KeyWord::LookupToString(Toke);
+	}
+	Token LookupToToken(const char* pName)
+	{
+		return KeyWord::LookupToToken(pName);
+	}
+	static KeyWord* GetKeyWords() { return KeyWordsLUT; }
 	//--------------------------------------
 	// Symbol Methods
 	//--------------------------------------
 	CSymbol* GetLexSymbol() { return m_pLexSymbol; }
 	CSection* GetLexSection() { return (CSection*)m_pLexSymbol; }
 	int GetLexValue() { return m_LexValue; }
-	char* GetLexBuffer() { return m_aLexBuff; }
+	char* GetLexBuffer() { 
+		return m_aLexBuff; 
+	}
 	int GetLineNumber() { return m_Line; }
 	int GetColunm() { return m_Col; }
+	CPreProcessor* GetPreProc() {
+		return &m_PreProc;
+	}
+	int IncFileIndex(int n) { return m_PreProc.IncFileIndex(n); }
 };
 

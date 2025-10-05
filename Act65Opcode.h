@@ -68,7 +68,6 @@ public:
 		CSection* pSection,
 		CValue* pLabel = 0
 	);
-	int SaveInstruction(char* pM);
 	//-----------------------------
 	// Setter/Getter Methods
 	//-----------------------------
@@ -76,7 +75,6 @@ public:
 	void SetInstructionAddress(int Adr);
 	Token GetToken() const { return m_OpcodeToken; }
 	void SetToken(Token t) { m_OpcodeToken = t; }
-	const char* GetOpcodeName();
 	int GetLineNumber() const  { return m_LineNumber; }
 	void SetLineNumber(int n) { m_LineNumber = n; }
 	int GetColumnNumber() const { return m_ColumnNumber; }

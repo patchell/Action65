@@ -6,6 +6,12 @@ CStackItem::CStackItem()
 	m_Type = ItemType::NONE;
 }
 
+CStackItem::CStackItem(ItemType Type)
+{
+	m_pNext = 0;
+	m_Type = Type;
+}
+
 CStackItem::~CStackItem()
 {
 }

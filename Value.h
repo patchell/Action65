@@ -88,7 +88,7 @@ private:
 	UpperLower m_UpperLOwer;
 	CReg* m_pReg;
 	CVirtualReg::VREG* m_pVirtualReg;
-	CTypeChain m_AltTypeChain;
+	CChainType m_AltTypeChain;
 public:
 	CValue();
 	virtual ~CValue();
@@ -102,8 +102,8 @@ public:
 	CReg* GetRegister() { return m_pReg; }
 	CVirtualReg::VREG* GetVirtualReg() { return m_pVirtualReg; }
 	CSymbol* GetSymbol();
-	CTypeChain* GetTypeChain();
-	void SetTypeChain(CTypeChain* pTC);
+	CChainType* GetTypeChain();
+	void SetTypeChain(CChain* pTC);
 	char* GetName();
 	int GetConstVal();
 	void SetConstVal(int v) {

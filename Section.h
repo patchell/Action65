@@ -48,6 +48,7 @@ public:
 	CSection();
 	virtual ~CSection();
 	bool Create();
+	virtual bool Compare(const char* name, BinType Type = BinType::ANY, int aux = 0);
 	CSection* GetNextSection() { return m_pNextSection; }
 	void SetNextSection(CSection* pN) { m_pNextSection = pN; }
 	CSection* GetPrevSection() { return m_pPrevSection; }
@@ -81,7 +82,6 @@ public:
 	virtual void Print(FILE* pOut, const char* s = 0);
 	void Dump(FILE* pOut, const char* s = 0);
 	void Info();
-	bool Compare(const char* name, int scope);
 	bool IsPageZero() const {
 		bool rV = false;
 

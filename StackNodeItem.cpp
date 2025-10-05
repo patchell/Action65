@@ -1,6 +1,6 @@
 #include "pch.h"
 
-CStackNodeItem::CStackNodeItem()
+CStackNodeItem::CStackNodeItem() :CStackItem(CStackItem::ItemType::NODE)
 {
 	m_pAstNode = 0;
 }

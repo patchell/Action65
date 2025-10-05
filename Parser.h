@@ -111,12 +111,6 @@ private:
 	//---------------------------------
 	CAstNode*  Action65();
 	CAstNode*  Modules();
-	//---------------------------------
-	// SET
-	//---------------------------------
-	CAstNode*  Set();
-	void SetObjects();
-	void SetSectionName();
 	//------------------------------------------
 	// Statements
 	//------------------------------------------
@@ -200,13 +194,6 @@ private:
 	CAstNode*  VectorEnd();
 	CAstNode*  AddressEnd();
 	CAstNode*  VectorAddress();
-	//------------------------------------------
-	// DEFINE
-	//------------------------------------------
-	CAstNode*  Define();
-	CAstNode*  DefObject();
-	CAstNode*  DefList();
-	CAstNode*  Def();
 	//--------------------------------------
 	// TYPEdef Definition
 	//--------------------------------------
@@ -218,36 +205,36 @@ private:
 	CAstNode*  Declare();
 	void DECLAREnd();
 	void DECLAREParamList();
-	void DECLAREParamTypeSpec(CTypeChain* pTypeChain);
-	void DECLAREParamIdentList(CTypeChain* pTypeChain);
-	void DECLAREParamIdent(CTypeChain* pTypeChain);
+	void DECLAREParamTypeSpec(CChainType* pTypeChain);
+	void DECLAREParamIdentList(CChainType* pTypeChain);
+	void DECLAREParamIdent(CChainType* pTypeChain);
 	//-------------------
 	void DECLAREFuncType(void);
-	void DECLAREFuncTypeSpec(CTypeChain* pTypeChain);
-	void  DECLAREfunction(CTypeChain* pTypeChain);
-	void DECLAREFuncName(CTypeChain* pTypeChain);
+	void DECLAREFuncTypeSpec(CChainType* pTypeChain);
+	void  DECLAREfunction(CChainType* pTypeChain);
+	void DECLAREFuncName(CChainType* pTypeChain);
 	// ---------------------------------------
 	// Fundamental Declarations
 	//----------------------------------------
-	CAstNode*  FundDecl();
-	CAstNode*  FundTypeSpec(CTypeChain* pTC);
+	CAstNode* FundamentalDecl();
+	CAstNode*  FundTypeSpec(CChainType* pTypeChain);
 	//----------------------------------
 	// Identifiers
 	//----------------------------------
-	CAstNode*  IdentList(CTypeChain* pTC);
-	CAstNode*  Ident( CTypeChain* pTC);
+	CAstNode*  IdentList(CChainType* pTypeChain);
+	CAstNode*  Ident( CChainType* pTypeChain);
 	CAstNode*  IdentInitType();
 	CAstNode*  InitData();
 	//------------------
-	CAstNode*  IrqDecl(CTypeChain* pTypeChain);
+	CAstNode*  IrqDecl(CChainType* pTypeChain);
 	CAstNode*  IrqDeclParams();
 	CAstNode*  IrqBody();
 	//------------------
-	CAstNode*  ProcDecl(CTypeChain* pTypeChain);
+	CAstNode*  ProcDecl(CChainType* pTypeChain);
 	CAstNode*  ProcDeclParams(CSymbol* pFuncSym);
 	CAstNode*  ProcBody();
 	//------------------
-	CAstNode*  FuncDecl(CTypeChain* pTypeChain);
+	CAstNode*  FuncDecl(CChainType* pTypeChain);
 	CAstNode*  FuncDeclParams(CSymbol* pFuncSym);
 	CAstNode*  FuncBody();
 	//------------------
@@ -256,9 +243,9 @@ private:
 	// Parameter Declarations
 	//-------------------------------------------
 	CAstNode*  ParamList(CSymbol* pFuncSym);
-	CAstNode*  ParamTypeSpec(CTypeChain* pTypeChain, CSymbol* pFuncSym);
-	CAstNode*  DefineParamIdentList(CTypeChain* pTypeChain, CSymbol* pFuncSym);
-	CAstNode*  DefineParamIdent(CTypeChain* pTypeChain, CSymbol* pFuncSym);
+	CAstNode*  ParamTypeSpec(CChainType* pTypeChain, CSymbol* pFuncSym);
+	CAstNode*  DefineParamIdentList(CChainType* pTypeChain, CSymbol* pFuncSym);
+	CAstNode*  DefineParamIdent(CChainType* pTypeChain, CSymbol* pFuncSym);
 	//-----------------------------------------------
 	// TYPE field members
 	//-----------------------------------------------
@@ -268,7 +255,7 @@ private:
 	//-----------------------------------------------
 	CAstNode*  LocalDecls();
 	CAstNode*  LocalVarDecls();
-	CAstNode*  LocalTypeSpec(CTypeChain* pTypeChain);
+	CAstNode*  LocalTypeSpec(CChainType* pTypeChain);
 	//-------------------------------
 	// Compiler Constants
 	//-------------------------------
@@ -282,35 +269,20 @@ private:
 	//	Statements
 	//----------------------------------------
 	//****************************************
-	CAstNode*  AsmStmt();
-	CAstNode*  ProcessorType();
 	//-----------------------------------------
 	// Code
 	//		These statements are what actually
 	// do something that concerns the machine
 	// code that is executed
 	//-----------------------------------------
-
-	//-----------------------------------------
-	// SET
-	//-----------------------------------------
-	CAstNode*  AsmSet();
-	CAstNode*  AsmSetObjects();
-	CSection*  AsmSectionName();
-	//-----------------------------------------
-	// SECITON
-	//-----------------------------------------
-	CAstNode*  Section();
-	void  SectionName(CSection* pSection);
-	void  SectionDef(CSection* pSection);
-	void SectionAtributes(CSection* pSection);
-	CSection::Mode Modes();
-	CSection::AddressSize  SectionAddressSize();
 	//----------------------------
 	// Code Statements
 	//----------------------------
-//	CAstNode* AsmStatements();
+	//	CAstNode* AsmStatements();
 	//----IFF-------------
+	// AsmStmt is the start of
+	// IFFend
+	//------------------------------
 	CAstNode* IFFend();
 	CAstNode* IFFthenpart();;
 	CAstNode* IffRelOper();;

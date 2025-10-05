@@ -21,8 +21,8 @@ public:
 	bool Create(int TableDepth);
 	int GetSectionCount() const { return m_SectionSymbolCount; }
 	int GetSymbolCount() const { return m_GeneralSymbolCount; }
-	virtual CBin* FindSymbol(const char* name, int scope);
-	virtual void AddSymbol(CBin* pSym);
+	virtual CBin* FindSymbol(const char* name, CBin::BinType Type, int scope);
+	virtual void AddSymbol(CBin* pSym, CBin::BinType SymBin, int Scope = SYMBOL_SCOPE_ANY);
 	virtual void DelSymbol(CBin* pSym);
 	virtual void PrintTable(FILE* pOut);
 	int GetNumElements() const { return m_nElements; }

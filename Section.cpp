@@ -25,6 +25,21 @@ bool CSection::Create()
 	return rV;
 }
 
+bool CSection::Compare(const char* name, BinType Type, int aux)
+{
+	bool rV = false;
+
+	if (strcmp(name, GetName()) == 0)
+	{
+		if (Type == BinType::ANY || Type == BinType::SECTION)
+		{
+			if(aux == 0 || aux == GetScope())
+				rV = true;
+		}
+	}
+	return rV;
+}
+
 void CSection::SetStartAddress(int Start)
 {
 	if ((Start + m_Size) <= 0x010000u)
@@ -298,21 +313,18 @@ int CSection::AddInstruction(CInstruction* pInstruction)
 	pInstruction->SetAddress(m_LocationCounter);
 	if(pInstruction->GetAdrMode() == AdrModeType::NA)
 	{
-		printf("Opps\n");
+		printf("Oops\n");
 	}
 	switch(pInstruction->GetNumBytes())
 	{
 	case 1:
-		NextAddress = AddData(1, pInstruction->GetData(0), pInstruction->GetLabel());
+		IncrementLocationCounterBy(1);
 		break;
 	case 2:
-		AddData(1, pInstruction->GetData(0), pInstruction->GetLabel());
-		NextAddress = AddData(1, pInstruction->GetData(1));
+		IncrementLocationCounterBy(2);
 		break;
 	case 3:
-		AddData(1, pInstruction->GetData(0), pInstruction->GetLabel());
-		AddData(1, pInstruction->GetData(1));
-		NextAddress = AddData(1, pInstruction->GetData(2));
+		IncrementLocationCounterBy(3);
 		break;
 	}
 	GetInstructionsChain()->AddToTail(pInsChainItem);
@@ -403,24 +415,6 @@ void CSection::Info()
 	//);
 }
 
-bool CSection::Compare(const char* name, int scope)
-{
-	bool rV = false;
-
-	if (strcmp(GetName(), name) == 0)
-	{
-		rV = true;
-		//if (scope > 0)
-		//{
-		//	if (scope == GetScope())
-		//		rV = true;
-		//}
-		//else
-		//	rV = true;
-	}
-	return rV;
-}
-
 void CSection::EmitListing()
 {
 	CChainInstruction* pInsChainItem = (CChainInstruction*)m_Instructions.GetHead();
@@ -433,4 +427,33 @@ void CSection::EmitListing()
 
 void CSection::EmitBinary()
 {
+	CInstruction* pIns = 0;
+	CChainItem* pItem = m_Instructions.GetHead();
+
+	while (pItem)
+	{
+		switch (pItem->GetItemType())
+		{
+		case CChainItem::ChainItemType::INSTRUCTION:
+			pIns = ((CChainInstruction*)pItem)->GetInstruction();
+			if (pIns)
+			{
+//				Add()
+			}
+			break;
+		case CChainItem::ChainItemType::VALUE:
+			break;
+		case CChainItem::ChainItemType::BIN:
+			break;
+		case CChainItem::ChainItemType::PARAMETER:
+			break;
+		case CChainItem::ChainItemType::TYPE:
+			break;
+		case CChainItem::ChainItemType::SYMBOL_USED:
+			break;
+		default:
+			break;
+		}
+		pItem = pItem->GetNext();
+	}
 }

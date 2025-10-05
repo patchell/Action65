@@ -1,6 +1,6 @@
 #include "pch.h"
 
-CStackDOODItem::CStackDOODItem()
+CStackDOODItem::CStackDOODItem() :CStackItem(CStackItem::ItemType::DOOD)
 {
 	m_pLabelValue = 0;
 }

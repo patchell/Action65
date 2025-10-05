@@ -2,10 +2,75 @@
 
 CChain::CChain()
 {
+	m_pHead = 0;
+	m_pTail = 0;
+	m_ChainType = ChainType::NONE;
+}
+
+CChain::CChain(ChainType T)
+{
+	m_pHead = 0;
+	m_pTail = 0;
+	m_ChainType = T;
 }
 
 CChain::~CChain()
 {
+}
+
+bool CChain::Create()
+{
+	return true;
+}
+
+void CChain::Copy(CChain* pC)
+{
+	if (pC)
+	{
+		CChainItem* pItem = pC->GetHead();
+		while (pItem)
+		{
+			CChainItem* pNewItem = 0;
+			if (pItem->Is(CChainItem::ChainItemType::INSTRUCTION))
+			{
+				pNewItem = new CChainInstruction();
+			}
+			else if (pItem->Is(CChainItem::ChainItemType::VALUE))
+			{
+				pNewItem = new CChainValueItem;
+			}
+			else if (pItem->Is(CChainItem::ChainItemType::BIN))
+			{
+				pNewItem = new CChainBinItem();
+			}
+			else if (pItem->Is(CChainItem::ChainItemType::PARAMETER))
+			{
+				pNewItem = new CChainParameterItem();
+			}
+			else if (pItem->Is(CChainItem::ChainItemType::TYPE))
+			{
+				pNewItem = new CChainTypeObject();
+			}
+			else if (pItem->Is(CChainItem::ChainItemType::SYMBOL_USED))
+			{
+				pNewItem = new CChainSymUsed();
+			}
+			if (pNewItem)
+			{
+				if (pNewItem->Create())
+				{
+					pNewItem->Copy(pItem);
+					AddToTail(pNewItem);
+				}
+				else
+				{
+					delete pNewItem;
+					pNewItem = 0;
+				}
+			}
+			pItem = pItem->GetNext();
+		}
+	}
 }
 
 void CChain::AddToTail(CChainItem* pItem)
@@ -73,4 +138,45 @@ CChainItem* CChain::FindItem(const char* pName)
 			pChainItem = pChainItem->GetNext();
 	}
 	return pChainItem;
+}
+
+CChain::ChainType CChain::LookupType(const char* pName)
+{
+	ChainType rV = ChainType::NONE;
+
+    for (int i = 0; TypeItemLUT[i].m_pName && !bool(rV); ++i)
+    {
+		if (strcmp(TypeItemLUT[i].m_pName, pName) == 0)
+            rV = TypeItemLUT[i].m_Type;
+    }
+    return rV;
+}
+
+const char* CChain::FindTypeName(ChainType T) const
+{
+	const char* rV = nullptr;
+
+    for (int i = 0;TypeItemLUT[i].m_pName && !rV; ++i)
+    {
+        if (TypeItemLUT[i].m_Type == T)
+            rV = TypeItemLUT[i].m_pName;
+    }
+    return rV;
+}
+
+int CChain::Print(char* pSO, int l, int Indent, const char* s)
+{
+	int ls = 0;
+	CChainItem* pItem = GetHead();
+	if (s)
+	{
+		ls += sprintf_s(&pSO[ls], l - ls, "Head:%s", s);
+	}
+	while (pItem)
+	{
+		int size = l - ls;
+		ls += pItem->Print(&pSO[ls], size, Indent+2, "");
+		pItem = pItem->GetNext();
+	}
+	return ls;
 }

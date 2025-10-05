@@ -57,6 +57,17 @@ CSymTab::~CSymTab()
 bool CSymTab::Create(int TableDepth)
 {
 	m_ppTab = new CBucket * [TableDepth];
+	if (m_ppTab == 0)
+	{
+		ThrownException.SetXCeptType(Exception::ExceptionType::INIT_SYMTAB);
+		sprintf_s(
+			ThrownException.GetErrorString(),
+			ThrownException.GetMaxStringLen(),
+			"Memory Error:Could not Create Symbol Table\n"
+		);
+		throw(ThrownException);
+
+	}
 	m_tSize = TableDepth;
 	for (int i = 0; i < m_tSize; ++i)
 		m_ppTab[i] = 0;
@@ -72,13 +83,13 @@ bool CSymTab::Create(int TableDepth)
 //
 //******************************************************
 
-CBin* CSymTab::FindSymbol(const char* name, int scope)
+CBin* CSymTab::FindSymbol(const char* name, CBin::BinType Type, int scope)
 {
 	CBin* pRV = NULL;
 
 	int Index = Hash(name);	//get index from hash of name
 	if(m_ppTab[Index] != 0)
-		pRV = m_ppTab[Index]->Find(name, scope);
+		pRV = m_ppTab[Index]->Find(name, Type, scope);
 	return pRV;
 }
 
@@ -90,12 +101,16 @@ CBin* CSymTab::FindSymbol(const char* name, int scope)
 //
 //***********************************************************
 
-void CSymTab::AddSymbol(CBin* pSym)
+void CSymTab::AddSymbol(CBin* pSym, CBin::BinType SymBin, int Scope)
 {
 	int Index = Hash(pSym->GetName());	//generate index
 	CBin* pSymbol = 0;
 
-	pSymbol = FindSymbol(pSym->GetName(), 0);
+	pSymbol = FindSymbol(
+		pSym->GetName(), 
+		SymBin,
+		Scope
+	);
 	if (pSymbol == 0)
 	{
 		Index = Hash(pSym->GetName());	//generate HASH index
@@ -208,7 +223,7 @@ void CSymTab::PrintTable(FILE* pOut)
 			pSym = m_ppTab[i]->GetHead();
 		while (pSym)
 		{
-			pSym->Print(pOut);
+//			pSym->Print(pOut);
 			pSym = pSym->GetNext();
 		}
 	}

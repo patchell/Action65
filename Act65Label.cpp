@@ -42,25 +42,29 @@ int CAct65Label::Print(int Indent, char* s, int Strlen, bool* pbNextFlag)
 {
 	int l = 0;
 	int Size;
+	CSymbol* pSym = 0;
+	CChainBinItem* pCBI = 0;
+	CChainInstruction* pCInstr = 0;
+	CChainValueItem* pCVI = 0;
 
 	l = CAstNode::Print(Indent, s, Strlen, pbNextFlag);
 	Size = Strlen - l;
+	pSym = (CSymbol*)GetSymbol();
 	l += sprintf_s(&s[l], Size, " \'%s\'", 
-		GetSymbol()->GetName()
+		pSym->GetName()
 	);
 	if (GetHead())	//print where the symbol is used
 	{
-		CWhereSymbolIsUsed* pWSIU = 0;
-
-		pWSIU = (CWhereSymbolIsUsed*)GetHead();
-		while (pWSIU)
+		CChain* pWhereIsItUsed = pSym->GetWhereUsed();
+		CChainItem* pCI = pWhereIsItUsed->GetHead();
+		while (pCI)
 		{
 			Size = Strlen - l;
 			l += sprintf_s(&s[l], Size, "\t\t");
 			Size = Strlen - l;
-			l += pWSIU->Print(&s[l], Size, 0);
-			pWSIU = (CWhereSymbolIsUsed*)pWSIU->GetNext();
-			if (pWSIU)
+			l += pCI->Print(&s[l], Size, 0);
+			pCI = pCI->GetNext();
+			if (pCI)
 			{
 				Size = Strlen - l;
 				l += sprintf_s(&s[l], Size, "\n");

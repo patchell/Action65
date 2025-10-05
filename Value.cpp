@@ -106,9 +106,9 @@ CSymbol* CValue::GetSymbol()
 	return pSym;
 }
 
-CTypeChain* CValue::GetTypeChain()
+CChainType* CValue::GetTypeChain()
 {
-	CTypeChain* pTC = 0;
+	CChainType* pTC = 0;
 
 	switch (m_ValType)
 	{
@@ -127,7 +127,7 @@ CTypeChain* CValue::GetTypeChain()
 	return pTC;
 }
 
-void CValue::SetTypeChain(CTypeChain* pTC)
+void CValue::SetTypeChain(CChain* pTC)
 {
 	switch (GetValueType())
 	{
@@ -355,12 +355,12 @@ bool CValue::IsPageZero()
 int CValue::SizeOf()
 {
 	int rV = 0;
-	CTypeChain* pTypeChain = 0;
+	CChainType* pTypeChain = 0;
 
 	pTypeChain = GetTypeChain();
 	if (!pTypeChain)
 		printf("Oh-Oh\n");
-	if (pTypeChain->Is(CObjTypeChain::Spec::POINTER))
+	if (pTypeChain->Is(CChainTypeObject::Spec::POINTER))
 		rV = 2;
 	else if (pTypeChain->IsByte())
 		rV = 1;

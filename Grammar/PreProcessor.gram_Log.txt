@@ -1,0 +1,99 @@
+???????? $ Nullable Set(0)
+TERMINALS['Terminals'] { 'STRING' }
+FIRST['STRING'] { 'STRING' }
+TERMINALS['Terminals'] { 'STRING','NUMBER' }
+FIRST['NUMBER'] { 'NUMBER' }
+TERMINALS['Terminals'] { 'STRING','NUMBER','SET' }
+FIRST['SET'] { 'SET' }
+TERMINALS['Terminals'] { 'STRING','NUMBER','SET','DEFINE' }
+FIRST['DEFINE'] { 'DEFINE' }
+TERMINALS['Terminals'] { 'STRING','NUMBER','SET','DEFINE','SECTION' }
+FIRST['SECTION'] { 'SECTION' }
+TERMINALS['Terminals'] { 'STRING','NUMBER','SET','DEFINE','SECTION','START' }
+FIRST['START'] { 'START' }
+TERMINALS['Terminals'] { 'STRING','NUMBER','SET','DEFINE','SECTION','START','SIZE' }
+FIRST['SIZE'] { 'SIZE' }
+TERMINALS['Terminals'] { 'STRING','NUMBER','SET','DEFINE','SECTION','START','SIZE','MODE'
+ }
+FIRST['MODE'] { 'MODE' }
+TERMINALS['Terminals'] { 'STRING','NUMBER','SET','DEFINE','SECTION','START','SIZE','MODE'
+,'PAGEZERO' }
+FIRST['PAGEZERO'] { 'PAGEZERO' }
+TERMINALS['Terminals'] { 'STRING','NUMBER','SET','DEFINE','SECTION','START','SIZE','MODE'
+,'PAGEZERO','READ_ONLY' }
+FIRST['READ_ONLY'] { 'READ_ONLY' }
+TERMINALS['Terminals'] { 'STRING','NUMBER','SET','DEFINE','SECTION','START','SIZE','MODE'
+,'PAGEZERO','READ_ONLY','READ_WRITE' }
+FIRST['READ_WRITE'] { 'READ_WRITE' }
+TERMINALS['Terminals'] { 'STRING','NUMBER','SET','DEFINE','SECTION','START','SIZE','MODE'
+,'PAGEZERO','READ_ONLY','READ_WRITE','TRUE' }
+FIRST['TRUE'] { 'TRUE' }
+TERMINALS['Terminals'] { 'STRING','NUMBER','SET','DEFINE','SECTION','START','SIZE','MODE'
+,'PAGEZERO','READ_ONLY','READ_WRITE','TRUE','FALSE' }
+FIRST['FALSE'] { 'FALSE' }
+TERMINALS['Terminals'] { 'STRING','NUMBER','SET','DEFINE','SECTION','START','SIZE','MODE'
+,'PAGEZERO','READ_ONLY','READ_WRITE','TRUE','FALSE','PROCESSOR' }
+FIRST['PROCESSOR'] { 'PROCESSOR' }
+TERMINALS['Terminals'] { 'STRING','NUMBER','SET','DEFINE','SECTION','START','SIZE','MODE'
+,'PAGEZERO','READ_ONLY','READ_WRITE','TRUE','FALSE','PROCESSOR','R6502' }
+FIRST['R6502'] { 'R6502' }
+TERMINALS['Terminals'] { 'STRING','NUMBER','SET','DEFINE','SECTION','START','SIZE','MODE'
+,'PAGEZERO','READ_ONLY','READ_WRITE','TRUE','FALSE','PROCESSOR','R6502','WD65C02'
+ }
+FIRST['WD65C02'] { 'WD65C02' }
+TERMINALS['Terminals'] { 'STRING','NUMBER','SET','DEFINE','SECTION','START','SIZE','MODE'
+,'PAGEZERO','READ_ONLY','READ_WRITE','TRUE','FALSE','PROCESSOR','R6502','WD65C02'
+,'WD65C816' }
+FIRST['WD65C816'] { 'WD65C816' }
+TERMINALS['Terminals'] { 'STRING','NUMBER','SET','DEFINE','SECTION','START','SIZE','MODE'
+,'PAGEZERO','READ_ONLY','READ_WRITE','TRUE','FALSE','PROCESSOR','R6502','WD65C02'
+,'WD65C816','IDENT' }
+FIRST['IDENT'] { 'IDENT' }
+TERMINALS['Terminals'] { 'STRING','NUMBER','SET','DEFINE','SECTION','START','SIZE','MODE'
+,'PAGEZERO','READ_ONLY','READ_WRITE','TRUE','FALSE','PROCESSOR','R6502','WD65C02'
+,'WD65C816','IDENT','[',']','=',',','e','$' }
+NONTERMINALS['Non Terminals'] { 'Set','Set_1','SetObjects','Define','DefObject','DefObject_1'
+,'SectionName','SectionName_1','SectionDef','SectionAtributes','Modes','AddressSize'
+,'DefList','DefList_1','Def','Def_1','ProcessorType' }
+*********** Build Nullable Set **********
+****************Create NOT nullable set ************************
+----- Calc First Sets------
+FIRST['Set'] { 'e','DEFINE' }
+FIRST['Set_1'] { 'SET','e' }
+FIRST['SetObjects'] { 'SECTION','PROCESSOR','e' }
+FIRST['Define'] { 'DEFINE','e' }
+FIRST['DefObject'] { 'IDENT' }
+FIRST['DefObject_1'] { 'SECTION','e' }
+FIRST['SectionName'] { 'e','[',']' }
+FIRST['SectionName_1'] { 'STRING','e' }
+FIRST['SectionDef'] { '[',']','e' }
+FIRST['SectionAtributes'] { 'START','SIZE','MODE','PAGEZERO',']',',' }
+FIRST['Modes'] { 'READ_ONLY','READ_WRITE' }
+FIRST['AddressSize'] { 'TRUE','FALSE' }
+FIRST['DefList'] { 'IDENT' }
+FIRST['DefList_1'] { ',','e' }
+FIRST['Def'] { 'IDENT' }
+FIRST['Def_1'] { '=','IDENT','e' }
+FIRST['ProcessorType'] { 'R6502','WD65C02','WD65C816' }
+----- Calc Follow Sets------
+------------ Follow Sets ---------------
+FOLLOW['Set'] { '$' }
+FOLLOW['Set_1'] { '$' }
+FOLLOW['SetObjects'] { }
+FOLLOW['Define'] { 'SET','$' }
+FOLLOW['DefObject'] { 'DEFINE','SET','$' }
+FOLLOW['DefObject_1'] { 'DEFINE','SET','$' }
+FOLLOW['SectionName'] { }
+FOLLOW['SectionName_1'] { }
+FOLLOW['SectionDef'] { 'STRING' }
+FOLLOW['SectionAtributes'] { }
+FOLLOW['Modes'] { 'START','SIZE','MODE','PAGEZERO',']',',' }
+FOLLOW['AddressSize'] { 'START','SIZE','MODE','PAGEZERO',']',',' }
+FOLLOW['DefList'] { 'SECTION','DEFINE','SET','$' }
+FOLLOW['DefList_1'] { 'SECTION','DEFINE','SET','$' }
+FOLLOW['Def'] { ',','SECTION','DEFINE','SET','$' }
+FOLLOW['Def_1'] { }
+FOLLOW['ProcessorType'] { }
+---------------- Create Parse Table --------------
+Table Entries = 52
+------------ Check For Conflicts-------------

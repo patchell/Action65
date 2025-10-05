@@ -1,6 +1,6 @@
 #include "pch.h"
 
-CChainInstruction::CChainInstruction()
+CChainInstruction::CChainInstruction() :CChainItem(ChainItemType::INSTRUCTION)
 {
 	m_pInstruction = 0;
 }
@@ -13,6 +13,14 @@ bool CChainInstruction::Create(CInstruction* pInstruction)
 {
 	m_pInstruction = pInstruction;
 	return true;
+}
+
+void CChainInstruction::Copy(CChainItem* pI)
+{
+	if (pI && (pI->Is(CChainItem::ChainItemType::INSTRUCTION)))
+	{
+		m_pInstruction = ((CChainInstruction*)pI)->m_pInstruction;
+	}
 }
 
 bool CChainInstruction::Compare(const char* pName)

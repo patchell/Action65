@@ -53,5 +53,7 @@ public:
 	int GetAddress() const { return m_Address; }
 	void EmitListing();
 	char* GenOperand(char* s, int n);
+	virtual int Print(char* pSO, int l, int Indent, const char* s);
+
 };
 

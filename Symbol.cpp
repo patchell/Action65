@@ -2,30 +2,29 @@
 
 CSymbol::CSymbol() : CBin(CBin::BinType::SYMBOL)
 {
+	m_bDefined = false;
 	m_Address = 0;
-	m_Scope = SYMBOL_SCOPE_ANY;
 	m_pSection = 0;
 	m_UnResolved = true;
 	m_pTypeChain = 0;
 	m_pParamChain = 0;
 	m_pTypeDefChain = 0;
-	m_pLocalVariables = 0;	//list of local variables
+	m_pLocalVariablesChain = 0;	//list of local variables
 }
 
-bool CSymbol::Compare(const char* name, int scope)
+bool CSymbol::Compare(const char* name, BinType Type, int scope)
 {
 	bool rV = false;
 
 	if (strcmp(GetName(), name) == 0)
 	{
-		rV = true;
-		//if (scope > 0)
-		//{
-		//	if (scope == GetScope())
-		//		rV = true;
-		//}
-		//else
-		//	rV = true;
+		if ((Type == BinType::ANY) || (GetType() == Type))
+		{
+			if ((scope == SYMBOL_SCOPE_ANY) || (GetScope() == scope))
+			{
+				rV = true;
+			}
+		}
 	}
 	return rV;
 }
@@ -33,72 +32,72 @@ bool CSymbol::Compare(const char* name, int scope)
 
 void CSymbol::BackFillUnresolved()
 {
-	CWhereSymbolIsUsed* pWSIU;
-	int Address;
-	int URLocation; //unresolved location
+	//int Address;
+	//int URLocation; //unresolved location
+	//CChain* pChain = GetWhereUsed();
+	//CChainItem* pItem = (CChainItem*)pChain->GetHead();
 
-	Address = GetAddress();
-	//	fprintf(
-	//		As65App.LogFile(),
-	//		"Back Fill %s @ 0x%4x\n",
-	//		GetName(),
-	//		Address
-	//	);
-	pWSIU = (CWhereSymbolIsUsed*)GetHead();
-	while (pWSIU)
-	{
-		if (!pWSIU->IsResolveProcessed())
-		{
-			URLocation = pWSIU->GetAddress();
-			fprintf(
-				Act()->LogFile(),
-				"Unresolved: @0x%04x\n",
-				URLocation
-			);
-			if (pWSIU->GetUnResType() == CWhereSymbolIsUsed::UnResolvedType::ABSOLUTE_REFERENCE)
-			{
-				//------------------------------------------
-				// Get the location of an unresolved value,
-				// and then put the data defined by this
-				// symbol in there.
-				//------------------------------------------
-				pWSIU->GetSection()->AddDataAt(
-					pWSIU->GetAddress(),	//address of data
-					2,						// size of object
-					Address					// object value
-				);
-			}
-			else
-			{
-				//------------------------------------------
-				// for relative address, subtract the
-				// location of the unresoved symbol from
-				// the value of this object.
-				//------------------------------------------
-				unsigned WhereSymIsUsedAddress = pWSIU->GetAddress();
-				unsigned RelAddress = Address - WhereSymIsUsedAddress;
+	//Address = GetAddress();
+	////	fprintf(
+	////		As65App.LogFile(),
+	////		"Back Fill %s @ 0x%4x\n",
+	////		GetName(),
+	////		Address
+	////	);
+	//while (pItem)
+	//{
+	//	if (!pWSIU->IsResolveProcessed())
+	//	{
+	//		URLocation = pWSIU->GetAddress();
+	//		fprintf(
+	//			Act()->LogFile(),
+	//			"Unresolved: @0x%04x\n",
+	//			URLocation
+	//		);
+	//		if (pWSIU->GetUnResType() == CWhereSymbolIsUsed::UnResolvedType::ABSOLUTE_REFERENCE)
+	//		{
+	//			//------------------------------------------
+	//			// Get the location of an unresolved value,
+	//			// and then put the data defined by this
+	//			// symbol in there.
+	//			//------------------------------------------
+	//			pWSIU->GetSection()->AddDataAt(
+	//				pWSIU->GetAddress(),	//address of data
+	//				2,						// size of object
+	//				Address					// object value
+	//			);
+	//		}
+	//		else
+	//		{
+	//			//------------------------------------------
+	//			// for relative address, subtract the
+	//			// location of the unresoved symbol from
+	//			// the value of this object.
+	//			//------------------------------------------
+	//			unsigned WhereSymIsUsedAddress = pWSIU->GetAddress();
+	//			unsigned RelAddress = Address - WhereSymIsUsedAddress;
 
-				RelAddress--;
-				pWSIU->GetSection()->AddDataAt(
-					WhereSymIsUsedAddress,
-					1,
-					RelAddress
-				);
-			}
-		}
-		pWSIU = (CWhereSymbolIsUsed*)pWSIU->GetNext();
-	}
-	SetResolved();
+	//			RelAddress--;
+	//			pWSIU->GetSection()->AddDataAt(
+	//				WhereSymIsUsedAddress,
+	//				1,
+	//				RelAddress
+	//			);
+	//		}
+	//	}
+	//	pWSIU = (CWhereSymbolIsUsed*)pWSIU->GetNext();
+	//}
+	//SetResolved();
 }
 
-void CSymbol::CreateTypeChain(CTypeChain* pTC)
+void CSymbol::CreateTypeChain(CChain* pTC)
 {
 	//---------------------------------------
 	// Create a type chan for this symbol
 	// Make a copy of the passed pointer
 	// to a Type Chain
 	//---------------------------------------
-	m_pTypeChain = new CTypeChain;
+	m_pTypeChain = new CChainType;
 	GetTypeChain()->Create();
 	if (pTC)
 	{
@@ -128,7 +127,7 @@ int CSymbol::Print(char* pSO, int l, const char* s)
 		ls += sprintf_s(&pSO[ls], size, "%s", s);
 	}
 	if(GetTypeChain())
-		if (GetTypeChain()->Is(CObjTypeChain::Spec::FUNC))
+		if (GetTypeChain()->Is(CChainTypeObject::Spec::FUNC))
 			printf("Opps\n");
 	if (GetName())
 	{
@@ -150,25 +149,25 @@ int CSymbol::Print(char* pSO, int l, const char* s)
 	}
 	if (GetHead())	//print where the symbol is used
 	{
-		CWhereSymbolIsUsed* pWSIU = 0;
+		
 
 		size = l - ls;
 		ls += sprintf_s(&pSO[ls], size, "\n");
 
-		pWSIU = (CWhereSymbolIsUsed*)GetHead();
-		while (pWSIU)
-		{
-			size = l - ls;
-			ls += sprintf_s(&pSO[ls], size, "\t\t");
-			size = l - ls;
-			ls += pWSIU->Print(&pSO[ls], size,0);
-			pWSIU = (CWhereSymbolIsUsed*)pWSIU->GetNext();
-			if (pWSIU)
-			{
-				size = l - ls;
-				ls += sprintf_s(&pSO[ls], size, "\n");
-			}
-		}
+		//pWSIU = (CWhereSymbolIsUsed*)GetHead();
+		//while (pWSIU)
+		//{
+		//	size = l - ls;
+		//	ls += sprintf_s(&pSO[ls], size, "\t\t");
+		//	size = l - ls;
+		//	ls += pWSIU->Print(&pSO[ls], size,0);
+		//	pWSIU = (CWhereSymbolIsUsed*)pWSIU->GetNext();
+		//	if (pWSIU)
+		//	{
+		//		size = l - ls;
+		//		ls += sprintf_s(&pSO[ls], size, "\n");
+		//	}
+		//}
 	}
 	CChainBinItem* pLocalSyms = 0;
 	if (GetLocalVars())
@@ -196,5 +195,12 @@ int CSymbol::Print(char* pSO, int l, const char* s)
 
 const char* CSymbol::CIdentType::LookupIdentType(IdentType IT)
 {
-    return IdentTypeLUT[int(IT)].m_pName;
+	const char* rV = 0;
+
+	for (int i = 0; IdentTypeLUT[i].m_pName && !rV; ++i)
+	{
+		if (IdentTypeLUT[i].m_Type == IT)
+			rV = IdentTypeLUT[i].m_pName;
+	}
+    return rV;
 }

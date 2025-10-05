@@ -1,17 +1,20 @@
 #include "pch.h"
 
-//bool CBin::Compare(const char* name, int aux)
-//{
-//	bool rV = false;
-//
-//	if (strcmp(GetName(), name) == 0)
-//		rV = true;
-//    return rV;
-//}
-
-void CBin::Print(FILE* pOut, const char* s)
+int CBin::Print(char* pSO, int l, int Indent, const char* s)
 {
-	fprintf(pOut, "CBin::%s\n", m_pName);
+	int rV = 0;
+
+	char* pIndentString = new char[512];
+	Act()->IndentString(pIndentString, 512, Indent + 2);
+	if (!s) s = "";		
+	
+	rV += sprintf_s(pSO + rV, l - rV, "%sCBin::%s\n", 
+		pIndentString, 
+		GetName());
+
+
+	delete[] pIndentString;
+	return rV;
 }
 
 //-----------------------------------------------

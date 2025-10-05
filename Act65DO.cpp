@@ -64,7 +64,7 @@ CValue* CAct65DO::Emit(CValue* pVc, CValue* pVn)
 	pStartSymbol->SetAddress(StartAddressOfDO);
 	pStartSymbol->SetSection(GetSection());
 	pStartSymbol->SetIdentType(CBin::IdentType::LOCAL);
-	Act()->GetParser()->GetLexer()->GetSymTab()->AddSymbol(pStartSymbol);
+	Act()->GetSymTab()->AddSymbol(pStartSymbol, CBin::BinType::SYMBOL, 0);
 
 	pLabelValue = new CValue;
 	pLabelValue->Create(pStartSymbol);

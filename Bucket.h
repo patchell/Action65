@@ -12,7 +12,7 @@ public:
 	virtual ~CBucket();
 	void Add(CBin* pSym);
 	bool Create() { return true; }
-	CBin* Find(const char* pName, int scope);
+	CBin* Find(const char* pName, CBin::BinType Type, int scope);
 	void Delete(CBin* pSym);
 	void Unlink(CBin* pSym);
 	inline void SetHead(CBin* pH) { m_pHead = pH; }

@@ -293,11 +293,17 @@
     <ClCompile Include="ChainBinItem.cpp" />
     <ClCompile Include="ChainInstruction.cpp" />
     <ClCompile Include="ChainItem.cpp" />
+    <ClCompile Include="ChainMisc.cpp" />
+    <ClCompile Include="ChainParameterItem.cpp" />
+    <ClCompile Include="ChainSymUsed.cpp" />
+    <ClCompile Include="ChainType.cpp" />
     <ClCompile Include="ChainValueItem.cpp" />
     <ClCompile Include="CodeGeneration.cpp" />
     <ClCompile Include="Instruction.cpp" />
+    <ClCompile Include="KeyWord.cpp" />
     <ClCompile Include="Lexer.cpp" />
     <ClCompile Include="Linker.cpp" />
+    <ClCompile Include="Macro.cpp" />
     <ClCompile Include="ObjFormatCode.cpp" />
     <ClCompile Include="ObjFormatData.cpp" />
     <ClCompile Include="ObjFormatFile.cpp" />
@@ -306,10 +312,10 @@
     <ClCompile Include="ObjFormatSectionItem.cpp" />
     <ClCompile Include="ObjFormatSymbolItem.cpp" />
     <ClCompile Include="ObjFormatSymbols.cpp" />
-    <ClCompile Include="ObjType.cpp" />
-    <ClCompile Include="ParameterChain.cpp" />
+    <ClCompile Include="ChainTypeObject.cpp" />
     <ClCompile Include="Parser.cpp" />
     <ClCompile Include="pch.cpp" />
+    <ClCompile Include="PreProcessor.cpp" />
     <ClCompile Include="Reg.cpp" />
     <ClCompile Include="RegPool.cpp" />
     <ClCompile Include="Section.cpp" />
@@ -320,10 +326,8 @@
     <ClCompile Include="StackNodeItem.cpp" />
     <ClCompile Include="Symbol.cpp" />
     <ClCompile Include="SymTab.cpp" />
-    <ClCompile Include="TypeChain.cpp" />
     <ClCompile Include="Value.cpp" />
     <ClCompile Include="VirtualReg.cpp" />
-    <ClCompile Include="WhereSymbolIsUsed.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Act65ARRAYdim.h" />
@@ -483,10 +487,16 @@
     <ClInclude Include="ChainBinItem.h" />
     <ClInclude Include="ChainInstruction.h" />
     <ClInclude Include="ChainItem.h" />
+    <ClInclude Include="ChainMisc.h" />
+    <ClInclude Include="ChainParameterItem.h" />
+    <ClInclude Include="ChainSymUsed.h" />
+    <ClInclude Include="ChainType.h" />
     <ClInclude Include="ChainValueItem.h" />
     <ClInclude Include="CodeGeneration.h" />
     <ClInclude Include="Instruction.h" />
+    <ClInclude Include="KeyWord.h" />
     <ClInclude Include="Linker.h" />
+    <ClInclude Include="Macro.h" />
     <ClInclude Include="ObjFormatCode.h" />
     <ClInclude Include="ObjFormatData.h" />
     <ClInclude Include="ObjFormatFile.h" />
@@ -495,13 +505,13 @@
     <ClInclude Include="ObjFormatSectionItem.h" />
     <ClInclude Include="ObjFormatSymbolItem.h" />
     <ClInclude Include="ObjFormatSymbols.h" />
-    <ClInclude Include="ObjType.h" />
-    <ClInclude Include="ParameterChain.h" />
+    <ClInclude Include="ChainTypeObject.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Bin.h" />
     <ClInclude Include="Bucket.h" />
     <ClInclude Include="Lexer.h" />
     <ClInclude Include="Parser.h" />
+    <ClInclude Include="PreProcessor.h" />
     <ClInclude Include="Reg.h" />
     <ClInclude Include="RegPool.h" />
     <ClInclude Include="Section.h" />
@@ -512,10 +522,8 @@
     <ClInclude Include="StackNodeItem.h" />
     <ClInclude Include="Symbol.h" />
     <ClInclude Include="SymTab.h" />
-    <ClInclude Include="TypeChain.h" />
     <ClInclude Include="Value.h" />
     <ClInclude Include="VirtualReg.h" />
-    <ClInclude Include="WhereSymbolIsUsed.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Action.Act65_settings" />
@@ -523,6 +531,7 @@
     <None Include="Grammar\Action.gram" />
     <None Include="Grammar\Action1.gram" />
     <None Include="Grammar\Linker.gram" />
+    <None Include="Grammar\Preprocessor.gram" />
     <None Include="Grammar\Settings.gram" />
     <None Include="Linker.Act65_LinkerScript" />
     <None Include="Test1.act" />

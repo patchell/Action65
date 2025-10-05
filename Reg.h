@@ -29,7 +29,7 @@ private:
 	};
 	bool m_InUse;
 	RegType m_Type;
-	CTypeChain* m_pTypeChain;
+	CChainType* m_pTypeChain;
 public:
 	CReg() {
 		m_InUse = false;
@@ -43,9 +43,9 @@ public:
 	void SetType(RegType Type) { m_Type = Type; }
 	RegType GetType() const { return m_Type; }
 	const char* ToString() const { return RegTypeLUT[int(m_Type)].m_pName; }
-	CTypeChain* GetTypeChain() {
+	CChainType* GetTypeChain() {
 		return m_pTypeChain;
 	}
-	bool CreateTypeChain(CTypeChain* pTC = 0);
+	bool CreateTypeChain(CChainType* pTC = 0);
 };
 

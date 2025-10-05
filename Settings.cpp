@@ -18,21 +18,8 @@ bool CSettings::Create()
 
 	if (Act()->GetSettingsFileName())
 	{
-		try
-		{ 
-			GetParser()->Create(Act()->GetSettingsFileName());
-			GetParser()->Run();
-		}
-		catch(Exception & BooBoo)
-		{
-			fprintf(
-				Act()->LogFile(),
-				"%s Line=%d  Col=%d\n",
-				BooBoo.GetExceptionTypeString(BooBoo.GetXCeptType()),
-				GetParser()->GetLexer()->GetLineNumber(),
-				GetParser()->GetLexer()->GetCollum()
-			);
-		}
+		GetParser()->Create(Act()->GetSettingsFileName());
+		GetParser()->Run();
 	}
 	else
 	{
@@ -379,7 +366,7 @@ CSettings::Lexer::Token CSettings::Lexer::LookupKeyWord(const char* pKeyWord)
 
 CBin* CSettings::Lexer::LookupSymbol(const char* pName)
 {
-	return GetSymTab()->FindSymbol(pName, 1);
+	return GetSymTab()->FindSymbol(pName, CBin::BinType::ANY,0);
 }
 
 //----------------------------------------

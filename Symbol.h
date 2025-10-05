@@ -9,13 +9,13 @@ class CSection;
 class CSymbol: public CBin
 {
 	unsigned m_Address;		//physical address the symbol represents
-	int m_Scope;
 	CSection* m_pSection;	//Memory Section where symbol is defined
 	bool m_UnResolved;	//Unresolved/Not Defined
+	bool m_bDefined;	//The address has been defined has been defined
 	//---------------------------
 	// Type Chain
 	//---------------------------
-	CTypeChain* m_pTypeChain;	//Defines the Type of the Symbol
+	CChainType* m_pTypeChain;	//Defines the Type of the Symbol
 	//---------------------------
 	// Parameter chain for a
 	// function/proceedure
@@ -24,32 +24,32 @@ class CSymbol: public CBin
 	// Chain of data members for
 	// a user defined TYPE
 	//---------------------------
-	CParameterChain* m_pParamChain;
-	CParameterChain* m_pTypeDefChain;
-	CChain* m_pLocalVariables;
+	CChain* m_pParamChain;
+	CChain* m_pTypeDefChain;
+	CChain* m_pLocalVariablesChain;
 public:
 	CSymbol();
 	virtual ~CSymbol() {}
 	bool Create() { return true; }
-	virtual bool Compare(const char* name, int scope);
+	virtual bool Compare(const char* name, BinType Type = BinType::ANY, int aux = 0);
 	virtual void Print(FILE* pOut, const char* s);
 	virtual int Print(char* pSO,int l, const char* s = 0);
 	//-----------------------------
 	// Accessor Methods
 	//-----------------------------
-	CParameterChain* GetParamChain() {
+	CChain* GetParamChain() {
 		return m_pParamChain
 			;
 	}
 	void CreateParamChain() {
-		m_pParamChain = new CParameterChain;
+		m_pParamChain = new CChain;
 		m_pParamChain->Create();
 	}
-	CParameterChain* GetTypeDefChain() {
+	CChain* GetTypeDefChain() {
 		return m_pTypeDefChain;
 	}
 	void CreateTypeDefChain() {
-		m_pTypeDefChain = new CParameterChain;
+		m_pTypeDefChain = new CChain;
 		m_pTypeDefChain->Create();
 	}
 	virtual unsigned GetAddress() const { return m_Address; }
@@ -58,15 +58,23 @@ public:
 		SetResolved();
 		BackFillUnresolved();
 	}
-	int GetScope() const { return m_Scope; }
-	void SetScope(int S) { m_Scope = S; }
 	CSection* GetSection() { return m_pSection; }
 	void SetSection(CSection* pS) { m_pSection = pS; }
+	bool IsDefined() const { return m_bDefined && !m_UnResolved; }
 	bool IsUnResolved() const {
 		return m_UnResolved;
 	}
 	bool IsResolved() const {
 		return !m_UnResolved;
+	}
+	bool SetDefined() {
+		bool rV = false;
+		if(IsResolved())
+		{
+			m_bDefined = true; 
+			rV = true;
+		}
+		return rV;
 	}
 	void SetResolved() { m_UnResolved = false; }
 	void SetUnResolved() { m_UnResolved = true; }
@@ -77,17 +85,17 @@ public:
 	//-----------------------------------
 	// Type chain methods
 	//-----------------------------------
-	CTypeChain* GetTypeChain() { return m_pTypeChain; }
-//	void SetTypeChain(CTypeChain* pTC) { m_pTypeChain = pTC; }
-	virtual	void CreateTypeChain(CTypeChain* pTC = 0);
+	CChainType* GetTypeChain() { return m_pTypeChain; }
+//	void SetTypeChain(CChain* pTC) { m_pTypeChain = pTC; }
+	virtual	void CreateTypeChain(CChain* pTC = 0);
 	//---------------------------------------
 	// Manage List of Local Variables/Labels
 	//---------------------------------------
 	CChain* GetLocalVars() { 
-		return m_pLocalVariables; 
+		return m_pLocalVariablesChain;
 	}
 	void CreateLocalVars() {
-		m_pLocalVariables = new CChain;
+		m_pLocalVariablesChain = new CChain;
 	}
 };
 
