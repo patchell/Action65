@@ -49,7 +49,7 @@ void CChain::Copy(CChain* pC)
 			}
 			else if (pItem->Is(CChainItem::ChainItemType::TYPE))
 			{
-				pNewItem = new CChainTypeObject();
+				pNewItem = new CChainTypeItem();
 			}
 			else if (pItem->Is(CChainItem::ChainItemType::SYMBOL_USED))
 			{

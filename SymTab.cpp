@@ -63,7 +63,7 @@ bool CSymTab::Create(int TableDepth)
 		sprintf_s(
 			ThrownException.GetErrorString(),
 			ThrownException.GetMaxStringLen(),
-			"Memory Error:Could not Create Symbol Table\n"
+			"CSymTab::Create: Memory Error:Could not Create Symbol Table\n"
 		);
 		throw(ThrownException);
 

@@ -46,7 +46,7 @@ void CObjFormatSection::Print(FILE* pO, int Indent)
 	char* pStr = new char[256];
 
 	fprintf(pO, "%sSection:%s\n",
-		Act()->IndentString(pStr,Indent,' '),
+		Act()->IndentString(pStr, 256, Indent,' '),
 		GetSection()->GetName()
 	);
 	delete[] pStr;

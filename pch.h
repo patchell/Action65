@@ -8,13 +8,15 @@
 #include <sys\stat.h>
 #include <sys\types.h>
 
+
 constexpr auto MAX_SYMBOL_NAME_LEN = 256;
 constexpr auto MAX_NAME_LEN = 64;
 constexpr auto MAX_STRING_LEN = 512;
 
 constexpr auto INTERNAL_ERROR = 2;
 
-enum  class Token {
+enum  class Token 
+{
 	ENDOFFILE = -1,	// 1
 	NONE,
 	IDENT = 256,	//2
@@ -187,10 +189,24 @@ enum  class Token {
 	OVERFLOW,
 	IRQENABLE,
 	DECIMAL_MODE,
-	//------- Processor Selector
+	//---------- Compiler Directives -----------
+	INCLUDE,
+	SET,
+	DEFINE,
+	SECTION,
+	SECTION_NAME,
+	START,
+	SIZE,
+	NAME,
+	MODE,
+	READ_WRTE,
+	READ_ONLY,
+	PAGEZERO,
+	TRUE,
+	FALSE,
 	PROCESSOR,
-	R6502,
 	W65C02,
+	R6502,
 	W65C816,
 	//------- Misc
 	CHAR_CONSTANT,
@@ -219,7 +235,8 @@ enum class AdrModeType {
 };
 
 
-struct AdrModeToTextLUT {
+struct AdrModeToTextLUT 
+{
 	struct AdrModeTypeToStringItem {
 		AdrModeType m_AdressMode;
 		const char* m_pName;
@@ -294,10 +311,13 @@ enum class Processor {
 	W65C816
 };
 
-struct AdressModeItem {
+struct AdressModeItem 
+{
 	AdrModeType Mode;
-	int inc;
-	int m_numBytes;
+	int inc;		// Amount to add to the base opcode 
+					// to get the opcode for this addressing mode
+	int m_numBytes;	// Number of bytes this instruction takes
+					// in memory including the opcode byte
 	AdressModeItem() {
 		Mode = AdrModeType::NA;
 		inc = 0;
@@ -311,6 +331,12 @@ struct AdressModeItem {
 	int GetInc(AdrModeType ModeType) const {
 		//---------------------------
 		// GetInc
+		// Check to see if this is
+		// the amount to increment
+		// the opcode by for the
+		// given address mode
+		// type.
+		// 
 		//	Compares the address mode
 		// type of this object to the
 		// one that is desired.  If
@@ -333,7 +359,8 @@ struct AdressModeItem {
 	}
 };
 
-struct AdressModeLUT {
+struct AdressModeLUT 
+{
 	AdressModeItem* m_pModeInc;
 	int m_nElements;
 	AdressModeLUT() {
@@ -373,12 +400,13 @@ struct AdressModeLUT {
 	bool ValidAddressingMode(AdrModeType AMT) const;
 };
 
+
 #include "KeyWord.h"
 #include "Bin.h"
 #include "Bucket.h"
 //--------------------------------------
 #include "ChainItem.h"
-#include "ChainTypeObject.h"
+#include "ChainTypeItem.h"
 #include "ChainParameterItem.h"
 #include "ChainBinItem.h"
 #include "ChainSymUsed.h"
@@ -396,7 +424,8 @@ struct AdressModeLUT {
 
 constexpr auto MAX_EXCEPTION_STRING_LEN = 512;
 
-class Exception {
+class Exception 
+{
 public:
 	enum class ExceptionType {
 		WHOKNOWS,
@@ -429,7 +458,50 @@ public:
 		// Initialization Exceptions
 		//--------------------
 		INIT_INPUT_FILE,
-		INIT_SYMTAB
+		INIT_SYMTAB,
+		UNDEFINED_SECTION_NAME
+	};
+	struct ExceptionTypeStrings {
+		ExceptionType m_Type;
+		const char* m_Name;
+		ExceptionTypeStrings() {
+			m_Type = ExceptionType::WHOKNOWS;
+			m_Name = 0;
+		}
+		ExceptionTypeStrings(ExceptionType Type, const char* pName) {
+			m_Type = Type;
+			m_Name = pName;
+		}
+		static const char* FindExceptionTypeString(ExceptionType Type);
+	};
+	static inline ExceptionTypeStrings ExceptionTypesLUT[] = {
+		{ExceptionType:: WHOKNOWS, "WHO KNOWS, Whatever" },
+		{ ExceptionType::UNEXPECTED_TOKEN, "UNEXPECTED Token" },
+		{ ExceptionType::SECTION_ADDRES_RANGE_EXCEEDED, "SECTION ADDRES RANGE EXCEEDED" },
+		{ ExceptionType::SECTION_UNDEFINED, "SECTION UNDEFINED" },
+		{ ExceptionType::NOSECTION_DEFINED, "NO SECTION DEFINED" },
+		{ ExceptionType::LEXER_STUMPTED, "LEXER is STUMPTED!" },
+		{ ExceptionType::ILLEGAL_ADDRESSING_MODE, "ILLEGAL ADDRESSING MODE" },
+		{ ExceptionType::TOKEN_OUT_OF_PLACE, "TOKEN OUT OF PLACE" },
+		{ ExceptionType::VALUE_EXCEEDS_RANGE, "VALUE EXCEEDS RANGE" },
+		{ ExceptionType::STACK, "STACK EXCEPTION" },
+		{ ExceptionType::INTERNAL_ERROR, "This is too much, INTERNAL ERROR!" },
+		{ ExceptionType::EXPECTED_IDENT, "Expected an Identifier::ERROR!" },
+		{ ExceptionType::EXPECTED_CONSTANT, "Expected a Constant::ERROR!" },
+		{ ExceptionType::EXPECTED_DATABLOCK, "Expected a Data Block::ERROR!" },
+		{ ExceptionType::EXPECTED_INDEX_REG, "Expected an Index Register::ERROR!" },
+		{ ExceptionType::EXPECTED_STRING, "Expected a String::ERROR!" },
+		{ ExceptionType::EXPECTED_PROC_FUNC_INTERRUPT, "Expected a Proc, Func or Interrupt::ERROR!" },
+		{ ExceptionType::AST_RECURSION_LIMIT, "AST Recursion Limit Exceeded::ERROR!" },
+		{ ExceptionType::INTERNAL_SYMBOL_NULL, "Internal Symbol is NULL::ERROR!" },
+		{ ExceptionType::INTERNAL_VALUE_NULL, "Internal Value is NULL::ERROR!" },
+		{ ExceptionType::CODEGEN_NO_SECTION, "CodeGen: No Section Defined::ERROR!" },
+		{ ExceptionType::CVALUE_NO_SYMBOL, "CValue: No Symbol Defined::ERROR!" },
+		{ ExceptionType::CODEGEN_UNKNOWN_BYTE_ORDER, "CodeGen: Unknown Byte Order::ERROR!" },
+		{ ExceptionType::INIT_INPUT_FILE, "Initialization: Input File Error::ERROR!" },
+		{ ExceptionType::INIT_SYMTAB, "Initialization: Symbol Table Error::ERROR!" },
+		{ ExceptionType::UNDEFINED_SECTION_NAME, "Undefined Section Name::ERROR!" },
+		{ ExceptionType(-1), NULL}
 	};
 	enum class ExceptionSubType {
 		WHOKNOWS,
@@ -463,50 +535,10 @@ private:
 		const char* FindSubTypeString(ExceptionSubType Type);
 	};
 	//------------------------------------------------
-	struct ExcepTypeToString {
-		ExceptionType m_Type;
-		const char* m_Name;
-		ExcepTypeToString() {
-			m_Type = ExceptionType::WHOKNOWS;
-			m_Name = 0;
-		}
-		ExcepTypeToString(ExceptionType Type, const char* pName) {
-			m_Type = Type;
-			m_Name = pName;
-		}
-		const char* FindString(ExceptionType Type);
-	};
-	//-------------------------------------------------------
-	inline static ExcepTypeToString ExceptionTypesLUT[] = {
-		{ExceptionType:: WHOKNOWS, "WHO KNOWS, Whatever" },
-		{ ExceptionType::UNEXPECTED_TOKEN, "UNEXPECTED TOKEN" },
-		{ ExceptionType::SECTION_ADDRES_RANGE_EXCEEDED, "SECTION ADDRES RANGE EXCEEDED" },
-		{ ExceptionType::SECTION_UNDEFINED, "SECTION UNDEFINED" },
-		{ ExceptionType::NOSECTION_DEFINED, "NO SECTION DEFINED" },
-		{ExceptionType::LEXER_STUMPTED, "LEXER is STUMPTED!" },
-		{ ExceptionType::ILLEGAL_ADDRESSING_MODE, "ILLEGAL ADDRESSING MODE" },
-		{ ExceptionType::TOKEN_OUT_OF_PLACE, "TOKEN OUT OF PLACE" },
-		{ ExceptionType::VALUE_EXCEEDS_RANGE, "VALUE EXCEEDS RANGE" },
-		{ ExceptionType::INTERNAL_ERROR, "This is too much, INTERNAL ERROR!" },
-		{ ExceptionType::EXPECTED_IDENT, "Expected an Identifier::ERROR!" },
-		{ ExceptionType::EXPECTED_CONSTANT, "Expected a Constant::ERROR!" },
-		{ ExceptionType::EXPECTED_DATABLOCK, "Expected a Data Block::ERROR!" },
-		{ ExceptionType::EXPECTED_INDEX_REG, "Expected an Index Register::ERROR!" },
-		{ ExceptionType::EXPECTED_STRING, "Expected a String::ERROR!" },
-		{ ExceptionType::EXPECTED_PROC_FUNC_INTERRUPT, "Expected a Proc, Func or Interrupt::ERROR!" },
-		{ ExceptionType::AST_RECURSION_LIMIT, "AST Recursion Limit Exceeded::ERROR!" },
-		{ ExceptionType::INTERNAL_SYMBOL_NULL, "Internal Symbol is NULL::ERROR!" },
-		{ ExceptionType::INTERNAL_VALUE_NULL, "Internal Value is NULL::ERROR!" },
-		{ ExceptionType::CODEGEN_NO_SECTION, "CodeGen: No Section Defined::ERROR!" },
-		{ ExceptionType::CVALUE_NO_SYMBOL, "CValue: No Symbol Defined::ERROR!" },
-		{ ExceptionType::CODEGEN_UNKNOWN_BYTE_ORDER, "CodeGen: Unknown Byte Order::ERROR!" },
-		{ ExceptionType::INIT_INPUT_FILE, "Initialization: Input File Error::ERROR!" },	
-		{ ExceptionType(-1), NULL}
-	};
 	//--------------------------------------------------
 	inline static ExceptionSubTypeStrings XcepSubTypesLUT[] =
 	{
-		{ExceptionSubType::WHOKNOWS,"Who Knows, Not me!"},
+		{ExceptionSubType::WHOKNOWS,"NONE"},
 		{ExceptionSubType::STACK_UNEXPECTED_NULL,"Top of Stack is NULL"},
 		{ExceptionSubType::STACK_EMPTY,"Stack is Empty"},
 		{ExceptionSubType::STACK_ITEM_MISMATCH,"Mismatch"},
@@ -527,6 +559,8 @@ public:
 	const char* GetExceptionTypeString(ExceptionType xType);
 	ExceptionType GetXCeptType() { return m_Type; }
 	void SetXCeptType(ExceptionType Type) { m_Type = Type; }
+	ExceptionSubType GetExceptionSubType() { return m_SubType; }
+	void SetExceptionSubType(ExceptionSubType SubType) { m_SubType = SubType; }
 	Token GetGotToken() { return badToken; }
 	void SetGotToken(Token t) { badToken = t; }
 	char* GetErrorString() { return ErrorString; }
@@ -535,11 +569,11 @@ public:
 	}
 	void SetSymbol(CBin* pSym) { m_pSymbol = pSym; }
 	CBin* GetSymbol() { return m_pSymbol; }
-	const char* FindXceptnSubType(ExceptionSubType Type) {
+	static const char* FindExceptionSubTypeString(ExceptionSubType Type) {
 		return XcepSubTypesLUT->FindSubTypeString(Type);
 	}
-	const char* FindXceptnType(ExceptionType Type) {
-		return ExceptionTypesLUT->FindString(Type);
+	static const char* FindExceptionTypeString(ExceptionType Type) {
+		return ExceptionTypesLUT->FindExceptionTypeString(Type);
 	}
 };
 
@@ -729,8 +763,6 @@ public:
 #include "AstTree.h"
 #include "ActionAstTree.h"
 
-#include "PreProcessor.h"
-#include "Lexer.h"
 #include "Instruction.h"
 #include "ChainInstruction.h"
 #include "Parser.h"

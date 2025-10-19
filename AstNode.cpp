@@ -16,7 +16,7 @@ CAstNode::CAstNode()
 	m_pTail = 0;
 	m_pSection = GetParser()->GetCurrentSection();
 	m_Line = Act()->GetParser()->GetLexer()->GetLineNumber();
-	m_Column = Act()->GetParser()->GetLexer()->GetColunm();
+	m_Column = Act()->GetParser()->GetLexer()->GetColumn();
 	m_pChildValue = 0;
 	m_pNextValue = 0;
 	m_pResultValue = 0;
@@ -37,7 +37,7 @@ CAstNode::CAstNode(const char* pName, NodeType NT)
 	m_pTail = 0;
 	m_pSection = GetParser()->GetCurrentSection();
 	m_Line = GetParser()->GetLexer()->GetLineNumber();
-	m_Column = GetParser()->GetLexer()->GetColunm();
+	m_Column = GetParser()->GetLexer()->GetColumn();
 }
 
 CAstNode::~CAstNode()
@@ -52,6 +52,7 @@ bool CAstNode::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 
 	CSymbol* pProcSym = 0;
 
+	SetSection(Act()->GetParser()->GetCurrentSection());
 	pProcSym = Act()->GetParser()->GetCurrentProc();
 	SetProcSym(pProcSym);
 	if (pChild)
@@ -71,6 +72,7 @@ bool CAstNode::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 	}
 	return rV;
 }
+
 CAstNode* CAstNode::MakeNode(
 	CAstNode* pChild,
 	CAstNode* pNext
@@ -162,6 +164,16 @@ int CAstNode::Print(int Indent, char* s, int strLen, bool* pbNextFlag)
 	l += MakeIndentString(&s[l], size, Indent, pbNextFlag);
 	size = strLen - l;
 	l += sprintf_s(&s[l], size, "+- \'%s\'", GetNodeName());
+	if(GetSection() && GetSection()->GetName())
+	{
+		size = strLen - l;
+		l += sprintf_s(&s[l], size, " (Section: ");
+		size = strLen - l;
+		l += sprintf_s(&s[l], size, "%s)", GetSection()->GetName());
+	}
+	size = strLen - l;
+	if (GetSection() && GetSection()->GetName())
+		l += sprintf_s(&s[l], size, "%s\'", GetSection()->GetName());
 	return l;
 }
 

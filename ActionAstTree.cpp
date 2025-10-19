@@ -51,7 +51,7 @@ int CActionAstTree::OptimizeTree(
 		sprintf_s(
 			ThrownException.GetErrorString(),
 			ThrownException.GetMaxStringLen(),
-			"Too Many Recursions in CAstTree::TraverseTree  Line:%d Col:%d\n",
+			"CActionAstTree::OptimizeTree: Too Many Recursions in CAstTree::TraverseTree  Line:%d Col:%d\n",
 			pNode->GetLine(),
 			pNode->GetColumn());
 		throw(ThrownException);

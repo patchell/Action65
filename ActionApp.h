@@ -100,7 +100,7 @@ public:
 		return &m_ActParse;
 	}
 
-	char* IndentString(char* s, int Indent, int c);
+	char* IndentString(char* s, int StringLength, int Indent, int c);
 	static void Dump(
 		FILE* pOut, 
 		char* pMem, 
@@ -118,7 +118,7 @@ public:
 	CStack* GetIFFFFIStack() { return &IFF_FFI_Stack; }
 	//-----------------------------------------
 	char* CreateIndentString(char* s, int n, int Indent, int c = ' ');
-	CLexer* GetLexer() { return m_ActParse.GetLexer(); }
+	CParser::CLexer* GetLexer() { return m_ActParse.GetLexer(); }
 	CSymTab* GetSymTab() { return m_ActParse.GetLexer()->GetSymTab(); }
 	CCodeGeneration* GetCodeGen() { return &m_CodeGenerationUtils; }
 };

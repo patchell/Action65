@@ -2,6 +2,9 @@
 
 class CMacro : public CBin
 {
+	char* m_pMacroBody;
+	int m_MacroBodySize;
+	int m_MacroBodyIndex;
 public:
 	CMacro();
 	virtual ~CMacro();

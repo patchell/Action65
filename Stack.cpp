@@ -161,7 +161,7 @@ void CStack::StackException(const char* pDesc, Exception::ExceptionSubType SubTy
 		GetStackName(),
 		pDesc,
 		Act()->GetParser()->GetLexer()->GetLineNumber(),
-		Act()->GetParser()->GetLexer()->GetColunm()
+		Act()->GetParser()->GetLexer()->GetColumn()
 	);
 	throw(ThrownException);
 }

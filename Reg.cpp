@@ -16,12 +16,12 @@ bool CReg::CreateTypeChain(CChainType* pTC)
 		// Move the type chain objects into the
 		// new type chain
 		//--------------------------------------
-		CChainTypeObject* pTCobj = (CChainTypeObject*)pTC->GetHead();
+		CChainTypeItem* pTCobj = (CChainTypeItem*)pTC->GetHead();
 		while (pTCobj)
 		{
 			m_pTypeChain->AddToTail(pTCobj);
 			pTC->Unlink(pTCobj);
-			pTCobj = (CChainTypeObject*)pTC->GetHead();
+			pTCobj = (CChainTypeItem*)pTC->GetHead();
 		}
 	}
 	return true;

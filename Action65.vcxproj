@@ -301,7 +301,6 @@
     <ClCompile Include="CodeGeneration.cpp" />
     <ClCompile Include="Instruction.cpp" />
     <ClCompile Include="KeyWord.cpp" />
-    <ClCompile Include="Lexer.cpp" />
     <ClCompile Include="Linker.cpp" />
     <ClCompile Include="Macro.cpp" />
     <ClCompile Include="ObjFormatCode.cpp" />
@@ -312,10 +311,9 @@
     <ClCompile Include="ObjFormatSectionItem.cpp" />
     <ClCompile Include="ObjFormatSymbolItem.cpp" />
     <ClCompile Include="ObjFormatSymbols.cpp" />
-    <ClCompile Include="ChainTypeObject.cpp" />
+    <ClCompile Include="ChainTypeItem.cpp" />
     <ClCompile Include="Parser.cpp" />
     <ClCompile Include="pch.cpp" />
-    <ClCompile Include="PreProcessor.cpp" />
     <ClCompile Include="Reg.cpp" />
     <ClCompile Include="RegPool.cpp" />
     <ClCompile Include="Section.cpp" />
@@ -505,13 +503,11 @@
     <ClInclude Include="ObjFormatSectionItem.h" />
     <ClInclude Include="ObjFormatSymbolItem.h" />
     <ClInclude Include="ObjFormatSymbols.h" />
-    <ClInclude Include="ChainTypeObject.h" />
+    <ClInclude Include="ChainTypeItem.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Bin.h" />
     <ClInclude Include="Bucket.h" />
-    <ClInclude Include="Lexer.h" />
     <ClInclude Include="Parser.h" />
-    <ClInclude Include="PreProcessor.h" />
     <ClInclude Include="Reg.h" />
     <ClInclude Include="RegPool.h" />
     <ClInclude Include="Section.h" />

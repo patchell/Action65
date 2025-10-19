@@ -9,7 +9,7 @@ bool CChainType::Create()
 	return CChain::Create();
 }
 
-bool CChainType::Is(CChainTypeObject::Spec Type)
+bool CChainType::Is(CChainTypeItem::Spec Type)
 {
 	bool rV = false;
 	CChainItem* pItem = GetHead();
@@ -18,7 +18,7 @@ bool CChainType::Is(CChainTypeObject::Spec Type)
 	{
 		if (pItem->Is(CChainItem::ChainItemType::TYPE))
 		{
-			CChainTypeObject* pTO = (CChainTypeObject*)pItem;
+			CChainTypeItem* pTO = (CChainTypeItem*)pItem;
 			if (pTO->Is(Type))
 			{
 				rV = true;
@@ -36,16 +36,16 @@ bool CChainType::IsFundamentalType()
 
 	if (pItem && pItem->Is(CChainItem::ChainItemType::TYPE))
 	{
-		CChainTypeObject* pTO = (CChainTypeObject*)pItem;
+		CChainTypeItem* pTO = (CChainTypeItem*)pItem;
 		rV = pTO->IsFundamentalType();
 	}
 	return rV;
 }
 
-CChainTypeObject::Spec CChainType::GetFundSpec()
+CChainTypeItem::Spec CChainType::GetFundSpec()
 {
-	CChainTypeObject* pItem = (CChainTypeObject*)GetHead();
-	CChainTypeObject::Spec rV = CChainTypeObject::Spec::NONE;
+	CChainTypeItem* pItem = (CChainTypeItem*)GetHead();
+	CChainTypeItem::Spec rV = CChainTypeItem::Spec::NONE;
 
 	if (pItem)
 	{

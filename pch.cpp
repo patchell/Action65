@@ -21,13 +21,13 @@ const char* Exception::GetExceptionTypeString(ExceptionType xType)
 	return pName;
 }
 
-const char* Exception::ExcepTypeToString::FindString(ExceptionType Type)
+const char* Exception::ExceptionTypeStrings::FindExceptionTypeString(ExceptionType Type)
 {
 	const char* pString = 0;
 	int i;
 	bool Loop = true;
 
-	for (i = 0; Loop && (ExceptionTypesLUT[i].m_Name != 0 ); ++i)
+	for (i = 0; Loop && (Exception::ExceptionTypesLUT[i].m_Name != 0 ); ++i)
 	{
 		if (ExceptionTypesLUT[i].m_Type == Type)
 		{

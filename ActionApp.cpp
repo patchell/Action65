@@ -11,7 +11,6 @@ CActionApp* Act()
 int main(int argc, char* argv[])
 {
 	fprintf(stderr, "The Action! Cross Compiler for the 6502 Ver 0.0.4\nOct 7, 2025\n");
-	exit(1);
 	if(ActApp.Create(argc, argv))
 		ActApp.Run();
 	fprintf(stderr, "Done\n");
@@ -79,7 +78,6 @@ bool CActionApp::Create(int argc, char* argv[])
 	int l=0;
 	bool bOpps = false;
 
-	exit(0);
 	if (argc == 1)
 	{
 		fprintf(stderr, "Usage:\n");
@@ -341,11 +339,11 @@ void CActionApp::CloseAll()
 	CloseListing();
 }
 
-char* CActionApp::IndentString(char* s, int Indent, int c)
+char* CActionApp::IndentString(char* s, int StringLength, int Indent, int c)
 {
 	int i;
 
-	for (i = 0; i < Indent;++i)
+	for (i = 0; (i < Indent) && (i<(StringLength - 1));++i)
 		s[i] = c;
 	s[i] = 0;
 	return s;
@@ -390,7 +388,7 @@ void CActionApp::Dump(
 			if (n < 8)
 			{
 				Pad = (8 - n) * 3;
-				Act()->IndentString(strPad, Pad, ' ');
+				Act()->IndentString(strPad, 64, Pad, ' ');
 				l += sprintf_s(&s[l], 256 - l, "%s", strPad);
 			}
 			for (i = 0; i < n; ++i)
@@ -411,7 +409,9 @@ void CActionApp::Dump(
 
 void CActionApp::Exit(int Err)
 {
-	if (Err == 2)
+	if(Err == 1)
+		fprintf(stderr, "Exception Error:See Log File\n");
+	else if (Err == 2)
 		fprintf(stderr, "Internal Error:See Log File\n");
 	CloseAll();
 	exit(Err);

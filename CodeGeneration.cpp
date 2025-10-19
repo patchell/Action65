@@ -36,7 +36,7 @@ CValue* CCodeGeneration::EmitBinaryOp(
 	AdrModeType AddressMode = AdrModeType::NA;
 	CValue* pReturnValue = 0;
 	CValue* pTempConst = 0;
-	CChainTypeObject* pTypeObj = 0;
+	CChainTypeItem* pTypeObj = 0;
 	int YregValue = -1;
 	CValue* pLabel = 0;
 	CInstruction* pOpCode = 0;
@@ -66,7 +66,7 @@ CValue* CCodeGeneration::EmitBinaryOp(
 		//------------------------------------------
 		// Operand 1
 		//------------------------------------------
-		if (((CChainTypeObject*)pTCnext->GetTail())->IsFundamentalType())
+		if (((CChainTypeItem*)pTCnext->GetTail())->IsFundamentalType())
 		{
 			if (i == 0)	//first time though
 			{
@@ -105,7 +105,7 @@ CValue* CCodeGeneration::EmitBinaryOp(
 				pOpCode = 0;
 			}
 		}
-		else if (((CChainTypeObject*)pTCnext->GetTail())->Is(CChainTypeObject::Spec::POINTER_DREF))
+		else if (((CChainTypeItem*)pTCnext->GetTail())->Is(CChainTypeItem::Spec::POINTER_DREF))
 		{
 			if (i == 0)	//first time though
 			{
@@ -159,7 +159,7 @@ CValue* CCodeGeneration::EmitBinaryOp(
 			pSection->AddInstruction(pOpCode);
 			pOpCode = 0;
 		}
-		else if (((CChainTypeObject*)pTCnext->GetTail())->Is(CChainTypeObject::Spec::POINTER))
+		else if (((CChainTypeItem*)pTCnext->GetTail())->Is(CChainTypeItem::Spec::POINTER))
 		{
 			//------------------------------------------------
 			// Performing Arithmatic on a POINTER is the same
@@ -204,7 +204,7 @@ CValue* CCodeGeneration::EmitBinaryOp(
 				pOpCode = 0;
 			}
 		}
-		else if (((CChainTypeObject*)pTCnext->GetTail())->Is(CChainTypeObject::Spec::ARRAY))
+		else if (((CChainTypeItem*)pTCnext->GetTail())->Is(CChainTypeItem::Spec::ARRAY))
 		{
 			if (i == 0)	//first time through
 			{
@@ -247,7 +247,7 @@ CValue* CCodeGeneration::EmitBinaryOp(
 		//------------------------------------------
 		// Operand 2
 		//------------------------------------------
-		if (((CChainTypeObject*)pTCchild->GetTail())->IsFundamentalType())
+		if (((CChainTypeItem*)pTCchild->GetTail())->IsFundamentalType())
 		{
 			if (i == 0)
 			{
@@ -285,7 +285,7 @@ CValue* CCodeGeneration::EmitBinaryOp(
 				pOpCode	= 0;
 			}
 		}
-		else if (((CChainTypeObject*)pTCchild->GetTail())->Is(CChainTypeObject::Spec::POINTER_DREF))
+		else if (((CChainTypeItem*)pTCchild->GetTail())->Is(CChainTypeItem::Spec::POINTER_DREF))
 		{
 			if (i == 0)	//first time though
 			{
@@ -322,11 +322,11 @@ CValue* CCodeGeneration::EmitBinaryOp(
 				// second and greater times though
 			}
 		}
-		else if (((CChainTypeObject*)pTCchild->GetTail())->Is(CChainTypeObject::Spec::POINTER))
+		else if (((CChainTypeItem*)pTCchild->GetTail())->Is(CChainTypeItem::Spec::POINTER))
 		{
 			fprintf(Act()->LogFile(), "Pointer\n");
 		}
-		else if (((CChainTypeObject*)pTCchild->GetTail())->Is(CChainTypeObject::Spec::ARRAY))
+		else if (((CChainTypeItem*)pTCchild->GetTail())->Is(CChainTypeItem::Spec::ARRAY))
 		{
 			if (i == 0)
 			{
@@ -384,7 +384,7 @@ CValue* CCodeGeneration::EmitBinaryOp(
 				sprintf_s(
 					ThrownException.GetErrorString(),
 					ThrownException.GetMaxStringLen(),
-					"Internal Error:Binary Operation:Unknown Destination\n"
+					"CCodeGeneration::EmitBinaryOp:Unknown Destination\n"
 				);
 				throw(ThrownException);
 				break;
@@ -406,14 +406,14 @@ CValue* CCodeGeneration::EmitBinaryOp(
 				CReg* pReg = new CReg;
 
 				pReg->CreateTypeChain();
-				pTypeObj = new CChainTypeObject;
+				pTypeObj = new CChainTypeItem;
 				pTypeObj->Create();
-				pTypeObj->SetSpec(CChainTypeObject::Spec::AREG);
+				pTypeObj->SetSpec(CChainTypeItem::Spec::AREG);
 				pReg->GetTypeChain()->AddToHead(pTypeObj);
 
-				pTypeObj = new CChainTypeObject;
+				pTypeObj = new CChainTypeItem;
 				pTypeObj->Create();
-				pTypeObj->SetSpec(CChainTypeObject::Spec::BYTE);
+				pTypeObj->SetSpec(CChainTypeItem::Spec::BYTE);
 				pReg->GetTypeChain()->AddToHead(pTypeObj);
 				pReg->SetType(CReg::RegType::A);
 				pReturnValue->Create(pReg);
@@ -425,12 +425,12 @@ CValue* CCodeGeneration::EmitBinaryOp(
 					pReturnValue = GetVirtRegPool()->Lock(CVirtualReg::RegStatus::LOCKED_WORD);
 					pReturnValue->GetSymbol()->CreateTypeChain();
 
-					pTypeObj = new CChainTypeObject;
-					pTypeObj->SetSpec(CChainTypeObject::Spec::VIRTUAL_REG);
+					pTypeObj = new CChainTypeItem;
+					pTypeObj->SetSpec(CChainTypeItem::Spec::VIRTUAL_REG);
 					pReturnValue->GetSymbol()->GetTypeChain()->AddToTail(pTypeObj);
 
-					pTypeObj = new CChainTypeObject;
-					pTypeObj->SetSpec(CChainTypeObject::Spec::INT);
+					pTypeObj = new CChainTypeItem;
+					pTypeObj->SetSpec(CChainTypeItem::Spec::INT);
 					pReturnValue->GetSymbol()->GetTypeChain()->AddToTail(pTypeObj);
 
 					pOpCode = new CInstruction;
@@ -497,14 +497,14 @@ void CCodeGeneration::EmitInstruction(
 	KeyWord* pKeyWord = 0;
 	int StartAddress = 0;
 
-	CLexer* pLex = Act()->GetParser()->GetLexer();
+	CParser::CLexer* pLex = Act()->GetParser()->GetLexer();
 	if (pSection == 0)
 	{
 		ThrownException.SetXCeptType(Exception::ExceptionType::CODEGEN_NO_SECTION);
 		sprintf_s(
 			ThrownException.GetErrorString(),
 			ThrownException.GetMaxStringLen(),
-			"Line %d: No Section Defined for Instruction\n",
+			"CCodeGeneration::EmitInstruction: Line %d: No Section Defined for Instruction\n",
 			pLex->GetLineNumber()
 		);
 		throw(ThrownException);
@@ -523,7 +523,7 @@ void CCodeGeneration::EmitInstruction(
 			sprintf_s(
 				ThrownException.GetErrorString(),
 				ThrownException.GetMaxStringLen(),
-				"Internal Error:Instruction Label has no symbol\n"
+				"CCodeGeneration::EmitInstruction: Instruction Label has no symbol\n"
 			);
 			throw(ThrownException);
 		}
@@ -534,7 +534,7 @@ void CCodeGeneration::EmitInstruction(
 		sprintf_s(
 			ThrownException.GetErrorString(),
 			ThrownException.GetMaxStringLen(),
-			"Line %d: Illegal Addressing Mode\n",
+			"CCodeGeneration::EmitInstruction Line %d: Illegal Addressing Mode\n",
 			Act()->GetParser()->GetLexer()->GetLineNumber()
 		);
 		throw(ThrownException);
@@ -599,7 +599,7 @@ CValue* CCodeGeneration::EmitDirect(Token Op, CValue* pVdest, int Byte, CSection
 		sprintf_s(
 			ThrownException.GetErrorString(),
 			ThrownException.GetMaxStringLen(),
-			"Internal Error:Code Gen:Unknown Byte Order:%d\n", Byte
+			"CCodeGeneration::EmitDirect: Unknown Byte Order:%d\n", Byte
 		);
 		throw(ThrownException);
 		break;
@@ -631,7 +631,7 @@ CValue* CCodeGeneration::EmitIndirect(Token Op, CValue* pVdestPointer, int Byte,
 		sprintf_s(
 			ThrownException.GetErrorString(),
 			ThrownException.GetMaxStringLen(),
-			"Internal Error:Code Gen:Unknown Byte Order:%d\n", Byte
+			"CCodeGeneration:: EmitIndirect:Code Gen:Unknown Byte Order:%d\n", Byte
 		);
 		throw(ThrownException);
 		break;
@@ -685,7 +685,7 @@ CValue* CCodeGeneration::EmitIndexed(Token Op, CValue* pVdest, CValue* pIndex, i
 		sprintf_s(
 			ThrownException.GetErrorString(),
 			ThrownException.GetMaxStringLen(),
-			"Internal Error:Code Gen:Unknown Byte Order:%d\n", Byte
+			"CCodeGeneration::EmitIndexed: Code Gen:Unknown Byte Order:%d\n", Byte
 		);
 		throw(ThrownException);
 	}

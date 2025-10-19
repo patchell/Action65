@@ -80,28 +80,42 @@ CValue* CAct65ArrayINDEX::Emit(CValue* pVc, CValue* pVn)
 	CValue* pLabel;
 
 	pLabel = GetCodeGen()->GetPendingLabel();
-	switch (pVc->GetValueType())
+	if (pVc)
 	{
-	case CValue::ValueType::REG:
-		switch (pVc->GetRegister()->GetType())
+		switch (pVc->GetValueType())
 		{
-		case CReg::RegType::A:
-			pOpCode = new CInstruction;
-			pOpCode->GenInstruction(Token::TAX, AdrModeType::IMPLIED, 0, pLabel, GetSection()->GetLocationCounter());
-			GetSection()->AddInstruction(pOpCode);
-			pVc->GetRegister()->SetType(CReg::RegType::X);
+		case CValue::ValueType::REG:
+			switch (pVc->GetRegister()->GetType())
+			{
+			case CReg::RegType::A:
+				pOpCode = new CInstruction;
+				pOpCode->GenInstruction(Token::TAX, AdrModeType::IMPLIED, 0, pLabel, GetSection()->GetLocationCounter());
+				GetSection()->AddInstruction(pOpCode);
+				pVc->GetRegister()->SetType(CReg::RegType::X);
+				break;
+			case CReg::RegType::X:
+				break;
+			case CReg::RegType::Y:
+				break;
+			}
 			break;
-		case CReg::RegType::X:
+		case CValue::ValueType::VIRTUAL_REGISTER:
+		case CValue::ValueType::SYMBOL:
 			break;
-		case CReg::RegType::Y:
+		case CValue::ValueType::CONSTANT:
 			break;
 		}
-		break;
-	case CValue::ValueType::VIRTUAL_REGISTER:
-	case CValue::ValueType::SYMBOL:
-		break;
-	case CValue::ValueType::CONSTANT:
-		break;
+	}
+	else
+	{
+		ThrownException.SetXCeptType(Exception::ExceptionType::INTERNAL_SYMBOL_NULL);
+		sprintf_s(
+			ThrownException.GetErrorString(),
+			ThrownException.GetMaxStringLen(),
+			"Internal Error:CAct65ArrayINDEX cannot have a NULL child value (pVc) Line:%d\n",
+			GetLine()
+		);
+		throw(ThrownException);
 	}
     return pRetValue;
 }

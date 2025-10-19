@@ -9,6 +9,12 @@ Compatibility Issues with the real ACTION!
 	Hopefully, in the future I will find a way to fix
 	this conflict.
 
+October 19, 2025
+
+Still revamping a lot of stuff that just needed...revamping.
+At the moment, the example (test9.act) gets to the code generation
+before it throws an exception.
+
 October 5, 2025
 
 Major Changes in progress.  I discoverred a big problem

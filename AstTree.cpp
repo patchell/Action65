@@ -71,7 +71,9 @@ void CAstTree::TraverseTree(
 	--Recursions;
 	if (Recursions <= 0)
 	{
-		fprintf(Act()->LogFile(), "Internal Error::Too Many Recursions in CAstTree::TraverseTree  Line:%d Col:%d\n",
+		fprintf(Act()->LogFile(), 
+			"CAstTree::TraverseTree: Too Many Recursions in:%s   Line:%d Col:%d\n",
+			pNode->GetNodeName() ? pNode->GetNodeName() : "<unnamed>",
 			pNode->GetLine(),
 			pNode->GetColumn()
 		);
@@ -80,7 +82,8 @@ void CAstTree::TraverseTree(
 		sprintf_s(
 			ThrownException.GetErrorString(),
 			ThrownException.GetMaxStringLen(),
-			"Internal Error:Too Many Recursions in CAstTree::TraverseTree  Line:%d Col:%d\n",
+			"CAstTree::TraverseTree: Too Many Recursions in:%s   Line:%d Col:%d\n",
+			pNode->GetNodeName() ? pNode->GetNodeName() : "<unnamed>",
 			pNode->GetLine(),
 			pNode->GetColumn()
 		);
@@ -141,7 +144,8 @@ void CAstTree::TraverseTree(
 			sprintf_s(
 				ThrownException.GetErrorString(),
 				ThrownException.GetMaxStringLen(),
-				"Internal Error:Too Many Recursions in CAstTree::TraverseTree  Line:%d Col:%d\n",
+				"CAstTree::TraverseTree: Too Many Recursions in:%s   Line:%d Col:%d\n",
+				pNode->GetNodeName() ? pNode->GetNodeName() : "<unnamed>", 
 				pNode->GetLine(),
 				pNode->GetColumn()
 			);
@@ -189,21 +193,14 @@ void CAstTree::Run()
 	}
 	catch (Exception& BooBoo)
 	{
-		char* s = new char[256];
-		Exception::ExceptionType ExcptType;
-
-		ExcptType = BooBoo.GetXCeptType();
-		switch (ExcptType)
-		{
-		case Exception::ExceptionType::WHOKNOWS:
-			fprintf(Act()->LogFile(), "Unknown Exception Caught\n");
-			break;
-		default:
-			fprintf(Act()->LogFile(), "%s\n", BooBoo.GetErrorString()	);
-			break;
-		}
-		int two = 2;
-		Act()->Exit(two);
+		fprintf(Act()->LogFile(),
+			"AST ERROR: %s SubType:%s: %s\n",
+			Exception::FindExceptionTypeString(BooBoo.GetXCeptType()),
+			Exception::FindExceptionSubTypeString(BooBoo.GetExceptionSubType()),
+			BooBoo.GetErrorString()
+		);
+		Act()->CloseAll();
+		Act()->Exit(1);
 	}
 }
 

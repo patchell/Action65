@@ -2,19 +2,20 @@
 
 int CBin::Print(char* pSO, int l, int Indent, const char* s)
 {
-	int rV = 0;
+	int ls = 0;
+	int size = l;
 
 	char* pIndentString = new char[512];
-	Act()->IndentString(pIndentString, 512, Indent + 2);
+	Act()->IndentString(pIndentString, 512, Indent + 2, ' ');
 	if (!s) s = "";		
-	
-	rV += sprintf_s(pSO + rV, l - rV, "%sCBin::%s\n", 
+
+	ls += sprintf_s(&pSO[ls], size, "%sCBin::%s\n", 
 		pIndentString, 
 		GetName());
 
 
 	delete[] pIndentString;
-	return rV;
+	return ls;
 }
 
 //-----------------------------------------------

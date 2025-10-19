@@ -414,7 +414,7 @@ void CAct65Opcode::PrepareInstruction(
 	CValue* pLabel		// Label associated with this instruction
 )
 {
-	CLexer* pLex = Act()->GetParser()->GetLexer();
+	CParser::CLexer* pLex = Act()->GetParser()->GetLexer();
 	if(pSection == 0)
 	{
 		ThrownException.SetXCeptType(Exception::ExceptionType::NOSECTION_DEFINED);
@@ -453,7 +453,7 @@ void CAct65Opcode::PrepareInstruction(
 		}
 		SetToken(OpToken);
 		SetLineNumber(pLex->GetLineNumber());
-		SetColumnNumber(pLex->GetColunm());
+		SetColumnNumber(pLex->GetColumn());
 		SetOpCode(pLex->MakeOpcode(OpToken, AddressMode));
 		SetByteCount(OperandByteCount::GetOperandByteCount(AddressMode) + 1);
 		SetValue(pOperandValue);

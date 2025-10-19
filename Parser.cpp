@@ -1,12 +1,1411 @@
 #include "pch.h"
 
+//-------------------------------------
+// Lexer Methods and PreProcessor Methods
+//-------------------------------------
+
+CParser::CLexer::CLexer()
+{
+	int i;
+
+	for (i = 0; i < 256; ++i)
+		m_aLexBuff[i] = 0;
+	m_UngetBuffer = 0;
+	m_LexBuffIndex = 0;
+	m_Line = 1;
+	m_Col = 0;
+	m_LexValue = 0;
+	m_pLexSymbol = 0;
+	m_bAsmMode = false;
+	m_pCurrentLine = 0;
+	m_pCurrentComment = 0;
+	m_FileIndex = 0;
+	m_InFileSize = 0;
+	m_pFileBuffeer = 0;
+	m_pCompilerParser = 0;
+}
+
+CParser::CLexer::~CLexer()
+{
+}
+
+bool CParser::CLexer::Create(CParser* pParse)
+{
+	struct _stat32 FileStats;
+	unsigned BytesRead = 0;
+	bool rV = true;
+	//----------------------------
+	// Create Symbol Table
+	//----------------------------
+	m_SymbolTable.Create(101);
+	//----------------------------
+	//---------------------------------
+	// Open Input File
+	//---------------------------------
+	_stat32(Act()->GetSourceFileName(), &FileStats);
+	m_InFileSize = FileStats.st_size;
+	Act()->OpenSource();
+	m_pFileBuffeer = new char[m_InFileSize + 1];
+	if (m_pFileBuffeer && Act()->SrcFile())
+		BytesRead = (int)fread(m_pFileBuffeer, 1, m_InFileSize, Act()->SrcFile());
+	Act()->CloseSource();
+	if (BytesRead)
+		m_InFileSize = BytesRead;
+	if (Act()->LogFile())
+		fprintf(Act()->LogFile(), "File:%s has %d Bytes\n", Act()->GetSourceFileName(), m_InFileSize);
+	m_LexSubParser.Create(this);
+	m_pCompilerParser = pParse;
+	return rV;
+}
+
+Token CParser::CLexer::LookAheadToken() {
+	return m_pCompilerParser->LookAheadToken();
+}
+void CParser::CLexer::SetLookAheadToken(Token t) {
+	m_pCompilerParser->SetLookAheadToken(t);
+}
+
+int CParser::CLexer::LexGet()
+{
+	int c = EOF;
+
+	if (m_FileIndex < m_InFileSize)
+		c = m_pFileBuffeer[m_FileIndex++];
+	else
+	{
+		c = EOF;
+		if (c == '\n')
+		{
+			m_Line++;
+			m_Col = 0;
+		}
+		else
+			m_Col++;
+	}
+	return c;
+}
+
+int CParser::CLexer::LexLook(int index)
+{
+	//--------------------------------------
+	// Looks at characters in the future
+	// from the current character pointed
+	// by the code buffer pointer 
+	// ( m_FileIndex )
+	// 0 is the current next character
+	// 1 is the one following that
+	// ... ext.
+	//--------------------------------------
+	int c = EOF;
+
+	if (m_FileIndex + index < m_InFileSize)
+		c = m_pFileBuffeer[m_FileIndex + index];
+	else
+		c = EOF;
+	return c;
+}
+
+void CParser::CLexer::LexUnGet(int c)
+{
+	if (m_FileIndex > 0)
+		m_FileIndex--;
+}
+
+bool CParser::CLexer::IsValidHexNumber(int c)
+{
+	bool IsValid = false;
+
+	switch (c)
+	{
+	case '0': case '1': case '2': case '3': case '4':
+	case '5': case '6': case '7': case '8': case '9':
+	case 'a': case 'b': case 'c': case 'd': case 'e': case 'f':
+	case 'A': case 'B': case 'C': case 'D': case 'E': case 'F':
+		IsValid = true;
+		break;
+	}
+	return IsValid;
+}
+
+bool CParser::CLexer::IsValidNumber(int c)
+{
+	bool IsValid = false;
+
+	switch (c)
+	{
+	case '0': case '1': case '2': case '3': case '4':
+	case '5': case '6': case '7': case '8': case '9':
+		IsValid = true;
+		break;
+	}
+	return IsValid;
+}
+
+bool CParser::CLexer::IsValidNameFirstChar(int c)
+{
+	bool IsValid = false;
+
+	if (isalpha(c) || c == '_')
+		IsValid = true;
+	return IsValid;;
+}
+
+bool CParser::CLexer::IsValidNameChar(int c)
+{
+	bool IsValid = false;
+
+	if (isalnum(c) || c == '_')
+		IsValid = true;
+	return IsValid;;
+}
+
+bool CParser::CLexer::IsWhiteSpace(int c)
+{
+	bool IsValid = false;
+
+	switch (c)
+	{
+	case '\n':
+	case '\r':
+	case '\t':
+	case ' ':
+		IsValid = true;
+		break;;
+	}
+	return IsValid;
+}
+
+bool CParser::CLexer::IsValidAssignmentOperator(int c)
+{
+	bool IsValid = false;
+
+	switch (c)
+	{
+	case '+':
+	case '-':
+	case '*':
+	case '/':
+	case 'M':
+	case '&':
+	case '%':
+	case '!':
+	case 'X':
+	case 'L':
+	case 'R':
+		IsValid = true;
+	}
+	return IsValid;
+}
+
+Token CParser::CLexer::Lex()
+{
+	bool Loop = true;
+	bool auxLoop = true;
+	int c = 0, c1 = 0, c2 = 0;
+	Token TokenValue = Token(0);
+	CBin* pSym = 0;
+	const char* pLookaheadTokenString = 0;
+	static Token PreviousSymbolType = Token::NONE;
+
+	m_LexBuffIndex = 0;
+	while (Loop)
+	{
+		c = LexGet();
+		switch (c)
+		{
+		case EOF:
+			TokenValue = Token::ENDOFFILE;
+			Loop = false;
+			break;
+		case '\n':	//white space
+		case '\r':	//more white space
+		case '\t':
+			[[fallthrough]];
+		case ' ':
+			break;
+		case '0': case '1': case '2': case '3': case '4':
+		case '5': case '6': case '7': case '8':
+			[[fallthrough]];
+		case '9':
+			//Decimal Number
+			m_aLexBuff[m_LexBuffIndex++] = c;
+			auxLoop = true;
+			while (auxLoop)
+			{
+				c = LexGet();
+				if (IsValidNumber(c))
+					m_aLexBuff[m_LexBuffIndex++] = c;
+				else
+					auxLoop = false;
+			}
+			m_aLexBuff[m_LexBuffIndex] = 0;
+			m_LexValue = atoi(m_aLexBuff);
+			LexUnGet(c);
+			Loop = false;
+			TokenValue = Token::NUMBER;
+			break;
+		case '$':	//Hexadecimal Number
+			auxLoop = true;
+			while (auxLoop)
+			{
+				c = LexGet();
+				if (IsValidHexNumber(c))
+					m_aLexBuff[m_LexBuffIndex++] = c;
+				else
+					auxLoop = false;
+			}
+			m_aLexBuff[m_LexBuffIndex] = 0;
+			m_LexValue = strtol(m_aLexBuff, NULL, 16);
+			LexUnGet(c);
+			Loop = false;
+			TokenValue = Token::NUMBER;
+			break;
+		case '=':	//assignment operators
+			c = LexGet();
+			if (IsWhiteSpace(c) || c != '=')
+			{
+				TokenValue = Token('=');
+				Loop = false;
+				LexUnGet(c);
+			}
+			else
+			{
+				c = LexGet();
+				if (IsValidAssignmentOperator(c))
+				{
+					switch (c)
+					{
+					case '+':
+						TokenValue = Token::ASSIGN_ADD;
+						break;
+					case '-':
+						TokenValue = Token::ASSIGN_SUB;
+						break;
+					case '*':
+						TokenValue = Token::ASSIGN_SUB;
+						break;
+					case '/':
+						TokenValue = Token::ASSIGN_DIV;
+						break;
+					case 'M':
+						//throw away next two characters
+						LexGet();
+						LexGet();
+						TokenValue = Token::ASSIGN_MOD;
+						break;
+					case '&':
+						TokenValue = Token::ASSIGN_AND;;
+						break;
+					case '%':
+						TokenValue = Token::ASSIGN_OR;
+						break;
+					case '!':
+						TokenValue = Token::ASSIGN_XOR;
+						break;
+					case 'X':
+						TokenValue = Token::ASSIGN_XOR;;
+						//throw away next two characters
+						LexGet();
+						LexGet();
+						break;
+					case 'L':
+						//throw away next two characters
+						LexGet();
+						LexGet();
+						TokenValue = Token::ASSIGN_LSH;
+						break;
+					case 'R':
+						//throw away next two characters
+						LexGet();
+						LexGet();
+						TokenValue = Token::ASSIGN_RSH;
+						break;
+					}
+				}
+			}
+			Loop = false;
+			break;
+		case ':':	// Label
+			if (IsValidNameFirstChar(LexLook(0)))
+			{
+				m_LexBuffIndex = 0;
+				auxLoop = true;
+				while (auxLoop)
+				{
+					c = LexGet();
+					if (IsValidNameChar(c))
+						m_aLexBuff[m_LexBuffIndex++] = c;
+					else
+						auxLoop = false;
+				}
+				m_aLexBuff[m_LexBuffIndex] = 0;
+				//Lookup Name
+				m_pLexSymbol = (CSymbol*)GetSymTab()->FindSymbol(m_aLexBuff, CBin::BinType::ANY, 0);
+				if (!m_pLexSymbol)	//new lable
+				{
+					m_pLexSymbol = new CSymbol;
+					m_pLexSymbol->Create();
+					m_pLexSymbol->SetName(m_aLexBuff);
+					if (c == ':')
+					{
+						m_pLexSymbol->SetIdentType(CBin::IdentType::NEW_SYMBOL);
+						m_pLexSymbol->SetToken(Token::LOCAL_LABEL);
+					}
+					else
+					{
+						LexUnGet(c);
+						m_pLexSymbol->SetIdentType(CBin::IdentType::NEW_SYMBOL);
+						m_pLexSymbol->SetToken(Token::GLOBAL_LABEL);
+					}
+					TokenValue = m_pLexSymbol->GetToken();
+				}
+				else
+				{
+					if (':' == c)
+					{
+						TokenValue = Token::LOCAL_LABEL;
+					}
+					else
+					{
+						TokenValue = Token::GLOBAL_LABEL;
+						LexUnGet(c);
+					}
+				}
+				Loop = false;
+			}
+			else
+			{
+				TokenValue = Token(':');
+				Loop = false;
+			}
+			break;
+		case '[':
+		case ']':
+		case '(':
+		case ')':
+		case'{':
+		case '}':
+		case '+':	//add
+		case '-':	//sub
+		case '*':	//mul
+		case '!':	//XOR
+		case '&':	//Bitwise AND
+		case '%':	//Bitwise OR
+		case '#':	//Not Equal/Immediate Data
+		case '@':	//Address of
+		case '^':	//Pointer dereference
+			[[fallthrough]];
+		case ',':
+			TokenValue = Token(c);
+			Loop = false;
+			break;
+		case '"':	// STRING
+			auxLoop = true;
+			while (auxLoop)
+			{
+				c = LexGet();
+				if (c == '"')
+					auxLoop = false;
+				else
+				{
+					m_aLexBuff[m_LexBuffIndex++] = c;
+				}
+			}
+			m_aLexBuff[m_LexBuffIndex++] = 0;
+			Loop = false;
+			TokenValue = Token::STRING;
+			break;
+		case '>':	//Greader Than
+			c = LexGet();
+			if (c == '=')
+				TokenValue = Token::GTEQ;
+			else
+			{
+				TokenValue = Token('>');
+				LexUnGet(c);
+			}
+			Loop = false;
+			break;
+		case '<':	//Less Than
+			c = LexGet();
+			if (c == '>')
+				TokenValue = Token('#');
+			else if (c == '=')
+				TokenValue = Token::LTEQ;
+			else
+			{
+				TokenValue = Token('<');
+				LexUnGet(c);
+			}
+			Loop = false;
+			break;
+		case '.':
+			if (PreviousSymbolType == Token::RECORDTYPE)
+			{
+				TokenValue = Token('.');
+				Loop = false;
+			}
+			else
+			{
+				//-------------------------------
+				// Look ahead just a tiny bit
+				//-------------------------------
+				c1 = LexLook(0);
+				c2 = LexLook(1);
+				if (!IsValidNameChar(c2))
+				{
+					switch (c1)
+					{
+					case 'A':	//accumulator
+						TokenValue = Token::AREG;
+						IncFileIndex(1);
+						break;
+					case 'P':	//proecssor status
+						TokenValue = Token::PSREG;
+						IncFileIndex(1);
+						break;
+					case 'S':	// stack pointer
+						TokenValue = Token::SPREG;
+						IncFileIndex(1);
+						break;
+					case 'X':	// X index register
+						TokenValue = Token::XREG;
+						IncFileIndex(1);
+						break;
+					case 'Y':	// Y index register
+						TokenValue = Token::YREG;
+						IncFileIndex(1);
+						break;
+					case 'C':	// carry flag
+						TokenValue = Token::CARRY;
+						IncFileIndex(1);
+						break;
+					case 'D':
+						TokenValue = Token::DECIMAL_MODE;
+						IncFileIndex(1);
+						break;
+					case 'I':	// interrupt flag
+						TokenValue = Token::IRQENABLE;
+						IncFileIndex(1);
+						break;
+					case 'N':	// negative flag
+						TokenValue = Token::NEG;
+						IncFileIndex(1);
+						break;
+					case 'O':
+						TokenValue = Token::OVERFLOW;
+						IncFileIndex(1);
+						break;
+					case 'Z':
+						TokenValue = Token::ZERO;
+						IncFileIndex(1);
+						break;
+					case '*':
+						//-------------------------------------
+						// 	Unfortunately, this has a conflict with the meaning
+						// of Multiply, so I had to make the current location
+						//	Symbol be '.*' : (
+						//-------------------------------------
+						TokenValue = Token::CUR_LOC;
+						IncFileIndex(1);
+						break;
+					default:
+						TokenValue = Token('.');
+						break;
+					}
+					Loop = false;
+				}
+				else
+				{
+					TokenValue = Token('.');
+				}
+			}
+			Loop = false;
+			break;
+		case '/':
+			if (LexLook(0) == '/')	//comment?
+			{
+				auxLoop = true;
+				while (auxLoop)
+				{
+					c = LexLook(0);
+					if (c == '\n')
+					{
+						auxLoop = false;
+					}
+					c = LexGet();
+				}
+			}
+			else
+			{
+				TokenValue = Token(c);
+				Loop = false;
+			}
+			break;
+		case ';':	// Comment
+			auxLoop = true;
+			while (auxLoop)
+			{
+				c = LexGet();
+				if (c == '\n')
+				{
+					auxLoop = false;
+					m_Line++;
+					m_Col = 0;
+				}
+			}	// No need for Loop = false here
+			break;
+		case '\'':
+			m_LexValue = LexGet();
+			if (LexLook(0) == '\'')
+				c = LexGet();
+			TokenValue = Token::CHAR_CONSTANT;
+			Loop = false;
+			break;
+		default:	//Keywords and Identifiers
+			m_aLexBuff[m_LexBuffIndex++] = c;
+			auxLoop = true;
+			while (auxLoop)
+			{
+				c = LexGet();
+				if (IsValidNameChar(c))
+				{
+					m_aLexBuff[m_LexBuffIndex++] = c;
+				}
+				else
+				{
+					auxLoop = false;
+					m_aLexBuff[m_LexBuffIndex] = 0;
+					LexUnGet(c);
+				}
+			}	//END OF collecting characters for word
+			if (strcmp("Result", m_aLexBuff) == 0)
+			{
+				printf("Result\n");
+			}
+
+			//---------------------------------
+			// First check to see if it is a
+			// Keyword
+			//---------------------------------
+			TokenValue = LookupKeyword(m_aLexBuff);
+			if (int(TokenValue))
+			{
+				//--------------------------
+				// Keyword has matched
+				// 
+				// We need to check to see
+				// if it is a compiler
+				// directive
+				//--------------------------
+				KeyWord* pKW = FindKeyword(TokenValue);
+				if (pKW)
+				{
+					// Found a matching keyword
+					// Check if it's a compiler directive
+					if (pKW->m_KeyWordType == KeyWord::KeyWordType::COMPILER_DIRECTIVE)
+					{
+						switch (TokenValue)
+						{
+						case Token::INCLUDE:
+							// Handle include directive
+						case Token::DEFINE:
+							// Handle define directive
+							[[fallthrough]];
+						case Token::SET:
+							// Handle set directive
+							m_LexSubParser.Parse(TokenValue);
+							TokenValue = LookAheadToken();
+							break;
+						default:
+							pLookaheadTokenString = LookupTokenToString(TokenValue);
+							ThrownException.SetXCeptType(Exception::ExceptionType::UNEXPECTED_TOKEN);
+							sprintf_s(
+								ThrownException.GetErrorString(),
+								ThrownException.GetMaxStringLen(),
+								"CParser::CLexer::Lex: Line %d: Illegal Use of Directive Keyword %s\n",
+								GetLineNumber(),
+								pLookaheadTokenString
+							);
+							throw(ThrownException);
+							break;
+						}
+					}
+				}
+				Loop = 0;
+			}
+			else
+			{
+				//-------------------------------------
+				// Is it an Identifier?
+				//-------------------------------------
+				m_pLexSymbol = (CSymbol*)LookupSymbol(m_aLexBuff);
+				if (m_pLexSymbol)
+				{
+					TokenValue = m_pLexSymbol->GetToken();
+					PreviousSymbolType = TokenValue;
+					Loop = false;
+				}
+				else
+				{
+					//-------------------------------------
+					// Identifier is New/Undefined
+					//-------------------------------------
+					m_pLexSymbol = new CSymbol;
+					m_pLexSymbol->Create();
+					TokenValue = Token::IDENT;
+					m_pLexSymbol->SetIdentType(CBin::IdentType::NEW_SYMBOL);
+					m_pLexSymbol->SetName(GetLexBuffer());
+					Loop = false;
+				}
+			}
+			break;	// end of default:
+		}
+	}
+	if (TokenValue == Token(0))
+		printf("TokenValue = 0\n");
+	return TokenValue;
+}
+
+CBin* CParser::CLexer::LookupSymbol(const char* pName)
+{
+	return GetSymTab()->FindSymbol(pName, CBin::BinType::ANY, 0);
+}
+
+Token CParser::CLexer::LookupKeyword(const char* pKeyword)
+{
+	Token Toke;
+
+	Toke = KeyWordsLUT->LookupToToken(pKeyword);
+	return Toke;
+}
+
+KeyWord* CParser::CLexer::FindKeyword(Token KeywordToken)
+{
+	int i = 0;
+	bool Loop = true;
+	KeyWord* pKW = 0;
+
+	while (Loop)
+	{
+		if (KeyWordsLUT[i].m_TokenID == KeywordToken)
+		{
+			pKW = &KeyWordsLUT[i];
+			Loop = 0;
+		}
+		else
+		{
+			++i;
+			if (KeyWordsLUT[i].m_TokenID == Token::ENDOFTOKENS)
+			{
+				Loop = false;
+			}
+		}
+	}
+	return pKW;
+}
+
+Processor CParser::CLexer::LookupProcessor(Token KeywordToken)
+{
+	Processor AppropriateProcessor = Processor::ALL;
+	int i = 0;
+	bool Loop = true;
+
+	while (Loop)
+	{
+		if (KeyWordsLUT[i].m_TokenID == KeywordToken)
+		{
+			AppropriateProcessor = KeyWordsLUT[i].m_Processor;
+			Loop = 0;
+		}
+		else
+		{
+			++i;
+			if (KeyWordsLUT[i].m_TokenID == Token::ENDOFTOKENS)
+			{
+				Loop = false;
+			}
+		}
+	}
+	return AppropriateProcessor;
+}
+
+int CParser::CLexer::LookupOpcode(Token OpcodeToken)
+{
+	int OpCode = 0;
+	int i;
+	bool Loop = true;
+
+	for (i = 0; KeyWordsLUT[i].m_OpCode >= 0 && Loop; ++i)
+	{
+		if (KeyWordsLUT[i].m_TokenID == OpcodeToken)
+		{
+			Loop = false;
+			OpCode = KeyWordsLUT[i].m_OpCode;
+		}
+	}
+	return OpCode;
+}
+
+int CParser::CLexer::MakeOpcode(Token OpCodeToken, AdrModeType AddressMode)
+{
+	int OpCode;
+	KeyWord* pK;
+
+	pK = FindKeyword(OpCodeToken);
+	OpCode = pK->m_OpCode;
+	OpCode += pK->FindInc(AddressMode);
+	return OpCode;
+}
+
+int CParser::CLexer::GetOpcode(Token OpCodeToken)
+{
+	int OpCode = -1;	//indicates error
+	int i = 0;
+	bool Loop = true;
+
+	while (KeyWordsLUT[i].m_TokenID != Token::ENDOFTOKENS && Loop)
+	{
+		if (KeyWordsLUT[i].m_TokenID == OpCodeToken)
+		{
+			OpCode = KeyWordsLUT[i].m_OpCode;
+			Loop = false;
+		}
+		else
+			++i;
+	}
+	return OpCode;
+}
+
+//-------------------------------
+// LexSubParser Class SubLex Methods
+//-------------------------------
+
+CParser::CLexer::LexSubParser::SubParse::SubLex::SubLex()
+{
+	m_pGrandParent = 0;
+	m_pParent = 0;
+	m_pLexer = 0;
+}
+
+CParser::CLexer::LexSubParser::SubParse::SubLex::~SubLex()
+{
+}
+
+bool CParser::CLexer::LexSubParser::SubParse::SubLex::Create(LexSubParser* pLSP, CParser::CLexer::LexSubParser::SubParse* pSP)
+{
+	bool rV = true;
+	m_pGrandParent = pLSP;
+	m_pParent = pSP;
+	m_pLexer = pLSP->m_pParent;
+	return rV;
+}
+Token CParser::CLexer::LexSubParser::SubParse::SubLex::Lex()
+{
+	Token TokenValue = Token(0);
+	bool Loop = true;
+	bool auxLoop = true;
+	int c = 0;
+	char const* pLookaheadTokenString = 0;
+
+	pLookaheadTokenString = new char[256];
+	m_pLexer->m_LexBuffIndex = 0;
+	while (Loop)
+	{
+		c = LexGet();
+		switch (c)
+		{
+		case EOF:
+			TokenValue = Token::ENDOFFILE;
+			Loop = false;
+			break;
+		case '\n':	//white space
+		case '\r':	//more white space
+		case '\t':
+			[[fallthrough]];
+		case ' ':
+			break;
+		case '0': case '1': case '2': case '3': case '4':
+		case '5': case '6': case '7': case '8':
+			[[fallthrough]];
+		case '9':
+			//Decimal Number
+			m_pLexer->m_aLexBuff[m_pLexer->m_LexBuffIndex++] = c;
+			auxLoop = true;
+			while (auxLoop)
+			{
+				c = LexGet();
+				if (IsValidNumber(c))
+					m_pLexer->m_aLexBuff[m_pLexer->m_LexBuffIndex++] = c;
+				else
+					auxLoop = false;
+			}
+			m_pLexer->m_aLexBuff[m_pLexer->m_LexBuffIndex] = 0;
+			m_pLexer->m_LexValue = atoi(m_pLexer->m_aLexBuff);
+			LexUnGet(c);
+			Loop = false;
+			TokenValue = Token::NUMBER;
+			break;
+		case '$':	//Hexadecimal Number
+			auxLoop = true;
+			while (auxLoop)
+			{
+				c = LexGet();
+				if (IsValidHexNumber(c))
+					m_pLexer->m_aLexBuff[m_pLexer->m_LexBuffIndex++] = c;
+				else
+					auxLoop = false;
+			}
+			m_pLexer->m_aLexBuff[m_pLexer->m_LexBuffIndex] = 0;
+			m_pLexer->m_LexValue = strtol(m_pLexer->m_aLexBuff, NULL, 16);
+			LexUnGet(c);
+			Loop = false;
+			TokenValue = Token::NUMBER;
+			break;
+		case '"':	// STRING
+			auxLoop = true;
+			while (auxLoop)
+			{
+				c = LexGet();
+				if (c == '"')
+					auxLoop = false;
+				else
+				{
+					m_pLexer->m_aLexBuff[m_pLexer->m_LexBuffIndex++] = c;
+				}
+			}
+			m_pLexer->m_aLexBuff[m_pLexer->m_LexBuffIndex++] = 0;
+			Loop = false;
+			TokenValue = Token::STRING;
+			break;
+		case '/':
+			if (LexLook(0) == '/')	//comment?
+			{
+				auxLoop = true;
+				while (auxLoop)
+				{
+					c = LexLook(0);
+					if (c == '\n')
+					{
+						auxLoop = false;
+					}
+					c = LexGet();
+				}
+			}
+			else
+			{
+				TokenValue = Token(c);
+				Loop = false;
+			}
+			break;
+		case ';':	// Comment
+			auxLoop = true;
+			while (auxLoop)
+			{
+				c = LexGet();
+				if (c == '\n')
+				{
+					auxLoop = false;
+				}
+			}	// No need for Loop = false here
+			break;
+		case '[':
+		case ']':
+		case ',':
+			TokenValue = Token(c);
+			Loop = false;
+			break;
+		case '(':
+		case ')':
+		case'{':
+		case '}':
+		case '+':	//add
+		case '-':	//sub
+		case '*':	//mul
+		case '!':	//XOR
+		case '&':	//Bitwise AND
+		case '%':	//Bitwise OR
+		case '#':	//Not Equal/Immediate Data
+		case '@':	//Address of
+			[[fallthrough]];
+		case '^':	//Pointer dereference
+			pLookaheadTokenString = LookupTokenToString(TokenValue);
+			ThrownException.SetXCeptType(Exception::ExceptionType::UNEXPECTED_TOKEN);
+			sprintf_s(
+				ThrownException.GetErrorString(),
+				ThrownException.GetMaxStringLen(),
+				"CParser::CLexer::LexSubParse::SubParse::SubLex::Lex(): Line %d: Illegal Token in Compiler Directive %s\n",
+				GetLineNumber(),
+				pLookaheadTokenString
+			);
+			throw(ThrownException);
+			break;
+		default:
+			//-------------------------------
+			// Keywords and Identifiers
+			//-------------------------------
+			m_pLexer->m_aLexBuff[m_pLexer->m_LexBuffIndex++] = c;
+			auxLoop = true;
+			while (auxLoop)
+			{
+				c = LexGet();
+				if (m_pLexer->IsValidNameChar(c))
+				{
+					m_pLexer->m_aLexBuff[m_pLexer->m_LexBuffIndex++] = c;
+				}
+				else
+				{
+					auxLoop = false;
+					m_pLexer->m_aLexBuff[m_pLexer->m_LexBuffIndex] = 0;
+					LexUnGet(c);
+				}
+			}	//END OF collecting characters for word
+			//---------------------------------
+			// Check to see if it is a Keyword
+			//---------------------------------
+			TokenValue = m_pLexer->LookupKeyword(m_pLexer->m_aLexBuff);
+			if (int(TokenValue))
+			{
+				Loop = false;
+			}
+			else
+			{
+				Loop = false;
+			}
+			break;
+		}
+	}
+	delete[] pLookaheadTokenString;
+	return TokenValue;
+}
+
+//-------------------------------
+// LexSubParser Class SubParse Methods
+//-------------------------------
+
+CParser::CLexer::LexSubParser::SubParse::SubParse()
+{
+	m_pLexSubParserParent = 0;
+}
+
+CParser::CLexer::LexSubParser::SubParse::~SubParse()
+{
+}
+
+bool CParser::CLexer::LexSubParser::SubParse::Create(LexSubParser* pLSP)
+{
+	bool rV = true;
+
+	m_pLexSubParserParent = pLSP;
+	m_SubLexer.Create(pLSP, this);
+	return rV;
+}
+
+bool CParser::CLexer::LexSubParser::SubParse::Accept(Token ExpectedToken)
+{
+	bool rV = false;
+	if (LookAheadToken() == ExpectedToken)
+	{
+		rV = true;
+	}
+	return rV;
+}
+
+void CParser::CLexer::LexSubParser::SubParse::Expect(Token ExpectedToken)
+{
+	if (Accept(ExpectedToken))
+	{
+		SetLookAheadToken(GetSubLexer()->Lex());
+	}
+	else
+	{
+		const char* pLookaheadTokenString = LookupTokenToString(LookAheadToken());
+		const char* pExpectedTokenString = LookupTokenToString(ExpectedToken);
+		ThrownException.SetXCeptType(Exception::ExceptionType::UNEXPECTED_TOKEN);
+		sprintf_s(
+			ThrownException.GetErrorString(),
+			ThrownException.GetMaxStringLen(),
+			"CParser::CLexer::LexSubParser::SubParse::Expect: Line %d: Expected %s, Found %s\n",
+			m_pLexSubParserParent->GetSubLexer()->GetLineNumber(),
+			pExpectedTokenString,
+			pLookaheadTokenString
+		);
+		throw(ThrownException);
+	}
+}
+
+CParser::CLexer::LexSubParser::LexSubParser()
+{
+	m_pParent = 0;
+}
+
+CParser::CLexer::LexSubParser::~LexSubParser()
+{
+}
+
+bool CParser::CLexer::LexSubParser::Create(CLexer* pParent)
+{
+	m_pParent = pParent;
+	m_SubParser.Create(this);
+	return true;
+}
+
+bool CParser::CLexer::LexSubParser::SubParse::Parse(Token TokenVal)
+{
+	bool rV = true;
+	bool Loop = true;
+
+	SetLookAheadToken(TokenVal);
+	while (Loop)
+	{
+		switch (LookAheadToken())
+		{
+		case Token::INCLUDE:
+			//Include();
+			break;
+		case Token::SET:
+			Set();
+			break;
+		case Token::DEFINE:
+			Define();
+			break;
+
+		default:
+			Loop = false;
+			break;
+		}
+	}
+	return rV;
+}
+
+void CParser::CLexer::LexSubParser::SubParse::Set()
+{
+	//----------------------------------------
+	//	Set	-> 'SET' SetObjects Set
+	//			-> .
+	//			;
+	//----------------------------------------
+	bool Loop = true;
+
+	while (Loop)
+	{
+		switch (LookAheadToken())
+		{
+		case Token::SET:
+			Expect(Token::SET);
+			SetObjects();
+			break;
+		default:
+			Loop = false;
+			break;
+		}
+	}
+}
+
+void CParser::CLexer::LexSubParser::SubParse::SetObjects()
+{
+	//--------------------------------------------
+	// SetObjects	-> 'SECTION' 'STRING'
+	//				-> 'PROCESSOR' ProcessorType
+	//				-> .
+	//				;
+	//--------------------------------------------
+	CSection* pSec = 0;
+
+	switch (LookAheadToken())
+	{
+	case Token::SECTION:
+		Expect(Token::SECTION);
+		pSec = (CSection*)m_pLexSubParserParent->m_pParent->GetSymTab()->FindSymbol(GetSubLexer()->m_pLexer->GetLexBuffer(), CBin::BinType::SECTION,0);	
+		if (pSec)
+		{
+			Act()->GetParser()->SetCurrentSection(pSec);
+		}
+		else
+		{
+			ThrownException.SetXCeptType(Exception::ExceptionType::SECTION_UNDEFINED);
+			sprintf_s(
+				ThrownException.GetErrorString(),
+				ThrownException.GetMaxStringLen(),
+				"CParser::CLexer::LexSubParser::SubParse::SetObjects: Line %d: Undefined Section %s\n",
+				GetSubLexer()->GetLineNumber(),
+				GetSubLexer()->m_pLexer->GetLexBuffer()
+			);
+			throw(ThrownException);
+		}
+		Expect(Token::STRING);
+		break;
+	case Token::PROCESSOR:
+		Expect(Token::PROCESSOR);
+		Expect(Token::STRING);
+		break;
+	}
+}
+
+void CParser::CLexer::LexSubParser::SubParse::ProcessorType()
+{
+	//----------------------------------------
+	// ProcessorType	-> 'W65C02'
+	//					-> 'R6502'
+	//					-> 'W65C816'
+	//					;
+	//----------------------------------------
+	switch (LookAheadToken())
+	{
+	case Token::W65C02:
+		Expect(Token::W65C02);
+		break;
+	case Token::R6502:
+		Expect(Token::R6502);
+		break;
+	case Token::W65C816:
+		Expect(Token::W65C816);
+		break;
+	default:
+		ThrownException.SetXCeptType(Exception::ExceptionType::UNEXPECTED_TOKEN);
+		sprintf_s(
+			ThrownException.GetErrorString(),
+			ThrownException.GetMaxStringLen(),
+			"CParser::CLexer::LexSubParser::SubParse::ProcessorType: Line %d: Expected Processor Type, Found %s\n",
+			GetSubLexer()->GetLineNumber(),
+			LookupTokenToString(LookAheadToken())
+		);
+		throw(ThrownException);
+		break;
+	}
+}
+
+void CParser::CLexer::LexSubParser::SubParse::Define()
+{
+	//----------------------------------------
+	// Define		-> 'DEFINE' DefObject Define
+	//				-> .
+	//				;
+	//----------------------------------------
+	bool Loop = true;
+
+	while (Loop)
+	{
+		switch (LookAheadToken())
+		{
+		case Token::DEFINE:
+			Expect(Token::DEFINE);
+			DefObjects();
+			break;
+		default:
+			Loop = false;
+			break;
+		}
+	}
+}
+
+void CParser::CLexer::LexSubParser::SubParse::DefObjects()
+{
+	//--------------------------------------------
+	// DefObject	->DefList DefObject_1;
+	// DefObject_1	-> 'SECTION' SectionName DefList DefObject_1
+	//				-> .
+	//				;
+	//--------------------------------------------
+	bool Loop = true;
+
+	DefList();
+	while (Loop)
+	{
+		switch (LookAheadToken())
+		{
+		case Token::SECTION:
+			Expect(Token::SECTION);
+			SectionName();;
+			DefList();
+			break;
+		default:
+			Loop = false;
+			break;
+		}
+	}
+}
+
+void CParser::CLexer::LexSubParser::SubParse::DefList()
+{
+	//----------------------------------------
+	// DefList		->Def DefList_1;
+	// DefList_1	-> ',' Def DefList_1
+	//				-> .
+	//				;
+	//----------------------------------------
+}
+
+void CParser::CLexer::LexSubParser::SubParse::Def()
+{
+	//----------------------------------------
+	// Def		-> 'IDENT' Def_1;
+	// Def_1	-> '=' 'IDENT'
+	//			-> 'IDENT'
+	//			-> .
+	//			;
+	//----------------------------------------
+	Expect(Token::IDENT);
+	switch (LookAheadToken())
+	{
+	case Token('='):
+		Expect(Token('='));
+		Expect(Token::IDENT);
+		break;
+	case Token::IDENT:
+		Expect(Token::IDENT);
+		break;
+	default:
+		ThrownException.SetXCeptType(Exception::ExceptionType::UNEXPECTED_TOKEN);
+		sprintf_s(
+			ThrownException.GetErrorString(),
+			ThrownException.GetMaxStringLen(),
+			"CParser::CLexer::LexSubParser::SubParse::Def: Line %d: Expected ASSIGN or IDENT, Found %s\n",
+			GetSubLexer()->GetLineNumber(),
+			LookupTokenToString(LookAheadToken())
+		);
+		throw(ThrownException);
+		break;
+	}
+}
+void CParser::CLexer::LexSubParser::SubParse::SectionName()
+{
+	//--------------------------------------------
+	// SectionName		->SectionDef SectionName_1;
+	// SectionName_1	-> 'STRING' SectionDef
+	//					-> .
+	//					;
+	//--------------------------------------------
+	Expect(Token::STRING);
+}
+
+void CParser::CLexer::LexSubParser::SubParse::SectionAttributes()
+{
+	//----------------------------------------
+	// SectionAtributes	-> 'START' '=' 'NUMBER' SectionAtributes
+	//					-> 'SIZE' '=' 'NUMBER' SectionAtributes
+	//					-> 'MODE' '=' Modes SectionAtributes
+	//					-> 'ZEROPAGE' '=' AddressSize SectionAtributes
+	//					-> ']'
+	//					-> ',' SectionAtributes
+	//					;
+	//----------------------------------------
+	switch (LookAheadToken())
+	{
+	case Token::START:
+		Expect(Token::START);
+		Expect(Token('='));
+		Expect(Token::NUMBER);
+		SectionAttributes();
+		break;
+	case Token::SIZE:
+		Expect(Token::SIZE);
+		Expect(Token('='));
+		Expect(Token::NUMBER);
+		SectionAttributes();
+		break;
+	case Token::MODE:
+		Expect(Token::MODE);
+		Expect(Token('='));
+		Modes();
+		SectionAttributes();
+		break;
+	case Token::PAGEZERO:
+		Expect(Token::PAGEZERO);
+		Expect(Token('='));
+		AddressSize();
+		SectionAttributes();
+		break;
+	case Token(']'):
+		Expect(Token(']'));
+		break;
+	case Token(','):
+		Expect(Token(','));
+		SectionAttributes();
+		break;
+	default:
+		ThrownException.SetXCeptType(Exception::ExceptionType::UNEXPECTED_TOKEN);
+		sprintf_s(
+			ThrownException.GetErrorString(),
+			ThrownException.GetMaxStringLen(),
+			"CParser::CLexer::LexSubParser::SubParse::SectionAttributes: Line %d: Expected Section Attribute, Found %s\n",
+			GetSubLexer()->GetLineNumber(),
+			LookupTokenToString(LookAheadToken())
+		);
+		throw(ThrownException);
+		break;
+	}
+}
+
+void CParser::CLexer::LexSubParser::SubParse::AddressSize()
+{
+	//----------------------------------------
+	// AddressSize		-> 'TRUE'
+	//					-> 'FALSE'
+	//					;
+	//----------------------------------------
+	switch (LookAheadToken())
+	{
+	case Token::TRUE:
+		Expect(Token::TRUE);
+		break;
+	case Token::FALSE:
+		Expect(Token::FALSE);
+		break;
+	default:
+		ThrownException.SetXCeptType(Exception::ExceptionType::UNEXPECTED_TOKEN);
+		sprintf_s(
+			ThrownException.GetErrorString(),
+			ThrownException.GetMaxStringLen(),
+			"CParser::CLexer::LexSubParser::SubParse::AddressSize: Line %d: Expected Address Size, Found %s\n",
+			GetSubLexer()->GetLineNumber(),
+			LookupTokenToString(LookAheadToken())
+		);
+		throw(ThrownException);
+		break;
+	}
+}
+
+void CParser::CLexer::LexSubParser::SubParse::Modes()
+{
+	//----------------------------------------
+	// Modes			-> 'READ_ONLY'
+	//					-> 'READ_WRITE'
+	//					;
+	//----------------------------------------
+	switch (LookAheadToken())
+	{
+	case Token::READ_ONLY:
+		Expect(Token::READ_ONLY);
+		break;
+	case Token::READ_WRTE:
+		Expect(Token::READ_WRTE);
+		break;
+	default:
+		ThrownException.SetXCeptType(Exception::ExceptionType::UNEXPECTED_TOKEN);
+		sprintf_s(
+			ThrownException.GetErrorString(),
+			ThrownException.GetMaxStringLen(),
+			"CParser::CLexer::LexSubParser::SubParse::Modes: Line %d: Expected Mode Type, Found %s\n",
+			GetSubLexer()->GetLineNumber(),
+			LookupTokenToString(LookAheadToken())
+		);
+		throw(ThrownException);
+		break;
+	}
+}
+
+
+//-------------------------------------
+// Compiler Parser Methods
+//-------------------------------------
+
 CParser::CParser()
 {
-	m_pLex = 0;
 	m_Processor = Processor::R6502;
 	m_Recursion = 0;
 	m_Bump = 0;
-	LookaHeadToken = Token(0);
+	m_LookAheadToken = Token(0);
 	m_pLinkerScript = 0;
 	m_pCurrentSection = 0;
 	m_pHead = 0;
@@ -16,8 +1415,6 @@ CParser::CParser()
 
 CParser::~CParser()
 {
-	if (m_pLex)
-		delete m_pLex;
 }
 
 bool CParser::Create()
@@ -29,8 +1426,7 @@ bool CParser::Create()
 
 	try 
 	{
-		m_pLex = new CLexer;
-		m_pLex->Create();
+		m_MainLexer.Create(this);
 		GetAstTree()->Create();
 		//-----------------------------------
 		// Initialize Default Sections
@@ -49,24 +1445,22 @@ bool CParser::Create()
 	}
 	catch (Exception& BooBoo)
 	{
-		char* s = new char[256];
-		Exception::ExceptionType ExcptType;
-
-		ExcptType = BooBoo.GetXCeptType();
-		switch (ExcptType)
-		{
-		case Exception::ExceptionType::INIT_INPUT_FILE:
-			fprintf(
-				stderr,
-				"%s:: %s\n",
-				BooBoo.GetExceptionTypeString(BooBoo.GetXCeptType()),
-				BooBoo.GetErrorString()
-			);
-			break;
-		}
+		fprintf(Act()->LogFile(),
+			"Create Compiler ERROR: %s SubType:%s: %s\n",
+			Exception::FindExceptionTypeString(BooBoo.GetXCeptType()),
+			Exception::FindExceptionSubTypeString(BooBoo.GetExceptionSubType()),
+			BooBoo.GetErrorString()
+		);
+		Act()->CloseAll();
+		Act()->Exit(1);
 	}
-	Act()->Exit(1);
 	return true;
+}
+
+void CParser::SetCurrentSection(CSection* pSection)
+{
+	m_pCurrentSection = pSection;
+	fprintf(Act()->LogFile(), "Switching to Section:%s\n", pSection->GetName());
 }
 
 FILE* CParser::LogFile()
@@ -95,7 +1489,7 @@ CAstNode* CParser::Run()
 		pRoot = new CAct65ROOT;
 		pRoot->Create();
 		GetAstTree()->SetRootNode(pRoot);
-		LookaHeadToken = GetLexer()->Lex();
+		m_LookAheadToken = GetLexer()->Lex();
 		pN = Action65();
 		pRoot->SetChild(pN);
 		GetAstTree()->Print(LogFile());
@@ -120,116 +1514,13 @@ CAstNode* CParser::Run()
 	}
 	catch (Exception& BooBoo)
 	{
-		char* s = new char[256];
-		Exception::ExceptionType ExcptType;
 
-		ExcptType = BooBoo.GetXCeptType();
-		switch (ExcptType)
-		{
-		case Exception::ExceptionType::WHOKNOWS:
-			fprintf(ErrorDest,
-				"%s Line=%d  Col=%d\n",
-				BooBoo.GetExceptionTypeString(BooBoo.GetXCeptType()),
-				GetLexer()->GetLineNumber(),
-				GetLexer()->GetColunm()
-			);
-			break;
-		case Exception::ExceptionType::UNEXPECTED_TOKEN:
-			fprintf(ErrorDest,
-				"%s %d:%s  Line:%d Col:%d\n",
-				BooBoo.GetExceptionTypeString(BooBoo.GetXCeptType()),
-				int(BooBoo.GetGotToken()),
-				GetLexer()->LookupToString(BooBoo.GetGotToken()),
-				GetLexer()->GetLineNumber(),
-				GetLexer()->GetColunm()
-			);
-			break;
-		case Exception::ExceptionType::EXPECTED_PROC_FUNC_INTERRUPT:
-			fprintf(ErrorDest,
-				"%s %d:%s\n",
-				BooBoo.GetExceptionTypeString(BooBoo.GetXCeptType()),
-				int(BooBoo.GetGotToken()),
-				GetLexer()->LookupToString(BooBoo.GetGotToken())
-			);
-			break;
-		case Exception::ExceptionType::EXPECTED_INDEX_REG:
-			fprintf(ErrorDest,
-				"%s %d:%s  Line:%d Col:%d\n",
-				BooBoo.GetExceptionTypeString(BooBoo.GetXCeptType()),
-				int(BooBoo.GetGotToken()),
-				GetLexer()->LookupToString(BooBoo.GetGotToken()),
-				GetLexer()->GetLineNumber(),
-				GetLexer()->GetColunm()
-			);
-			break;
-		case Exception::ExceptionType::SECTION_ADDRES_RANGE_EXCEEDED:
-			fprintf(ErrorDest,
-				"Section:Address Range Exceeded %d:%s\n%s\n  Line:%d Col:%d\n",
-				int(BooBoo.GetGotToken()),
-				GetLexer()->LookupToString(BooBoo.GetGotToken()),
-				BooBoo.GetErrorString(),
-				GetLexer()->GetLineNumber(),
-				GetLexer()->GetColunm()
-			);
-			break;
-		case Exception::ExceptionType::SECTION_UNDEFINED:
-			fprintf(ErrorDest,
-				"Section Undefined %d:%s  Line:%d Col:%d\n",
-				int(BooBoo.GetGotToken()),
-				GetLexer()->LookupToString(BooBoo.GetGotToken()),
-				GetLexer()->GetLineNumber(),
-				GetLexer()->GetColunm()
-			);
-			break;
-		case Exception::ExceptionType::NOSECTION_DEFINED:
-			fprintf(ErrorDest,
-				"No Section Defined %d:%s  Line:%d Col:%d\n",
-				int(BooBoo.GetGotToken()),
-				GetLexer()->LookupToString(BooBoo.GetGotToken()),
-				GetLexer()->GetLineNumber(),
-				GetLexer()->GetColunm()
-			);
-			break;
-		case Exception::ExceptionType::LEXER_STUMPTED:
-			fprintf(
-				ErrorDest,
-				"%s",
-				BooBoo.GetErrorString()
-			);
-			break;
-		case Exception::ExceptionType::ILLEGAL_ADDRESSING_MODE:
-			fprintf(ErrorDest,
-				"%s",
-				BooBoo.GetErrorString()
-			);
-			break;
-		case Exception::ExceptionType::INTERNAL_ERROR:
-			fprintf(
-				ErrorDest,
-				"Internal Error:%s Line:%d  Col:%d\n",
-				BooBoo.GetErrorString(),
-				GetLexer()->GetLineNumber(),
-				GetLexer()->GetColunm()
-			);
-			break;
-		case Exception::ExceptionType::STACK:
-			fprintf(
-				ErrorDest,
-				"Error:%s\n",
-				BooBoo.GetErrorString()
-			);
-			break;
-		case Exception::ExceptionType::EXPECTED_IDENT:
-			fprintf(
-				ErrorDest,
-				"Error:%s\n",
-				BooBoo.GetErrorString()
-			);
-			break;
-		default:
-			fprintf(ErrorDest, "Unknown Exception\n");
-			break;
-		}
+		fprintf(Act()->LogFile(),
+			"PARSER ERROR: %s SubType:%s: %s\n",
+			Exception::FindExceptionTypeString(BooBoo.GetXCeptType()),
+			Exception::FindExceptionSubTypeString(BooBoo.GetExceptionSubType()),
+			BooBoo.GetErrorString()
+		);
 		Act()->CloseAll();
 		Act()->Exit(1);
 	}
@@ -310,17 +1601,19 @@ void CParser::Expect(Token Expected)
 	int number = 0;
 
 	if (Accept(Expected))
-		LookaHeadToken = GetLexer()->Lex();
+		m_LookAheadToken = GetLexer()->Lex();
 	else
 	{
+		pExpectedToken = (char*)GetLexer()->LookupTokenToString(Expected);
+		pLookaheadToken = (char*)GetLexer()->LookupTokenToString(m_LookAheadToken);
 		ThrownException.SetXCeptType(Exception::ExceptionType::UNEXPECTED_TOKEN);
 		sprintf_s(
 			ThrownException.GetErrorString(),
 			ThrownException.GetMaxStringLen(),
-			"Line %d: Unexpected CLHead:Got %d Expected %d\n",
+			"CParser::Expect: Line %d: Unexpected Token:Got %s Expected %s\n",
 			GetLexer()->GetLineNumber(),
-			(int)LookaHeadToken,
-			Expected
+			pLookaheadToken,
+			pExpectedToken
 		);
 		throw(ThrownException);
 	}
@@ -347,7 +1640,7 @@ bool CParser::Accept(Token Expected)
 {
 	bool rv = false;
 
-	if (Expected == LookaHeadToken)
+	if (Expected == m_LookAheadToken)
 		rv = true;
 	return rv;
 }
@@ -386,7 +1679,7 @@ CAstNode* CParser::Modules()
 	pNext = SysDecl();
 	while (Loop)
 	{
-		switch (LookaHeadToken)
+		switch (m_LookAheadToken)
 		{
 		case Token::MODULE:
 			Expect(Token::MODULE);
@@ -459,7 +1752,7 @@ CAstNode* CParser::Call()
 	pNext = ForStmt();
 	while (Loop)
 	{
-		switch (LookaHeadToken)
+		switch (m_LookAheadToken)
 		{
 		case Token::PROC_IDENT:
 			Expect(Token::PROC_IDENT);
@@ -503,7 +1796,7 @@ CAstNode* CParser::ProcParams()
 	CAstNode* pNext = 0, *pChild = 0;
 
 	pNext = ProcParamsEnd();
-	switch (LookaHeadToken)
+	switch (m_LookAheadToken)
 	{
 	case Token('('):
 		Expect(Token('('));
@@ -530,7 +1823,7 @@ CAstNode* CParser::ProcParamsEnd()
 	CAstNode* pNext = 0;
 
 	pNext = ValueList();
-	switch (LookaHeadToken)
+	switch (m_LookAheadToken)
 	{
 	case Token(')'):
 		Expect(Token(')'));
@@ -560,7 +1853,7 @@ CAstNode* CParser::ForStmt()
 	pNext = IfStmt();
 	while (Loop)
 	{
-		switch (LookaHeadToken)
+		switch (m_LookAheadToken)
 		{
 		case Token::FOR:
 			Expect(Token::FOR);
@@ -594,7 +1887,7 @@ CAstNode* CParser::ForDOendOD()
 	CAstNode* pNext = 0;
 
 	pNext = STEPoption();
-	switch (LookaHeadToken)
+	switch (m_LookAheadToken)
 	{
 	case Token::DO:
 		Expect(Token::DO);
@@ -627,7 +1920,7 @@ CAstNode* CParser::STEPoption()
 	CAstNode* pNArithExpr = 0;
 
 	pNTO = ForTO();
-	switch (LookaHeadToken)
+	switch (m_LookAheadToken)
 	{
 	case Token::STEP:
 		Expect(Token::STEP);
@@ -655,7 +1948,7 @@ CAstNode* CParser::ForTO()
 	CAstNode* pArithExpr = 0;
 
 	pItterator = Itterrator();
-	switch (LookaHeadToken)
+	switch (m_LookAheadToken)
 	{
 	case Token::TO:
 		Expect(Token::TO);
@@ -682,7 +1975,7 @@ CAstNode* CParser::Itterrator()
 	CAstNode* pArithExpr = 0;
 
 	pMemoryValue = MemoryValue();
-	switch (LookaHeadToken)
+	switch (m_LookAheadToken)
 	{
 	case Token('='):
 		Expect(Token('='));
@@ -719,7 +2012,7 @@ CAstNode* CParser::IfStmt()
 	pNext = WhileStmt();
 	while (Loop)
 	{
-		switch (LookaHeadToken)
+		switch (m_LookAheadToken)
 		{
 		case Token::IF:
 			Expect(Token::IF);
@@ -750,7 +2043,7 @@ CAstNode* CParser::EndIF()
 	CAstNode* pNFI = 0;
 
 	pElsePart = ElsePart();
-	switch (LookaHeadToken)
+	switch (m_LookAheadToken)
 	{
 	case Token::FI:
 		Expect(Token::FI);
@@ -777,7 +2070,7 @@ CAstNode* CParser::ElsePart()
 	CAstNode* pStatements = 0;
 
 	pElseIfPart = ElseIfPart();
-	switch (LookaHeadToken)
+	switch (m_LookAheadToken)
 	{
 	case Token::ELSE:
 		Expect(Token::ELSE);
@@ -809,7 +2102,7 @@ CAstNode* CParser::ElseIfPart()
 	pNThenPart = ThenPart();
 	while (Loop)
 	{
-		switch (LookaHeadToken)
+		switch (m_LookAheadToken)
 		{
 		case Token::ELSEIF:
 			Expect(Token::ELSEIF);
@@ -840,7 +2133,7 @@ CAstNode* CParser::ThenPart()
 	CAstNode* pStatements = 0;
 
 	pNRelOp = RelOperation();
-	switch (LookaHeadToken)
+	switch (m_LookAheadToken)
 	{
 	case Token::THEN:
 		Expect(Token::THEN);
@@ -875,7 +2168,7 @@ CAstNode* CParser::WhileStmt()
 	pNext = DoStmt();
 	while (Loop)
 	{
-		switch (LookaHeadToken)
+		switch (m_LookAheadToken)
 		{
 		case Token::WHILE:
 			Expect(Token::WHILE);
@@ -910,7 +2203,7 @@ CAstNode* CParser::WhileDO()
 	CAstNode* pNrel = 0;
 
 	pNrel = RelOperation();
-	switch (LookaHeadToken)
+	switch (m_LookAheadToken)
 	{
 	case Token::DO:
 		Expect(Token::DO);
@@ -923,7 +2216,7 @@ CAstNode* CParser::WhileDO()
 	default:
 		break;
 	}
-	switch (LookaHeadToken)
+	switch (m_LookAheadToken)
 	{
 	case Token::OD:
 		Expect(Token::OD);
@@ -956,7 +2249,7 @@ CAstNode* CParser::DoStmt()
 	pNext = EXITstmt();
 	while (Loop)
 	{
-		switch (LookaHeadToken)
+		switch (m_LookAheadToken)
 		{
 		case Token::DO:
 			Expect(Token::DO);
@@ -988,7 +2281,7 @@ CAstNode* CParser::DoEND()
 	CAstNode* pStatements = 0;
 
 	pStatements = Statements();
-	switch (LookaHeadToken)
+	switch (m_LookAheadToken)
 	{
 	case Token::OD:
 		Expect(Token::OD);
@@ -1022,7 +2315,7 @@ CAstNode* CParser::EXITstmt()
 	pNext = RetStmt();
 	while (Loop)
 	{
-		switch (LookaHeadToken)
+		switch (m_LookAheadToken)
 		{
 		case Token::EXIT:
 			Expect(Token::EXIT);
@@ -1058,7 +2351,7 @@ CAstNode* CParser::RetStmt()
 	pNext = InlineAssembly();
 	while (Loop)
 	{
-		switch (LookaHeadToken)
+		switch (m_LookAheadToken)
 		{
 		case Token::RETURN:
 			Expect(Token::RETURN);
@@ -1098,7 +2391,7 @@ CAstNode* CParser::InlineAssembly()
 	pNext = CodeBlock();
 	while (Loop)
 	{
-		switch (LookaHeadToken)
+		switch (m_LookAheadToken)
 		{
 		case Token::ASM:
 			Expect(Token::ASM);
@@ -1131,7 +2424,7 @@ CAstNode* CParser::InlineAssBlock()
 
 	while (Loop)
 	{
-		switch (LookaHeadToken)
+		switch (m_LookAheadToken)
 		{
 		case Token('{'):
 			Expect(Token('{'));
@@ -1170,7 +2463,7 @@ CAstNode* CParser::CodeBlock()
 	pNext = UntillStmt();
 	while (Loop)
 	{
-		switch (LookaHeadToken)
+		switch (m_LookAheadToken)
 		{
 		case Token('['):
 			Expect(Token('['));
@@ -1209,7 +2502,7 @@ CAstNode* CParser::UntillStmt()
 	pNext = Break();
 	while (Loop)
 	{
-		switch (LookaHeadToken)
+		switch (m_LookAheadToken)
 		{
 		case Token::UNTIL:
 			Expect(Token::UNTIL);
@@ -1248,7 +2541,7 @@ CAstNode* CParser::Break()
 	pNext = Rti();
 	while (Loop)
 	{
-		switch (LookaHeadToken)
+		switch (m_LookAheadToken)
 		{
 		case Token::BREAK:
 			Expect(Token::BREAK);
@@ -1285,7 +2578,7 @@ CAstNode* CParser::Rti()
 	pNext = Assignment();
 	while (Loop)
 	{
-		switch (LookaHeadToken)
+		switch (m_LookAheadToken)
 		{
 		case Token::RTI:
 			Expect(Token::RTI);
@@ -1339,7 +2632,7 @@ CAstNode* CParser::Assignment()
 	pNext = MemContents();
 	while (Loop)
 	{
-		switch (LookaHeadToken)
+		switch (m_LookAheadToken)
 		{
 		case Token('='):
 			Expect(Token('='));
@@ -1473,7 +2766,7 @@ CAstNode* CParser::RelOperation()
 	pNext = LogicalOR();
 	while (Loop)
 	{
-		switch (LookaHeadToken)
+		switch (m_LookAheadToken)
 		{
 		case Token::GTEQ:
 			Expect(Token::GTEQ);
@@ -1534,7 +2827,7 @@ CAstNode* CParser::LogicalOR()
 	pNext = LogicalAND();
 	while (Loop)
 	{
-		switch (LookaHeadToken)
+		switch (m_LookAheadToken)
 		{
 		case Token::OR:	//logical and
 			Expect(Token::OR);
@@ -1565,7 +2858,7 @@ CAstNode* CParser::LogicalAND()
 	pNext = ArithExpr();
 	while (Loop)
 	{
-		switch (LookaHeadToken)
+		switch (m_LookAheadToken)
 		{
 		case Token::AND:	//Logical AND
 			Expect(Token::AND);
@@ -1601,7 +2894,7 @@ CAstNode* CParser::ArithExpr()
 	pNext = BitwiseAND();
 	while (Loop)
 	{
-		switch (LookaHeadToken)
+		switch (m_LookAheadToken)
 		{
 		case Token('%'):	// botwise OR
 			Expect(Token('%'));
@@ -1632,7 +2925,7 @@ CAstNode* CParser::BitwiseAND()
 	pNext = BitwiseXOR();
 	while (Loop)
 	{
-		switch (LookaHeadToken)
+		switch (m_LookAheadToken)
 		{
 		case Token('&'):	// Bitwise AND
 			Expect(Token('&'));
@@ -1665,7 +2958,7 @@ CAstNode* CParser::BitwiseXOR()
 	pNext = AddExpr();
 	while (Loop)
 	{
-		switch (LookaHeadToken)
+		switch (m_LookAheadToken)
 		{
 		case Token('!'):
 		case Token::EOR:
@@ -1699,7 +2992,7 @@ CAstNode* CParser::AddExpr()
 	pNext = ShifExpr();
 	while (Loop)
 	{
-		switch (LookaHeadToken)
+		switch (m_LookAheadToken)
 		{
 		case Token('+'):
 			Expect(Token('+'));
@@ -1737,7 +3030,7 @@ CAstNode* CParser::AddExpr()
 //	pNext = ShifExpr();
 //	while (Loop)
 //	{
-//		switch (LookaHeadToken)
+//		switch (m_LookAheadToken)
 //		{
 //		case Token('+'):	
 //			Expect(Token('+'));
@@ -1775,7 +3068,7 @@ CAstNode* CParser::ShifExpr()
 	pNext = MultExpr();
 	while (Loop)
 	{
-		switch (LookaHeadToken)
+		switch (m_LookAheadToken)
 		{
 		case Token::LSH:
 			Expect(Token::LSH);
@@ -1814,7 +3107,7 @@ CAstNode* CParser::MultExpr()
 	pNext = Unary();
 	while (Loop)
 	{
-		switch (LookaHeadToken)
+		switch (m_LookAheadToken)
 		{
 		case Token('*'):
 			Expect(Token('*'));
@@ -1857,7 +3150,7 @@ CAstNode* CParser::Unary()
 
 	while (Loop) 
 	{
-		switch (LookaHeadToken)
+		switch (m_LookAheadToken)
 		{
 		case Token('-'):
 			Expect(Token('-'));
@@ -1896,7 +3189,7 @@ CAstNode* CParser::ValueList()
 	pNext = Value();
 	while (Loop)
 	{
-		switch (LookaHeadToken)
+		switch (m_LookAheadToken)
 		{
 		case Token(','):
 			Expect(Token(','));
@@ -1928,7 +3221,7 @@ CAstNode* CParser::Value()
 	CValue* pVal = 0;
 
 	pNext = MemContentsType();
-	switch (LookaHeadToken)
+	switch (m_LookAheadToken)
 	{
 	case Token::NUMBER:
 		V = GetLexer()->GetLexValue();
@@ -1973,7 +3266,7 @@ CAstNode* CParser::AddressOf()
 	CSymbol* pSym;
 
 	pNext = MemContentsType();
-	switch (LookaHeadToken)
+	switch (m_LookAheadToken)
 	{
 	case Token::INTERRUPT_IDENT:
 		pSym = GetLexer()->GetLexSymbol();
@@ -2019,7 +3312,7 @@ CAstNode* CParser::MemContentsType()
 	pNext = MemContents();
 	while (Loop)
 	{
-		switch (LookaHeadToken)
+		switch (m_LookAheadToken)
 		{
 		case Token('^'):
 			Expect(Token('^'));
@@ -2056,7 +3349,7 @@ CAstNode* CParser::MemContents()
 	CSymbol* pSym;
 
 	pNext = Factor();
-	switch (LookaHeadToken)
+	switch (m_LookAheadToken)
 	{
 	case Token::VAR_GLOBAL:
 		pSym = GetLexer()->GetLexSymbol();
@@ -2118,7 +3411,7 @@ CAstNode* CParser::ArrayIndex()
 	CAstNode* pN = 0;
 	CAstNode* pNext = 0, *pChild = 0;
 
-	switch (LookaHeadToken)
+	switch (m_LookAheadToken)
 	{
 	case Token('('):
 		Expect(Token('('));
@@ -2144,7 +3437,7 @@ CAstNode* CParser::Factor()
 	CAstNode* pN= 0;
 	CAstNode* pNext = 0, *pChild = 0;
 
-	switch (LookaHeadToken)
+	switch (m_LookAheadToken)
 	{
 	case Token('('):
 		Expect(Token('('));
@@ -2175,7 +3468,7 @@ CAstNode* CParser::MemoryValue()
 	pNMemValLocation = MemValLocation();
 	while (Loop)
 	{
-		switch (LookaHeadToken)
+		switch (m_LookAheadToken)
 		{
 		case Token('^'):
 			Expect(Token('^'));
@@ -2209,7 +3502,7 @@ CAstNode* CParser::MemValLocation()
 	CSymbol* pSym;
 
 	pNext = Factor();
-	switch (LookaHeadToken)
+	switch (m_LookAheadToken)
 	{
 	case Token::VAR_GLOBAL:
 		pSym = GetLexer()->GetLexSymbol();
@@ -2274,7 +3567,7 @@ CAstNode* CParser::SysDecl()
 	pNext = TypeDefDecl();
 	while (Loop)
 	{
-		switch (LookaHeadToken)
+		switch (m_LookAheadToken)
 		{
 		case Token::VECTOR:
 			Expect(Token::VECTOR);
@@ -2304,7 +3597,7 @@ CAstNode* CParser::VectorEnd()
 	CAstNode* pNext = 0, *pChild = 0;
 
 	pNext = AddressEnd();
-	switch (LookaHeadToken)
+	switch (m_LookAheadToken)
 	{
 	case Token('='):
 		Expect(Token('='));
@@ -2328,7 +3621,7 @@ CAstNode* CParser::AddressEnd()
 	CAstNode* pNext = 0, *pChild = 0;
 
 	pNext = VectorAddress();
-	switch (LookaHeadToken)
+	switch (m_LookAheadToken)
 	{
 	case Token(')'):
 		Expect(Token(')'));
@@ -2373,7 +3666,7 @@ CAstNode* CParser::TypeDefDecl()
 	pNext = Declare();
 	while (Loop)
 	{
-		switch (LookaHeadToken)
+		switch (m_LookAheadToken)
 		{
 		case Token::TYPE :
 			Expect(Token::TYPE);
@@ -2414,7 +3707,7 @@ CAstNode* CParser::TypeDef()
 	pTypeName->SetSymbol(pSym);
 	//	TypeDef_1	-> '=' '[' LocalDecls TypeDef_2;
 	Expect(Token('='));
-	switch (LookaHeadToken)
+	switch (m_LookAheadToken)
 	{
 	case Token('['):
 		Expect(Token('['));
@@ -2426,7 +3719,7 @@ CAstNode* CParser::TypeDef()
 	default:
 		break;
 	}
-	switch (LookaHeadToken)
+	switch (m_LookAheadToken)
 	{
 	case Token(']'):
 		Expect(Token(']'));
@@ -2460,25 +3753,25 @@ CAstNode* CParser::TypeField(CSymbol* pFuncSym)
 	bool Loop = true;
 	CAstNode* pN = 0;
 	CAstNode* pNext = 0, * pChild = 0;
-	CChainTypeObject* pOTC = 0;
+	CChainTypeItem* pOTC = 0;
 	CChainType* pTypeChain = 0;
 
 	while (Loop)
 	{
-		switch (LookaHeadToken)
+		switch (m_LookAheadToken)
 		{
 		case Token::CHAR:
 			//--------------- Declaration -------------
 			pTypeChain = new CChainType;
 			//----------------------------------------
-			pOTC = new CChainTypeObject;
+			pOTC = new CChainTypeItem;
 			pOTC->Create();
-			pOTC->SetSpec(CChainTypeObject::Spec::TYPE_FIELD);
+			pOTC->SetSpec(CChainTypeItem::Spec::TYPE_FIELD);
 			pTypeChain->AddToTail(pOTC);		//node -> ROOT
 			//---------------------------------
-			pOTC = new CChainTypeObject;
+			pOTC = new CChainTypeItem;
 			pOTC->Create();
-			pOTC->SetSpec(CChainTypeObject::Spec::CHAR);
+			pOTC->SetSpec(CChainTypeItem::Spec::CHAR);
 			pTypeChain->AddToTail(pOTC);		//node -> ROOT
 			//------------------ Parse ------------------------
 			Expect(Token::CHAR);
@@ -2494,14 +3787,14 @@ CAstNode* CParser::TypeField(CSymbol* pFuncSym)
 			pTypeChain = new CChainType;
 			pTypeChain->Create();
 			//----------------------------------------
-			pOTC = new CChainTypeObject;
+			pOTC = new CChainTypeItem;
 			pOTC->Create();
-			pOTC->SetSpec(CChainTypeObject::Spec::TYPE_FIELD);
+			pOTC->SetSpec(CChainTypeItem::Spec::TYPE_FIELD);
 			pTypeChain->AddToTail(pOTC);		//node -> ROOT
 			//-----------------------------------
-			pOTC = new CChainTypeObject;
+			pOTC = new CChainTypeItem;
 			pOTC->Create();
-			pOTC->SetSpec(CChainTypeObject::Spec::BYTE);
+			pOTC->SetSpec(CChainTypeItem::Spec::BYTE);
 			pTypeChain->AddToTail(pOTC);		//node -> ROOT
 			//------------------ Parse ------------------------
 			Expect(Token::BYTE);
@@ -2517,14 +3810,14 @@ CAstNode* CParser::TypeField(CSymbol* pFuncSym)
 			pTypeChain = new CChainType;
 			pTypeChain->Create();
 			//----------------------------------------
-			pOTC = new CChainTypeObject;
+			pOTC = new CChainTypeItem;
 			pOTC->Create();
-			pOTC->SetSpec(CChainTypeObject::Spec::TYPE_FIELD);
+			pOTC->SetSpec(CChainTypeItem::Spec::TYPE_FIELD);
 			pTypeChain->AddToTail(pOTC);		//node -> ROOT
 			//-------------------------------------
-			pOTC = new CChainTypeObject;
+			pOTC = new CChainTypeItem;
 			pOTC->Create();
-			pOTC->SetSpec(CChainTypeObject::Spec::CARD);
+			pOTC->SetSpec(CChainTypeItem::Spec::CARD);
 			pTypeChain->AddToTail(pOTC);		//node -> ROOT
 			//------------------ Parse ------------------------
 			Expect(Token::CARD);
@@ -2540,14 +3833,14 @@ CAstNode* CParser::TypeField(CSymbol* pFuncSym)
 			pTypeChain = new CChainType;
 			pTypeChain->Create();
 			//----------------------------------------
-			pOTC = new CChainTypeObject;
+			pOTC = new CChainTypeItem;
 			pOTC->Create();
-			pOTC->SetSpec(CChainTypeObject::Spec::TYPE_FIELD);
+			pOTC->SetSpec(CChainTypeItem::Spec::TYPE_FIELD);
 			pTypeChain->AddToTail(pOTC);		//node -> ROOT
 			//-------------------------------------
-			pOTC = new CChainTypeObject;
+			pOTC = new CChainTypeItem;
 			pOTC->Create();
-			pOTC->SetSpec(CChainTypeObject::Spec::INT);
+			pOTC->SetSpec(CChainTypeItem::Spec::INT);
 			pTypeChain->AddToTail(pOTC);		//node -> ROOT
 			//------------------ Parse ------------------------
 			Expect(Token::INT);
@@ -2563,13 +3856,13 @@ CAstNode* CParser::TypeField(CSymbol* pFuncSym)
 			pTypeChain = new CChainType;
 			pTypeChain->Create();
 			//----------------------------------------
-			pOTC = new CChainTypeObject;
+			pOTC = new CChainTypeItem;
 			pOTC->Create();
-			pOTC->SetSpec(CChainTypeObject::Spec::TYPE_FIELD);
+			pOTC->SetSpec(CChainTypeItem::Spec::TYPE_FIELD);
 			pTypeChain->AddToTail(pOTC);		//node -> ROOT
-			pOTC = new CChainTypeObject;
+			pOTC = new CChainTypeItem;
 			pOTC->Create();
-			pOTC->SetSpec(CChainTypeObject::Spec::BOOL);
+			pOTC->SetSpec(CChainTypeItem::Spec::BOOL);
 			pTypeChain->AddToTail(pOTC);		//node -> ROOT
 			//------------------ Parse ------------------------
 			Expect(Token::BOOL);
@@ -2584,14 +3877,14 @@ CAstNode* CParser::TypeField(CSymbol* pFuncSym)
 			pTypeChain = new CChainType;
 			pTypeChain->Create();
 			//----------------------------------------
-			pOTC = new CChainTypeObject;
+			pOTC = new CChainTypeItem;
 			pOTC->Create();
-			pOTC->SetSpec(CChainTypeObject::Spec::TYPE_FIELD);
+			pOTC->SetSpec(CChainTypeItem::Spec::TYPE_FIELD);
 			pTypeChain->AddToTail(pOTC);		//node -> ROOT
 			//-------------------------------
-			pOTC = new CChainTypeObject;
+			pOTC = new CChainTypeItem;
 			pOTC->Create();
-			pOTC->SetSpec(CChainTypeObject::Spec::TYPE);
+			pOTC->SetSpec(CChainTypeItem::Spec::TYPE);
 			pTypeChain->AddToTail(pOTC);		//node -> ROOT
 			//------------------ Parse ------------------------
 			Expect(Token::RECORDTYPE);
@@ -2647,7 +3940,7 @@ CAstNode* CParser::Declare()
 	pNext = FundamentalDecl();
 	while (Loop)
 	{
-		switch (LookaHeadToken)
+		switch (m_LookAheadToken)
 		{
 		case Token::DECLARE:
 			Expect(Token::DECLARE);
@@ -2679,7 +3972,7 @@ void CParser::DECLAREnd()
 	DECLAREFuncType();
 	while (Loop)
 	{
-		switch (LookaHeadToken)
+		switch (m_LookAheadToken)
 		{
 		case Token('('):
 			Expect(Token('('));
@@ -2714,25 +4007,25 @@ void CParser::DECLAREParamList()
 	// This Method does not generate any ASTs
 	//--------------------------------------------
 	bool Loop = true;
-	CChainTypeObject* pOTC = 0;
+	CChainTypeItem* pOTC = 0;
 	CChainType* pTypeChain = 0;
 
 	while (Loop)
 	{
-		switch (LookaHeadToken)
+		switch (m_LookAheadToken)
 		{
 		case Token::RECORDTYPE:	// DECLARE
 			pTypeChain = new CChainType;
 			pTypeChain->Create();
 			//-------------------------
-			pOTC = new CChainTypeObject;
+			pOTC = new CChainTypeItem;
 			pOTC->Create();
-			pOTC->SetSpec(CChainTypeObject::Spec::PARAM);
+			pOTC->SetSpec(CChainTypeItem::Spec::PARAM);
 			pTypeChain->AddToTail(pOTC);
 			//-------------------------
-			pOTC = new CChainTypeObject;
+			pOTC = new CChainTypeItem;
 			pOTC->Create();
-			pOTC->SetSpec(CChainTypeObject::Spec::TYPE);
+			pOTC->SetSpec(CChainTypeItem::Spec::TYPE);
 			pTypeChain->AddToTail(pOTC);
 			//--------------------------
 			Expect(Token::RECORDTYPE);
@@ -2743,14 +4036,14 @@ void CParser::DECLAREParamList()
 			pTypeChain = new CChainType;
 			pTypeChain->Create();
 			//-------------------------
-			pOTC = new CChainTypeObject;
+			pOTC = new CChainTypeItem;
 			pOTC->Create();
-			pOTC->SetSpec(CChainTypeObject::Spec::PARAM);
+			pOTC->SetSpec(CChainTypeItem::Spec::PARAM);
 			pTypeChain->AddToTail(pOTC);
 			//-------------------------
-			pOTC = new CChainTypeObject;
+			pOTC = new CChainTypeItem;
 			pOTC->Create();
-			pOTC->SetSpec(CChainTypeObject::Spec::CARD);
+			pOTC->SetSpec(CChainTypeItem::Spec::CARD);
 			pTypeChain->AddToTail(pOTC);
 			//--------------------------
 			Expect(Token::CHAR);
@@ -2761,14 +4054,14 @@ void CParser::DECLAREParamList()
 			pTypeChain = new CChainType;
 			pTypeChain->Create();
 			//-------------------------
-			pOTC = new CChainTypeObject;
+			pOTC = new CChainTypeItem;
 			pOTC->Create();
-			pOTC->SetSpec(CChainTypeObject::Spec::PARAM);
+			pOTC->SetSpec(CChainTypeItem::Spec::PARAM);
 			pTypeChain->AddToTail(pOTC);
 			//-------------------------
-			pOTC = new CChainTypeObject;
+			pOTC = new CChainTypeItem;
 			pOTC->Create();
-			pOTC->SetSpec(CChainTypeObject::Spec::BYTE);
+			pOTC->SetSpec(CChainTypeItem::Spec::BYTE);
 			pTypeChain->AddToTail(pOTC);
 			//-----------------------
 			Expect(Token::BYTE);
@@ -2779,14 +4072,14 @@ void CParser::DECLAREParamList()
 			pTypeChain = new CChainType;
 			pTypeChain->Create();
 			//-------------------------
-			pOTC = new CChainTypeObject;
+			pOTC = new CChainTypeItem;
 			pOTC->Create();
-			pOTC->SetSpec(CChainTypeObject::Spec::PARAM);
+			pOTC->SetSpec(CChainTypeItem::Spec::PARAM);
 			pTypeChain->AddToTail(pOTC);
 			//-------------------------
-			pOTC = new CChainTypeObject;
+			pOTC = new CChainTypeItem;
 			pOTC->Create();
-			pOTC->SetSpec(CChainTypeObject::Spec::INT);
+			pOTC->SetSpec(CChainTypeItem::Spec::INT);
 			pTypeChain->AddToTail(pOTC);
 			//--------------------------
 			Expect(Token::INT);
@@ -2797,14 +4090,14 @@ void CParser::DECLAREParamList()
 			pTypeChain = new CChainType;
 			pTypeChain->Create();
 			//-------------------------
-			pOTC = new CChainTypeObject;
+			pOTC = new CChainTypeItem;
 			pOTC->Create();
-			pOTC->SetSpec(CChainTypeObject::Spec::PARAM);
+			pOTC->SetSpec(CChainTypeItem::Spec::PARAM);
 			pTypeChain->AddToTail(pOTC);
 			//-------------------------
-			pOTC = new CChainTypeObject;
+			pOTC = new CChainTypeItem;
 			pOTC->Create();
-			pOTC->SetSpec(CChainTypeObject::Spec::CARD);
+			pOTC->SetSpec(CChainTypeItem::Spec::CARD);
 			pTypeChain->AddToTail(pOTC);
 			//-------------------------
 			Expect(Token::CARD);
@@ -2815,14 +4108,14 @@ void CParser::DECLAREParamList()
 			pTypeChain = new CChainType;
 			pTypeChain->Create();
 			//-------------------------
-			pOTC = new CChainTypeObject;
+			pOTC = new CChainTypeItem;
 			pOTC->Create();
-			pOTC->SetSpec(CChainTypeObject::Spec::PARAM);
+			pOTC->SetSpec(CChainTypeItem::Spec::PARAM);
 			pTypeChain->AddToTail(pOTC);
 			//-------------------------
-			pOTC = new CChainTypeObject;
+			pOTC = new CChainTypeItem;
 			pOTC->Create();
-			pOTC->SetSpec(CChainTypeObject::Spec::BOOL);
+			pOTC->SetSpec(CChainTypeItem::Spec::BOOL);
 			pTypeChain->AddToTail(pOTC);
 			//-------------------------
 			Expect(Token::BOOL);
@@ -2845,19 +4138,19 @@ void CParser::DECLAREParamTypeSpec(CChainType* pTypeChain)
 	//							-> .
 	//							;
 	//--------------------------------------------
-	CChainTypeObject* pOTC = 0;
+	CChainTypeItem* pOTC = 0;
 	bool Loop = true;
 	
 	DECLAREParamIdentList(pTypeChain);
 	while (Loop)
 	{
-		switch (LookaHeadToken)
+		switch (m_LookAheadToken)
 		{
 		case Token::CONST:
 			//-------------- Declaration ----------------------
-			pOTC = new CChainTypeObject;
+			pOTC = new CChainTypeItem;
 			pOTC->Create();
-			pOTC->SetSpec(CChainTypeObject::Spec::CONST);
+			pOTC->SetSpec(CChainTypeItem::Spec::CONST);
 			pTypeChain->AddToTail(pOTC);
 			//---------------- Parsing -------------------
 			Expect(Token::CONST);
@@ -2865,9 +4158,9 @@ void CParser::DECLAREParamTypeSpec(CChainType* pTypeChain)
 			break;
 		case Token::POINTER:
 			//-------------- Declaration ----------------------
-			pOTC = new CChainTypeObject;
+			pOTC = new CChainTypeItem;
 			pOTC->Create();
-			pOTC->SetSpec(CChainTypeObject::Spec::POINTER);
+			pOTC->SetSpec(CChainTypeItem::Spec::POINTER);
 			pTypeChain->AddToTail(pOTC);
 			//---------------- Parsing -------------------
 			Expect(Token::POINTER);
@@ -2875,9 +4168,9 @@ void CParser::DECLAREParamTypeSpec(CChainType* pTypeChain)
 			break;
 		case Token::ARRAY:
 			//----------- Declaration -----------------------
-			pOTC = new CChainTypeObject;
+			pOTC = new CChainTypeItem;
 			pOTC->Create();
-			pOTC->SetSpec(CChainTypeObject::Spec::ARRAY);
+			pOTC->SetSpec(CChainTypeItem::Spec::ARRAY);
 			pTypeChain->AddToTail(pOTC);
 			//-------------- Parsing ------------------------
 			Expect(Token::ARRAY);
@@ -2906,7 +4199,7 @@ void CParser::DECLAREParamIdentList(CChainType* pTypeChain)
 	DECLAREParamIdent(pTypeChain);
 	while (Loop)
 	{
-		switch (LookaHeadToken)
+		switch (m_LookAheadToken)
 		{
 		case Token(','):
 			Expect(Token(','));
@@ -2928,7 +4221,7 @@ void CParser::DECLAREParamIdent(CChainType* pTypeChain)
 	//--------------------------------------------
 	CSymbol* pSym;
 
-	switch (LookaHeadToken)
+	switch (m_LookAheadToken)
 	{
 	case Token::IDENT:
 		pSym = GetLexer()->GetLexSymbol();
@@ -2944,10 +4237,10 @@ void CParser::DECLAREParamIdent(CChainType* pTypeChain)
 		sprintf_s(
 			ThrownException.GetErrorString(),
 			ThrownException.GetMaxStringLen(),
-			"Line %d: Col %d Expected An Identifier\nGot a %s\n",
+			"DECLAREParamIdent: Line %d: Col %d Expected An Identifier\nGot a %s\n",
 			GetLexer()->GetLineNumber(),
-			GetLexer()->GetColunm(),
-			GetLexer()->LookupToString(LookaHeadToken)
+			GetLexer()->GetColumn(),
+			GetLexer()->LookupTokenToString(m_LookAheadToken)
 		);
 		throw(ThrownException);
 		break;
@@ -2971,19 +4264,19 @@ void CParser::DECLAREFuncType()
 	// 
 	// This Method does not generate any ASTs
 	//--------------------------------------------
-	CChainTypeObject* pOTC = 0;
+	CChainTypeItem* pOTC = 0;
 	CChainType* pTypeChain = 0;
 	bool Loop = true;
 
 	while (Loop)
 	{
-		switch (LookaHeadToken)
+		switch (m_LookAheadToken)
 		{
 		case Token::BYTE:
 			pTypeChain = new CChainType;
-			pOTC = new CChainTypeObject;
+			pOTC = new CChainTypeItem;
 			pOTC->Create();
-			pOTC->SetSpec(CChainTypeObject::Spec::BYTE);
+			pOTC->SetSpec(CChainTypeItem::Spec::BYTE);
 			pTypeChain->AddToTail(pOTC);
 			Expect(Token::BYTE);
 			DECLAREFuncTypeSpec(pTypeChain);
@@ -2991,9 +4284,9 @@ void CParser::DECLAREFuncType()
 			break;
 		case Token::CHAR:
 			pTypeChain = new CChainType;
-			pOTC = new CChainTypeObject;
+			pOTC = new CChainTypeItem;
 			pOTC->Create();
-			pOTC->SetSpec(CChainTypeObject::Spec::CHAR);
+			pOTC->SetSpec(CChainTypeItem::Spec::CHAR);
 			pTypeChain->AddToTail(pOTC);
 			Expect(Token::CHAR);
 			DECLAREFuncTypeSpec(pTypeChain);
@@ -3001,9 +4294,9 @@ void CParser::DECLAREFuncType()
 			break;
 		case Token::INT:
 			pTypeChain = new CChainType;
-			pOTC = new CChainTypeObject;
+			pOTC = new CChainTypeItem;
 			pOTC->Create();
-			pOTC->SetSpec(CChainTypeObject::Spec::INT);
+			pOTC->SetSpec(CChainTypeItem::Spec::INT);
 			pTypeChain->AddToTail(pOTC);
 			Expect(Token::INT);
 			DECLAREFuncTypeSpec(pTypeChain);
@@ -3011,9 +4304,9 @@ void CParser::DECLAREFuncType()
 			break;
 		case Token::CARD:
 			pTypeChain = new CChainType;
-			pOTC = new CChainTypeObject;
+			pOTC = new CChainTypeItem;
 			pOTC->Create();
-			pOTC->SetSpec(CChainTypeObject::Spec::CARD);
+			pOTC->SetSpec(CChainTypeItem::Spec::CARD);
 			pTypeChain->AddToTail(pOTC);
 			Expect(Token::CARD);
 			DECLAREFuncTypeSpec(pTypeChain);
@@ -3021,9 +4314,9 @@ void CParser::DECLAREFuncType()
 			break;
 		case Token::BOOL:
 			pTypeChain = new CChainType;
-			pOTC = new CChainTypeObject;
+			pOTC = new CChainTypeItem;
 			pOTC->Create();
-			pOTC->SetSpec(CChainTypeObject::Spec::BOOL);
+			pOTC->SetSpec(CChainTypeItem::Spec::BOOL);
 			pTypeChain->AddToTail(pOTC);
 			Expect(Token::BOOL);
 			DECLAREFuncTypeSpec(pTypeChain);
@@ -3031,9 +4324,9 @@ void CParser::DECLAREFuncType()
 			break;
 		case Token::RECORDTYPE:
 			pTypeChain = new CChainType;
-			pOTC = new CChainTypeObject;
+			pOTC = new CChainTypeItem;
 			pOTC->Create();
-			pOTC->SetSpec(CChainTypeObject::Spec::TYPE);
+			pOTC->SetSpec(CChainTypeItem::Spec::TYPE);
 			pTypeChain->AddToTail(pOTC);
 			Expect(Token::RECORDTYPE);
 			DECLAREFuncTypeSpec(pTypeChain);
@@ -3055,19 +4348,19 @@ void CParser::DECLAREFuncTypeSpec(CChainType* pTypeChain)
 	//						-> .
 	//						;
 	//--------------------------------------------
-	CChainTypeObject* pOTC = 0;
+	CChainTypeItem* pOTC = 0;
 	bool Loop = true;
 
 	DECLAREfunction(pTypeChain);
 	while (Loop)
 	{
-		switch (LookaHeadToken)
+		switch (m_LookAheadToken)
 		{
 		case Token::CONST:
 			//-------------- Declaration ----------------------
-			pOTC = new CChainTypeObject;
+			pOTC = new CChainTypeItem;
 			pOTC->Create();
-			pOTC->SetSpec(CChainTypeObject::Spec::CONST);
+			pOTC->SetSpec(CChainTypeItem::Spec::CONST);
 			pTypeChain->AddToTail(pOTC);
 			//---------------- Parsing -------------------
 			Expect(Token::CONST);
@@ -3075,9 +4368,9 @@ void CParser::DECLAREFuncTypeSpec(CChainType* pTypeChain)
 			break;
 		case Token::POINTER:
 			//-------------- Declaration ----------------------
-			pOTC = new CChainTypeObject;
+			pOTC = new CChainTypeItem;
 			pOTC->Create();
-			pOTC->SetSpec(CChainTypeObject::Spec::POINTER);
+			pOTC->SetSpec(CChainTypeItem::Spec::POINTER);
 			pTypeChain->AddToTail(pOTC);
 			//---------------- Parsing -------------------
 			Expect(Token::POINTER);
@@ -3085,9 +4378,9 @@ void CParser::DECLAREFuncTypeSpec(CChainType* pTypeChain)
 			break;
 		case Token::ARRAY:
 			//----------- Declaration -----------------------
-			pOTC = new CChainTypeObject;
+			pOTC = new CChainTypeItem;
 			pOTC->Create();
-			pOTC->SetSpec(CChainTypeObject::Spec::ARRAY);
+			pOTC->SetSpec(CChainTypeItem::Spec::ARRAY);
 			pTypeChain->AddToTail(pOTC);
 			//-------------- Parsing ------------------------
 			Expect(Token::ARRAY);
@@ -3112,31 +4405,31 @@ void CParser::DECLAREfunction(CChainType* pTypeChain)
 	// This Method does not generate any ASTs
 	//--------------------------------------------
 	bool Loop = true;
-	CChainTypeObject* pOTC = 0;
+	CChainTypeItem* pOTC = 0;
 
-	switch (LookaHeadToken)
+	switch (m_LookAheadToken)
 	{
 	case Token::FUNC:
 		Expect(Token::FUNC);
-		pOTC = new CChainTypeObject;
+		pOTC = new CChainTypeItem;
 		pOTC->Create();
-		pOTC->SetSpec(CChainTypeObject::Spec::FUNC);
+		pOTC->SetSpec(CChainTypeItem::Spec::FUNC);
 		pTypeChain->AddToTail(pOTC);
 		DECLAREFuncName(pTypeChain);
 		break;
 	case Token::PROC:
 		Expect(Token::PROC);
-		pOTC = new CChainTypeObject;
+		pOTC = new CChainTypeItem;
 		pOTC->Create();
-		pOTC->SetSpec(CChainTypeObject::Spec::PROC);
+		pOTC->SetSpec(CChainTypeItem::Spec::PROC);
 		pTypeChain->AddToTail(pOTC);
 		DECLAREFuncName(pTypeChain);
 		break;
 	case Token::INTERRUPT:
 		Expect(Token::INTERRUPT);
-		pOTC = new CChainTypeObject;
+		pOTC = new CChainTypeItem;
 		pOTC->Create();
-		pOTC->SetSpec(CChainTypeObject::Spec::INTERRUPT);
+		pOTC->SetSpec(CChainTypeItem::Spec::INTERRUPT);
 		pTypeChain->AddToTail(pOTC);
 		DECLAREFuncName(pTypeChain);
 		break;
@@ -3145,10 +4438,10 @@ void CParser::DECLAREfunction(CChainType* pTypeChain)
 		sprintf_s(
 			ThrownException.GetErrorString(),
 			ThrownException.GetMaxStringLen(),
-			"Line %d: Col %d Expected A PROC, FUNC or INTERRUPT Keyword\nGot a %s\n",
+			"DECLAREfunction: Line %d: Col %d Expected A PROC, FUNC or INTERRUPT Keyword\nGot a %s\n",
 			GetLexer()->GetLineNumber(),
-			GetLexer()->GetColunm(),
-			GetLexer()->LookupToString(LookaHeadToken)
+			GetLexer()->GetColumn(),
+			GetLexer()->LookupTokenToString(m_LookAheadToken)
 		);
 		throw(ThrownException);
 		break;
@@ -3166,22 +4459,22 @@ void CParser::DECLAREFuncName(CChainType* pTypeChain)
 	//--------------------------------------------
 	CSymbol* pSym;
 
-	switch (LookaHeadToken)
+	switch (m_LookAheadToken)
 	{
 	case Token::IDENT:
 		pSym = GetLexer()->GetLexSymbol();
 		pSym->CreateTypeChain(pTypeChain);
-		if (pTypeChain->Is(CChainTypeObject::Spec::FUNC))
+		if (pTypeChain->Is(CChainTypeItem::Spec::FUNC))
 		{
 			pSym->SetIdentType(CBin::IdentType::FUNC);
 			pSym->SetToken(Token::FUNC_IDENT);
 		}
-		else if (pTypeChain->Is(CChainTypeObject::Spec::PROC))
+		else if (pTypeChain->Is(CChainTypeItem::Spec::PROC))
 		{
 			pSym->SetIdentType(CBin::IdentType::PROC);
 			pSym->SetToken(Token::PROC_IDENT);
 		}
-		else if (pTypeChain->Is(CChainTypeObject::Spec::INTERRUPT))
+		else if (pTypeChain->Is(CChainTypeItem::Spec::INTERRUPT))
 		{
 			pSym->SetIdentType(CBin::IdentType::IRQPROC);
 			pSym->SetToken(Token::INTERRUPT_IDENT);
@@ -3218,25 +4511,25 @@ CAstNode* CParser::FundamentalDecl()
 	CAstNode* pN= 0;
 	CAstNode* pNext = 0, *pChild = 0;
 	CAstNode* pOtherNode = 0;
-	CChainTypeObject* pOTC = 0;
+	CChainTypeItem* pOTC = 0;
 	CChainType* pTC = 0;
 
 //	pNext = FundTypeSpec();
 	while (Loop)
 	{
-		switch (LookaHeadToken)
+		switch (m_LookAheadToken)
 		{
 		case Token::RECORDTYPE:
 			//------------ Declaration - Create Type Chain ---------
 			pTC = new CChainType;
 			pTC->Create();
-			pOTC = new CChainTypeObject;
+			pOTC = new CChainTypeItem;
 			pOTC->Create();
-			pOTC->SetSpec(CChainTypeObject::Spec::GLOBAL);
+			pOTC->SetSpec(CChainTypeItem::Spec::GLOBAL);
 			pTC->AddToTail(pOTC);		//node -> ROOT
-			pOTC = new CChainTypeObject;
+			pOTC = new CChainTypeItem;
 			pOTC->Create();
-			pOTC->SetSpec(CChainTypeObject::Spec::TYPE);
+			pOTC->SetSpec(CChainTypeItem::Spec::TYPE);
 			pTC->AddToTail(pOTC);
 			//------------- Parsing -----------------------
 			Expect(Token::RECORDTYPE);
@@ -3252,14 +4545,14 @@ CAstNode* CParser::FundamentalDecl()
 			pTC = new CChainType;
 			pTC->Create();
 			//-----------------------
-			pOTC = new CChainTypeObject;
+			pOTC = new CChainTypeItem;
 			pOTC->Create();
-			pOTC->SetSpec(CChainTypeObject::Spec::GLOBAL);
+			pOTC->SetSpec(CChainTypeItem::Spec::GLOBAL);
 			pTC->AddToTail(pOTC);
 			//-------------------------------
-			pOTC = new CChainTypeObject;
+			pOTC = new CChainTypeItem;
 			pOTC->Create();
-			pOTC->SetSpec(CChainTypeObject::Spec::CHAR);
+			pOTC->SetSpec(CChainTypeItem::Spec::CHAR);
 			pTC->AddToTail(pOTC);		//node -> ROOT
 			//--------------- Parsing ---------------------------
 			Expect(Token::CHAR);		//LookaHead node -> Root
@@ -3275,14 +4568,14 @@ CAstNode* CParser::FundamentalDecl()
 			pTC = new CChainType;
 			pTC->Create();
 			//-------------------------
-			pOTC = new CChainTypeObject;
+			pOTC = new CChainTypeItem;
 			pOTC->Create();
-			pOTC->SetSpec(CChainTypeObject::Spec::GLOBAL);
+			pOTC->SetSpec(CChainTypeItem::Spec::GLOBAL);
 			pTC->AddToTail(pOTC);
 			//--------------------------------------
-			pOTC = new CChainTypeObject;
+			pOTC = new CChainTypeItem;
 			pOTC->Create();
-			pOTC->SetSpec(CChainTypeObject::Spec::BYTE);
+			pOTC->SetSpec(CChainTypeItem::Spec::BYTE);
 			pTC->AddToTail(pOTC);
 			//--------------- Parsing ---------------------------
 			Expect(Token::BYTE);
@@ -3298,14 +4591,14 @@ CAstNode* CParser::FundamentalDecl()
 			pTC = new CChainType;
 			pTC->Create();
 			//----------------------
-			pOTC = new CChainTypeObject;
+			pOTC = new CChainTypeItem;
 			pOTC->Create();
-			pOTC->SetSpec(CChainTypeObject::Spec::GLOBAL);
+			pOTC->SetSpec(CChainTypeItem::Spec::GLOBAL);
 			pTC->AddToTail(pOTC);		//node -> ROOT
 			//------------------------
-			pOTC = new CChainTypeObject;
+			pOTC = new CChainTypeItem;
 			pOTC->Create();
-			pOTC->SetSpec(CChainTypeObject::Spec::CARD);
+			pOTC->SetSpec(CChainTypeItem::Spec::CARD);
 			pTC->AddToTail(pOTC);
 			//--------------- Parsing ---------------------------
 			Expect(Token::CARD);
@@ -3321,14 +4614,14 @@ CAstNode* CParser::FundamentalDecl()
 			pTC = new CChainType;
 			pTC->Create();
 			//----------------------
-			pOTC = new CChainTypeObject;
+			pOTC = new CChainTypeItem;
 			pOTC->Create();
-			pOTC->SetSpec(CChainTypeObject::Spec::GLOBAL);
+			pOTC->SetSpec(CChainTypeItem::Spec::GLOBAL);
 			pTC->AddToTail(pOTC);		
 			//------------------------------
-			pOTC = new CChainTypeObject;
+			pOTC = new CChainTypeItem;
 			pOTC->Create();
-			pOTC->SetSpec(CChainTypeObject::Spec::INT);
+			pOTC->SetSpec(CChainTypeItem::Spec::INT);
 			pTC->AddToTail(pOTC);
 			//--------------- Parsing ---------------------------
 			Expect(Token::INT);
@@ -3344,14 +4637,14 @@ CAstNode* CParser::FundamentalDecl()
 			pTC = new CChainType;
 			pTC->Create();
 			//----------------------
-			pOTC = new CChainTypeObject;
+			pOTC = new CChainTypeItem;
 			pOTC->Create();
-			pOTC->SetSpec(CChainTypeObject::Spec::GLOBAL);
+			pOTC->SetSpec(CChainTypeItem::Spec::GLOBAL);
 			pTC->AddToTail(pOTC);
 			//-----------------------------
-			pOTC = new CChainTypeObject;
+			pOTC = new CChainTypeItem;
 			pOTC->Create();
-			pOTC->SetSpec(CChainTypeObject::Spec::BOOL);
+			pOTC->SetSpec(CChainTypeItem::Spec::BOOL);
 			pTC->AddToTail(pOTC);
 			//--------------- Parsing ---------------------------
 			Expect(Token::BOOL);
@@ -3367,14 +4660,14 @@ CAstNode* CParser::FundamentalDecl()
 			pTC = new CChainType;
 			pTC->Create();
 			//----------------------
-			pOTC = new CChainTypeObject;
+			pOTC = new CChainTypeItem;
 			pOTC->Create();
-			pOTC->SetSpec(CChainTypeObject::Spec::GLOBAL);
+			pOTC->SetSpec(CChainTypeItem::Spec::GLOBAL);
 			pTC->AddToTail(pOTC);		
 			//-------------------------
-			pOTC = new CChainTypeObject;
+			pOTC = new CChainTypeItem;
 			pOTC->Create();
-			pOTC->SetSpec(CChainTypeObject::Spec::PROC);
+			pOTC->SetSpec(CChainTypeItem::Spec::PROC);
 			pTC->AddToTail(pOTC);
 			//------------------- Parsing ----------------------
 			Expect(Token::PROC);
@@ -3390,9 +4683,9 @@ CAstNode* CParser::FundamentalDecl()
 			pTC = new CChainType;
 			pTC->Create();
 			//----------------------
-			pOTC = new CChainTypeObject;
+			pOTC = new CChainTypeItem;
 			pOTC->Create();
-			pOTC->SetSpec(CChainTypeObject::Spec::INTERRUPT);
+			pOTC->SetSpec(CChainTypeItem::Spec::INTERRUPT);
 			pTC->AddToTail(pOTC);
 			//----------------- Parsing -------------------
 			Expect(Token::INTERRUPT);
@@ -3425,20 +4718,20 @@ CAstNode* CParser::FundTypeSpec(CChainType* pTypeChain)
 	//--------------------------------------------
 	CAstNode* pN = 0;
 	CAstNode* pNext = 0, *pChild = 0;
-	CChainTypeObject* pOTC = 0;
+	CChainTypeItem* pOTC = 0;
 	bool Loop = true;
 	int LoopCount = 0;
 
 	pNext = IdentList(pTypeChain);
 	while (Loop)
 	{
-		switch (LookaHeadToken)
+		switch (m_LookAheadToken)
 		{
 		case Token::CONST:
 			//-------------- Declaration ----------------------
-			pOTC = new CChainTypeObject;
+			pOTC = new CChainTypeItem;
 			pOTC->Create();
-			pOTC->SetSpec(CChainTypeObject::Spec::CONST);
+			pOTC->SetSpec(CChainTypeItem::Spec::CONST);
 			pTypeChain->AddToTail(pOTC);
 			//---------------- Parsing -------------------
 			Expect(Token::CONST);
@@ -3450,9 +4743,9 @@ CAstNode* CParser::FundTypeSpec(CChainType* pTypeChain)
 			break;
 		case Token::POINTER:
 			//-------------- Declaration ----------------------
-			pOTC = new CChainTypeObject;
+			pOTC = new CChainTypeItem;
 			pOTC->Create();
-			pOTC->SetSpec(CChainTypeObject::Spec::POINTER);
+			pOTC->SetSpec(CChainTypeItem::Spec::POINTER);
 			pTypeChain->AddToTail(pOTC);
 			//---------------- Parsing -------------------
 			Expect(Token::POINTER);
@@ -3464,9 +4757,9 @@ CAstNode* CParser::FundTypeSpec(CChainType* pTypeChain)
 			break;
 		case Token::ARRAY:
 			//----------- Declaration -----------------------
-			pOTC = new CChainTypeObject;
+			pOTC = new CChainTypeItem;
 			pOTC->Create();
-			pOTC->SetSpec(CChainTypeObject::Spec::ARRAY);
+			pOTC->SetSpec(CChainTypeItem::Spec::ARRAY);
 			pTypeChain->AddToTail(pOTC);
 			//-------------- Parsing ------------------------
 			Expect(Token::ARRAY);
@@ -3514,7 +4807,7 @@ CAstNode* CParser::IdentList(CChainType* pTypeChain)
 	pNext = Ident(pTypeChain);
 	while (Loop)
 	{
-		switch (LookaHeadToken)
+		switch (m_LookAheadToken)
 		{
 		case Token(','):
 			Expect(Token(','));
@@ -3540,44 +4833,48 @@ CAstNode* CParser::Ident(CChainType* pTypeChain)
 	CAstNode* pN = 0;
 	CAstNode* pNext = 0, *pChild = 0;
 	CSymbol* pSym = 0;
-	CChainTypeObject* pOTC = 0;
+	CChainTypeItem* pOTC = 0;
 	CSection* pSection = 0; 
+	char* pS = new char[2048];
 
-	switch (LookaHeadToken)
+	for (int i = 0; i < 2048; i++) pS[i] = 0;
+	pTypeChain->Print(pS,2048,1,0);
+	fprintf(LogFile(), "Ident: TypeChain:%s\n", pS);
+	switch (m_LookAheadToken)
 	{
 	case Token::IDENT:
 		pSym = GetLexer()->GetLexSymbol();
 		pSym->CreateTypeChain(pTypeChain);
-		if (pTypeChain->Is(CChainTypeObject::Spec::FUNC))
+		if (pTypeChain->Is(CChainTypeItem::Spec::FUNC))
 		{
 			pSym->SetIdentType(CBin::IdentType::FUNC);
 			pSym->SetToken(Token::FUNC_IDENT);
 			GetLexer()->GetSymTab()->AddSymbol(pSym, CBin::BinType::SYMBOL);
 		}
-		else if (pTypeChain->Is(CChainTypeObject::Spec::PROC))
+		else if (pTypeChain->Is(CChainTypeItem::Spec::PROC))
 		{
 			pSym->SetIdentType(CBin::IdentType::PROC);
 			pSym->SetToken(Token::PROC_IDENT);
 			GetLexer()->GetSymTab()->AddSymbol(pSym, CBin::BinType::SYMBOL);
 		}
-		else if (pTypeChain->Is(CChainTypeObject::Spec::INTERRUPT))
+		else if (pTypeChain->Is(CChainTypeItem::Spec::INTERRUPT))
 		{
 			pSym->SetIdentType(CBin::IdentType::IRQPROC);
 			pSym->SetToken(Token::INTERRUPT_IDENT);
 			GetLexer()->GetSymTab()->AddSymbol(pSym, CBin::BinType::SYMBOL);
 		}
-		else if (pSym->GetTypeChain()->Is(CChainTypeObject::Spec::GLOBAL))
+		else if (pTypeChain->Is(CChainTypeItem::Spec::GLOBAL))
 		{
 			pSym->SetIdentType(CBin::IdentType::GLOBAL);
 			pSym->SetToken(Token::VAR_GLOBAL);
 			GetLexer()->GetSymTab()->AddSymbol(pSym, CBin::BinType::SYMBOL);
 			pSym->SetSection(FindSection("GLOBALS"));
 		}
-		else if (pSym->GetTypeChain()->Is(CChainTypeObject::Spec::TYPE_FIELD))
+		else if (pTypeChain->Is(CChainTypeItem::Spec::TYPE_FIELD))
 		{
 			pSym->SetToken(Token::TYPE_FIELD);
 		}
-		else if (pSym->GetTypeChain()->Is(CChainTypeObject::Spec::LOCAL))
+		else if (pTypeChain->Is(CChainTypeItem::Spec::LOCAL))
 		{
 			pSym->SetSection(FindSection("LOCALS"));
 			pSym->SetToken(Token::VAR_LOCAL);
@@ -3615,9 +4912,9 @@ CAstNode* CParser::Ident(CChainType* pTypeChain)
 		break;
 	case Token::FUNC:
 		//-------------- Declaration -------------------
-		pOTC = new CChainTypeObject;
+		pOTC = new CChainTypeItem;
 		pOTC->Create();
-		pOTC->SetSpec(CChainTypeObject::Spec::FUNC);
+		pOTC->SetSpec(CChainTypeItem::Spec::FUNC);
 		pTypeChain->AddToTail(pOTC);
 		//----------------- Parsing --------------------
 		Expect(Token::FUNC);
@@ -3634,12 +4931,13 @@ CAstNode* CParser::Ident(CChainType* pTypeChain)
 		//	ThrownException.GetMaxStringLen(),
 		//	"Line %d: Col %d Expected An Identifier\nGot a %s\n",
 		//	GetLexer()->GetLineNumber(),
-		//	GetLexer()->GetColunm(),
+		//	GetLexer()->GetColumn(),
 		//	GetLexer()->LookupToString(LookaHead)
 		//);
 		//throw(ThrownException);
 		break;
 	}
+	delete[] pS;
 	return pNext;
 }
 
@@ -3654,7 +4952,7 @@ CAstNode* CParser::IdentInitType()
 	CAstNode* pN = 0;
 	CAstNode* pNext = 0, *pChild = 0;
 
-	switch (LookaHeadToken)
+	switch (m_LookAheadToken)
 	{
 	case Token('('):
 		Expect(Token('('));
@@ -3690,7 +4988,7 @@ CAstNode* CParser::InitData()
 	char* pString;
 
 	pNext = CompConst();
-	switch (LookaHeadToken)
+	switch (m_LookAheadToken)
 	{
 	case Token('['):
 		Expect(Token('['));
@@ -3730,7 +5028,7 @@ CAstNode* CParser::IrqDecl(CChainType* pTypeChain)
 	// INTERRUPT_IDENT
 	//--------------------
 	
-	switch (LookaHeadToken)
+	switch (m_LookAheadToken)
 	{
 	case Token::IDENT:
 		//--------------- Declaration --------------
@@ -3829,7 +5127,7 @@ CAstNode* CParser::ProcDecl(CChainType* pTypeChain)
 	//--------------------
 	//--------------- Declaration --------------
 	
-	switch (LookaHeadToken)
+	switch (m_LookAheadToken)
 	{
 	case Token::IDENT:
 		pSym = (CSymbol*)GetLexer()->GetLexSymbol();
@@ -3873,7 +5171,7 @@ CAstNode* CParser::ProcDeclParams(CSymbol* pFuncSym)
 	//--------------------------------------------
 	CAstNode* pNext = 0, *pChild = 0;
 
-	switch (LookaHeadToken)
+	switch (m_LookAheadToken)
 	{
 	case Token('('):
 		Expect(Token('('));
@@ -3934,7 +5232,7 @@ CAstNode* CParser::FuncDecl(CChainType* pTypeChain)
 	// Set symbol type to
 	// FUNC_IDENT
 	//--------------------
-	switch (LookaHeadToken)
+	switch (m_LookAheadToken)
 	{
 	case Token::IDENT:
 		pSym = (CSymbol*)GetLexer()->GetLexSymbol();
@@ -4019,7 +5317,7 @@ CAstNode* CParser::OptInit()
 	CAstNode* pNext = 0;
 	int V = 0;
 
-	switch (LookaHeadToken)
+	switch (m_LookAheadToken)
 	{
 	case Token('='):
 		Expect(Token('='));
@@ -4056,26 +5354,26 @@ CAstNode* CParser::ParamList(CSymbol* pFuncSym)
 	bool Loop = true;
 	CAstNode* pN= 0;
 	CAstNode* pNext = 0, *pChild = 0;
-	CChainTypeObject* pOTC = 0;
+	CChainTypeItem* pOTC = 0;
 	CChainType* pTypeChain = 0;
 
 	while (Loop)
 	{
-		switch (LookaHeadToken)
+		switch (m_LookAheadToken)
 		{
 		case Token::CHAR:
 			//--------------- Declaration -------------
 			pTypeChain = new CChainType;
 			pTypeChain->Create();
 			//------------------------------
-			pOTC = new CChainTypeObject;
+			pOTC = new CChainTypeItem;
 			pOTC->Create();
-			pOTC->SetSpec(CChainTypeObject::Spec::PARAM);
+			pOTC->SetSpec(CChainTypeItem::Spec::PARAM);
 			pTypeChain->AddToTail(pOTC);		//node -> ROOT
 			//--------------------------------
-			pOTC = new CChainTypeObject;
+			pOTC = new CChainTypeItem;
 			pOTC->Create();
-			pOTC->SetSpec(CChainTypeObject::Spec::CHAR);
+			pOTC->SetSpec(CChainTypeItem::Spec::CHAR);
 			pTypeChain->AddToTail(pOTC);		//node -> ROOT
 			//------------------ Parse ------------------------
 			Expect(Token::CHAR);
@@ -4091,14 +5389,14 @@ CAstNode* CParser::ParamList(CSymbol* pFuncSym)
 			pTypeChain = new CChainType;
 			pTypeChain->Create();
 			//----------------------------
-			pOTC = new CChainTypeObject;
+			pOTC = new CChainTypeItem;
 			pOTC->Create();
-			pOTC->SetSpec(CChainTypeObject::Spec::PARAM);
+			pOTC->SetSpec(CChainTypeItem::Spec::PARAM);
 			pTypeChain->AddToTail(pOTC);		//node -> ROOT
 			//--------------------------------
-			pOTC = new CChainTypeObject;
+			pOTC = new CChainTypeItem;
 			pOTC->Create();
-			pOTC->SetSpec(CChainTypeObject::Spec::BYTE);
+			pOTC->SetSpec(CChainTypeItem::Spec::BYTE);
 			pTypeChain->AddToTail(pOTC);		//node -> ROOT
 			//------------------ Parse ------------------------
 			Expect(Token::BYTE);
@@ -4114,14 +5412,14 @@ CAstNode* CParser::ParamList(CSymbol* pFuncSym)
 			pTypeChain = new CChainType;
 			pTypeChain->Create();
 			//---------------------------------------
-			pOTC = new CChainTypeObject;
+			pOTC = new CChainTypeItem;
 			pOTC->Create();
-			pOTC->SetSpec(CChainTypeObject::Spec::PARAM);
+			pOTC->SetSpec(CChainTypeItem::Spec::PARAM);
 			pTypeChain->AddToTail(pOTC);		//node -> ROOT
 			//------------------------------------
-			pOTC = new CChainTypeObject;
+			pOTC = new CChainTypeItem;
 			pOTC->Create();
-			pOTC->SetSpec(CChainTypeObject::Spec::CARD);
+			pOTC->SetSpec(CChainTypeItem::Spec::CARD);
 			pTypeChain->AddToTail(pOTC);		//node -> ROOT
 			//------------------ Parse ------------------------
 			Expect(Token::CARD);
@@ -4136,14 +5434,14 @@ CAstNode* CParser::ParamList(CSymbol* pFuncSym)
 			pTypeChain = new CChainType;
 			pTypeChain->Create();
 			//------------------------------
-			pOTC = new CChainTypeObject;
+			pOTC = new CChainTypeItem;
 			pOTC->Create();
-			pOTC->SetSpec(CChainTypeObject::Spec::PARAM);
+			pOTC->SetSpec(CChainTypeItem::Spec::PARAM);
 			pTypeChain->AddToTail(pOTC);		//node -> ROOT
 			//------------------------------------
-			pOTC = new CChainTypeObject;
+			pOTC = new CChainTypeItem;
 			pOTC->Create();
-			pOTC->SetSpec(CChainTypeObject::Spec::INT);
+			pOTC->SetSpec(CChainTypeItem::Spec::INT);
 			pTypeChain->AddToTail(pOTC);		//node -> ROOT
 			//------------------ Parse ------------------------
 			Expect(Token::INT);
@@ -4159,14 +5457,14 @@ CAstNode* CParser::ParamList(CSymbol* pFuncSym)
 			pTypeChain = new CChainType;
 			pTypeChain->Create();
 			//---------------------------------
-			pOTC = new CChainTypeObject;
+			pOTC = new CChainTypeItem;
 			pOTC->Create();
-			pOTC->SetSpec(CChainTypeObject::Spec::PARAM);
+			pOTC->SetSpec(CChainTypeItem::Spec::PARAM);
 			pTypeChain->AddToTail(pOTC);		//node -> ROOT
 			//----------------------------------------
-			pOTC = new CChainTypeObject;
+			pOTC = new CChainTypeItem;
 			pOTC->Create();
-			pOTC->SetSpec(CChainTypeObject::Spec::BOOL);
+			pOTC->SetSpec(CChainTypeItem::Spec::BOOL);
 			pTypeChain->AddToTail(pOTC);		//node -> ROOT
 			//------------------ Parse ------------------------
 			Expect(Token::BOOL);
@@ -4182,14 +5480,14 @@ CAstNode* CParser::ParamList(CSymbol* pFuncSym)
 			pTypeChain = new CChainType;
 			pTypeChain->Create();
 			//---------------------------------
-			pOTC = new CChainTypeObject;
+			pOTC = new CChainTypeItem;
 			pOTC->Create();
-			pOTC->SetSpec(CChainTypeObject::Spec::PARAM);
+			pOTC->SetSpec(CChainTypeItem::Spec::PARAM);
 			pTypeChain->AddToTail(pOTC);		//node -> ROOT
 			//-------------------------------------
-			pOTC = new CChainTypeObject;
+			pOTC = new CChainTypeItem;
 			pOTC->Create();
-			pOTC->SetSpec(CChainTypeObject::Spec::TYPE);
+			pOTC->SetSpec(CChainTypeItem::Spec::TYPE);
 			pTypeChain->AddToTail(pOTC);		//node -> ROOT
 			//------------------ Parse ------------------------
 			Expect(Token::RECORDTYPE);
@@ -4219,20 +5517,20 @@ CAstNode* CParser::ParamTypeSpec(CChainType* pTypeChain, CSymbol* pFuncSym)
 	//--------------------------------------------
 	CAstNode* pN = 0;
 	CAstNode* pNext = 0, *pChild = 0;
-	CChainTypeObject* pOTC = 0;
+	CChainTypeItem* pOTC = 0;
 	bool Loop = true;
 	int LoopCount = 0;
 
 	pNext = DefineParamIdentList(pTypeChain, pFuncSym);
 	while (Loop)
 	{
-		switch (LookaHeadToken)
+		switch (m_LookAheadToken)
 		{
 		case Token::CONST:
 			//-------------- Declaration ----------------------
-			pOTC = new CChainTypeObject;
+			pOTC = new CChainTypeItem;
 			pOTC->Create();
-			pOTC->SetSpec(CChainTypeObject::Spec::CONST);
+			pOTC->SetSpec(CChainTypeItem::Spec::CONST);
 			pTypeChain->AddToTail(pOTC);
 			//---------------- Parsing -------------------
 			Expect(Token::CONST);
@@ -4244,9 +5542,9 @@ CAstNode* CParser::ParamTypeSpec(CChainType* pTypeChain, CSymbol* pFuncSym)
 			break;
 		case Token::POINTER:
 			//-------------- Declaration ----------------------
-			pOTC = new CChainTypeObject;
+			pOTC = new CChainTypeItem;
 			pOTC->Create();
-			pOTC->SetSpec(CChainTypeObject::Spec::POINTER);
+			pOTC->SetSpec(CChainTypeItem::Spec::POINTER);
 			pTypeChain->AddToTail(pOTC);
 			//---------------- Parsing -------------------
 			Expect(Token::POINTER);
@@ -4258,9 +5556,9 @@ CAstNode* CParser::ParamTypeSpec(CChainType* pTypeChain, CSymbol* pFuncSym)
 			break;
 		case Token::ARRAY:
 			//----------- Declaration -----------------------
-			pOTC = new CChainTypeObject;
+			pOTC = new CChainTypeItem;
 			pOTC->Create();
-			pOTC->SetSpec(CChainTypeObject::Spec::ARRAY);
+			pOTC->SetSpec(CChainTypeItem::Spec::ARRAY);
 			pTypeChain->AddToTail(pOTC);
 			//-------------- Parsing ------------------------
 			Expect(Token::ARRAY);
@@ -4296,12 +5594,12 @@ CAstNode* CParser::DefineParamIdentList(CChainType* pTypeChain, CSymbol* pFuncSy
 	bool Loop = true;
 	CAstNode* pN = 0;
 	CAstNode* pNext = 0, *pChild = 0;
-	CChainTypeObject* pOTC = 0;
+	CChainTypeItem* pOTC = 0;
 
 	pNext = DefineParamIdent(pTypeChain, pFuncSym);
 	while (Loop)
 	{
-		switch (LookaHeadToken)
+		switch (m_LookAheadToken)
 		{
 		case Token(','):
 
@@ -4330,11 +5628,11 @@ CAstNode* CParser::DefineParamIdent(CChainType* pTypeChain, CSymbol* pFuncSym)
 	// LookaHead.m_pNode......Previous Node
 	//--------------------------------------------
 	CAstNode* pN = 0;
-	CChainTypeObject* pOTC = 0;
+	CChainTypeItem* pOTC = 0;
 	CSymbol* pSym = 0;
 	CChainBinItem* pBinItem = 0;
 
-	switch (LookaHeadToken)
+	switch (m_LookAheadToken)
 	{
 	case Token::IDENT:
 		//--------------- Declaration -----------------
@@ -4385,7 +5683,7 @@ CAstNode* CParser::LocalDecls()
 	pNext = LocalVarDecls();
 	while (Loop)
 	{
-		switch (LookaHeadToken)
+		switch (m_LookAheadToken)
 		{
 		case Token::TYPE:
 			Expect(Token::TYPE);
@@ -4425,26 +5723,26 @@ CAstNode* CParser::LocalVarDecls()
 	bool Loop = true;
 	CAstNode* pN= 0;
 	CAstNode* pNext = 0, *pChild = 0;
-	CChainTypeObject* pOTC = 0;
+	CChainTypeItem* pOTC = 0;
 	CChainType* pTypeChain = 0;
 
 	while (Loop)
 	{
-		switch (LookaHeadToken)
+		switch (m_LookAheadToken)
 		{
 		case Token::CHAR:
 			//--------------- Declaration -------------
 			pTypeChain = new CChainType;
 			pTypeChain->Create();
 			//----------------------------------------
-			pOTC = new CChainTypeObject;
+			pOTC = new CChainTypeItem;
 			pOTC->Create();
-			pOTC->SetSpec(CChainTypeObject::Spec::LOCAL);
+			pOTC->SetSpec(CChainTypeItem::Spec::LOCAL);
 			pTypeChain->AddToTail(pOTC);		//node -> ROOT
 			//---------------------------------
-			pOTC = new CChainTypeObject;
+			pOTC = new CChainTypeItem;
 			pOTC->Create();
-			pOTC->SetSpec(CChainTypeObject::Spec::CHAR);
+			pOTC->SetSpec(CChainTypeItem::Spec::CHAR);
 			pTypeChain->AddToTail(pOTC);		//node -> ROOT
 			//------------------ Parse ------------------------
 			Expect(Token::CHAR);
@@ -4460,14 +5758,14 @@ CAstNode* CParser::LocalVarDecls()
 			pTypeChain = new CChainType;
 			pTypeChain->Create();
 			//----------------------------------------
-			pOTC = new CChainTypeObject;
+			pOTC = new CChainTypeItem;
 			pOTC->Create();
-			pOTC->SetSpec(CChainTypeObject::Spec::LOCAL);
+			pOTC->SetSpec(CChainTypeItem::Spec::LOCAL);
 			pTypeChain->AddToTail(pOTC);		//node -> ROOT
 			//-----------------------------------
-			pOTC = new CChainTypeObject;
+			pOTC = new CChainTypeItem;
 			pOTC->Create();
-			pOTC->SetSpec(CChainTypeObject::Spec::BYTE);
+			pOTC->SetSpec(CChainTypeItem::Spec::BYTE);
 			pTypeChain->AddToTail(pOTC);		//node -> ROOT
 			//------------------ Parse ------------------------
 			Expect(Token::BYTE);
@@ -4483,14 +5781,14 @@ CAstNode* CParser::LocalVarDecls()
 			pTypeChain = new CChainType;
 			pTypeChain->Create();
 			//----------------------------------------
-			pOTC = new CChainTypeObject;
+			pOTC = new CChainTypeItem;
 			pOTC->Create();
-			pOTC->SetSpec(CChainTypeObject::Spec::LOCAL);
+			pOTC->SetSpec(CChainTypeItem::Spec::LOCAL);
 			pTypeChain->AddToTail(pOTC);		//node -> ROOT
 			//-------------------------------------
-			pOTC = new CChainTypeObject;
+			pOTC = new CChainTypeItem;
 			pOTC->Create();
-			pOTC->SetSpec(CChainTypeObject::Spec::CARD);
+			pOTC->SetSpec(CChainTypeItem::Spec::CARD);
 			pTypeChain->AddToTail(pOTC);		//node -> ROOT
 			//------------------ Parse ------------------------
 			Expect(Token::CARD);
@@ -4506,14 +5804,14 @@ CAstNode* CParser::LocalVarDecls()
 			pTypeChain = new CChainType;
 			pTypeChain->Create();
 			//----------------------------------------
-			pOTC = new CChainTypeObject;
+			pOTC = new CChainTypeItem;
 			pOTC->Create();
-			pOTC->SetSpec(CChainTypeObject::Spec::LOCAL);
+			pOTC->SetSpec(CChainTypeItem::Spec::LOCAL);
 			pTypeChain->AddToTail(pOTC);		//node -> ROOT
 			//-------------------------------------
-			pOTC = new CChainTypeObject;
+			pOTC = new CChainTypeItem;
 			pOTC->Create();
-			pOTC->SetSpec(CChainTypeObject::Spec::INT);
+			pOTC->SetSpec(CChainTypeItem::Spec::INT);
 			pTypeChain->AddToTail(pOTC);		//node -> ROOT
 			//------------------ Parse ------------------------
 			Expect(Token::INT);
@@ -4529,13 +5827,13 @@ CAstNode* CParser::LocalVarDecls()
 			pTypeChain = new CChainType;
 			pTypeChain->Create();
 			//----------------------------------------
-			pOTC = new CChainTypeObject;
+			pOTC = new CChainTypeItem;
 			pOTC->Create();
-			pOTC->SetSpec(CChainTypeObject::Spec::LOCAL);
+			pOTC->SetSpec(CChainTypeItem::Spec::LOCAL);
 			pTypeChain->AddToTail(pOTC);		//node -> ROOT
-			pOTC = new CChainTypeObject;
+			pOTC = new CChainTypeItem;
 			pOTC->Create();
-			pOTC->SetSpec(CChainTypeObject::Spec::BOOL);
+			pOTC->SetSpec(CChainTypeItem::Spec::BOOL);
 			pTypeChain->AddToTail(pOTC);		//node -> ROOT
 			//------------------ Parse ------------------------
 			Expect(Token::BOOL);
@@ -4550,14 +5848,14 @@ CAstNode* CParser::LocalVarDecls()
 			pTypeChain = new CChainType;
 			pTypeChain->Create();
 			//----------------------------------------
-			pOTC = new CChainTypeObject;
+			pOTC = new CChainTypeItem;
 			pOTC->Create();
-			pOTC->SetSpec(CChainTypeObject::Spec::LOCAL);
+			pOTC->SetSpec(CChainTypeItem::Spec::LOCAL);
 			pTypeChain->AddToTail(pOTC);		//node -> ROOT
 			//-------------------------------
-			pOTC = new CChainTypeObject;
+			pOTC = new CChainTypeItem;
 			pOTC->Create();
-			pOTC->SetSpec(CChainTypeObject::Spec::TYPE);
+			pOTC->SetSpec(CChainTypeItem::Spec::TYPE);
 			pTypeChain->AddToTail(pOTC);		//node -> ROOT
 			//------------------ Parse ------------------------
 			Expect(Token::RECORDTYPE);
@@ -4587,20 +5885,20 @@ CAstNode* CParser::LocalTypeSpec(CChainType* pTypeChain)
 	//--------------------------------------------
 	CAstNode* pN = 0;
 	CAstNode* pNext = 0, *pChild = 0;
-	CChainTypeObject* pOTC = 0;
+	CChainTypeItem* pOTC = 0;
 	bool Loop = true;
 	int LoopCount = 0;
 
 	pNext = IdentList(pTypeChain);
 	while (Loop)
 	{
-		switch (LookaHeadToken)
+		switch (m_LookAheadToken)
 		{
 		case Token::CONST:
 			//-------------- Declaration ----------------------
-			pOTC = new CChainTypeObject;
+			pOTC = new CChainTypeItem;
 			pOTC->Create();
-			pOTC->SetSpec(CChainTypeObject::Spec::CONST);
+			pOTC->SetSpec(CChainTypeItem::Spec::CONST);
 			pTypeChain->AddToTail(pOTC);
 			//---------------- Parsing -------------------
 			Expect(Token::CONST);
@@ -4612,9 +5910,9 @@ CAstNode* CParser::LocalTypeSpec(CChainType* pTypeChain)
 			break;
 		case Token::POINTER:
 			//-------------- Declaration ----------------------
-			pOTC = new CChainTypeObject;
+			pOTC = new CChainTypeItem;
 			pOTC->Create();
-			pOTC->SetSpec(CChainTypeObject::Spec::POINTER);
+			pOTC->SetSpec(CChainTypeItem::Spec::POINTER);
 			pTypeChain->AddToTail(pOTC);
 			//---------------- Parsing -------------------
 			Expect(Token::POINTER);
@@ -4626,9 +5924,9 @@ CAstNode* CParser::LocalTypeSpec(CChainType* pTypeChain)
 			break;
 		case Token::ARRAY:
 			//----------- Declaration -----------------------
-			pOTC = new CChainTypeObject;
+			pOTC = new CChainTypeItem;
 			pOTC->Create();
-			pOTC->SetSpec(CChainTypeObject::Spec::ARRAY);
+			pOTC->SetSpec(CChainTypeItem::Spec::ARRAY);
 			pTypeChain->AddToTail(pOTC);
 			//-------------- Parsing ------------------------
 			Expect(Token::ARRAY);
@@ -4666,7 +5964,7 @@ CAstNode* CParser::ConstListEnd()
 	pNext = CompConst();
 	while (Loop)
 	{
-		switch (LookaHeadToken)
+		switch (m_LookAheadToken)
 		{
 		case Token(']'):
 			Expect(Token(']'));
@@ -4709,7 +6007,7 @@ CAstNode* CParser::CompConst()
 	pNext = BaseCompConst();
 	while (Loop)
 	{
-		switch (LookaHeadToken)
+		switch (m_LookAheadToken)
 		{
 		case Token('+'):
 			Expect(Token('+'));
@@ -4746,18 +6044,18 @@ CAstNode* CParser::BaseCompConst()
 	CAstNode* pNext= 0;
 	CValue* pVal = 0;
 	CSymbol* pSym = 0;
-	CChainTypeObject* pTCobj = 0;
+	CChainTypeItem* pTCobj = 0;
 	int V = 0;
 
-	switch (LookaHeadToken)
+	switch (m_LookAheadToken)
 	{
 	case Token::NUMBER:
 		V = GetLexer()->GetLexValue();
 		pVal = new CValue;
 		pVal->Create(V);
 		pVal->SetConstVal(GetLexer()->GetLexValue());
-		pTCobj = new CChainTypeObject;
-		pTCobj->SetSpec(CChainTypeObject::Spec::CONSTANT);
+		pTCobj = new CChainTypeItem;
+		pTCobj->SetSpec(CChainTypeItem::Spec::CONSTANT);
 		pVal->GetTypeChain()->AddToHead(pTCobj);
 		pNext = new CAct65NUMBER;
 		pNext->SetValue(pVal);
@@ -4767,8 +6065,8 @@ CAstNode* CParser::BaseCompConst()
 		V = GetCurrentSection()->GetLocationCounter();
 		pVal = new CValue;
 		pVal->Create(V);
-		pTCobj = new CChainTypeObject;
-		pTCobj->SetSpec(CChainTypeObject::Spec::CONSTANT);
+		pTCobj = new CChainTypeItem;
+		pTCobj->SetSpec(CChainTypeItem::Spec::CONSTANT);
 		pVal->GetTypeChain()->AddToHead(pTCobj);
 		pNext = new CAct65CurrentLocation;
 		pNext->SetValue(pVal);
@@ -4779,8 +6077,8 @@ CAstNode* CParser::BaseCompConst()
 		pVal = new CValue;
 		pVal->Create(GetLexer()->GetLexSymbol());
 		pVal->SetValueType(CValue::ValueType::ADDRESS_OF);
-		pTCobj = new CChainTypeObject;
-		pTCobj->SetSpec(CChainTypeObject::Spec::CONSTANT);
+		pTCobj = new CChainTypeItem;
+		pTCobj->SetSpec(CChainTypeItem::Spec::CONSTANT);
 		pVal->GetTypeChain()->AddToHead(pTCobj);
 		pNext = new CAct65AdrOfCONST;
 		pNext->SetValue(pVal);
@@ -4790,8 +6088,8 @@ CAstNode* CParser::BaseCompConst()
 		pVal = new CValue;
 		pVal->Create(GetLexer()->GetLexSymbol());
 		pVal->SetValueType(CValue::ValueType::ADDRESS_OF);
-		pTCobj = new CChainTypeObject;
-		pTCobj->SetSpec(CChainTypeObject::Spec::CONSTANT);
+		pTCobj = new CChainTypeItem;
+		pTCobj->SetSpec(CChainTypeItem::Spec::CONSTANT);
 		pVal->GetTypeChain()->AddToHead(pTCobj);
 		pNext = new CAct65AddrOfINTERRUPT;
 		pNext->SetValue(pVal);
@@ -4801,8 +6099,8 @@ CAstNode* CParser::BaseCompConst()
 		pVal = new CValue;
 		pVal->Create(GetLexer()->GetLexSymbol());
 		pVal->SetValueType(CValue::ValueType::ADDRESS_OF);
-		pTCobj = new CChainTypeObject;
-		pTCobj->SetSpec(CChainTypeObject::Spec::CONSTANT);
+		pTCobj = new CChainTypeItem;
+		pTCobj->SetSpec(CChainTypeItem::Spec::CONSTANT);
 		pVal->GetTypeChain()->AddToHead(pTCobj);
 		pNext = new CAct65FuncADDR;
 		pNext->SetValue(pVal);
@@ -4812,8 +6110,8 @@ CAstNode* CParser::BaseCompConst()
 		pVal = new CValue;
 		pVal->Create(GetLexer()->GetLexSymbol());
 		pVal->SetValueType(CValue::ValueType::ADDRESS_OF);
-		pTCobj = new CChainTypeObject;
-		pTCobj->SetSpec(CChainTypeObject::Spec::CONSTANT);
+		pTCobj = new CChainTypeItem;
+		pTCobj->SetSpec(CChainTypeItem::Spec::CONSTANT);
 		pVal->GetTypeChain()->AddToHead(pTCobj);
 		pNext = new CAct65ProcADDR;
 		pNext->SetValue(pVal);
@@ -4824,7 +6122,7 @@ CAstNode* CParser::BaseCompConst()
 		sprintf_s(
 			ThrownException.GetErrorString(),
 			ThrownException.GetMaxStringLen(),
-			"Line %d: Expected a Constant\n",
+			"CParser::BaseCompConst: Line %d: Expected a Constant\n",
 			GetLexer()->GetLineNumber()
 		);
 		throw(ThrownException);
@@ -4859,7 +6157,7 @@ CAstNode* CParser::IFFend()
 	CAstNode* pNFFI = 0;
 
 	pIFFthenPart = IFFthenpart();
-	switch (LookaHeadToken)
+	switch (m_LookAheadToken)
 	{
 	case Token::FFI:
 		Expect(Token::FFI);
@@ -4890,7 +6188,7 @@ CAstNode* CParser::IFFthenpart()
 	CValue* pValue = 0;
 
 	pIffRelOper = IffRelOper();
-	switch (LookaHeadToken)
+	switch (m_LookAheadToken)
 	{
 	case Token::THEN:
 		Expect(Token::THEN);
@@ -4922,7 +6220,7 @@ CAstNode* CParser::IffRelOper()
 	CAstNode* pNext = 0, * pChild = 0;
 
 	pNext = IffRegister();
-	switch (LookaHeadToken)
+	switch (m_LookAheadToken)
 	{
 	case Token('<'):
 		Expect(Token('<'));
@@ -4970,7 +6268,7 @@ CAstNode* CParser::IffRegister()
 	CAstNode* pNext = 0;
 
 	pNext = Bits();
-	switch (LookaHeadToken)
+	switch (m_LookAheadToken)
 	{
 	case Token::AREG:
 		Expect(Token::AREG);
@@ -5008,7 +6306,7 @@ CAstNode* CParser::Bits()
 	CAstNode* pNext = 0, * pChild = 0;
 
 	pNext = StatusFlags();
-	switch (LookaHeadToken)
+	switch (m_LookAheadToken)
 	{
 	case Token::BITS:
 		Expect(Token::BITS);
@@ -5052,7 +6350,7 @@ CAstNode* CParser::StatusFlags()
 	CAstNode* pNext = 0, * pChild = 0;
 
 	pNext = OptNot();
-	switch (LookaHeadToken)
+	switch (m_LookAheadToken)
 	{
 	case Token::NEG:
 		Expect(Token::NEG);
@@ -5091,7 +6389,7 @@ CAstNode* CParser::OptNot()
 	CAstNode* pN = 0;
 	CAstNode* pNext = 0;
 
-	switch (LookaHeadToken)
+	switch (m_LookAheadToken)
 	{
 	case Token('^'):
 		Expect(Token('^'));
@@ -5124,7 +6422,7 @@ CAstNode* CParser::PopDestList()
 	pNext = PopDest();
 	while (Loop)
 	{
-		switch (LookaHeadToken)
+		switch (m_LookAheadToken)
 		{
 		case Token(','):
 			Expect(Token(','));
@@ -5155,7 +6453,7 @@ CAstNode* CParser::PopDest()
 	CAstNode* pNext = 0;
 
 	pNext = MemContentsType();
-	switch (LookaHeadToken)
+	switch (m_LookAheadToken)
 	{
 	case Token::AREG:
 		pN = new CAct65ACC;
@@ -5204,7 +6502,7 @@ CAstNode* CParser::PushSourceList()
 	pNext = PushSource();
 	while (Loop)
 	{
-		switch (LookaHeadToken)
+		switch (m_LookAheadToken)
 		{
 		case Token(','):
 			Expect(Token(','));
@@ -5236,7 +6534,7 @@ CAstNode* CParser::PushSource()
 	CAstNode* pNext;
 
 	pNext = ArithExpr();
-	switch (LookaHeadToken)
+	switch (m_LookAheadToken)
 	{
 	case Token::AREG:
 		pN = new CAct65ACC;
@@ -5276,7 +6574,7 @@ CAstNode* CParser::AsmProcEnd()
 	CAstNode* pNext = 0, *pChild = 0;
 
 	pNext = AsmProcBody();
-	switch (LookaHeadToken)
+	switch (m_LookAheadToken)
 	{
 	case Token::EPROC:
 		Expect(Token::EPROC);
@@ -5298,7 +6596,7 @@ CAstNode* CParser::AsmProcBody()
 	CAstNode* pNext = 0, *pChild = 0;
 
 	pNext = AsmProcName();
-	switch (LookaHeadToken)
+	switch (m_LookAheadToken)
 	{
 	case Token::BEGIN:
 		Expect(Token::BEGIN);
@@ -5319,7 +6617,7 @@ CAstNode* CParser::AsmProcName()
 	CAct65PROCname* pNext = 0;
 	CSymbol* pSym = 0;
 
-	switch (LookaHeadToken)
+	switch (m_LookAheadToken)
 	{
 	case Token::IDENT:
 		pSym = GetLexer()->GetLexSymbol();
@@ -5424,7 +6722,7 @@ CAstNode* CParser::AsmStatements()
 	pLabel = OptLabel();
 	while(Loop)
 	{
-		OpCodeToken = LookaHeadToken;
+		OpCodeToken = m_LookAheadToken;
 		switch(OpCodeToken)
 		{
 		case Token::ADC:	//ALU addressing
@@ -5679,7 +6977,7 @@ CAstNode* CParser::OptLabel()
 	CAstNode* pLabel = 0;
 	CSymbol* pSym = 0;
 
-	switch (LookaHeadToken)
+	switch (m_LookAheadToken)
 	{
 	case Token::GLOBAL_LABEL:
 		pSym = GetLexer()->GetLexSymbol();
@@ -5754,7 +7052,7 @@ CAstNode* CParser::Operand(Token OpCodeToken, CAstNode* pLabel)
 	CAstNode* pAbs = 0;
 	CAstNode* pChild = 0;
 
-	switch (LookaHeadToken)
+	switch (m_LookAheadToken)
 	{
 	case Token('#'):
 		Expect(Token('#'));
@@ -5808,7 +7106,7 @@ CAstNode* CParser::JumpAddressingModes(
 	CValue* pAddress = 0;
 	CAct65Opcode* pNext = 0;
 
-	switch (LookaHeadToken)
+	switch (m_LookAheadToken)
 	{
 	case Token('('):
 		Expect(Token('('));
@@ -5839,7 +7137,7 @@ CReg::RegType CParser::OptIndexReg()
 	//--------------------------------------------------
 	CReg::RegType Reg = CReg::RegType::NONE;
 
-	switch (LookaHeadToken)
+	switch (m_LookAheadToken)
 	{
 	case Token::XREG:
 		Expect(Token::XREG);
@@ -5867,7 +7165,7 @@ CAstNode* CParser::AsmConstList()
 	CAct65STRING* pN= 0;
 	CAstNode* pNext = 0, *pChild = 0;
 
-	switch (LookaHeadToken)
+	switch (m_LookAheadToken)
 	{
 	case Token::STRING:
 		pN = new CAct65STRING;
@@ -5901,7 +7199,7 @@ CAstNode* CParser::AsmConstList_1()
 	pNext->SetValue(pV);
 	while (Loop)
 	{
-		switch (LookaHeadToken)
+		switch (m_LookAheadToken)
 		{
 		case Token(','):
 			++LoopCount;
@@ -5938,7 +7236,7 @@ CValue* CParser::AsmConstant()
 	pValNext = AsmConstUpLow();
 	while (Loop)
 	{
-		switch (LookaHeadToken)
+		switch (m_LookAheadToken)
 		{
 		case Token('+'):
 			Expect(Token('+'));
@@ -5971,7 +7269,7 @@ CValue* CParser::AsmConstUpLow()
 	CValue* pNextVal = 0;
 	CValue* pChildVal = 0;
 
-	switch (LookaHeadToken)
+	switch (m_LookAheadToken)
 	{
 	case Token('>'):	//Lower
 		Expect(Token('>'));
@@ -6003,7 +7301,7 @@ CValue* CParser::BaseAsmConstant( )
 	CValue* pValue = 0;
 	CSymbol* pSym = 0;
 
-	switch (LookaHeadToken)
+	switch (m_LookAheadToken)
 	{
 	case Token::NUMBER:
 		pValue = new CValue;
@@ -6071,7 +7369,7 @@ CAstNode* CParser::Indirect(Token OpCodeToken, CAstNode* pLabel)
 	CAct65Opcode* pOpCode = 0;
 
 	pAddress = AsmConstant();
-	switch (LookaHeadToken)
+	switch (m_LookAheadToken)
 	{
 	case Token(')'):	//indirect indexed,Y
 		pOpCode = new CAct65Opcode;
@@ -6155,7 +7453,7 @@ CAstNode* CParser::Absolute(
 		printf("Bad\n");
 	pOperandValue = AsmConstant();	// GetAddress
 	pOpCode = new CAct65Opcode;
-	switch (LookaHeadToken)
+	switch (m_LookAheadToken)
 	{
 	case Token(','):	//indexed
 		Expect(Token(','));
@@ -6203,7 +7501,7 @@ CAstNode* CParser::Absolute(
 			sprintf_s(
 				ThrownException.GetErrorString(),
 				ThrownException.GetMaxStringLen(),
-				"Expected Index Register(X or Y not found"
+				"CParser::Absolute: Expected Index Register(X or Y not found"
 			);
 			throw(ThrownException);
 			break;
@@ -6325,7 +7623,7 @@ void CParser::DebugTraverse(
 			);
 		}
 		Line = Act()->GetParser()->GetLexer()->GetLineNumber();
-		Col = Act()->GetParser()->GetLexer()->GetColunm();
+		Col = Act()->GetParser()->GetLexer()->GetColumn();
 		for (int i = 0; i < 256; ++i)
 			pbNextFlags[i] = false;
 		memset(s, 0, 512);

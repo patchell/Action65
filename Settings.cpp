@@ -422,7 +422,7 @@ void CSettings::Parser::Expect(CSettings::Lexer::Token Expected)
 		sprintf_s(
 			ThrownException.GetErrorString(),
 			ThrownException.GetMaxStringLen(),
-			"Line %d: Unexpected CLHead:Got %d Expected %d\n",
+			"CSettings::Parser::Expect:Line %d: Unexpected CLHead:Got %d Expected %d\n",
 			GetLexer()->GetLineNumber(),
 			(int)LookaHeadToken,
 			Expected

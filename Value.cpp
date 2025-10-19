@@ -54,7 +54,7 @@ bool CValue::Create(CSymbol* pSym)
 		sprintf_s(
 			ThrownException.GetErrorString(),
 			ThrownException.GetMaxStringLen(),
-			"Internal Error: Value Create Error:NULL Symbol\n"
+			"CValue::Create: Internal Error: Value Create Error:NULL Symbol\n"
 		);
 		throw(ThrownException);
 	}
@@ -152,7 +152,7 @@ char* CValue::GetName()
 		sprintf_s(
 			ThrownException.GetErrorString(),
 			ThrownException.GetMaxStringLen(),
-			"Internal Error:No Symbol Attatch to Value\n"
+			"CValue::GetName(): Internal Error:No Symbol Attached to Value\n"
 		);
 		throw(ThrownException);
 	}
@@ -222,7 +222,7 @@ void CValue::Add(CValue* pVal)
 		default:
 			fprintf(stderr, "Line:%d Col:%d Right hand side must be a CONST]n",
 				Act()->GetParser()->GetLexer()->GetLineNumber(),
-				Act()->GetParser()->GetLexer()->GetColunm()
+				Act()->GetParser()->GetLexer()->GetColumn()
 			);
 			Act()->Exit(77);
 			break;
@@ -238,7 +238,7 @@ void CValue::Add(CValue* pVal)
 		default:
 			fprintf(stderr, "Line:%d Col:%d Right hand side must be a CONST]n",
 				Act()->GetParser()->GetLexer()->GetLineNumber(),
-				Act()->GetParser()->GetLexer()->GetColunm()
+				Act()->GetParser()->GetLexer()->GetColumn()
 			);
 			Act()->Exit(77);
 			break;
@@ -259,7 +259,7 @@ void CValue::Sub(CValue* pVal)
 		default:
 			fprintf(stderr, "Line:%d Col:%d Right hand side must be a CONST]n",
 				Act()->GetParser()->GetLexer()->GetLineNumber(),
-				Act()->GetParser()->GetLexer()->GetColunm()
+				Act()->GetParser()->GetLexer()->GetColumn()
 			);
 			Act()->Exit(77);
 			break;
@@ -275,7 +275,7 @@ void CValue::Sub(CValue* pVal)
 		default:
 			fprintf(stderr, "Line:%d Col:%d Right hand side must be a CONST]n",
 				Act()->GetParser()->GetLexer()->GetLineNumber(),
-				Act()->GetParser()->GetLexer()->GetColunm()
+				Act()->GetParser()->GetLexer()->GetColumn()
 			);
 			Act()->Exit(77);
 			break;
@@ -343,7 +343,7 @@ bool CValue::IsPageZero()
 		{
 			fprintf(stderr, "CValue::IsPageZero()::Internal Error:Line %d  Col %d",
 				Act()->GetParser()->GetLexer()->GetLineNumber(),
-				Act()->GetParser()->GetLexer()->GetColunm()
+				Act()->GetParser()->GetLexer()->GetColumn()
 			);
 			Act()->Exit(33);
 		}
@@ -360,7 +360,7 @@ int CValue::SizeOf()
 	pTypeChain = GetTypeChain();
 	if (!pTypeChain)
 		printf("Oh-Oh\n");
-	if (pTypeChain->Is(CChainTypeObject::Spec::POINTER))
+	if (pTypeChain->Is(CChainTypeItem::Spec::POINTER))
 		rV = 2;
 	else if (pTypeChain->IsByte())
 		rV = 1;
@@ -379,7 +379,7 @@ void CValue::SetAddress(int Addr)
 		sprintf_s(
 			ThrownException.GetErrorString(),
 			ThrownException.GetMaxStringLen(),
-			"CValue has no Symbol\n"
+			"CValue::SetAddress: Value has no Symbol\n"
 		);
 		throw(ThrownException);
 	}
@@ -400,7 +400,7 @@ void CValue::SetResolved(bool bRes)
 		sprintf_s(
 			ThrownException.GetErrorString(),
 			ThrownException.GetMaxStringLen(),
-			"CValue has no Symbol\n"
+			"CValue::SetResolved: Value has no Symbol\n"
 		);
 		throw(ThrownException);
 	}
@@ -416,7 +416,7 @@ void CValue::BackFillUnresolved()
 		sprintf_s(
 			ThrownException.GetErrorString(),
 			ThrownException.GetMaxStringLen(),
-			"CValue has no Symbol\n"
+			"CValue::BackFillUnresolved: Value has no Symbol\n"
 		);
 		throw(ThrownException);
 	}

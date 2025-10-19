@@ -2,6 +2,9 @@
 
 CMacro::CMacro() : CBin(BinType::MACRO)
 {
+	m_pMacroBody = 0;
+	m_MacroBodySize = 0;
+	m_MacroBodyIndex = 0;
 }
 
 CMacro::~CMacro()

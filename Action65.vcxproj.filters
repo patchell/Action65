@@ -49,9 +49,6 @@
     <ClCompile Include="Bucket.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Lexer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Parser.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -394,7 +391,7 @@
     <ClCompile Include="Act65IDENT.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ChainTypeObject.cpp">
+    <ClCompile Include="ChainTypeItem.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Act65RTI.cpp">
@@ -619,9 +616,6 @@
     <ClCompile Include="Macro.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="PreProcessor.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="KeyWord.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -634,9 +628,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Bucket.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Lexer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Parser.h">
@@ -978,7 +969,7 @@
     <ClInclude Include="Act65IDENT.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ChainTypeObject.h">
+    <ClInclude Include="ChainTypeItem.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Act65RTI.h">
@@ -1201,9 +1192,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Macro.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="PreProcessor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="KeyWord.h">

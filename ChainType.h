@@ -7,7 +7,7 @@ public:
 	virtual ~CChainType() {}
 	bool Create();
 	virtual void CopyTypeChain(CChain* pC) { CChain::Copy(pC); }
-	bool Is(CChainTypeObject::Spec Type);
+	bool Is(CChainTypeItem::Spec Type);
 	bool IsFundamentalType();
 	bool MoveTypeChain(CChain* pC) {
 		if (pC) {
@@ -21,13 +21,13 @@ public:
 		return false;
 	}
 	bool IsByte() {
-		return Is(CChainTypeObject::Spec::BYTE) || 
-			Is(CChainTypeObject::Spec::CHAR) ||
-			Is(CChainTypeObject::Spec::BOOL
+		return Is(CChainTypeItem::Spec::BYTE) || 
+			Is(CChainTypeItem::Spec::CHAR) ||
+			Is(CChainTypeItem::Spec::BOOL
 			);
 	}
 	bool IsWord() {
-		return Is(CChainTypeObject::Spec::INT) || Is(CChainTypeObject::Spec::CARD) || Is(CChainTypeObject::Spec::BOOL);
+		return Is(CChainTypeItem::Spec::INT) || Is(CChainTypeItem::Spec::CARD) || Is(CChainTypeItem::Spec::BOOL);
 	}
-	CChainTypeObject::Spec GetFundSpec();
+	CChainTypeItem::Spec GetFundSpec();
 };

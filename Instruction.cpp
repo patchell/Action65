@@ -28,7 +28,7 @@ bool CInstruction::GenInstruction(
 				sprintf_s(
 					ThrownException.GetErrorString(),
 					ThrownException.GetMaxStringLen(),
-					"Address is NOT page Zero:%s\n",
+					"CInstruction::GenInstruction: Address is NOT page Zero:%s\n",
 					pOperandValue->GetSymbol()->GetName()
 				);
 				throw(ThrownException);
@@ -75,7 +75,7 @@ void CInstruction::EmitListing()
 				sprintf_s(
 					ThrownException.GetErrorString(), 
 					ThrownException.GetMaxStringLen(), 
-					"Instruction::EmitListing: Invalid number of bytes %d", 
+					"CInstruction::EmitListing: Invalid number of bytes %d", 
 					GetNumBytes()
 				);
 				throw(ThrownException);
@@ -100,7 +100,7 @@ void CInstruction::EmitListing()
 				sprintf_s(
 					ThrownException.GetErrorString(), 
 					ThrownException.GetMaxStringLen(), 
-					"Instruction::EmitListing: Invalid number of bytes %d", 
+					"CInstruction::EmitListing: Invalid number of bytes %d", 
 					GetNumBytes()
 				);
 				throw(ThrownException);
@@ -192,7 +192,10 @@ char* CInstruction::GenOperand(char* s, int n)
 			break;
 		default:
 			ThrownException.SetXCeptType(Exception::ExceptionType::INTERNAL_ERROR);
-			sprintf_s(ThrownException.GetErrorString(), ThrownException.GetMaxStringLen(), "Instruction::GenOperand: Invalid addressing mode %d", m_AdrMode);
+			sprintf_s(
+				ThrownException.GetErrorString(), 
+				ThrownException.GetMaxStringLen(), 
+				"CInstruction::GenOperand: Invalid addressing mode %d", m_AdrMode);
 			throw(ThrownException);
 			break;
 	}
@@ -201,9 +204,8 @@ char* CInstruction::GenOperand(char* s, int n)
 
 int CInstruction::Print(char* pSO, int l, int Indent, const char* s)
 {
-	int i = 0;
-	int j = 0;
-	int k = 0;
+	int ls = 0;
+	int size = l;
 	int StartAddress = 0;
 	char* pIndentString = new char[256];
 
@@ -212,53 +214,58 @@ int CInstruction::Print(char* pSO, int l, int Indent, const char* s)
 	{
 		if (Indent < 0)
 			Indent = 0;
-		Act()->IndentString(pIndentString, 256, Indent + 2);
+		Act()->IndentString(pIndentString, 256, Indent + 2, ' ');
 		if (!s) s = "";
 		if (GetLabel())
 		{
 			switch (GetNumBytes())
 			{
 			case 1:
-				k = sprintf_s(&pSO[j], l - j, "%04x %02x\t%s ", m_Address, (unsigned char)m_Data[0], GetLabel()->GetName());
+				size -= ls;
+				ls += sprintf_s(&pSO[ls], size, "%04x %02x\t%s ", m_Address, (unsigned char)m_Data[0], GetLabel()->GetName());
 				break;
 			case 2:
-				k = sprintf_s(&pSO[j], l - j, "%04x %02x %02x\t%s", m_Address, (unsigned char)m_Data[0], (unsigned char)m_Data[1], GetLabel()->GetName());
+				size -= ls;
+				ls += sprintf_s(&pSO[ls], size, "%04x %02x %02x\t%s", m_Address, (unsigned char)m_Data[0], (unsigned char)m_Data[1], GetLabel()->GetName());
 				break;
 			case 3:
-				k = sprintf_s(&pSO[j], l - j, "%04x %02x %02x %02x\t%s ", m_Address, (unsigned char)m_Data[0], (unsigned char)m_Data[1], (unsigned char)m_Data[2], GetLabel()->GetName());
+				size -= ls;
+				ls += sprintf_s(&pSO[ls], size, "%04x %02x %02x %02x\t%s ", m_Address, (unsigned char)m_Data[0], (unsigned char)m_Data[1], (unsigned char)m_Data[2], GetLabel()->GetName());
 				break;
 			default:
 				ThrownException.SetXCeptType(Exception::ExceptionType::INTERNAL_ERROR);
 				sprintf_s(
 					ThrownException.GetErrorString(),
 					ThrownException.GetMaxStringLen(),
-					"Instruction::Print: Invalid number of bytes %d",
+					"CInstruction::Print: Invalid number of bytes %d",
 					GetNumBytes()
 				);
 				throw(ThrownException);
 				break;
 			}
-			j += k;
 		}
 		else
 		{
 			switch (GetNumBytes())
 			{
 			case 1:
-				k = sprintf_s(&pSO[j], l - j, "%04x %02x\t", m_Address, (unsigned char)m_Data[0]);
+				size -= ls;
+				ls += sprintf_s(&pSO[ls], size, "%04x %02x\t", m_Address, (unsigned char)m_Data[0]);
 				break;
 			case 2:
-				k = sprintf_s(&pSO[j], l - j, "%04x %02x %02x\t", m_Address, (unsigned char)m_Data[0], (unsigned char)m_Data[1]);
+				size -= ls;
+				ls += sprintf_s(&pSO[ls], size, "%04x %02x %02x\t", m_Address, (unsigned char)m_Data[0], (unsigned char)m_Data[1]);
 				break;
 			case 3:
-				k = sprintf_s(&pSO[j], l - j, "%04x %02x %02x %02x\t", m_Address, (unsigned char)m_Data[0], (unsigned char)m_Data[1], (unsigned char)m_Data[2]);
+				size -= ls;
+				ls += sprintf_s(&pSO[ls], size, "%04x %02x %02x %02x\t", m_Address, (unsigned char)m_Data[0], (unsigned char)m_Data[1], (unsigned char)m_Data[2]);
 				break;
 			default:
 				ThrownException.SetXCeptType(Exception::ExceptionType::INTERNAL_ERROR);
 				sprintf_s(
 					ThrownException.GetErrorString(),
 					ThrownException.GetMaxStringLen(),
-					"Instruction::Print: Invalid number of bytes %d",
+					"CInstruction::Print: Invalid number of bytes %d",
 					GetNumBytes()
 				);
 				throw(ThrownException);
@@ -266,7 +273,7 @@ int CInstruction::Print(char* pSO, int l, int Indent, const char* s)
 			}
 		}
 	}
-	return j;
+	return ls;
 }
 
 

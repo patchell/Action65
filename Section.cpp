@@ -63,7 +63,7 @@ void CSection::SetStartAddress(int Start)
 		sprintf_s(
 			ThrownException.GetErrorString(),
 			ThrownException.GetMaxStringLen(),
-			"Section:%s  Start Address:$%04x  Size:$%04x Over By:$%04x\n",
+			"CSection::SetStartAddress: Section:%s  Start Address:$%04x  Size:$%04x Over By:$%04x\n",
 			GetName(),
 			Start,
 			m_Size,
@@ -95,7 +95,7 @@ void CSection::SetSectionSize(int Size)
 		sprintf_s(
 			ThrownException.GetErrorString(),
 			ThrownException.GetMaxStringLen(),
-			"Section:%s  Start Address:$%04x  Size:$%04x Over By:$%04x\n",
+			"CSection::SetSectionSize: Section:%s  Start Address:$%04x  Size:$%04x Over By:$%04x\n",
 			GetName(),
 			m_StartAddress,
 			Size,
@@ -121,7 +121,7 @@ void CSection::SetLocationCounter(int NewAddress)
 		sprintf_s(
 			ThrownException.GetErrorString(),
 			ThrownException.GetMaxStringLen(),
-			"Section:%s  Start Address:$%04x  Size:$%04x Over By:$%04x\n",
+			"CSection::SetLocationCounter: Section:%s  Start Address:$%04x  Size:$%04x Over By:$%04x\n",
 			GetName(),
 			0,
 			m_Size,
