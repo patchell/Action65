@@ -53,6 +53,7 @@ bool CAstNode::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 	CSymbol* pProcSym = 0;
 
 	SetSection(Act()->GetParser()->GetCurrentSection());
+	m_Line = GetParser()->GetLexer()->GetLineNumber();
 	pProcSym = Act()->GetParser()->GetCurrentProc();
 	SetProcSym(pProcSym);
 	if (pChild)

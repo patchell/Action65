@@ -2,24 +2,13 @@
 
 class CInstruction;
 
-class CChainSymUsed : public CChainItem
+class CChainSymUsed : public CChain
 {
-	CInstruction* m_pInst;
 public:
 	CChainSymUsed();
 	~CChainSymUsed();
-	bool Create(CInstruction* pI) {
-		bool rV = false;
-		if (pI) {
-			m_pInst = pI;
-			rV = true;
-		}
-		return rV;
-	}
-
-	virtual bool Create() { return true; }
+	bool Create() {	return true; }
 	virtual void Copy(CChainItem* pI);
-	virtual bool Compare(const char* pName);
-	
+	virtual int Print(char* pSO, int l, int Indent = 0, const char* s = 0);
 };
 

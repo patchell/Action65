@@ -354,10 +354,10 @@ void CActionApp::Dump(
 	FILE* pOut, 
 	char* pMem, 
 	unsigned StartAddress, 
-	unsigned Size
+	int Size
 )
 {
-	unsigned Loc = 0;
+	int Loc = 0;
 	bool bDone = false;
 	char* s = new char[256];
 	char strPad[64];
@@ -365,6 +365,8 @@ void CActionApp::Dump(
 	char Ascii[10];
 	int l, i, c, n;
 
+	if(Size == 6)
+		int bk = 1;
 	Ascii[8] = 0;
 	while (!bDone)
 	{
@@ -402,6 +404,10 @@ void CActionApp::Dump(
 			}
 			fprintf(pOut, "%s %s\n", s, Ascii);
 			Loc += 8;
+			if ((Size - Loc) <= 0)
+			{
+				bDone = true;
+			}
 		}
 	}
 	delete[] s;

@@ -615,11 +615,16 @@ public:
 		char* GetLexBuffer() {
 			return m_aLexBuff;
 		}
-		int GetLineNumber() const { return m_Line; }
+		int GetLineNumber() const { 
+			return m_Line; 
+		}
 		int GetColumn() const { return m_Col; }
 		int IncFileIndex(int inc = 1) { return m_FileIndex += inc; }
 		Token LookAheadToken();
 		void SetLookAheadToken(Token t);
+		CParser* GetMainParser() { return m_pCompilerParser; }
+		CSymbol* CheckForLocalVariable(const char* pName);
+		CSymbol* CheckForParameterVariable(const char* pName);
 	}m_MainLexer;;
 
 //------------------------------
@@ -810,36 +815,37 @@ private:
 	CAstNode*  Declare();
 	void DECLAREnd();
 	void DECLAREParamList();
-	void DECLAREParamTypeSpec(CChainType* pTypeChain);
-	void DECLAREParamIdentList(CChainType* pTypeChain);
-	void DECLAREParamIdent(CChainType* pTypeChain);
+	void DECLAREParamTypeSpec(CChainTypeSpec* pTypeChain);
+	void DECLAREParamIdentList(CChainTypeSpec* pTypeChain);
+	void DECLAREParamIdent(CChainTypeSpec* pTypeChain);
 	//-------------------
 	void DECLAREFuncType(void);
-	void DECLAREFuncTypeSpec(CChainType* pTypeChain);
-	void  DECLAREfunction(CChainType* pTypeChain);
-	void DECLAREFuncName(CChainType* pTypeChain);
+	void DECLAREFuncTypeSpec(CChainTypeSpec* pTypeChain);
+	void  DECLAREfunction(CChainTypeSpec* pTypeChain);
+	void DECLAREFuncName(CChainTypeSpec* pTypeChain);
 	// ---------------------------------------
 	// Fundamental Declarations
 	//----------------------------------------
 	CAstNode* FundamentalDecl();
-	CAstNode*  FundTypeSpec(CChainType* pTypeChain);
+	CAstNode*  FundTypeSpec(CChainTypeSpec* pTypeChain);
 	//----------------------------------
 	// Identifiers
 	//----------------------------------
-	CAstNode*  IdentList(CChainType* pTypeChain);
-	CAstNode*  Ident( CChainType* pTypeChain);
+	CAstNode*  IdentList(CChainTypeSpec* pTypeChain);
+	void MakeIdent(CChainTypeSpec* pTypeChain);
+	CAstNode*  Ident( CChainTypeSpec* pTypeChain);
 	CAstNode*  IdentInitType();
 	CAstNode*  InitData();
 	//------------------
-	CAstNode*  IrqDecl(CChainType* pTypeChain);
+	CAstNode*  IrqDecl(CChainTypeSpec* pTypeChain);
 	CAstNode*  IrqDeclParams();
 	CAstNode*  IrqBody();
 	//------------------
-	CAstNode*  ProcDecl(CChainType* pTypeChain);
+	CAstNode*  ProcDecl(CChainTypeSpec* pTypeChain);
 	CAstNode*  ProcDeclParams(CSymbol* pFuncSym);
 	CAstNode*  ProcBody();
 	//------------------
-	CAstNode*  FuncDecl(CChainType* pTypeChain);
+	CAstNode*  FuncDecl(CChainTypeSpec* pTypeChain);
 	CAstNode*  FuncDeclParams(CSymbol* pFuncSym);
 	CAstNode*  FuncBody();
 	//------------------
@@ -848,9 +854,9 @@ private:
 	// Parameter Declarations
 	//-------------------------------------------
 	CAstNode*  ParamList(CSymbol* pFuncSym);
-	CAstNode*  ParamTypeSpec(CChainType* pTypeChain, CSymbol* pFuncSym);
-	CAstNode*  DefineParamIdentList(CChainType* pTypeChain, CSymbol* pFuncSym);
-	CAstNode*  DefineParamIdent(CChainType* pTypeChain, CSymbol* pFuncSym);
+	CAstNode*  ParamTypeSpec(CChainTypeSpec* pTypeChain, CSymbol* pFuncSym);
+	CAstNode*  DefineParamIdentList(CChainTypeSpec* pTypeChain, CSymbol* pFuncSym);
+	CAstNode*  DefineParamIdent(CChainTypeSpec* pTypeChain, CSymbol* pFuncSym);
 	//-----------------------------------------------
 	// TYPE field members
 	//-----------------------------------------------
@@ -860,7 +866,7 @@ private:
 	//-----------------------------------------------
 	CAstNode*  LocalDecls();
 	CAstNode*  LocalVarDecls();
-	CAstNode*  LocalTypeSpec(CChainType* pTypeChain);
+	CAstNode*  LocalTypeSpec(CChainTypeSpec* pTypeChain);
 	//-------------------------------
 	// Compiler Constants
 	//-------------------------------

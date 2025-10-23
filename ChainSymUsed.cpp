@@ -1,6 +1,6 @@
 #include "pch.h"
 
-CChainSymUsed::CChainSymUsed() : CChainItem(CChainItem::ChainItemType::SYMBOL_USED)
+CChainSymUsed::CChainSymUsed() : CChain(CChain::ChainType::CHAINSYMBOLSUSED)
 {
 }
 
@@ -10,28 +10,17 @@ CChainSymUsed::~CChainSymUsed()
 
 void CChainSymUsed::Copy(CChainItem* pI)
 {
-	if (pI && (pI->Is(CChainItem::ChainItemType::SYMBOL_USED)))
-	{
-		m_pInst = ((CChainSymUsed*)pI)->m_pInst;
-	}
 }
 
-bool CChainSymUsed::Compare(const char* pName)
+int CChainSymUsed::Print(char* pSO, int l, int Indent, const char* s)
 {
-	bool rV = false;
-	char* pLabelName = 0;
+	int ls = 0;
 
-	if (m_pInst)
+	CChainItem* pItem = GetHead();
+	while(pItem)
 	{
-		pLabelName = m_pInst->GetLabel()->GetName();
-		if (pName)
-		{
-			if (pLabelName)
-			{
-				if (strcmp(pLabelName, pName) == 0)
-					rV = true;
-			}
-		}
+		ls += pItem->Print(&pSO[ls], l - ls, Indent, s);
+		pItem = pItem->GetNext();
 	}
-	return rV;
+	return ls;
 }

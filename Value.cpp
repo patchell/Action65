@@ -81,6 +81,15 @@ bool CValue::Create(CReg* pReg)
 	return true;
 }
 
+int CValue::Print(char* pSO, int l, int Indent, const char* s)
+{
+	// Implementation of Print function
+	int ls = 0;
+
+	ls = sprintf_s(pSO, l, "Implement CValue::Print method\n");
+	return ls;
+}
+
 void CValue::SetSymbol(CSymbol* pSym)
 {
 	m_pSym = pSym;
@@ -106,9 +115,9 @@ CSymbol* CValue::GetSymbol()
 	return pSym;
 }
 
-CChainType* CValue::GetTypeChain()
+CChainTypeSpec* CValue::GetTypeChain()
 {
-	CChainType* pTC = 0;
+	CChainTypeSpec* pTC = 0;
 
 	switch (m_ValType)
 	{
@@ -355,12 +364,12 @@ bool CValue::IsPageZero()
 int CValue::SizeOf()
 {
 	int rV = 0;
-	CChainType* pTypeChain = 0;
+	CChainTypeSpec* pTypeChain = 0;
 
 	pTypeChain = GetTypeChain();
 	if (!pTypeChain)
 		printf("Oh-Oh\n");
-	if (pTypeChain->Is(CChainTypeItem::Spec::POINTER))
+	if (pTypeChain->Is(CChainTypeSpecItem::Spec::POINTER))
 		rV = 2;
 	else if (pTypeChain->IsByte())
 		rV = 1;

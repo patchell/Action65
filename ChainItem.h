@@ -10,7 +10,8 @@ public:
 		BIN,
 		PARAMETER,
 		TYPE,
-		SYMBOL_USED
+		SYMBOL_USED,
+		LOCAL_SYMBOL
 	};
 	struct ItemType {
 		ChainItemType m_Type;
@@ -34,7 +35,8 @@ public:
 		{ChainItemType::BIN,"BIN"},
 		{ChainItemType::PARAMETER,"PARAMETER"},
 		{ChainItemType::TYPE,"TYPE"},
-		{ChainItemType::SYMBOL_USED,"SYMBOL_USED"}
+		{ChainItemType::SYMBOL_USED,"SYMBOL_USED"},
+		{ChainItemType::LOCAL_SYMBOL,"LOCAL_SYMBOL"}
 	};
 private:
 	ChainItemType m_ItemType;

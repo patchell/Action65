@@ -25,35 +25,40 @@ bool CChain::Create()
 
 void CChain::Copy(CChain* pC)
 {
+	CChainItem::ChainItemType ItemType;
+
 	if (pC)
 	{
 		CChainItem* pItem = pC->GetHead();
 		while (pItem)
 		{
 			CChainItem* pNewItem = 0;
-			if (pItem->Is(CChainItem::ChainItemType::INSTRUCTION))
+			ItemType = pItem->GetItemType();
+			switch (ItemType)
 			{
+			case CChainItem::ChainItemType::LOCAL_SYMBOL:
+				pNewItem = new CChainLocalItem();
+				break;
+			case CChainItem::ChainItemType::INSTRUCTION:
 				pNewItem = new CChainInstruction();
-			}
-			else if (pItem->Is(CChainItem::ChainItemType::VALUE))
-			{
-				pNewItem = new CChainValueItem;
-			}
-			else if (pItem->Is(CChainItem::ChainItemType::BIN))
-			{
+				break;
+			case CChainItem::ChainItemType::VALUE:
+				pNewItem = new CChainValueItem();
+				break;
+			case CChainItem::ChainItemType::BIN:
 				pNewItem = new CChainBinItem();
-			}
-			else if (pItem->Is(CChainItem::ChainItemType::PARAMETER))
-			{
+				break;
+			case CChainItem::ChainItemType::PARAMETER:
 				pNewItem = new CChainParameterItem();
-			}
-			else if (pItem->Is(CChainItem::ChainItemType::TYPE))
-			{
-				pNewItem = new CChainTypeItem();
-			}
-			else if (pItem->Is(CChainItem::ChainItemType::SYMBOL_USED))
-			{
-				pNewItem = new CChainSymUsed();
+				break;
+			case CChainItem::ChainItemType::TYPE:
+				pNewItem = new CChainTypeSpecItem();
+				break;
+			case CChainItem::ChainItemType::SYMBOL_USED:
+				pNewItem = new CChainSymUsedItem();
+				break;
+			default:
+				break;
 			}
 			if (pNewItem)
 			{

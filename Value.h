@@ -88,7 +88,7 @@ private:
 	UpperLower m_UpperLOwer;
 	CReg* m_pReg;
 	CVirtualReg::VREG* m_pVirtualReg;
-	CChainType m_AltTypeChain;
+	CChainTypeSpec m_AltTypeChain;
 public:
 	CValue();
 	virtual ~CValue();
@@ -98,11 +98,12 @@ public:
 	bool Create(ValueType VT);
 	bool Create(int V);
     bool Create(CReg* pReg);
+	int Print(char* pSO, int l, int Indent = 0, const char* s = 0);
 	void SetSymbol(CSymbol* pSym);
 	CReg* GetRegister() { return m_pReg; }
 	CVirtualReg::VREG* GetVirtualReg() { return m_pVirtualReg; }
 	CSymbol* GetSymbol();
-	CChainType* GetTypeChain();
+	CChainTypeSpec* GetTypeChain();
 	void SetTypeChain(CChain* pTC);
 	char* GetName();
 	int GetConstVal();

@@ -397,6 +397,8 @@ void CSection::Dump(FILE* pOut, const char* s)
 {
 	if (s)
 		fprintf(pOut, "--------- %s ---------\n", s);
+	else
+		fprintf(pOut, "--------- %s ---------\n", GetName());
 	CActionApp::Dump(
 		pOut,
 		m_pSectionData,

@@ -79,29 +79,29 @@ CValue* CAct65PointerDeREF::Emit(CValue* pVc, CValue* pVn)
 	// will have a type chain something like
 	// VIRTUAL_REG:CHAR:POINTER_DREF
 	//----------------------------------------
-	CChainType* pTypeChain = pVc->GetTypeChain();
-	CChainMisc* pNewTypeChain = new CChainMisc();	// Type chain for dereferenced pointer
+	CChainTypeSpec* pTypeChain = pVc->GetTypeChain();
+	CChainTypeSpec* pNewTypeChain = new CChainTypeSpec;	// Type chain for dereferenced pointer
 	CValue* pVirtualReg = 0;	//will define a virtual register
-	CChainTypeItem* pNewTypeItem = 0;
+	CChainTypeSpecItem* pNewTypeItem = 0;
 	CInstruction* pOpCode = 0;
-	CChainTypeItem::Spec FundSpec;
+	CChainTypeSpecItem::Spec FundSpec;
 	AdrModeType AddressingMode;
 	CValue* pLabel = GetCodeGen()->GetPendingLabel();
 	bool Byte = false;
 
 	pNewTypeChain->Create();
 	// Scope is a Virtual Register
-	pNewTypeItem = new CChainTypeItem;
-	pNewTypeItem->SetSpec(CChainTypeItem::Spec::VIRTUAL_REG);
+	pNewTypeItem = new CChainTypeSpecItem;
+	pNewTypeItem->SetSpec(CChainTypeSpecItem::Spec::VIRTUAL_REG);
 	pNewTypeChain->AddToTail(pNewTypeItem);
 	//what are we referencing here
 	FundSpec = pTypeChain->GetFundSpec();	//get fundamental type for pVc
-	pNewTypeItem = new CChainTypeItem;
+	pNewTypeItem = new CChainTypeSpecItem;
 	pNewTypeItem->SetSpec(FundSpec);
 	pNewTypeChain->AddToTail(pNewTypeItem);
 	//------- Value is a Dereferenced --------
-	pNewTypeItem = new CChainTypeItem;
-	pNewTypeItem->SetSpec(CChainTypeItem::Spec::POINTER_DREF);
+	pNewTypeItem = new CChainTypeSpecItem;
+	pNewTypeItem->SetSpec(CChainTypeSpecItem::Spec::POINTER_DREF);
 	pNewTypeChain->AddToTail(pNewTypeItem);
 	//------------------------------------------------
 	// Allocate a Virtual Register for the Pointer

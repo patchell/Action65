@@ -15,7 +15,7 @@ class CSymbol: public CBin
 	//---------------------------
 	// Type Chain
 	//---------------------------
-	CChainType* m_pTypeChain;	//Defines the Type of the Symbol
+	CChainTypeSpec* m_pTypeChain;	//Defines the Type of the Symbol
 	//---------------------------
 	// Parameter chain for a
 	// function/proceedure
@@ -24,9 +24,9 @@ class CSymbol: public CBin
 	// Chain of data members for
 	// a user defined TYPE
 	//---------------------------
-	CChain* m_pParamChain;
-	CChain* m_pTypeDefChain;
-	CChain* m_pLocalVariablesChain;
+	CChainParameter* m_pParamChain;
+	CChainTypeSpec* m_pTypeDefChain;
+	CChainLocals* m_pLocalVariablesChain;
 public:
 	CSymbol();
 	virtual ~CSymbol() {}
@@ -37,19 +37,18 @@ public:
 	//-----------------------------
 	// Accessor Methods
 	//-----------------------------
-	CChain* GetParamChain() {
-		return m_pParamChain
-			;
+	CChainParameter* GetParamChain() {
+		return m_pParamChain;
 	}
 	void CreateParamChain() {
-		m_pParamChain = new CChain;
+		m_pParamChain = new CChainParameter;
 		m_pParamChain->Create();
 	}
 	CChain* GetTypeDefChain() {
 		return m_pTypeDefChain;
 	}
 	void CreateTypeDefChain() {
-		m_pTypeDefChain = new CChain;
+		m_pTypeDefChain = new CChainTypeSpec;
 		m_pTypeDefChain->Create();
 	}
 	virtual unsigned GetAddress() const { return m_Address; }
@@ -85,17 +84,17 @@ public:
 	//-----------------------------------
 	// Type chain methods
 	//-----------------------------------
-	CChainType* GetTypeChain() { return m_pTypeChain; }
+	CChainTypeSpec* GetTypeChain() { return m_pTypeChain; }
 //	void SetTypeChain(CChain* pTC) { m_pTypeChain = pTC; }
 	virtual	void CreateTypeChain(CChain* pTC = 0);
 	//---------------------------------------
 	// Manage List of Local Variables/Labels
 	//---------------------------------------
-	CChain* GetLocalVars() { 
+	CChainLocals* GetLocalVars() { 
 		return m_pLocalVariablesChain;
 	}
 	void CreateLocalVars() {
-		m_pLocalVariablesChain = new CChain;
+		m_pLocalVariablesChain = new CChainLocals	;
 	}
 };
 

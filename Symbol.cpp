@@ -97,7 +97,7 @@ void CSymbol::CreateTypeChain(CChain* pTC)
 	// Make a copy of the passed pointer
 	// to a Type Chain
 	//---------------------------------------
-	m_pTypeChain = new CChainType;
+	m_pTypeChain = new CChainTypeSpec;
 	GetTypeChain()->Create();
 	if (pTC)
 	{
@@ -127,7 +127,7 @@ int CSymbol::Print(char* pSO, int l, const char* s)
 		ls += sprintf_s(&pSO[ls], size, "%s", s);
 	}
 	if(GetTypeChain())
-		if (GetTypeChain()->Is(CChainTypeItem::Spec::FUNC))
+		if (GetTypeChain()->Is(CChainTypeSpecItem::Spec::FUNC))
 			printf("Opps\n");
 	if (GetName())
 	{

@@ -391,7 +391,7 @@
     <ClCompile Include="Act65IDENT.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ChainTypeItem.cpp">
+    <ClCompile Include="ChainTypeSpecItem.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Act65RTI.cpp">
@@ -604,10 +604,7 @@
     <ClCompile Include="ChainSymUsed.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ChainType.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ChainMisc.cpp">
+    <ClCompile Include="ChainTypeSpec.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ChainParameterItem.cpp">
@@ -617,6 +614,18 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="KeyWord.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ChainLocals.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ChainLocalItem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ChainParameter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ChainSymUsedItem.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -969,7 +978,7 @@
     <ClInclude Include="Act65IDENT.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ChainTypeItem.h">
+    <ClInclude Include="ChainTypeSpecItem.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Act65RTI.h">
@@ -1182,10 +1191,7 @@
     <ClInclude Include="ChainSymUsed.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ChainType.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ChainMisc.h">
+    <ClInclude Include="ChainTypeSpec.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ChainParameterItem.h">
@@ -1195,6 +1201,18 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="KeyWord.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ChainLocals.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ChainLocalItem.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ChainParameter.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ChainSymUsedItem.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -6,7 +6,14 @@ public:
 	enum class ChainType {
 		NONE,
 		CHAINMISC,
-		CHAINTYPE,
+		CHAINTYPESPEC,	
+		CHAINLOCALS,
+		CHAINPARAMETERS,
+		CHAINBIN,
+		CHAININSTRUCTIONS,
+		CHAINSYMBOLSUSED,
+		CHAINVALUES,
+		CHAINSYMBOLS,
 		ERROR
 	};
 	struct TypeItem
@@ -28,8 +35,15 @@ public:
 private:
 	static inline TypeItem TypeItemLUT[] = {
 		{ChainType::NONE,"NONE"},
-		{ChainType::CHAINMISC,"CHAINMISC"},
-		{ChainType::CHAINTYPE,"CHAINTYPE"},
+		{ChainType::CHAINMISC,"CHAIN MISC"},
+		{ChainType::CHAINTYPESPEC,"CHAIN TYPE SPEC"},
+		{ChainType::CHAINLOCALS,"CHAIN LOCALS"},
+		{ChainType::CHAINPARAMETERS,"CHAIN PARAMETERS"},
+		{ChainType::CHAINBIN,"CHAIN BIN"},
+		{ChainType::CHAININSTRUCTIONS,"CHAIN INSTRUCTIONS"},
+		{ChainType::CHAINSYMBOLSUSED,"CHAIN SYMBOLS USED"},
+		{ChainType::CHAINVALUES,"CHAIN VALUES"},
+		{ChainType::CHAINSYMBOLS,"CHAIN SYMBOLS"},
 		{ChainType::ERROR,nullptr}
 	};
 	ChainType m_ChainType;

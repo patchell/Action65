@@ -1,17 +1,22 @@
 #pragma once
 
+class CValue;
+class CSymbol;
+
 class CChainParameterItem : public CChainItem
 {
-	CBin* m_pParameter; // A parameter is a symbol that is a parameter to a function or procedure
+	CValue* m_pValue; // A parameter is a symbol that is a parameter to a function or procedure
 public:
-	CChainParameterItem() : CChainItem(CChainItem::ChainItemType::PARAMETER) {
-		m_pParameter = 0;
-	}
+	CChainParameterItem();
 	virtual ~CChainParameterItem() {}
-	bool Create() { return true; }
-	virtual int Print(char* pSO, int l, int Indent, const char* s = 0);
+	bool Create(CSymbol* pSym);
+	bool Create(CValue* pVal);
+	bool Is(const char* pName);
+	virtual bool Compare(const char* pName);
 	virtual void Copy(CChainItem* pI);
-	virtual bool Compare(const char* pName) { return false; }
-	virtual int Print(char* pSO, int l, const char* s = 0) { return 0; }
+	virtual int Print(char* pSO, int l, int Indent, const char* s = 0);
+	char* GetName();
+	CValue* GetValue() { return m_pValue; }
+	CSymbol* GetSymbol();
 };
 

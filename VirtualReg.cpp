@@ -167,7 +167,7 @@ bool CVirtualReg::UnLock(CValue* pVRegValue)
 bool CVirtualReg::VREG::Create(RegStatus Size, int Address, int TableIndex)
 {
 	CSymbol* pSym = 0;
-	CChainTypeItem* pOTC = 0;
+	CChainTypeSpecItem* pOTC = 0;
 
 	m_nBytes = Size;
 	m_TableIndex = TableIndex;
@@ -177,18 +177,18 @@ bool CVirtualReg::VREG::Create(RegStatus Size, int Address, int TableIndex)
 	pSym->SetName(m_pName);
 	pSym->SetAddress(Address);
 	pSym->CreateTypeChain();
-	pOTC = new CChainTypeItem;
-	pOTC->SetSpec(CChainTypeItem::Spec::VIRTUAL_REG);
+	pOTC = new CChainTypeSpecItem;
+	pOTC->SetSpec(CChainTypeSpecItem::Spec::VIRTUAL_REG);
 	pSym->GetTypeChain()->AddToHead(pOTC);
 	if (Size == RegStatus::LOCKED_BYTE)
 	{
-		pOTC = new CChainTypeItem;
-		pOTC->SetSpec(CChainTypeItem::Spec::BYTE);
+		pOTC = new CChainTypeSpecItem;
+		pOTC->SetSpec(CChainTypeSpecItem::Spec::BYTE);
 	}
 	else
 	{
-		pOTC = new CChainTypeItem;
-		pOTC->SetSpec(CChainTypeItem::Spec::CARD);
+		pOTC = new CChainTypeSpecItem;
+		pOTC->SetSpec(CChainTypeSpecItem::Spec::CARD);
 	}
 	pSym->GetTypeChain()->AddToHead(pOTC);
 	Act()->GetParser()->GetLexer()->GetSymTab()->AddSymbol(pSym, CBin::BinType::SYMBOL);

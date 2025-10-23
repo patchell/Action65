@@ -105,7 +105,7 @@ public:
 		FILE* pOut, 
 		char* pMem, 
 		unsigned StartAddress, 
-		unsigned Size
+		int Size
 	);
 	void Exit(int Err);
 	//-----------------------------------------
