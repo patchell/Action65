@@ -17,5 +17,7 @@ public:
 	char* GetName();
 	CValue* GetValue() { return m_pValue; }
 	virtual int Print(char* pSO, int l, int Indent = 0, const char* s = 0);
+	virtual void Emit(CSection* pSec);
+	virtual void EmitListing(CSection* pSec);
 };
 

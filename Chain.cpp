@@ -40,7 +40,7 @@ void CChain::Copy(CChain* pC)
 				pNewItem = new CChainLocalItem();
 				break;
 			case CChainItem::ChainItemType::INSTRUCTION:
-				pNewItem = new CChainInstruction();
+				pNewItem = new CChainInstructionItem();
 				break;
 			case CChainItem::ChainItemType::VALUE:
 				pNewItem = new CChainValueItem();
@@ -51,7 +51,7 @@ void CChain::Copy(CChain* pC)
 			case CChainItem::ChainItemType::PARAMETER:
 				pNewItem = new CChainParameterItem();
 				break;
-			case CChainItem::ChainItemType::TYPE:
+			case CChainItem::ChainItemType::TYPESPEC:
 				pNewItem = new CChainTypeSpecItem();
 				break;
 			case CChainItem::ChainItemType::SYMBOL_USED:
@@ -62,7 +62,7 @@ void CChain::Copy(CChain* pC)
 			}
 			if (pNewItem)
 			{
-				if (pNewItem->Create())
+				if (pNewItem->Create(0))
 				{
 					pNewItem->Copy(pItem);
 					AddToTail(pNewItem);
@@ -172,16 +172,23 @@ const char* CChain::FindTypeName(ChainType T) const
 int CChain::Print(char* pSO, int l, int Indent, const char* s)
 {
 	int ls = 0;
+	int size = l;
+	char* pIndentString = new char[512];
+
+	Act()->IndentString(pIndentString, 512, Indent, ' ');
 	CChainItem* pItem = GetHead();
 	if (s)
 	{
-		ls += sprintf_s(&pSO[ls], l - ls, "Head:%s", s);
+		size = l - ls;
+		ls += sprintf_s(&pSO[ls], size, "%s%s\n", pIndentString, s);
+		Act()->IndentString(pIndentString, 512, Indent + 2, ' ');
 	}
 	while (pItem)
 	{
-		int size = l - ls;
-		ls += pItem->Print(&pSO[ls], size, Indent+2, "");
+		size = l - ls;
+		ls += pItem->Print(&pSO[ls], size, Indent + 2, 0);
 		pItem = pItem->GetNext();
 	}
+	delete[] pIndentString;
 	return ls;
 }

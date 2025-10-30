@@ -8,10 +8,10 @@ CAct65AssignXOR::~CAct65AssignXOR()
 {
 }
 
-bool CAct65AssignXOR::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
+bool CAct65AssignXOR::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym, CSection* pSec)
 {
 	bool rV = true;
-	rV = CAstNode::Create(pChild, pNext, pSym);
+	rV = CAstNode::Create(pChild, pNext, pSym, pSec);
 	return rV;
 }
 

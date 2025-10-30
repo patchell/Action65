@@ -6,6 +6,47 @@ class CAstNode;
 class CSection : public CBin
 {
 public:
+	enum class SectionTypes {
+		NONE,
+		STACK,
+		CONST,
+		STRINGS,
+		PAGE_ZERO,
+		VECTOR,
+		GLOBALS,
+		PARAMS,
+		LOCALS,
+		CODE,
+		END
+	};
+	struct SectionTypeNameItem
+	{
+		SectionTypes m_Type;
+		const char* m_pName;
+		SectionTypeNameItem() {
+			m_Type = SectionTypes::NONE;
+			m_pName = 0;
+		}
+		SectionTypeNameItem(SectionTypes T, const char* pN) {
+			m_Type = T;
+			m_pName = pN;
+		}
+	};
+private:
+	inline static SectionTypeNameItem SectionTypeNameLUT[] = {
+		{SectionTypes::NONE,"NONE"},
+		{SectionTypes::STACK,"STACK"},
+		{SectionTypes::CONST,"CONST"},
+		{SectionTypes::STRINGS,"STRINGS"},
+		{SectionTypes::PAGE_ZERO,"PAGEZERO"},
+		{SectionTypes::VECTOR,"VECTOR"},
+		{SectionTypes::GLOBALS,"GLOBALS"},
+		{SectionTypes::PARAMS,"PARAMS"},
+		{SectionTypes::LOCALS,"LOCALS"},
+		{SectionTypes::CODE,"CODE"},
+		{SectionTypes::END,0}
+	};
+public:
 	enum class SectionType {
 		TYPE_ABSOLUTE,
 		TYPE_RELOCATALE
@@ -39,8 +80,8 @@ private:
 	Mode m_AccessMode;	//read only or read write
 	AddressSize m_ZeroPageAddressSize;
 	SectionType m_Type;
-	CChain m_Values;
-	CChain m_Instructions;
+	CChainValue m_Values;
+	CChain m_ChainSectionData;
 	//---------- Section List --------------
 	CSection* m_pNextSection;
 	CSection* m_pPrevSection;
@@ -59,7 +100,9 @@ public:
 	void SetStartAddress(int SA);
 	int GetSectionSize() const { return m_Size; }
 	void SetSectionSize(int S);
-	int GetLocationCounter() const { return m_LocationCounter; }
+	int GetLocationCounter() const { 
+		return m_LocationCounter; 
+	}
 	int IncrementLocationCounterBy(int v) {
 		m_LocationCounter += v;
 		return m_LocationCounter;
@@ -79,7 +122,7 @@ public:
 	void AddLabelValue(CValue* pLabelSym);
 	bool EmitToSection(CAstNode* pNode, int ObjectSize, CSymbol* pLabel);
 	//------ Debug/Diagnosis -----------------
-	virtual void Print(FILE* pOut, const char* s = 0);
+	virtual int Print(char* pSO, int l, int Indent, const char* s = 0);
 	void Dump(FILE* pOut, const char* s = 0);
 	void Info();
 	bool IsPageZero() const {
@@ -89,13 +132,16 @@ public:
 			rV = true;
 		return rV;
 	}
-	CChain* GetInstructionsChain() {
-		return &m_Instructions;
+	CChain* GetSectionDataChain() {
+		return &m_ChainSectionData;
 	}
 	CChain* GetValuesChain() {
 		return &m_Values;
 	}
 	void EmitListing();
 	void EmitBinary();
+	static const char* GetSectionTypeNameStr(int idx) {
+		return SectionTypeNameLUT[idx].m_pName;
+	}
 };
 

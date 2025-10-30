@@ -52,8 +52,9 @@ public:
 	void SetAddress(int A) { m_Address = A; }
 	int GetAddress() const { return m_Address; }
 	void EmitListing();
+	int Print(char* pSO, int l, int Indent, const char* s);
 	char* GenOperand(char* s, int n);
-	virtual int Print(char* pSO, int l, int Indent, const char* s);
+	virtual int PrintBinary(char* pSO, int l, int Indent, const char* s);
 
 };
 

@@ -1,23 +1,5 @@
 #include "pch.h"
 
-int CBin::Print(char* pSO, int l, int Indent, const char* s)
-{
-	int ls = 0;
-	int size = l;
-
-	char* pIndentString = new char[512];
-	Act()->IndentString(pIndentString, 512, Indent + 2, ' ');
-	if (!s) s = "";		
-
-	ls += sprintf_s(&pSO[ls], size, "%sCBin::%s\n", 
-		pIndentString, 
-		GetName());
-
-
-	delete[] pIndentString;
-	return ls;
-}
-
 //-----------------------------------------------
 // Sub list methods
 //-----------------------------------------------
@@ -78,4 +60,9 @@ void CBin::Unlink(CBin* pSym)
 		pSym->GetNext()->SetPrev(pSym->GetPrev());
 		pSym->GetPrev()->SetNext(pSym->GetNext());
 	}
+}
+
+CChain* CBin::GetWhereUsed()
+{
+	return &m_WhereUsed;
 }

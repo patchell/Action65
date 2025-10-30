@@ -51,7 +51,7 @@ public:
 	CAct65Opcode();
 	void Reset();
 	virtual ~CAct65Opcode();
-	virtual bool Create(CAstNode* pChild = 0, CAstNode* pNext = 0, CBin* pSym = 0);
+	virtual bool Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym, CSection* pSec);
 	//-----------------------------
 	// Node Processor
 	//-----------------------------

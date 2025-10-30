@@ -8,10 +8,10 @@ CAct65ASM::~CAct65ASM()
 {
 }
 
-bool CAct65ASM::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
+bool CAct65ASM::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym, CSection* pSec)
 {
 	bool rV = true;
-	rV = CAstNode::Create(pChild, pNext, pSym);
+	rV = CAstNode::Create(pChild, pNext, pSym, pSec);
 	return rV;
 }
 

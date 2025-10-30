@@ -4,7 +4,7 @@ class CInstruction;
 
 class CChainSymUsedItem : public CChainItem
 {
-	CInstruction* m_pInstruction;
+	CChainItem* m_pUsedHere;
 public:
 	CChainSymUsedItem();
 	virtual ~CChainSymUsedItem();
@@ -15,9 +15,11 @@ public:
 	virtual bool Compare(const char* pName){
 		return Is(pName);
 	}
-	virtual void Copy(CChainItem* pI);
 	virtual int Print(char* pSO, int l, int Indent, const char* s = 0);
-	CInstruction* GetInstruction() { return m_pInstruction; }
-	void SetInstruction(CInstruction* pI) { m_pInstruction = pI; }
+	virtual void Copy(CChainItem* pI);
+	CChainItem* GetWhereUsed() { return m_pUsedHere; }
+	void SetWhereUsed(CChainItem* pI) { m_pUsedHere = pI; }
+	virtual void Emit(CSection* pSec) {}
+	virtual void EmitListing(CSection* pSec) {}
 };
 

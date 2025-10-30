@@ -22,6 +22,7 @@ constexpr auto PHASE_LUT_DIM = 5;
 
 class CParser
 {
+private:
 	Token m_LookAheadToken;
 //------------------------------
 // Lexer Stuff
@@ -697,6 +698,9 @@ public:
 		return m_pCurrentSection;
 	}
 	CLexer* GetLexer() { return &m_MainLexer; }
+	CSymTab* GetSymTab() { 
+		return m_MainLexer.GetSymTab(); 
+	}
 	CActionAstTree* GetAstTree() { return &m_AstTree; }
 	FILE* LogFile();
 	CAstNode* Run();
@@ -958,5 +962,7 @@ public:
 	);
 	//---------------------------------
 	void ProgramListing();
+	void ProgramEmitSections();
+	void ProgramEmitSection(CSection* pSection);	
 };
 

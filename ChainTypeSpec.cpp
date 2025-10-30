@@ -16,7 +16,7 @@ bool CChainTypeSpec::Is(CChainTypeSpecItem::Spec Type)
 
 	while (pItem && !rV)
 	{
-		if (pItem->Is(CChainItem::ChainItemType::TYPE))
+		if (pItem->Is(CChainItem::ChainItemType::TYPESPEC))
 		{
 			CChainTypeSpecItem* pTO = (CChainTypeSpecItem*)pItem;
 			if (pTO->Is(Type))
@@ -34,10 +34,23 @@ bool CChainTypeSpec::IsFundamentalType()
 	bool rV = false;
 	CChainItem* pItem = GetHead();
 
-	if (pItem && pItem->Is(CChainItem::ChainItemType::TYPE))
+	if (pItem && pItem->Is(CChainItem::ChainItemType::TYPESPEC))
 	{
 		CChainTypeSpecItem* pTO = (CChainTypeSpecItem*)pItem;
 		rV = pTO->IsFundamentalType();
+	}
+	return rV;
+}
+
+CChainTypeSpecItem::Spec CChainTypeSpec::GetScope()
+{
+	CChainTypeSpecItem* pItem = (CChainTypeSpecItem*)GetHead();
+	CChainTypeSpecItem::Spec rV = CChainTypeSpecItem::Spec::NONE;
+
+	if (pItem)
+	{
+		if (pItem->IsScopeType())
+			rV = pItem->GetSpec();
 	}
 	return rV;
 }
@@ -53,4 +66,37 @@ CChainTypeSpecItem::Spec CChainTypeSpec::GetFundSpec()
 			rV = pItem->GetSpec();
 	}
 	return rV;
+}
+
+int CChainTypeSpec::SizeOf()
+{
+	int Size = 0;
+
+	CChainTypeSpecItem* pItem = (CChainTypeSpecItem*)GetHead();
+
+	while (pItem)
+	{
+		switch(pItem->GetSpec())
+		{
+		case CChainTypeSpecItem::Spec::BYTE:
+		case CChainTypeSpecItem::Spec::CHAR:
+		case CChainTypeSpecItem::Spec::BOOL:
+			if (Size < 1 )
+				Size = 1;
+			break;
+		case CChainTypeSpecItem::Spec::INT:
+		case CChainTypeSpecItem::Spec::CARD:
+		case CChainTypeSpecItem::Spec::POINTER:
+			if (Size < 2)
+				Size = 2;
+			break;
+		case CChainTypeSpecItem::Spec::ARRAY:
+			// TO DO: Handle arrays properly
+			break;
+		case CChainTypeSpecItem::Spec::CONST:
+			break;
+		}
+		pItem = (CChainTypeSpecItem*)pItem->GetNext();
+	}
+	return Size;
 }

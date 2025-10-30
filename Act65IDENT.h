@@ -6,7 +6,7 @@ class CAct65IDENT : public CAstNode
 public:
 	CAct65IDENT();
 	virtual ~CAct65IDENT();
-	virtual bool Create(CAstNode* pChild = 0, CAstNode* pNex = 0, CBin* pSym = 0);
+	virtual bool Create(CAstNode* pChild, CAstNode* pNex, CBin* pSym , CSection* pSec);
 	virtual CValue* Process();
 	virtual int Print(int Indent, char* s, int l, bool* pbNextFlag);
 	virtual void PrintNode(FILE* pOut, int Indent, bool* pbNextFlag);

@@ -402,17 +402,19 @@ struct AdressModeLUT
 
 
 #include "KeyWord.h"
+#include "ChainItem.h"
+#include "Chain.h"
 #include "Bin.h"
 #include "Bucket.h"
 //--------------------------------------
-#include "ChainItem.h"
 #include "ChainTypeSpecItem.h"
+#include "ChainItemItem.h"
 #include "ChainParameterItem.h"
 #include "ChainBinItem.h"
 #include "ChainSymUsedItem.h"
 #include "ChainLocalItem.h"
-#include "Chain.h"
-#include "ChainSymUsed.h"
+#include "ChainDataItem.h"
+#include "ChainStorageItem.h"
 #include "ChainTypeSpec.h"
 #include "ChainLocals.h"
 #include "ChainParameter.h"
@@ -422,6 +424,7 @@ struct AdressModeLUT
 #include "VirtualReg.h" //- Virtual Registers 
 #include "Value.h"
 #include "ChainValueItem.h"
+#include "ChainValue.h"
 #include "SymTab.h"
 #include "Settings.h"
 
@@ -454,6 +457,7 @@ public:
 		//--------------------
 		// Code Generation Exceptions
 		//--------------------
+		CODEGEN_VALUE_NULL,
 		CODEGEN_NO_SECTION,
 		CVALUE_NO_SYMBOL,
 		CODEGEN_UNKNOWN_BYTE_ORDER,
@@ -498,6 +502,7 @@ public:
 		{ ExceptionType::AST_RECURSION_LIMIT, "AST Recursion Limit Exceeded::ERROR!" },
 		{ ExceptionType::INTERNAL_SYMBOL_NULL, "Internal Symbol is NULL::ERROR!" },
 		{ ExceptionType::INTERNAL_VALUE_NULL, "Internal Value is NULL::ERROR!" },
+		{ ExceptionType::CODEGEN_VALUE_NULL, "CodeGen:  Variable Value is NULL::ERROR!" },
 		{ ExceptionType::CODEGEN_NO_SECTION, "CodeGen: No Section Defined::ERROR!" },
 		{ ExceptionType::CVALUE_NO_SYMBOL, "CValue: No Symbol Defined::ERROR!" },
 		{ ExceptionType::CODEGEN_UNKNOWN_BYTE_ORDER, "CodeGen: Unknown Byte Order::ERROR!" },
@@ -746,6 +751,9 @@ public:
 #include "Act65UnaryNEG.h"
 #include "Act65UNTILL.h"
 #include "Act65UpperPart.h"
+#include "Act65VarGlobal.h"
+#include "Act65VarLocal.h"
+#include "Act65VarParameter.h"
 #include "Act65VECTOR.h"
 #include "Act65W65C02.h"
 #include "Act65W65C816.h"
@@ -767,7 +775,7 @@ public:
 #include "ActionAstTree.h"
 
 #include "Instruction.h"
-#include "ChainInstruction.h"
+#include "ChainInstructionItem.h"
 #include "Parser.h"
 #include "ActionApp.h"
 

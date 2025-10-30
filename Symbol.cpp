@@ -8,7 +8,7 @@ CSymbol::CSymbol() : CBin(CBin::BinType::SYMBOL)
 	m_UnResolved = true;
 	m_pTypeChain = 0;
 	m_pParamChain = 0;
-	m_pTypeDefChain = 0;
+	m_pTypeDefFieldChain = 0;
 	m_pLocalVariablesChain = 0;	//list of local variables
 }
 
@@ -32,18 +32,18 @@ bool CSymbol::Compare(const char* name, BinType Type, int scope)
 
 void CSymbol::BackFillUnresolved()
 {
-	//int Address;
-	//int URLocation; //unresolved location
-	//CChain* pChain = GetWhereUsed();
-	//CChainItem* pItem = (CChainItem*)pChain->GetHead();
+	int Address;
+	int URLocation; //unresolved location
+	CChain* pChain = GetWhereUsed();
+//	CChainItem* pItem = (CChainItem*)pChain->GetHead();
 
-	//Address = GetAddress();
-	////	fprintf(
-	////		As65App.LogFile(),
-	////		"Back Fill %s @ 0x%4x\n",
-	////		GetName(),
-	////		Address
-	////	);
+	Address = GetAddress();
+	fprintf(
+		Act()->	LogFile(),
+		"Back Fill %s @ 0x%4x\n",
+		GetName(),
+		Address
+	);
 	//while (pItem)
 	//{
 	//	if (!pWSIU->IsResolveProcessed())
@@ -115,64 +115,78 @@ void CSymbol::Print(FILE* pOut, const char* s)
 	delete[] pSO;
 }
 
-int CSymbol::Print(char* pSO, int l, const char* s)
+int CSymbol::Print(char* pSO, int l, int Indent, const char* s)
 {
 	int ls = 0;
-	int size;
+	int size = l;
 	char* pp = pSO;
+	char* pIndentString = 0;
+	static int Recursions = 0;
 
+	++Recursions;
+	pIndentString = new char[256];	
+	Act()->IndentString(pIndentString, 256, Indent + 2, ' ');
 	if (s)
 	{
 		size = l - ls;
-		ls += sprintf_s(&pSO[ls], size, "%s", s);
+		ls += sprintf_s(&pSO[ls], size, "%s:", s);
 	}
-	if(GetTypeChain())
-		if (GetTypeChain()->Is(CChainTypeSpecItem::Spec::FUNC))
-			printf("Opps\n");
-	if (GetName())
+	if (GetSection())
 	{
 		size = l - ls;
-		ls += sprintf_s(&pSO[ls], size, "%s: ", GetName());
+		ls += sprintf_s(&pSO[ls], size, "%s%s:Section = %s\n", pIndentString, GetName(), GetSection()->GetName());
 	}
-	if (GetTypeChain())	
+	if (GetTypeChain())
 	{
-		ls += GetTypeChain()->Print(&pSO[ls], l - ls);
+		size = l - ls;
+		ls += GetTypeChain()->Print(&pSO[ls], size, Indent + 2, 0);
+	}
+	else if (GetName())
+	{
+		size = l - ls;
+		ls += sprintf_s(&pSO[ls], size, "%s%s: ", pIndentString, GetName());
 	}
 	size = l - ls;
-	ls += sprintf_s(&pSO[ls],size, ":Address=$%04lx",
+	ls += sprintf_s(&pSO[ls],size, "%sAddress = $%04lx\n",
+		pIndentString,
 		GetAddress()
 	);
 	if (GetParamChain())
 	{
 		size = l - ls;
+		ls += sprintf_s(&pSO[ls], size, "%sParameters:\n", pIndentString);
+		size = l - ls;
 		ls += GetParamChain()->Print(&pSO[ls], size);
 	}
-	if (GetHead())	//print where the symbol is used
+	if (GetWhereUsed())	//print where the symbol is used
 	{
-		
+		CChainItem* pWSIU = 0;
 
+		size = l - ls;
+		ls += sprintf_s(&pSO[ls], size, "%sSymbol is used AT:\n", pIndentString);
+		size = l - ls;
+		pWSIU = GetWhereUsed()->GetHead();
 		size = l - ls;
 		ls += sprintf_s(&pSO[ls], size, "\n");
 
-		//pWSIU = (CWhereSymbolIsUsed*)GetHead();
-		//while (pWSIU)
-		//{
-		//	size = l - ls;
-		//	ls += sprintf_s(&pSO[ls], size, "\t\t");
-		//	size = l - ls;
-		//	ls += pWSIU->Print(&pSO[ls], size,0);
-		//	pWSIU = (CWhereSymbolIsUsed*)pWSIU->GetNext();
-		//	if (pWSIU)
-		//	{
-		//		size = l - ls;
-		//		ls += sprintf_s(&pSO[ls], size, "\n");
-		//	}
-		//}
+		while (pWSIU)
+		{
+			size = l - ls;
+			ls += sprintf_s(&pSO[ls], size, "\t\t");
+			size = l - ls;
+			ls += pWSIU->Print(&pSO[ls], size,0);
+			pWSIU = pWSIU->GetNext();
+			if (pWSIU)
+			{
+				size = l - ls;
+				ls += sprintf_s(&pSO[ls], size, "\n");
+			}
+		}
 	}
-	CChainBinItem* pLocalSyms = 0;
+	CChainLocalItem* pLocalSyms = 0;
 	if (GetLocalVars())
 	{
-		pLocalSyms = (CChainBinItem*)GetLocalVars()->GetHead();
+		pLocalSyms = (CChainLocalItem*)GetLocalVars()->GetHead();
 	}
 	if (pLocalSyms)
 	{
@@ -181,16 +195,36 @@ int CSymbol::Print(char* pSO, int l, const char* s)
 		while (pLocalSyms)
 		{
 			size = l - ls;
-			ls += ((CSymbol*)pLocalSyms->GetSymbol())->Print(&pSO[ls], size, "\t");
+			ls += sprintf_s(&pSO[ls], size, "%s------------ %s -----------\n", pIndentString, pLocalSyms->GetName() );
+			size = l - ls;
+			ls += ((CSymbol*)pLocalSyms->GetSymbol())->Print(&pSO[ls], size, Indent+ 2, 0);
 			if (pLocalSyms->GetNext())
 			{
 				size = l - ls;
 				ls += sprintf_s(&pSO[ls], size, "\n");
 			}
-			pLocalSyms = (CChainBinItem*)pLocalSyms->GetNext();
+			pLocalSyms = (CChainLocalItem*)pLocalSyms->GetNext();
 		}
 	}
+	delete[] pIndentString;
+	--Recursions;
 	return ls;
+}
+
+void CSymbol::SetAddress(unsigned A)
+{
+	if (IsUnResolved())
+	{
+		if (A == 0xf805)
+		{
+			int debug = 0;
+		}
+		m_Address = A;
+		SetResolved();
+		BackFillUnresolved();
+	}
+	else
+		printf("Error: Symbol address already resolved\n");
 }
 
 const char* CSymbol::CIdentType::LookupIdentType(IdentType IT)

@@ -1503,6 +1503,7 @@ bool CParser::Create()
 		pSettings = new CSettings;
 		pSettings->Create();
 		PrintSections();
+		m_pCurrentSection = (CSection*)GetLexer()->GetSymTab()->FindSymbol("CODE", CBin::BinType::SECTION, 0);
 		m_pLinkerScript = new CLinker;
 		m_pLinkerScript->Create();
 		//-----------------------------------
@@ -1556,7 +1557,7 @@ CAstNode* CParser::Run()
 		fprintf(stderr, "Generate Abstract Syntax Tree\n");
 		pRoot = (CAct65ROOT*)GetAstTree()->GetRootNode();	//???????
 		pRoot = new CAct65ROOT;
-		pRoot->Create();
+		pRoot->Create(0,0,0,0);
 		GetAstTree()->SetRootNode(pRoot);
 		m_LookAheadToken = GetLexer()->Lex();
 		pN = Action65();
@@ -1571,13 +1572,10 @@ CAstNode* CParser::Run()
 		GetAstTree()->Process();	//gemerate cpde
 		NextPass();	//Generate Listing
 		fprintf(stderr, "Generate Listing\n");
+		ProgramEmitSections();
 		ProgramListing();
-		Act()->Exit(0);
 		NextPass();	//Create Output file
 		GetLexer()->GetSymTab()->PrintTable(LogFile());
-		CSection* pSec = FindSection("Code");
-		if (pSec)
-			pSec->Dump(LogFile(), "Code");
 		fprintf(stderr, "Lines Compiled:%d\n", GetLexer()->GetLineNumber());
 		fprintf(LogFile(), "Lines Compiled:%d\n", GetLexer()->GetLineNumber());
 	}
@@ -1654,13 +1652,19 @@ void CParser::AddSection(CSection* pSection)
 void CParser::PrintSections()
 {
 	CSection* pSec = 0;
+	char* pSO = 0;
+	int size = 0, ls = 0;
 
+	size = 8192;
+	pSO = new char[size];
 	pSec = GetSectionHead();
 	while (pSec)
 	{
-		pSec->Print(LogFile(), "   ");
+		pSec->Print(pSO, size, 2, 0);
+		fprintf(LogFile(), "%s\n", pSO);
 		pSec = (CSection * )pSec->GetNextSection();
 	}
+	delete[] pSO;
 }
 
 void CParser::Expect(Token Expected)
@@ -1753,7 +1757,7 @@ CAstNode* CParser::Modules()
 		case Token::MODULE:
 			Expect(Token::MODULE);
 			pN = new CAct65Module;
-			pN->Create(0, 0, GetCurrentProc());
+			pN->Create(0, 0, GetCurrentProc(), (CSection*) GetSymTab()->FindSymbol("NONE",CBin::BinType::SECTION, 0));
 			pChild = SysDecl();
 			pChild = pN->SetChild(pChild);
 			pNext = CAstNode::MakeNextList(pNext, pChild);
@@ -1764,7 +1768,7 @@ CAstNode* CParser::Modules()
 		case Token::ASMMODULE:
 			Expect(Token::ASMMODULE);
 			pN = new CAct65AsmModule;
-			pN->Create(0, 0, GetCurrentProc());
+			pN->Create(0, 0, GetCurrentProc(), (CSection*)GetSymTab()->FindSymbol("NONE", CBin::BinType::SECTION, 0));
 			pChild = InlineAssBlock();
 			pN->SetChild(pChild);
 			pNext = CAstNode::MakeNextList(pNext, pN);
@@ -1795,7 +1799,7 @@ CAstNode* CParser::Statements()
 	bool Loop = true;
 
 	pN = new CAct65Statements;
-	pN->Create(0, 0, GetCurrentProc());
+	pN->Create(0, 0, GetCurrentProc(), (CSection*) GetSymTab()->FindSymbol("CODE",CBin::BinType::SECTION, 0));
 	pChild = Call();
 	pN->SetChild(pChild);
 	return pN;
@@ -1826,7 +1830,7 @@ CAstNode* CParser::Call()
 		case Token::PROC_IDENT:
 			Expect(Token::PROC_IDENT);
 			pN = new CAct65ProcCall;
-			pN->Create(0, 0, GetCurrentProc());
+			pN->Create(0, 0, GetCurrentProc(), (CSection*)GetSymTab()->FindSymbol("CODE", CBin::BinType::SECTION, 0));
 			pChild = ProcParams();
 			pN->SetChild(pChild);
 			pNext = CAstNode::MakeNextList(pNext, pN);
@@ -1837,7 +1841,7 @@ CAstNode* CParser::Call()
 		case Token::FUNC_IDENT:
 			Expect(Token::FUNC_IDENT);
 			pN = new CAct65FuncCall;
-			pN->Create(0, 0, GetCurrentProc());
+			pN->Create(0, 0, GetCurrentProc(), (CSection*) GetSymTab()->FindSymbol("CODE",CBin::BinType::SECTION, 0));
 			pChild = ProcParams();
 			pN->SetChild(pChild);
 			pNext = CAstNode::MakeNextList(pNext, pN);
@@ -1870,7 +1874,7 @@ CAstNode* CParser::ProcParams()
 	case Token('('):
 		Expect(Token('('));
 		pN = new CAct65FuncCall;
-		pN->Create(0, 0, GetCurrentProc());
+		pN->Create(0, 0, GetCurrentProc(), (CSection*)GetSymTab()->FindSymbol("PARAMS", CBin::BinType::SECTION, 0));
 		pChild = ProcParams();
 		pN->MakeNode(pChild,pNext);
 		Expect(Token(')'));
@@ -1927,7 +1931,7 @@ CAstNode* CParser::ForStmt()
 		case Token::FOR:
 			Expect(Token::FOR);
 			pN = new CAct65FOR;;
-			pN->Create(0, 0, GetCurrentProc());
+			pN->Create(0, 0, GetCurrentProc(), (CSection*)GetSymTab()->FindSymbol("CODE", CBin::BinType::SECTION, 0));
 			pChild = ForDOendOD();
 			pN->SetChild(pChild);
 			pNext = CAstNode::MakeNextList(pNext, pN);
@@ -1961,9 +1965,9 @@ CAstNode* CParser::ForDOendOD()
 	case Token::DO:
 		Expect(Token::DO);
 		pNDO = new CAct65DO;
-		pNDO->Create(0, 0, GetCurrentProc());
+		pNDO->Create(0, 0, GetCurrentProc(), (CSection*)GetSymTab()->FindSymbol("CODE", CBin::BinType::SECTION, 0));
 		pNOD = new CAct65OD;
-		pNOD->Create(0, 0, GetCurrentProc());
+		pNOD->Create(0, 0, GetCurrentProc(), (CSection*)GetSymTab()->FindSymbol("CODE", CBin::BinType::SECTION, 0));
 		pStatements = Statements();
 		pNDO = CAstNode::MakeChildList(pNDO, pStatements);
 		pNDO = CAstNode::MakeChildList(pNDO, pNOD);
@@ -1995,7 +1999,7 @@ CAstNode* CParser::STEPoption()
 		Expect(Token::STEP);
 		pNArithExpr = ArithExpr();
 		pNStep = new CAct65ForSTEP;
-		pNStep->Create(0, 0, GetCurrentProc());
+		pNStep->Create(0, 0, GetCurrentProc(), (CSection*)GetSymTab()->FindSymbol("CODE", CBin::BinType::SECTION, 0));
 		pNStep->SetChild(pNArithExpr);
 		pNTO = CAstNode::MakeNextList(pNTO, pNStep);
 		break;
@@ -2022,7 +2026,7 @@ CAstNode* CParser::ForTO()
 	case Token::TO:
 		Expect(Token::TO);
 		pNTO = new CAct65ForTO;
-		pNTO->Create(0, 0, GetCurrentProc());
+		pNTO->Create(0, 0, GetCurrentProc(), (CSection*)GetSymTab()->FindSymbol("CODE", CBin::BinType::SECTION, 0));
 		pArithExpr = ArithExpr();
 		pNTO->SetChild(pArithExpr);
 		pItterator = CAstNode::MakeNextList(pItterator, pNTO);
@@ -2086,7 +2090,7 @@ CAstNode* CParser::IfStmt()
 		case Token::IF:
 			Expect(Token::IF);
 			pN = new CAct65IF;
-			pN->Create(0, 0, GetCurrentProc());
+			pN->Create(0, 0, GetCurrentProc(), (CSection*)GetSymTab()->FindSymbol("CODE", CBin::BinType::SECTION, 0));
 			pChild = EndIF();
 			pN->SetChild(pChild);
 			pNext = CAstNode::MakeNextList(pNext, pN);
@@ -2117,7 +2121,7 @@ CAstNode* CParser::EndIF()
 	case Token::FI:
 		Expect(Token::FI);
 		pNFI = new CAct65FI;
-		pNFI->Create(0, 0, GetCurrentProc());
+		pNFI->Create(0, 0, GetCurrentProc(), (CSection*)GetSymTab()->FindSymbol("CODE", CBin::BinType::SECTION, 0));
 		pElsePart = CAstNode::MakeNextList(pElsePart, pNFI);
 		break;
 	default:
@@ -2145,7 +2149,7 @@ CAstNode* CParser::ElsePart()
 		Expect(Token::ELSE);
 		pStatements = Statements();
 		pNElse = new CAct65ELSE;
-		pNElse->Create(0, 0, GetCurrentProc());
+		pNElse->Create(0, 0, GetCurrentProc(), (CSection*)GetSymTab()->FindSymbol("CODE", CBin::BinType::SECTION, 0));
 		pNElse->SetChild(pStatements);
 		pElseIfPart = CAstNode::MakeNextList(pElseIfPart, pNElse);
 		break;
@@ -2176,7 +2180,7 @@ CAstNode* CParser::ElseIfPart()
 		case Token::ELSEIF:
 			Expect(Token::ELSEIF);
 			pNELSEIF = new CAct65ELSEIF;
-			pNELSEIF->Create(0, 0, GetCurrentProc());
+			pNELSEIF->Create(0, 0, GetCurrentProc(), (CSection*)GetSymTab()->FindSymbol("CODE", CBin::BinType::SECTION, 0));
 			pN = ThenPart();
 			pNELSEIF->SetChild(pN);
 			pNThenPart = CAstNode::MakeNextList(pNThenPart, pNELSEIF);
@@ -2208,7 +2212,7 @@ CAstNode* CParser::ThenPart()
 		Expect(Token::THEN);
 		pStatements = Statements();
 		pNThen = new CAct65THEN;
-		pNThen->Create(0, 0, GetCurrentProc());
+		pNThen->Create(0, 0, GetCurrentProc(), (CSection*)GetSymTab()->FindSymbol("CODE", CBin::BinType::SECTION, 0));
 		pNThen->SetChild(pStatements);
 		pNRelOp = CAstNode::MakeChildList(pNRelOp, pNThen);
 		break;
@@ -2242,7 +2246,7 @@ CAstNode* CParser::WhileStmt()
 		case Token::WHILE:
 			Expect(Token::WHILE);
 			pN = new CAct65WHILE;
-			pN->Create(0, 0, GetCurrentProc());
+			pN->Create(0, 0, GetCurrentProc(), (CSection*)GetSymTab()->FindSymbol("CODE", CBin::BinType::SECTION, 0));
 			pChild = WhileDO();
 			pChild = pN->SetChild(pChild);
 			pNext = CAstNode::MakeNextList(pNext, pChild);
@@ -2278,7 +2282,7 @@ CAstNode* CParser::WhileDO()
 		Expect(Token::DO);
 		pStatements = Statements();
 		pN = new CAct65DO;
-		pN->Create(0, 0, GetCurrentProc());
+		pN->Create(0, 0, GetCurrentProc(), (CSection*)GetSymTab()->FindSymbol("CODE", CBin::BinType::SECTION, 0));
 		pChild = pN->SetChild(pStatements);
 		pNrel = CAstNode::MakeNextList(pNrel, pChild);
 		break;
@@ -2290,7 +2294,7 @@ CAstNode* CParser::WhileDO()
 	case Token::OD:
 		Expect(Token::OD);
 		pNOD = new CAct65OD;
-		pNOD->Create(0, 0, GetCurrentProc());
+		pNOD->Create(0, 0, GetCurrentProc(), (CSection*)GetSymTab()->FindSymbol("CODE", CBin::BinType::SECTION, 0));
 		CAstNode::MakeNextList(pStatements, pNOD);;
 		break;
 	default:
@@ -2323,7 +2327,7 @@ CAstNode* CParser::DoStmt()
 		case Token::DO:
 			Expect(Token::DO);
 			pN = new CAct65DO;
-			pN->Create(0, 0, GetCurrentProc());
+			pN->Create(0, 0, GetCurrentProc(), (CSection*)GetSymTab()->FindSymbol("CODE", CBin::BinType::SECTION, 0));
 			pChild = DoEND();
 			pN->SetChild(pChild);
 			pNext = CAstNode::MakeNextList(pNext, pN);
@@ -2355,7 +2359,7 @@ CAstNode* CParser::DoEND()
 	case Token::OD:
 		Expect(Token::OD);
 		pNOD = new CAct65OD;
-		pNOD->Create(0, 0, GetCurrentProc());
+		pNOD->Create(0, 0, GetCurrentProc(), (CSection*)GetSymTab()->FindSymbol("CODE", CBin::BinType::SECTION, 0));
 		pStatements = CAstNode::MakeNextList(pStatements, pNOD);
 		break;
 	default:
@@ -2389,6 +2393,7 @@ CAstNode* CParser::EXITstmt()
 		case Token::EXIT:
 			Expect(Token::EXIT);
 			pN = new CAct65EXIT;
+			pN->Create(GetCurrentProc(), (CSection*)GetSymTab()->FindSymbol("CODE", CBin::BinType::SECTION, 0));
 			pNext = CAstNode::MakeNextList(pNext, pN);
 			//----------------------------------------
 			pChild = RetStmt();
@@ -2425,7 +2430,7 @@ CAstNode* CParser::RetStmt()
 		case Token::RETURN:
 			Expect(Token::RETURN);
 			pNodeReturn = new CAct65RETURN;
-			pNodeReturn->Create(0, 0, 0);
+			pNodeReturn->Create(0, 0, 0, (CSection*)GetSymTab()->FindSymbol("CODE", CBin::BinType::SECTION, 0));
 			pChild = ArithExpr();
 			pNodeReturn->SetChild(pChild);
 			pNext = CAstNode::MakeNextList(pNext, pNodeReturn);
@@ -2465,6 +2470,7 @@ CAstNode* CParser::InlineAssembly()
 		case Token::ASM:
 			Expect(Token::ASM);
 			pN = new CAct65ASM;	
+			pN->Create(GetCurrentProc(), (CSection*)GetSymTab()->FindSymbol("CODE", CBin::BinType::SECTION, 0));
 			pChild = InlineAssBlock();
 			pN->SetChild(pChild);
 			pNext = CAstNode::MakeNextList(pNext, pN);
@@ -2537,6 +2543,10 @@ CAstNode* CParser::CodeBlock()
 		case Token('['):
 			Expect(Token('['));
 			pN = new CAct65CodeBlock;
+			pN->Create(
+				(CBin*)GetCurrentProc(), 
+				(CSection*)GetSymTab()->FindSymbol("CODE", CBin::BinType::SECTION, 0)
+			);
 			pChild = ConstListEnd();
 			pN->SetChild(pChild);
 			pNext = CAstNode::MakeNextList(pNext, pN);
@@ -2576,6 +2586,7 @@ CAstNode* CParser::UntillStmt()
 		case Token::UNTIL:
 			Expect(Token::UNTIL);
 			pN = new CAct65UNTILL;
+			pN->Create(GetCurrentProc(), (CSection*)GetSymTab()->FindSymbol("CODE", CBin::BinType::SECTION, 0));
 			pChild = RelOperation();
 			pN->SetChild(pChild);
 			pNext = CAstNode::MakeNextList(pNext, pN);
@@ -2615,6 +2626,7 @@ CAstNode* CParser::Break()
 		case Token::BREAK:
 			Expect(Token::BREAK);
 			pN = new CAct65BREAK;
+			pN->Create(GetCurrentProc(), (CSection*)GetSymTab()->FindSymbol("CODE", CBin::BinType::SECTION, 0));
 			pNext = CAstNode::MakeNextList(pNext, pN);
 			//-------------------------------------
 			pChild = Rti();
@@ -2652,6 +2664,7 @@ CAstNode* CParser::Rti()
 		case Token::RTI:
 			Expect(Token::RTI);
 			pN = new CAct65RTI;
+			pN->Create(GetCurrentProc(), (CSection*)GetSymTab()->FindSymbol("CODE", CBin::BinType::SECTION, 0));
 			pNext = CAstNode::MakeNextList(pNext, pN);
 			//--------------------------------------------
 			pNode = Assignment();
@@ -2706,6 +2719,7 @@ CAstNode* CParser::Assignment()
 		case Token('='):
 			Expect(Token('='));
 			pN = new CAct65AssignEQ;
+			pN->Create(GetCurrentProc(), (CSection*)GetSymTab()->FindSymbol("CODE", CBin::BinType::SECTION, 0));
 			pChild = ArithExpr();
 			pNext = pN->MakeNode(pChild, pNext);
 			pList = CAstNode::MakeNextList(pList, pNext);
@@ -2715,6 +2729,7 @@ CAstNode* CParser::Assignment()
 		case Token::ASSIGN_ADD:
 			Expect(Token::ASSIGN_ADD);
 			pN = new CAct65AssignADD;
+			pN->Create(GetCurrentProc(), (CSection*)GetSymTab()->FindSymbol("CODE", CBin::BinType::SECTION, 0));
 			pChild = ArithExpr();
 			pNext = pN->MakeNode(pChild, pNext);
 			pList = CAstNode::MakeNextList(pList, pNext);
@@ -2724,6 +2739,7 @@ CAstNode* CParser::Assignment()
 		case Token::ASSIGN_AND:
 			Expect(Token::ASSIGN_AND);
 			pN = new CAct65AssignAND;
+			pN->Create(GetCurrentProc(), (CSection*)GetSymTab()->FindSymbol("CODE", CBin::BinType::SECTION, 0));
 			pChild = ArithExpr();
 			pNext = pN->MakeNode(pChild, pNext);
 			pList = CAstNode::MakeNextList(pList, pNext);
@@ -2733,6 +2749,7 @@ CAstNode* CParser::Assignment()
 		case Token::ASSIGN_DIV:
 			Expect(Token::ASSIGN_DIV);
 			pN = new CAct65AssignDIV;
+			pN->Create(GetCurrentProc(), (CSection*)GetSymTab()->FindSymbol("CODE", CBin::BinType::SECTION, 0));
 			pChild = ArithExpr();
 			pNext = pN->MakeNode(pChild, pNext);
 			pList = CAstNode::MakeNextList(pList, pNext);
@@ -2742,6 +2759,7 @@ CAstNode* CParser::Assignment()
 		case Token::ASSIGN_LSH:
 			Expect(Token::ASSIGN_LSH);
 			pN = new CAct65AssignLSh;
+			pN->Create(GetCurrentProc(), (CSection*)GetSymTab()->FindSymbol("CODE", CBin::BinType::SECTION, 0));
 			pChild = ArithExpr();
 			pNext = pN->MakeNode(pChild, pNext);
 			pList = CAstNode::MakeNextList(pList, pNext);
@@ -2751,6 +2769,7 @@ CAstNode* CParser::Assignment()
 		case Token::ASSIGN_MOD:
 			Expect(Token::ASSIGN_MOD);
 			pN = new CAct65AssignMOD;
+			pN->Create(GetCurrentProc(), (CSection*)GetSymTab()->FindSymbol("CODE", CBin::BinType::SECTION, 0));
 			pChild = ArithExpr();
 			pNext = pN->MakeNode(pChild, pNext);
 			pList = CAstNode::MakeNextList(pList, pNext);
@@ -2768,7 +2787,9 @@ CAstNode* CParser::Assignment()
 			break;
 		case Token::ASSIGN_OR:
 			Expect(Token::ASSIGN_OR);
+			pN->Create(GetCurrentProc(), (CSection*)GetSymTab()->FindSymbol("CODE", CBin::BinType::SECTION, 0));
 			pN = new CAct65AssignOR;
+			pN->Create(GetCurrentProc(), (CSection*)GetSymTab()->FindSymbol("CODE", CBin::BinType::SECTION, 0));
 			pChild = ArithExpr();
 			pNext = pN->MakeNode(pChild, pNext);
 			pList = CAstNode::MakeNextList(pList, pNext);
@@ -2787,6 +2808,7 @@ CAstNode* CParser::Assignment()
 		case Token::ASSIGN_SUB:
 			Expect(Token::ASSIGN_SUB);
 			pN = new CAct65AssignSUB;
+			pN->Create(GetCurrentProc(), (CSection*)GetSymTab()->FindSymbol("CODE", CBin::BinType::SECTION, 0));
 			pChild = ArithExpr();
 			pNext = pN->MakeNode(pChild, pNext);
 			pList = CAstNode::MakeNextList(pList, pNext);
@@ -2796,6 +2818,7 @@ CAstNode* CParser::Assignment()
 		case Token::ASSIGN_XOR:
 			Expect(Token::ASSIGN_XOR);
 			pN = new CAct65AssignXOR;
+			pN->Create(GetCurrentProc(), (CSection*)GetSymTab()->FindSymbol("CODE", CBin::BinType::SECTION, 0));
 			pChild = ArithExpr();
 			pNext = pN->MakeNode(pChild, pNext);
 			pList = CAstNode::MakeNextList(pList, pNext);
@@ -2840,24 +2863,28 @@ CAstNode* CParser::RelOperation()
 		case Token::GTEQ:
 			Expect(Token::GTEQ);
 			pN = new CAct65GTEQ;
+			pN->Create(GetCurrentProc(), (CSection*)GetSymTab()->FindSymbol("CODE", CBin::BinType::SECTION, 0));
 			pChild = LogicalOR();
 			pNext = pN->MakeNode(pChild, pNext);
 			break;
 		case Token::LTEQ:
 			Expect(Token::LTEQ);
 			pN = new CAct65LTEQ;
+			pN->Create(GetCurrentProc(), (CSection*)GetSymTab()->FindSymbol("CODE", CBin::BinType::SECTION, 0));
 			pChild = LogicalOR();
 			pNext = pN->MakeNode(pChild, pNext);
 			break;
 		case Token('<'):
 			Expect(Token('<'));
 			pN = new CAct65LessTHAN;
+			pN->Create(GetCurrentProc(), (CSection*)GetSymTab()->FindSymbol("CODE", CBin::BinType::SECTION, 0));
 			pChild = LogicalOR();
 			pNext = pN->MakeNode(pChild, pNext);
 			break;
 		case Token('>'):
 			Expect(Token('>'));
 			pN = new CAct65GreaterTHAN;
+			pN->Create(GetCurrentProc(), (CSection*)GetSymTab()->FindSymbol("CODE", CBin::BinType::SECTION, 0));
 			pChild = LogicalOR();
 			pNext = pN->MakeNode(pChild, pNext);
 			break;
@@ -2865,11 +2892,13 @@ CAstNode* CParser::RelOperation()
 			Expect(Token('='));
 			pN = new CAct65EqualTO;
 			pChild = LogicalOR();
+			pN->Create(GetCurrentProc(), (CSection*)GetSymTab()->FindSymbol("CODE", CBin::BinType::SECTION, 0));
 			pNext = pN->MakeNode(pChild, pNext);
 			break;
 		case Token('#'):	// not equals
 			Expect(Token('#'));
 			pN = new CAct65NotEquelTO;
+			pN->Create(GetCurrentProc(), (CSection*)GetSymTab()->FindSymbol("CODE", CBin::BinType::SECTION, 0));
 			pChild = LogicalOR();
 			pNext = pN->MakeNode(pChild, pNext);
 			break;
@@ -2901,6 +2930,7 @@ CAstNode* CParser::LogicalOR()
 		case Token::OR:	//logical and
 			Expect(Token::OR);
 			pN = new CAct65LogicalOR;
+			pN->Create(GetCurrentProc(), (CSection*)GetSymTab()->FindSymbol("CODE", CBin::BinType::SECTION, 0));
 			pChild = LogicalAND();
 			pNext = pN->MakeNode(pChild, pNext);
 			break;
@@ -2932,6 +2962,7 @@ CAstNode* CParser::LogicalAND()
 		case Token::AND:	//Logical AND
 			Expect(Token::AND);
 			pN = new CAct65LogicalAND;
+			pN->Create(GetCurrentProc(), (CSection*)GetSymTab()->FindSymbol("CODE", CBin::BinType::SECTION, 0));
 			pChild = ArithExpr();
 			pNext = pN->MakeNode(pChild, pNext);
 			break;
@@ -2968,6 +2999,7 @@ CAstNode* CParser::ArithExpr()
 		case Token('%'):	// botwise OR
 			Expect(Token('%'));
 			pN = new CAct65BitWiseOR;
+			pN->Create(GetCurrentProc(), (CSection*)GetSymTab()->FindSymbol("CODE", CBin::BinType::SECTION, 0));
 			pChild = BitwiseAND();
 			pNext = pN->MakeNode(pChild, pNext);
 			break;
@@ -2999,6 +3031,7 @@ CAstNode* CParser::BitwiseAND()
 		case Token('&'):	// Bitwise AND
 			Expect(Token('&'));
 			pN = new CAct65BitWiseAND;
+			pN->Create(GetCurrentProc(), (CSection*)GetSymTab()->FindSymbol("CODE", CBin::BinType::SECTION, 0));
 			pChild = BitwiseXOR();
 			pNext = pN->MakeNode(pChild, pNext);
 			break;
@@ -3034,6 +3067,7 @@ CAstNode* CParser::BitwiseXOR()
 		case Token::XOR:	
 			Expect(Token::XOR);
 			pN = new CAct65XOR;
+			pN->Create(GetCurrentProc(), (CSection*)GetSymTab()->FindSymbol("CODE", CBin::BinType::SECTION, 0));
 			pChild = AddExpr();
 			pNext = pN->MakeNode(pChild, pNext);
 			break;
@@ -3066,12 +3100,14 @@ CAstNode* CParser::AddExpr()
 		case Token('+'):
 			Expect(Token('+'));
 			pN = new CAct65ADD;
+			pN->Create(GetCurrentProc(), (CSection*)GetSymTab()->FindSymbol("CODE", CBin::BinType::SECTION, 0));
 			pChild = ShifExpr();
 			pNext = pN->MakeNode(pNext, pChild);
 			break;
 		case Token('-'):
 			Expect(Token('-'));
 			pN = new CAct65SUB;
+			pN->Create(GetCurrentProc(), (CSection*)GetSymTab()->FindSymbol("CODE", CBin::BinType::SECTION, 0));
 			pChild = ShifExpr();
 			pNext = pN->MakeNode(pChild, pNext);
 			break;
@@ -3142,12 +3178,14 @@ CAstNode* CParser::ShifExpr()
 		case Token::LSH:
 			Expect(Token::LSH);
 			pN = new CAct65LSH;
+			pN->Create(GetCurrentProc(), (CSection*)GetSymTab()->FindSymbol("CODE", CBin::BinType::SECTION, 0));
 			pChild = MultExpr();
 			pNext = pN->MakeNode(pChild, pNext);
 			break;
 		case Token::RSH:
 			Expect(Token::RSH);
 			pN = new CAct65RSH;
+			pN->Create(GetCurrentProc(), (CSection*)GetSymTab()->FindSymbol("CODE", CBin::BinType::SECTION, 0));
 			pChild = MultExpr();
 			pNext = pN->MakeNode(pChild, pNext);
 			break;
@@ -3181,18 +3219,21 @@ CAstNode* CParser::MultExpr()
 		case Token('*'):
 			Expect(Token('*'));
 			pN = new CAct65MUL;
+			pN->Create(GetCurrentProc(), (CSection*)GetSymTab()->FindSymbol("CODE", CBin::BinType::SECTION, 0));
 			pChild = Unary();
 			pNext = pN->MakeNode(pChild, pNext);
 			break;
 		case Token('/'):
 			Expect(Token('/'));
 			pN = new CAct65DIV;
+			pN->Create(GetCurrentProc(), (CSection*)GetSymTab()->FindSymbol("CODE", CBin::BinType::SECTION, 0));
 			pChild = Unary();
 			pNext = pN->MakeNode(pChild, pNext);
 			break;
 		case Token::MOD:
 			Expect(Token::MOD);
 			pN = new CAct65MOD;
+			pN->Create(GetCurrentProc(), (CSection*)GetSymTab()->FindSymbol("CODE", CBin::BinType::SECTION, 0));
 			pChild = Unary();
 			pNext = pN->MakeNode(pChild, pNext);
 			break;
@@ -3224,7 +3265,8 @@ CAstNode* CParser::Unary()
 		case Token('-'):
 			Expect(Token('-'));
 			pN = new CAct65UnaryNEG;
-			 break;
+			pN->Create(GetCurrentProc(), (CSection*)GetSymTab()->FindSymbol("CODE", CBin::BinType::SECTION, 0));
+			break;
 		default:
 			pChild = Value();
 			if (pN)
@@ -3288,6 +3330,7 @@ CAstNode* CParser::Value()
 	int V = 0;
 	CSymbol* pSym = 0;
 	CValue* pVal = 0;
+	CSection* pSec = 0;
 
 	pNext = MemContentsType();
 	switch (m_LookAheadToken)
@@ -3296,13 +3339,16 @@ CAstNode* CParser::Value()
 		V = GetLexer()->GetLexValue();
 		Expect(Token::NUMBER);
 		pN = new CAct65NUMBER;
+		pN->Create(GetCurrentProc(), (CSection*)GetSymTab()->FindSymbol("CODE", CBin::BinType::SECTION, 0));
 		pN->CreateValue(V);
 		pNext = CAstNode::MakeNextList(pNext,pN);
 		break;
 	case Token::CUR_LOC:
 		Expect(Token::CUR_LOC);
 		pN = new CAct65CurrentLocation;
-		V = GetCurrentSection()->GetLocationCounter();
+		pN->Create(GetCurrentProc(), (CSection*)GetSymTab()->FindSymbol("CODE", CBin::BinType::SECTION, 0));
+		pSec = (CSection*)GetSymTab()->FindSymbol("CODE", CBin::BinType::SECTION,0);
+		V = pSec->GetLocationCounter();
 		pN->CreateValue(V);
 		pNext = CAstNode::MakeNextList(pNext, pN);
 		break;
@@ -3310,6 +3356,7 @@ CAstNode* CParser::Value()
 		Expect(Token('@'));
 		pChild = AddressOf();
 		pN = new CAct65AddressOF;
+		pN->Create(GetCurrentProc(), (CSection*)GetSymTab()->FindSymbol("CODE", CBin::BinType::SECTION, 0));
 		pChild = pN->SetChild(pChild);
 		pNext = CAstNode::MakeNextList(pNext, pChild);
 		break;
@@ -3341,6 +3388,7 @@ CAstNode* CParser::AddressOf()
 		pSym = GetLexer()->GetLexSymbol();
 		Expect(Token::INTERRUPT_IDENT);
 		pN = new CAct65INTERRUPT;
+		pN->Create(GetCurrentProc(), (CSection*)GetSymTab()->FindSymbol("CODE", CBin::BinType::SECTION, 0));
 		pN->SetSymbol(pSym);
 		pNext = pN;
 		break;
@@ -3348,6 +3396,7 @@ CAstNode* CParser::AddressOf()
 		pSym = GetLexer()->GetLexSymbol();
 		Expect(Token::FUNC_IDENT);
 		pN = new CAct65FUNC;
+		pN->Create(GetCurrentProc(), (CSection*)GetSymTab()->FindSymbol("CODE", CBin::BinType::SECTION, 0));
 		pN->SetSymbol(pSym);
 		pNext = pN;
 		break;
@@ -3355,6 +3404,7 @@ CAstNode* CParser::AddressOf()
 		pSym = GetLexer()->GetLexSymbol();
 		Expect(Token::PROC_IDENT);
 		pN = new CAct65PROC;
+		pN->Create(GetCurrentProc(), (CSection*)GetSymTab()->FindSymbol("CODE", CBin::BinType::SECTION, 0));
 		pN->SetSymbol(pSym);
 		pNext = pN;
 		break;
@@ -3386,6 +3436,7 @@ CAstNode* CParser::MemContentsType()
 		case Token('^'):
 			Expect(Token('^'));
 			pN = new CAct65PointerDeREF;;
+			pN->Create(GetCurrentProc(), (CSection*)GetSymTab()->FindSymbol("CODE", CBin::BinType::SECTION, 0));
 			pNext = pN->MakeNode(pNext, 0);
 			Loop = false;
 			break;
@@ -3393,6 +3444,7 @@ CAstNode* CParser::MemContentsType()
 			Expect(Token('.'));
 			pChild = MemContents();
 			pN = new CAct65TypeDotField;
+			pN->Create(GetCurrentProc(), (CSection*)GetSymTab()->FindSymbol("CODE", CBin::BinType::SECTION, 0));
 			pNext = pN->MakeNode(pChild,pNext);
 			break;
 		default:
@@ -3424,7 +3476,8 @@ CAstNode* CParser::MemContents()
 		pSym = GetLexer()->GetLexSymbol();
 		Expect(Token::VAR_GLOBAL);
 		pChild = ArrayIndex();
-		pN = new CAct65IDENT;
+		pN = new CAct65VarGlobal;
+		pN->Create(GetCurrentProc(), (CSection*)GetSymTab()->FindSymbol("CODE", CBin::BinType::SECTION, 0));
 		pChild = pN->SetChild(pChild);
 		pN->SetSymbol(pSym);
 		pNext = CAstNode::MakeNextList(pNext, pChild);
@@ -3433,7 +3486,8 @@ CAstNode* CParser::MemContents()
 		pSym = GetLexer()->GetLexSymbol();
 		Expect(Token::VAR_LOCAL);
 		pChild = ArrayIndex();
-		pN = new CAct65IDENT;
+		pN = new CAct65VarLocal;
+		pN->Create(GetCurrentProc(), (CSection*)GetSymTab()->FindSymbol("CODE", CBin::BinType::SECTION, 0));
 		pChild = pN->SetChild(pChild);
 		pN->SetSymbol(pSym);
 		pNext = CAstNode::MakeNextList(pNext, pChild);
@@ -3442,7 +3496,8 @@ CAstNode* CParser::MemContents()
 		pSym = GetLexer()->GetLexSymbol();
 		Expect(Token::VAR_PARAM);
 		pChild = ArrayIndex();
-		pN = new CAct65IDENT;
+		pN = new CAct65VarParameter;
+		pN->Create(GetCurrentProc(), (CSection*)GetSymTab()->FindSymbol("CODE", CBin::BinType::SECTION, 0));
 		pChild = pN->SetChild(pChild);
 		pN->SetSymbol(pSym);
 		pNext = CAstNode::MakeNextList(pNext, pChild);
@@ -3459,7 +3514,8 @@ CAstNode* CParser::MemContents()
 	case Token::LABEL:
 		pSym = GetLexer()->GetLexSymbol();
 		Expect(Token::LABEL);
-		pN = new CAct65IDENT;
+		pN = new CAct65Label;
+		pN->Create(GetCurrentProc(), (CSection*)GetSymTab()->FindSymbol("CODE", CBin::BinType::SECTION, 0));
 		pChild = pN->SetChild(pChild);
 		pN->SetSymbol(pSym);
 		pNext = CAstNode::MakeNextList(pNext, pChild);
@@ -3487,6 +3543,7 @@ CAstNode* CParser::ArrayIndex()
 		pChild = ArithExpr();
 		Expect(Token(')'));
 		pN = new CAct65ArrayINDEX;
+		pN->Create(GetCurrentProc(), (CSection*)GetSymTab()->FindSymbol("CODE", CBin::BinType::SECTION, 0));
 		pNext = pN->SetChild(pChild);
 		pNext->MakeNode();
 		break;
@@ -3542,12 +3599,14 @@ CAstNode* CParser::MemoryValue()
 		case Token('^'):
 			Expect(Token('^'));
 			pNPointerDeReference = new CAct65PointerDeREF;
+			pNPointerDeReference->Create(GetCurrentProc(), (CSection*)GetSymTab()->FindSymbol("CODE", CBin::BinType::SECTION, 0));
 			pNMemValLocation->SetChild(pNPointerDeReference);
 			Loop = false;
 			break;
 		case Token('.'):
 			Expect(Token('.'));
 			pNFeildMember = new CAct65TypeFIELD;
+			pNFeildMember->Create(GetCurrentProc(), (CSection*)GetSymTab()->FindSymbol("CODE", CBin::BinType::SECTION, 0));
 			pNMemValLocation->SetChild(pNFeildMember);			break;
 		default:
 			Loop = false;
@@ -3578,6 +3637,7 @@ CAstNode* CParser::MemValLocation()
 		Expect(Token::VAR_GLOBAL);
 		pChild = ArrayIndex();
 		pN = new CAct65IDENT;
+		pN->Create(GetCurrentProc(), (CSection*)GetSymTab()->FindSymbol("CODE", CBin::BinType::SECTION, 0));
 		pChild = pN->SetChild(pChild);
 		pN->SetSymbol(pSym);
 		pNext = CAstNode::MakeNextList(pNext, pChild);
@@ -3587,6 +3647,7 @@ CAstNode* CParser::MemValLocation()
 		Expect(Token::VAR_LOCAL);
 		pChild = ArrayIndex();
 		pN = new CAct65IDENT;
+		pN->Create(GetCurrentProc(), (CSection*)GetSymTab()->FindSymbol("CODE", CBin::BinType::SECTION, 0));
 		pChild = pN->SetChild(pChild);
 		pN->SetSymbol(pSym);
 		pNext = CAstNode::MakeNextList(pNext, pChild);
@@ -3596,6 +3657,7 @@ CAstNode* CParser::MemValLocation()
 		Expect(Token::VAR_PARAM);
 		pChild = ArrayIndex();
 		pN = new CAct65IDENT;
+		pN->Create(GetCurrentProc(), (CSection*)GetSymTab()->FindSymbol("CODE", CBin::BinType::SECTION, 0));
 		pChild = pN->SetChild(pChild);
 		pN->SetSymbol(pSym);
 		pNext = CAstNode::MakeNextList(pNext, pChild);
@@ -3642,6 +3704,7 @@ CAstNode* CParser::SysDecl()
 			Expect(Token::VECTOR);
 			pChild = VectorEnd();
 			pN = new CAct65VECTOR;
+			pN->Create(GetCurrentProc(), (CSection*)GetSymTab()->FindSymbol("CODE", CBin::BinType::SECTION, 0));
 			pChild = pN->SetChild(pChild);
 			pNext = CAstNode::MakeNextList(pNext, pChild);;
 			//--------------------------------------
@@ -3741,6 +3804,7 @@ CAstNode* CParser::TypeDefDecl()
 			Expect(Token::TYPE);
 			pChild = TypeDef();
 			pN = new CAct65TYPE;
+			pN->Create(GetCurrentProc(), (CSection*)GetSymTab()->FindSymbol("CODE", CBin::BinType::SECTION, 0));
 			pChild = pN->SetChild(pChild);
 			pNext = CAstNode::MakeNextList(pNext, pChild);
 			//-------------------------------------------
@@ -3953,7 +4017,7 @@ CAstNode* CParser::TypeField(CSymbol* pFuncSym)
 			//-------------------------------
 			pOTC = new CChainTypeSpecItem;
 			pOTC->Create();
-			pOTC->SetSpec(CChainTypeSpecItem::Spec::TYPE);
+			pOTC->SetSpec(CChainTypeSpecItem::Spec::TYPE_FIELD);
 			pTypeChain->AddToTail(pOTC);		//node -> ROOT
 			//------------------ Parse ------------------------
 			Expect(Token::RECORDTYPE);
@@ -4089,12 +4153,12 @@ void CParser::DECLAREParamList()
 			//-------------------------
 			pOTC = new CChainTypeSpecItem;
 			pOTC->Create();
-			pOTC->SetSpec(CChainTypeSpecItem::Spec::PARAM);
+			pOTC->SetSpec(CChainTypeSpecItem::Spec::PARAM_SCOPE);
 			pTypeChain->AddToTail(pOTC);
 			//-------------------------
 			pOTC = new CChainTypeSpecItem;
 			pOTC->Create();
-			pOTC->SetSpec(CChainTypeSpecItem::Spec::TYPE);
+			pOTC->SetSpec(CChainTypeSpecItem::Spec::TYPEDEF);
 			pTypeChain->AddToTail(pOTC);
 			//--------------------------
 			Expect(Token::RECORDTYPE);
@@ -4107,7 +4171,7 @@ void CParser::DECLAREParamList()
 			//-------------------------
 			pOTC = new CChainTypeSpecItem;
 			pOTC->Create();
-			pOTC->SetSpec(CChainTypeSpecItem::Spec::PARAM);
+			pOTC->SetSpec(CChainTypeSpecItem::Spec::PARAM_SCOPE);
 			pTypeChain->AddToTail(pOTC);
 			//-------------------------
 			pOTC = new CChainTypeSpecItem;
@@ -4125,7 +4189,7 @@ void CParser::DECLAREParamList()
 			//-------------------------
 			pOTC = new CChainTypeSpecItem;
 			pOTC->Create();
-			pOTC->SetSpec(CChainTypeSpecItem::Spec::PARAM);
+			pOTC->SetSpec(CChainTypeSpecItem::Spec::PARAM_SCOPE);
 			pTypeChain->AddToTail(pOTC);
 			//-------------------------
 			pOTC = new CChainTypeSpecItem;
@@ -4143,7 +4207,7 @@ void CParser::DECLAREParamList()
 			//-------------------------
 			pOTC = new CChainTypeSpecItem;
 			pOTC->Create();
-			pOTC->SetSpec(CChainTypeSpecItem::Spec::PARAM);
+			pOTC->SetSpec(CChainTypeSpecItem::Spec::PARAM_SCOPE);
 			pTypeChain->AddToTail(pOTC);
 			//-------------------------
 			pOTC = new CChainTypeSpecItem;
@@ -4161,7 +4225,7 @@ void CParser::DECLAREParamList()
 			//-------------------------
 			pOTC = new CChainTypeSpecItem;
 			pOTC->Create();
-			pOTC->SetSpec(CChainTypeSpecItem::Spec::PARAM);
+			pOTC->SetSpec(CChainTypeSpecItem::Spec::PARAM_SCOPE);
 			pTypeChain->AddToTail(pOTC);
 			//-------------------------
 			pOTC = new CChainTypeSpecItem;
@@ -4179,7 +4243,7 @@ void CParser::DECLAREParamList()
 			//-------------------------
 			pOTC = new CChainTypeSpecItem;
 			pOTC->Create();
-			pOTC->SetSpec(CChainTypeSpecItem::Spec::PARAM);
+			pOTC->SetSpec(CChainTypeSpecItem::Spec::PARAM_SCOPE);
 			pTypeChain->AddToTail(pOTC);
 			//-------------------------
 			pOTC = new CChainTypeSpecItem;
@@ -4395,7 +4459,7 @@ void CParser::DECLAREFuncType()
 			pTypeChain = new CChainTypeSpec;
 			pOTC = new CChainTypeSpecItem;
 			pOTC->Create();
-			pOTC->SetSpec(CChainTypeSpecItem::Spec::TYPE);
+			pOTC->SetSpec(CChainTypeSpecItem::Spec::TYPEDEF);
 			pTypeChain->AddToTail(pOTC);
 			Expect(Token::RECORDTYPE);
 			DECLAREFuncTypeSpec(pTypeChain);
@@ -4482,7 +4546,7 @@ void CParser::DECLAREfunction(CChainTypeSpec* pTypeChain)
 		Expect(Token::FUNC);
 		pOTC = new CChainTypeSpecItem;
 		pOTC->Create();
-		pOTC->SetSpec(CChainTypeSpecItem::Spec::FUNC);
+		pOTC->SetSpec(CChainTypeSpecItem::Spec::FUNC_SCOPE);
 		pTypeChain->AddToTail(pOTC);
 		DECLAREFuncName(pTypeChain);
 		break;
@@ -4490,7 +4554,7 @@ void CParser::DECLAREfunction(CChainTypeSpec* pTypeChain)
 		Expect(Token::PROC);
 		pOTC = new CChainTypeSpecItem;
 		pOTC->Create();
-		pOTC->SetSpec(CChainTypeSpecItem::Spec::PROC);
+		pOTC->SetSpec(CChainTypeSpecItem::Spec::PROC_SCOPE);
 		pTypeChain->AddToTail(pOTC);
 		DECLAREFuncName(pTypeChain);
 		break;
@@ -4498,7 +4562,7 @@ void CParser::DECLAREfunction(CChainTypeSpec* pTypeChain)
 		Expect(Token::INTERRUPT);
 		pOTC = new CChainTypeSpecItem;
 		pOTC->Create();
-		pOTC->SetSpec(CChainTypeSpecItem::Spec::INTERRUPT);
+		pOTC->SetSpec(CChainTypeSpecItem::Spec::INTERRUPT_SCOPE);
 		pTypeChain->AddToTail(pOTC);
 		DECLAREFuncName(pTypeChain);
 		break;
@@ -4533,17 +4597,17 @@ void CParser::DECLAREFuncName(CChainTypeSpec* pTypeChain)
 	case Token::IDENT:
 		pSym = GetLexer()->GetLexSymbol();
 		pSym->CreateTypeChain(pTypeChain);
-		if (pTypeChain->Is(CChainTypeSpecItem::Spec::FUNC))
+		if (pTypeChain->Is(CChainTypeSpecItem::Spec::FUNC_SCOPE))
 		{
 			pSym->SetIdentType(CBin::IdentType::FUNC);
 			pSym->SetToken(Token::FUNC_IDENT);
 		}
-		else if (pTypeChain->Is(CChainTypeSpecItem::Spec::PROC))
+		else if (pTypeChain->Is(CChainTypeSpecItem::Spec::PROC_SCOPE))
 		{
 			pSym->SetIdentType(CBin::IdentType::PROC);
 			pSym->SetToken(Token::PROC_IDENT);
 		}
-		else if (pTypeChain->Is(CChainTypeSpecItem::Spec::INTERRUPT))
+		else if (pTypeChain->Is(CChainTypeSpecItem::Spec::INTERRUPT_SCOPE))
 		{
 			pSym->SetIdentType(CBin::IdentType::IRQPROC);
 			pSym->SetToken(Token::INTERRUPT_IDENT);
@@ -4594,11 +4658,11 @@ CAstNode* CParser::FundamentalDecl()
 			pTC->Create();
 			pOTC = new CChainTypeSpecItem;
 			pOTC->Create();
-			pOTC->SetSpec(CChainTypeSpecItem::Spec::GLOBAL);
+			pOTC->SetSpec(CChainTypeSpecItem::Spec::GLOBAL_SCOPE);
 			pTC->AddToTail(pOTC);		//node -> ROOT
 			pOTC = new CChainTypeSpecItem;
 			pOTC->Create();
-			pOTC->SetSpec(CChainTypeSpecItem::Spec::TYPE);
+			pOTC->SetSpec(CChainTypeSpecItem::Spec::TYPE_FIELD);
 			pTC->AddToTail(pOTC);
 			//------------- Parsing -----------------------
 			Expect(Token::RECORDTYPE);
@@ -4616,7 +4680,7 @@ CAstNode* CParser::FundamentalDecl()
 			//-----------------------
 			pOTC = new CChainTypeSpecItem;
 			pOTC->Create();
-			pOTC->SetSpec(CChainTypeSpecItem::Spec::GLOBAL);
+			pOTC->SetSpec(CChainTypeSpecItem::Spec::GLOBAL_SCOPE);
 			pTC->AddToTail(pOTC);
 			//-------------------------------
 			pOTC = new CChainTypeSpecItem;
@@ -4639,7 +4703,7 @@ CAstNode* CParser::FundamentalDecl()
 			//-------------------------
 			pOTC = new CChainTypeSpecItem;
 			pOTC->Create();
-			pOTC->SetSpec(CChainTypeSpecItem::Spec::GLOBAL);
+			pOTC->SetSpec(CChainTypeSpecItem::Spec::GLOBAL_SCOPE);
 			pTC->AddToTail(pOTC);
 			//--------------------------------------
 			pOTC = new CChainTypeSpecItem;
@@ -4662,7 +4726,7 @@ CAstNode* CParser::FundamentalDecl()
 			//----------------------
 			pOTC = new CChainTypeSpecItem;
 			pOTC->Create();
-			pOTC->SetSpec(CChainTypeSpecItem::Spec::GLOBAL);
+			pOTC->SetSpec(CChainTypeSpecItem::Spec::GLOBAL_SCOPE);
 			pTC->AddToTail(pOTC);		//node -> ROOT
 			//------------------------
 			pOTC = new CChainTypeSpecItem;
@@ -4685,7 +4749,7 @@ CAstNode* CParser::FundamentalDecl()
 			//----------------------
 			pOTC = new CChainTypeSpecItem;
 			pOTC->Create();
-			pOTC->SetSpec(CChainTypeSpecItem::Spec::GLOBAL);
+			pOTC->SetSpec(CChainTypeSpecItem::Spec::GLOBAL_SCOPE);
 			pTC->AddToTail(pOTC);		
 			//------------------------------
 			pOTC = new CChainTypeSpecItem;
@@ -4708,7 +4772,7 @@ CAstNode* CParser::FundamentalDecl()
 			//----------------------
 			pOTC = new CChainTypeSpecItem;
 			pOTC->Create();
-			pOTC->SetSpec(CChainTypeSpecItem::Spec::GLOBAL);
+			pOTC->SetSpec(CChainTypeSpecItem::Spec::GLOBAL_SCOPE);
 			pTC->AddToTail(pOTC);
 			//-----------------------------
 			pOTC = new CChainTypeSpecItem;
@@ -4731,12 +4795,12 @@ CAstNode* CParser::FundamentalDecl()
 			//----------------------
 			pOTC = new CChainTypeSpecItem;
 			pOTC->Create();
-			pOTC->SetSpec(CChainTypeSpecItem::Spec::GLOBAL);
+			pOTC->SetSpec(CChainTypeSpecItem::Spec::GLOBAL_SCOPE);
 			pTC->AddToTail(pOTC);		
 			//-------------------------
 			pOTC = new CChainTypeSpecItem;
 			pOTC->Create();
-			pOTC->SetSpec(CChainTypeSpecItem::Spec::PROC);
+			pOTC->SetSpec(CChainTypeSpecItem::Spec::PROC_SCOPE);
 			pTC->AddToTail(pOTC);
 			//------------------- Parsing ----------------------
 			Expect(Token::PROC);
@@ -4754,13 +4818,13 @@ CAstNode* CParser::FundamentalDecl()
 			//----------------------
 			pOTC = new CChainTypeSpecItem;
 			pOTC->Create();
-			pOTC->SetSpec(CChainTypeSpecItem::Spec::INTERRUPT);
+			pOTC->SetSpec(CChainTypeSpecItem::Spec::INTERRUPT_SCOPE);
 			pTC->AddToTail(pOTC);
 			//----------------- Parsing -------------------
 			Expect(Token::INTERRUPT);
 			pN = new CAct65INTERRUPT;
 			pChild = IrqDecl(pTC);
-			pN->Create(0, 0, pChild->GetSymbol());
+			pN->Create(0, 0, pChild->GetSymbol(), (CSection*)GetSymTab()->FindSymbol("CODE", CBin::BinType::SECTION, 0));
 			//------------Abstract syntax Tree Node -----------
 			pN->SetChild(pChild);
 			pOtherNode = IrqBody();
@@ -4915,44 +4979,22 @@ CAstNode* CParser::Ident(CChainTypeSpec* pTypeChain)
 	char* pS = new char[2048];
 
 	for (int i = 0; i < 2048; i++) pS[i] = 0;
-	pTypeChain->Print(pS,2048,1,0);
-	fprintf(LogFile(), "Ident: TypeChain:%s\n", pS);
 	switch (m_LookAheadToken)
 	{
 	case Token::IDENT:
 		pSym = GetLexer()->GetLexSymbol();
 		pSym->CreateTypeChain(pTypeChain);
-		if (pTypeChain->Is(CChainTypeSpecItem::Spec::FUNC))
+		pTypeChain->Print(pS, 2048, 2, pSym->GetName());
+		fprintf(LogFile(), "TypeChain:%s\n", pS);
+		switch (pTypeChain->GetScope())
 		{
-			pSym->SetIdentType(CBin::IdentType::FUNC);
-			pSym->SetToken(Token::FUNC_IDENT);
-			GetLexer()->GetSymTab()->AddSymbol(pSym, CBin::BinType::SYMBOL);
-		}
-		else if (pTypeChain->Is(CChainTypeSpecItem::Spec::PROC))
-		{
-			pSym->SetIdentType(CBin::IdentType::PROC);
-			pSym->SetToken(Token::PROC_IDENT);
-			GetLexer()->GetSymTab()->AddSymbol(pSym, CBin::BinType::SYMBOL);
-		}
-		else if (pTypeChain->Is(CChainTypeSpecItem::Spec::INTERRUPT))
-		{
-			pSym->SetIdentType(CBin::IdentType::IRQPROC);
-			pSym->SetToken(Token::INTERRUPT_IDENT);
-			GetLexer()->GetSymTab()->AddSymbol(pSym, CBin::BinType::SYMBOL);
-		}
-		else if (pTypeChain->Is(CChainTypeSpecItem::Spec::GLOBAL))
-		{
+		case CChainTypeSpecItem::Spec::GLOBAL_SCOPE:
 			pSym->SetIdentType(CBin::IdentType::GLOBAL);
 			pSym->SetToken(Token::VAR_GLOBAL);
 			GetLexer()->GetSymTab()->AddSymbol(pSym, CBin::BinType::SYMBOL);
 			pSym->SetSection(FindSection("GLOBALS"));
-		}
-		else if (pTypeChain->Is(CChainTypeSpecItem::Spec::TYPE_FIELD))
-		{
-			pSym->SetToken(Token::TYPE_FIELD);
-		}
-		else if (pTypeChain->Is(CChainTypeSpecItem::Spec::LOCAL))
-		{
+			break;
+		case CChainTypeSpecItem::Spec::LOCAL_SCOPE:
 			pSym->SetSection(FindSection("LOCALS"));
 			pSym->SetToken(Token::VAR_LOCAL);
 			if (GetCurrentProc())
@@ -4961,7 +5003,7 @@ CAstNode* CParser::Ident(CChainTypeSpec* pTypeChain)
 
 				pCLI->Create(pSym);
 				pSym->SetIdentType(CBin::IdentType::LOCAL);
-				if(GetCurrentProc()->GetLocalVars())
+				if (GetCurrentProc()->GetLocalVars())
 					GetCurrentProc()->GetLocalVars()->AddToTail(pCLI);
 				else
 				{
@@ -4971,13 +5013,33 @@ CAstNode* CParser::Ident(CChainTypeSpec* pTypeChain)
 			}
 			else
 			{
-				fprintf(LogFile(), "Local Variable, But no PROC? Symbol:%s Line:%d\n", 
+				fprintf(LogFile(), "Local Variable, But no PROC? Symbol:%s Line:%d\n",
 					pSym->GetName(),
 					GetLexer()->GetLineNumber()
 				);
 				Act()->Exit(354);
 			}
 			// Do Not Add Local Symbol to Symbol Table
+			break;
+		case CChainTypeSpecItem::Spec::PARAM_SCOPE:
+			break;
+		case CChainTypeSpecItem::Spec::PROC_SCOPE:
+			pSym->SetIdentType(CBin::IdentType::PROC);
+			pSym->SetToken(Token::PROC_IDENT);
+			GetLexer()->GetSymTab()->AddSymbol(pSym, CBin::BinType::SYMBOL);
+			break;
+		case CChainTypeSpecItem::Spec::FUNC_SCOPE:
+			pSym->SetIdentType(CBin::IdentType::FUNC);
+			pSym->SetToken(Token::FUNC_IDENT);
+			GetLexer()->GetSymTab()->AddSymbol(pSym, CBin::BinType::SYMBOL);
+			break;
+		case CChainTypeSpecItem::Spec::INTERRUPT_SCOPE:
+			pSym->SetIdentType(CBin::IdentType::IRQPROC);
+			pSym->SetToken(Token::INTERRUPT_IDENT);
+			GetLexer()->GetSymTab()->AddSymbol(pSym, CBin::BinType::SYMBOL);
+			break;
+		default:
+			break;
 		}
 		//---------------- Parse --------------------------
 		Expect(Token::IDENT);
@@ -4991,7 +5053,7 @@ CAstNode* CParser::Ident(CChainTypeSpec* pTypeChain)
 		//-------------- Declaration -------------------
 		pOTC = new CChainTypeSpecItem;
 		pOTC->Create();
-		pOTC->SetSpec(CChainTypeSpecItem::Spec::FUNC);
+		pOTC->SetSpec(CChainTypeSpecItem::Spec::FUNC_SCOPE);
 		pTypeChain->AddToTail(pOTC);
 		//----------------- Parsing --------------------
 		Expect(Token::FUNC);
@@ -5099,7 +5161,7 @@ CAstNode* CParser::IrqDecl(CChainTypeSpec* pTypeChain)
 	CAstNode* pInit = 0;
 	CAstNode* pChild = 0;
 	CSymbol* pSym;
-
+	CSection* pSection = 0;
 	//--------------------
 	// Set symbol type to
 	// INTERRUPT_IDENT
@@ -5114,7 +5176,8 @@ CAstNode* CParser::IrqDecl(CChainTypeSpec* pTypeChain)
 		pSym->SetIdentType(CBin::IdentType::IRQPROC);
 		pSym->SetToken(Token::INTERRUPT_IDENT);
 		pSym->CreateTypeChain(pTypeChain);
-		pSym->SetSection(GetCurrentSection());
+		pSection = (CSection*)GetSymTab()->FindSymbol("CODE", CBin::BinType::SECTION, 0);
+		pSym->SetSection(pSection);
 		//--------------------------
 		// Set the current IRQ proc
 		// name that will be used
@@ -5172,7 +5235,7 @@ CAstNode* CParser::IrqBody()
 	CAstNode* pParamList = 0;
 
 	pN = new CAct65BODY;
-	pN->Create(0, 0, GetCurrentProc());
+	pN->Create(0, 0, GetCurrentProc(), (CSection*)GetSymTab()->FindSymbol("CODE", CBin::BinType::SECTION, 0));
 	pParamList = IrqDeclParams();
 	pChild = LocalDecls();
 	pParamList = CAstNode::MakeNextList(pParamList, pChild);
@@ -5445,7 +5508,7 @@ CAstNode* CParser::ParamList(CSymbol* pFuncSym)
 			//------------------------------
 			pOTC = new CChainTypeSpecItem;
 			pOTC->Create();
-			pOTC->SetSpec(CChainTypeSpecItem::Spec::PARAM);
+			pOTC->SetSpec(CChainTypeSpecItem::Spec::PARAM_SCOPE);
 			pTypeChain->AddToTail(pOTC);		//node -> ROOT
 			//--------------------------------
 			pOTC = new CChainTypeSpecItem;
@@ -5468,7 +5531,7 @@ CAstNode* CParser::ParamList(CSymbol* pFuncSym)
 			//----------------------------
 			pOTC = new CChainTypeSpecItem;
 			pOTC->Create();
-			pOTC->SetSpec(CChainTypeSpecItem::Spec::PARAM);
+			pOTC->SetSpec(CChainTypeSpecItem::Spec::PARAM_SCOPE);
 			pTypeChain->AddToTail(pOTC);		//node -> ROOT
 			//--------------------------------
 			pOTC = new CChainTypeSpecItem;
@@ -5491,7 +5554,7 @@ CAstNode* CParser::ParamList(CSymbol* pFuncSym)
 			//---------------------------------------
 			pOTC = new CChainTypeSpecItem;
 			pOTC->Create();
-			pOTC->SetSpec(CChainTypeSpecItem::Spec::PARAM);
+			pOTC->SetSpec(CChainTypeSpecItem::Spec::PARAM_SCOPE);
 			pTypeChain->AddToTail(pOTC);		//node -> ROOT
 			//------------------------------------
 			pOTC = new CChainTypeSpecItem;
@@ -5513,7 +5576,7 @@ CAstNode* CParser::ParamList(CSymbol* pFuncSym)
 			//------------------------------
 			pOTC = new CChainTypeSpecItem;
 			pOTC->Create();
-			pOTC->SetSpec(CChainTypeSpecItem::Spec::PARAM);
+			pOTC->SetSpec(CChainTypeSpecItem::Spec::PARAM_SCOPE);
 			pTypeChain->AddToTail(pOTC);		//node -> ROOT
 			//------------------------------------
 			pOTC = new CChainTypeSpecItem;
@@ -5536,7 +5599,7 @@ CAstNode* CParser::ParamList(CSymbol* pFuncSym)
 			//---------------------------------
 			pOTC = new CChainTypeSpecItem;
 			pOTC->Create();
-			pOTC->SetSpec(CChainTypeSpecItem::Spec::PARAM);
+			pOTC->SetSpec(CChainTypeSpecItem::Spec::PARAM_SCOPE);
 			pTypeChain->AddToTail(pOTC);		//node -> ROOT
 			//----------------------------------------
 			pOTC = new CChainTypeSpecItem;
@@ -5559,12 +5622,12 @@ CAstNode* CParser::ParamList(CSymbol* pFuncSym)
 			//---------------------------------
 			pOTC = new CChainTypeSpecItem;
 			pOTC->Create();
-			pOTC->SetSpec(CChainTypeSpecItem::Spec::PARAM);
+			pOTC->SetSpec(CChainTypeSpecItem::Spec::PARAM_SCOPE);
 			pTypeChain->AddToTail(pOTC);		//node -> ROOT
 			//-------------------------------------
 			pOTC = new CChainTypeSpecItem;
 			pOTC->Create();
-			pOTC->SetSpec(CChainTypeSpecItem::Spec::TYPE);
+			pOTC->SetSpec(CChainTypeSpecItem::Spec::TYPEDEF);
 			pTypeChain->AddToTail(pOTC);		//node -> ROOT
 			//------------------ Parse ------------------------
 			Expect(Token::RECORDTYPE);
@@ -5814,7 +5877,7 @@ CAstNode* CParser::LocalVarDecls()
 			//----------------------------------------
 			pOTC = new CChainTypeSpecItem;
 			pOTC->Create();
-			pOTC->SetSpec(CChainTypeSpecItem::Spec::LOCAL);
+			pOTC->SetSpec(CChainTypeSpecItem::Spec::LOCAL_SCOPE);
 			pTypeChain->AddToTail(pOTC);		//node -> ROOT
 			//---------------------------------
 			pOTC = new CChainTypeSpecItem;
@@ -5837,7 +5900,7 @@ CAstNode* CParser::LocalVarDecls()
 			//----------------------------------------
 			pOTC = new CChainTypeSpecItem;
 			pOTC->Create();
-			pOTC->SetSpec(CChainTypeSpecItem::Spec::LOCAL);
+			pOTC->SetSpec(CChainTypeSpecItem::Spec::LOCAL_SCOPE);
 			pTypeChain->AddToTail(pOTC);		//node -> ROOT
 			//-----------------------------------
 			pOTC = new CChainTypeSpecItem;
@@ -5860,7 +5923,7 @@ CAstNode* CParser::LocalVarDecls()
 			//----------------------------------------
 			pOTC = new CChainTypeSpecItem;
 			pOTC->Create();
-			pOTC->SetSpec(CChainTypeSpecItem::Spec::LOCAL);
+			pOTC->SetSpec(CChainTypeSpecItem::Spec::LOCAL_SCOPE);
 			pTypeChain->AddToTail(pOTC);		//node -> ROOT
 			//-------------------------------------
 			pOTC = new CChainTypeSpecItem;
@@ -5883,7 +5946,7 @@ CAstNode* CParser::LocalVarDecls()
 			//----------------------------------------
 			pOTC = new CChainTypeSpecItem;
 			pOTC->Create();
-			pOTC->SetSpec(CChainTypeSpecItem::Spec::LOCAL);
+			pOTC->SetSpec(CChainTypeSpecItem::Spec::LOCAL_SCOPE);
 			pTypeChain->AddToTail(pOTC);		//node -> ROOT
 			//-------------------------------------
 			pOTC = new CChainTypeSpecItem;
@@ -5906,7 +5969,7 @@ CAstNode* CParser::LocalVarDecls()
 			//----------------------------------------
 			pOTC = new CChainTypeSpecItem;
 			pOTC->Create();
-			pOTC->SetSpec(CChainTypeSpecItem::Spec::LOCAL);
+			pOTC->SetSpec(CChainTypeSpecItem::Spec::LOCAL_SCOPE);
 			pTypeChain->AddToTail(pOTC);		//node -> ROOT
 			pOTC = new CChainTypeSpecItem;
 			pOTC->Create();
@@ -5927,12 +5990,12 @@ CAstNode* CParser::LocalVarDecls()
 			//----------------------------------------
 			pOTC = new CChainTypeSpecItem;
 			pOTC->Create();
-			pOTC->SetSpec(CChainTypeSpecItem::Spec::LOCAL);
+			pOTC->SetSpec(CChainTypeSpecItem::Spec::LOCAL_SCOPE);
 			pTypeChain->AddToTail(pOTC);		//node -> ROOT
 			//-------------------------------
 			pOTC = new CChainTypeSpecItem;
 			pOTC->Create();
-			pOTC->SetSpec(CChainTypeSpecItem::Spec::TYPE);
+			pOTC->SetSpec(CChainTypeSpecItem::Spec::TYPEDEF);
 			pTypeChain->AddToTail(pOTC);		//node -> ROOT
 			//------------------ Parse ------------------------
 			Expect(Token::RECORDTYPE);
@@ -6123,6 +6186,7 @@ CAstNode* CParser::BaseCompConst()
 	CSymbol* pSym = 0;
 	CChainTypeSpecItem* pTCobj = 0;
 	int V = 0;
+	CSection* pSec = 0;
 
 	switch (m_LookAheadToken)
 	{
@@ -6130,6 +6194,8 @@ CAstNode* CParser::BaseCompConst()
 		V = GetLexer()->GetLexValue();
 		pVal = new CValue;
 		pVal->Create(V);
+		pSec = (CSection*)GetSymTab()->FindSymbol("CODE", CBin::BinType::SECTION,0);
+		pVal->GetSymbol()->SetSection(pSec);
 		pVal->SetConstVal(GetLexer()->GetLexValue());
 		pTCobj = new CChainTypeSpecItem;
 		pTCobj->SetSpec(CChainTypeSpecItem::Spec::CONSTANT);
@@ -6139,12 +6205,15 @@ CAstNode* CParser::BaseCompConst()
 		Expect(Token::NUMBER);
 		break;
 	case Token::CUR_LOC:
-		V = GetCurrentSection()->GetLocationCounter();
+		pSec = (CSection*)GetSymTab()->FindSymbol("CODE", CBin::BinType::SECTION, 0);
+		V = pSec->GetLocationCounter();
 		pVal = new CValue;
 		pVal->Create(V);
 		pTCobj = new CChainTypeSpecItem;
 		pTCobj->SetSpec(CChainTypeSpecItem::Spec::CONSTANT);
 		pVal->GetTypeChain()->AddToHead(pTCobj);
+		pSec = (CSection*)GetSymTab()->FindSymbol("CODE", CBin::BinType::SECTION, 0);
+		pVal->GetSymbol()->SetSection(pSec);
 		pNext = new CAct65CurrentLocation;
 		pNext->SetValue(pVal);
 		Expect(Token::CUR_LOC);
@@ -6157,6 +6226,8 @@ CAstNode* CParser::BaseCompConst()
 		pTCobj = new CChainTypeSpecItem;
 		pTCobj->SetSpec(CChainTypeSpecItem::Spec::CONSTANT);
 		pVal->GetTypeChain()->AddToHead(pTCobj);
+		pSec = (CSection*)GetSymTab()->FindSymbol("CODE", CBin::BinType::SECTION, 0);
+		pVal->GetSymbol()->SetSection(pSec);
 		pNext = new CAct65AdrOfCONST;
 		pNext->SetValue(pVal);
 		Expect(Token::IDENT);
@@ -6168,6 +6239,8 @@ CAstNode* CParser::BaseCompConst()
 		pTCobj = new CChainTypeSpecItem;
 		pTCobj->SetSpec(CChainTypeSpecItem::Spec::CONSTANT);
 		pVal->GetTypeChain()->AddToHead(pTCobj);
+		pSec = (CSection*)GetSymTab()->FindSymbol("CODE", CBin::BinType::SECTION, 0);
+		pVal->GetSymbol()->SetSection(pSec);
 		pNext = new CAct65AddrOfINTERRUPT;
 		pNext->SetValue(pVal);
 		Expect(Token::INTERRUPT_IDENT);
@@ -6179,6 +6252,8 @@ CAstNode* CParser::BaseCompConst()
 		pTCobj = new CChainTypeSpecItem;
 		pTCobj->SetSpec(CChainTypeSpecItem::Spec::CONSTANT);
 		pVal->GetTypeChain()->AddToHead(pTCobj);
+		pSec = (CSection*)GetSymTab()->FindSymbol("CODE", CBin::BinType::SECTION, 0);
+		pVal->GetSymbol()->SetSection(pSec);
 		pNext = new CAct65FuncADDR;
 		pNext->SetValue(pVal);
 		Expect(Token::FUNC_IDENT);
@@ -6190,6 +6265,8 @@ CAstNode* CParser::BaseCompConst()
 		pTCobj = new CChainTypeSpecItem;
 		pTCobj->SetSpec(CChainTypeSpecItem::Spec::CONSTANT);
 		pVal->GetTypeChain()->AddToHead(pTCobj);
+		pSec = (CSection*)GetSymTab()->FindSymbol("CODE", CBin::BinType::SECTION, 0);
+		pVal->GetSymbol()->SetSection(pSec);
 		pNext = new CAct65ProcADDR;
 		pNext->SetValue(pVal);
 		Expect(Token::PROC_IDENT);
@@ -7246,7 +7323,7 @@ CAstNode* CParser::AsmConstList()
 	{
 	case Token::STRING:
 		pN = new CAct65STRING;
-		pN->Create();
+		pN->Create(0,0, GetCurrentProc(), (CSection*)GetSymTab()->FindSymbol("STRINGS", CBin::BinType::SECTION, 0));
 		pN->SetString(GetLexer()->GetLexBuffer());
 		pNext = pN;
 		Expect(Token::STRING);
@@ -7741,8 +7818,46 @@ void CParser::ProgramListing()
 	pSec = GetSectionHead();
 	while (pSec)
 	{
-		pSec->Dump(LogFile());
 		pSec->EmitListing();
+		pSec->Dump(LogFile());
 		pSec = (CSection*)pSec->GetNextSection();
 	}
+}
+
+void CParser::ProgramEmitSections()
+{
+	int i = 1;
+	CSection* pSec = 0;
+	bool Loop = true;
+	const char* pStr = 0;
+
+	while (Loop)
+	{
+		pStr = CSection::GetSectionTypeNameStr(i);
+		fprintf(Act()->LogFile(), "Emitting Section Type: %s\n", pStr);
+		if (pStr)
+		{
+			pSec = (CSection*)GetSymTab()->FindSymbol(
+				pStr,
+				CBin::BinType::SECTION,
+				0
+			);
+			if (pSec)
+			{
+				ProgramEmitSection(pSec);
+				++i;
+			}
+			else
+				Loop = false;
+		}
+		else
+		{
+			Loop = false;
+		}
+	}
+}
+
+void CParser::ProgramEmitSection(CSection* pSection)
+{
+	pSection->EmitBinary();
 }

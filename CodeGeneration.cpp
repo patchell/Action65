@@ -494,6 +494,10 @@ void CCodeGeneration::EmitInstruction(
 	CValue* pLabel
 )
 {
+	//------------------------------------------
+	// Oct 28, 2025  This method does not seem
+	// to be used at the moment.
+	//------------------------------------------
 	KeyWord* pKeyWord = 0;
 	int StartAddress = 0;
 

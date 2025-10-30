@@ -6,7 +6,18 @@ class CAct65CodeBlock : public CAstNode
 public:
 	CAct65CodeBlock();
 	virtual ~CAct65CodeBlock();
-	virtual bool Create(CAstNode* pChild = 0, CAstNode* pNext = 0, CBin* pSym = 0);
+	virtual bool Create(
+		CAstNode* pChild,
+		CAstNode* pNext,
+		CBin* pSym,
+		CSection* pSec
+	);
+	virtual bool Create(
+		CBin* pSym,
+		CSection* pSec
+	) {
+		return CAstNode::Create(pSym, pSec);
+	}
 	virtual CValue* Process();
 	virtual int Print(int Indent, char* s, int l, bool* pbNextFlag);
 	virtual void PrintNode(FILE* pOut, int Indent, bool* pbNextFlag);
@@ -20,7 +31,7 @@ class CAct65CODEBLOCKend : public CAstNode
 public:
 	CAct65CODEBLOCKend();
 	virtual ~CAct65CODEBLOCKend();
-	virtual bool Create(CAstNode* pChild = 0, CAstNode* pNext = 0, CBin* pSym = 0);
+	virtual bool Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym, CSection* pSec);
 	virtual CValue* Process();
 	virtual int Print(int Indent, char* s, int l, bool* pbNextFlag);
 	virtual void PrintNode(FILE* pOut, int Indent, bool* pbNextFlag);

@@ -17,6 +17,11 @@ CValue::CValue()
 
 CValue::~CValue()
 {
+	if (m_pString)
+	{
+		delete[] m_pString;
+		m_pString = 0;
+	}
 }
 
 bool CValue::Create(CVirtualReg::VREG* pVReg)
@@ -86,7 +91,7 @@ int CValue::Print(char* pSO, int l, int Indent, const char* s)
 	// Implementation of Print function
 	int ls = 0;
 
-	ls = sprintf_s(pSO, l, "Implement CValue::Print method\n");
+	ls = GetSymbol()->Print(pSO, l, Indent, s);
 	return ls;
 }
 
@@ -99,6 +104,39 @@ void CValue::SetSymbol(CSymbol* pSym)
 	}
 }
 
+CChainTypeSpec* CValue::GetTypeChain()
+{
+	CChainTypeSpec* pTC = 0;
+
+	switch (m_ValType)
+	{
+	case ValueType::VIRTUAL_REGISTER:
+	case ValueType::SYMBOL:
+		if (GetSymbol())
+		{
+			pTC = GetSymbol()->GetTypeChain();
+		}
+		else
+		{
+			ThrownException.SetXCeptType(Exception::ExceptionType::CVALUE_NO_SYMBOL);
+			sprintf_s(
+				ThrownException.GetErrorString(),
+				ThrownException.GetMaxStringLen(),
+				"CValue::GetTypeChain(): Internal Error:No Symbol Attached to Value\n"
+			);
+			throw(ThrownException);
+		}
+		break;
+	case ValueType::CONSTANT:
+	case ValueType::ADDRESS_OF:
+		pTC = &m_AltTypeChain;
+		break;
+	case ValueType::REG:
+		pTC = m_pReg->GetTypeChain();
+		break;
+	}
+	return pTC;
+}
 CSymbol* CValue::GetSymbol()
 {
 	CSymbol* pSym = 0;
@@ -115,34 +153,13 @@ CSymbol* CValue::GetSymbol()
 	return pSym;
 }
 
-CChainTypeSpec* CValue::GetTypeChain()
-{
-	CChainTypeSpec* pTC = 0;
-
-	switch (m_ValType)
-	{
-	case ValueType::VIRTUAL_REGISTER:
-	case ValueType::SYMBOL:
-		pTC = GetSymbol()->GetTypeChain();
-		break;
-	case ValueType::CONSTANT:
-	case ValueType::ADDRESS_OF:
-		pTC = &m_AltTypeChain;
-		break;
-	case ValueType::REG:
-		pTC = m_pReg->GetTypeChain();
-		break;
-	}
-	return pTC;
-}
-
 void CValue::SetTypeChain(CChain* pTC)
 {
 	switch (GetValueType())
 	{
 	case ValueType::SYMBOL:
 	case ValueType::VIRTUAL_REGISTER:
-		GetSymbol()->CreateTypeDefChain();
+		GetSymbol()->CreateTypeDefFieldChain();
 		GetSymbol()->GetTypeChain()->CopyTypeChain(pTC);
 		break;
 	case ValueType::CONSTANT:
@@ -369,13 +386,56 @@ int CValue::SizeOf()
 	pTypeChain = GetTypeChain();
 	if (!pTypeChain)
 		printf("Oh-Oh\n");
-	if (pTypeChain->Is(CChainTypeSpecItem::Spec::POINTER))
-		rV = 2;
-	else if (pTypeChain->IsByte())
-		rV = 1;
-	else if (pTypeChain->IsWord())
-		rV = 2;
+	if (pTypeChain->Is(CChainTypeSpecItem::Spec::ARRAY))
+	{
+		rV = GetConstVal() * pTypeChain->SizeOf();
+	}
+	else if (pTypeChain->Is(CChainTypeSpecItem::Spec::TYPEDEF))
+	{
+		CValue* pFieldValue = 0;
+		CChain* pTypeDefChain = 0;
+		CChainItem* pItem;
+
+		pTypeDefChain = GetTypeTypeDefFieldChain();
+		pItem = pTypeDefChain->GetHead();
+		while (pItem)
+		{
+			if(pItem->Is(CChainItem::ChainItemType::VALUE))
+			{
+				pFieldValue = ((CChainValueItem*)pItem)->GetValue();
+				rV += pFieldValue->SizeOf();
+			}
+			pItem = pItem->GetNext();
+		}
+	}
+	else
+	{
+		rV = pTypeChain->SizeOf();
+	}
 	return rV;
+}
+
+int CValue::SizeOfTypeDef()
+{
+	int Size = 0;
+	CChainItem* pItem = 0;
+	CChain* pChain = 0;
+
+
+	if (GetTypeChain())
+	{
+		pChain = this->GetTypeTypeDefFieldChain();
+		pItem = pChain->GetHead();
+		while (pItem)
+		{
+			if (pItem->Is(CChainItem::ChainItemType::VALUE))
+			{
+				Size += ((CChainValueItem*)pItem)->GetValue()->SizeOf();
+			}
+			pItem = pItem->GetNext();
+		}
+	}
+	return Size;
 }
 
 void CValue::SetAddress(int Addr)
@@ -429,4 +489,15 @@ void CValue::BackFillUnresolved()
 		);
 		throw(ThrownException);
 	}
+}
+
+CChain* CValue::GetTypeTypeDefFieldChain()
+{
+	CChain* pChain = nullptr;
+
+	if (GetSymbol())
+	{
+		pChain = GetSymbol()->GetTypeDefFieldChain();
+	}
+	return pChain;
 }

@@ -14,7 +14,7 @@ CAstNode::CAstNode()
 	m_pValue = 0;
 	m_pHead = 0;
 	m_pTail = 0;
-	m_pSection = GetParser()->GetCurrentSection();
+	m_pSection = (CSection*)GetParser()->GetSymTab()->FindSymbol("NONE", CBin::BinType::SECTION, 0);
 	m_Line = Act()->GetParser()->GetLexer()->GetLineNumber();
 	m_Column = Act()->GetParser()->GetLexer()->GetColumn();
 	m_pChildValue = 0;
@@ -35,7 +35,7 @@ CAstNode::CAstNode(const char* pName, NodeType NT)
 	m_pValue = 0;
 	m_pHead = 0;
 	m_pTail = 0;
-	m_pSection = GetParser()->GetCurrentSection();
+	m_pSection = (CSection*)GetParser()->GetSymTab()->FindSymbol("NONE", CBin::BinType::SECTION, 0);
 	m_Line = GetParser()->GetLexer()->GetLineNumber();
 	m_Column = GetParser()->GetLexer()->GetColumn();
 }
@@ -46,13 +46,13 @@ CAstNode::~CAstNode()
 		delete m_pValue;
 }
 
-bool CAstNode::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
+bool CAstNode::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym, CSection* pSec)
 {
 	bool rV = true;
 
 	CSymbol* pProcSym = 0;
 
-	SetSection(Act()->GetParser()->GetCurrentSection());
+	SetSection(pSec);
 	m_Line = GetParser()->GetLexer()->GetLineNumber();
 	pProcSym = Act()->GetParser()->GetCurrentProc();
 	SetProcSym(pProcSym);
@@ -67,6 +67,23 @@ bool CAstNode::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
 			pNode = pNode->GetNext();
 		pNode->SetNext(pNext);
 	}
+	if (pSym)
+	{
+		CreateValue((CSymbol*)pSym);
+	}
+	return rV;
+}
+
+bool CAstNode::Create(CBin* pSym, CSection* pSec)
+{
+	bool rV = true;
+
+	CSymbol* pProcSym = 0;
+
+	SetSection(pSec);
+	m_Line = GetParser()->GetLexer()->GetLineNumber();
+	pProcSym = Act()->GetParser()->GetCurrentProc();
+	SetProcSym(pProcSym);
 	if (pSym)
 	{
 		CreateValue((CSymbol*)pSym);

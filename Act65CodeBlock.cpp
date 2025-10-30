@@ -8,10 +8,10 @@ CAct65CodeBlock::~CAct65CodeBlock()
 {
 }
 
-bool CAct65CodeBlock::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
+bool CAct65CodeBlock::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym, CSection* pSec)
 {
 	bool rV = true;
-	rV = CAstNode::Create(pChild, pNext, pSym);
+	rV = CAstNode::Create(pChild, pNext, pSym, pSec);
 	return rV;
 }
 
@@ -65,10 +65,10 @@ CAct65CODEBLOCKend::~CAct65CODEBLOCKend()
 {
 }
 
-bool CAct65CODEBLOCKend::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
+bool CAct65CODEBLOCKend::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym, CSection* pSec)
 {
 	bool rV = true;
-	rV = CAstNode::Create(pChild, pNext, pSym);
+	rV = CAstNode::Create(pChild, pNext, pSym, pSec);
 	return rV;
 }
 

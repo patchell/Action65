@@ -14,33 +14,28 @@ bool CInstruction::GenInstruction(
 	m_pKeyWord = Act()->GetParser()->GetLexer()->FindKeyword(OpToken);
 	if (m_pKeyWord->m_pAddresModeLUT->ValidAddressingMode(AdressMode))
 	{
-		switch (AdressMode)
-		{
-		case AdrModeType::INDEXED_INDIRECT_X_ADR:
-		case AdrModeType::INDIRECT_INDEXED_Y_ADR:
-		case AdrModeType::ZERO_PAGE_ADR:
-		case AdrModeType::ZERO_PAGE_X_ADR:
-			[[fallthrough]];
-		case AdrModeType::ZERO_PAGE_Y_ADR:
-			if (!pOperandValue->IsPageZero())
-			{
-				ThrownException.SetXCeptType(Exception::ExceptionType::ILLEGAL_ADDRESSING_MODE);
-				sprintf_s(
-					ThrownException.GetErrorString(),
-					ThrownException.GetMaxStringLen(),
-					"CInstruction::GenInstruction: Address is NOT page Zero:%s\n",
-					pOperandValue->GetSymbol()->GetName()
-				);
-				throw(ThrownException);
-			}
-			break;
-		}
+		//switch (AdressMode)
+		//{
+		//case AdrModeType::INDEXED_INDIRECT_X_ADR:
+		//case AdrModeType::INDIRECT_INDEXED_Y_ADR:
+		//case AdrModeType::ZERO_PAGE_ADR:
+		//case AdrModeType::ZERO_PAGE_X_ADR:
+		//	[[fallthrough]];
+		//case AdrModeType::ZERO_PAGE_Y_ADR:
+		//	if (!pOperandValue->IsPageZero())
+		//	{
+		//		ThrownException.SetXCeptType(Exception::ExceptionType::ILLEGAL_ADDRESSING_MODE);
+		//		sprintf_s(
+		//			ThrownException.GetErrorString(),
+		//			ThrownException.GetMaxStringLen(),
+		//			"CInstruction::GenInstruction: Address is NOT page Zero:%s\n",
+		//			pOperandValue->GetSymbol()->GetName()
+		//		);
+		//		throw(ThrownException);
+		//	}
+		//	break;
+		//}
 		m_Data[0] = Act()->GetLexer()->MakeOpcode(OpToken, AdressMode);
-		m_numBytes = m_pKeyWord->GetNumberOfBytes(AdressMode);
-		if(m_numBytes > 3)
-		{
-			printf("Opps\n");
-		}
 		m_numBytes = m_pKeyWord->GetNumberOfBytes(AdressMode);
 		m_pOperand = pOperandValue;
 		m_pLabel = pLabel;
@@ -54,6 +49,8 @@ void CInstruction::EmitListing()
 {
 	FILE* pListing = Act()->GetListingFile();
 	char* s = new char[256];
+	char* pPadString = new char[256];
+	int PadLength = 0;
 
 	if (pListing)
 	{
@@ -62,13 +59,35 @@ void CInstruction::EmitListing()
 			switch (GetNumBytes())
 			{
 			case 1:
-				fprintf(pListing, "%04x %02x\t%s ", m_Address, (unsigned char)m_Data[0], GetLabel()->GetName());
+				PadLength = 8;
+				Act()->CreateIndentString(pPadString, 256, PadLength, ' ');
+				fprintf(pListing, "%04x %02x%s\t%s ", 
+					m_Address, 
+					(unsigned char)m_Data[0], 
+					pPadString,
+					GetLabel()->GetName());
 				break;
 			case 2:
-				fprintf(pListing, "%04x %02x %02x\t%s", m_Address, (unsigned char)m_Data[0], (unsigned char)m_Data[1], GetLabel()->GetName());
+				PadLength = 5;
+				Act()->CreateIndentString(pPadString, 256, PadLength, ' ');
+				fprintf(pListing, "%04x %02x %02x%s\t%s", 
+					m_Address, 
+					(unsigned char)m_Data[0], 
+					(unsigned char)m_Data[1], 
+					pPadString,
+					GetLabel()->GetName());
 				break;
 			case 3:
-				fprintf(pListing, "%04x %02x %02x %02x\t%s ", m_Address, (unsigned char)m_Data[0], (unsigned char)m_Data[1], (unsigned char)m_Data[2], GetLabel()->GetName());
+				PadLength = 2;
+				Act()->CreateIndentString(pPadString, 256, PadLength, ' ');
+				fprintf(pListing, "%04x %02x %02x %02x%s\t%s ", 
+					m_Address, 
+					(unsigned char)m_Data[0], 
+					(unsigned char)m_Data[1], 
+					(unsigned char)m_Data[2], 
+					pPadString,
+					GetLabel()->GetName()
+				);
 				break;
 			default:
 				ThrownException.SetXCeptType(Exception::ExceptionType::INTERNAL_ERROR);
@@ -87,13 +106,34 @@ void CInstruction::EmitListing()
 			switch (GetNumBytes())
 			{
 				case 1:
-				fprintf(pListing, "%04x %02x\t", m_Address, (unsigned char)m_Data[0]);
+					PadLength = 8;
+					Act()->CreateIndentString(pPadString, 256, PadLength, ' ');
+					fprintf(pListing, "%04x %02x%s\t", 
+						m_Address, 
+						(unsigned char)m_Data[0],
+						pPadString
+					);
 				break;
 			case 2:
-				fprintf(pListing, "%04x %02x %02x\t", m_Address, (unsigned char)m_Data[0], (unsigned char)m_Data[1]);
+				PadLength = 5;
+				Act()->CreateIndentString(pPadString, 256, PadLength, ' ');
+				fprintf(pListing, "%04x %02x %02x%s\t", 
+					m_Address, 
+					(unsigned char)m_Data[0], 
+					(unsigned char)m_Data[1],
+					pPadString
+				);
 				break;
 			case 3:
-				fprintf(pListing, "%04x %02x %02x %02x\t", m_Address, (unsigned char)m_Data[0], (unsigned char)m_Data[1], (unsigned char)m_Data[2]);
+				PadLength = 2;
+				Act()->CreateIndentString(pPadString, 256, PadLength, ' ');
+				fprintf(pListing, "%04x %02x %02x %02x%s\t", 
+					m_Address, 
+					(unsigned char)m_Data[0], 
+					(unsigned char)m_Data[1], 
+					(unsigned char)m_Data[2],
+					pPadString
+				);
 				break;
 			default:
 				ThrownException.SetXCeptType(Exception::ExceptionType::INTERNAL_ERROR);
@@ -112,6 +152,131 @@ void CInstruction::EmitListing()
 			GenOperand(s,256)
 		);
 	}
+	delete[] s;
+	delete[] pPadString;
+}
+
+int CInstruction::Print(char* pSO, int l, int Indent, const char* pAuxStr)
+{
+	int ls = 0;
+	int size = 0;
+
+	printf("CInstruction::Print: Not Implemented Yet!\n");
+	char* pPadString = new char[256];
+	char* s = new char[256];
+	int PadLength = 0;
+
+	if (pSO)
+	{
+		 ls = PrintBinary(pSO, l, 0, 0);
+		if (GetLabel())
+		{
+			switch (GetNumBytes())
+			{
+			case 1:
+				PadLength = 8;
+				Act()->CreateIndentString(pPadString, 256, PadLength, ' ');
+				size = l - ls;
+				ls += sprintf_s(&pSO[ls], size, "%04x %02x%s\t%s ",
+					m_Address,
+					(unsigned char)m_Data[0],
+					pPadString,
+					GetLabel()->GetName());
+				break;
+			case 2:
+				PadLength = 5;
+				Act()->CreateIndentString(pPadString, 256, PadLength, ' ');
+				size = l - ls;
+				ls += sprintf_s(&pSO[ls], size, "%04x %02x %02x%s\t%s",
+					m_Address,
+					(unsigned char)m_Data[0],
+					(unsigned char)m_Data[1],
+					pPadString,
+					GetLabel()->GetName());
+				break;
+			case 3:
+				PadLength = 2;
+				Act()->CreateIndentString(pPadString, 256, PadLength, ' ');
+				size = l - ls;
+				ls += sprintf_s(&pSO[ls], size, "%04x %02x %02x %02x%s\t%s ",
+					m_Address,
+					(unsigned char)m_Data[0],
+					(unsigned char)m_Data[1],
+					(unsigned char)m_Data[2],
+					pPadString,
+					GetLabel()->GetName()
+				);
+				break;
+			default:
+				ThrownException.SetXCeptType(Exception::ExceptionType::INTERNAL_ERROR);
+				sprintf_s(
+					ThrownException.GetErrorString(),
+					ThrownException.GetMaxStringLen(),
+					"CInstruction::EmitListing: Invalid number of bytes %d",
+					GetNumBytes()
+				);
+				throw(ThrownException);
+				break;
+			}
+		}
+		else
+		{
+			switch (GetNumBytes())
+			{
+			case 1:
+				PadLength = 8;
+				Act()->CreateIndentString(pPadString, 256, PadLength, ' ');
+				size = l - ls;
+				ls += sprintf_s(&pSO[ls], size, "%04x %02x%s\t",
+					m_Address,
+					(unsigned char)m_Data[0],
+					pPadString
+				);
+				break;
+			case 2:
+				PadLength = 5;
+				Act()->CreateIndentString(pPadString, 256, PadLength, ' ');
+				size = l - ls;
+				ls += sprintf_s(&pSO[ls], size, "%04x %02x %02x%s\t",
+					m_Address,
+					(unsigned char)m_Data[0],
+					(unsigned char)m_Data[1],
+					pPadString
+				);
+				break;
+			case 3:
+				PadLength = 2;
+				Act()->CreateIndentString(pPadString, 256, PadLength, ' ');
+				size = l - ls;
+				ls += sprintf_s(&pSO[ls], size, "%04x %02x %02x %02x%s\t",
+					m_Address,
+					(unsigned char)m_Data[0],
+					(unsigned char)m_Data[1],
+					(unsigned char)m_Data[2],
+					pPadString
+				);
+				break;
+			default:
+				ThrownException.SetXCeptType(Exception::ExceptionType::INTERNAL_ERROR);
+				sprintf_s(
+					ThrownException.GetErrorString(),
+					ThrownException.GetMaxStringLen(),
+					"CInstruction::EmitListing: Invalid number of bytes %d",
+					GetNumBytes()
+				);
+				throw(ThrownException);
+				break;
+			}
+		}
+		size = l - ls;
+		ls += sprintf_s(&pSO[ls], size, "%s %s\n",
+			GetKeyWord()->m_Name,
+			GenOperand(s, 256)
+		);
+	}
+	delete[] pPadString;
+	delete[] s;
+	return ls;
 }
 
 char* CInstruction::GenOperand(char* s, int n)
@@ -119,8 +284,8 @@ char* CInstruction::GenOperand(char* s, int n)
 	switch(m_AdrMode)
 	{
 		case AdrModeType::IMPLIED:
-		sprintf_s(s, n, "");
-		break;
+			sprintf_s(s, n, "");
+			break;
 		case AdrModeType::ACCUMULATOR:
 			sprintf_s(s, n, "A");
 			break;
@@ -202,7 +367,7 @@ char* CInstruction::GenOperand(char* s, int n)
 	return s;
 }
 
-int CInstruction::Print(char* pSO, int l, int Indent, const char* s)
+int CInstruction::PrintBinary(char* pSO, int l, int Indent, const char* s)
 {
 	int ls = 0;
 	int size = l;
@@ -221,15 +386,15 @@ int CInstruction::Print(char* pSO, int l, int Indent, const char* s)
 			switch (GetNumBytes())
 			{
 			case 1:
-				size -= ls;
+				size = l - ls;
 				ls += sprintf_s(&pSO[ls], size, "%04x %02x\t%s ", m_Address, (unsigned char)m_Data[0], GetLabel()->GetName());
 				break;
 			case 2:
-				size -= ls;
+				size = l - ls;
 				ls += sprintf_s(&pSO[ls], size, "%04x %02x %02x\t%s", m_Address, (unsigned char)m_Data[0], (unsigned char)m_Data[1], GetLabel()->GetName());
 				break;
 			case 3:
-				size -= ls;
+				size = l - ls;
 				ls += sprintf_s(&pSO[ls], size, "%04x %02x %02x %02x\t%s ", m_Address, (unsigned char)m_Data[0], (unsigned char)m_Data[1], (unsigned char)m_Data[2], GetLabel()->GetName());
 				break;
 			default:
@@ -249,15 +414,15 @@ int CInstruction::Print(char* pSO, int l, int Indent, const char* s)
 			switch (GetNumBytes())
 			{
 			case 1:
-				size -= ls;
+				size = l - ls;
 				ls += sprintf_s(&pSO[ls], size, "%04x %02x\t", m_Address, (unsigned char)m_Data[0]);
 				break;
 			case 2:
-				size -= ls;
+				size = l - ls;
 				ls += sprintf_s(&pSO[ls], size, "%04x %02x %02x\t", m_Address, (unsigned char)m_Data[0], (unsigned char)m_Data[1]);
 				break;
 			case 3:
-				size -= ls;
+				size = l - ls;
 				ls += sprintf_s(&pSO[ls], size, "%04x %02x %02x %02x\t", m_Address, (unsigned char)m_Data[0], (unsigned char)m_Data[1], (unsigned char)m_Data[2]);
 				break;
 			default:
@@ -273,6 +438,7 @@ int CInstruction::Print(char* pSO, int l, int Indent, const char* s)
 			}
 		}
 	}
+	delete[] pIndentString;
 	return ls;
 }
 

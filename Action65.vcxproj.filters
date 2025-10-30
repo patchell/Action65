@@ -595,13 +595,10 @@
     <ClCompile Include="Act65AsmModule.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ChainInstruction.cpp">
+    <ClCompile Include="ChainInstructionItem.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Instruction.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ChainSymUsed.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ChainTypeSpec.cpp">
@@ -626,6 +623,27 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ChainSymUsedItem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ChainValue.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Act65VarGlobal.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Act65VarLocal.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Act65VarParameter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ChainDataItem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ChainStorageItem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ChainItemItem.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -1182,13 +1200,10 @@
     <ClInclude Include="Act65AsmModule.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ChainInstruction.h">
+    <ClInclude Include="ChainInstructionItem.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Instruction.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ChainSymUsed.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ChainTypeSpec.h">
@@ -1213,6 +1228,27 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ChainSymUsedItem.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ChainValue.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Act65VarGlobal.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Act65VarLocal.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Act65VarParameter.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ChainDataItem.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ChainStorageItem.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ChainItemItem.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

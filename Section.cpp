@@ -22,6 +22,7 @@ bool CSection::Create()
 {
 	bool rV = true;
 	CBin::Create();
+	m_ChainSectionData.Create();
 	return rV;
 }
 
@@ -307,27 +308,20 @@ void CSection::AddDataAt(
 int CSection::AddInstruction(CInstruction* pInstruction)
 {
 	int NextAddress = 0;
-	CChainInstruction* pInsChainItem = new CChainInstruction;
+	CChainInstructionItem* pInsChainItem = new CChainInstructionItem;
 
 	pInsChainItem->Create(pInstruction);
-	pInstruction->SetAddress(m_LocationCounter);
-	if(pInstruction->GetAdrMode() == AdrModeType::NA)
+	if (pInstruction->GetOperand())
 	{
-		printf("Oops\n");
+		if (pInstruction->GetOperand()->GetSymbol())
+		{
+			CChainItemItem* pSubChainItem = new CChainItemItem;
+			pSubChainItem->Create();
+			pSubChainItem->SetSubItem(pInsChainItem);
+			pInstruction->GetOperand()->GetSymbol()->GetWhereUsed()->AddToTail(pSubChainItem); //add where used entry
+		}
 	}
-	switch(pInstruction->GetNumBytes())
-	{
-	case 1:
-		IncrementLocationCounterBy(1);
-		break;
-	case 2:
-		IncrementLocationCounterBy(2);
-		break;
-	case 3:
-		IncrementLocationCounterBy(3);
-		break;
-	}
-	GetInstructionsChain()->AddToTail(pInsChainItem);
+	GetSectionDataChain()->AddToTail(pInsChainItem);
 	return NextAddress;
 }
 
@@ -380,9 +374,23 @@ bool CSection::EmitToSection(CAstNode* pNode, int ObjectSize, CSymbol* pLabel)
     return rV;
 }
 
-void CSection::Print(FILE* pOut, const char* s)
+int CSection::Print(char* pSO, int l, int Indent, const char* s)
 {
-	fprintf(pOut, "%sSection:%s:Start:$%04X Size:$%04X MODE:%s:%s Address Size:%s\n",
+	int size = 0;
+	int ls = 0;
+	char* pIndentString = 0;
+
+	pIndentString = new char[256];
+	memset(pIndentString, ' ', 255);
+	Act()->IndentString(
+		pIndentString,
+		255,
+		Indent,
+		' '
+	);
+	size = l;
+
+	ls = sprintf_s(pSO, size, "%sSection:%s:Start:$%04X Size:$%04X MODE:%s:%s Address Size:%s\n",
 		s?s:"",
 		GetName(),
 		m_StartAddress,
@@ -391,6 +399,8 @@ void CSection::Print(FILE* pOut, const char* s)
 		int(m_Type) ? "RELOCATALE" : "ABSOLUTE",
 		int(m_ZeroPageAddressSize)?"BYTE":"WORD"
 	);
+	delete[] pIndentString;
+	return ls;
 }
 
 void CSection::Dump(FILE* pOut, const char* s)
@@ -419,43 +429,23 @@ void CSection::Info()
 
 void CSection::EmitListing()
 {
-	CChainInstruction* pInsChainItem = (CChainInstruction*)m_Instructions.GetHead();
-	while (pInsChainItem)
+	CChainItem* pItem = (CChainItem*)m_ChainSectionData.GetHead();
+
+	while (pItem)
 	{
-		pInsChainItem->GetInstruction()->EmitListing();
-		pInsChainItem = (CChainInstruction*)pInsChainItem->GetNext();
+		pItem->EmitListing(this);
+		pItem = pItem->GetNext();
 	}
 }
 
 void CSection::EmitBinary()
 {
 	CInstruction* pIns = 0;
-	CChainItem* pItem = m_Instructions.GetHead();
+	CChainItem* pItem = m_ChainSectionData.GetHead();
 
 	while (pItem)
 	{
-		switch (pItem->GetItemType())
-		{
-		case CChainItem::ChainItemType::INSTRUCTION:
-			pIns = ((CChainInstruction*)pItem)->GetInstruction();
-			if (pIns)
-			{
-//				Add()
-			}
-			break;
-		case CChainItem::ChainItemType::VALUE:
-			break;
-		case CChainItem::ChainItemType::BIN:
-			break;
-		case CChainItem::ChainItemType::PARAMETER:
-			break;
-		case CChainItem::ChainItemType::TYPE:
-			break;
-		case CChainItem::ChainItemType::SYMBOL_USED:
-			break;
-		default:
-			break;
-		}
+		pItem->Emit(this);
 		pItem = pItem->GetNext();
 	}
 }

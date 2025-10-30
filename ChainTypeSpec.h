@@ -27,7 +27,12 @@ public:
 			);
 	}
 	bool IsWord() {
-		return Is(CChainTypeSpecItem::Spec::INT) || Is(CChainTypeSpecItem::Spec::CARD) || Is(CChainTypeSpecItem::Spec::BOOL);
+		return Is(CChainTypeSpecItem::Spec::INT) ||
+			Is(CChainTypeSpecItem::Spec::CARD) || 
+			Is(CChainTypeSpecItem::Spec::POINTER
+		);
 	}
+	CChainTypeSpecItem::Spec GetScope();
 	CChainTypeSpecItem::Spec GetFundSpec();
+	int SizeOf();
 };

@@ -79,11 +79,38 @@ char* CChainLocalItem::GetName()
 
 int CChainLocalItem::Print(char* pSO, int l, int Indent, const char* s)
 {
-	int rV = 0;
+	int ls = 0;
+	int size = l;
+	char* pIndentString = new char[512];
 
+	Act()->IndentString(pIndentString, 512, Indent, ' ');
+	if (s && strlen(s) > 0)
+	{
+		size = l - ls;
+		ls += sprintf_s(&pSO[ls], size, "%s%s:", pIndentString, s);
+		Act()->IndentString(pIndentString, 512, Indent + 2, ' ');
+	}
+	size = l - ls;
+	ls += sprintf_s(&pSO[ls], size, "%s\n", FindItemTypeName(GetItemType()));
 	if (m_pValue)
 	{
-		rV = m_pValue->Print(pSO, l, Indent, s);
+		size = l - ls;
+		ls = m_pValue->Print(&pSO[ls], size, Indent, pIndentString);
 	}
-	return rV;
+	else
+	{
+		size = l - ls;
+		ls += sprintf_s(&pSO[ls], size, "%sNo Symbol\n", pIndentString);
+	}
+	delete[] pIndentString;
+	return ls;
+}
+
+void CChainLocalItem::Emit(CSection* pSec)
+{
+
+}
+
+void CChainLocalItem::EmitListing(CSection* pSec)
+{
 }

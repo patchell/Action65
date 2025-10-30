@@ -8,10 +8,10 @@ CAct65LogicalOR::~CAct65LogicalOR()
 {
 }
 
-bool CAct65LogicalOR::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
+bool CAct65LogicalOR::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym, CSection* pSec)
 {
 	bool rV = true;
-	rV = CAstNode::Create(pChild, pNext, pSym);
+	rV = CAstNode::Create(pChild, pNext, pSym, pSec);
 	return rV;
 }
 

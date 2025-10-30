@@ -8,10 +8,10 @@ CAct65SET::~CAct65SET()
 {
 }
 
-bool CAct65SET::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
+bool CAct65SET::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym, CSection* pSec)
 {
 	bool rV = true;
-	rV = CAstNode::Create(pChild, pNext, pSym);
+	rV = CAstNode::Create(pChild, pNext, pSym, pSec);
 	return rV;
 }
 

@@ -2,6 +2,7 @@
 
 CChainSymUsedItem::CChainSymUsedItem() :CChainItem(CChainItem::ChainItemType::SYMBOL_USED)
 {
+	m_pUsedHere = 0;
 }
 
 CChainSymUsedItem::~CChainSymUsedItem()
@@ -25,7 +26,11 @@ int CChainSymUsedItem::Print(char* pSO, int l, int Indent, const char* s)
 {
 	// Implementation of Print function
 	int ls = 0;
-	ls = m_pInstruction->Print(&pSO[ls], l - ls, Indent + 2, s);
+	char* pOprd = new char[256];
+	memset(pOprd, 0, 256);
+
+	ls = m_pUsedHere->Print(&pSO[ls], l - ls, Indent + 2, s);
+	delete [] pOprd;
 	return ls;
 }
 

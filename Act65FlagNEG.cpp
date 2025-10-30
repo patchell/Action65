@@ -8,10 +8,10 @@ CAct65FlagNEG::~CAct65FlagNEG()
 {
 }
 
-bool CAct65FlagNEG::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
+bool CAct65FlagNEG::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym, CSection* pSec)
 {
 	bool rV = true;
-	rV = CAstNode::Create(pChild, pNext, pSym);
+	rV = CAstNode::Create(pChild, pNext, pSym, pSec);
 	return rV;
 }
 

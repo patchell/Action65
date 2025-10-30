@@ -1,6 +1,7 @@
 #pragma once
 
 constexpr auto VALUE_LUT_DIM = 9;
+class CChainTypeSpec;
 
 class CReg;
 
@@ -83,6 +84,7 @@ private:
 							// last character is '0'
 							// which is not included
 							// in the length
+							// 4, The dimension of an ARRAY
 	char* m_pString;
 	ValueType m_ValType;
 	UpperLower m_UpperLOwer;
@@ -130,8 +132,10 @@ public:
 		return UpperLowerLUT[int(UL)].m_pName;
 	}
 	int SizeOf();
+	int SizeOfTypeDef();
 	void SetAddress(int Address);
 	void SetResolved(bool bRes);
 	void BackFillUnresolved();
+	CChain* GetTypeTypeDefFieldChain();
 };
 

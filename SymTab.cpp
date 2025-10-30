@@ -185,11 +185,11 @@ int CSymTab::Hash(const char* name)
 
 void CSymTab::PrintTable(FILE* pOut)
 {
-	char* s = new char[512];
+	char* s = 0;
 	CBin* pSym;
 	int i;
 	int maxStringLen = 0;
-	int l;
+	int l = 0, ls = 0, size = 0;
 
 	fprintf(pOut, "------------ Symbol Table --------------\n");
 	//------------------------------
@@ -212,7 +212,12 @@ void CSymTab::PrintTable(FILE* pOut)
 			pSym = pSym->GetNext();
 		}
 	}
-
+	//------------------------------
+	// Now print the table
+	//------------------------------
+	l = 8192;
+	s = new char[l];
+	memset(s, 0, l);
 	for (i = 0; i < m_tSize; ++i)
 	{
 		if (m_ppTab[i] == NULL)
@@ -223,10 +228,15 @@ void CSymTab::PrintTable(FILE* pOut)
 			pSym = m_ppTab[i]->GetHead();
 		while (pSym)
 		{
-//			pSym->Print(pOut);
+			fprintf(pOut, "------------- %s -------------\n", pSym->GetName());
+			size = l - ls;
+			ls = pSym->Print(s,size,4,pSym->GetName());
+			fprintf(pOut, "%s\n", s);
+			ls = 0;
 			pSym = pSym->GetNext();
 		}
 	}
+	delete[] s;
 }
 
 
@@ -304,6 +314,7 @@ int CSymTab::RemoveAllOfType(CBin::IdentType Type)
 				pSym = pSym->GetNext();
 		}
 	}
+	delete[] s;
 	return Count;
 }
 

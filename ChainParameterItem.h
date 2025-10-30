@@ -18,5 +18,7 @@ public:
 	char* GetName();
 	CValue* GetValue() { return m_pValue; }
 	CSymbol* GetSymbol();
+	virtual void Emit(CSection* pSec);
+	virtual void EmitListing(CSection* pSec);
 };
 

@@ -205,8 +205,10 @@ public:
 	virtual bool Create(
 		CAstNode* pChild, 
 		CAstNode* pNext, 
-		CBin* pSym
+		CBin* pSym,
+		CSection* pSec
 	);
+	virtual bool Create(CBin* pSym, CSection* pSec);
 	virtual CAstNode* MakeNode(
 		CAstNode* pChild = 0,
 		CAstNode* pNext = 0

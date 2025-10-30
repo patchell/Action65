@@ -8,10 +8,10 @@ CAct65RETURN::~CAct65RETURN()
 {
 }
 
-bool CAct65RETURN::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
+bool CAct65RETURN::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym, CSection* pSec)
 {
 	bool rV = true;
-	rV = CAstNode::Create(pChild, pNext, pSym);
+	rV = CAstNode::Create(pChild, pNext, pSym, pSec);
 	return rV;
 }
 

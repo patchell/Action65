@@ -9,10 +9,10 @@ CAct65Label::~CAct65Label()
 {
 }
 
-bool CAct65Label::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym)
+bool CAct65Label::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym, CSection* pSec)
 {
 	bool rV = true;
-	rV = CAstNode::Create(pChild, pNext, pSym);
+	rV = CAstNode::Create(pChild, pNext, pSym, pSec);
 	return rV;
 }
 
@@ -44,7 +44,7 @@ int CAct65Label::Print(int Indent, char* s, int Strlen, bool* pbNextFlag)
 	int Size;
 	CSymbol* pSym = 0;
 	CChainBinItem* pCBI = 0;
-	CChainInstruction* pCInstr = 0;
+	CChainInstructionItem* pCInstr = 0;
 	CChainValueItem* pCVI = 0;
 
 	l = CAstNode::Print(Indent, s, Strlen, pbNextFlag);

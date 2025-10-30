@@ -365,8 +365,6 @@ void CActionApp::Dump(
 	char Ascii[10];
 	int l, i, c, n;
 
-	if(Size == 6)
-		int bk = 1;
 	Ascii[8] = 0;
 	while (!bDone)
 	{
@@ -430,5 +428,6 @@ char* CActionApp::CreateIndentString(char* s, int n, int Indent, int c)
 	for (i = 0; (i < Indent) && (i < (n - 1)); ++i)
 		s[i] = c;
 	s[i] = 0;
+	printf("Indent String:%d  Len=%d\n", n, Indent);
 	return s;
 }

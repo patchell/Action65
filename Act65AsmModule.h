@@ -6,7 +6,7 @@ class CAct65AsmModule : public CAstNode
 public:
 	CAct65AsmModule();
 	virtual ~CAct65AsmModule();
-	virtual bool Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym);
+	virtual bool Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym, CSection* pSec);
 	virtual CValue* Process() override;
 	virtual void PrintNode(FILE* pOut, int Indent, bool* pbNextFlag);
 	virtual int Print(int Indent, char* s, int l, bool* pbNextFlag);

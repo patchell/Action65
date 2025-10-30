@@ -1,6 +1,6 @@
 #include "pch.h"
 
-CChainTypeSpecItem::CChainTypeSpecItem() :CChainItem(CChainItem::ChainItemType::TYPE)
+CChainTypeSpecItem::CChainTypeSpecItem() :CChainItem(CChainItem::ChainItemType::TYPESPEC)
 {
 	m_SpecType = Spec::NONE;
 }
@@ -16,7 +16,7 @@ bool CChainTypeSpecItem::Create()
 
 void CChainTypeSpecItem::Copy(CChainItem* pI)
 {
-	if (pI && (pI->Is(CChainItem::ChainItemType::TYPE)))
+	if (pI && (pI->Is(CChainItem::ChainItemType::TYPESPEC)))
 	{
 		m_SpecType = ((CChainTypeSpecItem*)pI)->m_SpecType;
 	}
@@ -32,16 +32,6 @@ bool CChainTypeSpecItem::Compare(const char* pName)
 			rV = true;
 	}
 	return rV;
-}
-
-int CChainTypeSpecItem::Print(char* pSO, int l)
-{
-	int ls = 0;
-	const char* pObjName = FindName(m_SpecType);
-
-	if(pObjName)
-		ls += sprintf_s(pSO, l, "%s:", pObjName);
-	return ls;
 }
 
 bool CChainTypeSpecItem::IsFundamentalType()
@@ -61,6 +51,25 @@ bool CChainTypeSpecItem::IsFundamentalType()
     return rV;
 }
 
+bool CChainTypeSpecItem::IsScopeType()
+{
+	bool rV = false;
+
+	switch (m_SpecType)
+	{
+	case Spec::PROC_SCOPE:
+	case Spec::FUNC_SCOPE:
+	case Spec::INTERRUPT_SCOPE:
+	case Spec::LOCAL_SCOPE:
+	case Spec::GLOBAL_SCOPE:
+		[[fallthrough]];
+	case Spec::PARAM_SCOPE:
+		rV = true;
+		break;
+	}
+	return rV;
+}
+
 bool CChainTypeSpecItem::Is(Spec SpecType) const
 {
 	bool rV = false;
@@ -72,7 +81,14 @@ bool CChainTypeSpecItem::Is(Spec SpecType) const
 
 const char* CChainTypeSpecItem::Types::FindName(Spec T)
 {
-	return TypesLUT[int(T)].m_pName;
+	const char* rV = nullptr;
+
+	for (int i = 0; TypesLUT[i].m_pName && !rV; ++i)
+	{
+		if (TypesLUT[i].m_SpecType == T)
+			rV = TypesLUT[i].m_pName;
+	}
+	return rV;
 }
 
 int CChainTypeSpecItem::Print(char* pSO, int l, int Indent, const char* s)
@@ -82,24 +98,25 @@ int CChainTypeSpecItem::Print(char* pSO, int l, int Indent, const char* s)
 	char* pIndentString = new char[512];
 
 	Act()->IndentString(pIndentString, 512, Indent, ' ');
-	if (s)
+	if (s && (strlen(s) > 0))
 	{
-		size -= ls;
-		ls += sprintf_s(&pSO[ls], size, "%s%s:", pIndentString, s);
+		size = l - ls;
+		ls += sprintf_s(&pSO[ls], size, "%s%s:\n", pIndentString, s);
+		Act()->IndentString(pIndentString, 512, Indent+2, ' ');
 	}
-	size -= ls;
-	ls += sprintf_s(&pSO[ls], size, "%s\n", ItemTypeLUT[int(GetItemType())].m_pName);
-	size -= ls;
+	size = l - ls;
+	ls += sprintf_s(&pSO[ls], size, "%sChain Item Type:%s:", pIndentString, FindItemTypeName(GetItemType()));
+	size = l - ls;
 	const char* pObjName = FindName(m_SpecType);
 	if (pObjName)
 	{
-		size -= ls;
-		ls += sprintf_s(&pSO[ls], size, "%sType:%s\n", pIndentString, pObjName);
+		size = l - ls;
+		ls += sprintf_s(&pSO[ls], size, " Type:%s\n", pObjName);
 	}
 	else
 	{
-		size -= ls;
-		ls += sprintf_s(&pSO[ls], size, "%sType:Unknown\n", pIndentString);
+		size = l - ls;
+		ls += sprintf_s(&pSO[ls], size, " Type:<Unknown>\n");
 	}
 	delete[] pIndentString;
 	return ls;

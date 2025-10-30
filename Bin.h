@@ -99,7 +99,7 @@ private:
 	// Chain List for where symbol
 	// is used
 	//-------------------------------
-	CChain* m_pWhereUsed;
+	CChain m_WhereUsed;
 	//-------------------------------
 	// Symbol Properties
 	//-------------------------------
@@ -111,7 +111,6 @@ private:
 public:
 	CBin() {
 		m_Scope = 0;
-		m_pWhereUsed = 0;
 		m_pHead = 0;
 		m_pTail = 0;
 		m_Token = Token(0);
@@ -124,7 +123,6 @@ public:
 	}
 	CBin(BinType type) {
 		m_Scope = 0;
-		m_pWhereUsed = 0;
 		m_pName = 0;
 		m_pNext = 0;
 		m_pPrev = 0;
@@ -172,7 +170,7 @@ public:
 	virtual void SetAddress(unsigned A) {}
 	void SetToken(Token t) { m_Token = t; }
 	Token GetToken() const { return m_Token; }
-	virtual int Print(char* pSO, int l, int Indent, const char* s);
+	virtual int Print(char* pSO, int l, int Indent, const char* s) = 0;
 	//------------------------------------------
 	// SubList Methods
 	//------------------------------------------
@@ -185,7 +183,7 @@ public:
 	void SetTail(CBin* pT) { m_pTail = pT; }
 	CBin* GetTail() { return m_pTail; }
 	int GetID() const { return m_ID; }
-	CChain* GetWhereUsed() { return m_pWhereUsed; }
+	CChain* GetWhereUsed();
 	const char* GetIdentTypeString(IdentType IT) const {
 
 		const char* prStr = 0;

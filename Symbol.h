@@ -25,7 +25,7 @@ class CSymbol: public CBin
 	// a user defined TYPE
 	//---------------------------
 	CChainParameter* m_pParamChain;
-	CChainTypeSpec* m_pTypeDefChain;
+	CChain* m_pTypeDefFieldChain;
 	CChainLocals* m_pLocalVariablesChain;
 public:
 	CSymbol();
@@ -33,7 +33,7 @@ public:
 	bool Create() { return true; }
 	virtual bool Compare(const char* name, BinType Type = BinType::ANY, int aux = 0);
 	virtual void Print(FILE* pOut, const char* s);
-	virtual int Print(char* pSO,int l, const char* s = 0);
+	virtual int Print(char* pSO,int l, int Indent, const char* s = 0);
 	//-----------------------------
 	// Accessor Methods
 	//-----------------------------
@@ -44,21 +44,21 @@ public:
 		m_pParamChain = new CChainParameter;
 		m_pParamChain->Create();
 	}
-	CChain* GetTypeDefChain() {
-		return m_pTypeDefChain;
+	CChain* GetTypeDefFieldChain() {
+		return m_pTypeDefFieldChain;
 	}
-	void CreateTypeDefChain() {
-		m_pTypeDefChain = new CChainTypeSpec;
-		m_pTypeDefChain->Create();
+	void CreateTypeDefFieldChain() {
+		m_pTypeDefFieldChain = new CChainTypeSpec;
+		m_pTypeDefFieldChain->Create();
 	}
-	virtual unsigned GetAddress() const { return m_Address; }
-	virtual void SetAddress(unsigned A) { 
-		m_Address = A; 
-		SetResolved();
-		BackFillUnresolved();
+	virtual unsigned GetAddress() const { 
+		return m_Address; 
 	}
+	virtual void SetAddress(unsigned A);
 	CSection* GetSection() { return m_pSection; }
-	void SetSection(CSection* pS) { m_pSection = pS; }
+	void SetSection(CSection* pS) { 
+		m_pSection = pS; 
+	}
 	bool IsDefined() const { return m_bDefined && !m_UnResolved; }
 	bool IsUnResolved() const {
 		return m_UnResolved;
