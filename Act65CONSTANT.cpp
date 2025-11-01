@@ -37,7 +37,7 @@ CValue* CAct65CONSTANT::Process()
 	return Emit(m_pChildValue, m_pChildValue);
 }
 
-int CAct65CONSTANT::Print(int Indent, char* s, int Strlen, bool* pbNextFlag)
+int CAct65CONSTANT::Print(char* s, int Strlen, int Indent, const char* pAuxStr, bool* pbNextFlag)
 {
 	int l = 0;
 	int size;
@@ -46,7 +46,7 @@ int CAct65CONSTANT::Print(int Indent, char* s, int Strlen, bool* pbNextFlag)
 	++Count;
 	if (Count == 14)
 		printf("Well Dang\n");
-	l = CAstNode::Print(Indent, s, Strlen, pbNextFlag);
+	l = CAstNode::Print(s, Strlen, Indent, pAuxStr, pbNextFlag);
 	if (GetValue() == 0)
 		printf("Dang\n");
 	size = Strlen - l;

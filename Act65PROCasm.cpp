@@ -37,11 +37,11 @@ CValue* CAct65PROCasm::Process()
 	return Emit(m_pChildValue, m_pChildValue);
 }
 
-int CAct65PROCasm::Print(int Indent, char* s, int Strlen, bool* pbNextFlag)
+int CAct65PROCasm::Print(char* s, int Strlen, int Indent, const char* pAuxStr, bool* pbNextFlag)
 {
 	int l = 0;
 
-	l = CAstNode::Print(Indent, s, Strlen, pbNextFlag);
+	l = CAstNode::Print(s, Strlen, Indent, pAuxStr, pbNextFlag);
 	return l;
 }
 
@@ -53,7 +53,7 @@ void CAct65PROCasm::PrintNode(FILE* pOut, int Indent, bool* pbNextFlag)
 		int l = 0;
 		int size = 0;
 
-		l = Print(Indent, pS, 256, pbNextFlag);
+		l = Print(pS, 256, Indent, 0, pbNextFlag);
 		fprintf(pOut, "%s\n", pS);
 		delete[]pS;
 	}

@@ -37,12 +37,12 @@ CValue* CAct65TYPE::Process()
 	return Emit(m_pChildValue, m_pChildValue);
 }
 
-int CAct65TYPE::Print(int Indent, char* s, int Strlen, bool* pbNextFlag)
+int CAct65TYPE::Print(char* s, int Strlen, int Indent, const char* pAuxStr, bool* pbNextFlag)
 {
 	int l = 0;
 	int size = 0;
 
-	l = CAstNode::Print(Indent, s, Strlen, pbNextFlag);
+	l = CAstNode::Print(s, Strlen, Indent, pAuxStr, pbNextFlag);
 	size = Strlen - l;
 	if(GetSymbol())
 		l += sprintf_s(&s[l], size, " %s", GetSymbol()->GetName());

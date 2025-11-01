@@ -100,6 +100,7 @@ public:
 	bool Create(ValueType VT);
 	bool Create(int V);
     bool Create(CReg* pReg);
+	void Copy(CValue* pV);
 	int Print(char* pSO, int l, int Indent = 0, const char* s = 0);
 	void SetSymbol(CSymbol* pSym);
 	CReg* GetRegister() { return m_pReg; }
@@ -134,6 +135,7 @@ public:
 	int SizeOf();
 	int SizeOfTypeDef();
 	void SetAddress(int Address);
+	int GetAddress();
 	void SetResolved(bool bRes);
 	void BackFillUnresolved();
 	CChain* GetTypeTypeDefFieldChain();

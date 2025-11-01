@@ -38,14 +38,14 @@ CValue* CAct65SECTION::Process()
 	return Emit(m_pChildValue, m_pChildValue);
 }
 
-int CAct65SECTION::Print(int Indent, char* s, int Strlen, bool* pbNextFlag)
+int CAct65SECTION::Print(char* s, int Strlen, int Indent, const char* pAuxStr, bool* pbNextFlag)
 {
 	int l = 0;
 	int size = 0;
 	CSection* pSec = 0;
 
 	pSec = GetSection();
-	l = CAstNode::Print(Indent, s, Strlen, pbNextFlag);
+	l = CAstNode::Print(s, Strlen, Indent, pAuxStr, pbNextFlag);
 	size = Strlen - l;
 	l += sprintf_s(&s[l], size, " %s Start:$%04X SIZE:$%04X MODE:%s PAGE0:%s",
 		pSec->GetName(),

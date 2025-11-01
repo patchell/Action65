@@ -45,12 +45,12 @@ CValue* CAct65STRING::Process()
 	return Emit(m_pChildValue, m_pChildValue);
 }
 
-int CAct65STRING::Print(int Indent, char* s, int Strlen, bool* pbNextFlag)
+int CAct65STRING::Print(char* s, int Strlen, int Indent, const char* pAuxStr, bool* pbNextFlag)
 {
 	int l = 0;
 	int size = 0;
 
-	l = CAstNode::Print(Indent, s, Strlen, pbNextFlag);
+	l = CAstNode::Print(s, Strlen, Indent, pAuxStr, pbNextFlag);
 	size = Strlen - l;
 	l += sprintf_s(&s[l], size, ":\'%s\'", GetValue()->GetString());
 	return l;
@@ -64,7 +64,7 @@ void CAct65STRING::PrintNode(FILE* pOut, int Indent, bool* pbNextFlag)
 		int l = 0;
 		int size = 0;
 
-		l = Print(Indent, s, 512, pbNextFlag);
+		l = Print(s, 512, Indent, 0, pbNextFlag);
 		size = 256 - l;
 		sprintf_s(&s[l], size, " = \"%s\"", GetString());
 		fprintf(pOut, "%s\n", s);

@@ -118,22 +118,63 @@ void CActionAstTree::CheckNode(CAstNode* pNode)
 {
 	CAstNode* pChild = 0;
 	CAstNode* pNext = 0;
+	CAstNode* pParent = 0;
+	CAstNode* pResult = 0;
+	CAstNode* pBinOp = 0;
+	CAstNode* pAssign = 0;
+	char* pStr = 0;
+	int size = 0;
+	int l = 2048;
+	int ls = 0;
 
+	pStr = new char[l];
 	fprintf(Act()->LogFile(), "CheckNode:%s\n", pNode->GetNodeName());
 	switch (pNode->GetNodeType())
 	{
 	case CAstNode::NodeType::ASSIGN_EQ:
-		fprintf(Act()->LogFile(), "Optimize this NODE: %s\n", pNode->GetNodeName());
-		pChild = pNode->GetChild();
-		fprintf(Act()->LogFile(), "CheckNode::Child:%s\n", pChild->GetNodeName());;
-		if (pChild->IsBinOpNode())
+		//---------------------------------
+		// Optiming an assignment node:
+		// The direct child node is going
+		// to be a binary operator node.
+		// The "next" node of the binary
+		// operator node is going to be
+		// where the reslut is stored.
+		// The result node needs to be
+		// moved to the end of the child
+		// next list, and the assign node
+		// needs to be removed from tree
+		// by substituting the binary
+		// operator node.  Is this clear
+		// class?
+		//---------------------------------
+		pAssign = pNode;
+		fprintf(Act()->LogFile(), "Optimize this NODE: %s\n", pAssign->GetNodeName());
+		if (pAssign->GetChild()->IsBinOpNode())
 		{
-			pNext = pNode->GetChild()->GetNext();
-			pNode->GetChild()->SetNext(0);
-			CAstNode::MakeChildList(pChild,pNext);
+			pBinOp = pAssign->GetChild();
+			pParent = pAssign->GetParent();
+			pResult = pAssign->GetChild()->GetNext();
+			size = l - ls;
+			ls += pBinOp->Print(&pStr[ls], size, 4, 0, 0);
+			if (pParent)
+			{
+			}
+			else
+			{
+				fprintf(Act()->LogFile(), "***** Parent Node is NULL ********\n");
+			}
 		}
 		break;
 	default:
 		break;
 	}
+	delete[] pStr;
+}
+
+int CActionAstTree::Eol(char* pStr, int size)
+{
+	int ls = 0;
+
+	ls = sprintf_s(pStr, size, "\n");
+	return ls;
 }

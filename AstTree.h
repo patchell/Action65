@@ -7,6 +7,7 @@ public:
 	CAstTree();
 	virtual ~CAstTree();
 	bool Create();
+	static int PrintHeading(char* pSO, int l, int Indent, const char* s, bool bFull);
 	void Print(FILE* pOut);
 	static void TraverseTree(
 		FILE* pOut,

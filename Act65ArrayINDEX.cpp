@@ -43,11 +43,11 @@ CValue* CAct65ArrayINDEX::Process()
 	return Emit(m_pChildValue, m_pChildValue);
 }
 
-int CAct65ArrayINDEX::Print(int Indent, char* s, int Strlen, bool* pbNextFlag)
+int CAct65ArrayINDEX::Print(char* s, int Strlen, int Indent, const char* pAuxStr, bool* pbNextFlag)
 {
 	int l = 0;
 
-	l = CAstNode::Print(Indent, s, Strlen, pbNextFlag);
+	l = CAstNode::Print(s, Strlen, Indent, pAuxStr, pbNextFlag);
 	if (GetValue())
 	{
 		if (GetValue()->GetSymbol())
@@ -89,7 +89,7 @@ CValue* CAct65ArrayINDEX::Emit(CValue* pVc, CValue* pVn)
 			{
 			case CReg::RegType::A:
 				pOpCode = new CInstruction;
-				pOpCode->GenInstruction(Token::TAX, AdrModeType::IMPLIED, 0, pLabel, GetSection()->GetLocationCounter());
+				pOpCode->GenInstruction(Token::TAX, AdrModeType::IMPLIED, 0, pLabel);
 				GetSection()->AddInstruction(pOpCode);
 				pVc->GetRegister()->SetType(CReg::RegType::X);
 				break;

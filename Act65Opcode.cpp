@@ -66,8 +66,8 @@ void CAct65Opcode::PrintNode(FILE* pOut, int Indent, bool* pbNextFlag)
 	{
 		char* s = new char[256];
 		int l = 0;
-		
-		l = Print(Indent, s, l, pbNextFlag);
+
+		l = Print(s, 256, Indent, 0, pbNextFlag);
 		sprintf_s(&s[l], 256 - l, " %s", GetKeyWord()->m_Name);
 		fprintf(pOut, "%s\n", s);
 		delete[]s;
@@ -86,20 +86,19 @@ CValue* CAct65Opcode::Emit(CValue* pVc, CValue* pVn)
 		GetToken(),
 		GetAdrModeType(),
 		GetOperand(),
-		m_pLabel,
-		GetInstructionAddress()
+		m_pLabel
 	);
 	pSection->AddInstruction(m_pInstruction);
 	return nullptr;
 }
 
-int CAct65Opcode::Print(int Indent, char* s, int Strlen, bool* pbNextFlag)
+int CAct65Opcode::Print(char* s, int Strlen, int Indent, const char* pAuxStr, bool* pbNextFlag)
 {
 	int l = 0;
 	int c = 0;
 	char* pS = 0;
 
-	l = CAstNode::Print(Indent, s, Strlen, pbNextFlag);
+	l = CAstNode::Print(s, Strlen, Indent, pAuxStr,pbNextFlag);
 	int size = Strlen - l;
 	l += sprintf_s(&s[l], size, " %s ($%02X) %s",
 		GetKeyWord()->m_Name,

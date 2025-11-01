@@ -86,6 +86,27 @@ bool CValue::Create(CReg* pReg)
 	return true;
 }
 
+void CValue::Copy(CValue* pV)
+{
+	m_ValType = pV->m_ValType;
+	m_ConstantValue = pV->m_ConstantValue;
+	m_UpperLOwer = pV->m_UpperLOwer;
+	m_pSym = pV->m_pSym;
+	m_pReg = pV->m_pReg;
+	m_pVirtualReg = pV->m_pVirtualReg;
+	if (pV->m_pString)
+	{
+		int l = (int)strlen(pV->m_pString) + 1;
+		m_pString = new char[l];
+		strcpy_s(m_pString, l, pV->m_pString);
+	}
+	else
+	{
+		m_pString = 0;
+	}
+	m_AltTypeChain.CopyTypeChain(&pV->m_AltTypeChain);
+}
+
 int CValue::Print(char* pSO, int l, int Indent, const char* s)
 {
 	// Implementation of Print function
@@ -452,6 +473,15 @@ void CValue::SetAddress(int Addr)
 		);
 		throw(ThrownException);
 	}
+}
+
+int CValue::GetAddress()
+{
+	int Address = 0;
+	if(m_pSym)
+		Address = m_pSym->GetAddress();
+	Address += m_ConstantValue;
+	return Address;
 }
 
 void CValue::SetResolved(bool bRes)

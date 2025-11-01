@@ -42,11 +42,11 @@ CValue* CAct65AssignEQ::Process()
 		return nullptr;
 }
 
-int CAct65AssignEQ::Print(int Indent, char* s, int Strlen, bool* pbNextFlag)
+int CAct65AssignEQ::Print(char* s, int Strlen, int Indent, const char* pAuxStr, bool* pbNextFlag)
 {
 	int l = 0;
 
-	l = CAstNode::Print(Indent, s, Strlen, pbNextFlag);
+	l = CAstNode::Print(s, Strlen, Indent, pAuxStr, pbNextFlag);
 	return l;
 }
 

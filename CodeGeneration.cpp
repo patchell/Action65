@@ -36,6 +36,7 @@ CValue* CCodeGeneration::EmitBinaryOp(
 	AdrModeType AddressMode = AdrModeType::NA;
 	CValue* pReturnValue = 0;
 	CValue* pTempConst = 0;
+	CValue* pTempValue = 0;
 	CChainTypeSpecItem* pTypeObj = 0;
 	int YregValue = -1;
 	CValue* pLabel = 0;
@@ -51,8 +52,7 @@ CValue* CCodeGeneration::EmitBinaryOp(
 			OpAux,
 			AdrModeType::IMPLIED,
 			0,
-			pLabel,
-			pSection->GetLocationCounter()
+			pLabel
 		);
 		pSection->AddInstruction(pOpCode);
 		pOpCode = 0;
@@ -75,12 +75,13 @@ CValue* CCodeGeneration::EmitBinaryOp(
 				else
 					AddressMode = AdrModeType::ABSOLUTE_ADR;
 				pOpCode = new CInstruction;
+				pTempValue = new CValue;
+				pTempValue->Copy(pVn);
 				pOpCode->GenInstruction(
 					Token::LDA,
 					AddressMode,
-					pVn,
-					pLabel,
-					pSection->GetLocationCounter()
+					pTempValue,
+					pLabel
 				);
 				pSection->AddInstruction(pOpCode);
 				pOpCode = 0;
@@ -91,17 +92,16 @@ CValue* CCodeGeneration::EmitBinaryOp(
 					AddressMode = AdrModeType::ZERO_PAGE_ADR;
 				else
 					AddressMode = AdrModeType::ABSOLUTE_ADR;
-				pVn->Inc();
+				pTempValue = new CValue;
+				pTempValue->Copy(pVn);
 				pOpCode = new CInstruction;
 				pOpCode->GenInstruction(
 					Token::LDA,
 					AddressMode,
-					pVn,
-					pLabel,
-					pSection->GetLocationCounter()
+					pTempValue,
+					pLabel
 				);
 				pSection->AddInstruction(pOpCode);
-				pVn->Dec();
 				pOpCode = 0;
 			}
 		}
@@ -119,19 +119,20 @@ CValue* CCodeGeneration::EmitBinaryOp(
 						Token::LDY,
 						AdrModeType::IMMEDIATE_ADR,
 						pTempConst,
-						pLabel,
-						pSection->GetLocationCounter()
+						pLabel
 					);
 					pSection->AddInstruction(pOpCode);
 					pOpCode = 0;
 				}
 				pOpCode = new CInstruction;
+				pTempValue = new CValue;
+				pTempValue->Copy(pVn);
+				pTempValue->SetConstVal(i);
 				pOpCode->GenInstruction(
 					Token::LDA,
 					AdrModeType::INDIRECT_INDEXED_Y_ADR,
-					pVn,
-					pLabel,
-					pSection->GetLocationCounter()
+					pTempValue,
+					0
 				);
 				pSection->AddInstruction(pOpCode);
 				pOpCode = 0;
@@ -143,8 +144,7 @@ CValue* CCodeGeneration::EmitBinaryOp(
 					Token::INY,
 					AdrModeType::IMPLIED,
 					0,
-					pLabel,
-					pSection->GetLocationCounter()
+					pLabel
 				);
 				pOpCode = 0;
 			}
@@ -153,8 +153,7 @@ CValue* CCodeGeneration::EmitBinaryOp(
 				Token::LDA,
 				AdrModeType::INDIRECT_INDEXED_Y_ADR,
 				pVn,
-				pLabel,
-				pSection->GetLocationCounter()
+				pLabel
 			);
 			pSection->AddInstruction(pOpCode);
 			pOpCode = 0;
@@ -173,12 +172,14 @@ CValue* CCodeGeneration::EmitBinaryOp(
 				else
 					AddressMode = AdrModeType::ABSOLUTE_ADR;
 				pOpCode = new CInstruction;
+				pTempValue = new CValue;
+				pTempValue->Copy(pVn);
+				pTempValue->SetConstVal(i);
 				pOpCode->GenInstruction(
 					Token::LDA,
 					AddressMode,
-					pVn,
-					pLabel,
-					pSection->GetLocationCounter()
+					pTempValue,
+					pLabel
 				);
 				pSection->AddInstruction(pOpCode);
 				pOpCode = 0;
@@ -190,17 +191,17 @@ CValue* CCodeGeneration::EmitBinaryOp(
 					AddressMode = AdrModeType::ZERO_PAGE_ADR;
 				else
 					AddressMode = AdrModeType::ABSOLUTE_ADR;
-				pVn->Inc();
+				pTempValue = new CValue;
+				pTempValue->Copy(pVn);
+				pTempValue->SetConstVal(i);
 				pOpCode = new CInstruction;
 				pOpCode->GenInstruction(
 					Token::LDA,
 					AddressMode,
-					pVn,
-					pLabel,
-					pSection->GetLocationCounter()
+					pTempValue,
+					pLabel
 				);
 				pSection->AddInstruction(pOpCode);
-				pVn->Dec();
 				pOpCode = 0;
 			}
 		}
@@ -217,8 +218,7 @@ CValue* CCodeGeneration::EmitBinaryOp(
 					Token::LDA,
 					AddressMode,
 					pVn,
-					pLabel,
-					pSection->GetLocationCounter()
+					pLabel
 				);
 				pSection->AddInstruction(pOpCode);
 				pOpCode = 0;
@@ -230,17 +230,14 @@ CValue* CCodeGeneration::EmitBinaryOp(
 					AddressMode = AdrModeType::ZERO_PAGE_X_ADR;
 				else
 					AddressMode = AdrModeType::ABSOLUTE_X_ADR;
-				pVn->Inc();
 				pOpCode = new CInstruction;
 				pOpCode->GenInstruction(
 					Token::LDA,
 					AddressMode,
 					pVn,
-					pLabel,
-					pSection->GetLocationCounter()
+					pLabel
 				);
 				pSection->AddInstruction(pOpCode);
-				pVn->Dec();
 				pOpCode = 0;
 			}
 		}
@@ -256,12 +253,14 @@ CValue* CCodeGeneration::EmitBinaryOp(
 				else
 					AddressMode = AdrModeType::ABSOLUTE_ADR;
 				pOpCode = new CInstruction;
+				pTempValue = new CValue;
+				pTempValue->Copy(pVc);
+				pTempValue->SetConstVal(i);
 				pOpCode->GenInstruction(
 					Op,
 					AddressMode,
-					pVc,
-					pLabel,
-					pSection->GetLocationCounter()
+					pTempValue,
+					pLabel
 				);
 				pSection->AddInstruction(pOpCode);
 				pOpCode = 0;
@@ -272,16 +271,16 @@ CValue* CCodeGeneration::EmitBinaryOp(
 					AddressMode = AdrModeType::ZERO_PAGE_ADR;
 				else
 					AddressMode = AdrModeType::ABSOLUTE_ADR;
-				pVc->Inc();
+				pTempValue = new CValue;
+				pTempValue->Copy(pVc);
+				pTempValue->SetConstVal(i);
 				pOpCode = new CInstruction;
 				pOpCode->GenInstruction(
 					Op,
 					AddressMode,
-					pVc,
-					pLabel,
-					pSection->GetLocationCounter()
+					pTempValue,
+					pLabel
 				);
-				pVc->Dec();
 				pOpCode	= 0;
 			}
 		}
@@ -299,8 +298,7 @@ CValue* CCodeGeneration::EmitBinaryOp(
 						Token::LDY,
 						AdrModeType::IMMEDIATE_ADR,
 						pTempConst,
-						pLabel,
-						pSection->GetLocationCounter()
+						pLabel
 					);
 					pSection->AddInstruction(pOpCode);
 					pOpCode = 0;
@@ -311,8 +309,7 @@ CValue* CCodeGeneration::EmitBinaryOp(
 					Op,
 					AdrModeType::INDIRECT_INDEXED_Y_ADR,
 					pVc,
-					pLabel,
-					pSection->GetLocationCounter()
+					pLabel
 				);
 				pSection->AddInstruction(pOpCode);
 				pOpCode = 0;
@@ -362,8 +359,7 @@ CValue* CCodeGeneration::EmitBinaryOp(
 						Token::STA,
 						AddressMode,
 						pVr,
-						pLabel,
-						pSection->GetLocationCounter()
+						pLabel
 					);
 					pSection->AddInstruction(pOpCode);
 					pOpCode = 0;
@@ -438,8 +434,7 @@ CValue* CCodeGeneration::EmitBinaryOp(
 						Token::STA,
 						AdrModeType::ZERO_PAGE_ADR,
 						pReturnValue,
-						pLabel,
-						pSection->GetLocationCounter()
+						pLabel
 					);
 					pSection->AddInstruction(pOpCode);
 					pOpCode = 0;
@@ -452,8 +447,7 @@ CValue* CCodeGeneration::EmitBinaryOp(
 						Token::STA,
 						AdrModeType::ZERO_PAGE_ADR,
 						pReturnValue,
-						pLabel,
-						pSection->GetLocationCounter()
+						pLabel
 					);
 					pSection->AddInstruction(pOpCode);
 					pReturnValue->Dec();
@@ -580,8 +574,7 @@ CValue* CCodeGeneration::EmitDirect(Token Op, CValue* pVdest, int Byte, CSection
 			Op,
 			AddressingMode,
 			pVdest,
-			pLabel,
-			pSection->GetLocationCounter()
+			pLabel
 		);
 		pSection->AddInstruction(pOpCode);
 		break;
@@ -592,8 +585,7 @@ CValue* CCodeGeneration::EmitDirect(Token Op, CValue* pVdest, int Byte, CSection
 			Op,
 			AddressingMode,
 			pVdest,
-			pLabel,
-			pSection->GetLocationCounter()
+			pLabel
 		);
 		pSection->AddInstruction(pOpCode);
 		pVdest->Dec();
@@ -619,7 +611,12 @@ CValue* CCodeGeneration::EmitIndirect(Token Op, CValue* pVdestPointer, int Byte,
 	if (IncYreg)
 	{
 		pOpCode = new CInstruction;
-		pOpCode->GenInstruction(Token::INY, AdrModeType::IMPLIED, 0, pLabel, pSection->GetLocationCounter());
+		pOpCode->GenInstruction(
+			Token::INY, 
+			AdrModeType::IMPLIED, 
+			0, 
+			pLabel
+		);
 		pSection->AddInstruction(pOpCode);
 	}
 	switch (Byte)
@@ -627,7 +624,12 @@ CValue* CCodeGeneration::EmitIndirect(Token Op, CValue* pVdestPointer, int Byte,
 	case ByteOrder::LOWBYTE:
 	case ByteOrder::HIGHBYTE:
 		pOpCode = new CInstruction;
-		pOpCode->GenInstruction(Op, AddressingMode, pVdestPointer, pLabel, pSection->GetLocationCounter());
+		pOpCode->GenInstruction(
+			Op, 
+			AddressingMode, 
+			pVdestPointer, 
+			pLabel
+		);
 		pSection->AddInstruction(pOpCode);
 		break;
 	default:
@@ -665,8 +667,7 @@ CValue* CCodeGeneration::EmitIndexed(Token Op, CValue* pVdest, CValue* pIndex, i
 			Op,
 			AddressingMode,
 			pVdest,
-			pLabel,
-			pSection->GetLocationCounter()
+			pLabel
 		);
 		pSection->AddInstruction(pOpCode);
 
@@ -678,8 +679,7 @@ CValue* CCodeGeneration::EmitIndexed(Token Op, CValue* pVdest, CValue* pIndex, i
 			Op,
 			AddressingMode,
 			pVdest,
-			pLabel,
-			pSection->GetLocationCounter()
+			pLabel
 		);
 		pSection->AddInstruction(pOpCode);
 		pVdest->Dec();

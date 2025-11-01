@@ -37,11 +37,11 @@ CValue* CAct65CodeBlock::Process()
 	return Emit(m_pChildValue, m_pChildValue);
 }
 
-int CAct65CodeBlock::Print(int Indent, char* s, int Strlen, bool* pbNextFlag)
+int CAct65CodeBlock::Print(char* s, int Strlen, int Indent, const char* pAuxStr, bool* pbNextFlag)
 {
 	int l = 0;
 
-	l = CAstNode::Print(Indent, s, Strlen, pbNextFlag);
+	l = CAstNode::Print(s, Strlen, Indent, pAuxStr, pbNextFlag);
 	return l;
 }
 
@@ -94,11 +94,11 @@ CValue* CAct65CODEBLOCKend::Process()
 	return Emit(m_pChildValue, m_pChildValue);
 }
 
-int CAct65CODEBLOCKend::Print(int Indent, char* s, int Strlen, bool* pbNextFlag)
+int CAct65CODEBLOCKend::Print(char* s, int Strlen, int Indent, const char* pAuxStr, bool* pbNextFlag)
 {
 	int l = 0;
 
-	l = CAstNode::Print(Indent, s, Strlen, pbNextFlag);
+	l = CAstNode::Print(s, Strlen, Indent, pAuxStr, pbNextFlag);
 	return l;
 }
 

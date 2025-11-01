@@ -4,11 +4,11 @@ class CInstruction
 {
 	char m_Data[3];
 	KeyWord* m_pKeyWord;
-	AdrModeType m_AdrMode;
-	int m_numBytes;
+	AdrModeType m_AdrMode;//addressing mode
+	int m_numBytes;	//number of bytes for this instruction
 	int m_Address;	//address where instruction is stored
-	CValue* m_pLabel;
-	CValue* m_pOperand;
+	CValue* m_pLabel;	// Location label
+	CValue* m_pOperand;	// instruction operand
 public:
 	CInstruction() {
 		m_Data[0] = 0;
@@ -23,11 +23,12 @@ public:
 	}
 	bool GenInstruction(
 		Token OpToken,
-		AdrModeType AdrMode,
-		CValue* pOperand,
-		CValue* pLabel,
-		int Address
+		AdrModeType AdrMode,	// Addressing mode
+		CValue* pOperand,	// instruction operand
+		CValue* pLabel	// Location label
 	);
+	int TwoByteOperand();
+	int OneByteOperand();
 	int GetNumBytes() const { return m_numBytes; }
 	char* GetData() { return m_Data; }
 	int GetData(int i) const {
@@ -55,6 +56,12 @@ public:
 	int Print(char* pSO, int l, int Indent, const char* s);
 	char* GenOperand(char* s, int n);
 	virtual int PrintBinary(char* pSO, int l, int Indent, const char* s);
+	void SaveWordToOperandField(short v){
+		if (m_numBytes == 3){
+			m_Data[1] = v & 0x00FF;
+			m_Data[2] = (v >> 8) & 0x00FF;
+		}
+	}
 
 };
 

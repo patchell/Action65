@@ -36,11 +36,11 @@ CValue* CAct65PointerDeREF::Process()
 	return Emit(m_pChildValue, m_pChildValue);
 }
 
-int CAct65PointerDeREF::Print(int Indent, char* s, int Strlen, bool* pbNextFlag)
+int CAct65PointerDeREF::Print(char* s, int Strlen, int Indent, const char* pAuxStr, bool* pbNextFlag)
 {
 	int l = 0;
 
-	l = CAstNode::Print(Indent, s, Strlen, pbNextFlag);
+	l = CAstNode::Print(s, Strlen, Indent, pAuxStr, pbNextFlag);
 	return l;
 }
 
@@ -120,8 +120,7 @@ CValue* CAct65PointerDeREF::Emit(CValue* pVc, CValue* pVn)
 		Token::LDA, 
 		AddressingMode, 
 		pVc, 
-		pLabel, 
-		0	// Address will be filled in by linker if needed
+		pLabel
 	);
 	GetSection()->AddInstruction(pOpCode);
 	pOpCode = 0;
@@ -131,7 +130,6 @@ CValue* CAct65PointerDeREF::Emit(CValue* pVc, CValue* pVn)
 		Token::STA,
 		AdrModeType::ZERO_PAGE_ADR,
 		pVirtualReg,
-		0,
 		0
 	);
 	GetSection()->AddInstruction(pOpCode);
@@ -148,7 +146,6 @@ CValue* CAct65PointerDeREF::Emit(CValue* pVc, CValue* pVn)
 		Token::LDA, 
 		AddressingMode, 
 		pVc, 
-		0,
 		0
 	);
 	GetSection()->AddInstruction(pOpCode);
@@ -162,7 +159,6 @@ CValue* CAct65PointerDeREF::Emit(CValue* pVc, CValue* pVn)
 		Token::STA, 
 		AdrModeType::ZERO_PAGE_ADR, 
 		pVirtualReg,
-		0,
 		0
 	);
 	GetSection()->AddInstruction(pOpCode);

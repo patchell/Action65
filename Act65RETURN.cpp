@@ -37,11 +37,11 @@ CValue* CAct65RETURN::Process()
 	return Emit(m_pChildValue, m_pChildValue);
 }
 
-int CAct65RETURN::Print(int Indent, char* s, int Strlen, bool* pbNextFlag)
+int CAct65RETURN::Print(char* s, int Strlen, int Indent, const char* pAuxStr, bool* pbNextFlag)
 {
 	int l = 0;
 
-	l = CAstNode::Print(Indent, s, Strlen, pbNextFlag);
+	l = CAstNode::Print(s, Strlen, Indent, pAuxStr, pbNextFlag);
 	return l;
 }
 
@@ -66,7 +66,6 @@ CValue* CAct65RETURN::Emit(CValue* pVc, CValue* pVn)
 			Token::PLA, 
 			AdrModeType::IMPLIED, 
 			0, 
-			0, 
 			0
 		);
 		GetSection()->AddInstruction(pOpCode);	
@@ -76,7 +75,6 @@ CValue* CAct65RETURN::Emit(CValue* pVc, CValue* pVn)
 			Token::TAY,
 			AdrModeType::IMPLIED,
 			0,
-			0,
 			0
 		);
 		GetSection()->AddInstruction(pOpCode);
@@ -85,7 +83,6 @@ CValue* CAct65RETURN::Emit(CValue* pVc, CValue* pVn)
 		pOpCode->GenInstruction(
 			Token::PLA,
 			AdrModeType::IMPLIED,
-			0,
 			0,
 			0
 		);
@@ -96,7 +93,6 @@ CValue* CAct65RETURN::Emit(CValue* pVc, CValue* pVn)
 			Token::TAX,
 			AdrModeType::IMPLIED,
 			0,
-			0,
 			0
 		);
 		GetSection()->AddInstruction(pOpCode);
@@ -106,7 +102,6 @@ CValue* CAct65RETURN::Emit(CValue* pVc, CValue* pVn)
 			Token::PLA,
 			AdrModeType::IMPLIED,
 			0,
-			0,
 			0
 		);
 		GetSection()->AddInstruction(pOpCode);
@@ -115,7 +110,6 @@ CValue* CAct65RETURN::Emit(CValue* pVc, CValue* pVn)
 		pOpCode->GenInstruction(
 			Token::RTI,
 			AdrModeType::IMPLIED,
-			0,
 			0,
 			0
 		);
@@ -130,7 +124,6 @@ CValue* CAct65RETURN::Emit(CValue* pVc, CValue* pVn)
 		pOpCode->GenInstruction(
 			Token::RTS,
 			AdrModeType::IMPLIED,
-			0,
 			0,
 			0
 		);

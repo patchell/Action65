@@ -40,11 +40,11 @@ CValue* CAct65ADD::Process()
 	return Emit(m_pChildValue, m_pNextValue, m_pResultValue);
 }
 
-int CAct65ADD::Print(int Indent, char* s, int Strlen, bool* pbNextFlag)
+int CAct65ADD::Print(char* s, int Strlen, int Indent, const char* pAuxStr, bool* pbNextFlag)
 {
 	int l = 0;
 
-	l = CAstNode::Print(Indent, s, Strlen, pbNextFlag);
+	l = CAstNode::Print(s, Strlen, Indent, pAuxStr, pbNextFlag);
 	if (GetValue())
 	{
 		if (GetValue()->GetSymbol())

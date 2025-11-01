@@ -65,7 +65,49 @@ void CChainInstructionItem::Emit(CSection* pSec)
 		char* pData = m_pInstruction->GetData();
 		int numBytes = m_pInstruction->GetNumBytes();
 		int addr = pSec->GetLocationCounter();
-		pSec->AddData(numBytes, pData, m_pInstruction->GetLabel());
+		CValue* pLabel = m_pInstruction->GetLabel();
+		CValue* pOperand = m_pInstruction->GetOperand();
+
+		if (pLabel)
+		{
+			if (pLabel->GetSymbol())
+			{
+				if (pLabel->GetName())
+				{
+					if(strcmp("DOlabel__19", pLabel->GetName()) == 0)
+						printf("DO\n");
+				}
+			}
+		}
+		if (m_pInstruction->GetOperand())
+		{
+			if(m_pInstruction->GetOperand()->GetSymbol())
+			{
+				if (m_pInstruction->GetOperand()->GetName())
+				{
+					if (strcmp("DOlabel__19", m_pInstruction->GetOperand()->GetName()) == 0)
+						printf("OD\n");
+				}
+			}
+		}
+		if(pLabel && pLabel->GetSymbol()->IsUnResolved())
+		{
+			//mark instruction label as unresolved
+			pLabel->SetAddress(addr);
+		}
+		if (pOperand && pOperand->GetSymbol())
+		{
+			if (pOperand->GetSymbol()->IsUnResolved())
+				printf("Error: Operand symbol not resolved before Emit\n");
+			else
+			{
+				if (m_pInstruction->GetNumBytes() == 3)
+					m_pInstruction->SaveWordToOperandField((short)pOperand->GetAddress());
+				else if(m_pInstruction->GetNumBytes() == 2)
+					m_pInstruction->SetData(1, (char)pOperand->GetAddress());
+			}
+		}
+		pSec->AddData(numBytes, pData, pLabel);
 		m_pInstruction->SetAddress(addr);
 	}
 }

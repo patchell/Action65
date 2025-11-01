@@ -39,11 +39,11 @@ CValue* CAct65DO::Process()
 	return pValue;
 }
 
-int CAct65DO::Print(int Indent, char* s, int Strlen, bool* pbNextFlag)
+int CAct65DO::Print(char* s, int Strlen, int Indent, const char* pAuxStr, bool* pbNextFlag)
 {
 	int l = 0;
 
-	l = CAstNode::Print(Indent, s, Strlen, pbNextFlag);
+	l = CAstNode::Print(s, Strlen, Indent, pAuxStr, pbNextFlag);
 	return l;
 }
 
@@ -54,14 +54,11 @@ void CAct65DO::PrintNode(FILE* pOut, int Indent, bool* pbNextFlag)
 
 CValue* CAct65DO::Emit(CValue* pVc, CValue* pVn)
 {
-	int StartAddressOfDO = 0;
 	CSymbol* pStartSymbol = 0;
 	CStackDOODItem* pDOODStackItem = 0;
 	CValue* pLabelValue = 0;
 
-	StartAddressOfDO = GetSection()->GetLocationCounter();
 	pStartSymbol = Act()->GetParser()->GenerateSymbol("DOlabel_");
-	pStartSymbol->SetAddress(StartAddressOfDO);
 	pStartSymbol->SetSection(GetSection());
 	pStartSymbol->SetIdentType(CBin::IdentType::LOCAL);
 	Act()->GetSymTab()->AddSymbol(pStartSymbol, CBin::BinType::SYMBOL, 0);

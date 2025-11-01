@@ -36,11 +36,11 @@ CValue* CAct65OD::Process()
 	return Emit(m_pChildValue, m_pChildValue);
 }
 
-int CAct65OD::Print(int Indent, char* s, int Strlen, bool* pbNextFlag)
+int CAct65OD::Print(char* s, int Strlen, int Indent, const char* pAuxStr, bool* pbNextFlag)
 {
 	int l = 0;
 
-	l = CAstNode::Print(Indent, s, Strlen, pbNextFlag);
+	l = CAstNode::Print(s, Strlen, Indent, pAuxStr, pbNextFlag);
 	return l;
 }
 
@@ -62,7 +62,6 @@ CValue* CAct65OD::Emit(CValue* pVc, CValue* pVn)
 			Token::JMP,
 			AdrModeType::ABSOLUTE_ADR,
 			pDOODItem->GetLabelValue(),
-			0,
 			0
 		);
 		GetSection()->AddInstruction(pOpCode);

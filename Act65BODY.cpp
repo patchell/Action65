@@ -39,11 +39,11 @@ CValue* CAct65BODY::Process()
 	return nullptr;
 }
 
-int CAct65BODY::Print(int Indent, char* s, int Strlen, bool* pbNextFlag)
+int CAct65BODY::Print(char* s, int Strlen, int Indent, const char* pAuxStr, bool* pbNextFlag)
 {
 	int l = 0;
 
-	l = CAstNode::Print(Indent, s, Strlen, pbNextFlag);
+	l = CAstNode::Print(s, Strlen, Indent, pAuxStr, pbNextFlag);
 	return l;
 }
 
@@ -73,8 +73,7 @@ CValue* CAct65BODY::Emit(CValue* pVc, CValue* pVn)
 		Token::PHA, 
 		AdrModeType::IMPLIED, 
 		0, // operand
-		pLabelVal,
-		Address
+		pLabelVal
 	);
 	Address = GetSection()->AddInstruction(pInst);
 
@@ -83,8 +82,7 @@ CValue* CAct65BODY::Emit(CValue* pVc, CValue* pVn)
 		Token::TXA, 
 		AdrModeType::IMPLIED, 
 		0,	// Operand
-		0,	// Label
-		Address
+		0	// Label
 	);
 	Address = GetSection()->AddInstruction(pInst);
 
@@ -93,8 +91,7 @@ CValue* CAct65BODY::Emit(CValue* pVc, CValue* pVn)
 		Token::PHA, 
 		AdrModeType::IMPLIED, 
 		0,	// Operand
-		0,	// Label
-		Address
+		0	// Label
 	);
 	Address = GetSection()->AddInstruction(pInst);
 
@@ -103,8 +100,7 @@ CValue* CAct65BODY::Emit(CValue* pVc, CValue* pVn)
 		Token::TYA, 
 		AdrModeType::IMPLIED, 
 		0,	// Operand
-		0,	// Label
-		Address
+		0	// Label
 	);
 	Address = GetSection()->AddInstruction(pInst);
 
@@ -113,8 +109,7 @@ CValue* CAct65BODY::Emit(CValue* pVc, CValue* pVn)
 		Token::PHA, 
 		AdrModeType::IMPLIED, 
 		0,	// Operand
-		0,	// Label
-		Address
+		0	// Label
 	);
 	GetSection()->AddInstruction(pInst);
 	//-------------------------------

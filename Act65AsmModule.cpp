@@ -41,15 +41,15 @@ void CAct65AsmModule::PrintNode(FILE* pOut, int Indent, bool* pbNextFlag)
 	{
 		char* s = new char[256];
 		int l = 0;
-		l = Print(Indent, s, 256, pbNextFlag);
+		l = Print(s, 256, Indent, NULL,pbNextFlag);
 		fprintf(pOut, "%s\n", s);
 		delete[]s;
 	}
 }
 
-int CAct65AsmModule::Print(int Indent, char* s, int l, bool* pbNextFlag)
+int CAct65AsmModule::Print(char* s, int l, int Indent, const char* pAuxStr, bool* pbNextFlag)
 {
-	l = CAstNode::Print(Indent, s, l, pbNextFlag);
+	l = CAstNode::Print(s, l, Indent, NULL, pbNextFlag);
 	int size = 256 - l;
 	l += sprintf_s(&s[l], size, " %s", m_pNodeTyypeName);
 	size = 256 - l;

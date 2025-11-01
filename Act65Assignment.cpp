@@ -36,11 +36,11 @@ CValue* CAct65Assignment::Process()
 	return Emit(m_pChildValue, m_pChildValue);
 }
 
-int CAct65Assignment::Print(int Indent, char* s, int Strlen, bool* pbNextFlag)
+int CAct65Assignment::Print(char* s, int Strlen, int Indent, const char* pAuxStr, bool* pbNextFlag)
 {
 	int l = 0;
 
-	l = CAstNode::Print(Indent, s, Strlen, pbNextFlag);
+	l = CAstNode::Print(s, Strlen, Indent, pAuxStr, pbNextFlag);
 	return l;
 }
 
@@ -81,7 +81,6 @@ CValue* CAct65Assignment::Emit(CValue* pVc, CValue* pVn)
 					Token::LDA,
 					AdrModeType::IMMEDIATE_ADR,
 					pTempValue,
-					0,
 					0
 				);
 				GetSection()->AddInstruction(pOpCode);
@@ -96,7 +95,6 @@ CValue* CAct65Assignment::Emit(CValue* pVc, CValue* pVn)
 					Token::LDA,
 					AdrModeType::IMMEDIATE_ADR,
 					pTempValue,
-					0,
 					0
 				);
 				GetSection()->AddInstruction(pOpCode);
@@ -134,12 +132,14 @@ CValue* CAct65Assignment::Emit(CValue* pVc, CValue* pVn)
 			else
 				AddressingMode = AdrModeType::ABSOLUTE_ADR;
 			pOpCode = new CInstruction;
+			pTempValue = new CValue;
+			pTempValue->Copy(pVn);
+			pTempValue->SetConstVal(i);
 			pOpCode->GenInstruction(
 				OpToken,
 				AddressingMode,
-				pVn,
-				0,
-				0
+				pTempValue,	// operand Value
+				0		// Label Value
 			);
 			GetSection()->AddInstruction(pOpCode);
 			break;

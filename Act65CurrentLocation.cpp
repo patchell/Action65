@@ -37,11 +37,11 @@ CValue* CAct65CurrentLocation::Process()
 	return Emit(m_pChildValue, m_pChildValue);
 }
 
-int CAct65CurrentLocation::Print(int Indent, char* s, int Strlen, bool* pbNextFlag)
+int CAct65CurrentLocation::Print(char* s, int Strlen, int Indent, const char* pAuxStr, bool* pbNextFlag)
 {
 	int l = 0;
 
-	l = CAstNode::Print(Indent, s, Strlen, pbNextFlag);
+	l = CAstNode::Print(s, Strlen, Indent, pAuxStr, pbNextFlag);
 	return l;
 }
 
@@ -53,7 +53,7 @@ void CAct65CurrentLocation::PrintNode(FILE* pOut, int Indent, bool* pbNextFlag)
 		int l = 0;
 		int size = 0;
 
-		l = Print(Indent, s, 256, pbNextFlag);
+		l = Print(s, 256, Indent, NULL, pbNextFlag);
 		size = 256 - l;
 		sprintf_s(&s[l], size, " =$%04X", GetValue() & 0x0ffff);
 		fprintf(pOut, "%s\n", s);

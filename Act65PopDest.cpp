@@ -37,9 +37,9 @@ CValue* CAct65PopDest::Process()
 	return Emit(m_pChildValue, m_pChildValue);
 }
 
-int CAct65PopDest::Print(int Indent, char* s, int Strlen, bool* pbNextFlag)
+int CAct65PopDest::Print(char* s, int Strlen, int Indent, const char* pAuxStr, bool* pbNextFlag)
 {
-	return 0;
+	return CAstNode::Print(s, Strlen, Indent, pAuxStr, pbNextFlag);
 }
 
 void CAct65PopDest::PrintNode(FILE* pOut, int Indent, bool* pbNextFlag)

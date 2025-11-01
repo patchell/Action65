@@ -5,44 +5,106 @@ bool CInstruction::GenInstruction(
 	Token OpToken,
 	AdrModeType AdressMode,
 	CValue* pOperandValue,
-	CValue* pLabel,
-	int Address
+	CValue* pLabel		// Location label
 )
 {
-	int StartAddress = 0;
+	int Operand = 0;
 
 	m_pKeyWord = Act()->GetParser()->GetLexer()->FindKeyword(OpToken);
 	if (m_pKeyWord->m_pAddresModeLUT->ValidAddressingMode(AdressMode))
 	{
-		//switch (AdressMode)
-		//{
-		//case AdrModeType::INDEXED_INDIRECT_X_ADR:
-		//case AdrModeType::INDIRECT_INDEXED_Y_ADR:
-		//case AdrModeType::ZERO_PAGE_ADR:
-		//case AdrModeType::ZERO_PAGE_X_ADR:
-		//	[[fallthrough]];
-		//case AdrModeType::ZERO_PAGE_Y_ADR:
-		//	if (!pOperandValue->IsPageZero())
-		//	{
-		//		ThrownException.SetXCeptType(Exception::ExceptionType::ILLEGAL_ADDRESSING_MODE);
-		//		sprintf_s(
-		//			ThrownException.GetErrorString(),
-		//			ThrownException.GetMaxStringLen(),
-		//			"CInstruction::GenInstruction: Address is NOT page Zero:%s\n",
-		//			pOperandValue->GetSymbol()->GetName()
-		//		);
-		//		throw(ThrownException);
-		//	}
-		//	break;
-		//}
-		m_Data[0] = Act()->GetLexer()->MakeOpcode(OpToken, AdressMode);
+		m_Data[0] = Act()->GetLexer()->MakeOpcode(OpToken, AdressMode);	//Opcode byte
 		m_numBytes = m_pKeyWord->GetNumberOfBytes(AdressMode);
-		m_pOperand = pOperandValue;
+		if (m_numBytes > 1)
+		{
+			m_pOperand = pOperandValue;
+			switch (m_numBytes)
+			{
+			case 2:	// One byte operand
+				Operand = OneByteOperand();
+				m_Data[1] = Operand & 0x00FF;
+				break;
+			case 3:	// Two byte operand
+				Operand = TwoByteOperand();
+				m_Data[1] = Operand & 0x00FF;
+				m_Data[2] = (Operand >> 8) & 0x00FF;
+				break;
+			default:
+				break;
+			}
+
+		}
 		m_pLabel = pLabel;
 		m_AdrMode = AdressMode;
-		m_Address = Address;
+//		m_Address = Address;
 	}
 	return true;
+}
+
+int CInstruction::TwoByteOperand()
+{
+	int OperandValue = 0;
+
+	switch (m_pOperand->GetValueType())
+	{
+	case CValue::ValueType::CONSTANT:
+		OperandValue = m_pOperand->GetConstVal();
+		break;
+	case CValue::ValueType::SYMBOL:
+		OperandValue = m_pOperand->GetSymbol()->GetAddress();
+		OperandValue += m_pOperand->GetConstVal();
+		break;
+	case CValue::ValueType::REG:
+		break;
+	case CValue::ValueType::VIRTUAL_REGISTER:
+		break;
+	case CValue::ValueType::ADDRESS_OF:
+		break;
+	case CValue::ValueType::NONE:
+		break;
+	case CValue::ValueType::STRING:
+		break;
+	case CValue::ValueType::CSTRING:
+		break;
+	case CValue::ValueType::ASTRING:
+		break;
+	default:
+		break;
+	}
+	return OperandValue;
+}
+
+int CInstruction::OneByteOperand()
+{
+	int OperandValue = 0;
+
+	switch (m_pOperand->GetValueType())
+	{
+	case CValue::ValueType::CONSTANT:
+		OperandValue = m_pOperand->GetConstVal();
+		break;
+	case CValue::ValueType::SYMBOL:
+		OperandValue = m_pOperand->GetSymbol()->GetAddress();
+		OperandValue += m_pOperand->GetConstVal();
+		break;
+	case CValue::ValueType::REG:
+		break;
+	case CValue::ValueType::VIRTUAL_REGISTER:
+		break;
+	case CValue::ValueType::ADDRESS_OF:
+		break;
+	case CValue::ValueType::NONE:
+		break;
+	case CValue::ValueType::STRING:
+		break;
+	case CValue::ValueType::CSTRING:
+		break;
+	case CValue::ValueType::ASTRING:
+		break;
+	default:
+		break;
+	}
+	return OperandValue;
 }
 
 void CInstruction::EmitListing()

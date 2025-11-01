@@ -38,7 +38,7 @@ CValue* CAct65Label::Process()
 	return Emit(m_pChildValue, m_pChildValue);
 }
 
-int CAct65Label::Print(int Indent, char* s, int Strlen, bool* pbNextFlag)
+int CAct65Label::Print(char* s, int Strlen, int Indent, const char* pAuxStr	, bool* pbNextFlag)
 {
 	int l = 0;
 	int Size;
@@ -47,7 +47,7 @@ int CAct65Label::Print(int Indent, char* s, int Strlen, bool* pbNextFlag)
 	CChainInstructionItem* pCInstr = 0;
 	CChainValueItem* pCVI = 0;
 
-	l = CAstNode::Print(Indent, s, Strlen, pbNextFlag);
+	l = CAstNode::Print(s, Strlen, Indent, pAuxStr, pbNextFlag);
 	Size = Strlen - l;
 	pSym = (CSymbol*)GetSymbol();
 	l += sprintf_s(&s[l], Size, " \'%s\'", 

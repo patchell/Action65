@@ -13,5 +13,6 @@ public:
 		int MaxLoops
 	);
 	void CheckNode(CAstNode* pNode);
+	int Eol(char* pStr, int size);
 };
 

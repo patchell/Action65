@@ -41,11 +41,11 @@ CValue* CAct65SUB::Process()
 	return Emit(m_pChildValue, m_pNextValue, m_pResultValue);
 }
 
-int CAct65SUB::Print(int Indent, char* s, int Strlen, bool* pbNextFlag)
+int CAct65SUB::Print(char* s, int Strlen, int Indent, const char* pAuxStr, bool* pbNextFlag)
 {
 	int l = 0;
 
-	l = CAstNode::Print(Indent, s, Strlen, pbNextFlag);
+	l = CAstNode::Print(s, Strlen, Indent, pAuxStr, pbNextFlag);
 	return l;
 }
 

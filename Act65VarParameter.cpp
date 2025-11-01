@@ -35,10 +35,10 @@ CValue* CAct65VarParameter::Process()
 	return Emit(m_pChildValue, m_pChildValue);
 }
 
-int CAct65VarParameter::Print(int Indent, char* s, int Strlen, bool* pbNextFlag)
+int CAct65VarParameter::Print(char* s, int Strlen, int Indent, const char* pAuxStr, bool* pbNextFlag)
 {
 	int l = 0;
-	l = CAstNode::Print(Indent, s, Strlen, pbNextFlag);
+	l = CAstNode::Print(s, Strlen, Indent, pAuxStr, pbNextFlag);
 	return l;
 }
 

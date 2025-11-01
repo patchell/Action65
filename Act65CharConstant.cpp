@@ -44,19 +44,19 @@ void CAct65CharConstant::PrintNode(FILE* pOut, int Indent, bool* pbNextFlag)
 	{
 		int l = 0;
 		char* s = new char[256];
-		
-		l = Print(Indent, s, 256, pbNextFlag);
+
+		l = Print(s, 256, Indent, NULL, pbNextFlag);
 		sprintf_s(&s[l], 256, " \'%c'\'", GetValue());
 		fprintf(pOut, "%s\n", s);
 		delete[] s;
 	}
 }
 
-int CAct65CharConstant::Print(int Indent, char* s, int Strlen, bool* pbNextFlag)
+int CAct65CharConstant::Print(char* s, int Strlen, int Indent, const char* pAuxStr, bool* pbNextFlag)
 {
 	int l = 0;
 
-	l = CAstNode::Print(Indent, s, Strlen, pbNextFlag);
+	l = CAstNode::Print(s, Strlen, Indent, pAuxStr, pbNextFlag);
 	return l;
 }
 

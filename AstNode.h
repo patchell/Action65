@@ -218,7 +218,8 @@ public:
 	virtual CAstNode* CreateValue(int V);
 	virtual CValue* Process() = 0;
 	virtual void PrintNode(FILE* pOut, int Indent, bool* pbNextFlag);
-	virtual int Print(int Indent, char* s, int strLen, bool* pbNextFlag);
+	virtual int Print(char* s, int strLen, int Indent, const char* pAuxStr, bool* pbNextFlag);
+	virtual int PrintAll(char* s, int strLen, int Indent, const char* pAuxStr, bool* pbNextFlag);
 	virtual bool IsLabel() { return false; }
 	virtual bool IsBinOpNode();
 

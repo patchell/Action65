@@ -40,11 +40,11 @@ CValue* CAct65XREG::Process()
 	return Emit(m_pChildValue, m_pChildValue);
 }
 
-int CAct65XREG::Print(int Indent, char* s, int Strlen, bool* pbNextFlag)
+int CAct65XREG::Print(char* s, int Strlen, int Indent, const char* pAuxStr, bool* pbNextFlag)
 {
 	int l = 0;
 
-	l = CAstNode::Print(Indent, s, Strlen, pbNextFlag);
+	l = CAstNode::Print(s, Strlen, Indent, pAuxStr, pbNextFlag);
 	return l;
 }
 
@@ -56,7 +56,7 @@ void CAct65XREG::PrintNode(FILE* pOut, int Indent, bool* pbNextFlag)
 		int l = 0;
 		int size = 0;
 
-		l = Print(Indent, s, l, pbNextFlag);
+		l = Print(s, 256, Indent, 0, pbNextFlag);
 		size = 256 - l;
 		sprintf_s(&s[l], size, " - \'X\'");
 		fprintf(pOut, "%s\n", s);

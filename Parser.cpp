@@ -1567,6 +1567,7 @@ CAstNode* CParser::Run()
 		fprintf(stderr, "Optimize Abstract Syntax Tree\n");
 		GetAstTree()->Optimize();
 		GetAstTree()->Print(LogFile());
+		Act()->Exit(0);
 		NextPass();	// Generate Code
 		fprintf(stderr, "Generate Cpde\n");
 		GetAstTree()->Process();	//gemerate cpde

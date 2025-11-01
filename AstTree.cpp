@@ -16,6 +16,31 @@ bool CAstTree::Create()
 	return rV;
 }
 
+int CAstTree::PrintHeading(char* pSO, int l, int Indent, const char* s, bool bFull)
+{
+	int ls = 0;
+
+	if (!bFull)
+	{
+		ls = sprintf_s(
+			pSO,
+			l,
+			"%s\t NUMB  CHILD  NEXT\n",
+			s ? s : ""
+		);
+	}
+	else
+	{
+		ls = sprintf_s(
+			pSO,
+			l,
+			"%s\t NUMB  CHILD  NEXT  PREV  PARENT\n",
+			s ? s : ""
+		);
+	}
+	return ls;
+}
+
 void CAstTree::Print(FILE* pOut)
 {
 	char* s = 0;
@@ -97,7 +122,7 @@ void CAstTree::TraverseTree(
 			pbNextFlags[Indent] = true;
 		else
 			pbNextFlags[Indent] = false;
-		l = pAN->Print(Indent, s, StringSize, pbNextFlags);
+		l = pAN->Print(s, StringSize, Indent, 0, pbNextFlags);
 		fprintf(pOut, "%s\n", s);
 		if (pAN->GetChild())
 		{
@@ -153,7 +178,7 @@ void CAstTree::TraverseTree(
 		}
 		pAN = pAN->GetNext();
 	}
-	l = pAN->Print(Indent, s, StringSize, pbNextFlags);
+	l = pAN->Print(s, StringSize, Indent, 0, pbNextFlags);
 	fprintf(pOut, "%s\n", s);
 	if (pAN->GetChild())
 	{

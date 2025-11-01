@@ -154,14 +154,14 @@ void CAstNode::PrintNode(FILE* pOut, int Indent, bool* pbNextFlag)
 {
 	if (pOut)
 	{
-		char* s = new char[256];
-		Print(Indent, s, 256, pbNextFlag);
+		char* s = new char[1024];
+		Print(s, 1024, Indent, NULL, pbNextFlag);
 		fprintf(pOut, "%s\n",s);
 		delete[] s;
 	}	 
 }
 
-int CAstNode::Print(int Indent, char* s, int strLen, bool* pbNextFlag)
+int CAstNode::Print(char* s, int strLen, int Indent, const char* pAuxStr, bool* pbNextFlag)
 {
 	int i = 0, l = 0;
 	int Id, Child, Next;
@@ -193,6 +193,53 @@ int CAstNode::Print(int Indent, char* s, int strLen, bool* pbNextFlag)
 	if (GetSection() && GetSection()->GetName())
 		l += sprintf_s(&s[l], size, "%s\'", GetSection()->GetName());
 	return l;
+}
+
+int CAstNode::PrintAll(char* pSO, int l, int Indent, const char* pAuxStr, bool* pbNextFlag)
+{
+	int i = 0, ls = 0;
+	int Id, Child, Next, Prev, Parent;
+	int size;
+	char* pIndentStr = new char[256];
+
+	Act()->IndentString(pIndentStr, 256, Indent, ' ');
+	Id = GetID();
+	if (GetChild())
+		Child = GetChild()->GetID();
+	else
+		Child = -1;
+	if (GetNext())
+		Next = GetNext()->GetID();
+	else
+		Next = -1;
+	if(GetParent())
+		Parent = GetParent()->GetID();
+	else
+		Parent = -1;
+	if (GetPrev())
+		Prev = GetPrev()->GetID();
+	else
+		Prev = -1;
+
+	size = l - ls;
+	ls += sprintf_s(&pSO[ls], size, "%s%6d %6d %6d %6d %6d  ", pIndentStr, Id, Child, Next, Prev, Parent);
+	size = l - ls;
+	ls += MakeIndentString(&pSO[ls], size, Indent, pbNextFlag);
+	size = l - ls;
+	ls += sprintf_s(&pSO[ls], size, "+- \'%s\'", GetNodeName());
+	if (GetSection() && GetSection()->GetName())
+	{
+		size = l - ls;
+		ls += sprintf_s(&pSO[ls], size, " (Section: ");
+		size = l - ls;
+		ls += sprintf_s(&pSO[ls], size, "%s)", GetSection()->GetName());
+	}
+	if (GetSection() && GetSection()->GetName())
+	{
+		size = l - ls;
+		ls += sprintf_s(&pSO[ls], size, "%s\'", GetSection()->GetName());
+	}
+	return ls;
 }
 
 bool CAstNode::IsBinOpNode()
@@ -300,6 +347,7 @@ CAstNode* CAstNode::MakeChildList(CAstNode* pList, CAstNode* pChild)
 					pNode = pNode->GetNext();
 				}
 				pNode->SetNext(pChild);
+				pChild->SetPrev(pNode);
 			}
 			else
 			{
@@ -336,7 +384,7 @@ int CAstNode::MakeIndentString(char* s, int size, int Indent, bool* pbNextFlag)
 
 	for (j = 0; j < Indent; ++j)
 	{
-		if (pbNextFlag[j])
+		if (pbNextFlag && pbNextFlag[j])
 			l += sprintf_s(&s[l], sz, "|  ");
 		else
 			l += sprintf_s(&s[l], sz, "   ");
