@@ -15,13 +15,13 @@ bool CAct65INTERRUPT::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym, CSec
 	return rV;
 }
 
-CValue* CAct65INTERRUPT::Process()
+CValue* CAct65INTERRUPT::Process(SAuxEmitInfo* pAuxInfo)
 {
 	CAstNode* pChild = 0, * pNext = 0;
 	CValue* pValue = 0;
 
 //	fprintf(Act()->LogFile(), "Process %s Node:%d\n", GetNodeName(), GetID());
-	Emit(0, 0);
+	Emit(0, 0, pAuxInfo);
 	pChild = GetChild();
 	if (pChild)
 	{
@@ -29,11 +29,11 @@ CValue* CAct65INTERRUPT::Process()
 	}
 	if (pChild)
 	{
-		m_pChildValue = pChild->Process();
+		m_pChildValue = pChild->Process(pAuxInfo);
 	}
 	while (pNext)
 	{
-		m_pNextValue = pNext->Process();
+		m_pNextValue = pNext->Process(pAuxInfo);
 		pNext = pNext->GetNext();
 	}
 	return nullptr;
@@ -52,7 +52,7 @@ void CAct65INTERRUPT::PrintNode(FILE* pOut, int Indent, bool* pbNextFlag)
 	CAstNode::PrintNode(pOut, Indent, pbNextFlag);
 }
 
-CValue* CAct65INTERRUPT::Emit(CValue* pVc, CValue* pVn)
+CValue* CAct65INTERRUPT::Emit(CValue* pVc, CValue* pVn, SAuxEmitInfo* pAuxInfo)
 {
 	return nullptr;
 }

@@ -3,6 +3,14 @@
 class CParser;
 class CCodeGeneration;
 
+struct SAuxEmitInfo {
+	int m_Iteration;
+public:
+	SAuxEmitInfo() {
+		m_Iteration = 0;
+	}
+};
+
 class CAstNode
 {
 public:
@@ -216,13 +224,13 @@ public:
 	virtual void CreateValue(CSymbol* pSym);
 	virtual void CreateValue(const char* s);
 	virtual CAstNode* CreateValue(int V);
-	virtual CValue* Process() = 0;
+	virtual CValue* Process(SAuxEmitInfo* pAuxInfo) = 0;
 	virtual void PrintNode(FILE* pOut, int Indent, bool* pbNextFlag);
 	virtual int Print(char* s, int strLen, int Indent, const char* pAuxStr, bool* pbNextFlag);
 	virtual int PrintAll(char* s, int strLen, int Indent, const char* pAuxStr, bool* pbNextFlag);
 	virtual bool IsLabel() { return false; }
 	virtual bool IsBinOpNode();
-
+	virtual CValue* Emit(CValue* pVc, CValue* pVn, SAuxEmitInfo* pAuxInfo);
 	// Getter/Setter Methods
 	CAstNode* GetHead() { return m_pHead; }
 	CAstNode* GetTail() { return m_pTail; }
@@ -278,6 +286,11 @@ public:
 	static CAstNode* MakeChildList(
 		CAstNode* pList, 
 		CAstNode* pChild
+	);
+	static CAstNode* RemoveAndSubstituteChild(
+		CAstNode* pParent,
+		CAstNode* pOldChild,
+		CAstNode* pNewChild
 	);
 	CAstNode* GetLastNext();
 	int MakeIndentString(char* s, int size, int Indent, bool* pbNextFlag);

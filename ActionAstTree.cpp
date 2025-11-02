@@ -154,10 +154,58 @@ void CActionAstTree::CheckNode(CAstNode* pNode)
 			pBinOp = pAssign->GetChild();
 			pParent = pAssign->GetParent();
 			pResult = pAssign->GetChild()->GetNext();
+			ls = PrintHeading(pStr, l, 0, "Before Optimization\n", true);
 			size = l - ls;
-			ls += pBinOp->Print(&pStr[ls], size, 4, 0, 0);
+			ls += pAssign->PrintAll(&pStr[ls], size, 4, 0, 0);
+			size = l - ls;
+			ls += Eol(&pStr[ls], size);
+			size = l - ls;
+			ls += pBinOp->PrintAll(&pStr[ls], size, 4, 0, 0);
+			size = l - ls;
+			ls += Eol(&pStr[ls], size);
+			size = l - ls;
+			ls += pParent->PrintAll(&pStr[ls], size, 4, 0, 0);
+			size = l - ls;
+			ls += Eol(&pStr[ls], size);
+			size = l - ls;
+			ls += pResult->PrintAll(&pStr[ls], size, 4, 0, 0);
+			size = l - ls;
+			ls += Eol(&pStr[ls], size);
+			fprintf(Act()->LogFile(), "%s\n", pStr);
 			if (pParent)
 			{
+				//--------------------------------------------------
+				// Assign NODE: Remove RESULT node
+				// BinOp NODE: Add RESULT node to the end of the
+				// Child Next list.
+				//--------------------------------------------------
+				pResult->GetPrev()->SetNext(0); // Remove RESULT from Assign Works
+				pResult->SetPrev(0);
+				pResult->SetParent(pBinOp);
+				CAstNode::MakeChildList(pBinOp,pResult);
+
+				CAstNode::RemoveAndSubstituteChild(pParent, pAssign, pBinOp);
+
+				ls = 0;
+				ls = PrintHeading(pStr, l, 0, "Before Optimization\n", true);
+				size = l - ls;
+				ls += pAssign->PrintAll(&pStr[ls], size, 4, 0, 0);
+				size = l - ls;
+				ls += Eol(&pStr[ls], size);
+				size = l - ls;
+				ls += pBinOp->PrintAll(&pStr[ls], size, 4, 0, 0);
+				size = l - ls;
+				ls += Eol(&pStr[ls], size);
+				size = l - ls;
+				ls += pParent->PrintAll(&pStr[ls], size, 4, 0, 0);
+				size = l - ls;
+				ls += Eol(&pStr[ls], size);
+				size = l - ls;
+				ls += pResult->PrintAll(&pStr[ls], size, 4, 0, 0);
+				size = l - ls;
+				ls += Eol(&pStr[ls], size);
+				fprintf(Act()->LogFile(), "%s\n", pStr);
+
 			}
 			else
 			{

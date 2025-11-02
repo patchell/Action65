@@ -15,13 +15,13 @@ bool CAct65DO::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym, CSection* p
 	return rV;
 }
 
-CValue* CAct65DO::Process()
+CValue* CAct65DO::Process(SAuxEmitInfo* pAuxInfo)
 {
 	CAstNode* pChild = 0, * pNext = 0;
 	CValue* pValue = 0;
 
 //	fprintf(Act()->LogFile(), "Process %s Node:%d\n", GetNodeName(), GetID());
-	pValue = Emit(m_pChildValue, m_pChildValue);
+	pValue = Emit(m_pChildValue, m_pChildValue, pAuxInfo);
 	pChild = GetChild();
 	if (pChild)
 	{
@@ -29,11 +29,11 @@ CValue* CAct65DO::Process()
 	}
 	if (pChild)
 	{
-		m_pChildValue = pChild->Process();
+		m_pChildValue = pChild->Process(pAuxInfo);
 	}
 	while (pNext)
 	{
-		m_pNextValue = pNext->Process();
+		m_pNextValue = pNext->Process(pAuxInfo);
 		pNext = pNext->GetNext();
 	}
 	return pValue;
@@ -52,7 +52,7 @@ void CAct65DO::PrintNode(FILE* pOut, int Indent, bool* pbNextFlag)
 	CAstNode::PrintNode(pOut, Indent, pbNextFlag);
 }
 
-CValue* CAct65DO::Emit(CValue* pVc, CValue* pVn)
+CValue* CAct65DO::Emit(CValue* pVc, CValue* pVn, SAuxEmitInfo* pAuxInfo)
 {
 	CSymbol* pStartSymbol = 0;
 	CStackDOODItem* pDOODStackItem = 0;

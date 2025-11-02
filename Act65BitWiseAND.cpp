@@ -15,7 +15,7 @@ bool CAct65BitWiseAND::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym, CSe
 	return rV;
 }
 
-CValue* CAct65BitWiseAND::Process()
+CValue* CAct65BitWiseAND::Process(SAuxEmitInfo* pAuxInfo)
 {
 	CAstNode* pChild = 0, * pNext = 0;
 	CValue* pValue = 0;
@@ -28,15 +28,15 @@ CValue* CAct65BitWiseAND::Process()
 	}
 	if (pChild)
 	{
-		m_pChildValue = pChild->Process();
+		m_pChildValue = pChild->Process(pAuxInfo);
 	}
 	if (pNext)
 	{
-		m_pNextValue = pNext->Process();
+		m_pNextValue = pNext->Process(pAuxInfo);
 	}
 	if (pNext->GetNext())
 	{
-		m_pResultValue = pNext->GetNext()->Process();
+		m_pResultValue = pNext->GetNext()->Process(pAuxInfo);
 	}
 	return Emit(m_pChildValue, m_pNextValue, m_pResultValue);
 }

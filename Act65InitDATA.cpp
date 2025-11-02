@@ -15,7 +15,7 @@ bool CAct65InitDATA::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym, CSect
 	return rV;
 }
 
-CValue* CAct65InitDATA::Process()
+CValue* CAct65InitDATA::Process(SAuxEmitInfo* pAuxInfo)
 {
 	CAstNode* pChild = 0, * pNext = 0;
 	CValue* pValue = 0;
@@ -28,13 +28,13 @@ CValue* CAct65InitDATA::Process()
 	}
 	if (pChild)
 	{
-		m_pChildValue = pChild->Process();
+		m_pChildValue = pChild->Process(pAuxInfo);
 	}
 	if (pNext)
 	{
-		m_pNextValue = pNext->Process();
+		m_pNextValue = pNext->Process(pAuxInfo);
 	}
-	return Emit(m_pChildValue, m_pChildValue);
+	return Emit(m_pChildValue, m_pChildValue, pAuxInfo);
 }
 
 int CAct65InitDATA::Print(char* s, int Strlen, int Indent, const char* pAuxStr, bool* pbNextFlag)
@@ -50,7 +50,7 @@ void CAct65InitDATA::PrintNode(FILE* pOut, int Indent, bool* pbNextFlag)
 	CAstNode::PrintNode(pOut, Indent, pbNextFlag);
 }
 
-CValue* CAct65InitDATA::Emit(CValue* pVc, CValue* pVn)
+CValue* CAct65InitDATA::Emit(CValue* pVc, CValue* pVn, SAuxEmitInfo* pAuxInfo)
 {
 	return nullptr;
 }

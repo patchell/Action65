@@ -16,7 +16,7 @@ bool CAct65CharConstant::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym, C
 	return rV;
 }
 
-CValue* CAct65CharConstant::Process()
+CValue* CAct65CharConstant::Process(SAuxEmitInfo* pAuxInfo)
 {
 	CAstNode* pChild = 0, * pNext = 0;
 	CValue* pValue = 0;
@@ -29,13 +29,13 @@ CValue* CAct65CharConstant::Process()
 	}
 	if (pChild)
 	{
-		m_pChildValue = pChild->Process();
+		m_pChildValue = pChild->Process(pAuxInfo);
 	}
 	if (pNext)
 	{
-		m_pNextValue = pNext->Process();
+		m_pNextValue = pNext->Process(pAuxInfo);
 	}
-	return Emit(m_pChildValue, m_pChildValue);
+	return Emit(m_pChildValue, m_pChildValue, pAuxInfo);
 }
 
 void CAct65CharConstant::PrintNode(FILE* pOut, int Indent, bool* pbNextFlag)
@@ -60,7 +60,7 @@ int CAct65CharConstant::Print(char* s, int Strlen, int Indent, const char* pAuxS
 	return l;
 }
 
-CValue* CAct65CharConstant::Emit(CValue* pVc, CValue* pVn)
+CValue* CAct65CharConstant::Emit(CValue* pVc, CValue* pVn, SAuxEmitInfo* pAuxInfo)
 {
     return nullptr;
 }

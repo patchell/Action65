@@ -208,7 +208,7 @@ void CAstTree::Run()
 	{
 		if (GetRootNode())
 		{
-			GetRootNode()->Process();
+			GetRootNode()->Process(NULL);
 		}
 		else
 		{
@@ -229,8 +229,8 @@ void CAstTree::Run()
 	}
 }
 
-CValue* CAstTree::Process()
+CValue* CAstTree::Process(SAuxEmitInfo* pAuxInfo)
 {
-    return GetRootNode()->Process();
+    return GetRootNode()->Process(pAuxInfo);
 }
 

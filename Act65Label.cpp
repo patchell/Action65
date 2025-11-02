@@ -16,7 +16,7 @@ bool CAct65Label::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym, CSection
 	return rV;
 }
 
-CValue* CAct65Label::Process()
+CValue* CAct65Label::Process(SAuxEmitInfo* pAuxInfo)
 {
 	CAstNode* pChild = 0, * pNext = 0;
 	CValue* pValue = 0;
@@ -29,13 +29,13 @@ CValue* CAct65Label::Process()
 	}
 	if (pChild)
 	{
-		m_pChildValue = pChild->Process();
+		m_pChildValue = pChild->Process(pAuxInfo);
 	}
 	if (pNext)
 	{
-		m_pNextValue = pNext->Process();
+		m_pNextValue = pNext->Process(pAuxInfo);
 	}
-	return Emit(m_pChildValue, m_pChildValue);
+	return Emit(m_pChildValue, m_pChildValue, pAuxInfo);
 }
 
 int CAct65Label::Print(char* s, int Strlen, int Indent, const char* pAuxStr	, bool* pbNextFlag)
@@ -74,7 +74,7 @@ int CAct65Label::Print(char* s, int Strlen, int Indent, const char* pAuxStr	, bo
 	return l;
 }
 
-CValue* CAct65Label::Emit(CValue* pVc, CValue* pVn)
+CValue* CAct65Label::Emit(CValue* pVc, CValue* pVn, SAuxEmitInfo* pAuxInfo)
 {
 	CSection* pSection = GetSection();
 

@@ -16,7 +16,7 @@ bool CAct65YREG::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym, CSection*
 	return rV;
 }
 
-CValue* CAct65YREG::Process()
+CValue* CAct65YREG::Process(SAuxEmitInfo* pAuxInfo)
 {
 	CAstNode* pChild = 0, * pNext = 0;
 	CValue* pValue = 0;
@@ -29,13 +29,13 @@ CValue* CAct65YREG::Process()
 	}
 	if (pChild)
 	{
-		m_pChildValue = pChild->Process();
+		m_pChildValue = pChild->Process(pAuxInfo);
 	}
 	if (pNext)
 	{
-		m_pNextValue = pNext->Process();
+		m_pNextValue = pNext->Process(pAuxInfo);
 	}
-	return Emit(m_pChildValue, m_pChildValue);
+	return Emit(m_pChildValue, m_pChildValue, pAuxInfo);
 }
 //::Print(char* s, int Strlen, int Indent, const char* pAuxStr, bool* pbNextFlag)
 int CAct65YREG::Print(char* s, int Strlen, int Indent, const char* pAuxStr, bool* pbNextFlag)
@@ -62,7 +62,7 @@ void CAct65YREG::PrintNode(FILE* pOut, int Indent, bool* pbNextFlag)
 	}
 }
 
-CValue* CAct65YREG::Emit(CValue* pVc, CValue* pVn)
+CValue* CAct65YREG::Emit(CValue* pVc, CValue* pVn, SAuxEmitInfo* pAuxInfo)
 {
 	return nullptr;
 }

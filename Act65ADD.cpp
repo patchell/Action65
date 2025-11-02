@@ -15,7 +15,7 @@ bool CAct65ADD::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym, CSection* 
 	return rV;
 }
 
-CValue* CAct65ADD::Process()
+CValue* CAct65ADD::Process(SAuxEmitInfo* pAuxInfo)
 {
 	CAstNode* pChild = 0, * pNext = 0;
 	CValue* pValue = 0;
@@ -27,15 +27,15 @@ CValue* CAct65ADD::Process()
 	}
 	if (pChild)
 	{
-		m_pChildValue = pChild->Process();
+		m_pChildValue = pChild->Process(pAuxInfo);
 	}
  	if (pNext)
 	{
-		m_pNextValue = pNext->Process();
+		m_pNextValue = pNext->Process(pAuxInfo);
 	}
 	if (pNext->GetNext())
 	{
-		m_pResultValue = pNext->GetNext()->Process();
+		m_pResultValue = pNext->GetNext()->Process(pAuxInfo);
 	}
 	return Emit(m_pChildValue, m_pNextValue, m_pResultValue);
 }

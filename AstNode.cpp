@@ -126,6 +126,8 @@ CAstNode* CAstNode::MakeNode(
 		while (pNode->GetNext())
 			pNode = pNode->GetNext();
 		pNode->SetNext(pNext);
+		if(pNext)
+			pNext->SetPrev(pNode);
 	}
 	return this;
 }
@@ -264,6 +266,14 @@ bool CAstNode::IsBinOpNode()
     return rV;
 }
 
+CValue* CAstNode::Emit(CValue* pVc, CValue* pVn, SAuxEmitInfo* pAuxInfo)
+{
+	//------------------------------------------------
+	// Default Emit just returns NULL
+	//------------------------------------------------
+	return nullptr;
+}
+
 CAstNode* CAstNode::SetChild(CAstNode* pAN)
 {
 	m_pChild = pAN;
@@ -303,6 +313,9 @@ CAstNode* CAstNode::AddToChildChain(CAstNode* pHead, CAstNode* pNode)
 
 CAstNode* CAstNode::MakeNextList(CAstNode* pList, CAstNode* pListMember)
 {
+	//------------------------------------------------
+	// Add pListMember to the end of pList
+	//------------------------------------------------
 	CAstNode* pNode;
 
 	if (pList)
@@ -318,6 +331,7 @@ CAstNode* CAstNode::MakeNextList(CAstNode* pList, CAstNode* pListMember)
 					pNode = pNode->GetNext();
 				}
 				pNode->SetNext(pListMember);
+				pListMember->SetPrev(pNode);
 			}
 			else
 			{
@@ -365,6 +379,48 @@ CAstNode* CAstNode::MakeChildList(CAstNode* pList, CAstNode* pChild)
 		Act()->Exit(101);
 	}
     return pList;
+}
+
+CAstNode* CAstNode::RemoveAndSubstituteChild(CAstNode* pParent, CAstNode* pOldChild, CAstNode* pNewChild)
+{
+	//------------------------------------------------
+	// Remove pOldChild from pParent child chain list
+	// and substitute pNewChild in its place
+	//------------------------------------------------
+
+	//------------------------------------------------
+	// Find Old Child in Parent Child Chain
+	//------------------------------------------------
+
+	CAstNode* pNode = 0;
+
+	if (pParent)
+	{
+		pNode = pParent->GetChild();
+		if (pNode)
+		{
+			while (pNode && pNode != pOldChild)
+			{
+				pNode = pNode->GetNext();
+			}
+			if (pNode)
+			{
+				if (pNode->GetPrev())
+					pNode->GetPrev()->SetNext(pNewChild);
+				else
+					pParent->SetChild(pNewChild);
+				if (pNewChild)
+				{
+					pNewChild->SetPrev(pNode->GetPrev());
+				}
+			}
+		}
+		else
+		{
+
+		}
+	}
+	return nullptr;
 }
 
 CAstNode* CAstNode::GetLastNext()

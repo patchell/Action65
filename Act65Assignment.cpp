@@ -15,7 +15,7 @@ bool CAct65Assignment::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym, CSe
 	return rV;
 }
 
-CValue* CAct65Assignment::Process()
+CValue* CAct65Assignment::Process(SAuxEmitInfo* pAuxInfo)
 {
 	CAstNode* pChild = 0, * pNext = 0;
 	CValue* pValue = 0;
@@ -27,13 +27,13 @@ CValue* CAct65Assignment::Process()
 	}
 	if (pChild)
 	{
-		m_pChildValue = pChild->Process();
+		m_pChildValue = pChild->Process(pAuxInfo);
 	}
 	if (pNext)
 	{
-		m_pNextValue = pNext->Process();
+		m_pNextValue = pNext->Process(pAuxInfo);
 	}
-	return Emit(m_pChildValue, m_pChildValue);
+	return Emit(m_pChildValue, m_pChildValue, pAuxInfo);
 }
 
 int CAct65Assignment::Print(char* s, int Strlen, int Indent, const char* pAuxStr, bool* pbNextFlag)
@@ -49,7 +49,7 @@ void CAct65Assignment::PrintNode(FILE* pOut, int Indent, bool* pbNextFlag)
 	CAstNode::PrintNode(pOut, Indent, pbNextFlag);
 }
 
-CValue* CAct65Assignment::Emit(CValue* pVc, CValue* pVn)
+CValue* CAct65Assignment::Emit(CValue* pVc, CValue* pVn, SAuxEmitInfo* pAuxInfo)
 {
 	//----------------------------------------------
 	// Value to store (assign to) is in pVc

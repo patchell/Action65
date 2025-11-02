@@ -128,30 +128,20 @@ CheckNode:STATEMENTS
 Node    20::STATEMENTS
 CheckNode:Assign =
 Optimize this NODE: Assign =
-CheckNode::Child:ADD
-
-    19     20     32                 +- 'DO' (Section: CODE)CODE'
-    20     22     31                 |  +- 'STATEMENTS' (Section: CODE)CODE'
-    22     25     -1                 |  |  +- 'Assign =' (Section: CODE)CODE'
-    25     24     21                 |  |     +- 'ADD' (Section: CODE)CODE': Hey
-    24     23     30                 |  |     |  +- 'DEREF' (Section: CODE)CODE'
-    23     -1     -1                 |  |     |  |  +- 'LOCAL VAR' (Section: CODE)CODE': pY
-    30     29     -1                 |  |     |  +- 'LOCAL VAR' (Section: CODE)CODE': aX
-    29     27     -1                 |  |     |     +- 'INDEX' (Section: CODE)CODE': Hey
-    27     26     -1                 |  |     |        +- 'ADD' (Section: CODE)CODE': Hey
-    26     -1     28                 |  |     |           +- 'LOCAL VAR' (Section: CODE)CODE': V2
-    28     -1     -1                 |  |     |           +- 'LOCAL VAR' (Section: CODE)CODE': V3
-    21     -1     -1                 |  |     +- 'LOCAL VAR' (Section: CODE)CODE': Result
-    
-
+Before Optimization
 	 NUMB  CHILD  NEXT  PREV  PARENT
-
         22     25     -1     -1     20              +- 'Assign =' (Section: CODE)CODE'
         25     24     21     -1     22              +- 'ADD' (Section: CODE)CODE'
         20     22     31     -1     19              +- 'STATEMENTS' (Section: CODE)CODE'
-        22     25     -1     -1     20              +- 'Assign =' (Section: CODE)CODE'
+        21     -1     -1     25     22              +- 'LOCAL VAR' (Section: CODE)CODE'
 
-   ------ CheckNode::Parent:STATEMENTS ----------
+Before Optimization
+	 NUMB  CHILD  NEXT  PREV  PARENT
+        22     25     -1     -1     20              +- 'Assign =' (Section: CODE)CODE'
+        25     24     -1     -1     20              +- 'ADD' (Section: CODE)CODE'
+        20     25     31     -1     19              +- 'STATEMENTS' (Section: CODE)CODE'
+        21     -1     -1     30     25              +- 'LOCAL VAR' (Section: CODE)CODE'
+
 Node    22::Assign =
 CheckNode:ADD
 Node    25::ADD
@@ -195,16 +185,12 @@ Node    32::RETURN
     16     -1     -1              |     +- 'IDENT' (Section: NONE)NONE': pY
     18     19     -1              +- 'STATEMENTS' (Section: CODE)CODE'
     19     20     32                 +- 'DO' (Section: CODE)CODE'
-    20     22     31                 |  +- 'STATEMENTS' (Section: CODE)CODE'
-    22     25     -1                 |  |  +- 'Assign =' (Section: CODE)CODE'
-    25     24     21                 |  |     +- 'ADD' (Section: CODE)CODE': Hey
-    24     23     30                 |  |     |  +- 'DEREF' (Section: CODE)CODE'
-    23     -1     -1                 |  |     |  |  +- 'LOCAL VAR' (Section: CODE)CODE': pY
-    30     29     -1                 |  |     |  +- 'LOCAL VAR' (Section: CODE)CODE': aX
-    29     27     -1                 |  |     |     +- 'INDEX' (Section: CODE)CODE': Hey
-    27     26     -1                 |  |     |        +- 'ADD' (Section: CODE)CODE': Hey
-    26     -1     28                 |  |     |           +- 'LOCAL VAR' (Section: CODE)CODE': V2
-    28     -1     -1                 |  |     |           +- 'LOCAL VAR' (Section: CODE)CODE': V3
-    21     -1     -1                 |  |     +- 'LOCAL VAR' (Section: CODE)CODE': Result
-    31     -1     -1                 |  +- 'OD' (Section: CODE)CODE'
-    32     -1     -1                 +- 'RETURN' (Section: CODE)CODE'
+    20     25     31                 |  +- 'STATEMENTS' (Section: CODE)CODE'
+    25     24     -1                 |  |  +- 'ADD' (Section: CODE)CODE': Hey
+    24     23     30                 |  |     +- 'DEREF' (Section: CODE)CODE'
+    23     -1     -1                 |  |     |  +- 'LOCAL VAR' (Section: CODE)CODE': pY
+    30     29     21                 |  |     +- 'LOCAL VAR' (Section: CODE)CODE': aX
+    29     27     -1                 |  |     |  +- 'INDEX' (Section: CODE)CODE': Hey
+    27     26     -1                 |  |     |     +- 'ADD' (Section: CODE)CODE': Hey
+    26     -1     28                 |  |     |        +- 'LOCAL VAR' (Section: CODE)CODE': V2
+    28   

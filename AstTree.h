@@ -20,7 +20,7 @@ public:
 		int MaxLoops = 3000
 	);
 	void Run();
-	virtual CValue* Process();
+	virtual CValue* Process(SAuxEmitInfo* pAuxInfo);
 	//--------------------------------
 	void SetRootNode(CAstNode* pRoot) { m_pRoot = pRoot; }
 	CAstNode* GetRootNode() { return m_pRoot; }

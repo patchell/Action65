@@ -26,15 +26,15 @@ enum  class Token
 	DEFINED_IDENT,
 	//------ Assignment
 	ASSIGN_ADD,		//5
-	ASSIGN_SUB,		//6
-	ASSIGN_MUL,		//7
-	ASSIGN_DIV,		//8
-	ASSIGN_MOD,		//9
 	ASSIGN_AND,		//10
-	ASSIGN_OR,
-	ASSIGN_XOR,
-	ASSIGN_RSH,
+	ASSIGN_DIV,		//8
 	ASSIGN_LSH,
+	ASSIGN_MOD,		//9
+	ASSIGN_MUL,		//7
+	ASSIGN_OR,
+	ASSIGN_RSH,
+	ASSIGN_SUB,		//6
+	ASSIGN_XOR,
 	//------- Operators
 	MOD,
 	LSH,

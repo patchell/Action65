@@ -10,6 +10,11 @@ bool CInstruction::GenInstruction(
 {
 	int Operand = 0;
 
+	if(OpToken == Token::LDA)
+	{
+		int a = 0;
+		a++;
+	}
 	m_pKeyWord = Act()->GetParser()->GetLexer()->FindKeyword(OpToken);
 	if (m_pKeyWord->m_pAddresModeLUT->ValidAddressingMode(AdressMode))
 	{

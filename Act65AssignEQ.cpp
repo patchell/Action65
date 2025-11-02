@@ -17,7 +17,7 @@ bool CAct65AssignEQ::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym, CSect
 	}
 }
 
-CValue* CAct65AssignEQ::Process()
+CValue* CAct65AssignEQ::Process(SAuxEmitInfo* pAuxInfo)
 {
 	CAstNode* pChild = 0, * pNext = 0;
 	CValue* pValue = 0;
@@ -30,14 +30,14 @@ CValue* CAct65AssignEQ::Process()
 	}
 	if (pChild)
 	{
-		m_pChildValue = pChild->Process();
+		m_pChildValue = pChild->Process(pAuxInfo);
 	}
 	if (pNext)
 	{
-		m_pNextValue = pNext->Process();
+		m_pNextValue = pNext->Process(pAuxInfo);
 	}
 	if (pNext)
-		return Emit(m_pChildValue, m_pChildValue);
+		return Emit(m_pChildValue, m_pChildValue, pAuxInfo);
 	else
 		return nullptr;
 }
@@ -55,7 +55,7 @@ void CAct65AssignEQ::PrintNode(FILE* pOut, int Indent, bool* pbNextFlag)
 	CAstNode::PrintNode(pOut, Indent, pbNextFlag);
 }
 
-CValue* CAct65AssignEQ::Emit(CValue* pVc, CValue* pVn)
+CValue* CAct65AssignEQ::Emit(CValue* pVc, CValue* pVn, SAuxEmitInfo* pAuxInfo)
 {
     return nullptr;
 }

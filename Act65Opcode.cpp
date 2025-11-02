@@ -39,7 +39,7 @@ bool CAct65Opcode::Create(CAstNode* pChild, CAstNode* pNext, CBin* pSym, CSectio
 	return rV;
 }
 
-CValue* CAct65Opcode::Process()
+CValue* CAct65Opcode::Process(SAuxEmitInfo* pAuxInfo)
 {
 	CAstNode* pChild = 0, * pNext = 0;
 	CValue* pValue = 0;
@@ -51,13 +51,13 @@ CValue* CAct65Opcode::Process()
 	}
 	if (pChild)
 	{
-		m_pChildValue = pChild->Process();
+		m_pChildValue = pChild->Process(pAuxInfo);
 	}
 	if (pNext)
 	{
-		m_pNextValue = pNext->Process();
+		m_pNextValue = pNext->Process(pAuxInfo);
 	}
-	return Emit(m_pChildValue, m_pChildValue);
+	return Emit(m_pChildValue, m_pChildValue, pAuxInfo);
 }
 
 void CAct65Opcode::PrintNode(FILE* pOut, int Indent, bool* pbNextFlag)
@@ -74,7 +74,7 @@ void CAct65Opcode::PrintNode(FILE* pOut, int Indent, bool* pbNextFlag)
 	}
 }
 
-CValue* CAct65Opcode::Emit(CValue* pVc, CValue* pVn)
+CValue* CAct65Opcode::Emit(CValue* pVc, CValue* pVn, SAuxEmitInfo* pAuxInfo)
 {
 	CSection* pSection = GetSection();
 	int size = 256;
